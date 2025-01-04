@@ -1,0 +1,46 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+using RPGPlatformer.Skills;
+using RPGPlatformer.Core;
+
+namespace RPGPlatformer.UI
+{
+    public class XPAlertBar : MonoBehaviour
+    {
+        [SerializeField] XPAlert alertPrefab;
+
+        Dictionary<CharacterSkill, XPAlert> activeXPAlerts = new();
+
+        private void OnEnable()
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            player.GetComponent<CharacterProgressionManager>().ExperienceGained +=
+                async (eventData) => await HandleXPGainEvent(eventData);
+        }
+
+        private async Task HandleXPGainEvent(XPGainEventData eventData)
+        {
+            if (!activeXPAlerts.ContainsKey(eventData.skill) || !activeXPAlerts[eventData.skill])
+            {
+                InstantiateNewAlert(eventData.skill);
+            }
+
+            XPAlert alert = activeXPAlerts[eventData.skill];
+            await alert.HandleXPGainEvent(eventData, GlobalGameTools.Instance.TokenSource.Token);
+        }
+
+        private void InstantiateNewAlert(CharacterSkill skill)
+        {
+            XPAlert newAlert = Instantiate(alertPrefab, transform);
+            newAlert.QueueEmptied += () => HandleChildDeath(skill, newAlert);
+            activeXPAlerts[skill] = newAlert;
+        }
+
+        private void HandleChildDeath(CharacterSkill key, XPAlert alert)
+        {
+            activeXPAlerts[key] = null;
+            Destroy(alert.gameObject, 0.1f);
+        }
+    }
+}

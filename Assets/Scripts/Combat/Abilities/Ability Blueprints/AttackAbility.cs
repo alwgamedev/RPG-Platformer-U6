@@ -1,0 +1,184 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+using RPGPlatformer.Effects;
+using RPGPlatformer.Core;
+
+namespace RPGPlatformer.Combat
+{
+    using static CombatStyles;
+    using static IProjectileAbility;
+
+    public enum AbilityTag
+    {
+        AoE_Damage, Bleed, Power_Up_Ability, Projectile_Ability, Stun
+    }
+
+    public class AttackAbility
+    {
+        public CombatStyle CombatStyle { get; init; }//should coincide with the animation layer name
+        public string DisplayName { get; init; }
+        public string Description { get; init; }//mainly for description of ability in tooltips
+        public List<AbilityTag> AbilityTags { get; init; } = new();
+        //public string AbilityTypeDescription { get; init; }
+        public string AnimationState { get; init; }//can leave null if no animation (will just get a warning in the editor)
+        public Func<PoolableEffect> GetCombatantExecuteEffect { get; init; }
+        public Func<PoolableEffect> GetHitEffect { get; init; }
+        public bool ObeyGCD { get; init; }
+        public bool UseActiveAimingWhilePoweringUp { get; init; }
+        public bool HoldAimOnRelease { get; init; }
+        public float Cooldown { get; init; }
+        [Range(0, 1)] public float StaminaFractionChange { get; init; }
+        [Range(0, 1)] public float WrathFractionChange { get; init; }
+        public float DamageMultiplier { get; init; } = 1;
+        //public int? StunDurationInMilliseconds { get; init; } = null;
+        public float? StunDuration { get; init; } = null;
+        public bool FreezeAnimationDuringStun { get; init; } = true;
+        public int BleedCount { get; init; }//many different types of abilities (aoe, projectile, auto targeted) can have a bleed,
+                                            //so it's easiest to just have every ability carry bleed stats (even though most don't need them).
+        public int BleedRate { get; init; }
+        public Func<int, float, float> DamagePerBleedIteration { get; init; } = (i, x) => x;
+        public Action<ICombatController> OnExecute { get; init; }
+        //OnExecute should be instructions for how the combat controller should execute the ability.
+        //(Using Action instead of virtual method so that we can customize instance by instance)
+
+        public string GetAbilityName()
+        {
+            return DisplayName ?? AnimationState;
+        }
+
+        public virtual void Execute(ICombatController controller)
+        {
+            if (!CanExecuteAbility(controller)) return;
+            controller.Combatant.Attack();
+            OnExecute?.Invoke(controller);
+            controller.OnAbilityExecute(this);
+
+            PoolableEffect effect = GetCombatantExecuteEffect?.Invoke();
+            if (effect)
+            {
+                effect.PlayAtPosition(controller.Combatant.Transform);
+            }
+
+            UpdateCombatantStats(controller.Combatant);
+        }
+
+        public float ComputeDamage(ICombatant combatant)
+        {
+            return DamageMultiplier * (combatant.AdditiveDamageBonus + combatant.Weapon.WeaponStats.BaseDamage);
+        }
+
+
+        //MANA AND WRATH CHECKS
+
+        public bool CombatantHasSufficientStamina(ICombatant combatant)
+        {
+            return combatant.Stamina.FractionOfMax + StaminaFractionChange >= 0;
+        }
+        public bool CombatantHasSufficientWrath(ICombatant combatant)
+        {
+            return combatant.Wrath.FractionOfMax + WrathFractionChange >= 0;
+        }
+
+        public bool CanExecuteAbility(ICombatController controller)
+        {
+            if (!CombatantHasSufficientStamina(controller.Combatant))
+            {
+                controller.OnInsufficientStamina();
+                return false;
+            }
+            if (!CombatantHasSufficientWrath(controller.Combatant))
+            {
+                controller.OnInsufficientWrath();
+                return false;
+            }
+            return true;
+        }
+
+        public void UpdateCombatantStamina(ICombatant combatant)
+        {
+            combatant.Stamina.AddValueClamped(StaminaFractionChange * combatant.Stamina.MaxValue);
+        }
+        public void UpdateCombatantWrath(ICombatant combatant)
+        {
+            combatant.Wrath.AddValueClamped(WrathFractionChange * combatant.Wrath.MaxValue);
+        }
+
+        public void UpdateCombatantStats(ICombatant combatant)
+        {
+            UpdateCombatantStamina(combatant);
+            UpdateCombatantWrath(combatant);
+        }
+
+
+        //STATIC HELPER METHODS//
+
+
+        //DEAL DAMAGE
+
+        public static void DealDamage(IDamageDealer damageDealer, IHealth targetHealth, float damage, float? stunDuration = null, 
+            bool freezeAnimationDuringStun = true, Func<PoolableEffect> getHitEffect = null)
+        {
+            if (targetHealth == null || targetHealth.IsDead) return;
+
+            targetHealth.ReceiveDamage(damage, damageDealer);
+            if (stunDuration.HasValue)
+            {
+                targetHealth.ReceiveStun(stunDuration.Value, freezeAnimationDuringStun);
+            }
+
+            PoolableEffect hitEffect = getHitEffect?.Invoke();
+            if (hitEffect)
+            {
+                hitEffect.PlayAtPosition(targetHealth.Transform);
+            }
+        }
+
+        public static async Task Bleed(IDamageDealer damageDealer, IHealth targetHealth, float baseDamage, int count, int rate, 
+            Func<int, float, float> damagePerBleedIteration = null, Func<PoolableEffect> getHitEffect = null,
+            bool useHitEffectOnlyOnFirstHit = false)
+        {
+            if (damagePerBleedIteration == null)
+            {
+                damagePerBleedIteration = (i, x) => x;
+            }
+            void BleedHit(int j)
+            {
+                if (useHitEffectOnlyOnFirstHit && j > 0)
+                {
+                    DealDamage(damageDealer, targetHealth, damagePerBleedIteration(j, baseDamage));
+                }
+                else
+                {
+                    DealDamage(damageDealer, targetHealth, damagePerBleedIteration(j, baseDamage), null, false, getHitEffect);
+                }
+            }
+            for (int i = 0; i < count; i++)
+            {
+                if (targetHealth == null || targetHealth.IsDead) break;
+                BleedHit(i);
+                if (i < count - 1)
+                {
+                    await Task.Delay(rate, GlobalGameTools.Instance.TokenSource.Token);
+                }
+            }
+        }
+
+
+        //PROJECTILES
+
+        public static void PrepareProjectile(ICombatController controller, IProjectile projectile, Vector2 aimPos, 
+            float powerMultiplier, GetHitActionDelegate getHitAction, int maxHits = 1)
+        {
+            controller.Combatant.PrepareProjectile(projectile, aimPos, powerMultiplier, getHitAction(controller, projectile), maxHits);
+        }
+
+        public static void AimAndPrepareProjectile(ICombatController controller, IProjectile projectile, 
+            float powerMultiplier, GetHitActionDelegate getHitAction, int maxHits = 1)
+        {
+            Vector2 aimPos = controller.GetAimPosition();
+            PrepareProjectile(controller, projectile, aimPos, powerMultiplier, getHitAction, maxHits);
+        }
+    }
+}

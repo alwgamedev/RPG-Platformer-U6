@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7055415064996551338
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7503022987723398935}
+  - component: {fileID: 4280106561366616497}
+  m_Layer: 0
+  m_Name: Effect Pooler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7503022987723398935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7055415064996551338}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4280106561366616497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7055415064996551338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0057b055e3cd374daaff4f8709ed3af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolData:
+  - pooledObject: {fileID: 4461090772248409264, guid: 3e5077ed434d2f64082c2c30e4c4f75a, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 9079761261629030662, guid: 9756918d2915cc845bca2a3aaae3a4cb, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: -593753959301935208, guid: 541fa447237ee8243a63b14e7951f26c, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 4656057454459124581, guid: 01aeba97936ac65449d9e7fdbfe0803d, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 7216283437631884252, guid: 7539badd9a35f0741a0afb3870f45559, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 4511504174960478417, guid: 89524853cd3238e45a2fd8f865295faa, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 7407324335357373767, guid: 02c5d7c8dfe1eb74bab637ccbd0dd03c, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 4969323355234003332, guid: 8a6b069a4a935bc4da384ef6bcbb2db1, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 1213089035483975652, guid: afb34ab2af424fd408b6b9b8413c5a5c, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 7224562156063860623, guid: 8a661a625c78a3a4eadd98ed4ebbd0b4, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 7323156605379486234, guid: 91484e6e7d3068145bc6a7a7989da8b6, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 2079278602736808488, guid: e58e29df21d9d544fa00f9f9482fba85, type: 3}
+    poolSize: 5
+  - pooledObject: {fileID: 2285083095542792619, guid: 429ec228f5cec314980a16b209e6da0a, type: 3}
+    poolSize: 5

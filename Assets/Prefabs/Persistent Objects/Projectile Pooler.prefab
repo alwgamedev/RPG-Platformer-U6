@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4341616218385574988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1538917767557215151}
+  - component: {fileID: 7032242658144361218}
+  m_Layer: 0
+  m_Name: Projectile Pooler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1538917767557215151
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4341616218385574988}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.378575, y: 0.30871433, z: 685.66156}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7032242658144361218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4341616218385574988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0057b055e3cd374daaff4f8709ed3af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolData:
+  - pooledObject: {fileID: 663186611169696029, guid: 2e5503ae7ce00814a9cdca4caae1bce3, type: 3}
+    poolSize: 25
+  - pooledObject: {fileID: 7867640122930504965, guid: cacded878dc37a543ab651d26b894822, type: 3}
+    poolSize: 10
+  - pooledObject: {fileID: 5073557430339836510, guid: 6123020bd4c2dcb4391654cc0966bbea, type: 3}
+    poolSize: 10
+  - pooledObject: {fileID: 6790099669019704634, guid: 4f9f8abd2327f9847949868700854e55, type: 3}
+    poolSize: 25
+  - pooledObject: {fileID: 3958835166184049965, guid: 8857f77682a711648b6ea572592494b0, type: 3}
+    poolSize: 10

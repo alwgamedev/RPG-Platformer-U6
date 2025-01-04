@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a57bdbd47583c2b488cc8bf46d2a5f0f, type: 3}
+  m_Name: Unarmed (SH)
+  m_EditorClassIdentifier: 
+  baseData:
+    lookupName: Unarmed (SH)
+    displayName: Unarmed Weapon
+    description: A true fighter uses their fists!
+    icon: {fileID: -162445357528718373, guid: a6210b498d6eff1419e75c6f6702ea72, type: 3}
+    maxStackable: 1
+  equippableItemData:
+    prefab: {fileID: 0}
+    slot: 0
+  weaponStats:
+    baseDamage: 69
+    attackRange: 0.6
+    baseAttackRate: 10
+  animatorOverrideController: {fileID: 22100000, guid: 878581dc1900c55489253a28ad1711dd, type: 2}
+  weaponClass: 1

@@ -1,0 +1,78 @@
+﻿using RPGPlatformer.UI;
+using System;
+using UnityEngine;
+
+namespace RPGPlatformer.Combat
+{
+    [Serializable]
+    public class ReplenishableStat
+    {
+        [SerializeField] float minValue;
+        [SerializeField] float maxValue;
+        [SerializeField] float defaultValue;
+        [SerializeField] float replenishRate;//fraction of maxValue replenished per second
+
+        public bool autoReplenish;
+        public StatBarItem statBar;
+
+        private float currentValue;
+
+        public float MinValue => minValue;
+        public float MaxValue => maxValue;
+        public float DefaultValue => defaultValue;
+
+        public float CurrentValue
+        {
+            get => currentValue;
+            set
+            {
+                currentValue = value;
+                if (statBar)
+                {
+                    statBar.SetFillAmount(currentValue / maxValue);
+                    statBar.SetText($"{(int)currentValue} / {(int)maxValue}");
+                }
+            }
+        }
+        public float FractionOfMax
+        {
+            get
+            {
+                if (maxValue != 0)
+                {
+                    return currentValue / maxValue;
+                }
+                Debug.LogWarning($"Tried to retrieve fractional value from a replenishable stat, but its max value is zero.");
+                return 0;
+            }
+        }
+
+        public void Start()
+        {
+            CurrentValue = defaultValue;
+        }
+
+        public void SetValueClamped(float value)
+        {
+            CurrentValue = Mathf.Clamp(value, minValue, maxValue);
+        }
+
+        public void AddValueClamped(float value)
+        {
+            CurrentValue += Mathf.Clamp(value, minValue - currentValue, maxValue - currentValue);
+        }
+
+        public void AutoReplenish()
+        {
+            AddValueClamped(replenishRate * MaxValue * Time.deltaTime);
+        }
+
+        public void Update()
+        {
+            if (autoReplenish)
+            {
+                AutoReplenish();
+            }
+        }
+    }
+}

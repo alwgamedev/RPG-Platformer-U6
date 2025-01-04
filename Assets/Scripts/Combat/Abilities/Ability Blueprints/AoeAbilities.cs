@@ -1,0 +1,127 @@
+﻿using System;
+using System.Collections;
+using System.Linq;
+using UnityEngine;
+using RPGPlatformer.Effects;
+
+namespace RPGPlatformer.Combat
+{
+    using static IAoeAbility;
+    using static AttackAbility;
+
+    public interface IAoeAbility
+    {
+        public float AoeRadius { get; }
+        public bool ExcludeInstigator { get; }
+
+        public Func<ICombatController, Vector2> GetAoeCenter { get; }
+
+        public static IEnumerable FindTargetsAtPosition(Vector2 position, float radius)
+        {
+            Collider2D[] hitColliders = Physics2D.OverlapBoxAll(position, 2 * radius * Vector2.right + 2 * radius * Vector2.up, 0);
+            return hitColliders.Select(x => x.GetComponent<IHealth>()).Distinct().Where(x => x != null);
+        }
+
+        //NOTE: the base DealDamage method already checks for null
+        public static void DealAoeDamage(IDamageDealer damageDealer, IEnumerable targets, float damage, bool excludeInstigator,
+            float? stunDuration = null, bool freezeAnimationDuringStun = true, Func<PoolableEffect> getHitEffect = null)
+        {
+            foreach (IHealth health in targets)
+            {
+                if (health == null || (excludeInstigator && health.Transform == damageDealer.Transform))
+                {
+                    continue;
+                }
+                DealDamage(damageDealer, health, damage, stunDuration, freezeAnimationDuringStun, getHitEffect);
+            }
+        }
+
+        public static void ExecuteAoeAbility(Vector2 aoeCenter, float aoeRadius,
+            float damage, bool excludeInstigator, IDamageDealer damageDealer, float? stunDuration = null, 
+            bool freezeAnimationDuringStun = true, Func<PoolableEffect> getHitEffect = null)
+        {
+            IEnumerable targets = FindTargetsAtPosition(aoeCenter, aoeRadius);
+            DealAoeDamage(damageDealer, targets, damage, excludeInstigator, stunDuration, freezeAnimationDuringStun, getHitEffect);
+        }
+    }
+
+    //Instance needs to fill in: 
+    //(*) GetAoeCenter (Func<ICombatController, Vector2>) -- where the aoe hit should be centered (e.g. aim position or combatant's position)
+    //(*) AoeRadius (float)
+    //(*) ExcludeInstigator (bool -- whether the attacker should be hit by the AoE)
+    //(*) base AttackAbility stats
+    public class AoeAbilityThatExecutesImmediately : AttackAbility, IAoeAbility
+    {
+        public float AoeRadius { get; init; } = 2;
+        public bool ExcludeInstigator { get; init; } = true;
+
+        public Func<ICombatController, Vector2> GetAoeCenter { get; init; }
+
+        public AoeAbilityThatExecutesImmediately() : base()
+        {
+            OnExecute = (controller) => ExecuteAoeAbility(GetAoeCenter(controller), AoeRadius, 
+                ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
+                StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+        }
+    }
+
+    //Instance needs to fill in: 
+    //(*) GetData (Func<ICombatController, Vector2>) -- where the aoe hit should be centered (e.g. aim position or combatant's position)
+    //(*) AoeRadius (float)
+    //(*) ExcludeInstigator (bool)
+    //(*) base AttackAbility stats
+    //(*) whether it HasChannelAnimation (bool)
+    public class AoeAbilityThatExecutesOnNextFireButtonDown : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<Vector2>, IAoeAbility
+    {
+        public float AoeRadius { get; init; } = 2;
+        public bool ExcludeInstigator { get; init; } = true;
+
+        public Func<ICombatController, Vector2> GetAoeCenter
+        {
+            get => GetData;
+            init
+            {
+                GetData = value;
+            }
+        }
+
+        public AoeAbilityThatExecutesOnNextFireButtonDown() : base()
+        {
+            OnExecute = (controller, position) => ExecuteAoeAbility(position, AoeRadius,
+                ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
+                StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+        }
+    }
+
+    //Instance needs to fill in:
+    //(*) TicksToAchieveMaxPower and PowerGainRate
+    //(*) GetData/GetAoeCenter (either one) (Func<ICombatController,Vector2>)
+    //(*) AoeRadius (float)
+    //(*) ExcludeInstigator (bool)
+    //(*) base AttackAbility stats
+    //(*) whether it HasChannelAnimation and HasPowerUpAnimation (bools)
+    public class AoePowerUpAbility : PowerUpAbility<Vector2>, IAoeAbility
+    {
+        protected Collider2D[] hitColliders;
+
+        public float AoeRadius { get; init; } = 2;
+        public bool ExcludeInstigator { get; init; } = true;
+
+        public Func<ICombatController, Vector2> GetAoeCenter
+        {
+            get => GetData;
+            init
+            {
+                GetData = value;
+            }
+        }
+
+        public AoePowerUpAbility() : base()
+        {
+            OnExecute = (controller, args) => ExecuteAoeAbility(args.Item1, AoeRadius,/* hitColliders,*/ 
+                ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
+                ExcludeInstigator, controller.Combatant,
+                StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+        }
+    }
+}
