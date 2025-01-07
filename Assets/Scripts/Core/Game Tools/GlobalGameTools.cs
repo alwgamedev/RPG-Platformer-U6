@@ -11,6 +11,7 @@ namespace RPGPlatformer.Core
     {
         public static GlobalGameTools Instance { get; private set; }
         public static bool PlayerIsDead { get; private set; }
+        public static string PlayerName { get; private set; } = "Player";
 
         public CancellationTokenSource TokenSource {  get; private set; }
         public TickTimer TickTimer { get; private set; }

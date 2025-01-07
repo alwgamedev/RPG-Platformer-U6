@@ -31,6 +31,22 @@ namespace RPGPlatformer.Dialogue
             return nodes;
         }
 
+        public bool HasContinuation(DialogueNode node)
+        {
+            if (node is ChoicesDialogueNode choicesNode)
+            {
+                for (int i = 0; i < choicesNode.ResponseChoices().Count; i++)
+                {
+                    if (TryGetContinuation(choicesNode, i, out _))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return TryGetContinuation(node, 0, out _);
+        }
+
         public bool TryGetContinuation(DialogueNode node, int responseIndex, out DialogueNode continuation)
         {
             continuation = null;

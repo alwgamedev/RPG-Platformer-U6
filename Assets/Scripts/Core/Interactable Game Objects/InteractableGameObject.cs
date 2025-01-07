@@ -99,10 +99,10 @@ namespace RPGPlatformer.Core
 
         public void SetInteractable(bool val)
         {
-            if(val)
+            if (val)
             {
                 gameObject.layer = homeLayer;
-                
+
             }
             else
             {

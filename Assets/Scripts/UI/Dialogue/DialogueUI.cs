@@ -1,59 +1,77 @@
 using RPGPlatformer.Dialogue;
-using RPGPlatformer.SceneManagement;
-using System.Collections;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace RPGPlatformer.UI
 {
     public class DialogueUI : HideableUI
     {
-        [SerializeField] float dialogueFadeDuration = 0.5f;
-        [SerializeField] VerticalLayoutGroup dialogueContainer;
-        [SerializeField] VerticalLayoutGroup choicesContainer;
-        [SerializeField] CanvasGroup dialogueSegmentPrefab;//use GetComponentInChildren<TMP> to set its text
-        //^idea: all dialogue segments will be installed at beginning of a dialogue node (so ui has correct size),
-        //but they will fade in 1by1
-        [SerializeField] Button choiceButtonPrefab;
-        [SerializeField] Button nextButton;
-        [SerializeField] Button exitButton;
+        [SerializeField] DialogueWindow dialogueWindowPrefab;
 
-        RectTransform rectTransform;
         DialogueSO activeDialogue;
+        DialogueNode currentNode;
+        DialogueWindow activeWindow;
         string conversantName;
+        string playerName = "Player";
 
         protected override void Awake()
         {
             base.Awake();
 
-            rectTransform = GetComponent<RectTransform>();
             DialogueTrigger.DialogueTriggered += StartDialogue;
         }
 
-        public void StartDialogue(DialogueSO dialogue, string conversantName)
+        public void StartDialogue(DialogueSO dialogue, string conversantName, string playerName)
         {
             activeDialogue = dialogue;
             this.conversantName = conversantName;
+            this.playerName = playerName;
+            DisplayDialogueNode(currentNode);
         }
 
-        private IEnumerator DisplayDialogueNode(DialogueNode dialogueNode)
+        public void EndDialogue()
         {
-            yield return null;
+            CloseActiveWindow();
+            activeDialogue = null;
+            conversantName = null;
+            playerName = null;
         }
 
-        private void DisplayResponseChoices(ChoicesDialogueNode choicesNode)
+        private void DisplayDialogueNode(DialogueNode dialogueNode)
         {
+            CloseActiveWindow();
 
-        }
+            currentNode = dialogueNode;
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
+            activeWindow = Instantiate(dialogueWindowPrefab, transform);
+            activeWindow.SetUpWindow(dialogueNode, conversantName, playerName);
 
-            foreach(Button b in GetComponentsInChildren<Button>())
+            if(!activeDialogue.HasContinuation(dialogueNode))
             {
-                b.onClick.RemoveAllListeners();
+                activeWindow.NextButtonContainer.SetActive(false);
+            }
+
+            activeWindow.CloseButton.onClick.AddListener(CloseActiveWindow);
+            activeWindow.ResponseSelected += DisplayContinuation;
+            //(^even for a choice node where the responses have no continuation (i.e. the choices are just 
+            //closing remarks) we should subscribe DisplayContinuation so that the dialogue closes
+            //when that last choice is selected)
+        }
+
+        private void DisplayContinuation(int responseIndex = 0)
+        {
+            if(!activeDialogue.TryGetContinuation(currentNode, responseIndex, out var continuation))
+            {
+                EndDialogue();
+            }
+            DisplayDialogueNode(continuation);
+        }
+
+        private void CloseActiveWindow()
+        {
+            if(activeWindow)
+            {
+                Destroy(activeWindow.gameObject);
+                activeWindow = null;
             }
         }
     }

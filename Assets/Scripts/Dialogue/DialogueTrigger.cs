@@ -13,31 +13,32 @@ namespace RPGPlatformer.Dialogue
 
         public string ConversantName { get; private set; }
 
-        public static event Action<DialogueSO, string> DialogueTriggered;
+        public static event Action<DialogueSO, string, string> DialogueTriggered;
+        //signature (dialogue, conversantName, playerName)
 
         private void Start()
         {
             ConversantName = GetComponent<InteractableGameObject>().DisplayName;
         }
 
-        public void TriggerDialogue(string dialogueName)
+        public void TriggerDialogue(string dialogueName, string playerName)
         {
             DialogueSO dialogue = dialogues.FirstOrDefault(x => x.name == dialogueName);
-            TriggerDialogue(dialogue);
+            TriggerDialogue(dialogue, playerName);
         }
 
-        public void TriggerDialogue(int index)
+        public void TriggerDialogue(int index, string playerName)
         {
             if (index < 0 || index >= dialogues.Count) return;
 
-            TriggerDialogue(dialogues[index]);
+            TriggerDialogue(dialogues[index], playerName);
         }
 
-        public void TriggerDialogue(DialogueSO dialogue)
+        public void TriggerDialogue(DialogueSO dialogue, string playerName)
         {
             if(dialogue)
             {
-                DialogueTriggered?.Invoke(dialogue, ConversantName);
+                DialogueTriggered?.Invoke(dialogue, ConversantName, playerName);
             }
         }
     }

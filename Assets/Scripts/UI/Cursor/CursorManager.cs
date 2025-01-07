@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
+using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.UI
 {
