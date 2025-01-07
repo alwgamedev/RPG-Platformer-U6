@@ -17,9 +17,13 @@ namespace RPGPlatformer.UI
         [SerializeField] protected GameObject menuPrefab;
         [SerializeField] protected bool disableWhenPlayerIsDead = true;
 
-        protected GameObject activeMenu;
+        //protected GameObject activeMenu;
         protected Canvas targetCanvas;
         protected IInteractableGameObject igo;
+
+        public GameObject ActiveMenu { get; protected set; }
+
+        public event Action MenuSpawned;
 
         protected virtual void Awake()
         {
@@ -37,6 +41,14 @@ namespace RPGPlatformer.UI
             }
         }
 
+        protected virtual void OnEnable()
+        {
+            if(TryGetComponent(out TooltipSpawner tts))
+            {
+                tts.TooltipSpawned += ClearMenu;
+            }
+        }
+
         public void Pause()
         {
             ClearMenu();
@@ -50,14 +62,14 @@ namespace RPGPlatformer.UI
 
         public virtual void ClearMenu()
         {
-            if (activeMenu)
+            if (ActiveMenu)
             {
                 foreach (Button button in GetComponentsInChildren<Button>())
                 {
                     button.onClick.RemoveAllListeners();
                 }
-                Destroy(activeMenu);
-                activeMenu = null;
+                Destroy(ActiveMenu);
+                ActiveMenu = null;
             }
         }
 
@@ -71,10 +83,10 @@ namespace RPGPlatformer.UI
 
         protected virtual void OnGUI()
         {
-            if (activeMenu && Event.current.type == EventType.MouseUp)
+            if (ActiveMenu && Event.current.type == EventType.MouseUp)
             {
                 GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
-                if (currentSelected && currentSelected.transform.IsChildOf(activeMenu.transform)) return;
+                if (currentSelected && currentSelected.transform.IsChildOf(ActiveMenu.transform)) return;
                 if (igo != null && igo.MouseOver) return;
 
                 ClearMenu();
@@ -104,21 +116,22 @@ namespace RPGPlatformer.UI
 
         private void OpenMenu()
         {
-            if (!activeMenu && CanCreateMenu())
+            if (!ActiveMenu && CanCreateMenu())
             {
-                activeMenu = InstantiateMenuPrefab();
+                ActiveMenu = InstantiateMenuPrefab();
             }
-            if (activeMenu)
+            if (ActiveMenu)
             {
-                ConfigureMenu(activeMenu);
+                ConfigureMenu(ActiveMenu);
                 RepositionMenu();
+                MenuSpawned?.Invoke();
             }
         }
 
         //NOTE: The menu prefab should have its pivot set in the UPPER LEFT CORNER
         private void RepositionMenu()
         {
-            activeMenu.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
+            ActiveMenu.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
         }
 
         private GameObject InstantiateMenuPrefab()
@@ -134,6 +147,11 @@ namespace RPGPlatformer.UI
         private void OnDisable()
         {
             ClearMenu();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            MenuSpawned = null;
         }
     }
 }

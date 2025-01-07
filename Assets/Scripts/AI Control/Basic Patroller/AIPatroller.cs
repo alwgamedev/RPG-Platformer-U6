@@ -14,8 +14,6 @@ namespace RPGPlatformer.AIControl
         public AdvancedMovementController movementController;
         public AICombatController combatController;
 
-        //public float pursuitRange;
-
 
         protected virtual void Awake()
         {
@@ -33,7 +31,7 @@ namespace RPGPlatformer.AIControl
             //stand there for now
         }
 
-        public void SuspicionBehavior(Health target)
+        public void SuspicionBehavior(IHealth target)
         {
             if (!TryGetDistance(target, out float distance))
             {
@@ -49,7 +47,7 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        public void PursuitBehavior(Health target)
+        public void PursuitBehavior(IHealth target)
         {
             if (!TryGetDistance(target, out float distance))
             {
@@ -66,7 +64,7 @@ namespace RPGPlatformer.AIControl
             }
             else
             {
-                movementController.moveInput = target.transform.position.x - transform.position.x;
+                movementController.moveInput = target.Transform.position.x - transform.position.x;
             }
         }
 
@@ -82,11 +80,11 @@ namespace RPGPlatformer.AIControl
             combatController.StopAttacking();
         }
 
-        public bool TryGetDistance(Health target, out float distance)
+        public bool TryGetDistance(IHealth target, out float distance)
         {
             if (target != null && !target.IsDead)
             {
-                distance = Vector3.Distance(transform.position, target.transform.position);
+                distance = Vector3.Distance(transform.position, target.Transform.position);
                 return true;
             }
             else
@@ -94,6 +92,11 @@ namespace RPGPlatformer.AIControl
                 distance = Mathf.Infinity;
                 return false;
             }
+        }
+
+        public void BeginPatrol()
+        {
+            Trigger(typeof(Patrol).Name);
         }
 
         public void BecomeSuspicious()

@@ -4,10 +4,8 @@ using RPGPlatformer.Inventory;
 
 namespace RPGPlatformer.Loot
 {
-    public interface ILootDrop : IInventoryOwner, IExaminable
+    public interface ILootDrop : IInventoryOwner, IInteractableGameObject
     {
-        public string DisplayName { get; }
-
         public event Action OnDropDestroyed;
         public event Action PlayerOutOfRange;
 

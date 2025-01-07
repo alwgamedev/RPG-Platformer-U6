@@ -4,7 +4,7 @@ namespace RPGPlatformer.Combat
 {
     public class AICombatController : CombatController
     {
-        public Health currentTarget;
+        public IHealth currentTarget;
 
         public CombatStateManager CombatManager => combatManager;
 
@@ -36,9 +36,9 @@ namespace RPGPlatformer.Combat
 
         public override Vector2 GetAimPosition()
         {
-            if (currentTarget)
+            if (currentTarget != null)
             {
-                return currentTarget.transform.position;
+                return currentTarget.Transform.position;
             }
             return base.GetAimPosition();
         }

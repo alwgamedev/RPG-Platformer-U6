@@ -1,4 +1,6 @@
-﻿namespace RPGPlatformer.Inventory
+﻿using System;
+
+namespace RPGPlatformer.Inventory
 {
     public class InventorySlotDataContainer : IInventorySlotDataContainer
     {

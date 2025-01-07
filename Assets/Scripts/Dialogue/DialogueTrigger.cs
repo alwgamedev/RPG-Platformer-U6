@@ -1,32 +1,43 @@
-﻿using System.Collections.Generic;
+﻿using RPGPlatformer.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Dialogue
 {
-    public class DialogueTrigger : InteractableGameObject
+    [RequireComponent(typeof(InteractableGameObject))]
+    public class DialogueTrigger : MonoBehaviour
     {
-        [SerializeField] Dialogue dialogue;
-        [SerializeField] List<DialogueSpeaker> speakerList;//assumes all speakers will be game objects saved in the scene
+        [SerializeField] List<DialogueSO> dialogues = new();
 
-        DialogueSpeaker playerSpeaker;
+        public string ConversantName { get; private set; }
+
+        public static event Action<DialogueSO, string> DialogueTriggered;
 
         private void Start()
         {
-            playerSpeaker = GameObject.FindWithTag("Player").GetComponent<DialogueSpeaker>();
-            if(dialogue)
-            {
-                dialogue.InitializeSpeakers(playerSpeaker, speakerList);
-            }
+            ConversantName = GetComponent<InteractableGameObject>().DisplayName;
         }
 
-        protected override void OnDestroy()
+        public void TriggerDialogue(string dialogueName)
         {
-            base.OnDestroy();
+            DialogueSO dialogue = dialogues.FirstOrDefault(x => x.name == dialogueName);
+            TriggerDialogue(dialogue);
+        }
 
+        public void TriggerDialogue(int index)
+        {
+            if (index < 0 || index >= dialogues.Count) return;
+
+            TriggerDialogue(dialogues[index]);
+        }
+
+        public void TriggerDialogue(DialogueSO dialogue)
+        {
             if(dialogue)
             {
-                dialogue.ClearSpeakers();
+                DialogueTriggered?.Invoke(dialogue, ConversantName);
             }
         }
     }

@@ -130,7 +130,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 15, y: 0, z: 0, w: 0}
+  m_margin: {x: 15, y: 5, z: 0, w: 5}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -189,7 +189,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: 150
-  m_PreferredHeight: 40
+  m_PreferredHeight: 50
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -451,6 +451,8 @@ MonoBehaviour:
   useShowOnEnable: 1
   interactableWhenShown: 1
   blockRaycastsWhenShown: 1
+  pauseAction: 2
+  unpauseAction: 2
   inventorySlotPrefab: {fileID: 8604536382215273377, guid: 7a9c09ec3df0fa342a46b317b3ae785d, type: 3}
 --- !u!114 &357570591142447923
 MonoBehaviour:

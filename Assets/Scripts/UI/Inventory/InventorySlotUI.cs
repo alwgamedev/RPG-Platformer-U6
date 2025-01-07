@@ -21,6 +21,7 @@ namespace RPGPlatformer.UI
         public bool AllowReplacementIfCantSwap => false;
 
         public event Action OnDragResolved;
+        public event Action OnItemChanged;
 
         public void SetIconSize(Vector2 sizeDelta)
         {
@@ -52,6 +53,7 @@ namespace RPGPlatformer.UI
         {
             item = data?.Item();
             quantity = data?.Quantity() ?? 0;
+            OnItemChanged?.Invoke();
             //we don't need to control quantity here, because the data will be copied from the backing inventory, where
             //max stackable is already enforced
         }
@@ -60,6 +62,7 @@ namespace RPGPlatformer.UI
         {
             item = null;
             quantity = 0;
+            OnItemChanged?.Invoke();
         }
 
         public virtual void UseItem()
@@ -134,6 +137,7 @@ namespace RPGPlatformer.UI
         private void OnDestroy()
         {
             OnDragResolved = null;
+            OnItemChanged = null;
         }
     }
 }

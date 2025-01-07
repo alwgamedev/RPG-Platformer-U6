@@ -16,31 +16,39 @@ namespace RPGPlatformer.AIControl
     [RequireComponent(typeof(AIPatroller))]
     public class AIPatrollerController : MonoBehaviour, IInputSource
     {
+        [SerializeField] protected bool playerEnemy = true;
+
         protected AIPatroller patroller;
         protected AIPatrollerStateManager stateManager;
-        protected Health currentTarget;
+        //protected IHealth currentTarget;
         protected Action OnUpdate;
 
         protected string currentState;//for testing
         protected string storedState;
 
-        protected Health CurrentTarget
-        {
-            get => currentTarget;
-            set
-            {
-                currentTarget = value;
-                patroller.combatController.currentTarget = value;
-                if (value != null)
-                {
-                    patroller.BecomeSuspicious();
-                }
-                else
-                {
-                    stateManager.StateMachine.SetCurrentState(stateManager.StateGraph.patrol);
-                }
-            }
+        public IHealth CurrentTarget 
+        { 
+            get => patroller.combatController.currentTarget;
+            protected set => patroller.combatController.currentTarget = value;
         }
+
+        //protected Health CurrentTarget
+        //{
+        //    get => currentTarget;
+        //    set
+        //    {
+        //        currentTarget = value;
+        //        patroller.combatController.currentTarget = value;
+        //        if (value != null)
+        //        {
+        //            patroller.BecomeSuspicious();
+        //        }
+        //        else
+        //        {
+        //            stateManager.StateMachine.SetCurrentState(stateManager.StateGraph.patrol);
+        //        }
+        //    }
+        //}
 
         protected virtual void Awake()
         {
@@ -65,7 +73,14 @@ namespace RPGPlatformer.AIControl
 
         private void Start()
         {
-            CurrentTarget = GameObject.Find("Player").GetComponent<Health>();
+            if (playerEnemy)
+            {
+                SetCurrentTarget(GameObject.Find("Player").GetComponent<IHealth>());
+            }
+            else
+            {
+                SetCurrentTarget(null);
+            }
         }
 
         protected virtual void Update()
@@ -73,10 +88,26 @@ namespace RPGPlatformer.AIControl
             OnUpdate?.Invoke();
         }
 
+        protected virtual void SetCurrentTarget(IHealth targetHealth, bool beginPatrolIfNoTarget = true)
+        {
+            CurrentTarget = targetHealth;
+            if (targetHealth != null)
+            {
+                patroller.BecomeSuspicious();
+            }
+            else
+            {
+                patroller.BeginPatrol();
+            }
+        }
+
         protected virtual void OnPatrolEntry()
         {
             //Debug.Log($"{gameObject.name} entering Patrol");
-            CurrentTarget = null;
+            if (CurrentTarget != null)
+            {
+                SetCurrentTarget(null, false);
+            }
             patroller.movementController.SetRunning(false);
             OnUpdate = patroller.PatrolBehavior;
         }
@@ -84,13 +115,13 @@ namespace RPGPlatformer.AIControl
         protected virtual void OnSuspicionEntry()
         {
             //Debug.Log($"{gameObject.name} entering Suspicion");
-            OnUpdate = () => patroller.SuspicionBehavior(currentTarget);
+            OnUpdate = () => patroller.SuspicionBehavior(CurrentTarget);
         }
 
         protected virtual void OnPursuitEntry()
         {
             //Debug.Log($"{gameObject.name} entering Pursuit");
-            OnUpdate = () => patroller.PursuitBehavior(currentTarget);
+            OnUpdate = () => patroller.PursuitBehavior(CurrentTarget);
             patroller.movementController.SetRunning(true);
         }
 

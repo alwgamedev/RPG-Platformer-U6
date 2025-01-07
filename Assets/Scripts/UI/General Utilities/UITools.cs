@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,6 +7,26 @@ namespace RPGPlatformer.UI
 {
     public static class UITools
     {
+        public static IEnumerator FadeIn(this CanvasGroup canvasGroup, float duration)
+        {
+            while(canvasGroup.alpha < 1)
+            {
+                yield return null;
+                canvasGroup.alpha += Time.deltaTime / duration;
+            }
+            canvasGroup.alpha = 1;
+        }
+
+        public static IEnumerator FadeOut(this CanvasGroup canvasGroup, float duration)
+        {
+            while(canvasGroup.alpha > 0)
+            {
+                yield return null;
+                canvasGroup.alpha -= Time.deltaTime / duration;
+            }
+            canvasGroup.alpha = 0;
+        }
+
         public static string FormatLinesOfText(List<string> lines)
         {
             if (lines == null) return null;

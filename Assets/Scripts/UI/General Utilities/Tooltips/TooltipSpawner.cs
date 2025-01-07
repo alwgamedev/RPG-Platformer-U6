@@ -14,12 +14,16 @@ namespace RPGPlatformer.UI
         [SerializeField] protected GameObject tooltipPrefab;
         [SerializeField] protected float spawnDelay;
 
-        protected GameObject activeTooltip;
+        //protected GameObject activeTooltip;
         protected Canvas targetCanvas;
         //protected bool mouseOverSpawner;
 
         Action PointerEnter;
         Action PointerExit;
+
+        public GameObject ActiveTooltip { get; protected set; }
+
+        public event Action TooltipSpawned;
 
         protected virtual void Awake()
         {
@@ -32,6 +36,14 @@ namespace RPGPlatformer.UI
             PointerEnter += async () => await DelayedSpawn();
         }
 
+        protected virtual void OnEnable()
+        {
+            if (TryGetComponent(out RightClickMenuSpawner rcms))
+            {
+                rcms.MenuSpawned += ClearTooltip;
+            }
+        }
+
         public void Pause()
         {
             ClearTooltip();
@@ -39,17 +51,24 @@ namespace RPGPlatformer.UI
 
         public void Unpause() { }
 
-        public abstract bool CanCreateTooltip();
+        public virtual bool CanCreateTooltip()
+        {
+            if(TryGetComponent(out RightClickMenuSpawner rcms) && rcms.ActiveMenu)
+            {
+                return false;
+            }
+            return true;
+        }
 
         public abstract void ConfigureTooltip(GameObject tooltip);
 
         public virtual void ClearTooltip()
         {
-            if (activeTooltip)
+            if (ActiveTooltip)
             {
-                Destroy(activeTooltip);
+                Destroy(ActiveTooltip);
             }
-            activeTooltip = null;
+            ActiveTooltip = null;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -72,7 +91,7 @@ namespace RPGPlatformer.UI
         //NOTE: The tooltip should have its pivot in UPPER RIGHT CORNER.
         private void RepositionTooltip()
         {
-            activeTooltip.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
+            ActiveTooltip.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
         }
 
         private GameObject InstantiateTooltipPrefab()
@@ -82,13 +101,14 @@ namespace RPGPlatformer.UI
 
         private void Spawn()
         {
-            if (!activeTooltip && CanCreateTooltip())
+            if (!ActiveTooltip && CanCreateTooltip())
             {
-                activeTooltip = InstantiateTooltipPrefab();
-                if (activeTooltip)
+                ActiveTooltip = InstantiateTooltipPrefab();
+                if (ActiveTooltip)
                 {
-                    ConfigureTooltip(activeTooltip);
+                    ConfigureTooltip(ActiveTooltip);
                     RepositionTooltip();
+                    TooltipSpawned?.Invoke();
                 }
             }
         }
@@ -124,7 +144,7 @@ namespace RPGPlatformer.UI
 
         protected virtual void OnGUI()
         {
-            if (activeTooltip && Event.current.type == EventType.MouseUp)
+            if (ActiveTooltip && Event.current.type == EventType.MouseUp)
             {
                 ClearTooltip();
             }
@@ -135,10 +155,11 @@ namespace RPGPlatformer.UI
             ClearTooltip();
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             PointerEnter = null;
             PointerExit = null;
+            TooltipSpawned = null;
         }
     }
 }

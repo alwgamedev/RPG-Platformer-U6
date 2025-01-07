@@ -1,7 +1,8 @@
 ﻿namespace RPGPlatformer.Core
 {
-    public interface IInteractableGameObject
+    public interface IInteractableGameObject : IExaminable
     {
+        public string DisplayName { get; }
         public bool MouseOver { get; }
     }
 }

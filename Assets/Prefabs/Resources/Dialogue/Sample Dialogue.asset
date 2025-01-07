@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6684077342714869245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
+  m_Name: (AutoContinuationDialogueNode) a79ad81a-5230-4067-80cc-8ca44316b53a
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  textSegments:
+  - That's fantastic news!
+  uniqueID: a79ad81a-5230-4067-80cc-8ca44316b53a
+  position: {x: 588.8, y: 27.2}
+  continuationID: 56e6b1cb-46da-4c5e-9181-ed43a78e35ee
+--- !u!114 &-3001012180287292945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 084b3ed8c5fb85646b7313618ab2f6c8, type: 3}
+  m_Name: (ChoicesDialogueNode) b901291e-c355-4769-bcf5-58445a3286ff
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  textSegments: []
+  uniqueID: b901291e-c355-4769-bcf5-58445a3286ff
+  position: {x: -148.03581, y: 106.19967}
+  responseChoices:
+  - choiceText: choice text works
+    continuationID: eeea8154-1955-434e-87bc-0cc7e80507cf
+  - choiceText: 
+    continuationID: 
+  - choiceText: 
+    continuationID: 
+--- !u!114 &-2406656997949494044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 084b3ed8c5fb85646b7313618ab2f6c8, type: 3}
+  m_Name: (ChoicesDialogueNode) eeea8154-1955-434e-87bc-0cc7e80507cf
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  textSegments:
+  - TEXT SEGMENT A
+  - TEXT SEGMENT B
+  uniqueID: eeea8154-1955-434e-87bc-0cc7e80507cf
+  position: {x: 240.8, y: 135.2}
+  responseChoices:
+  - choiceText: I think I'm lost...
+    continuationID: a79ad81a-5230-4067-80cc-8ca44316b53a
+  - choiceText: Who are you?!
+    continuationID: 56e6b1cb-46da-4c5e-9181-ed43a78e35ee
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169cada9d0d6b9745b76b51fc8d250cb, type: 3}
+  m_Name: Sample Dialogue
+  m_EditorClassIdentifier: 
+  rootNode: {fileID: -2406656997949494044}
+  nodes:
+  - {fileID: -2406656997949494044}
+  - {fileID: 6743007427671615389}
+  - {fileID: -6684077342714869245}
+  - {fileID: 8009054417789636396}
+  - {fileID: -3001012180287292945}
+--- !u!114 &6743007427671615389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
+  m_Name: (AutoContinuationDialogueNode) 56e6b1cb-46da-4c5e-9181-ed43a78e35ee
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  textSegments:
+  - How so?
+  uniqueID: 56e6b1cb-46da-4c5e-9181-ed43a78e35ee
+  position: {x: 977.60004, y: 361.6}
+  continuationID: 
+--- !u!114 &8009054417789636396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
+  m_Name: (AutoContinuationDialogueNode) 1e0f819a-3291-457d-90f8-0a0ea409b6bd
+  m_EditorClassIdentifier: 
+  isPlayerSpeaking: 0
+  textSegments: []
+  uniqueID: 1e0f819a-3291-457d-90f8-0a0ea409b6bd
+  position: {x: -371.19998, y: 221.6}
+  continuationID: b901291e-c355-4769-bcf5-58445a3286ff

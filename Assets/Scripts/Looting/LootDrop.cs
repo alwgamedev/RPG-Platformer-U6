@@ -10,30 +10,31 @@ namespace RPGPlatformer.Loot
     public class LootDrop : InteractableGameObject, ILootDrop
     {
         [SerializeField] protected float maxLifeTime = 60;
-        [SerializeField] protected float maxSearchableDistance = 2.5f;
-        [SerializeField] protected string displayName = "Loot Bag";
+        //[SerializeField] protected float maxSearchableDistance = 2.5f;
+        //[SerializeField] protected string displayName = "Loot Bag";
 
         protected float lifeTimer = 0;
         protected bool beingInspected;
-        protected Transform playerTransform;
-        protected ILooter player;
+        //protected Transform playerTransform;
+        protected ILooter playerLooter;
         protected InventoryManager inventory;
         protected Action OnUpdate;
 
-        public bool IsPlayer => false;
+        public bool IsPlayer => false;//(part of IInventoryOwner interface)
+        public override string ExamineText => "I should search this for loot.";
+        public override CursorType CursorType => CursorType.Loot;
         public InventoryManager Inventory => inventory;
-        public string DisplayName => $"<b>{displayName}</b>";
 
         public event Action OnDropDestroyed;
-        public event Action PlayerOutOfRange;
+        //public event Action PlayerOutOfRange;
 
         public static event Action<ILootDrop> OnLootSearched;
 
-        private void Awake()
+        protected override void Awake()
         {
-            GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
-            playerTransform = playerGO.transform;
-            player = playerGO.GetComponent<ILooter>();
+            base.Awake();
+
+            playerLooter = playerTransform.gameObject.GetComponent<ILooter>();
             
             inventory = GetComponent<InventoryManager>();
         }
@@ -61,6 +62,13 @@ namespace RPGPlatformer.Loot
             OnUpdate?.Invoke();
         }
 
+        protected override void OnMouseDown()
+        {
+            if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
+
+            TakeAll();
+        }
+
         public void HandleInventoryOverflow(IInventorySlotDataContainer data)
         {
             if (data == null)
@@ -84,12 +92,12 @@ namespace RPGPlatformer.Loot
 
         public void ReleaseFromSlot(int i, int quantity = 1)
         {
-            player.TakeLoot(inventory.RemoveFromSlot(i, quantity));
+            playerLooter.TakeLoot(inventory.RemoveFromSlot(i, quantity));
         }
 
         public void TakeAll()
         {
-            player.TakeLoot(inventory.RemoveAllItems());
+            playerLooter.TakeLoot(inventory.RemoveAllItems());
         }
 
         public void Search()
@@ -98,10 +106,10 @@ namespace RPGPlatformer.Loot
             OnLootSearched?.Invoke(this);
         }
 
-        public void Examine()
-        {
-            GameLog.Log("I should search this for loot.");
-        }
+        //public void Examine()
+        //{
+        //    GameLog.Log("I should search this for loot.");
+        //}
 
         public void BeginInspection()
         {
@@ -114,39 +122,30 @@ namespace RPGPlatformer.Loot
             OnUpdate = null;
         }
 
-        private bool PlayerInRangeWithNotifications()
-        {
-            if (!PlayerInRange())
-            {
-                LogPlayerOutOfRange();
-                PlayerOutOfRange?.Invoke();
-                return false;
-            }
-            return true;
-        }
+        //private bool PlayerInRangeWithNotifications()
+        //{
+        //    if (!PlayerInRange())
+        //    {
+        //        OnPlayerOutOfRange();
+        //        PlayerOutOfRange?.Invoke();
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
-        private bool PlayerInRange()
-        {
-            if(player == null)
-            {
-                return false;
-            }
+        ////private bool PlayerInRange()
+        ////{
+        ////    if(player == null)
+        ////    {
+        ////        return false;
+        ////    }
 
-            return Vector2.Distance(playerTransform.position, transform.position) < maxSearchableDistance;
-        }
+        ////    return Vector2.Distance(playerTransform.position, transform.position) < maxSearchableDistance;
+        ////}
 
-        private void OnMouseDown()
-        {
-            if (GlobalGameTools.PlayerIsDead) return;
-            if (!PlayerInRangeWithNotifications()) return;
-
-            TakeAll();
-        }
-
-        private void LogPlayerOutOfRange()
+        protected override void OnPlayerOutOfRange()
         {
             GameLog.Log($"You're too far away to see the contents of {DisplayName} ...");
-
         }
 
         private void DestroyDrop()
@@ -160,7 +159,7 @@ namespace RPGPlatformer.Loot
             base.OnDestroy();
 
             OnDropDestroyed = null;
-            PlayerOutOfRange = null;
+            //PlayerOutOfRange = null;
             OnUpdate = null;
         }
     }

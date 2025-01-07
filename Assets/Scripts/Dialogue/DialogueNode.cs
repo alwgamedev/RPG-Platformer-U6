@@ -1,105 +1,88 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace RPGPlatformer.Dialogue
 {
-    public abstract class DialogueNode : Node//this could be SO instead (like in KiwiCoder's tutorial)
+    public abstract class DialogueNode : ScriptableObject
     {
-        [SerializeField] protected List<string> childIDs = new();
-        [SerializeField] protected int speakerIndex = -1;//-1 will always be player
+        [SerializeField] protected bool isPlayerSpeaking;
+        //[SerializeField] protected int speakerIndex = -1;//-1 will always be player
         [SerializeField] protected List<string> textSegments = new();
+        [SerializeField] protected string uniqueID;
+        [SerializeField] protected Vector2 position;//store position in editor window
 
-        public List<string> ChildIDs()
+        public virtual void Initialize(Vector2 position = default)
         {
-            return childIDs;
+            uniqueID = Guid.NewGuid().ToString();
+            name = $"({GetType().Name}) {uniqueID}";
+            this.position = position;
         }
 
-        public int SpeakerIndex()
+        public string UniqueID()
         {
-            return speakerIndex;
+            return uniqueID;
         }
+
+        public abstract string ContinuationID(int responseIndex);
+
+        public bool IsPlayerSpeaking()
+        {
+            return isPlayerSpeaking;
+        }
+
+        //public int SpeakerIndex()
+        //{
+        //    return speakerIndex;
+        //}
 
         public List<string> TextSegments()
         {
             return textSegments;
         }
 
-        public void Position(Vector2 position)
+        public Rect Rect()
         {
-            SetPosition(new Rect(position, default));
+            return new(position.x, position.y, 0, 0);
         }
 
-        public void Draw()
+#if UNITY_EDITOR
+        //public void SetSpeakerIndex(int index)
+        //{
+        //    speakerIndex = index;
+        //    EditorUtility.SetDirty(this);
+        //}
+
+        public void SetIsPlayerSpeaking(bool val)
         {
-            DrawTitleContainer();
-            DrawInputContainer();
-            DrawOutputContainer();
-            DrawExtensionsContainer();
+            isPlayerSpeaking = val;
+            EditorUtility.SetDirty(this);
         }
 
-        protected void DrawTitleContainer()
+        public abstract void SetContinuation(DialogueNode node, int responseIndex);
+
+        public abstract void RemoveContinuation(int responseIndex);
+
+        public abstract void EraseAnyOccurrencesOfChild(DialogueNode child);
+
+        public void AddTextSegment(string textSegment = "")
         {
-            TextField title = new("Speaker number:")
-            {
-                value = "-1"
-                //TO-DO: enforce integer input only in OnGUI (i.e. if character out of range, clear the textfield)
-                //(can just check if int32.tryparse the current value)
-                //(we can even have the node hold a maxSpeaker index (defaulting usefuly to 0, as most dialogue will
-                //only have one ai speaker)
-            };
-            titleContainer.Insert(0, title);
+            textSegments.Add(textSegment);
+            EditorUtility.SetDirty(this);
         }
 
-        protected void DrawInputContainer()
+        public void RemoveTextSegment(int index)
         {
-            Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input,
-                Port.Capacity.Multi, typeof(Node));
-            inputPort.portName = "Parent";
-            inputContainer.Insert(0, inputPort);
+            textSegments.RemoveAt(index);
+            EditorUtility.SetDirty(this);
         }
 
-        protected abstract void DrawOutputContainer();
-
-        protected void DrawExtensionsContainer()
+        public void SetPosition(Vector2 position)
         {
-            Foldout dialogueFoldout = new()
-            {
-                text = "Speaker Dialogue"
-            };
-
-            for(int i = 0; i < textSegments.Count; i++)
-                //We would also want to be able to drag the segments around and reorder...
-                //(might be a bit of a pain to keep textSegments field updated)
-            {
-                VisualElement segmentContainer = new();
-                TextField textSegment = new(textSegments[i]);
-                Button deleteButton = new();
-                deleteButton.text = "Delete";
-                //deleteButton.clicked += () =>
-                //{
-                //    textSegments.RemoveAt(i);
-                //    Draw();
-                //};
-
-                segmentContainer.Insert(0, textSegment);
-                segmentContainer.Insert(1, deleteButton);
-
-                dialogueFoldout.Insert(i, segmentContainer);
-            }
-
-            Button addButton = new();
-            addButton.text = "Add";
-            dialogueFoldout.Insert(dialogueFoldout.childCount, addButton);
-
-            extensionContainer.Insert(0, dialogueFoldout);
-
-            //+there should be button for new text segment
-
-            RefreshExpandedState();
+            this.position = position;
+            EditorUtility.SetDirty(this);
         }
+#endif
     }
 }

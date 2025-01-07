@@ -16,6 +16,7 @@ namespace RPGPlatformer.UI
 
         public override bool CanCreateTooltip()
         {
+            if (!base.CanCreateTooltip()) return false;
             return slotComponent.Item() != null && tooltipPrefab;
         }
 

@@ -55,7 +55,7 @@ namespace RPGPlatformer.Combat
 
             ibm.LeftClickAction.started += (context) =>
             {
-                if (!EventSystem.current.IsPointerOverGameObject() && !InteractableGameObject.MouseOverInteractableGameObject)
+                if (!EventSystem.current.IsPointerOverGameObject() && !InteractableGameObject.MouseOverAnyIGO)
                 {
                     FireButtonDown();
                 }
