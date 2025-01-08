@@ -6,39 +6,47 @@ using UnityEngine;
 
 namespace RPGPlatformer.Dialogue
 {
-    [RequireComponent(typeof(InteractableGameObject))]
+    //[RequireComponent(typeof(InteractableGameObject))]
     public class DialogueTrigger : MonoBehaviour
     {
         [SerializeField] List<DialogueSO> dialogues = new();
 
-        public string ConversantName { get; private set; }
-
         public static event Action<DialogueSO, string, string> DialogueTriggered;
         //signature (dialogue, conversantName, playerName)
+        public static event Action DialogueCancelled;
 
-        private void Start()
+        //private void Start()
+        //{
+        //    var igo = GetComponent<InteractableGameObject>();
+        //    if (igo)
+        //    {
+        //        igo.PlayerOutOfRange += () => DialogueCancelled?.Invoke();
+        //    }
+        //}
+
+        public void CancelDialogue()
         {
-            ConversantName = GetComponent<InteractableGameObject>().DisplayName;
+            DialogueCancelled?.Invoke();
         }
 
-        public void TriggerDialogue(string dialogueName, string playerName)
+        public void TriggerDialogue(string dialogueName, string conversantName, string playerName)
         {
             DialogueSO dialogue = dialogues.FirstOrDefault(x => x.name == dialogueName);
-            TriggerDialogue(dialogue, playerName);
+            TriggerDialogue(dialogue, conversantName, playerName);
         }
 
-        public void TriggerDialogue(int index, string playerName)
+        public void TriggerDialogue(int index, string conversantName, string playerName)
         {
             if (index < 0 || index >= dialogues.Count) return;
 
-            TriggerDialogue(dialogues[index], playerName);
+            TriggerDialogue(dialogues[index], conversantName, playerName);
         }
 
-        public void TriggerDialogue(DialogueSO dialogue, string playerName)
+        public void TriggerDialogue(DialogueSO dialogue, string conversantName, string playerName)
         {
             if(dialogue)
             {
-                DialogueTriggered?.Invoke(dialogue, ConversantName, playerName);
+                DialogueTriggered?.Invoke(dialogue, conversantName, playerName);
             }
         }
     }

@@ -1,10 +1,14 @@
 ﻿using RPGPlatformer.Inventory;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace RPGPlatformer.UI
 {
     public class GridLayoutInventoryUI : InventoryUI
     {
+        [SerializeField] bool fillLastRowWithEmptySlots;
+
         protected GridLayoutGroup gridLayoutGroup;
 
         protected override void Awake()
@@ -35,9 +39,25 @@ namespace RPGPlatformer.UI
             {
                 slots[i] = Instantiate(inventorySlotPrefab, gridLayoutGroup.transform);
                 slots[i].PlaceItem(owner.Inventory.GetDataForSlot(i));
-                //slots[i].SetIconSize(0.8f * gridLayoutGroup.cellSize);
                 slots[i].DisplayItem();
                 slots[i].OnDragResolved += () => owner.Inventory.MatchItems(slots);
+            }
+
+            if(fillLastRowWithEmptySlots)
+            {
+                int lastRowCount = slots.Count() % gridLayoutGroup.constraintCount;
+                int remainder = gridLayoutGroup.constraintCount - lastRowCount;
+                for(int i = 0; i < remainder; i++)
+                {
+                    if (owner.Inventory.TryAddNewSlot())
+                    {
+                        var slot = Instantiate(inventorySlotPrefab, gridLayoutGroup.transform);
+                        slot.PlaceItem(null);
+                        slot.DisplayItem();
+                        slot.OnDragResolved += () => owner.Inventory.MatchItems(slots);
+                        slots = slots.Append(slot).ToArray();
+                    }
+                }
             }
         }
     }

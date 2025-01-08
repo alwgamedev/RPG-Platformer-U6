@@ -3,6 +3,7 @@
     public interface IInventoryOwner
     {
         public bool IsPlayer { get; }
+
         public InventoryManager Inventory { get; }
 
         public void ReleaseFromSlot(int slotIndex, int quantity = 1);

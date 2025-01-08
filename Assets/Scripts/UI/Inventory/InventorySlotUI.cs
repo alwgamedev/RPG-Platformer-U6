@@ -100,6 +100,7 @@ namespace RPGPlatformer.UI
 
         private void SetQuantityText()
         {
+            if (!quantityText) return;
             if (item == null || item.BaseData.MaxStack == 1)
             {
                 quantityText.text = "";
@@ -110,6 +111,7 @@ namespace RPGPlatformer.UI
 
         private void SetDosesText()
         {
+            if(!dosesText) return;
             if(item != null && item is IDosedItem dosed && dosed.Doses > 1)
             {
                 dosesText.text = $"({dosed.DosesRemaining}/{dosed.Doses})";
@@ -121,7 +123,11 @@ namespace RPGPlatformer.UI
 
         private void SetIcon(InventoryItem item)
         {
-            if (item != null && item.BaseData.Icon != null)
+            if(!slotIcon)
+            {
+                return;
+            }
+            else if (item != null && item.BaseData.Icon != null)
             {
                 slotIcon.sprite = item.BaseData.Icon;
                 slotIcon.preserveAspect = true;

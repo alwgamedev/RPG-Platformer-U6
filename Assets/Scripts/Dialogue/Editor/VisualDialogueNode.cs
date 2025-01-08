@@ -45,7 +45,7 @@ namespace RPGPlatformer.Dialogue.Editor
             };
             toggle.style.unityTextAlign = TextAnchor.MiddleLeft;
             toggle.style.minWidth = 5;//label and the actual toggle
-            toggle.ElementAt(0).style.fontSize = 16;
+            toggle.ElementAt(0).style.fontSize = 11;
             toggle.RegisterValueChangedCallback((valueChangeEvent) =>
             {
                 dialogueNode.SetIsPlayerSpeaking(valueChangeEvent.newValue);
@@ -53,9 +53,9 @@ namespace RPGPlatformer.Dialogue.Editor
 
 
             rootNodeToggle = new("Root node:");
-            toggle.style.unityTextAlign = TextAnchor.MiddleLeft;
-            toggle.style.minWidth = 5;
-            toggle.ElementAt(0).style.fontSize = 8;
+            rootNodeToggle.style.unityTextAlign = TextAnchor.MiddleLeft;
+            rootNodeToggle.style.minWidth = 15;
+            rootNodeToggle.ElementAt(0).style.fontSize = 11;
 
             titleContainer.Insert(0, toggle);
             titleContainer.Insert(1, rootNodeToggle);
@@ -101,7 +101,7 @@ namespace RPGPlatformer.Dialogue.Editor
                 text = "Response Choices"
             };
 
-            Func<VisualElement> makeItem = () => 
+            VisualElement MakeItem()
             {
                 VisualElement choiceContainer = new();
 
@@ -115,9 +115,7 @@ namespace RPGPlatformer.Dialogue.Editor
                     ListView listView = choicesFoldout[0] as ListView;
                     List<TextField> textFields = listView.Query<TextField>().ToList();
                     int currentIndex = textFields.IndexOf(textField);
-                    if (currentIndex < 0) return;
-                    choicesNode.ResponseChoices()[currentIndex].choiceText = textChangeEvent.newValue;
-                    EditorUtility.SetDirty(dialogueNode);
+                    choicesNode.SetResponseChoiceText(currentIndex, textChangeEvent.newValue);
                 });
 
                 choiceContainer.Insert(0, textField);
@@ -131,7 +129,7 @@ namespace RPGPlatformer.Dialogue.Editor
                 return choiceContainer;
             };
 
-            Action<VisualElement, int> bindItem = (elmt, index) =>
+            void BindItem(VisualElement elmt, int index)
             {
                 if (elmt == null || choicesNode == null || choicesNode.ResponseChoices() == null) return;
                 TextField tf = elmt.Q<TextField>();
@@ -141,12 +139,15 @@ namespace RPGPlatformer.Dialogue.Editor
                 }
             };
 
-            ListView listView = new(responseChoices, 40, makeItem, bindItem)
+            ListView listView = new(responseChoices, 60, MakeItem, BindItem)
             {
                 reorderable = true,
                 reorderMode = ListViewReorderMode.Animated,
                 showAddRemoveFooter = true
             };
+
+            listView.itemsAdded += (args) => EditorUtility.SetDirty(choicesNode);
+            listView.itemsRemoved += (args) => EditorUtility.SetDirty(choicesNode);
 
             choicesFoldout.Insert(0, listView);
             outputContainer.Insert(0, choicesFoldout);
@@ -172,9 +173,7 @@ namespace RPGPlatformer.Dialogue.Editor
                 text = "Speaker Dialogue"
             };
 
-            ListView listView = new();
-            listView.itemsSource = textSegments;
-            listView.makeItem = () =>
+            VisualElement MakeItem()
             {
                 TextField textField = new TextField();
                 textField.style.width = 250;
@@ -183,21 +182,27 @@ namespace RPGPlatformer.Dialogue.Editor
                 textField.style.whiteSpace = WhiteSpace.Normal;
                 textField.RegisterValueChangedCallback((textChangeEvent) =>
                 {
+                    ListView listView = dialogueFoldout[0] as ListView;
                     List<TextField> textFields = listView.Query<TextField>().ToList();
                     int currentIndex = textFields.IndexOf(textField);
-                    if (currentIndex < 0) return;
-                    dialogueNode.TextSegments()[currentIndex] = textChangeEvent.newValue;
-                    EditorUtility.SetDirty(dialogueNode);
+                    dialogueNode.SetTextSegment(currentIndex, textChangeEvent.newValue);
                 });
                 return textField;
 
             };
-            listView.bindItem = (elmt, index) => (elmt as TextField).value = textSegments[index] ?? "";
-            listView.fixedItemHeight = 60;
-            listView.reorderable = true;
-            listView.reorderMode = ListViewReorderMode.Animated;
-            listView.showAddRemoveFooter = true;
-            
+
+            void BindItem(VisualElement elmt, int index) => (elmt as TextField).value = textSegments[index] ?? "";
+
+            ListView listView = new(textSegments, 60, MakeItem, BindItem)
+            {
+                reorderable = true,
+                reorderMode = ListViewReorderMode.Animated,
+                showAddRemoveFooter = true
+            };
+
+            listView.itemsAdded += (args) => EditorUtility.SetDirty(dialogueNode);
+            listView.itemsRemoved += (args) => EditorUtility.SetDirty(dialogueNode);
+
             dialogueFoldout.Insert(0, listView);
             extensionContainer.Insert(0, dialogueFoldout);
             extensionContainer.style.backgroundColor = new Color(.15f, .15f, .15f, 1);

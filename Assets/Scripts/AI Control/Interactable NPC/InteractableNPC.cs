@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using RPGPlatformer.Core;
+using RPGPlatformer.Dialogue;
+using RPGPlatformer.UI;
 
 namespace RPGPlatformer.AIControl
 {
     public class InteractableNPC : InteractableGameObject
     {
-
-        Action primaryAction;//i.e. left click action (if any)
+        protected Action OnUpdate;
+        protected (string, Action) primaryAction = new();//i.e. left click action (if any)
         //Maybe this can be chosen from a set of pre-prepared static methods based on the IGO's CURSOR TYPE
         //(e.g. if cursor type dialogue, primaryAction = get component dialogueTrigger and trigger dialogue)
 
@@ -20,26 +22,45 @@ namespace RPGPlatformer.AIControl
             InitializeInteractionOptions();
         }
 
+        private void Update()
+        {
+            OnUpdate?.Invoke();
+        }
+
         protected virtual void InitializeInteractionOptions()
         {
             InteractionOptions = new();
-            //if(TryGetComponent(out DialogueTrigger dialogueTrigger))
-            //{
-            //    interactionOptions.Add(dialogueTrigger.TriggerDialogue);
-            //}
+
+            if (cursorType == CursorType.Dialogue && TryGetComponent(out DialogueTrigger dialogueTrigger))
+            {
+                primaryAction = ($"Talk to {displayName}", () =>
+                    {
+                        dialogueTrigger.TriggerDialogue(0, displayName, GlobalGameTools.PlayerName);
+                        OnUpdate = () => PlayerInRangeWithNotifications();
+                    }
+                );
+                PlayerOutOfRange += dialogueTrigger.CancelDialogue;
+                InteractionOptions.Add(primaryAction);
+            }
+        }
+
+        protected override void OnPlayerOutOfRange()
+        {
+            GameLog.Log($"You are too far away to interact with {DisplayName}.");
+            OnUpdate = null;
         }
 
         protected override void OnMouseDown()
         {
             if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
 
-            primaryAction?.Invoke();
+            primaryAction.Item2?.Invoke();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            primaryAction = null;
+            primaryAction.Item2 = null;
         }
     }
 }

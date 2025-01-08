@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,7 +15,8 @@ namespace RPGPlatformer.Dialogue
 
         public override string ContinuationID(int responseIndex)
         {
-            return responseChoices[responseIndex].continuationID;
+            if (responseIndex < 0 || responseIndex >= responseChoices.Count) return null;
+            return responseChoices[responseIndex]?.continuationID;
         }
 
 #if UNITY_EDITOR
@@ -28,6 +28,8 @@ namespace RPGPlatformer.Dialogue
 
         public void SetResponseChoiceText(int index, string response)
         {
+            if(index < 0 || index >= responseChoices.Count) return;
+            responseChoices[index] ??= new();
             responseChoices[index].choiceText = response;
             EditorUtility.SetDirty(this);
         }

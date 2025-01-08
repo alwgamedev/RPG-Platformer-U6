@@ -5,15 +5,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using RPGPlatformer.Dialogue;
+using System.Linq;
 
 namespace RPGPlatformer.UI
 {
-    using static UITools;
-
     public class DialogueWindow : MonoBehaviour
     {
         [SerializeField] float dialogueFadeDuration = 0.5f;
-        [SerializeField] float delayBetweenDialogueSegments = 0.5f;
+        [SerializeField] float delayBetweenDialogueSegments = 4;
         [SerializeField] TextMeshProUGUI speakerLabel;
         [SerializeField] VerticalLayoutGroup dialogueContainer;
         [SerializeField] VerticalLayoutGroup choicesContainer;
@@ -25,7 +24,7 @@ namespace RPGPlatformer.UI
         [SerializeField] Button nextButton;
         [SerializeField] Button closeButton;
 
-        List<CanvasGroup> textSegments;
+        List<CanvasGroup> textSegments = new();
 
         public GameObject NextButtonContainer => nextButtonContainer;
         public Button CloseButton => closeButton;
@@ -38,13 +37,14 @@ namespace RPGPlatformer.UI
 
             foreach (var text in dialogueNode.TextSegments())
             {
+                if (string.IsNullOrEmpty(text)) continue;
                 var textSegment = Instantiate(dialogueSegmentPrefab, dialogueContainer.transform);
                 textSegment.GetComponent<TextMeshProUGUI>().text = text;
                 textSegment.alpha = 0;
                 textSegments.Add(textSegment);
             }
 
-            if(dialogueNode is ChoicesDialogueNode choicesNode)
+            if (dialogueNode is ChoicesDialogueNode choicesNode)
             {
                 List<ResponseChoiceData> responseChoices = choicesNode.ResponseChoices();
 
@@ -52,10 +52,11 @@ namespace RPGPlatformer.UI
                 {
                     var choiceButton = Instantiate(choiceButtonPrefab, choicesContainer.transform);
                     choiceButton.GetComponentInChildren<TextMeshProUGUI>().text = responseChoices[i].choiceText;
-                    choiceButton.onClick.AddListener(() => ResponseSelected?.Invoke(i));
+                    int index = i;
+                    choiceButton.onClick.AddListener(() => ResponseSelected?.Invoke(index));
                 }
 
-                if (textSegments.Count > 0)
+                if (textSegments != null && textSegments.Count > 0)
                 {
                     string speakerName = dialogueNode.IsPlayerSpeaking() ? playerName : conversantName;
                     DisplayMainDialogue(speakerName);
@@ -103,7 +104,7 @@ namespace RPGPlatformer.UI
             foreach (var textGroup in textSegments)
             {
                 yield return textGroup.FadeIn(dialogueFadeDuration);
-                yield return delayBetweenDialogueSegments;
+                yield return delayBetweenSegments;
             }
         }
 

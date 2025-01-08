@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using RPGPlatformer.Inventory;
+using UnityEngine.UI;
 
 namespace RPGPlatformer.UI
 {
@@ -29,7 +30,7 @@ namespace RPGPlatformer.UI
 
         public virtual void UpdateInventoryUI()
         {
-            for(int i = 0; i < slots.Length; i++)
+            for(int i = 0; i < owner.Inventory.NumSlots; i++)
             {
                 slots[i].PlaceItem(owner.Inventory.GetDataForSlot(i));
                 slots[i].DisplayItem();

@@ -9,15 +9,18 @@ namespace RPGPlatformer.UI
         [SerializeField] Button collapseButton;
         [SerializeField] bool openOnStart;
 
+        bool isOpen;
+
         private void Start()
         {
-            SetOpen(openOnStart);
             collapseButton.onClick.AddListener(ToggleOpen);
+            SetOpen(openOnStart);
         }
 
         public void SetOpen(bool val)
         {
             content.SetActive(val);
+            isOpen = val;
         }
 
         public float ContentWidth()
@@ -27,7 +30,7 @@ namespace RPGPlatformer.UI
 
         private void ToggleOpen()
         {
-            SetOpen(!content.activeSelf);
+            SetOpen(!isOpen);
         }
 
         private void OnDestroy()

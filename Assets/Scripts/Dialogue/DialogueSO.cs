@@ -10,9 +10,15 @@ namespace RPGPlatformer.Dialogue
     {
         [SerializeField] DialogueNode rootNode;
         [SerializeField] List<DialogueNode> nodes = new();
-        [SerializeField] Dictionary<string, DialogueNode> NodeLookup = new();
+        
+        Dictionary<string, DialogueNode> NodeLookup = new();
 
         private void OnValidate()
+        {
+            RebuildNodeLookup();
+        }
+
+        private void RebuildNodeLookup()
         {
             NodeLookup.Clear();
             foreach (DialogueNode node in nodes)
@@ -53,11 +59,16 @@ namespace RPGPlatformer.Dialogue
             string id = node.ContinuationID(responseIndex);
             if (id != null)
             {
+                if(NodeLookup == null || NodeLookup.Count == 0)
+                {
+                    RebuildNodeLookup();
+                }
                 if (NodeLookup.TryGetValue(id, out continuation))
                 {
                     return true;
                 }
             }
+
             return false;
         }
 

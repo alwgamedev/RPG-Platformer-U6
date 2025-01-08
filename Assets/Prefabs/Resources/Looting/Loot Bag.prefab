@@ -99,9 +99,9 @@ GameObject:
   - component: {fileID: 719934269331192399}
   - component: {fileID: 2993346898027945617}
   - component: {fileID: 5450842472843519817}
-  - component: {fileID: 597913361817481228}
   - component: {fileID: 6284128859392026527}
   - component: {fileID: 3039045968565639590}
+  - component: {fileID: 9132743189128312601}
   m_Layer: 10
   m_Name: Loot Bag
   m_TagString: Untagged
@@ -203,19 +203,6 @@ MonoBehaviour:
   menuPrefab: {fileID: 8243535585966996843, guid: c551c427647afd148b00f56340a43966, type: 3}
   disableWhenPlayerIsDead: 1
   menuButtonPrefab: {fileID: 6071247106101167904, guid: 0460550107ed1174fab3368bcfe61d21, type: 3}
---- !u!114 &597913361817481228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9009915069681461062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41e838991cdcbf540bce40d397f03c9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numSlots: 20
 --- !u!114 &6284128859392026527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,9 +216,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Loot Bag
+  examineText: 
   cursorType: 0
+  maxInteractableDistance: 1.5
   maxLifeTime: 60
-  maxSearchableDistance: 2.5
 --- !u!114 &3039045968565639590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,3 +232,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a34615c6456bb469312e846abdd549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9132743189128312601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9009915069681461062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84921173fbae2454db1a185312a2ab22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numSlots: 20

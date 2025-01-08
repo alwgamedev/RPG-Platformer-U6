@@ -26,6 +26,11 @@ namespace RPGPlatformer.Inventory
             }
         }
 
+        public virtual bool TryAddNewSlot()
+        {
+            return false;
+        }
+
         public bool IsFull()
         {
            for(int i = 0; i < slots.Length; i++)

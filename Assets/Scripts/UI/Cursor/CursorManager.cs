@@ -9,7 +9,7 @@ namespace RPGPlatformer.UI
 {
     public enum CursorType
     {
-        Default, Dialogue, Loot, EnterDoor
+        Default, Dialogue, Loot, EnterDoor, //OpenShop, Bank
     }
 
     public class CursorManager : MonoBehaviour
@@ -18,6 +18,8 @@ namespace RPGPlatformer.UI
         [SerializeField] Texture2D dialogueCursor;
         [SerializeField] Texture2D lootCursor;
         [SerializeField] Texture2D enterDoorCursor;//maybe also for portals
+        //[SerializeField] Texture2D openShopCursor;
+        //[SerializeField] Texture2D openBank;
         [SerializeField] AnimatedCursorSO focusingRedCrosshairs;
         [SerializeField] AnimatedCursorSO blinkingGreenCrosshairs;
         [SerializeField] AnimatedCursorSO blinkingYellowCrosshairs;

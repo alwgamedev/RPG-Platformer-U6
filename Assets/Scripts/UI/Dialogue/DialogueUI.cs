@@ -18,22 +18,27 @@ namespace RPGPlatformer.UI
             base.Awake();
 
             DialogueTrigger.DialogueTriggered += StartDialogue;
+            DialogueTrigger.DialogueCancelled += EndDialogue;
         }
 
         public void StartDialogue(DialogueSO dialogue, string conversantName, string playerName)
         {
             activeDialogue = dialogue;
+            currentNode = dialogue.RootNode();
             this.conversantName = conversantName;
             this.playerName = playerName;
             DisplayDialogueNode(currentNode);
+            Show();
         }
 
         public void EndDialogue()
         {
             CloseActiveWindow();
             activeDialogue = null;
+            currentNode = null;
             conversantName = null;
             playerName = null;
+            Hide();
         }
 
         private void DisplayDialogueNode(DialogueNode dialogueNode)
@@ -57,11 +62,12 @@ namespace RPGPlatformer.UI
             //when that last choice is selected)
         }
 
-        private void DisplayContinuation(int responseIndex = 0)
+        private void DisplayContinuation(int responseIndex)
         {
             if(!activeDialogue.TryGetContinuation(currentNode, responseIndex, out var continuation))
             {
                 EndDialogue();
+                return;
             }
             DisplayDialogueNode(continuation);
         }
@@ -73,6 +79,14 @@ namespace RPGPlatformer.UI
                 Destroy(activeWindow.gameObject);
                 activeWindow = null;
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            DialogueTrigger.DialogueTriggered -= StartDialogue;
+            DialogueTrigger.DialogueCancelled -= EndDialogue;
         }
     }
 }
