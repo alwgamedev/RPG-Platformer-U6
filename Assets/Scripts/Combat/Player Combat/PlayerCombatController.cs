@@ -76,7 +76,7 @@ namespace RPGPlatformer.Combat
             base.Update();
 
             //FOR TESTING PURPOSES
-            if (Input.GetKeyDown(KeyCode.Backspace))
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
                 TogglePlayerAlive();
             }

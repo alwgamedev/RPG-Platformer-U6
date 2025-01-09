@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 1}
+  m_Color: {r: 0.0962264, g: 0.12757534, b: 0.19999999, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -330,6 +330,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Inventory Container
       objectReference: {fileID: 0}
+    - target: {fileID: 7796093600356679411, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -433,6 +437,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3565263288745632789, guid: d3172bd0f6e1b9343a80a4688c308105, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565263288745632789, guid: d3172bd0f6e1b9343a80a4688c308105, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565263288745632789, guid: d3172bd0f6e1b9343a80a4688c308105, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565263288745632789, guid: d3172bd0f6e1b9343a80a4688c308105, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565263288745632789, guid: d3172bd0f6e1b9343a80a4688c308105, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3565263288745632789, guid: d3172bd0f6e1b9343a80a4688c308105, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5011090018944734460, guid: d3172bd0f6e1b9343a80a4688c308105, type: 3}
       propertyPath: m_Name
       value: Collapse Button
@@ -463,9 +491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7456965713804011768, guid: d3172bd0f6e1b9343a80a4688c308105, type: 3}
       propertyPath: m_text
-      value: 'Inventory
-
-'
+      value: Inventory
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

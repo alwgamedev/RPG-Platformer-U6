@@ -77,6 +77,7 @@ namespace RPGPlatformer.Inventory
 
         public void MatchItems(IInventorySlotDataContainer[] data, bool matchSize = false)//needs to allow for quantities
         {
+            if (data == null) return;
             if (matchSize)
             {
                 numSlots = data.Length;

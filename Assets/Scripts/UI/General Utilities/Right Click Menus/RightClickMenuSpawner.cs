@@ -34,11 +34,6 @@ namespace RPGPlatformer.UI
             }
 
             igo = GetComponent<IInteractableGameObject>();
-
-            if (disableWhenPlayerIsDead)
-            {
-                GlobalGameTools.Instance.OnPlayerDeath += ClearMenu;
-            }
         }
 
         protected virtual void OnEnable()
@@ -46,6 +41,11 @@ namespace RPGPlatformer.UI
             if(TryGetComponent(out TooltipSpawner tts))
             {
                 tts.TooltipSpawned += ClearMenu;
+            }
+
+            if (disableWhenPlayerIsDead)
+            {
+                GlobalGameTools.OnPlayerDeath += ClearMenu;
             }
         }
 
@@ -104,15 +104,15 @@ namespace RPGPlatformer.UI
             }
         }
 
-        private void OnMouseOver()
-        {
-            if (GlobalGameTools.PlayerIsDead && disableWhenPlayerIsDead) return;
+        //private void OnMouseOver()
+        //{
+        //    if (GlobalGameTools.PlayerIsDead && disableWhenPlayerIsDead) return;
 
-            if (Input.GetKeyUp(KeyCode.Mouse1))
-            {
-                OpenMenu();
-            }
-        }
+        //    if (Input.GetKeyUp(KeyCode.Mouse1))
+        //    {
+        //        OpenMenu();
+        //    }
+        //}
 
         private void OpenMenu()
         {

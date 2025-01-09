@@ -4,16 +4,19 @@ using UnityEngine.UI;
 using RPGPlatformer.Inventory;
 using UnityEngine.EventSystems;
 using TMPro;
+using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.UI
 {
     //[RequireComponent(typeof(InventorySlotRightClickMenuSpawner))]
-    public class InventorySlotUI : MonoBehaviour, IInventorySlotDataContainer, IDragDropSlot<IInventorySlotDataContainer>, IPointerClickHandler
+    public class InventorySlotUI : MonoBehaviour, IInventorySlotDataContainer, 
+        IDragDropSlot<IInventorySlotDataContainer>, IPointerClickHandler
     {
         [SerializeField] protected Image slotIcon;
         [SerializeField] protected TextMeshProUGUI quantityText;
         [SerializeField] protected TextMeshProUGUI dosesText;
 
+        protected Transform draggableChild;
         protected InventoryItem item;
         protected int quantity;
 
@@ -22,6 +25,11 @@ namespace RPGPlatformer.UI
 
         public event Action OnDragResolved;
         public event Action OnItemChanged;
+
+        private void Awake()
+        {
+            draggableChild = GetComponentInChildren<DraggableInventoryItem>().transform;
+        }
 
         public void SetIconSize(Vector2 sizeDelta)
         {
@@ -142,6 +150,7 @@ namespace RPGPlatformer.UI
 
         private void OnDestroy()
         {
+            Destroy(draggableChild.gameObject);//in case the draggable is detached from the slot when it is destroyed
             OnDragResolved = null;
             OnItemChanged = null;
         }

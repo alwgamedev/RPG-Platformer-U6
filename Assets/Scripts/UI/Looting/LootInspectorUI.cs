@@ -11,6 +11,11 @@ namespace RPGPlatformer.UI
         [SerializeField] Button closeButton;
         [SerializeField] Button takeAllButton;
 
+        protected override void Awake()
+        {
+            base.Awake();
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -18,14 +23,9 @@ namespace RPGPlatformer.UI
             closeButton.onClick.AddListener(CloseInspector);
 
             LootDrop.OnLootSearched += DisplayLootDrop;//(lootDrop) => DisplayLootDrop(lootDrop);
-        }
 
-        protected override void Start() 
-        {
-            GlobalGameTools.Instance.OnPlayerDeath += CloseInspector;
-
-            //yes, empty method has a use here (to ignore the start method from base,
-            //which tries to hook up an owner)
+            GlobalGameTools.OnPlayerDeath += CloseInspector;
+            
         }
 
         public override void UpdateInventoryUI()
@@ -86,8 +86,8 @@ namespace RPGPlatformer.UI
 
         private void CloseInspector()
         {
-            Hide();
             DisconnectOwner();
+            Hide();
         }
 
         protected override void OnDestroy()

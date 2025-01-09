@@ -108,5 +108,13 @@ namespace RPGPlatformer.UI
                 EnableInputField(false);
             }
         }
+
+        private void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
+        }
     }
 }

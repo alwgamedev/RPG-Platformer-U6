@@ -1,14 +1,18 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.SceneManagement;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace RPGPlatformer.UI
 {
+    [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
     [RequireComponent(typeof(CanvasGroup))]
-    public class DraggableItem<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler where T : class
+    public class DraggableItem<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+        where T : class
     {
         IDragSource<T> source;
         Canvas parentCanvas;
         CanvasGroup canvasGroup;
+        bool canDrag = true;//mainly so that dragging gets cancelled when you pause
 
         private void Awake()
         {
@@ -17,7 +21,24 @@ namespace RPGPlatformer.UI
             canvasGroup = GetComponent<CanvasGroup>();
         }
 
-        //TO-DO: Where do we set the new source??
+        public void CancelDrag()
+        {
+            PointerEventData ed = new(EventSystem.current);
+            OnEndDrag(ed);
+            //cancels any ongoing drog by returning it to its source
+            //(it will still call OnEndDrag again when you actually release the pointer)
+        }
+
+        public void DisableDragging()
+        {
+            canDrag = false;
+            CancelDrag();
+        }
+
+        public void ReenableDragging()
+        {
+            canDrag = true;
+        }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -25,21 +46,30 @@ namespace RPGPlatformer.UI
 
             canvasGroup.blocksRaycasts = false;//or else the drop event doesn't register? (test it out)
             transform.SetParent(parentCanvas.transform, true);
+            Debug.Log("beginning drag");
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!eventData.IsLeftMouseButtonEvent()) return;
+            if (!canDrag || !eventData.IsLeftMouseButtonEvent()) return;
             transform.position = Camera.main.ScreenToWorldPoint((Vector3)eventData.position + parentCanvas.transform.position.z * Vector3.forward);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if(!eventData.IsLeftMouseButtonEvent()) return;
-            if (source != null && source.Transform)
+            if(!eventData.IsLeftMouseButtonEvent() && canDrag) return;
+
+            if (source != null)
             {
+                Debug.Log("returning draggable item to source");
                 transform.SetParent(source.Transform);
                 transform.localPosition = Vector3.zero;
+                Debug.Log($"did it work? current parent: {transform.parent.name}");
+            }
+            else
+            {
+                Debug.Log("couldn't return item to source");
+                Debug.Log($"was the source null? {source == null}");
             }
             canvasGroup.blocksRaycasts = true;
 
@@ -70,12 +100,8 @@ namespace RPGPlatformer.UI
 
         private void DropItemOntoTarget(IDropTarget<T> target)
         {
-            if (target == null || target == source)
-            {
-                return;
-            }
-
-            if (source != null && source is IDragDropSlot<T> sourceSlot && target is IDragDropSlot<T> targetSlot)
+            if(target == null) return;
+            else if (source != null && source is IDragDropSlot<T> sourceSlot && target is IDragDropSlot<T> targetSlot)
             {
                 Swap(sourceSlot, targetSlot);
             }

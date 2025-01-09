@@ -21,6 +21,7 @@ namespace RPGPlatformer.Core
             }
             else
             {
+                Debug.Log("Settings manager already has an Instance set.");
                 Destroy(gameObject);
             }
         }
@@ -44,6 +45,7 @@ namespace RPGPlatformer.Core
             if(Instance == this)
             {
                 OnIBMConfigure = null;
+                Instance = null;
             }
         }
     }

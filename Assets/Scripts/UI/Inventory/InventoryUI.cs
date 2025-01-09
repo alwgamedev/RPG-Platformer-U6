@@ -24,6 +24,19 @@ namespace RPGPlatformer.UI
             }
         }
 
+        //public void CancelAnyDrag()
+        //{
+        //    if (slots == null) return;
+            
+        //    foreach (var slot in slots)
+        //    {
+        //        var d = slot.GetComponentInChildren<DraggableInventoryItem>();
+        //        if(d)
+        //        {
+        //        }
+        //    }
+        //}
+
         public abstract void InitializeSlots(IInventoryOwner owner);
 
         public abstract void Configure(IInventoryOwner owner);
@@ -51,14 +64,12 @@ namespace RPGPlatformer.UI
                 owner.Inventory.OnInventoryChanged -= UpdateInventoryUI;
             }
 
+
             if (slots != null)
             {
                 foreach (var slot in slots)
                 {
-                    if (slot)
-                    {
-                        Destroy(slot.gameObject);
-                    }
+                    Destroy(slot.gameObject);
                 }
             }
 

@@ -97,7 +97,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6859021731872649106}
   - component: {fileID: 719934269331192399}
-  - component: {fileID: 2993346898027945617}
+  - component: {fileID: 2220450658595827888}
+  - component: {fileID: 7339017267789459188}
   - component: {fileID: 5450842472843519817}
   - component: {fileID: 6284128859392026527}
   - component: {fileID: 3039045968565639590}
@@ -152,7 +153,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!58 &2993346898027945617
+--- !u!58 &2220450658595827888
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,10 +166,10 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1015
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -186,8 +187,45 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.03}
-  m_Radius: 0.15
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.12
+--- !u!70 &7339017267789459188
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9009915069681461062}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.05}
+  m_Size: {x: 0.6, y: 0.4}
+  m_Direction: 1
 --- !u!114 &5450842472843519817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,7 +257,7 @@ MonoBehaviour:
   examineText: 
   cursorType: 0
   maxInteractableDistance: 1.5
-  maxLifeTime: 60
+  maxLifeTime: 150
 --- !u!114 &3039045968565639590
 MonoBehaviour:
   m_ObjectHideFlags: 0

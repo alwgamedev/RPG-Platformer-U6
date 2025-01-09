@@ -19,7 +19,9 @@ namespace RPGPlatformer.Core
         public ObjectPoolCollection ProjectilePooler {  get; private set; }
         public ObjectPoolCollection EffectPooler { get; private set; }
 
-        public event Action OnPlayerDeath;
+        public static event Action OnPlayerDeath;
+
+        public static event Action InstanceReady;
 
         private void Awake()
         {
@@ -27,9 +29,11 @@ namespace RPGPlatformer.Core
             {
                 Instance = this;
                 Configure();
+                InstanceReady?.Invoke();
             }
             else
             {
+                Debug.Log("GlobalGameTools already has an Instance set.");
                 Destroy(gameObject);
             }
         }
@@ -64,7 +68,12 @@ namespace RPGPlatformer.Core
                 TokenSource.Dispose();
             }
 
-            OnPlayerDeath = null;
+            if (Instance == this)
+            {
+                Instance = null;
+                InstanceReady = null;
+                OnPlayerDeath = null;
+            }
         }
     }
 }

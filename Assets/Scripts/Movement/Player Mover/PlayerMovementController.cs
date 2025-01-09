@@ -7,12 +7,6 @@ namespace RPGPlatformer.Movement
     {
         InputBindingManager ibm;
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-        }
-
         protected override void OnEnable()
         {
             base.OnEnable();

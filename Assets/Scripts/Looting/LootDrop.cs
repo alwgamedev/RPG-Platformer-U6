@@ -3,13 +3,14 @@ using UnityEngine;
 using RPGPlatformer.Core;
 using RPGPlatformer.Inventory;
 using RPGPlatformer.UI;
+using UnityEngine.EventSystems;
 
 namespace RPGPlatformer.Loot
 {
     [RequireComponent(typeof(InventoryManager))]
     public class LootDrop : InteractableGameObject, ILootDrop
     {
-        [SerializeField] protected float maxLifeTime = 60;
+        [SerializeField] protected float maxLifeTime = 150;
         //[SerializeField] protected float maxSearchableDistance = 2.5f;
         //[SerializeField] protected string displayName = "Loot Bag";
 
@@ -62,8 +63,9 @@ namespace RPGPlatformer.Loot
             OnUpdate?.Invoke();
         }
 
-        protected override void OnMouseDown()
+        public override void OnPointerClick(PointerEventData eventData)
         {
+            if (!eventData.IsLeftMouseButtonEvent()) return;
             if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
 
             TakeAll();

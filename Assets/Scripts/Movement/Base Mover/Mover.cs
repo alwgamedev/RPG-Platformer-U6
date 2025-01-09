@@ -63,8 +63,10 @@ namespace RPGPlatformer.Movement
 
         private void Update()
         {
-            rightHit = Physics2D.Raycast(ColliderFront, -transform.up, groundednessTolerance, LayerMask.GetMask("Ground"));
-            leftHit = Physics2D.Raycast(ColliderBack, -transform.up, groundednessTolerance, LayerMask.GetMask("Ground"));
+            rightHit = Physics2D.Raycast(ColliderFront, -transform.up, groundednessTolerance, 
+                LayerMask.GetMask("Ground") | LayerMask.GetMask("Interactable Game Object"));
+            leftHit = Physics2D.Raycast(ColliderBack, -transform.up, groundednessTolerance, 
+                LayerMask.GetMask("Ground") | LayerMask.GetMask("Interactable Game Object"));
             if(rightHit || leftHit)
             {
                 if((jumping && !verifyingJump) || (airborne && !verifyingAirborne))

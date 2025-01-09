@@ -2,6 +2,8 @@
 using RPGPlatformer.SceneManagement;
 using RPGPlatformer.UI;
 using System;
+using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 
 namespace RPGPlatformer.Core
@@ -10,7 +12,11 @@ namespace RPGPlatformer.Core
 
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
-    public abstract class InteractableGameObject : MonoBehaviour, IInteractableGameObject, IPausable
+    public abstract class InteractableGameObject : MonoBehaviour, IInteractableGameObject, IPausable, 
+        IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+        //why use pointer events instead of OnMouseOver etc.?
+        //because pointer events are detected by trigger colliders, so we can expand the object's
+        //interactable area by adding a trigger collider that won't affect its physics interactions
     {
         [SerializeField] protected string displayName;
         [SerializeField] protected string examineText;
@@ -114,13 +120,13 @@ namespace RPGPlatformer.Core
 
         //MOUSE EVENT CALLBACKS
 
-        protected virtual void OnMouseEnter()
+        public virtual void OnPointerEnter(PointerEventData eventData)
         {
             MouseOver = true;
             HoveredIGO = this;
         }
 
-        protected virtual void OnMouseExit()
+        public void OnPointerExit(PointerEventData eventData)
         {
             MouseOver = false;
             if (!MouseOverAny())
@@ -129,7 +135,7 @@ namespace RPGPlatformer.Core
             }
         }
 
-        protected abstract void OnMouseDown();
+        public abstract void OnPointerClick(PointerEventData eventData);
 
         private static bool MouseOverAny()
         {

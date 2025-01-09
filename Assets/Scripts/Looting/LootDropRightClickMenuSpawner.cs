@@ -20,7 +20,7 @@ namespace RPGPlatformer.Loot
 
         public override bool CanCreateMenu()
         {
-            return true;
+            return menuPrefab && menuButtonPrefab;
         }
 
         public override void ConfigureMenu(GameObject menu)
