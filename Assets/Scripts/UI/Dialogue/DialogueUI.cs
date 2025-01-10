@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.UI
 {
-    public class DialogueUI : HideableUI
+    public class DialogueUI : HidableUI
     {
         [SerializeField] DialogueWindow dialogueWindowPrefab;
 

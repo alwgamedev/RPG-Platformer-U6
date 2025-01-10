@@ -8,6 +8,8 @@ namespace RPGPlatformer.Combat
 {
     public class AbilityBar
     {
+        public const int playerAbilityBarLength = 10;
+
         private bool subscribedToController;
 
         public ICombatController controller;
@@ -39,6 +41,12 @@ namespace RPGPlatformer.Combat
                 CombatStyles.CombatStyle.Ranged => RangedAbilities.DefaultAbilityBarData(),
                 _ => null
             };
+        }
+
+        public AttackAbility GetAbility(int index)
+        {
+            if(Abilities == null || index < 0 || index >= Abilities.Count) return null;
+            return Abilities[index];
         }
 
         public AttackAbility GetAutoCastAbility()

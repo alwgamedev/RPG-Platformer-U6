@@ -14,15 +14,15 @@ namespace RPGPlatformer.Saving
     {
         private void OnEnable()
         {
-            SettingsManager.OnIBMConfigure += OnIBMConfigure;
+            SettingsManager.OnIAMConfigure += OnIAMConfigure;
         }
 
-        private void OnIBMConfigure()
+        private void OnIAMConfigure()
         {
-            SettingsManager.Instance.IBM.SaveAction.canceled += async (context) => await Save(DefaultFilePath());
-            SettingsManager.Instance.IBM.LoadAction.canceled += async (context) => await Load(DefaultFilePath());
+            SettingsManager.Instance.IAM.SaveAction.canceled += async (context) => await Save(DefaultFilePath());
+            SettingsManager.Instance.IAM.LoadAction.canceled += async (context) => await Load(DefaultFilePath());
 
-            SettingsManager.OnIBMConfigure -= OnIBMConfigure;
+            //SettingsManager.OnIAMConfigure -= OnIAMConfigure;
         }
 
         public async Task Save(string filePath)

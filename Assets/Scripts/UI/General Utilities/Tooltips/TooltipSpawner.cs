@@ -53,7 +53,7 @@ namespace RPGPlatformer.UI
 
         public virtual bool CanCreateTooltip()
         {
-            if(TryGetComponent(out RightClickMenuSpawner rcms) && rcms.ActiveMenu)
+            if(TryGetComponent(out RightClickMenuSpawner rcms) && rcms && rcms.ActiveMenu)
             {
                 return false;
             }

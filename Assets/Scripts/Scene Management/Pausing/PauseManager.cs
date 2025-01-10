@@ -13,14 +13,14 @@ namespace RPGPlatformer.SceneManagement
 
         private void OnEnable()
         {
-            SettingsManager.OnIBMConfigure += OnIBMConfigured;
+            SettingsManager.OnIAMConfigure += OnIAMConfigured;
         }
 
-        private void OnIBMConfigured()
+        private void OnIAMConfigured()
         {
-            SettingsManager.Instance.IBM.EscAction.started += (context) => TogglePause();
+            SettingsManager.Instance.IAM.EscAction.started += (context) => TogglePause();
 
-            SettingsManager.OnIBMConfigure -= OnIBMConfigured;
+            //SettingsManager.OnIAMConfigure -= OnIAMConfigured;
         }
 
         public void Pause()

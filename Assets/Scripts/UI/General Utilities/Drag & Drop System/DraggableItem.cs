@@ -61,15 +61,8 @@ namespace RPGPlatformer.UI
 
             if (source != null)
             {
-                Debug.Log("returning draggable item to source");
                 transform.SetParent(source.Transform);
                 transform.localPosition = Vector3.zero;
-                Debug.Log($"did it work? current parent: {transform.parent.name}");
-            }
-            else
-            {
-                Debug.Log("couldn't return item to source");
-                Debug.Log($"was the source null? {source == null}");
             }
             canvasGroup.blocksRaycasts = true;
 

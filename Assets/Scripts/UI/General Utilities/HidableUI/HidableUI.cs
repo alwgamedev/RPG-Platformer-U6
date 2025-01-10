@@ -7,7 +7,7 @@ namespace RPGPlatformer.UI
 {
 
     [RequireComponent(typeof(CanvasGroup))]
-    public class HideableUI : MonoBehaviour, IPausable
+    public class HidableUI : MonoBehaviour, IPausable
     {
         public enum PauseOptions
         {

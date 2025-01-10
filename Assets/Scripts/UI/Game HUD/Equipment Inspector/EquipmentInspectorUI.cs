@@ -7,7 +7,7 @@ namespace RPGPlatformer.UI
 {
     using static ItemSlot;
 
-    public class EquipmentInspectorUI : HideableUI
+    public class EquipmentInspectorUI : HidableUI
     {
         [SerializeField] EquipmentInspectorSlotUI headSlot;
         [SerializeField] EquipmentInspectorSlotUI torsoSlot;

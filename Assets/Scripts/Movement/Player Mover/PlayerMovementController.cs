@@ -1,47 +1,93 @@
 ﻿using RPGPlatformer.Core;
+using RPGPlatformer.SceneManagement;
 
 
 namespace RPGPlatformer.Movement
 {
-    public class PlayerMovementController : AdvancedMovementController
+    public class PlayerMovementController : AdvancedMovementController, IPausable
     {
-        InputBindingManager ibm;
+        bool inputDisabled;
 
         protected override void OnEnable()
         {
             base.OnEnable();
 
-            SettingsManager.OnIBMConfigure += OnIBMConfigure;
+            SettingsManager.OnIAMConfigure += OnIAMConfigure;
         }
 
-        void OnIBMConfigure()
+        void OnIAMConfigure()
         {
-            ibm = SettingsManager.Instance.IBM;
+            var iam = SettingsManager.Instance.IAM;
 
-            ibm.ToggleRunAction.started += (context) => mover.ToggleRun();
+            iam.ToggleRunAction.started += (context) =>
+            {
+                if (inputDisabled) return;
+                mover.ToggleRun();
+            };
 
-            ibm.MoveRightAction.started += (context) => ComputeMoveInput();
-            ibm.MoveRightAction.canceled += (context) => ComputeMoveInput();
-            ibm.MoveLeftAction.started += (context) => ComputeMoveInput();
-            ibm.MoveLeftAction.canceled += (context) => ComputeMoveInput();
+            iam.MoveRightAction.started += (context) =>
+            {
+                if (inputDisabled) return;
+                ComputeMoveInput();
+            };
+            iam.MoveRightAction.canceled += (context) => 
+            { 
+                if (inputDisabled) return; 
+                ComputeMoveInput(); 
+            };
+            iam.MoveLeftAction.started += (context) => 
+            { 
+                
+                if (inputDisabled) return; 
+                ComputeMoveInput(); 
+            };
+            iam.MoveLeftAction.canceled += (context) => 
+            { 
+                if (inputDisabled) return; 
+                ComputeMoveInput(); 
+            };
 
-            ibm.SpacebarAction.started += (context) => mover.Jump();
+            iam.SpacebarAction.started += (context) => 
+            { 
+                if (inputDisabled) return; 
+                mover.Jump(); 
+            };
 
-            SettingsManager.OnIBMConfigure -= OnIBMConfigure;
+            //SettingsManager.OnIAMConfigure -= OnIAMConfigure;
         }
 
         private void ComputeMoveInput()
         {
             float val = 0;
-            if (ibm.moveLeftHeldDown)
+            if (SettingsManager.Instance.IAM.MoveLeftHeldDown)
             {
                 val -= 1;
             }
-            if (ibm.moveRightHeldDown)
+            if (SettingsManager.Instance.IAM.MoveRightHeldDown)
             {
                 val += 1;
             }
             moveInput = val;
+        }
+
+        public void Pause()
+        {
+            DisableInput();
+        }
+
+        public void Unpause()
+        {
+            EnableInput();
+        }
+
+        private void DisableInput()
+        {
+            inputDisabled = true;
+        }
+
+        private void EnableInput()
+        {
+            inputDisabled = false;
         }
     }
 }

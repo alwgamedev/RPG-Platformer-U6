@@ -10,7 +10,6 @@ namespace RPGPlatformer.Movement
         right = 1, left = -1
     }
 
-    //[RequireComponent(typeof(MoverFeet))]
     public class Mover : StateDriver, IMover
     {
         [SerializeField] Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;//forces applied to rb upon character death
@@ -43,7 +42,7 @@ namespace RPGPlatformer.Movement
         {
             myCollider = GetComponent<Collider2D>();
             myRigidbody = GetComponent<Rigidbody2D>();
-            //myFeet = GetComponent<MoverFeet>();
+
             CurrentOrientation = HorizontalOrientation.right;
 
             myHeight = myCollider.bounds.max.y - myCollider.bounds.min.y;
@@ -55,18 +54,12 @@ namespace RPGPlatformer.Movement
             localColliderLeftCenter = myCollider.bounds.center - (myWidth / 4) * Vector3.right - transform.position;
         }
 
-        //private void OnEnable()
-        //{
-        //    //myFeet.Landing += OnLanding;
-        //    //myFeet.Takeoff += OnTakeoff;
-        //}
-
         private void Update()
         {
             rightHit = Physics2D.Raycast(ColliderFront, -transform.up, groundednessTolerance, 
-                LayerMask.GetMask("Ground") | LayerMask.GetMask("Interactable Game Object"));
+                LayerMask.GetMask("Ground"));
             leftHit = Physics2D.Raycast(ColliderBack, -transform.up, groundednessTolerance, 
-                LayerMask.GetMask("Ground") | LayerMask.GetMask("Interactable Game Object"));
+                LayerMask.GetMask("Ground"));
             if(rightHit || leftHit)
             {
                 if((jumping && !verifyingJump) || (airborne && !verifyingAirborne))
@@ -177,9 +170,6 @@ namespace RPGPlatformer.Movement
 
         public Vector2 GroundDirectionVector()
         {
-            //RaycastHit2D rightHit = Physics2D.Raycast(ColliderFront, -transform.up, Mathf.Infinity, LayerMask.GetMask("Ground"));
-            //RaycastHit2D leftHit = Physics2D.Raycast(ColliderBack, -transform.up, Mathf.Infinity, LayerMask.GetMask("Ground"));
-
             if (rightHit && leftHit)
             {
                 return (int)CurrentOrientation * (rightHit.point - leftHit.point).normalized;
@@ -187,18 +177,11 @@ namespace RPGPlatformer.Movement
             return (Vector2)transform.right * (int)CurrentOrientation;
         }
 
-        //public bool TouchingGround()
-        //{
-        //    return leftHit || rightHit;
-        //    //Vector2 bottomCenter = (Vector2)myCollider.bounds.center - new Vector2(0, myHeight / 2);
-        //    //Vector2 boxSize = new Vector2(myWidth, myHeight / 4);
-        //    //return Physics2D.OverlapBox(bottomCenter, boxSize, 0, LayerMask.GetMask("Ground"));
-        //}
-
         public void OnDeath()
         {
             myRigidbody.freezeRotation = false;
-            myRigidbody.AddForce(-(int)CurrentOrientation * deathForce.x * Vector2.right + deathForce.y * Vector2.up, ForceMode2D.Impulse);
+            myRigidbody.AddForce(-(int)CurrentOrientation * deathForce.x * Vector2.right 
+                + deathForce.y * Vector2.up, ForceMode2D.Impulse);
             myRigidbody.AddTorque((int)CurrentOrientation * deathTorque, ForceMode2D.Impulse);
         }
 

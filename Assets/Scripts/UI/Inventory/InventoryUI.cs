@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace RPGPlatformer.UI
 {
-    public abstract class InventoryUI : HideableUI
+    public abstract class InventoryUI : HidableUI
     {
         [SerializeField] protected InventorySlotUI inventorySlotPrefab;
 
@@ -23,19 +23,6 @@ namespace RPGPlatformer.UI
                 ConnectOwner(owner);
             }
         }
-
-        //public void CancelAnyDrag()
-        //{
-        //    if (slots == null) return;
-            
-        //    foreach (var slot in slots)
-        //    {
-        //        var d = slot.GetComponentInChildren<DraggableInventoryItem>();
-        //        if(d)
-        //        {
-        //        }
-        //    }
-        //}
 
         public abstract void InitializeSlots(IInventoryOwner owner);
 

@@ -8,7 +8,9 @@ namespace RPGPlatformer.Combat
 {
     public class PlayerCombatController : CombatController
     {
-        public override IInputSource InputSource => SettingsManager.Instance.IBM;
+        bool inputDisabled;
+
+        public override IInputSource InputSource => SettingsManager.Instance.IAM;
 
         protected override void Awake()
         {
@@ -19,7 +21,7 @@ namespace RPGPlatformer.Combat
         {
             base.OnEnable();
 
-            SettingsManager.OnIBMConfigure += OnIBMConfigure;
+            SettingsManager.OnIAMConfigure += OnIAMConfigure;
         }
 
         protected override void Start()
@@ -49,26 +51,39 @@ namespace RPGPlatformer.Combat
             combatant.TakeLoot(gold.CreateInstanceOfItem().ToSlotData(773));
         }
 
-        void OnIBMConfigure()
+        void OnIAMConfigure()
         {
-            InputBindingManager ibm = SettingsManager.Instance.IBM;
+            InputActionsManager iam = SettingsManager.Instance.IAM;
 
-            ibm.LeftClickAction.started += (context) =>
+            iam.LeftClickAction.started += (context) =>
             {
+                if(inputDisabled) return;
                 if (!EventSystem.current.IsPointerOverGameObject() && !InteractableGameObject.MouseOverAnyIGO)
                 {
                     FireButtonDown();
                 }
             };
-            ibm.LeftClickAction.canceled += (context) => FireButtonUp();
-            ibm.RightClickAction.started += (context) => CancelAbilityInProgress(true);
-
-            foreach (var entry in ibm.AbilityBarActions)
+            iam.LeftClickAction.canceled += (context) =>
             {
-                ibm.AbilityBarActions[entry.Key].started += (context) => HandleAbilityInput(entry.Key);
+                if (inputDisabled) return;
+                FireButtonUp();
+            };
+            iam.RightClickAction.started += (context) =>
+            {
+                if (inputDisabled) return;
+                CancelAbilityInProgress(true);
+            };
+
+            foreach (var entry in iam.AbilityBarActions)
+            {
+                iam.AbilityBarActions[entry.Key].started += (context) =>
+                {
+                    if (inputDisabled) return;
+                    HandleAbilityInput(entry.Key);
+                };
             }
 
-            SettingsManager.OnIBMConfigure -= OnIBMConfigure;
+            //SettingsManager.OnIAMConfigure -= OnIAMConfigure;
         }
 
         protected override void Update()
@@ -122,6 +137,17 @@ namespace RPGPlatformer.Combat
         public override Vector2 GetAimPosition()
         {
             return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+
+        protected override void DisableInput()
+        {
+            CancelAbilityInProgress(false);
+            inputDisabled = true;
+        }
+
+        protected override void EnableInput()
+        {
+            inputDisabled = false;
         }
     }
 }

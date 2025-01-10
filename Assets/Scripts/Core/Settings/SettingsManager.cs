@@ -3,21 +3,26 @@ using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
-    [RequireComponent(typeof(InputBindingManager))]
+    [RequireComponent(typeof(InputActionsManager))]
     public class SettingsManager : MonoBehaviour
     {
         public static SettingsManager Instance { get; private set; } = null;
-        public InputBindingManager IBM { get; private set; }
 
-        public static event Action OnIBMConfigure;
+        public InputActionsManager IAM { get; private set; }
+        public InputBindingData CurrentBindings { get; private set; }
+
+        public static event Action OnIAMConfigure;
 
         private void Awake()
         {
             if(Instance == null)
             {
                 Instance = this;
-                IBM = GetComponent<InputBindingManager>();
-                IBM.OnConfigure += IBMConfigureHandler;
+
+                CurrentBindings = InputBindingData.DefaultBindings;
+
+                IAM = GetComponent<InputActionsManager>();
+                IAM.OnConfigure += IAMConfigureHandler;
             }
             else
             {
@@ -30,21 +35,33 @@ namespace RPGPlatformer.Core
         {
             if (Instance == this)
             {
-                IBM.Configure();
+                IAM.Configure();
             }
         }
 
-        private void IBMConfigureHandler()
+        public InputBindingValidationResult TrySetInputBindings(InputBindingData data)
         {
-            OnIBMConfigure?.Invoke();
-            IBM.OnConfigure -= IBMConfigureHandler;
+            var result = data.Validate();
+            if(result == InputBindingValidationResult.Valid)
+            {
+                CurrentBindings = data;
+                IAM.Configure();
+            }
+            return result;
+        }
+
+        private void IAMConfigureHandler()
+        {
+            OnIAMConfigure?.Invoke();
+            //IAM.OnConfigure -= IAMConfigureHandler;
         }
 
         private void OnDestroy()
         {
             if(Instance == this)
             {
-                OnIBMConfigure = null;
+                IAM.OnConfigure -= IAMConfigureHandler;
+                OnIAMConfigure = null;
                 Instance = null;
             }
         }

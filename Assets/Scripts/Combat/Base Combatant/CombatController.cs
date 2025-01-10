@@ -157,7 +157,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void HandleAbilityInput(int index)
         {
-            ExecuteAbility(currentAbilityBar.Abilities[index]);
+            ExecuteAbility(currentAbilityBar.GetAbility(index));
         }
 
         public virtual void RunAutoAbilityCycle(bool runOffGCD)
@@ -258,7 +258,6 @@ namespace RPGPlatformer.Combat
 
                     void DelayedRelease()
                     {
-                        Debug.Log("Delayed release of channel");
                         ChannelingAbility = false;
                         postCancellationLock = false;
                         OnFireButtonUp -= DelayedRelease;

@@ -4,11 +4,13 @@ using UnityEngine.UI;
 
 namespace RPGPlatformer.UI
 {
-    public class PauseMenu : HideableUI
+    public class PauseMenu : HidableUI
     {
         [SerializeField] Button settingsButton;
         [SerializeField] Button resumeButton;
         [SerializeField] Button quitButton;
+
+        public Button SettingsButton => settingsButton;
 
         protected override void OnEnable()
         {
@@ -28,6 +30,8 @@ namespace RPGPlatformer.UI
 
         protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             foreach(var b in GetComponentsInChildren<Button>())
             {
                 b.onClick.RemoveAllListeners();

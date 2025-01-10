@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace RPGPlatformer.UI
 {
-    public class AbilityBarUI : HideableUI
+    public class AbilityBarUI : HidableUI
     {
         [SerializeField] AbilityBarItemUI itemPrefab;
         [SerializeField] HorizontalLayoutGroup abilitiesLayoutGroup;
