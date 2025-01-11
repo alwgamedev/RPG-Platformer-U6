@@ -9,12 +9,73 @@ namespace RPGPlatformer.Skills
     {
         Dictionary<CharacterSkill, SkillProgressionData> SkillLookup;
 
+        [SerializeField] SkillProgressionData health = new();
+        [SerializeField] SkillProgressionData defense = new();
+        [SerializeField] SkillProgressionData magic = new();
+        [SerializeField] SkillProgressionData melee = new();
+        [SerializeField] SkillProgressionData range = new();
+
+        //TO-DO: cache total level and combat level and only recompute when needed (minor performance improvement)
+
         //all need to be public get/set in order to serialize to json
-        public SkillProgressionData Health { get; set; } = new();
-        public SkillProgressionData Defense { get; set; } = new();
-        public SkillProgressionData Magic { get; set; } = new();
-        public SkillProgressionData Melee { get; set; } = new();
-        public SkillProgressionData Range { get; set; } = new(); 
+        public SkillProgressionData Health
+        {
+            get => health;
+            set
+            {
+                health = value ?? new();
+            }
+        }
+        public SkillProgressionData Defense
+        {
+            get => defense;
+            set
+            {
+                defense = value ?? new();
+            }
+        }
+        public SkillProgressionData Magic
+        {
+            get => magic;
+            set
+            {
+                magic = value ?? new();
+            }
+        }
+        public SkillProgressionData Melee
+        {
+            get => melee;
+            set
+            {
+                melee = value ?? new();
+            }
+        }
+        public SkillProgressionData Range
+        {
+            get => range;
+            set
+            {
+                range = value ?? new();
+            }
+        }
+
+        public int TotalLevel()
+        {
+            int result = 0;
+            foreach (var entry in SkillLookup)
+            {
+                if(entry.Value != null)
+                {
+                    result += entry.Value.Level;
+                }
+            }
+            return result;
+        }
+
+        public int CombatLevel()
+        {
+            return Health.Level + Defense.Level + Math.Max(Math.Max(Magic.Level, Melee.Level), Range.Level);
+        }
 
         //below this is mainly to allow flexible initialization of the dictionary
         public bool TryGetProgressionData(CharacterSkill skill, out SkillProgressionData data)

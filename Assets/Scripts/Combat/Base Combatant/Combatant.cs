@@ -6,16 +6,19 @@ using RPGPlatformer.UI;
 using RPGPlatformer.Effects;
 using RPGPlatformer.Inventory;
 using RPGPlatformer.Loot;
+using RPGPlatformer.Skills;
 
 namespace RPGPlatformer.Combat
 {
     using static ItemSlot;
 
+    [RequireComponent(typeof(CharacterProgressionManager))]
     [RequireComponent(typeof(InventoryManager))]
     [RequireComponent(typeof(DropSpawner))]
     [RequireComponent(typeof(Health))]
     public class Combatant : StateDriver, ICombatant, IInventoryOwner, ILooter, ILootDropper
     {
+        [SerializeField] protected string displayName;
         [SerializeField] protected string targetLayer;
         [SerializeField] protected string targetTag;
         [SerializeField] protected ItemSlot headSlot;
@@ -28,12 +31,15 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected ReplenishableStat stamina = new();
         [SerializeField] protected ReplenishableStat wrath = new();
 
+        protected CharacterProgressionManager progressionManager;
         protected InventoryManager inventory;
         protected Dictionary<EquipmentSlots, ItemSlot> equipSlots = new();
         protected DropSpawner dropSpawner;
         protected Weapon weapon;
         protected Health health;
 
+        public string DisplayName => displayName;
+        public int CombatLevel => progressionManager.CombatLevel;
         public bool IsPlayer { get; protected set; }
         public string TargetLayer => targetLayer;
         public string TargetTag => targetTag;
@@ -58,12 +64,13 @@ namespace RPGPlatformer.Combat
         {
             health = GetComponent<Health>();
 
-            if (gameObject.CompareTag("Player"))
-            {
-                stamina.statBar = GameObject.Find("Player Stamina Bar").GetComponent<StatBarItem>();
-                wrath.statBar = GameObject.Find("Player Wrath Bar").GetComponent<StatBarItem>();
-            }
+            //if (gameObject.CompareTag("Player"))
+            //{
+            //    stamina.statBar = GameObject.Find("Player Stamina Bar").GetComponent<StatBarItem>();
+            //    wrath.statBar = GameObject.Find("Player Wrath Bar").GetComponent<StatBarItem>();
+            //}
 
+            progressionManager = GetComponent<CharacterProgressionManager>();
             inventory = GetComponent<InventoryManager>();
             dropSpawner = GetComponent<DropSpawner>();
 
@@ -80,6 +87,13 @@ namespace RPGPlatformer.Combat
 
         private void OnEnable()
         {
+            if (IsPlayer)
+            {
+                Health.Stat.statBar = GameObject.Find("Player Health Bar").GetComponent<StatBarItem>();
+                Stamina.statBar = GameObject.Find("Player Stamina Bar").GetComponent<StatBarItem>();
+                Wrath.statBar = GameObject.Find("Player Wrath Bar").GetComponent<StatBarItem>();
+            }
+
             stamina.autoReplenish = true;
         }
 

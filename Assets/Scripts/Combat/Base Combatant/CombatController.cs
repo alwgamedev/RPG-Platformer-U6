@@ -7,6 +7,7 @@ using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 using System.Threading;
 using RPGPlatformer.SceneManagement;
+using RPGPlatformer.UI;
 
 
 namespace RPGPlatformer.Combat
@@ -60,6 +61,8 @@ namespace RPGPlatformer.Combat
         public IMovementController MovementController { get; protected set; }
         public virtual IInputSource InputSource { get; protected set; }
 
+        public event Action CombatEntered;
+        public event Action CombatExited;
         public event Action AbilityBarResetEvent;
         public event Action<AttackAbility> OnCooldownStarted;
         public event Action OnFireButtonDown;
@@ -337,12 +340,16 @@ namespace RPGPlatformer.Combat
             AbilityBarResetEvent?.Invoke();
         }
 
-        public virtual void OnCombatEntry() { }
+        public virtual void OnCombatEntry()
+        {
+            CombatEntered?.Invoke();
+        }
 
         public virtual void OnCombatExit()
         {
             EndChannel();//kills queued ability
             GlobalCooldown = false;
+            CombatExited?.Invoke();
         }
 
         protected virtual void OnWeaponTick()

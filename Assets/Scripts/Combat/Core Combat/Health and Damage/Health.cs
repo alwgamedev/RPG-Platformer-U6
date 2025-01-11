@@ -18,17 +18,17 @@ namespace RPGPlatformer.Combat
         public event Action<float, bool> OnStunned;//signature is (duration, freezeAnimation)
         public event Action<IDamageDealer> OnDeath;
 
-        private void Awake()
-        {
-            if (CompareTag("Player"))
-            {
-                stat.statBar = GameObject.Find("Player Health Bar").GetComponent<StatBarItem>();
-            }
-            else
-            {
-                stat.statBar = GetComponentInChildren<StatBarItem>();
-            }
-        }
+        //private void Awake()
+        //{
+        //    if (CompareTag("Player"))
+        //    {
+        //        stat.statBar = GameObject.Find("Player Health Bar").GetComponent<StatBarItem>();
+        //    }
+        //    else
+        //    {
+        //        stat.statBar = GetComponentInChildren<StatBarItem>();
+        //    }
+        //}
 
         private void OnEnable()
         {
@@ -40,6 +40,11 @@ namespace RPGPlatformer.Combat
 
         private void Start()
         {
+            if (stat.statBar == null && !CompareTag("Player"))//this is just so the combat dummy's health displays
+            {
+                stat.statBar = GetComponentInChildren<StatBarItem>();
+            }
+
             stat.Start();
         }
 

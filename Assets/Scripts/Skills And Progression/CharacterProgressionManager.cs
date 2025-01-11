@@ -10,13 +10,20 @@ namespace RPGPlatformer.Skills
 {
     public class CharacterProgressionManager : MonoBehaviour, ISavable, IXPGainer
     {
+        //[SerializeField] CharacterProgressionDataSO
+
         [SerializeField] CharacterProgressionData progressionData;
+        [SerializeField] bool canGainXP;
+
+        public int TotalLevel => progressionData.TotalLevel();
+        public int CombatLevel => progressionData.CombatLevel();
 
         public event Action<XPGainEventData> ExperienceGained;
         public event Action<CharacterSkill, int> LevelUp;
 
         public void GainExperience(CharacterSkill skill, int xpToGain)
         {
+            if (!canGainXP) return;
             if (!progressionData.TryGetProgressionData(skill, out var data)) return;
             if (xpToGain <= 0 || data.Level >= skill.XPTable.MaxLevel) return;
 
@@ -24,7 +31,7 @@ namespace RPGPlatformer.Skills
             int xpGained = data.GainExperience(xpToGain, skill.XPTable);
 
             ExperienceGained?.Invoke(new(skill, data, xpGained));
-            GameLog.Log($"Gained {xpGained} experience points in {skill.SkillName}.");
+            //GameLog.Log($"Gained {xpGained} experience points in {skill.SkillName}.");
 
             if(data.Level > oldLevel)
             {

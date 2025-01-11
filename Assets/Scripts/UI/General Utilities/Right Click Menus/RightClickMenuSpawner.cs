@@ -104,16 +104,6 @@ namespace RPGPlatformer.UI
             }
         }
 
-        //private void OnMouseOver()
-        //{
-        //    if (GlobalGameTools.PlayerIsDead && disableWhenPlayerIsDead) return;
-
-        //    if (Input.GetKeyUp(KeyCode.Mouse1))
-        //    {
-        //        OpenMenu();
-        //    }
-        //}
-
         private void OpenMenu()
         {
             if (!ActiveMenu && CanCreateMenu())
@@ -123,16 +113,19 @@ namespace RPGPlatformer.UI
             if (ActiveMenu)
             {
                 ConfigureMenu(ActiveMenu);
-                RepositionMenu();
+                var rectT = ActiveMenu.GetComponent<RectTransform>();
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rectT); 
+                rectT.RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
+                //RepositionMenu();
                 MenuSpawned?.Invoke();
             }
         }
 
         //NOTE: The menu prefab should have its pivot set in the UPPER LEFT CORNER
-        private void RepositionMenu()
-        {
-            ActiveMenu.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
-        }
+        //private void RepositionMenu()
+        //{
+        //    ActiveMenu.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
+        //}
 
         private GameObject InstantiateMenuPrefab()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace RPGPlatformer.Skills
 {
@@ -7,8 +8,25 @@ namespace RPGPlatformer.Skills
     [Serializable]
     public class SkillProgressionData
     {
-        public int Level { get; set; }
-        public int XP { get; set; }
+        [Min(1)][SerializeField] int level = 1;
+        [Min(0)][SerializeField] int xp;
+
+        public int Level
+        {
+            get => level;
+            set
+            {
+                level = value;
+            }
+        }
+        public int XP
+        {
+            get => xp;
+            set
+            {
+                xp = value;
+            }
+        }
 
         public int GainExperience(int xp, XPTable xpTable)
         {

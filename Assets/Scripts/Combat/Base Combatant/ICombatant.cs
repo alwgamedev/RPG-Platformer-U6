@@ -6,6 +6,8 @@ namespace RPGPlatformer.Combat
 {
     public interface ICombatant : IEquippableCharacter, IDamageDealer
     {
+        public string DisplayName { get; }
+        public int CombatLevel { get; }
         public float AdditiveDamageBonus { get; }
         public IWeapon Weapon { get; }
         public ReplenishableStat Stamina { get; }
