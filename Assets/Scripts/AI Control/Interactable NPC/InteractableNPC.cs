@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using RPGPlatformer.Core;
 using RPGPlatformer.Dialogue;
 using RPGPlatformer.UI;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace RPGPlatformer.AIControl
@@ -51,9 +52,19 @@ namespace RPGPlatformer.AIControl
             OnUpdate = null;
         }
 
+        //public override void OnMouseDown()
+        //{
+        //    if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+        //    if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
+
+        //    primaryAction.Item2?.Invoke();
+        //}
+
         public override void OnPointerClick(PointerEventData eventData)
         {
-            if(!eventData.IsLeftMouseButtonEvent()) return;
+            base.OnPointerClick(eventData);
+
+            if (!eventData.IsLeftMouseButtonEvent()) return;
             if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
 
             primaryAction.Item2?.Invoke();

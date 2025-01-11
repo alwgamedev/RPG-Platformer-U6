@@ -37,7 +37,13 @@ namespace RPGPlatformer.UI
         {
             ICombatController playerCombatController = GameObject.Find("Player").GetComponent<ICombatController>();
             playerCombatController.OnChannelStarted += () => EquipAnimatedCursor(focusingRedCrosshairs);
-            playerCombatController.OnChannelEnded += () => EquipCursor(CursorType.Default, true);
+            playerCombatController.OnChannelEnded += () =>
+            {
+                if (animatedCursorEquipped)
+                {
+                    EquipCursor(CursorType.Default, true);
+                }
+            };
             playerCombatController.OnPowerUpStarted += () => EquipAnimatedCursor(blinkingYellowCrosshairs);
             playerCombatController.OnMaximumPowerAchieved += () => EquipAnimatedCursor(blinkingGreenCrosshairs);
 

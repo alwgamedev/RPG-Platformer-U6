@@ -63,8 +63,18 @@ namespace RPGPlatformer.Loot
             OnUpdate?.Invoke();
         }
 
+        //public override void OnMouseDown()
+        //{
+        //    if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+        //    if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
+
+        //    TakeAll();
+        //}
+
         public override void OnPointerClick(PointerEventData eventData)
         {
+            base.OnPointerClick(eventData);
+
             if (!eventData.IsLeftMouseButtonEvent()) return;
             if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
 

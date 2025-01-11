@@ -173,14 +173,15 @@ namespace RPGPlatformer.Combat
 
         protected virtual bool CanExecute(AttackAbility ability)
         {
-            return ability != null
-                && !currentAbilityBar.OnCooldown(ability) 
+            return !currentAbilityBar.OnCooldown(ability) 
                 && (!ability.ObeyGCD || !GlobalCooldown)
                 && (combatant.Weapon?.CombatStyle == ability.CombatStyle || ability.CombatStyle == CombatStyle.Any);
         }
 
         protected virtual void ExecuteAbility(AttackAbility ability)
         {
+            if (ability == null) return;
+
             if (CanExecute(ability))
             {
                 CancelAbilityInProgress(false);

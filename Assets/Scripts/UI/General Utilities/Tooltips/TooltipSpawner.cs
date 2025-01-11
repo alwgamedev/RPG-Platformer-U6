@@ -88,6 +88,16 @@ namespace RPGPlatformer.UI
             ClearTooltip();
         }
 
+        //private void OnMouseEnter()
+        //{
+        //    OnPointerEnter(null);
+        //}
+
+        //private void OnMouseExit()
+        //{
+        //    OnPointerExit(null);
+        //}
+
         //NOTE: The tooltip should have its pivot in UPPER RIGHT CORNER.
         private void RepositionTooltip()
         {

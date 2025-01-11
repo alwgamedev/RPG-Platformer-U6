@@ -12,11 +12,11 @@ namespace RPGPlatformer.Core
 
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
-    public abstract class InteractableGameObject : MonoBehaviour, IInteractableGameObject, IPausable, 
+    public class InteractableGameObject : MonoBehaviour, IInteractableGameObject, IPausable, 
         IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
-        //why use pointer events instead of OnMouseOver etc.?
-        //because pointer events are detected by trigger colliders, so we can expand the object's
-        //interactable area by adding a trigger collider that won't affect its physics interactions
+    //why use pointer events instead of OnMouseOver etc.?
+    //because pointer events are detected by trigger colliders, so we can expand the object's
+    //interactable area by adding a trigger collider that won't affect its physics interactions
     {
         [SerializeField] protected string displayName;
         [SerializeField] protected string examineText;
@@ -25,6 +25,7 @@ namespace RPGPlatformer.Core
 
         protected int homeLayer;
         protected Transform playerTransform;
+        protected RightClickMenuSpawner rcm;
 
         private static InteractableGameObject hoveredIGO;
 
@@ -35,23 +36,27 @@ namespace RPGPlatformer.Core
 
         public event Action PlayerOutOfRange;
 
-        public static InteractableGameObject HoveredIGO
-        {
-            get => hoveredIGO;
-            protected set
-            {
-                hoveredIGO = value;
-                HoveredIGOChanged?.Invoke();
-            }
-        }
+        public static InteractableGameObject HoveredIGO => hoveredIGO;
+
+        //public static InteractableGameObject HoveredIGO
+        //{
+        //    get => hoveredIGO;
+        //    protected set
+        //    {
+        //        hoveredIGO = value;
+        //        HoveredIGOChanged?.Invoke();
+        //    }
+        //}
         public static bool MouseOverAnyIGO => HoveredIGO != null;
 
         public static event Action HoveredIGOChanged;
+        public static event Action IGOClicked;
 
         protected virtual void Awake()
         {
             GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
             playerTransform = playerGO.transform;
+            rcm = GetComponent<RightClickMenuSpawner>();
         }
 
         public virtual void Examine()
@@ -62,6 +67,24 @@ namespace RPGPlatformer.Core
                 //using the property ExamineText instead of field examineText
                 //so that inheriting classes (like LootDrop) can have a forced examine text.
             }
+        }
+
+        //looks stupid, should just do in property HoveredIGO, but that property should be static,
+        //so can't reference the non-static rcm in that property's set
+        private void SetHoveredIGOToThis()
+        {
+            hoveredIGO = this;
+            if(rcm == null || !rcm.ActiveMenu)
+            {
+                HoveredIGOChanged?.Invoke();
+                //so that we don't get flickering cursor changes when we have RCM active
+            }
+        }
+
+        private void SetHoveredIGOToNull()
+        {
+            hoveredIGO = null;
+            HoveredIGOChanged?.Invoke();
         }
 
 
@@ -120,10 +143,27 @@ namespace RPGPlatformer.Core
 
         //MOUSE EVENT CALLBACKS
 
+        //public virtual void OnMouseEnter()
+        //{
+        //    MouseOver = true;
+        //    HoveredIGO = this;
+        //}
+
+        //public void OnMouseExit()
+        //{
+        //    MouseOver = false;
+        //    if (!MouseOverAny())
+        //    {
+        //        HoveredIGO = null;
+        //    }
+        //}
+
+        //public abstract void OnMouseDown();
+
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
             MouseOver = true;
-            HoveredIGO = this;
+            SetHoveredIGOToThis();
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -131,11 +171,14 @@ namespace RPGPlatformer.Core
             MouseOver = false;
             if (!MouseOverAny())
             {
-                HoveredIGO = null;
+                SetHoveredIGOToNull();
             }
         }
 
-        public abstract void OnPointerClick(PointerEventData eventData);
+        public virtual void OnPointerClick(PointerEventData eventData)
+        {
+            IGOClicked.Invoke();
+        }
 
         private static bool MouseOverAny()
         {
@@ -151,7 +194,7 @@ namespace RPGPlatformer.Core
         {
             if (HoveredIGO == this)
             {
-                HoveredIGO = null;
+                SetHoveredIGOToNull();
             }
 
             PlayerOutOfRange = null;

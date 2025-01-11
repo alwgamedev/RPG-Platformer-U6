@@ -89,5 +89,10 @@ namespace RPGPlatformer.Movement
         {
             inputDisabled = false;
         }
+
+        private void OnDestroy()
+        {
+            SettingsManager.OnIAMConfigure -= OnIAMConfigure;
+        }
     }
 }

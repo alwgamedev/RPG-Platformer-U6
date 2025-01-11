@@ -22,6 +22,7 @@ namespace RPGPlatformer.Combat
             base.OnEnable();
 
             SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            InteractableGameObject.IGOClicked += OnIGOClicked;
         }
 
         protected override void Start()
@@ -97,6 +98,11 @@ namespace RPGPlatformer.Combat
             }
         }
 
+        private void OnIGOClicked()
+        {
+            CancelAbilityInProgress();
+        }
+
         protected override void AttemptedToExecuteAbilityOnCooldown()
         {
             GameLog.Log("That ability is on cooldown.");
@@ -148,6 +154,14 @@ namespace RPGPlatformer.Combat
         protected override void EnableInput()
         {
             inputDisabled = false;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            SettingsManager.OnIAMConfigure -= OnIAMConfigure;
+            InteractableGameObject.IGOClicked -= OnIGOClicked;
         }
     }
 }

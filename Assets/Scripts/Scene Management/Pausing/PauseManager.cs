@@ -53,6 +53,8 @@ namespace RPGPlatformer.SceneManagement
         {
             OnPause = null;
             OnUnpause = null;
+
+            SettingsManager.OnIAMConfigure -= OnIAMConfigured;
         }
     }
 }

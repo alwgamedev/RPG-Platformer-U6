@@ -38,7 +38,7 @@ namespace RPGPlatformer.Combat
         protected Weapon weapon;
         protected Health health;
 
-        public string DisplayName => displayName;
+        public string DisplayName => $"<b>{displayName}</b>";
         public int CombatLevel => progressionManager.CombatLevel;
         public bool IsPlayer { get; protected set; }
         public string TargetLayer => targetLayer;

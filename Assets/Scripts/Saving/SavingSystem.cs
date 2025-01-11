@@ -81,5 +81,10 @@ namespace RPGPlatformer.Saving
         {
             return Path.Combine(Application.persistentDataPath, "RPGPlatformerTestSave.json");
         }
+
+        private void OnDestroy()
+        {
+            SettingsManager.OnIAMConfigure -= OnIAMConfigure;
+        }
     }
 }
