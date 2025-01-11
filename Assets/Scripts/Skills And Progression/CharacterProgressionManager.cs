@@ -21,6 +21,11 @@ namespace RPGPlatformer.Skills
         public event Action<XPGainEventData> ExperienceGained;
         public event Action<CharacterSkill, int> LevelUp;
 
+        public int GetLevel(CharacterSkill skill)
+        {
+            return progressionData.GetLevel(skill);
+        }
+
         public void GainExperience(CharacterSkill skill, int xpToGain)
         {
             if (!canGainXP) return;

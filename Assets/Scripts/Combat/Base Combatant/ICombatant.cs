@@ -8,7 +8,6 @@ namespace RPGPlatformer.Combat
     {
         public string DisplayName { get; }
         public int CombatLevel { get; }
-        public float AdditiveDamageBonus { get; }
         public IWeapon Weapon { get; }
         public ReplenishableStat Stamina { get; }
         public ReplenishableStat Wrath { get; }
@@ -16,6 +15,7 @@ namespace RPGPlatformer.Combat
 
         public event Action OnTargetingFailed;
 
+        public float AdditiveDamageBonus();
         public IHealth FindTarget(Vector2 position, float searchRadius);
         public bool CanAttack(IHealth target);
         public bool CanAttack(float distance);

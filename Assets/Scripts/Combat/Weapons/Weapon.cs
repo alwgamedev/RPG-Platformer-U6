@@ -1,6 +1,5 @@
 ﻿using RPGPlatformer.Inventory;
 using UnityEngine;
-using static RPGPlatformer.Combat.CombatStyles;
 
 namespace RPGPlatformer.Combat
 {

@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
-    using static CombatStyles;
-
     [CreateAssetMenu(fileName = "Weapon", menuName = "Equippable Items/Weapons/New Weapon")]
     public class BlankWeaponSO : WeaponSO
     {

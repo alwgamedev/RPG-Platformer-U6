@@ -66,7 +66,7 @@ namespace RPGPlatformer.Combat
 
         public float ComputeDamage(ICombatant combatant)
         {
-            return DamageMultiplier * (combatant.AdditiveDamageBonus + combatant.Weapon.WeaponStats.BaseDamage);
+            return DamageMultiplier * (combatant.AdditiveDamageBonus() + combatant.Weapon.WeaponStats.BaseDamage);
         }
 
 

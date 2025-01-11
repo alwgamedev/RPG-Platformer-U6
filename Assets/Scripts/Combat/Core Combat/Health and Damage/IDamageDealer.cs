@@ -6,6 +6,6 @@ namespace RPGPlatformer.Combat
     {
         public Transform Transform { get; }
 
-        public CombatStyles.CombatStyle? CurrentCombatStyle { get; }
+        public CombatStyle? CurrentCombatStyle { get; }
     }
 }

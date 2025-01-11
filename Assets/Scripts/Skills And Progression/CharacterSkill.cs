@@ -7,6 +7,7 @@ namespace RPGPlatformer.Skills
     //for now will just have the XPTable for that skill,
     //later on it could also have information about achievements unlocked at certain levels etc.
     {
+
         public string SkillName { get; init; }
         public XPTable XPTable { get; init; }
 

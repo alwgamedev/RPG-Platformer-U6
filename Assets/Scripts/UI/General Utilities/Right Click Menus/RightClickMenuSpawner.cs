@@ -116,16 +116,9 @@ namespace RPGPlatformer.UI
                 var rectT = ActiveMenu.GetComponent<RectTransform>();
                 LayoutRebuilder.ForceRebuildLayoutImmediate(rectT); 
                 rectT.RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
-                //RepositionMenu();
                 MenuSpawned?.Invoke();
             }
         }
-
-        //NOTE: The menu prefab should have its pivot set in the UPPER LEFT CORNER
-        //private void RepositionMenu()
-        //{
-        //    ActiveMenu.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
-        //}
 
         private GameObject InstantiateMenuPrefab()
         {

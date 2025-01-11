@@ -31,14 +31,14 @@ namespace RPGPlatformer.Combat
             this.abilityBarItems = abilityBarItems?.GroupBy(y => y.ability).Select(z => z.First()).ToList() ?? new();
         }
 
-        public List<AbilityBarItem> GetDefaultAbilityBarItems(CombatStyles.CombatStyle combatStyle)
+        public List<AbilityBarItem> GetDefaultAbilityBarItems(CombatStyle combatStyle)
         {
             return combatStyle switch
             {
-                CombatStyles.CombatStyle.Unarmed => UnarmedAbilities.DefaultAbilityBarData(),
-                CombatStyles.CombatStyle.Mage => MageAbilities.DefaultAbilityBarData(),
-                CombatStyles.CombatStyle.Melee => MeleeAbilities.DefaultAbilityBarData(),
-                CombatStyles.CombatStyle.Ranged => RangedAbilities.DefaultAbilityBarData(),
+                CombatStyle.Unarmed => UnarmedAbilities.DefaultAbilityBarData(),
+                CombatStyle.Mage => MageAbilities.DefaultAbilityBarData(),
+                CombatStyle.Melee => MeleeAbilities.DefaultAbilityBarData(),
+                CombatStyle.Ranged => RangedAbilities.DefaultAbilityBarData(),
                 _ => null
             };
         }

@@ -173,13 +173,14 @@ namespace RPGPlatformer.Combat
 
         protected virtual bool CanExecute(AttackAbility ability)
         {
-            return !currentAbilityBar.OnCooldown(ability) && (!ability.ObeyGCD || !GlobalCooldown);
+            return ability != null
+                && !currentAbilityBar.OnCooldown(ability) 
+                && (!ability.ObeyGCD || !GlobalCooldown)
+                && (combatant.Weapon?.CombatStyle == ability.CombatStyle || ability.CombatStyle == CombatStyle.Any);
         }
 
         protected virtual void ExecuteAbility(AttackAbility ability)
         {
-            if (ability == null) return;
-
             if (CanExecute(ability))
             {
                 CancelAbilityInProgress(false);
@@ -358,17 +359,17 @@ namespace RPGPlatformer.Combat
             ExecuteAbility(queuedAbility);
         }
 
-        public virtual void PlayAnimation(string stateName, CombatStyles.CombatStyle combatStyle)
+        public virtual void PlayAnimation(string stateName, CombatStyle combatStyle)
         {
             combatManager.animationControl.PlayAnimationState(stateName, combatStyle.ToString(), 0);
         }
 
-        public virtual void PlayPowerUpAnimation(string stateName, CombatStyles.CombatStyle combatStyle)
+        public virtual void PlayPowerUpAnimation(string stateName, CombatStyle combatStyle)
         {
             PlayAnimation(stateName + " PowerUp", combatStyle);
         }
 
-        public virtual void PlayChannelAnimation(string stateName, CombatStyles.CombatStyle combatStyle)
+        public virtual void PlayChannelAnimation(string stateName, CombatStyle combatStyle)
         {
             PlayAnimation(stateName + " Channel", combatStyle);
         }

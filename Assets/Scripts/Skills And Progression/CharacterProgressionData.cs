@@ -59,6 +59,11 @@ namespace RPGPlatformer.Skills
             }
         }
 
+        public int GetLevel(CharacterSkill skill)
+        {
+            return GetProgressionData(skill).Level;
+        }
+
         public int TotalLevel()
         {
             int result = 0;
@@ -75,6 +80,15 @@ namespace RPGPlatformer.Skills
         public int CombatLevel()
         {
             return Health.Level + Defense.Level + Math.Max(Math.Max(Magic.Level, Melee.Level), Range.Level);
+        }
+
+        public SkillProgressionData GetProgressionData(CharacterSkill skill)
+        {
+            if(SkillLookup == null)
+            {
+                Configure();
+            }
+            return SkillLookup[skill];
         }
 
         //below this is mainly to allow flexible initialization of the dictionary

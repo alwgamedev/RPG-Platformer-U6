@@ -36,9 +36,9 @@ namespace RPGPlatformer.Combat
         public void OnInsufficientWrath();
         public Vector2 GetAimPosition();
         //public void HoldAim(int duration);
-        public void PlayAnimation(string stateName, CombatStyles.CombatStyle combatStyle);
-        public void PlayPowerUpAnimation(string stateName, CombatStyles.CombatStyle combatStyle);
-        public void PlayChannelAnimation(string stateName, CombatStyles.CombatStyle combatStyle);
+        public void PlayAnimation(string stateName, CombatStyle combatStyle);
+        public void PlayPowerUpAnimation(string stateName, CombatStyle combatStyle);
+        public void PlayChannelAnimation(string stateName, CombatStyle combatStyle);
         public void StartCooldown(AttackAbility ability);
     }
 }

@@ -43,14 +43,14 @@ namespace RPGPlatformer.Combat
         public bool IsPlayer { get; protected set; }
         public string TargetLayer => targetLayer;
         public string TargetTag => targetTag;
-        public float AdditiveDamageBonus => 0;//EVENTUALLY: will compute based on equipment, stats, and any active buffs
+        //public float AdditiveDamageBonus => 0;//EVENTUALLY: will compute based on equipment, stats, and any active buffs
         public InventoryManager Inventory => inventory;
         public Dictionary<EquipmentSlots, ItemSlot> EquipSlots => equipSlots;
         public Transform Transform => transform;
         public Transform MainhandElbow => mainhandElbow;
         public Transform ChestBone => chestBone;
         public IWeapon Weapon => weapon;
-        public CombatStyles.CombatStyle? CurrentCombatStyle => weapon?.CombatStyle;
+        public CombatStyle? CurrentCombatStyle => weapon?.CombatStyle;
         public IProjectile QueuedProjectile { get; set; }
         public IHealth Health => health;
         public ReplenishableStat Stamina => stamina;
@@ -63,12 +63,6 @@ namespace RPGPlatformer.Combat
         protected virtual void Awake()
         {
             health = GetComponent<Health>();
-
-            //if (gameObject.CompareTag("Player"))
-            //{
-            //    stamina.statBar = GameObject.Find("Player Stamina Bar").GetComponent<StatBarItem>();
-            //    wrath.statBar = GameObject.Find("Player Wrath Bar").GetComponent<StatBarItem>();
-            //}
 
             progressionManager = GetComponent<CharacterProgressionManager>();
             inventory = GetComponent<InventoryManager>();
@@ -111,11 +105,36 @@ namespace RPGPlatformer.Combat
         }
 
 
+        //DAMAGE MODIFIERS
+
+        public float AdditiveDamageBonus()
+        {
+            if (weapon == null) return 0;
+            return AdditiveDamageBonus(weapon.CombatStyle);
+        }
+
+        public float AdditiveDamageBonus(CombatStyle combatStyle)
+        {
+            if(CharacterSkillBook.GetCombatSkill(combatStyle) == null) return 0;
+            return 4.5f * progressionManager.GetLevel(CharacterSkillBook.GetCombatSkill(combatStyle));
+            //TO-DO: + bonuses from equipment and active buffs
+            //NOTE: at max level 40 this gives +180 damage (then times ability's damage multiplier)
+        }
+
+        public float DamageTakenMultiplier()
+        {
+            float defenseProgress = progressionManager.GetLevel(CharacterSkillBook.Defense)
+                / CharacterSkillBook.Defense.XPTable.MaxLevel;
+            return 1 - (0.1f * defenseProgress);//hence at max defense you get 10% damage reduction
+            //TO-DO: factor in armour, DEFENSE LEVEL, and buffs
+        }
+
+
         //BASIC FUNCTIONS
 
         public virtual void TakeDamage(float damage, IDamageDealer damageDealer)
         {
-            health.GainHealth(-damage, true);
+            health.GainHealth(-damage * DamageTakenMultiplier(), true);
             if (health.Stat.CurrentValue <= health.Stat.MinValue)
             {
                 Die(damageDealer);
