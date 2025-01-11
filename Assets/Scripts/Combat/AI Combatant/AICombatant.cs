@@ -17,10 +17,10 @@ namespace RPGPlatformer.Combat
             damageTracker = new();
         }
 
-        public override void TakeDamage(float damage, IDamageDealer damageDealer)
+        public override float HandleHealthChange(float damage, IDamageDealer damageDealer)
         {
             damageTracker.RecordDamage(damage, damageDealer);
-            base.TakeDamage(damage, damageDealer);
+            return base.HandleHealthChange(damage, damageDealer);
         }
 
         public override void OnDeath()

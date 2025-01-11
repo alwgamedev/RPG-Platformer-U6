@@ -9,9 +9,11 @@ namespace RPGPlatformer.Combat
         public Transform Transform { get; }
         public ReplenishableStat Stat { get; }
 
-        public event Action<float, IDamageDealer> OnDamaged;
+        public event Action<float, IDamageDealer> HealthChanged;
         public event Action<float, bool> OnStunned;
         public event Action<IDamageDealer> OnDeath;
+
+        public void GainHealth(float health, bool clamped);
 
         public void ReceiveDamage(float damage, IDamageDealer damageDealer);
 

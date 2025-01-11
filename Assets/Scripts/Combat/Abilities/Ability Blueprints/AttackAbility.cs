@@ -35,6 +35,7 @@ namespace RPGPlatformer.Combat
         //public int? StunDurationInMilliseconds { get; init; } = null;
         public float? StunDuration { get; init; } = null;
         public bool FreezeAnimationDuringStun { get; init; } = true;
+        //public bool ExecuteTriggeredInAnimation { get; init; }
         public int BleedCount { get; init; }//many different types of abilities (aoe, projectile, auto targeted) can have a bleed,
                                             //so it's easiest to just have every ability carry bleed stats (even though most don't need them).
         public int BleedRate { get; init; }

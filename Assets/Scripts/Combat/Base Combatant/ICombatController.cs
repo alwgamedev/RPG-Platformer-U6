@@ -22,6 +22,7 @@ namespace RPGPlatformer.Combat
         public event Action OnPowerUpStarted;
         public event Action OnPowerUpEnded;
         public event Action OnMaximumPowerAchieved;
+        public event Action<float> HealthChangeEffected;
 
         public void StartChannel();
         public void EndChannel(bool delayReleaseUntilFireButtonUp = false);
@@ -29,6 +30,7 @@ namespace RPGPlatformer.Combat
         public void EndPowerUp();
         public void OnAbilityExecute(AttackAbility ability);
         public void MaximumPowerAchieved();
+        public void StoreAction(Action action);
         public void OnWeaponEquip();
         public void OnCombatEntry();
         public void OnCombatExit();

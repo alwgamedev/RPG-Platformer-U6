@@ -117,16 +117,16 @@ namespace RPGPlatformer.Combat
             animationControl.PlayAnimationState("Idle", "Base Layer", 0);
         }
 
-        public virtual void OnDamageTaken(float damage)
+        public virtual void HandleHealthChange(float damage)
         {
             if (damage > 0)
             {
                 animationControl.PlayAnimationState("Take Damage", "Top Layer", 0);
             }
-            else if(damage < 0)
-            {
-                //play a health gained animation/effect
-            }
+            //else if(damage < 0)
+            //{
+            //    //play a health gained animation/effect
+            //}
         }
     }
 }

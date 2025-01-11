@@ -147,7 +147,7 @@ namespace RPGPlatformer.Combat
 
         //hits only slightly higher than max power Demolish, but fires instantly and has better AoE, hence the steeper Stamina and Wrath costs
         //on the other hand, only targets close range (no projectile)
-        public static AoeAbilityThatExecutesImmediately Desecrate = new()//threshold AoE
+        public static AoeAbilityThatExecutesImmediately Desecrate = new(true)//threshold AoE
         {
             Description = "Desecrate the earth by slamming down your staff, " +
             "dealing heavy damage to any nearby enemies.",
@@ -155,6 +155,7 @@ namespace RPGPlatformer.Combat
             {
                 AbilityTag.AoE_Damage
             },
+            //ExecuteTriggeredInAnimation = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Desecrate",

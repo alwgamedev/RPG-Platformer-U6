@@ -112,7 +112,7 @@ namespace RPGPlatformer.Combat
         {
             if (!combatant.Health.IsDead)
             {
-                combatant.TakeDamage(Mathf.Infinity, null);
+                combatant.HandleHealthChange(Mathf.Infinity, null);
             }
             else
             {

@@ -11,10 +11,19 @@ namespace RPGPlatformer.Combat
     {
         public Func<ICombatController, IHealth> AutoTarget;
 
-        public AutoTargetedAbility()
+        public AutoTargetedAbility(bool executeTriggeredInAnimation = false)
         {
-            OnExecute = (controller) => DealDamageWithRangeCheck(controller.Combatant, AutoTarget(controller),
-                   ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+            if (executeTriggeredInAnimation)
+            {
+                OnExecute = (controller) => controller.StoreAction(() =>
+                DealDamageWithRangeCheck(controller.Combatant, AutoTarget(controller),
+                    ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect));
+            }
+            else
+            {
+                OnExecute = (controller) => DealDamageWithRangeCheck(controller.Combatant, AutoTarget(controller),
+                       ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+            }
         }
         public static void DealDamageWithRangeCheck(ICombatant combatant, IHealth target, float damage,
             float? stunDuration = null, bool freezeAnimationDuringStun = true, Func<PoolableEffect> getHitEffect = null)
@@ -113,10 +122,19 @@ namespace RPGPlatformer.Combat
     //(*) whether it HasChannelAnimation (bool)
     public class AutoTargetOnNextFireButtonDownSingleDamage : AutoTargetOnNextFireButtonDown
     {
-        public AutoTargetOnNextFireButtonDownSingleDamage() : base()
+        public AutoTargetOnNextFireButtonDownSingleDamage(bool executeTriggeredInAnimation = false) : base()
         {
-            OnExecute = (controller, target) => DealDamage(controller.Combatant, target, ComputeDamage(controller.Combatant), 
+            if (executeTriggeredInAnimation)
+            {
+                OnExecute = (controller, target) => controller.StoreAction(() =>
+                DealDamage(controller.Combatant, target, ComputeDamage(controller.Combatant),
+                    StunDuration, FreezeAnimationDuringStun, GetHitEffect));
+            }
+            else
+            {
+                OnExecute = (controller, target) => DealDamage(controller.Combatant, target, ComputeDamage(controller.Combatant),
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+            }
         }
     }
 
@@ -158,12 +176,22 @@ namespace RPGPlatformer.Combat
     //(*) whether it HasChannelAnimation and HasPowerUpAnimation (bools)
     public class AutoTargetedPowerUpWithSingleDamageHit : AutoTargetedPowerUpAbility
     {
-        public AutoTargetedPowerUpWithSingleDamageHit() : base()
+        public AutoTargetedPowerUpWithSingleDamageHit(bool executeTriggeredInAnimation = false) : base()
         {
-            OnExecute = (controller, args) =>
+            if (executeTriggeredInAnimation)
+            {
+                OnExecute = (controller, args) => controller.StoreAction(() =>
                 AutoTargetedAbility.DealDamageWithRangeCheck(controller.Combatant, args.Item1,
-                ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2), 
+                ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
+                StunDuration, FreezeAnimationDuringStun, GetHitEffect));
+            }
+            else
+            {
+                OnExecute = (controller, args) =>
+                AutoTargetedAbility.DealDamageWithRangeCheck(controller.Combatant, args.Item1,
+                ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+            }
         }
     }
 

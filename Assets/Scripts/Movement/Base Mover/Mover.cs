@@ -29,6 +29,7 @@ namespace RPGPlatformer.Movement
         protected RaycastHit2D rightHit;
         protected RaycastHit2D leftHit;
 
+        public Transform Transform => transform;
         public Rigidbody2D MyRigidbody => myRigidbody;
         public Vector3 ColliderFront => transform.position + localColliderRightCenter;
         public Vector3 ColliderBack => transform.position + localColliderLeftCenter;

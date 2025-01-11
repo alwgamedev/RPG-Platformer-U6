@@ -132,13 +132,18 @@ namespace RPGPlatformer.Combat
 
         //BASIC FUNCTIONS
 
-        public virtual void TakeDamage(float damage, IDamageDealer damageDealer)
+        public virtual float HandleHealthChange(float damage, IDamageDealer damageDealer)
         {
-            health.GainHealth(-damage * DamageTakenMultiplier(), true);
+            if (damage > 0)
+            {
+                damage *= DamageTakenMultiplier();
+            }
+            health.GainHealth(-damage, true);
             if (health.Stat.CurrentValue <= health.Stat.MinValue)
             {
                 Die(damageDealer);
             }
+            return damage;
         }
 
         public virtual void OnDeath()

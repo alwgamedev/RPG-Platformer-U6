@@ -14,7 +14,7 @@ namespace RPGPlatformer.Combat
         public Transform Transform => transform; 
         public ReplenishableStat Stat => stat;
 
-        public event Action<float, IDamageDealer> OnDamaged;
+        public event Action<float, IDamageDealer> HealthChanged;
         public event Action<float, bool> OnStunned;//signature is (duration, freezeAnimation)
         public event Action<IDamageDealer> OnDeath;
 
@@ -34,7 +34,7 @@ namespace RPGPlatformer.Combat
         {
             if (takeDamageAutomatically)
             {
-                OnDamaged += (damage, damageDealer) => GainHealth(-damage, true);
+                HealthChanged += (damage, damageDealer) => GainHealth(-damage, true);
             }
         }
 
@@ -58,7 +58,7 @@ namespace RPGPlatformer.Combat
         //to decide how to take damage (e.g. combatant may have bonuses or effects to take into account)
         public void ReceiveDamage(float damage, IDamageDealer damageDealer)
         {
-            OnDamaged?.Invoke(damage, damageDealer);
+            HealthChanged?.Invoke(damage, damageDealer);
         }
 
         public void GainHealth(float amount, bool clamped)
@@ -94,7 +94,7 @@ namespace RPGPlatformer.Combat
 
         private void OnDestroy()
         {
-            OnDamaged = null;
+            HealthChanged = null;
             OnStunned = null;
             OnDeath = null;
         }

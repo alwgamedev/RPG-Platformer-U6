@@ -124,7 +124,7 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = -.35f
         };
 
-        public static AoeAbilityThatExecutesImmediately Slam = new()//thresh AoE Stun (should be comparable to Desecrate, with slightly higher damage + stun)
+        public static AoeAbilityThatExecutesImmediately Slam = new(true)//thresh AoE Stun (should be comparable to Desecrate, with slightly higher damage + stun)
         {
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
@@ -141,7 +141,7 @@ namespace RPGPlatformer.Combat
             FreezeAnimationDuringStun = false
         };
 
-        public static AoePowerUpAbility Ravage = new()//ultimate AoE
+        public static AoePowerUpAbility Ravage = new(true)//ultimate AoE
         {
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Ravage",

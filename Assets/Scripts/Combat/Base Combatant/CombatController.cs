@@ -7,13 +7,10 @@ using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 using System.Threading;
 using RPGPlatformer.SceneManagement;
-using RPGPlatformer.UI;
 
 
 namespace RPGPlatformer.Combat
 {
-    using static CombatStyles;
-
     [RequireComponent(typeof(TickTimer))]
     [RequireComponent(typeof(AnimationControl))]
     [RequireComponent(typeof(Combatant))]
@@ -48,6 +45,7 @@ namespace RPGPlatformer.Combat
         protected bool aimingActionInUse;
         protected Action OnLateUpdate;
         protected Action CurrentAimingAction;
+        protected Action StoredAction;//intended to be used with animation events; cleared in EndChannel
 
         protected List<(float, bool)> activeStuns = new();
 
@@ -74,6 +72,10 @@ namespace RPGPlatformer.Combat
         public event Action OnMaximumPowerAchieved;
         public event Action OnDeath;
         public event Action OnRevive;
+        public event Action<float> HealthChangeEffected;
+            //^note parameter represents damage (so positive is damage taken, and negative is health gained)
+            //we will run into issues if the animator transitions to another animation and the event never triggers...
+
 
         protected virtual void Awake()
         {
@@ -110,7 +112,7 @@ namespace RPGPlatformer.Combat
             combatant.OnWeaponEquip += OnWeaponEquip;
             combatant.Health.OnStunned += async (duration, freezeAnimation) => 
                 await GetStunned(duration, freezeAnimation, GlobalGameTools.Instance.TokenSource);
-            combatant.Health.OnDamaged += OnDamaged;
+            combatant.Health.HealthChanged += OnHealthChanged;
 
             combatant.EquipWeaponSO();
         }
@@ -276,6 +278,7 @@ namespace RPGPlatformer.Combat
 
             EndPowerUp();
             queuedAbility = null;
+            StoredAction = null;
             StopAimingAction();
             OnChannelEnded?.Invoke();
         }
@@ -324,6 +327,19 @@ namespace RPGPlatformer.Combat
 
         public virtual void OnInsufficientWrath() { }
 
+        public void StoreAction(Action action)//these functions would be better in the animation control class
+        {
+            StoredAction = action;
+            Debug.Log("stored action");
+            //gets cleared in OnChannel (in particular if you cast an ability, exit combat, or die)
+        }
+
+        public void ExecuteStoredAction()
+        {
+            StoredAction?.Invoke();
+            StoredAction = null;
+            Debug.Log("executing stored action");
+        }
 
         //STATE TRANSITIONS
 
@@ -476,14 +492,15 @@ namespace RPGPlatformer.Combat
 
         //HANDLE INCOMING DAMAGE
 
-        public virtual void OnDamaged(float damage, IDamageDealer damageDealer)
+        public virtual void OnHealthChanged(float damage, IDamageDealer damageDealer)
         {
             if (combatManager.StateMachine.CurrentState is not InCombat && damage > 0)
             {
                 combatant.Attack();
             }
-            combatant.TakeDamage(damage, damageDealer);
-            combatManager.OnDamageTaken(damage);
+            float effectiveDamage = combatant.HandleHealthChange(damage, damageDealer);
+            combatManager.HandleHealthChange(effectiveDamage);
+            HealthChangeEffected?.Invoke(effectiveDamage);
         }
 
         protected async Task GetStunned(float stunDuration, bool freezeAnimation, 
@@ -493,7 +510,7 @@ namespace RPGPlatformer.Combat
 
             var stunData = (stunDuration, freezeAnimation);
             activeStuns.Add(stunData);
-            InputSource.DisableInput();
+            DisableInput();
             if (freezeAnimation)
             {
                 combatManager.Freeze();
@@ -582,6 +599,8 @@ namespace RPGPlatformer.Combat
             OnLateUpdate = null;
             OnDeath = null;
             OnRevive = null;
+            HealthChangeEffected = null;
+            StoredAction = null;
         }
     }
 }

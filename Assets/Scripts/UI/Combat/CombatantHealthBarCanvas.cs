@@ -17,6 +17,8 @@ namespace RPGPlatformer.UI
         [SerializeField] GameObject healthContainer;
         [SerializeField] TextMeshProUGUI tmp;
         [SerializeField] StatBarItem statBar;
+        [SerializeField] Transform damagePopupSpawnPoint;
+        [SerializeField] DamagePopup damagePopupPrefab;
         [SerializeField] float mouseExitNameHideDelay = 1;
 
         bool inCombat;
@@ -29,7 +31,7 @@ namespace RPGPlatformer.UI
             var mover = GetComponentInParent<IMover>();
             if(mover != null)
             {
-                mover.UpdatedXScale += Unflip;
+                mover.UpdatedXScale += (orientation) => Unflip(mover.Transform);
             }
         }
 
@@ -50,18 +52,13 @@ namespace RPGPlatformer.UI
                 inCombat = false;
                 HideAll();
             };
+            cc.HealthChangeEffected += SpawnDamagePopup;
 
             MouseExit = mouseExitNameHideDelay > 0 ?
                 async () => await DelayedNameHide(GlobalGameTools.Instance.TokenSource.Token)
                 : HideNameIfNotInCombat;
 
             HideAll();
-        }
-
-        private void Unflip(HorizontalOrientation orientation)
-        {
-            transform.localScale = new((int)orientation * transform.localScale.x, transform.localScale.y,
-                transform.localScale.z);
         }
 
         public void OnMouseEnter()
@@ -76,21 +73,36 @@ namespace RPGPlatformer.UI
             MouseExit?.Invoke();
         }
 
-        private void ShowAll()
+        public void ShowAll()
         {
             nameContainer.SetActive(true);
             healthContainer.SetActive(true);
         }
 
-        private void HideAll()
+        public void HideAll()
         {
             nameContainer.SetActive(false);
             healthContainer.SetActive(false);
         }
 
+        private bool CanSpawnDamagePopup()
+        {
+            return damagePopupSpawnPoint != null && damagePopupPrefab != null;
+        }
+
+        private void SpawnDamagePopup(float damage)
+        {
+            if (damage > 0 && CanSpawnDamagePopup())
+            {
+                var popup = Instantiate(damagePopupPrefab, damagePopupSpawnPoint.transform);
+                popup.PlayDamageEffect(damage);
+                //and I think we can destroy the popup in Animation Event? (or here)
+            }
+        }
+
         private void HideNameIfNotInCombat()
         {
-            if (!inCombat)
+            if (!inCombat && nameContainer)
             {
                 nameContainer.SetActive(false);
             };
@@ -115,6 +127,19 @@ namespace RPGPlatformer.UI
             {
                 Destroyed -= cts.Cancel;
                 MouseEnter -= cts.Cancel;
+            }
+        }
+
+        private void Unflip(Transform parent)
+        {
+            //meaning either your parent is backwards (-1), and you're with it (1), or you're backwards (-1)
+            //relative to your parent (1)
+            //we should just using the orientation sent by UpdatedXScale,
+            //but for some reason this was not always reliable
+            if (Mathf.Sign(parent.localScale.x) * Mathf.Sign(transform.localScale.x) < 0)
+            {
+                transform.localScale = new(-transform.localScale.x, transform.localScale.y,
+                transform.localScale.z);
             }
         }
 
