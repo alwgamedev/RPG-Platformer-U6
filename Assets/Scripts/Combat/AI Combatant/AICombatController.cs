@@ -1,12 +1,26 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.UI;
+using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
     public class AICombatController : CombatController
     {
+        protected CombatantHealthBarCanvas healthBarCanvas;
+
         public IHealth currentTarget;
 
         public CombatStateManager CombatManager => combatManager;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            healthBarCanvas = GetComponentInChildren<CombatantHealthBarCanvas>();
+            if (healthBarCanvas != null)
+            {
+                healthBarCanvas.Configure(this);
+            }
+        }
 
         public void FireOneShot()
         {
@@ -49,6 +63,16 @@ namespace RPGPlatformer.Combat
 
             combatant.Health.Stat.statBar.gameObject.SetActive(false);
             Destroy(gameObject, 1.5f);
+        }
+
+        protected virtual void OnMouseEnter()
+        {
+            healthBarCanvas.OnMouseEnter();
+        }
+
+        protected virtual void OnMouseExit()
+        {
+            healthBarCanvas.OnMouseExit();
         }
     }
 }

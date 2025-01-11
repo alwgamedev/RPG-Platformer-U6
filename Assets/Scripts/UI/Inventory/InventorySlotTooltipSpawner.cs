@@ -30,7 +30,7 @@ namespace RPGPlatformer.UI
             {
                 Debug.Log($"{GetType().Name} attached to {name} does not have the correct " +
                     $"type of tooltip prefab installed.");
-                ClearTooltip();
+                ClearTooltipImmediate();
             }
         }
     }

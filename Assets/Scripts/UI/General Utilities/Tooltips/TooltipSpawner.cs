@@ -13,15 +13,18 @@ namespace RPGPlatformer.UI
     {
         [SerializeField] protected GameObject tooltipPrefab;
         [SerializeField] protected float spawnDelay;
+        [SerializeField] protected float clearDelay;
 
-        //protected GameObject activeTooltip;
+        protected GameObject activeTooltip;
         protected Canvas targetCanvas;
         //protected bool mouseOverSpawner;
 
         Action PointerEnter;
         Action PointerExit;
+        Action TooltipClear;
+        Action Destroyed;
 
-        public GameObject ActiveTooltip { get; protected set; }
+        public GameObject ActiveTooltip => activeTooltip;
 
         public event Action TooltipSpawned;
 
@@ -33,20 +36,27 @@ namespace RPGPlatformer.UI
                 targetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
             }
 
-            PointerEnter += async () => await DelayedSpawn();
+            if (spawnDelay > 0)
+            {
+                PointerEnter += async () => await DelayedSpawn(GlobalGameTools.Instance.TokenSource.Token);
+            }
+
+            TooltipClear = clearDelay > 0 ? 
+                async () => await ClearTooltipDelayed(GlobalGameTools.Instance.TokenSource.Token) 
+                : ClearTooltipImmediate;
         }
 
         protected virtual void OnEnable()
         {
             if (TryGetComponent(out RightClickMenuSpawner rcms))
             {
-                rcms.MenuSpawned += ClearTooltip;
+                rcms.MenuSpawned += ClearTooltipImmediate;
             }
         }
 
         public void Pause()
         {
-            ClearTooltip();
+            ClearTooltipImmediate();
         }
 
         public void Unpause() { }
@@ -64,25 +74,50 @@ namespace RPGPlatformer.UI
 
         public virtual void ClearTooltip()
         {
-            if (ActiveTooltip)
-            {
-                Destroy(ActiveTooltip);
-            }
-            ActiveTooltip = null;
+            TooltipClear?.Invoke();
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public virtual void ClearTooltipImmediate()
         {
-            if(spawnDelay == 0)
+            if (activeTooltip)
             {
-                Spawn();
+                Destroy(activeTooltip);
+            }
+            activeTooltip = null;
+        }
+
+        private async Task ClearTooltipDelayed(CancellationToken token)
+        {
+            if (!activeTooltip) return;
+
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+            try
+            {
+                Destroyed += cts.Cancel;
+                await MiscTools.DelayGameTime(clearDelay, token);
+                ClearTooltipImmediate();
+            }
+            catch (TaskCanceledException)
+            {
                 return;
             }
-
-            PointerEnter?.Invoke();
+            finally
+            {
+                Destroyed -= cts.Cancel;
+            }
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public virtual void OnPointerEnter(PointerEventData eventData)
+        {
+            PointerEnter?.Invoke();
+
+            if (spawnDelay == 0)
+            {
+                Spawn();
+            }
+        }
+
+        public virtual void OnPointerExit(PointerEventData eventData)
         {
             PointerExit?.Invoke();
             ClearTooltip();
@@ -101,7 +136,7 @@ namespace RPGPlatformer.UI
         //NOTE: The tooltip should have its pivot in UPPER RIGHT CORNER.
         private void RepositionTooltip()
         {
-            ActiveTooltip.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
+            activeTooltip.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
         }
 
         private GameObject InstantiateTooltipPrefab()
@@ -111,65 +146,70 @@ namespace RPGPlatformer.UI
 
         private void Spawn()
         {
-            if (!ActiveTooltip && CanCreateTooltip())
+            if (!activeTooltip && CanCreateTooltip())
             {
-                ActiveTooltip = InstantiateTooltipPrefab();
-                if (ActiveTooltip)
+                activeTooltip = InstantiateTooltipPrefab();
+                if (activeTooltip)
                 {
-                    ConfigureTooltip(ActiveTooltip);
+                    ConfigureTooltip(activeTooltip);
                     RepositionTooltip();
                     TooltipSpawned?.Invoke();
                 }
             }
         }
 
-        private async Task DelayedSpawn()
+        private async Task DelayedSpawn(CancellationToken token)
         {
-            using (var cts =
-                CancellationTokenSource.CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token))
+            using var cts =
+                CancellationTokenSource.CreateLinkedTokenSource(token);
+            try
             {
-                try
-                {
-                    PointerExit += cts.Cancel;
+                Destroyed += cts.Cancel;
+                PointerExit += cts.Cancel;
 
-                    await MiscTools.DelayGameTime(spawnDelay, cts.Token);
+                await MiscTools.DelayGameTime(spawnDelay, cts.Token);
 
-                    Spawn();
-                }
-                catch (TaskCanceledException)
-                {
-                    return;
-                }
-                finally
-                {
-                    PointerExit -= cts.Cancel;
-                }
+                Spawn();
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                PointerExit -= cts.Cancel;
+                Destroyed -= cts.Cancel;
             }
         }
 
         protected virtual Vector3 GetPosition()
         {
-            return Camera.main.ScreenToWorldPoint(Input.mousePosition) + targetCanvas.transform.position.z * Vector3.forward;
+            return Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition) 
+                + targetCanvas.transform.position.z * Vector3.forward;
         }
 
         protected virtual void OnGUI()
         {
-            if (ActiveTooltip && Event.current.type == EventType.MouseUp)
+            if (activeTooltip && Event.current.type == EventType.MouseDown)
             {
-                ClearTooltip();
+                ClearTooltipImmediate();
             }
         }
 
         private void OnDisable()
         {
-            ClearTooltip();
+            ClearTooltipImmediate();
         }
 
         protected virtual void OnDestroy()
         {
+            Destroyed?.Invoke();
+
             PointerEnter = null;
             PointerExit = null;
+            TooltipClear = null;
             TooltipSpawned = null;
+            Destroyed = null;
         }
     }
 }

@@ -46,7 +46,6 @@ namespace RPGPlatformer.UI
 
             canvasGroup.blocksRaycasts = false;//or else the drop event doesn't register? (test it out)
             transform.SetParent(parentCanvas.transform, true);
-            Debug.Log("beginning drag");
         }
 
         public void OnDrag(PointerEventData eventData)

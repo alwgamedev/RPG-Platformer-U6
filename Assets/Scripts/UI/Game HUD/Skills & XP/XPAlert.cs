@@ -23,6 +23,8 @@ namespace RPGPlatformer.UI
         Queue<XPGainEventData> alertQueue = new();
         Animation xpGainedTextAnimation;
 
+        Action Destroyed;
+
         public event Action NewXPGainEventReceived;
         public event Action QueueEmptied;
 
@@ -137,6 +139,7 @@ namespace RPGPlatformer.UI
 
                 try
                 {
+                    Destroyed += cts.Cancel;
                     NewXPGainEventReceived += cts.Cancel;
                     await MiscTools.DelayGameTime(timeToWaitBeforeDestroy, cts.Token);
                     QueueEmptied?.Invoke();
@@ -147,6 +150,7 @@ namespace RPGPlatformer.UI
                 }
                 finally
                 {
+                    Destroyed -= cts.Cancel;
                     NewXPGainEventReceived -= cts.Cancel;
                 }
             }
@@ -158,8 +162,11 @@ namespace RPGPlatformer.UI
 
         private void OnDestroy()
         {
+            Destroyed?.Invoke();
+
             QueueEmptied = null;
             NewXPGainEventReceived = null;
+            Destroyed = null;
         }
     }
 }
