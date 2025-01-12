@@ -9,13 +9,15 @@ namespace RPGPlatformer.Core
     [RequireComponent(typeof(TickTimer))]
     public class GlobalGameTools : MonoBehaviour
     {
+        [SerializeField] ResourcesManager resourcesManager = new();
+
         public static GlobalGameTools Instance { get; private set; }
         public static bool PlayerIsDead { get; private set; }
         public static string PlayerName { get; private set; } = "Player";
 
         public CancellationTokenSource TokenSource {  get; private set; }
         public TickTimer TickTimer { get; private set; }
-        public ResourcesManager ResourcesManager { get; private set; }
+        public ResourcesManager ResourcesManager => resourcesManager;
         public ObjectPoolCollection ProjectilePooler {  get; private set; }
         public ObjectPoolCollection EffectPooler { get; private set; }
 
@@ -47,8 +49,7 @@ namespace RPGPlatformer.Core
             ProjectilePooler = GameObject.Find("Projectile Pooler").GetComponent<ObjectPoolCollection>();
             EffectPooler = GameObject.Find("Effect Pooler").GetComponent<ObjectPoolCollection>();
 
-            ResourcesManager = new();
-            ResourcesManager.InitializeResources();
+            resourcesManager.InitializeResources();
 
             PlayerCombatController player = FindAnyObjectByType<PlayerCombatController>();
             player.OnDeath += () =>

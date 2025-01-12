@@ -329,16 +329,8 @@ namespace RPGPlatformer.Combat
         //Triggered by animation events
         public void ShootQueuedProjectile()
         {
-            if (QueuedProjectile != null)
-            {
-                QueuedProjectile.Shoot();
-                QueuedProjectile = null;
-            }
-            else
-            {
-                Debug.Log($"{gameObject.name} tried to shoot queued projectile, but it was null." +
-                    "\n(Either the projectile could not be found or a non-projectile ability is using a projectile animation.)");
-            }
+            QueuedProjectile?.Shoot();
+            QueuedProjectile = null;
         }
 
         //If you want to shoot the projectile immediately (currently not in use)

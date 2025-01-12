@@ -8,9 +8,13 @@ namespace RPGPlatformer.UI
     public class AbilityBarUI : HidableUI
     {
         [SerializeField] AbilityBarItemUI itemPrefab;
-        [SerializeField] HorizontalLayoutGroup abilitiesLayoutGroup;
+        [SerializeField] LayoutGroup layoutGroup;
 
-        Dictionary<AttackAbility, AbilityBarItemUI> items = new();
+        Dictionary<AttackAbility, AbilityBarItemUI> itemLookup = new();
+        List<AbilityBarItemUI> allItems = new();//including the empty ones (which aren't in the look)
+        //^why this instead of layoutGroup.GetComponentsInChildren<AbilityBarItemUI>()?
+        //because that doesn't work in awake/enable/start when Configure calls Clear
+        //(it doesn't even return a null array, it throws an exception no matter what)
         IAbilityBarOwner player;
 
         AbilityBar AbilityBar => player?.CurrentAbilityBar;
@@ -21,12 +25,13 @@ namespace RPGPlatformer.UI
 
             player = FindAnyObjectByType<PlayerCombatController>();
             player.AbilityBarResetEvent += Configure;
+            //^player does this in start so we don't have a race condition
             player.OnCooldownStarted += OnCooldownStart;
         }
 
         public void OnCooldownStart(AttackAbility ability)
         {
-            items[ability].StartCooldown();
+            itemLookup[ability].StartCooldown();
         }
 
         public void Configure()
@@ -34,14 +39,23 @@ namespace RPGPlatformer.UI
             Clear();
             if (AbilityBar != null)
             {
-                foreach (AbilityBarItem abilityBarItem in AbilityBar.abilityBarItems)
+                for (int i = 0; i < AbilityBar.playerAbilityBarLength; i++)
                 {
-                    AbilityBarItemUI item = Instantiate(itemPrefab, abilitiesLayoutGroup.transform);
-                    item.Configure(abilityBarItem, AbilityBar.CooldownTimers[abilityBarItem.ability]);
-                    items[abilityBarItem.ability] = item;
-                    if(item.fillImage.fillAmount > 0)
+                    AbilityBarItemUI item = Instantiate(itemPrefab, layoutGroup.transform);
+                    allItems.Add(item);
+                    if (i < AbilityBar.abilityBarItems.Count)
                     {
-                        item.StartCoroutine(item.PlayCooldownAnimation());
+                        var abilityBarItem = AbilityBar.abilityBarItems[i];
+                        item.Configure(abilityBarItem, i, AbilityBar.CooldownTimers[abilityBarItem.ability]);
+                        itemLookup[abilityBarItem.ability] = item;
+                        if (AbilityBar.CooldownTimers[abilityBarItem.ability] > 0)
+                        {
+                            item.StartCoroutine(item.PlayCooldownAnimation());
+                        }
+                    }
+                    else
+                    {
+                        item.Configure(null, i, 0);
                     }
                 }
             }
@@ -49,11 +63,19 @@ namespace RPGPlatformer.UI
 
         public void Clear()
         {
-            foreach (var item in items)
+            foreach (var item in allItems)
             {
-                Destroy(item.Value.gameObject);
+                Destroy(item.gameObject);
             }
-            items.Clear();
+            itemLookup?.Clear();
+            allItems.Clear();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            player.AbilityBarResetEvent -= Configure;
         }
     }
 }

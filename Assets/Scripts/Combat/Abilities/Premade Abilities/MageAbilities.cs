@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
+﻿
+using System;
+using System.Collections.Generic;
 using RPGPlatformer.Core;
 using RPGPlatformer.Effects;
 
 namespace RPGPlatformer.Combat
 {
-    using static AttackAbility;
     using static AutoTargetedAbility;
-    using static CombatStyles;
     using static IProjectileAbility;
 
     public static class MageAbilities
     {
+        //it is useful to have the enum rather than just a Dictionary<string, AttackAbility>
+        //so that we can have the correct abilities appear in an inspector drop down menu e.g.
+        //for SOs
         public enum MageAbilitiesEnum
         {
             Blast, Afflict, Daze, Demolish, Captivate, Desecrate, Invoke
@@ -29,6 +32,17 @@ namespace RPGPlatformer.Combat
                 MageAbilitiesEnum.Invoke => Invoke,
                 _ => null
             };
+        }
+
+        public static bool TryGetAbility(string abilityName, out AttackAbility ability)
+        {
+            ability = null;
+            if (Enum.TryParse(typeof(MageAbilitiesEnum), abilityName, out var obj))
+            {
+                ability = obj as AttackAbility;
+                return true;
+            }
+            return false;
         }
 
         public static List<AbilityBarItem> DefaultAbilityBarData()

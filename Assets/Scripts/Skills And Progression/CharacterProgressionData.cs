@@ -125,7 +125,7 @@ namespace RPGPlatformer.Skills
                 [CharacterSkillBook.Defense] = Defense,
                 [CharacterSkillBook.Magic] = Magic,
                 [CharacterSkillBook.Melee] = Melee,
-                [CharacterSkillBook.Range] = Range
+                [CharacterSkillBook.Ranged] = Range
             };
         }
 

@@ -10,11 +10,11 @@ namespace RPGPlatformer.Skills
         public static CharacterSkill Defense = new("Defense");
         public static CharacterSkill Magic = new("Magic");
         public static CharacterSkill Melee = new("Melee");
-        public static CharacterSkill Range = new("Range");
+        public static CharacterSkill Ranged = new("Range");
 
         public static readonly List<CharacterSkill> SkillList = new()
         {
-            Health, Defense, Magic, Melee, Range
+            Health, Defense, Magic, Melee, Ranged
         };
 
         public static CharacterSkill GetCombatSkill(CombatStyle combatStyle)
@@ -23,7 +23,7 @@ namespace RPGPlatformer.Skills
             {
                 CombatStyle.Mage => Magic,
                 CombatStyle.Melee => Melee,
-                CombatStyle.Ranged => Range,
+                CombatStyle.Ranged => Ranged,
                 CombatStyle.Unarmed => Melee,
                 _ => null
             };

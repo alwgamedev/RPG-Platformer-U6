@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RPGPlatformer.Core;
 using RPGPlatformer.Effects;
 
 namespace RPGPlatformer.Combat
 {
-    using static CombatStyles;
     using static IProjectileAbility;
 
     public static class RangedAbilities
@@ -27,6 +27,17 @@ namespace RPGPlatformer.Combat
                 RangedAbilitiesEnum.Ambush => Ambush,
                 _ => null
             };
+        }
+
+        public static bool TryGetAbility(string abilityName, out AttackAbility ability)
+        {
+            ability = null;
+            if (Enum.TryParse(typeof(RangedAbilitiesEnum), abilityName, out var obj))
+            {
+                ability = obj as AttackAbility;
+                return true;
+            }
+            return false;
         }
 
         public static List<AbilityBarItem> DefaultAbilityBarData()

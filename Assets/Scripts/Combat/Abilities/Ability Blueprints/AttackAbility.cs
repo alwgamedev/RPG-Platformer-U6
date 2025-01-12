@@ -7,7 +7,6 @@ using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Combat
 {
-    using static CombatStyles;
     using static IProjectileAbility;
 
     public enum AbilityTag
@@ -18,10 +17,10 @@ namespace RPGPlatformer.Combat
     public class AttackAbility
     {
         public CombatStyle CombatStyle { get; init; }//should coincide with the animation layer name
-        public string DisplayName { get; init; }
+        public string DisplayName { protected get; init; }
+        //^USE GetAbilityName INSTEAD! (DisplayName sometimes left null)
         public string Description { get; init; }//mainly for description of ability in tooltips
         public List<AbilityTag> AbilityTags { get; init; } = new();
-        //public string AbilityTypeDescription { get; init; }
         public string AnimationState { get; init; }//can leave null if no animation (will just get a warning in the editor)
         public Func<PoolableEffect> GetCombatantExecuteEffect { get; init; }
         public Func<PoolableEffect> GetHitEffect { get; init; }

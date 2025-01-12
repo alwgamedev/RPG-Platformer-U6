@@ -34,7 +34,10 @@ namespace RPGPlatformer.Core
                 [6] = "<Keyboard>/z",
                 [7] = "<Keyboard>/x",
                 [8] = "<Keyboard>/c",
-                [9] = "<Keyboard>/v"
+                [9] = "<Keyboard>/v",
+                [10] = "<Keyboard>/1",
+                [11] = "<Keyboard>/2",
+                [12] = "<Keyboard>/3"
             }
         };
 

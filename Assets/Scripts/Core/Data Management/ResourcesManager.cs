@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using RPGPlatformer.Skills;
 using RPGPlatformer.Inventory;
@@ -6,10 +7,15 @@ using RPGPlatformer.Inventory;
 
 namespace RPGPlatformer.Core
 {
-    //to be attached to Global Game Tools singleton (so we don't need any singleton/destroy stuff here)
+    //GlobalGameTools will hold an instance of this
+    [Serializable]
     public class ResourcesManager
     {
+        [SerializeField] AbilityResourceContainerSO abilityResources;
+
         public Dictionary<CharacterSkill, Sprite> CircularSkillIcons = new();
+
+        public AbilityResourceContainerSO AbilityResources => abilityResources;
 
         public void InitializeResources()
         {
@@ -34,7 +40,7 @@ namespace RPGPlatformer.Core
                 [CharacterSkillBook.Defense] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular defense icon"),
                 [CharacterSkillBook.Magic] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular magic icon"),
                 [CharacterSkillBook.Melee] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular melee icon"),
-                [CharacterSkillBook.Range] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular range icon")
+                [CharacterSkillBook.Ranged] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular range icon")
             };
         }
     }

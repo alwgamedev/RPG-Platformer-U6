@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RPGPlatformer.Combat
 {
@@ -18,6 +19,17 @@ namespace RPGPlatformer.Combat
                 UnarmedAbilitiesEnum.Punch => Punch,
                 _ => null
             };
+        }
+
+        public static bool TryGetAbility(string abilityName, out AttackAbility ability)
+        {
+            ability = null;
+            if (Enum.TryParse(typeof(UnarmedAbilitiesEnum), abilityName, out var obj))
+            {
+                ability = obj as AttackAbility;
+                return true;
+            }
+            return false;
         }
 
         public static List<AbilityBarItem> DefaultAbilityBarData()

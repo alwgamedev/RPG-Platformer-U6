@@ -18,6 +18,8 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected bool updateRotationWhileFlying = false;
         [SerializeField] protected bool freezePositionOnFinalImpact; 
         [SerializeField] protected float timeToBlockEnemyPath = .4f;
+        [SerializeField] protected Collider2D triggerCollider;
+        [SerializeField] protected Collider2D dynamicCollider;
 
         protected float powerMultiplier = 1;
         protected int maxHits = 1;
@@ -27,20 +29,13 @@ namespace RPGPlatformer.Combat
 
         protected float lifeTimer;
         protected float hits;
-        protected Rigidbody2D myRigidbody; 
-        protected CircleCollider2D dynamicCollider;//the main projectile collider is a trigger collider; this collider is not
-
+        protected Rigidbody2D myRigidbody;
         public float PowerMultiplier => powerMultiplier;
         public Transform Transform => transform;
 
         protected virtual void Awake()
         {
             myRigidbody = GetComponent<Rigidbody2D>();
-            dynamicCollider = GetComponent<CircleCollider2D>();
-            if(dynamicCollider)
-            {
-                dynamicCollider.isTrigger = false;
-            }
         }
 
         protected virtual void Update()
@@ -68,7 +63,9 @@ namespace RPGPlatformer.Combat
 
         public void Prepare(ICombatant combatant, Vector2 aimPos, float powerMultiplier, Action<Collider2D> hitAction, int maxHits = 1)
         {
+            Debug.Log("prepare called (temporarily disabling head)");
             EnableHead(false);
+            triggerCollider.enabled = false;
             transform.SetParent(combatant.EquipSlots[ItemSlot.EquipmentSlots.Mainhand].transform);
             transform.localPosition = Vector3.zero;
             this.aimPos = aimPos;
@@ -85,6 +82,7 @@ namespace RPGPlatformer.Combat
         public virtual void Shoot()
         {
             EnableHead(true);
+            triggerCollider.enabled = true;
             transform.SetParent(null, true);
             if (trailEffect)
             {
@@ -144,6 +142,7 @@ namespace RPGPlatformer.Combat
         protected virtual void OnLastHit()
         {
             EnableHead(false);
+            triggerCollider.enabled = false;
 
             if (trailEffect)
             {
@@ -188,6 +187,7 @@ namespace RPGPlatformer.Combat
             HitAction = null;
             shooter = null;
             EnableHead(true);
+            triggerCollider.enabled = true;
             EnableDynamicCollider(true);
         }
 

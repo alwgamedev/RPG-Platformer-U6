@@ -8,7 +8,7 @@ namespace RPGPlatformer.Combat
 {
     public class AbilityBar
     {
-        public const int playerAbilityBarLength = 10;
+        public const int playerAbilityBarLength = 13;
 
         private bool subscribedToController;
 

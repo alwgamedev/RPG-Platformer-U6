@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using RPGPlatformer.Core;
 using RPGPlatformer.Effects;
-using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {

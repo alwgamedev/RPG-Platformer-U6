@@ -1,12 +1,11 @@
 ﻿using RPGPlatformer.Core;
 using RPGPlatformer.Effects;
+using System;
 using System.Collections.Generic;
 
 namespace RPGPlatformer.Combat
 {
-    using static CombatStyles;
     using static AutoTargetedAbility;
-
     public static class MeleeAbilities
     {
 
@@ -29,6 +28,17 @@ namespace RPGPlatformer.Combat
                 MeleeAbilitiesEnum.Ravage => Ravage,
                 _ => null
             };
+        }
+
+        public static bool TryGetAbility(string abilityName, out AttackAbility ability)
+        {
+            ability = null;
+            if (Enum.TryParse(typeof(MeleeAbilitiesEnum), abilityName, out var obj))
+            {
+                ability = obj as AttackAbility;
+                return true;
+            }
+            return false;
         }
 
         public static List<AbilityBarItem> DefaultAbilityBarData()

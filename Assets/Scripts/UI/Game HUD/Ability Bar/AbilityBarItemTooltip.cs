@@ -47,6 +47,11 @@ namespace RPGPlatformer.UI
             statsText.text += $"\n<b>Stamina:</b> {FormattedStatChangeText(ability.StaminaFractionChange)}";
             statsText.text += $"\n<b>Wrath:</b> {FormattedStatChangeText(ability.WrathFractionChange)}";
 
+            //if(item.includeInAutoCastCycle)
+            //{
+            //    statsText.text += $"\n\n<i>Currently included in auto-cast cycle.</i>";
+            //}
+
 
         }
 
