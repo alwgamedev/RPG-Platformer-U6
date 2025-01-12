@@ -122,19 +122,11 @@ namespace RPGPlatformer.Combat
     //(*) whether it HasChannelAnimation (bool)
     public class AutoTargetOnNextFireButtonDownSingleDamage : AutoTargetOnNextFireButtonDown
     {
-        public AutoTargetOnNextFireButtonDownSingleDamage(bool executeTriggeredInAnimation = false) : base()
+        public AutoTargetOnNextFireButtonDownSingleDamage() : base()
         {
-            if (executeTriggeredInAnimation)
-            {
-                OnExecute = (controller, target) => controller.StoreAction(() =>
+            OnExecute = (controller, target) => 
                 DealDamage(controller.Combatant, target, ComputeDamage(controller.Combatant),
-                    StunDuration, FreezeAnimationDuringStun, GetHitEffect));
-            }
-            else
-            {
-                OnExecute = (controller, target) => DealDamage(controller.Combatant, target, ComputeDamage(controller.Combatant),
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);
-            }
         }
     }
 
@@ -176,22 +168,12 @@ namespace RPGPlatformer.Combat
     //(*) whether it HasChannelAnimation and HasPowerUpAnimation (bools)
     public class AutoTargetedPowerUpWithSingleDamageHit : AutoTargetedPowerUpAbility
     {
-        public AutoTargetedPowerUpWithSingleDamageHit(bool executeTriggeredInAnimation = false) : base()
+        public AutoTargetedPowerUpWithSingleDamageHit() : base()
         {
-            if (executeTriggeredInAnimation)
-            {
-                OnExecute = (controller, args) => controller.StoreAction(() =>
-                AutoTargetedAbility.DealDamageWithRangeCheck(controller.Combatant, args.Item1,
-                ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
-                StunDuration, FreezeAnimationDuringStun, GetHitEffect));
-            }
-            else
-            {
-                OnExecute = (controller, args) =>
+             OnExecute = (controller, args) =>
                 AutoTargetedAbility.DealDamageWithRangeCheck(controller.Combatant, args.Item1,
                 ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);
-            }
         }
     }
 

@@ -141,7 +141,7 @@ namespace RPGPlatformer.Combat
             FreezeAnimationDuringStun = false
         };
 
-        public static AoePowerUpAbility Ravage = new(true)//ultimate AoE
+        public static AoePowerUpAbility Ravage = new()//ultimate AoE
         {
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Ravage",

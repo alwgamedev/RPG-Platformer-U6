@@ -97,19 +97,9 @@ namespace RPGPlatformer.Combat
 
         public AoeAbilityThatExecutesOnNextFireButtonDown(bool executeTriggeredInAnimation = false) : base()
         {
-            if(executeTriggeredInAnimation)
-            {
-                OnExecute = (controller, position) => controller.StoreAction(() =>
-                ExecuteAoeAbility(position, AoeRadius,
+            OnExecute = (controller, position) => ExecuteAoeAbility(position, AoeRadius,
                 ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
-                StunDuration, FreezeAnimationDuringStun, GetHitEffect));
-            }
-            else
-            {
-                OnExecute = (controller, position) => ExecuteAoeAbility(position, AoeRadius,
-                    ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
-                    StunDuration, FreezeAnimationDuringStun, GetHitEffect);
-            }
+                StunDuration, FreezeAnimationDuringStun, GetHitEffect);
         }
     }
 
@@ -138,21 +128,12 @@ namespace RPGPlatformer.Combat
 
         public AoePowerUpAbility(bool executeTriggeredInAnimation = false) : base()
         {
-            if (executeTriggeredInAnimation)
-            {
-                OnExecute = (controller, args) => controller.StoreAction(() =>
+            OnExecute = (controller, args) => 
                 ExecuteAoeAbility(args.Item1, AoeRadius,
                 ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
                 ExcludeInstigator, controller.Combatant,
-                StunDuration, FreezeAnimationDuringStun, GetHitEffect));
-            }
-            else
-            {
-                OnExecute = (controller, args) => ExecuteAoeAbility(args.Item1, AoeRadius,
-                ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
-                ExcludeInstigator, controller.Combatant,
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);
-            }
+            
         }
     }
 }

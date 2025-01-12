@@ -45,7 +45,10 @@ namespace RPGPlatformer.Combat
         protected bool aimingActionInUse;
         protected Action OnLateUpdate;
         protected Action CurrentAimingAction;
-        protected Action StoredAction;//intended to be used with animation events; cleared in EndChannel
+        protected Action StoredAction;
+        //intended to be used with animation events;
+        //cleared in EndChannel, should not be used with async abilities
+        //(think I could adjust it to work, but rather keep things simple and reliable for now)
 
         protected List<(float, bool)> activeStuns = new();
 
@@ -336,9 +339,10 @@ namespace RPGPlatformer.Combat
 
         public void ExecuteStoredAction()
         {
+            Debug.Log("executing stored action");
+            Debug.Log($"is the stored action null? {StoredAction == null}");
             StoredAction?.Invoke();
             StoredAction = null;
-            Debug.Log("executing stored action");
         }
 
         //STATE TRANSITIONS
