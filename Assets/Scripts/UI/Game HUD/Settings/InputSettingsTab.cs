@@ -89,6 +89,8 @@ namespace RPGPlatformer.UI
             abilityBarInputFields.Clear();
             allInputFields.Clear();
 
+            //Debug.Log($"movement group non-null? movementGroup != null)
+
             foreach (var child in movementGroup.GetComponentsInChildren<TMP_InputField>())
             {
                 Destroy(child.transform.parent.gameObject);

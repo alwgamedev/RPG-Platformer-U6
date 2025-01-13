@@ -34,7 +34,11 @@ namespace RPGPlatformer.UI
 
             foreach (var entry in TabLookup)
             {
-                SettingsTabLookup[entry.Key] = entry.Value.Content.GetComponentInChildren<SettingsTab>();
+                var st = entry.Value.Content.GetComponentInChildren<SettingsTab>();
+                if (st != null)
+                { 
+                    SettingsTabLookup[entry.Key] = st; 
+                }
             }
 
             saveTabButton.onClick.AddListener(SaveOpenTab);
@@ -45,22 +49,6 @@ namespace RPGPlatformer.UI
 
             OnHide += ClosePopupPanel;
             closeButton.onClick.AddListener(CloseMenu);
-
-            //saveResultPopup = popupPanel.GetComponentInChildren<PopupWindow>();
-            //saveResultPopup.OnHide += popupPanel.Hide;
-            //popupPanel.OnShow += saveResultPopup.Show;
-
-            //videoPanel = TabLookup["Video Tab"].Content;
-            //audioPanel = TabLookup["Audio Tab"].Content;
-            //inputPanel = TabLookup["Input Tab"].Content.GetComponentInChildren<InputSettingsUI>();
-
-            //OnShow += inputPanel.Redraw;
-            //OnShow += popupPanel.Hide;
-            //OnHide += inputPanel.Clear;//(so that input field update functions aren't being called during game)
-
-            //closeButton.onClick.AddListener(Hide);
-
-            //saveButton.onClick.AddListener(SaveSettings);
         }
 
         private void Redraw()
