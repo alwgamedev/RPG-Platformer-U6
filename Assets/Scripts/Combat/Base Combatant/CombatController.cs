@@ -18,22 +18,13 @@ namespace RPGPlatformer.Combat
     public class CombatController : MonoBehaviour, ICombatController, IAbilityBarOwner, IPausable
     {
         [SerializeField] protected float timeToLeaveCombat = 200;
-        [SerializeField] protected List<SerializedUnarmedAbilityBarItem> unarmedAbilityBarItems;
-        [SerializeField] protected List<SerializedMageAbilityBarItem> mageAbilityBarItems;
-        [SerializeField] protected List<SerializedMeleeAbilityBarItem> meleeAbilityBarItems;
-        [SerializeField] protected List<SerializedRangedAbilityBarItem> rangedAbilityBarItems;
-        [SerializeField] protected bool useDefaultAbilityBars = true;
+        [SerializeField] protected SerializableCharacterAbilityBarData abilityBarData = new();
+        [SerializeField] protected bool useDefaultAbilityBars;
         [SerializeField] protected bool immuneToStuns = false;
 
         protected Combatant combatant;
         protected CombatStateManager combatManager;
-
-        protected AbilityBar currentAbilityBar = new();
-        protected Dictionary<CombatStyle, AbilityBar> GetAbilityBar = new();
-        protected AbilityBar unarmedAbilityBar = new();
-        protected AbilityBar mageAbilityBar = new();
-        protected AbilityBar meleeAbilityBar = new();
-        protected AbilityBar rangedAbilityBar = new();
+        protected CharacterAbilityBarManager abilityBarManager;
 
         protected TickTimer tickTimer;
         protected AttackAbility queuedAbility;
@@ -52,7 +43,7 @@ namespace RPGPlatformer.Combat
 
         protected List<(float, bool)> activeStuns = new();
 
-        public AbilityBar CurrentAbilityBar => currentAbilityBar;
+        public AbilityBar CurrentAbilityBar => abilityBarManager.CurrentAbilityBar;
         public TickTimer TickTimer => tickTimer;
         public bool GlobalCooldown { get; protected set; }
         public bool ChannelingAbility { get; protected set; }
@@ -77,7 +68,6 @@ namespace RPGPlatformer.Combat
         public event Action OnRevive;
         public event Action<float> HealthChangeEffected;
             //^note parameter represents damage (so positive is damage taken, and negative is health gained)
-            //we will run into issues if the animator transitions to another animation and the event never triggers...
 
 
         protected virtual void Awake()
@@ -93,7 +83,7 @@ namespace RPGPlatformer.Combat
             tickTimer = GetComponent<TickTimer>();
             tickTimer.RandomizeStartValue = true;
 
-            InitializeAbilityBars();
+            InitializeAbilityBarManager();
         }
 
         protected virtual void OnEnable()
@@ -134,53 +124,56 @@ namespace RPGPlatformer.Combat
         }
 
 
-        //SETUP
+        //ABILITY BARS
 
-        private void InitializeAbilityBars()
+        protected virtual void InitializeAbilityBarManager()
         {
-            unarmedAbilityBar = useDefaultAbilityBars ?
-                new(this, CurrentAbilityBar.GetDefaultAbilityBarItems(CombatStyle.Unarmed))
-                : new(this, unarmedAbilityBarItems?.Select(x => x.CreateAbilityBarItem()).ToList());
-            mageAbilityBar = useDefaultAbilityBars ?
-                new(this, CurrentAbilityBar.GetDefaultAbilityBarItems(CombatStyle.Mage))
-                : new(this, mageAbilityBarItems?.Select(x => x.CreateAbilityBarItem()).ToList());
-            meleeAbilityBar = useDefaultAbilityBars ?
-                new(this, CurrentAbilityBar.GetDefaultAbilityBarItems(CombatStyle.Melee))
-                : new(this, meleeAbilityBarItems?.Select(x => x.CreateAbilityBarItem()).ToList());
-            rangedAbilityBar = useDefaultAbilityBars ?
-                new(this, CurrentAbilityBar.GetDefaultAbilityBarItems(CombatStyle.Ranged))
-                : new(this, rangedAbilityBarItems?.Select(x => x.CreateAbilityBarItem()).ToList());
-
-            GetAbilityBar = new()
+            abilityBarManager = new CharacterAbilityBarManager(this);
+            if (useDefaultAbilityBars)
             {
-                [CombatStyle.Unarmed] = unarmedAbilityBar,
-                [CombatStyle.Melee] = meleeAbilityBar,
-                [CombatStyle.Mage] = mageAbilityBar,
-                [CombatStyle.Ranged] = rangedAbilityBar
-            };
+                abilityBarData = SerializableCharacterAbilityBarData.DefaultAbilityBarData();
+            }
+            ConfigureAbilityBarManager(abilityBarData);
+        }
+
+        protected virtual void ConfigureAbilityBarManager(SerializableCharacterAbilityBarData data)
+        {
+            abilityBarManager.Configure(data);
+            UpdateEquippedAbilityBar();
+        }
+
+        protected virtual void UpdateEquippedAbilityBar()
+        {
+            abilityBarManager.EquipAbilityBar(combatant.EquippedWeapon?.CombatStyle);
+            if (CurrentAbilityBar != null && !CurrentAbilityBar.Configured)
+            {
+                CurrentAbilityBar.Configure();
+            }
+
+            AbilityBarResetEvent?.Invoke();
         }
 
 
-        //ABILITY INPUT HANDLING
+    //ABILITY INPUT HANDLING
 
-        protected virtual void HandleAbilityInput(int index)
+    protected virtual void HandleAbilityInput(int index)
         {
-            ExecuteAbility(currentAbilityBar.GetAbility(index));
+            ExecuteAbility(CurrentAbilityBar.GetAbility(index));
         }
 
         public virtual void RunAutoAbilityCycle(bool runOffGCD)
         {
             if (!postCancellationLock && !ChannelingAbility && ((queuedAbility == null && !GlobalCooldown) || runOffGCD))
             {
-                ExecuteAbility(currentAbilityBar?.GetAutoCastAbility());
+                ExecuteAbility(CurrentAbilityBar?.GetAutoCastAbility());
             }
         }
 
         protected virtual bool CanExecute(AttackAbility ability)
         {
-            return !currentAbilityBar.OnCooldown(ability) 
+            return !CurrentAbilityBar.OnCooldown(ability) 
                 && (!ability.ObeyGCD || !GlobalCooldown)
-                && (combatant.Weapon?.CombatStyle == ability.CombatStyle || ability.CombatStyle == CombatStyle.Any);
+                && (combatant.EquippedWeapon?.CombatStyle == ability.CombatStyle || ability.CombatStyle == CombatStyle.Any);
         }
 
         protected virtual void ExecuteAbility(AttackAbility ability)
@@ -192,7 +185,7 @@ namespace RPGPlatformer.Combat
                 CancelAbilityInProgress(false);
                 ability?.Execute(this);
             }
-            else if(!currentAbilityBar.OnCooldown(ability))
+            else if(!CurrentAbilityBar.OnCooldown(ability))
             {
                 queuedAbility = ability;
             }
@@ -333,14 +326,11 @@ namespace RPGPlatformer.Combat
         public void StoreAction(Action action)//these functions would be better in the animation control class
         {
             StoredAction = action;
-            Debug.Log("stored action");
             //gets cleared in OnChannel (in particular if you cast an ability, exit combat, or die)
         }
 
         public void ExecuteStoredAction()
         {
-            Debug.Log("executing stored action");
-            Debug.Log($"is the stored action null? {StoredAction == null}");
             StoredAction?.Invoke();
             StoredAction = null;
         }
@@ -352,14 +342,7 @@ namespace RPGPlatformer.Combat
             EndChannel();
             combatant.ReturnQueuedProjectileToPool();
 
-            GetAbilityBar.TryGetValue(combatant.Weapon.CombatStyle, out var abilityBar);
-            currentAbilityBar = abilityBar;
-            if (currentAbilityBar != null && !currentAbilityBar.Configured)
-            {
-                currentAbilityBar.Configure();
-            }
-
-            AbilityBarResetEvent?.Invoke();
+            UpdateEquippedAbilityBar();
         }
 
         public virtual void OnCombatEntry()
@@ -521,14 +504,6 @@ namespace RPGPlatformer.Combat
             }
 
             TaskCompletionSource<object> tcs = new();
-            //we don't need to register cancellation of tcs to the tokenSource,
-            //b/c we're awaiting Task.WhenAny(...) where the other task Task.Delay will get cancelled.
-            //A cancelled task will cause Task.WhenAny() to complete, but it doesn't rethrow the
-            //TaskCancelledException (so don't get worried if you don't see any exceptions after cancelling)
-            //NOTE ALSO: we could maybe use a linked CTS instead of TCS, but then we have to catch the cancellation and
-            //figure out within the catch clause whether we got cancelled because we died or because the game ended,
-            //so it's just messier
-
 
             void CompleteEarly()
             {

@@ -1,4 +1,5 @@
 using RPGPlatformer.Core;
+using RPGPlatformer.UI;
 using System;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace RPGPlatformer.SceneManagement
 {
     public class PauseManager : MonoBehaviour
     {
+        bool pauseCanBeToggled = true;
+
         public bool GamePaused { get; private set; }
 
         public event Action OnPause;
@@ -14,6 +17,16 @@ namespace RPGPlatformer.SceneManagement
         private void OnEnable()
         {
             SettingsManager.OnIAMConfigure += OnIAMConfigured;
+        }
+
+        private void Start()
+        {
+            SettingsMenu sm = FindAnyObjectByType<SettingsMenu>(FindObjectsInactive.Include);
+            if (sm)
+            {
+                sm.OnShow += DisableToggling;
+                sm.OnHide += EnableToggling;
+            }
         }
 
         private void OnIAMConfigured()
@@ -39,7 +52,11 @@ namespace RPGPlatformer.SceneManagement
 
         public void TogglePause()
         {
-            if(GamePaused)
+            if (!pauseCanBeToggled)
+            {
+                return;
+            }
+            else if (GamePaused)
             {
                 Unpause();
             }
@@ -47,6 +64,16 @@ namespace RPGPlatformer.SceneManagement
             {
                 Pause();
             }
+        }
+
+        private void EnableToggling()
+        {
+            pauseCanBeToggled = true;
+        }
+
+        private void DisableToggling()
+        {
+            pauseCanBeToggled = false;
         }
 
         private void OnDestroy()

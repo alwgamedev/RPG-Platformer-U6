@@ -8,7 +8,7 @@ namespace RPGPlatformer.Combat
     {
         public string DisplayName { get; }
         public int CombatLevel { get; }
-        public IWeapon Weapon { get; }
+        public IWeapon EquippedWeapon { get; }
         public ReplenishableStat Stamina { get; }
         public ReplenishableStat Wrath { get; }
         public IHealth Health { get; }
@@ -20,8 +20,8 @@ namespace RPGPlatformer.Combat
         public bool CanAttack(IHealth target);
         public bool CanAttack(float distance);
         public void CheckIfTargetInRange(IHealth target, out bool result);//checks if CanAttack, and, if not, fires an "OnTargetingFailed" event
-        public void PrepareProjectile(IProjectile projectile, Vector2 aimPos, float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
-        public void PrepareAndShootProjectile(IProjectile projectile, Vector2 aimPos, float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
+        public void PrepareProjectile(IProjectile projectile, Func<Vector2> getAimPos, float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
+        public void PrepareAndShootProjectile(IProjectile projectile, Func<Vector2> getAimPos, float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
         public void Attack();
     }
 }

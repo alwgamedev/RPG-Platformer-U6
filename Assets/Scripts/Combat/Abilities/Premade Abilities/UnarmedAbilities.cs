@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 
 namespace RPGPlatformer.Combat
 {
@@ -10,6 +12,11 @@ namespace RPGPlatformer.Combat
         public enum UnarmedAbilitiesEnum
         {
             Punch
+        }
+
+        public static AttackAbility GetAbility(string abilityName)
+        {
+            return GetAbility((UnarmedAbilitiesEnum)Enum.Parse(typeof(AttackAbility), abilityName));
         }
 
         public static AttackAbility GetAbility(UnarmedAbilitiesEnum ability)
@@ -24,9 +31,10 @@ namespace RPGPlatformer.Combat
         public static bool TryGetAbility(string abilityName, out AttackAbility ability)
         {
             ability = null;
-            if (Enum.TryParse(typeof(UnarmedAbilitiesEnum), abilityName, out var obj))
+            string formattedName = string.Concat(abilityName.Where(x => x != ' '));
+            if (Enum.TryParse(typeof(UnarmedAbilitiesEnum), formattedName, out var obj))
             {
-                ability = obj as AttackAbility;
+                ability = GetAbility((UnarmedAbilitiesEnum)obj);
                 return true;
             }
             return false;
@@ -35,9 +43,9 @@ namespace RPGPlatformer.Combat
         public static List<AbilityBarItem> DefaultAbilityBarData()
         {
             return new()
-        {
-            new(Punch, true)
-        };
+            {
+                new(Punch, true)
+            };
         }
 
         public static CloseRangeAbility Punch = new()
@@ -46,6 +54,11 @@ namespace RPGPlatformer.Combat
             CombatStyle = CombatStyle.Unarmed,
             AnimationState = "Punch",
             Cooldown = 3
+        };
+
+        public static IEnumerable<AttackAbility> AllAbilities = new List<AttackAbility>()
+        {
+            Punch
         };
     }
 }

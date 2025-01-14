@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RPGPlatformer.Core;
 using RPGPlatformer.Effects;
 
@@ -17,6 +18,11 @@ namespace RPGPlatformer.Combat
         public enum MageAbilitiesEnum
         {
             Blast, Afflict, Daze, Demolish, Captivate, Desecrate, Invoke
+        }
+
+        public static AttackAbility GetAbility(string abilityName)
+        {
+            return GetAbility((MageAbilitiesEnum)Enum.Parse(typeof(AttackAbility), abilityName));
         }
 
         public static AttackAbility GetAbility(MageAbilitiesEnum ability)
@@ -37,9 +43,10 @@ namespace RPGPlatformer.Combat
         public static bool TryGetAbility(string abilityName, out AttackAbility ability)
         {
             ability = null;
-            if (Enum.TryParse(typeof(MageAbilitiesEnum), abilityName, out var obj))
+            string formattedName = string.Concat(abilityName.Where(x => x != ' '));
+            if (Enum.TryParse(typeof(MageAbilitiesEnum), formattedName, out var obj))
             {
-                ability = obj as AttackAbility;
+                ability = GetAbility((MageAbilitiesEnum)obj);
                 return true;
             }
             return false;
@@ -48,15 +55,16 @@ namespace RPGPlatformer.Combat
         public static List<AbilityBarItem> DefaultAbilityBarData()
         {
             return new()
-        {
-            new(Afflict, false),
-            new(Daze, false),
-            new(Demolish, false),
-            new(Captivate, false),
-            new(Desecrate, false),
-            new(Invoke, false),
-            new(Blast, true)
-        };
+            {
+                new(Afflict, false),
+                new(Daze, false),
+                new(Demolish, false),
+                new(Captivate, false),
+                new(Desecrate, false),
+                new(Invoke, false),
+                new(Blast, true)
+            };
+
         }
 
         public static GrenadeLikeAbility Blast = new()//basic
@@ -218,6 +226,11 @@ namespace RPGPlatformer.Combat
                     _ => baseDamage * 0.6f,
                 };
             }
+        };
+
+        public static IEnumerable<AttackAbility> AllAbilities = new List<AttackAbility>()
+        {
+            Blast, Afflict, Daze, Demolish, Captivate, Desecrate, Invoke
         };
     }
 }

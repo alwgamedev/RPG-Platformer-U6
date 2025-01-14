@@ -34,7 +34,7 @@ namespace RPGPlatformer.UI
                 abilityBarInputFields.Add(AddField($"Ability Bar {i}:", abilityBarGroup));
             }
 
-            PopulateFields(SettingsManager.Instance.CurrentBindings);
+            PopulateFields(SettingsManager.Instance.InputSettings);
 
             HasUnsavedChanges = false;
 

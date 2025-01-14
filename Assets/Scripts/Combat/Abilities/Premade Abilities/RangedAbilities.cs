@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RPGPlatformer.Core;
 using RPGPlatformer.Effects;
+using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
@@ -12,6 +14,11 @@ namespace RPGPlatformer.Combat
         public enum RangedAbilitiesEnum
         {
             Pierce, PrecisionShot, Ensnare, Bombard, FesteringWound, MagicBullet, Ambush
+        }
+
+        public static AttackAbility GetAbility(string abilityName)
+        {
+            return GetAbility((RangedAbilitiesEnum)Enum.Parse(typeof(AttackAbility), abilityName));
         }
 
         public static AttackAbility GetAbility(RangedAbilitiesEnum ability)
@@ -29,17 +36,6 @@ namespace RPGPlatformer.Combat
             };
         }
 
-        public static bool TryGetAbility(string abilityName, out AttackAbility ability)
-        {
-            ability = null;
-            if (Enum.TryParse(typeof(RangedAbilitiesEnum), abilityName, out var obj))
-            {
-                ability = obj as AttackAbility;
-                return true;
-            }
-            return false;
-        }
-
         public static List<AbilityBarItem> DefaultAbilityBarData()
         {
             return new()
@@ -52,6 +48,18 @@ namespace RPGPlatformer.Combat
                 new(Ambush, false),
                 new(Pierce, true)
             };
+        }
+
+        public static bool TryGetAbility(string abilityName, out AttackAbility ability)
+        {
+            ability = null;
+            string formattedName = string.Concat(abilityName.Where(x => x != ' '));
+            if (Enum.TryParse(typeof(RangedAbilitiesEnum), formattedName, out var obj))
+            {
+                ability = GetAbility((RangedAbilitiesEnum)obj);
+                return true;
+            }
+            return false;
         }
 
         public static GrenadeLikeAbility Pierce = new()//basic
@@ -167,6 +175,12 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = -0.75f,
             BleedCount = 6,
             BleedRate = 500
+        };
+
+
+        public static IEnumerable<AttackAbility> AllAbilities = new List<AttackAbility>()
+        {
+            Pierce, PrecisionShot, Ensnare, Bombard, FesteringWound, MagicBullet, Ambush
         };
     }
 }

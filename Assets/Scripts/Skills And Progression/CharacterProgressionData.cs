@@ -21,42 +21,27 @@ namespace RPGPlatformer.Skills
         public SkillProgressionData Health
         {
             get => health;
-            set
-            {
-                health = value ?? new();
-            }
+            set => health = value ?? new();
         }
         public SkillProgressionData Defense
         {
             get => defense;
-            set
-            {
-                defense = value ?? new();
-            }
+            set => defense = value ?? new();
         }
         public SkillProgressionData Magic
         {
             get => magic;
-            set
-            {
-                magic = value ?? new();
-            }
+            set => magic = value ?? new();
         }
         public SkillProgressionData Melee
         {
             get => melee;
-            set
-            {
-                melee = value ?? new();
-            }
+            set => melee = value ?? new();
         }
         public SkillProgressionData Range
         {
             get => range;
-            set
-            {
-                range = value ?? new();
-            }
+            set => range = value ?? new();
         }
 
         public int GetLevel(CharacterSkill skill)

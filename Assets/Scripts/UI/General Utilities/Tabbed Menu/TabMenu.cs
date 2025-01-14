@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,7 +33,7 @@ namespace RPGPlatformer.UI
             OnShow += () => OpenTab(tabs[0]);
         }
 
-        protected void OpenTab(Tab tab)
+        public virtual void OpenTab(Tab tab)
         {
             CloseAllTabs();
             tab.SetOpen(true);
@@ -41,7 +42,7 @@ namespace RPGPlatformer.UI
             openTab = tab.Name;
         }
 
-        protected void CloseAllTabs()
+        public virtual void CloseAllTabs()
         {
             foreach(var tab in tabs)
             {

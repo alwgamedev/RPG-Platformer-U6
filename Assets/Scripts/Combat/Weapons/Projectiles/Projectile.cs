@@ -23,8 +23,8 @@ namespace RPGPlatformer.Combat
 
         protected float powerMultiplier = 1;
         protected int maxHits = 1;
-        protected Vector2 aimPos;
         protected Transform shooter;
+        protected Func<Vector2> GetAimPos;
         protected Action<Collider2D> HitAction;
 
         protected float lifeTimer;
@@ -61,16 +61,15 @@ namespace RPGPlatformer.Combat
 
         //PREPARE AND SHOOT
 
-        public void Prepare(ICombatant combatant, Vector2 aimPos, float powerMultiplier, Action<Collider2D> hitAction, int maxHits = 1)
+        public void Prepare(ICombatant combatant, Func<Vector2> getAimPos, float powerMultiplier, Action<Collider2D> hitAction, int maxHits = 1)
         {
-            Debug.Log("prepare called (temporarily disabling head)");
             EnableHead(false);
             triggerCollider.enabled = false;
             transform.SetParent(combatant.EquipSlots[ItemSlot.EquipmentSlots.Mainhand].transform);
             transform.localPosition = Vector3.zero;
-            this.aimPos = aimPos;
             this.powerMultiplier = powerMultiplier;
             this.maxHits = maxHits;
+            GetAimPos = getAimPos;
             HitAction = hitAction;
             shooter = combatant.Transform;
         }
@@ -81,6 +80,12 @@ namespace RPGPlatformer.Combat
 
         public virtual void Shoot()
         {
+            if (GetAimPos == null || !shooter)
+            {
+                ReturnToPool();
+                return;
+            }
+
             EnableHead(true);
             triggerCollider.enabled = true;
             transform.SetParent(null, true);
@@ -88,7 +93,7 @@ namespace RPGPlatformer.Combat
             {
                 trailEffect.Play();
             }
-            LookAtTarget(aimPos);
+            LookAtTarget(GetAimPos());
             myRigidbody.AddForce(powerMultiplier * shootForce * forceMultiplierScale * transform.up, ForceMode2D.Impulse);
         }
 
@@ -183,7 +188,7 @@ namespace RPGPlatformer.Combat
             powerMultiplier = 1;
             maxHits = 1;
             hits = 0;
-            aimPos = default;
+            GetAimPos = null;
             HitAction = null;
             shooter = null;
             EnableHead(true);
@@ -193,6 +198,7 @@ namespace RPGPlatformer.Combat
 
         private void OnDestroy()
         {
+            GetAimPos = null;
             HitAction = null;
         }
     }

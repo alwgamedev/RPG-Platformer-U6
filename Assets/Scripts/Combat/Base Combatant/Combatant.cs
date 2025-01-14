@@ -35,7 +35,7 @@ namespace RPGPlatformer.Combat
         protected InventoryManager inventory;
         protected Dictionary<EquipmentSlots, ItemSlot> equipSlots = new();
         protected DropSpawner dropSpawner;
-        protected Weapon weapon;
+        protected Weapon equippedWeapon;
         protected Health health;
 
         public string DisplayName => $"<b>{displayName}</b>";
@@ -49,8 +49,8 @@ namespace RPGPlatformer.Combat
         public Transform Transform => transform;
         public Transform MainhandElbow => mainhandElbow;
         public Transform ChestBone => chestBone;
-        public IWeapon Weapon => weapon;
-        public CombatStyle? CurrentCombatStyle => weapon?.CombatStyle;
+        public IWeapon EquippedWeapon => equippedWeapon;
+        public CombatStyle? CurrentCombatStyle => equippedWeapon?.CombatStyle;
         public IProjectile QueuedProjectile { get; set; }
         public IHealth Health => health;
         public ReplenishableStat Stamina => stamina;
@@ -109,8 +109,8 @@ namespace RPGPlatformer.Combat
 
         public float AdditiveDamageBonus()
         {
-            if (weapon == null) return 0;
-            return AdditiveDamageBonus(weapon.CombatStyle);
+            if (equippedWeapon == null) return 0;
+            return AdditiveDamageBonus(equippedWeapon.CombatStyle);
         }
 
         public float AdditiveDamageBonus(CombatStyle combatStyle)
@@ -172,7 +172,7 @@ namespace RPGPlatformer.Combat
 
             if (item is Weapon weapon && item.EquippableItemData.Slot == EquipmentSlots.Mainhand)
             {
-                this.weapon = weapon;
+                equippedWeapon = weapon;
                 OnWeaponEquip?.Invoke();
             }
 
@@ -255,7 +255,7 @@ namespace RPGPlatformer.Combat
 
         public bool CanAttack(float distance)
         {
-            return weapon != null && distance < weapon.WeaponStats.AttackRange;
+            return equippedWeapon != null && distance < equippedWeapon.WeaponStats.AttackRange;
         }
 
         public void CheckIfTargetInRange(IHealth target, out bool result)
@@ -314,7 +314,8 @@ namespace RPGPlatformer.Combat
 
         //FUNCTIONS FOR PROJECTILES AND RANGED WEAPONS
 
-        public void PrepareProjectile(IProjectile projectile, Vector2 aimPos, float powerMultiplier, Action<Collider2D> hitAction, int maxHits = 1)
+        public void PrepareProjectile(IProjectile projectile, Func<Vector2> getAimPos, float powerMultiplier,
+            Action<Collider2D> hitAction, int maxHits = 1)
         {
             ReturnQueuedProjectileToPool();
             if (projectile == null)
@@ -322,7 +323,7 @@ namespace RPGPlatformer.Combat
                 Debug.Log($"{gameObject.name} tried to prepare a projectile, but the projectile was null.");
                 return;
             }
-            projectile.Prepare(this, aimPos, powerMultiplier, hitAction, maxHits);
+            projectile.Prepare(this, getAimPos, powerMultiplier, hitAction, maxHits);
             QueuedProjectile = projectile;
         }
 
@@ -334,7 +335,7 @@ namespace RPGPlatformer.Combat
         }
 
         //If you want to shoot the projectile immediately (currently not in use)
-        public void PrepareAndShootProjectile(IProjectile projectile, Vector2 aimPos, 
+        public void PrepareAndShootProjectile(IProjectile projectile, Func<Vector2> getAimPos, 
             float powerMultiplier, Action<Collider2D> hitAction, int maxHits = 1)
         {
             if (projectile == null)
@@ -342,8 +343,8 @@ namespace RPGPlatformer.Combat
                 Debug.Log($"{gameObject.name} tried to shoot a projectile, but the projectile was null.");
                 return;
             }
-            projectile.Prepare(this, aimPos, powerMultiplier, hitAction, maxHits);
-            projectile.Shoot(/*forceMultiplier*/);
+            projectile.Prepare(this, getAimPos, powerMultiplier, hitAction, maxHits);
+            projectile.Shoot();
         }
 
         public void ReturnQueuedProjectileToPool()

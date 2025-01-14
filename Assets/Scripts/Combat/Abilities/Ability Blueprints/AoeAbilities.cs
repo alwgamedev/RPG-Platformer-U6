@@ -59,12 +59,15 @@ namespace RPGPlatformer.Combat
 
         public AoeAbilityThatExecutesImmediately(bool executeTriggeredInAnimation = false) : base()
         {
-            if(executeTriggeredInAnimation)
+            if (executeTriggeredInAnimation)
             {
                 OnExecute = (controller) => controller.StoreAction(() =>
-                ExecuteAoeAbility(GetAoeCenter(controller), AoeRadius,
-                    ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
-                    StunDuration, FreezeAnimationDuringStun, GetHitEffect));
+                {
+                    Vector2 aoeCenter = GetAoeCenter(controller);
+                    ExecuteAoeAbility(aoeCenter, AoeRadius,
+                        ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
+                        StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+                });
             }
             else
             {

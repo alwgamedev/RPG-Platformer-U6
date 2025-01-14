@@ -632,7 +632,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7505579478510739804}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.054545455
+  m_Size: 0.01
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -650,6 +650,7 @@ GameObject:
   - component: {fileID: 4088865543271569955}
   - component: {fileID: 580314208337294541}
   - component: {fileID: 4585936854036276404}
+  - component: {fileID: 7675071226369089326}
   m_Layer: 5
   m_Name: Tab Content
   m_TagString: Untagged
@@ -755,6 +756,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &7675071226369089326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7615418554509139162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: 600
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &8931791024886646176
 GameObject:
   m_ObjectHideFlags: 0

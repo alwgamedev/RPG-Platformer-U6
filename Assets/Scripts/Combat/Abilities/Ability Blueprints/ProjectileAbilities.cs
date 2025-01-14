@@ -11,8 +11,7 @@ namespace RPGPlatformer.Combat
     {
         public int MaxHits { get; }
         public Func<IProjectile> GetProjectile { get; }
-        public Func<AttackAbility, GetHitActionDelegate> GetHitAction { get; }//made it a Func of attack ability so that we can feed in ability stats
-                                                                              //in a static way during initialization
+        public Func<AttackAbility, GetHitActionDelegate> GetHitAction { get; }
 
         public delegate Action<Collider2D> GetHitActionDelegate(ICombatController controller, IProjectile projectile);
 
@@ -74,7 +73,7 @@ namespace RPGPlatformer.Combat
         public GunLikeAbility()
         {
             OnExecute = (controller) => 
-                AimAndPrepareProjectile(controller, GetProjectile?.Invoke(), 1, GetHitAction(this), MaxHits);
+                PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), 1, GetHitAction(this), MaxHits);
         }
     }
 
@@ -82,7 +81,7 @@ namespace RPGPlatformer.Combat
     //Instance needs to fill in:
     //(*) ProjectilePrefab
     //(*) base AttackAbility stats
-    public class GrenadeLikeAbility : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<Vector2>, IProjectileAbility
+    public class GrenadeLikeAbility : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<object>, IProjectileAbility
     {
         public int MaxHits { get; init; } = 1;
         public Func<IProjectile> GetProjectile { get; init; }
@@ -90,9 +89,9 @@ namespace RPGPlatformer.Combat
 
         public GrenadeLikeAbility() : base()
         {
-            GetData = (controller) => controller.GetAimPosition();
-            OnExecute = (controller, aimPos) => 
-                PrepareProjectile(controller, GetProjectile?.Invoke(), aimPos, 1, GetHitAction(this), MaxHits);
+            GetData = (controller) => null;//(controller) => controller.GetAimPosition();
+            OnExecute = (controller, args) => 
+                PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), 1, GetHitAction(this), MaxHits);
         }
     }
 
@@ -101,11 +100,11 @@ namespace RPGPlatformer.Combat
     //(*) TicksToAchieveMaxPower and PowerGainRate
     //(*) base AttackAbility stats
     //(*) OnExecute = Action<(Vector2, int)>
-    public class AimedPowerUpAbility : PowerUpAbility<Vector2>
+    public class AimedPowerUpAbility : PowerUpAbility<object>
     {
         public AimedPowerUpAbility() : base()
         {
-            GetData = controller => controller.GetAimPosition();
+            GetData = controller => null;
         }
     }
 
@@ -126,7 +125,7 @@ namespace RPGPlatformer.Combat
             OnExecute = (controller, args) =>
             {
                 float powerMultiplier = ComputePowerMultiplier(args.Item2);
-                PrepareProjectile(controller, GetProjectile?.Invoke(), args.Item1, powerMultiplier, GetHitAction(this), MaxHits);
+                PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), powerMultiplier, GetHitAction(this), MaxHits);
             };
         }
     }

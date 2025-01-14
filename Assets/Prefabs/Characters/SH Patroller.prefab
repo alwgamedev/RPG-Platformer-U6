@@ -570,18 +570,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToLeaveCombat: 200
-  unarmedAbilityBarItems:
-  - includeInAutoCastCycle: 1
-    abilityEnum: 0
-  mageAbilityBarItems:
-  - includeInAutoCastCycle: 1
-    abilityEnum: 0
-  meleeAbilityBarItems:
-  - includeInAutoCastCycle: 1
-    abilityEnum: 4
-  - includeInAutoCastCycle: 1
-    abilityEnum: 3
-  rangedAbilityBarItems: []
+  abilityBarData:
+    unarmedAbilityBarItems: []
+    mageAbilityBarItems: []
+    meleeAbilityBarItems:
+    - includeInAutoCastCycle: 1
+      ability: 4
+    - includeInAutoCastCycle: 1
+      ability: 3
+    rangedAbilityBarItems: []
   useDefaultAbilityBars: 0
   immuneToStuns: 0
 --- !u!114 &3663846158437281456
@@ -691,7 +688,7 @@ MonoBehaviour:
     replenishRate: 0
     autoReplenish: 0
     statBar: {fileID: 0}
-  combatXPReward: 50
+  combatXPReward: 24
 --- !u!114 &8912017489112769141
 MonoBehaviour:
   m_ObjectHideFlags: 0

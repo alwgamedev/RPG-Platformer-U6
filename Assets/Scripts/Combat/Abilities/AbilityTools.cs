@@ -1,36 +1,35 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Combat
 {
-    using static MageAbilities;
-    using static MeleeAbilities;
-    using static RangedAbilities;
-    using static UnarmedAbilities;
-
     public static class AbilityTools
     {
+        public static IEnumerable<AttackAbility> GetAllAbilities(CombatStyle combatStyle)
+        {
+            return combatStyle switch
+            {
+                CombatStyle.Mage => MageAbilities.AllAbilities,
+                CombatStyle.Melee => MeleeAbilities.AllAbilities,
+                CombatStyle.Ranged => RangedAbilities.AllAbilities,
+                CombatStyle.Unarmed => UnarmedAbilities.AllAbilities,
+                _ => new List<AttackAbility>()
+            };
+        }
+
         public static AttackAbility GetAbility(CombatStyle combatStyle, string abilityName)
         {
-            if(combatStyle == CombatStyle.Mage)
+            switch(combatStyle)
             {
-                return MageAbilities.GetAbility(
-                    (MageAbilitiesEnum)Enum.Parse(typeof(MageAbilitiesEnum), abilityName));
-            }
-            else if (combatStyle == CombatStyle.Melee)
-            {
-                return MeleeAbilities.GetAbility(
-                    (MeleeAbilitiesEnum)Enum.Parse(typeof(MeleeAbilitiesEnum), abilityName));
-            }
-            else if (combatStyle == CombatStyle.Ranged)
-            {
-                return RangedAbilities.GetAbility(
-                    (RangedAbilitiesEnum)Enum.Parse(typeof(RangedAbilitiesEnum), abilityName));
-            }
-            else if (combatStyle == CombatStyle.Unarmed)
-            {
-                return UnarmedAbilities.GetAbility(
-                    (UnarmedAbilitiesEnum)Enum.Parse(typeof(UnarmedAbilities), abilityName));
+                case CombatStyle.Mage:
+                    return MageAbilities.GetAbility(abilityName);
+                case CombatStyle.Melee:
+                    return MeleeAbilities.GetAbility(abilityName);
+                case CombatStyle.Ranged:
+                    return RangedAbilities.GetAbility(abilityName);
+                case CombatStyle.Unarmed:
+                    return UnarmedAbilities.GetAbility(abilityName);
             }
             return null;
         }
@@ -38,21 +37,16 @@ namespace RPGPlatformer.Combat
         public static bool TryGetAbility(CombatStyle combatStyle, string abilityName, out AttackAbility ability)
         {
             ability = null; 
-            if (combatStyle == CombatStyle.Mage)
+            switch(combatStyle)
             {
-                return MageAbilities.TryGetAbility(abilityName, out ability);
-            }
-            else if (combatStyle == CombatStyle.Melee)
-            {
-                return MeleeAbilities.TryGetAbility(abilityName, out ability);
-            }
-            else if (combatStyle == CombatStyle.Ranged)
-            {
-                return RangedAbilities.TryGetAbility(abilityName, out ability);
-            }
-            else if (combatStyle == CombatStyle.Unarmed)
-            {
-                return UnarmedAbilities.TryGetAbility(abilityName, out ability);
+                case CombatStyle.Mage:
+                    return MageAbilities.TryGetAbility(abilityName, out ability);
+                case CombatStyle.Melee:
+                    return MeleeAbilities.TryGetAbility(abilityName, out ability);
+                case CombatStyle.Ranged:
+                    return RangedAbilities.TryGetAbility(abilityName, out ability);
+                case CombatStyle.Unarmed:
+                    return UnarmedAbilities.TryGetAbility(abilityName, out ability);
             }
             return false;
         }

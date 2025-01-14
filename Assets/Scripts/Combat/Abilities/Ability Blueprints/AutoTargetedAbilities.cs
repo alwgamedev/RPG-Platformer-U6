@@ -16,8 +16,11 @@ namespace RPGPlatformer.Combat
             if (executeTriggeredInAnimation)
             {
                 OnExecute = (controller) => controller.StoreAction(() =>
-                DealDamageWithRangeCheck(controller.Combatant, AutoTarget(controller),
-                    ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect));
+                {
+                    IHealth target = AutoTarget(controller);
+                    DealDamageWithRangeCheck(controller.Combatant, target,
+                        ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+                });
             }
             else
             {
@@ -46,7 +49,7 @@ namespace RPGPlatformer.Combat
         public static IHealth TargetInFront(ICombatant combatant)//almost all melee abilities will use this
         {
             Transform transform = combatant.Transform;
-            float radius = combatant.Weapon.WeaponStats.AttackRange / 2;
+            float radius = combatant.EquippedWeapon.WeaponStats.AttackRange / 2;
             Vector2 center = transform.position + radius * Mathf.Sign(transform.localScale.x) * transform.right;
             return combatant.FindTarget(center, radius);
         }
@@ -54,7 +57,7 @@ namespace RPGPlatformer.Combat
         public static IHealth TargetCentered(ICombatant combatant)
         {
             Transform transform = combatant.Transform;
-            float radius = combatant.Weapon.WeaponStats.AttackRange;
+            float radius = combatant.EquippedWeapon.WeaponStats.AttackRange;
             return combatant.FindTarget(transform.position, radius);
         }
 

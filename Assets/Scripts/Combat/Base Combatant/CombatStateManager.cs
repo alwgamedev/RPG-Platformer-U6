@@ -62,7 +62,7 @@ namespace RPGPlatformer.Combat
             if (StateMachine.HasState(typeof(InCombat)))
             {
                 combatTimer++;
-                if (driver.Weapon != null && combatTimer % driver.Weapon.WeaponStats.BaseAttackRate == 0)
+                if (driver.EquippedWeapon != null && combatTimer % driver.EquippedWeapon.WeaponStats.BaseAttackRate == 0)
                 {
                     OnWeaponTick?.Invoke();
                 }
@@ -80,9 +80,9 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnInitialCombatEntry()
         {
-            if (driver.Weapon != null)
+            if (driver.EquippedWeapon != null)
             {
-                animationControl.SetAnimatorOverride(((Weapon)driver.Weapon).AnimatorOverrideController);
+                animationControl.SetAnimatorOverride(((Weapon)driver.EquippedWeapon).AnimatorOverrideController);
             }
             driver.Health.Stat.autoReplenish = false;
             driver.Wrath.autoReplenish = false;

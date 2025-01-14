@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace RPGPlatformer.Combat
 {
@@ -18,6 +18,13 @@ namespace RPGPlatformer.Combat
         public class Mage : Any { }
         public class Melee : Any { }
         public class Ranged : Any { }
+
+        public static IEnumerable<CombatStyle> CoreCombatStyles = new List<CombatStyle>()
+        {
+            CombatStyle.Mage, CombatStyle.Melee, CombatStyle.Ranged, CombatStyle.Unarmed
+        };
+        //if you need an iterator for all combat styles use Enum.GetValues(typeof(CombatStyle))
+        //and then cast the elements to CombatStyle
 
         public static CombatStyle GetCombatStyleNameFromType(Type type)
         {

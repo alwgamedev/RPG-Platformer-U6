@@ -14,18 +14,12 @@ namespace RPGPlatformer.Skills
         public int Level
         {
             get => level;
-            set
-            {
-                level = value;
-            }
+            set => level = value;
         }
         public int XP
         {
             get => xp;
-            set
-            {
-                xp = value;
-            }
+            set => xp = value;
         }
 
         public int GainExperience(int xp, XPTable xpTable)

@@ -22,6 +22,8 @@ namespace RPGPlatformer.Combat
             base.OnEnable();
 
             SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            SettingsManager.NewAbilityBarSettings += abilityBarManager.Configure;
+
             InteractableGameObject.IGOClicked += OnIGOClicked;
         }
 
@@ -83,8 +85,6 @@ namespace RPGPlatformer.Combat
                     HandleAbilityInput(entry.Key);
                 };
             }
-
-            //SettingsManager.OnIAMConfigure -= OnIAMConfigure;
         }
 
         protected override void Update()
@@ -161,6 +161,7 @@ namespace RPGPlatformer.Combat
             base.OnDestroy();
 
             SettingsManager.OnIAMConfigure -= OnIAMConfigure;
+            SettingsManager.NewAbilityBarSettings -= ConfigureAbilityBarManager;
             InteractableGameObject.IGOClicked -= OnIGOClicked;
         }
     }

@@ -20,9 +20,16 @@ namespace RPGPlatformer.UI
 
         public void SetOpen(bool val)
         {
-            if (content == null) return;
-            content.SetActive(val);
+            if (content != null)
+            {
+                content.SetActive(val);
+            }
             buttonObscurer.SetActive(!val);
+        }
+
+        public void ObscureButton(bool val)
+        {
+            buttonObscurer.SetActive(val);
         }
     }
 }

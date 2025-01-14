@@ -56,7 +56,7 @@ namespace RPGPlatformer.Core
                 return;
             }
 
-            var currentBindings = SettingsManager.Instance.CurrentBindings;
+            var currentBindings = SettingsManager.Instance.InputSettings;
             if (currentBindings == null)
             {
                 Debug.LogError("IAM tried to configure, but the SettingsManager's CurrentBindings are null");

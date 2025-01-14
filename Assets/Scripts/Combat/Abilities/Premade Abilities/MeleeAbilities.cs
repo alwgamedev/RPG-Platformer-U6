@@ -2,16 +2,24 @@
 using RPGPlatformer.Effects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Timeline.Actions;
 
 namespace RPGPlatformer.Combat
 {
     using static AutoTargetedAbility;
+
     public static class MeleeAbilities
     {
 
         public enum MeleeAbilitiesEnum
         {
             Jab, Slice, Swipe, Uppercut, Slash, Thrust, Slam, Ravage
+        }
+
+        public static AttackAbility GetAbility(string abilityName)
+        {
+            return GetAbility((MeleeAbilitiesEnum)Enum.Parse(typeof(AttackAbility), abilityName));
         }
 
         public static AttackAbility GetAbility(MeleeAbilitiesEnum ability)
@@ -32,10 +40,11 @@ namespace RPGPlatformer.Combat
 
         public static bool TryGetAbility(string abilityName, out AttackAbility ability)
         {
-            ability = null;
-            if (Enum.TryParse(typeof(MeleeAbilitiesEnum), abilityName, out var obj))
+            ability = null; 
+            string formattedName = string.Concat(abilityName.Where(x => x != ' '));
+            if (Enum.TryParse(typeof(MeleeAbilitiesEnum), formattedName, out var obj))
             {
-                ability = obj as AttackAbility;
+                ability = GetAbility((MeleeAbilitiesEnum)obj);
                 return true;
             }
             return false;
@@ -167,6 +176,12 @@ namespace RPGPlatformer.Combat
             AoeRadius = 1.5f,
             GetAoeCenter = (controller) => controller.Combatant.Transform.position,
             ExcludeInstigator = true
+        };
+
+
+        public static IEnumerable<AttackAbility> AllAbilities = new List<AttackAbility>()
+        {
+            Jab, Slice, Swipe, Uppercut, Slash, Thrust, Slam, Ravage
         };
     }
 }

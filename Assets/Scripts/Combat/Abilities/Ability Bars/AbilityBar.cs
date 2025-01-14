@@ -31,7 +31,7 @@ namespace RPGPlatformer.Combat
             this.abilityBarItems = abilityBarItems?.GroupBy(y => y.ability).Select(z => z.First()).ToList() ?? new();
         }
 
-        public List<AbilityBarItem> GetDefaultAbilityBarItems(CombatStyle combatStyle)
+        public static List<AbilityBarItem> GetDefaultAbilityBarItems(CombatStyle combatStyle)
         {
             return combatStyle switch
             {
@@ -41,6 +41,11 @@ namespace RPGPlatformer.Combat
                 CombatStyle.Ranged => RangedAbilities.DefaultAbilityBarData(),
                 _ => null
             };
+        }
+
+        public static AbilityBar DefaultAbilityBar(ICombatController cc, CombatStyle combatStyle)
+        {
+            return new(cc, GetDefaultAbilityBarItems(combatStyle));
         }
 
         public AttackAbility GetAbility(int index)
@@ -53,7 +58,8 @@ namespace RPGPlatformer.Combat
         {
             try
             {
-                return abilityBarItems.FirstOrDefault(x => x.includeInAutoCastCycle && !CooldownTracker[x.ability]).ability;
+                return abilityBarItems.FirstOrDefault(
+                    x => x.includeInAutoCastCycle && !CooldownTracker[x.ability]).ability;
             }
             catch
             {

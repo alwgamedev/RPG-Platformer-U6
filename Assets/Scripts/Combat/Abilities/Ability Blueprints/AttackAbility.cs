@@ -66,7 +66,7 @@ namespace RPGPlatformer.Combat
 
         public float ComputeDamage(ICombatant combatant)
         {
-            return DamageMultiplier * (combatant.AdditiveDamageBonus() + combatant.Weapon.WeaponStats.BaseDamage);
+            return DamageMultiplier * (combatant.AdditiveDamageBonus() + combatant.EquippedWeapon.WeaponStats.BaseDamage);
         }
 
 
@@ -168,17 +168,17 @@ namespace RPGPlatformer.Combat
 
         //PROJECTILES
 
-        public static void PrepareProjectile(ICombatController controller, IProjectile projectile, Vector2 aimPos, 
-            float powerMultiplier, GetHitActionDelegate getHitAction, int maxHits = 1)
+        public static void PrepareProjectile(ICombatController controller, IProjectile projectile, 
+            Func<Vector2> getAimPos, float powerMultiplier, GetHitActionDelegate getHitAction, int maxHits = 1)
         {
-            controller.Combatant.PrepareProjectile(projectile, aimPos, powerMultiplier, getHitAction(controller, projectile), maxHits);
+            controller.Combatant.PrepareProjectile(projectile, getAimPos, powerMultiplier, getHitAction(controller, projectile), maxHits);
         }
 
-        public static void AimAndPrepareProjectile(ICombatController controller, IProjectile projectile, 
+        public static void PrepareProjectileWithStandardAiming(ICombatController controller, IProjectile projectile,
             float powerMultiplier, GetHitActionDelegate getHitAction, int maxHits = 1)
         {
-            Vector2 aimPos = controller.GetAimPosition();
-            PrepareProjectile(controller, projectile, aimPos, powerMultiplier, getHitAction, maxHits);
+            Func<Vector2> getAimPos = () => controller.GetAimPosition();
+            PrepareProjectile(controller, projectile, getAimPos, powerMultiplier, getHitAction, maxHits);
         }
     }
 }

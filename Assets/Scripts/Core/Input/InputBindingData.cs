@@ -11,6 +11,7 @@ namespace RPGPlatformer.Core
         Valid, MoveLeftMissing, MoveRightMissing, BindingsNonDistinct
     }
 
+    //TO-DO: make this serializable so we can actually save it
     public class InputBindingData
     {
         public string moveLeftBindingPath;

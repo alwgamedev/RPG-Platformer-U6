@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPGPlatformer.Combat;
+using System;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
@@ -9,9 +10,14 @@ namespace RPGPlatformer.Core
         public static SettingsManager Instance { get; private set; } = null;
 
         public InputActionsManager IAM { get; private set; }
-        public InputBindingData CurrentBindings { get; private set; }
+        public InputBindingData InputSettings { get; private set; }
+        public SerializableCharacterAbilityBarData PlayerAbilityBars { get; private set; }
+        //NOTE: it needs to be the serializable version so that we can save it (if it's an actual ability bar
+        //then we would have to serialize attack abilities and way too much information; this way we basically
+        //just store the combat style and ability name)
 
-        public static event Action OnIAMConfigure;
+        public static event Action OnIAMConfigure;//also gets called when new InputSettings are set
+        public static event Action<SerializableCharacterAbilityBarData> NewAbilityBarSettings;
 
         private void Awake()
         {
@@ -19,10 +25,12 @@ namespace RPGPlatformer.Core
             {
                 Instance = this;
 
-                CurrentBindings = InputBindingData.DefaultBindings;
+                InputSettings = InputBindingData.DefaultBindings;
 
                 IAM = GetComponent<InputActionsManager>();
                 IAM.OnConfigure += IAMConfigureHandler;
+
+                PlayerAbilityBars = SerializableCharacterAbilityBarData.DefaultAbilityBarData(); 
             }
             else
             {
@@ -39,12 +47,14 @@ namespace RPGPlatformer.Core
             }
         }
 
+        //INPUT SETTINGS
+
         public InputBindingValidationResult TrySetInputBindings(InputBindingData data)
         {
             var result = data.Validate();
             if(result == InputBindingValidationResult.Valid)
             {
-                CurrentBindings = data;
+                InputSettings = data;
                 IAM.Configure();
             }
             return result;
@@ -53,7 +63,15 @@ namespace RPGPlatformer.Core
         private void IAMConfigureHandler()
         {
             OnIAMConfigure?.Invoke();
-            //IAM.OnConfigure -= IAMConfigureHandler;
+        }
+
+
+        //ABILITY BAR SETTINGS
+
+        public void SetPlayerAbilityBars(SerializableCharacterAbilityBarData newData)
+        {
+            PlayerAbilityBars = newData;
+            NewAbilityBarSettings?.Invoke(PlayerAbilityBars);
         }
 
         private void OnDestroy()
