@@ -36,11 +36,13 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public static void ExecuteAoeAbility(Vector2 aoeCenter, float aoeRadius,
-            float damage, bool excludeInstigator, IDamageDealer damageDealer, float? stunDuration = null, 
+        public static void ExecuteAoeAbility(ICombatController controller, 
+            Func<ICombatController, Vector2> getAoeCenter, float aoeRadius, float damage, 
+            bool excludeInstigator, IDamageDealer damageDealer, float? stunDuration = null, 
             bool freezeAnimationDuringStun = true, Func<PoolableEffect> getHitEffect = null)
         {
-            IEnumerable targets = FindTargetsAtPosition(aoeCenter, aoeRadius);
+            if (getAoeCenter == null) return;
+            IEnumerable targets = FindTargetsAtPosition(getAoeCenter(controller), aoeRadius);
             DealAoeDamage(damageDealer, targets, damage, excludeInstigator, stunDuration, freezeAnimationDuringStun, getHitEffect);
         }
     }
@@ -63,15 +65,15 @@ namespace RPGPlatformer.Combat
             {
                 OnExecute = (controller) => controller.StoreAction(() =>
                 {
-                    Vector2 aoeCenter = GetAoeCenter(controller);
-                    ExecuteAoeAbility(aoeCenter, AoeRadius,
+                    //Vector2 aoeCenter = GetAoeCenter(controller);
+                    ExecuteAoeAbility(controller, GetAoeCenter, AoeRadius,
                         ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
                         StunDuration, FreezeAnimationDuringStun, GetHitEffect);
                 });
             }
             else
             {
-                OnExecute = (controller) => ExecuteAoeAbility(GetAoeCenter(controller), AoeRadius,
+                OnExecute = (controller) => ExecuteAoeAbility(controller, GetAoeCenter, AoeRadius,
                     ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
                     StunDuration, FreezeAnimationDuringStun, GetHitEffect);
             }
@@ -84,7 +86,8 @@ namespace RPGPlatformer.Combat
     //(*) ExcludeInstigator (bool)
     //(*) base AttackAbility stats
     //(*) whether it HasChannelAnimation (bool)
-    public class AoeAbilityThatExecutesOnNextFireButtonDown : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<Vector2>, IAoeAbility
+    public class AoeAbilityThatExecutesOnNextFireButtonDown 
+        : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<Vector2>, IAoeAbility
     {
         public float AoeRadius { get; init; } = 2;
         public bool ExcludeInstigator { get; init; } = true;
@@ -98,9 +101,9 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public AoeAbilityThatExecutesOnNextFireButtonDown(bool executeTriggeredInAnimation = false) : base()
+        public AoeAbilityThatExecutesOnNextFireButtonDown() : base()
         {
-            OnExecute = (controller, position) => ExecuteAoeAbility(position, AoeRadius,
+            OnExecute = (controller, position) => ExecuteAoeAbility(null, c => position, AoeRadius,
                 ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);
         }
@@ -129,10 +132,10 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public AoePowerUpAbility(bool executeTriggeredInAnimation = false) : base()
+        public AoePowerUpAbility() : base()
         {
             OnExecute = (controller, args) => 
-                ExecuteAoeAbility(args.Item1, AoeRadius,
+                ExecuteAoeAbility(null, c => args.Item1, AoeRadius,
                 ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
                 ExcludeInstigator, controller.Combatant,
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);

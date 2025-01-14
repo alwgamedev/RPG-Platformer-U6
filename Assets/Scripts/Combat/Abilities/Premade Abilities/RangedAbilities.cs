@@ -64,6 +64,7 @@ namespace RPGPlatformer.Combat
 
         public static GrenadeLikeAbility Pierce = new()//basic
         {
+            DelayedReleaseOfChannel = false,
             ObeyGCD = true,
             GetProjectile = () => (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Basic Arrow"),
             CombatStyle = CombatStyle.Ranged,

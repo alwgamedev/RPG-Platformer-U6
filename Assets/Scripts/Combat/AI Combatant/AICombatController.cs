@@ -61,7 +61,7 @@ namespace RPGPlatformer.Combat
         {
             base.Death();
 
-            combatant.Health.Stat.statBar.gameObject.SetActive(false);
+            //combatant.Health.Stat.statBar.gameObject.SetActive(false);
             Destroy(gameObject, 1.5f);
         }
 

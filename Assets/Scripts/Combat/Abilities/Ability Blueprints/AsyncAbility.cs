@@ -9,6 +9,7 @@ namespace RPGPlatformer.Combat
     //Description: waits for a Task<T> Prepare to complete, like aiming or powering up, then passes along the T result to the OnExecute method
     public class AsyncAbility<T> : AttackAbility
     {
+        public bool DelayedReleaseOfChannel { get; init; } = true;
         public bool HasChannelAnimation { get; init; } = false;
         public Func<ICombatController, CancellationTokenSource, Task<T>> Prepare { get; init; }
         //Very important: Prepare must cancel when game ends
@@ -58,17 +59,18 @@ namespace RPGPlatformer.Combat
             {
                 if (controller != null && controller.ChannelingAbility)
                 {
-                    controller.EndChannel();
+                    controller.EndChannel(DelayedReleaseOfChannel);
                 }
             }
         }
 
-        public static void EndChannelIfTargetNotInRange(ICombatController controller, IHealth target)
+        public static void EndChannelIfTargetNotInRange(ICombatController controller, IHealth target,
+            bool delayedReleaseOfChannel)
         {
             controller.Combatant.CheckIfTargetInRange(target, out bool result);
             if (!result)
             {
-                controller.EndChannel();
+                controller.EndChannel(delayedReleaseOfChannel);
             }
         }
     }

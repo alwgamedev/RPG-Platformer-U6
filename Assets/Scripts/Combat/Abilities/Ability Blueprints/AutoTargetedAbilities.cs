@@ -16,11 +16,8 @@ namespace RPGPlatformer.Combat
             if (executeTriggeredInAnimation)
             {
                 OnExecute = (controller) => controller.StoreAction(() =>
-                {
-                    IHealth target = AutoTarget(controller);
-                    DealDamageWithRangeCheck(controller.Combatant, target,
-                        ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect);
-                });
+                    DealDamageWithRangeCheck(controller.Combatant, AutoTarget(controller),
+                        ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect));
             }
             else
             {
@@ -113,7 +110,7 @@ namespace RPGPlatformer.Combat
             GetData = (controller) =>
             {
                 IHealth target = AutoTarget(controller);
-                EndChannelIfTargetNotInRange(controller, target);
+                EndChannelIfTargetNotInRange(controller, target, DelayedReleaseOfChannel);
                 return target;
             };
         }
@@ -158,7 +155,7 @@ namespace RPGPlatformer.Combat
             GetData = (controller) =>
             {
                 IHealth target = AutoTarget(controller);
-                EndChannelIfTargetNotInRange(controller, target);
+                EndChannelIfTargetNotInRange(controller, target, DelayedReleaseOfChannel);
                 return target;
             };
         }

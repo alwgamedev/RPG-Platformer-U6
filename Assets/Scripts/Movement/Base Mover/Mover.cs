@@ -53,6 +53,8 @@ namespace RPGPlatformer.Movement
 
             localColliderRightCenter = myCollider.bounds.center + (myWidth / 4) * Vector3.right - transform.position;
             localColliderLeftCenter = myCollider.bounds.center - (myWidth / 4) * Vector3.right - transform.position;
+
+            //PlayDelayedDeath = async () => await DelayedDeath();
         }
 
         private void Update()
@@ -181,7 +183,7 @@ namespace RPGPlatformer.Movement
         public void OnDeath()
         {
             myRigidbody.freezeRotation = false;
-            myRigidbody.AddForce(-(int)CurrentOrientation * deathForce.x * Vector2.right 
+            myRigidbody.AddForce(-(int)CurrentOrientation * deathForce.x * Vector2.right
                 + deathForce.y * Vector2.up, ForceMode2D.Impulse);
             myRigidbody.AddTorque((int)CurrentOrientation * deathTorque, ForceMode2D.Impulse);
         }

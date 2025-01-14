@@ -126,7 +126,8 @@ namespace RPGPlatformer.Combat
 
                 registration.Dispose();
 
-                if (controller.PoweringUp)
+
+                if (controller != null && controller.PoweringUp)
                 {
                     controller.EndPowerUp();
                 }

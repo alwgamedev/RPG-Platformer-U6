@@ -7,6 +7,7 @@ using RPGPlatformer.Core;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Movement;
 using RPGPlatformer.SceneManagement;
+using System.Collections;
 
 namespace RPGPlatformer.UI
 {
@@ -19,11 +20,10 @@ namespace RPGPlatformer.UI
         [SerializeField] StatBarItem statBar;
         [SerializeField] Transform damagePopupSpawnPoint;
         [SerializeField] DamagePopup damagePopupPrefab;
-        [SerializeField] float mouseExitNameHideDelay = 1;
 
         bool inCombat;
-        Action MouseEnter;
-        Action MouseExit;
+        bool dead;
+        //Canvas popupTargetCanvas;
         Action Destroyed;
 
         private void Start()
@@ -33,6 +33,8 @@ namespace RPGPlatformer.UI
             {
                 mover.UpdatedXScale += (orientation) => Unflip(mover.Transform);
             }
+            
+            //popupTargetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
         }
 
         public void Configure(ICombatController cc)
@@ -43,20 +45,21 @@ namespace RPGPlatformer.UI
             tmp.text = $"{cc.Combatant.DisplayName} (Level {cc.Combatant.CombatLevel})";
 
             cc.CombatEntered += () =>
-                {
+            {
                     inCombat = true;
                     ShowAll();
-                };
+            };
             cc.CombatExited += () =>
             {
                 inCombat = false;
-                HideAll();
+                StartCoroutine(FadeOut());
             };
+            cc.OnDeath += OnDeath;
             cc.HealthChangeEffected += SpawnDamagePopup;
 
-            MouseExit = mouseExitNameHideDelay > 0 ?
-                async () => await DelayedNameHide(GlobalGameTools.Instance.TokenSource.Token)
-                : HideNameIfNotInCombat;
+            //MouseExit = mouseExitNameHideDelay > 0 ?
+            //    async () => await DelayedNameHide(GlobalGameTools.Instance.TokenSource.Token)
+            //    : HideNameIfNotInCombat;
 
             HideAll();
         }
@@ -64,25 +67,52 @@ namespace RPGPlatformer.UI
         public void OnMouseEnter()
             //these are not actually detected by the health bar canvas but called by combat controller
         {
-            MouseEnter?.Invoke();
-            nameContainer.SetActive(true);
+            if (dead || inCombat) return;
+            ShowNameOnly();
         }
 
         public void OnMouseExit()
         {
-            MouseExit?.Invoke();
+            if (dead || inCombat) return;
+            StartCoroutine(FadeOut(0.5f));
+        }
+
+        public void ShowNameOnly()
+        {
+            StopAllCoroutines();
+            CanvasGroup.alpha = 1;
+            nameContainer.SetActive(true);
         }
 
         public void ShowAll()
         {
+            StopAllCoroutines();
+            CanvasGroup.alpha = 1;
             nameContainer.SetActive(true);
             healthContainer.SetActive(true);
         }
 
+        public IEnumerator FadeOut(float startDelay = 0)
+        {
+            if (dead) yield break;
+            yield return new WaitForSeconds(startDelay);
+            yield return CanvasGroup.FadeOut(0.25f);
+            HideAll();
+        }
+
         public void HideAll()
         {
+            StopAllCoroutines();
             nameContainer.SetActive(false);
             healthContainer.SetActive(false);
+        }
+
+        private void OnDeath()
+        {
+            dead = true;
+            transform.SetParent(null, true);
+            HideAll();
+            Destroy(gameObject, 1);
         }
 
         private bool CanSpawnDamagePopup()
@@ -97,36 +127,6 @@ namespace RPGPlatformer.UI
                 var popup = Instantiate(damagePopupPrefab, damagePopupSpawnPoint.transform);
                 popup.PlayDamageEffect(damage);
                 //and I think we can destroy the popup in Animation Event? (or here)
-            }
-        }
-
-        private void HideNameIfNotInCombat()
-        {
-            if (!inCombat && nameContainer)
-            {
-                nameContainer.SetActive(false);
-            };
-        }
-
-        private async Task DelayedNameHide(CancellationToken token)
-        {
-            using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
-
-            try
-            {
-                MouseEnter += cts.Cancel;
-                Destroyed += cts.Cancel;
-                await MiscTools.DelayGameTime(mouseExitNameHideDelay, cts.Token);
-                HideNameIfNotInCombat();
-            }
-            catch (TaskCanceledException)
-            {
-                return;
-            }
-            finally
-            {
-                Destroyed -= cts.Cancel;
-                MouseEnter -= cts.Cancel;
             }
         }
 
@@ -150,8 +150,6 @@ namespace RPGPlatformer.UI
             base.OnDestroy();
 
             Destroyed = null;
-            MouseEnter = null;
-            MouseExit = null;
         }
     }
 }

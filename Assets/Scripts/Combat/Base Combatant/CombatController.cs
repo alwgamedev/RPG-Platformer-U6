@@ -41,6 +41,7 @@ namespace RPGPlatformer.Combat
         //(think I could adjust it to work, but rather keep things simple and reliable for now)
 
         protected List<(float, bool)> activeStuns = new();
+        //later can be managed by buff manager?
 
         public AbilityBar CurrentAbilityBar => abilityBarManager.CurrentAbilityBar;
         public TickTimer TickTimer => tickTimer;
@@ -324,12 +325,15 @@ namespace RPGPlatformer.Combat
 
         public void StoreAction(Action action)//these functions would be better in the animation control class
         {
+            Debug.Log($"storing an action. is the action null? {action == null}");
             StoredAction = action;
-            //gets cleared in OnChannel (in particular if you cast an ability, exit combat, or die)
+            StartChannel();//so that auto-cast cycle will not interrupt the animation
+            StoredAction += () => EndChannel();
         }
 
         public void ExecuteStoredAction()
         {
+            Debug.Log($"executing stored action. is it null? {StoredAction == null}");
             StoredAction?.Invoke();
             StoredAction = null;
         }

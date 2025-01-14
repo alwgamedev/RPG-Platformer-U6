@@ -33,7 +33,7 @@ namespace RPGPlatformer.Combat
         {
             return (controller, projectile) => (collider) =>
             {
-                ExecuteAoeAbility(projectile.Transform.position, aoeRadius,
+                ExecuteAoeAbility(null, c => projectile.Transform.position, aoeRadius,
                     ability.ComputeDamage(controller.Combatant) * projectile.PowerMultiplier, 
                     excludeInstigator, controller.Combatant,
                     ability.StunDuration, ability.FreezeAnimationDuringStun, ability.GetHitEffect);

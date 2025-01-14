@@ -74,6 +74,7 @@ namespace RPGPlatformer.Combat
             {
                 AbilityTag.Projectile_Ability
             },
+            DelayedReleaseOfChannel = false,
             ObeyGCD = true,
             GetProjectile = () => (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Green Trail Projectile"),
             CombatStyle = CombatStyle.Mage,
@@ -177,7 +178,6 @@ namespace RPGPlatformer.Combat
             {
                 AbilityTag.AoE_Damage
             },
-            //ExecuteTriggeredInAnimation = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Desecrate",
