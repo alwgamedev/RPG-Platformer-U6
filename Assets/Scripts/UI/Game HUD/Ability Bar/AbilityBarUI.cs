@@ -11,6 +11,7 @@ namespace RPGPlatformer.UI
         [SerializeField] protected LayoutGroup layoutGroup;
         [SerializeField] protected int maxAbilities = AbilityBar.playerAbilityBarLength;
         [SerializeField] protected bool isPlayerAbilityBar;
+        [SerializeField] protected bool usePlayerAbilityBarLength;
 
         protected Dictionary<AttackAbility, AbilityBarItemUI> itemLookup = new();
         protected List<AbilityBarItemUI> allItems = new();//including the empty cells (which aren't in the lookup)
@@ -19,17 +20,21 @@ namespace RPGPlatformer.UI
         //(it doesn't even return a null array, it throws an exception no matter what)
         protected IAbilityBarOwner player;
 
-        public AbilityBar AbilityBar => player?.CurrentAbilityBar;
+        public AbilityBar AbilityBar { get; private set; }
 
         protected override void OnEnable()
         {
             base.OnEnable();
 
-            if (isPlayerAbilityBar)
+            if(usePlayerAbilityBarLength)
             {
                 maxAbilities = AbilityBar.playerAbilityBarLength;
+            }
+
+            if (isPlayerAbilityBar)
+            {
                 player = FindAnyObjectByType<PlayerCombatController>();
-                player.AbilityBarResetEvent += Redraw;
+                player.AbilityBarResetEvent += RedrawPlayerAbilityBar;
                 //^player does this in start so we don't have a race condition
                 player.OnCooldownStarted += OnCooldownStart;
             }
@@ -40,48 +45,30 @@ namespace RPGPlatformer.UI
             itemLookup[ability].StartCooldown();
         }
 
-        public void Redraw()
+        public void RedrawPlayerAbilityBar()
         {
             Clear();
-            DisplayAbilityBar(AbilityBar, true);
-            //for (int i = 0; i < maxAbilities; i++)
-            //{
-            //    AbilityBarItemUI item = Instantiate(itemPrefab, layoutGroup.transform);
-            //    allItems.Add(item);
-            //    if (AbilityBar != null && i < AbilityBar.abilityBarItems.Count)
-            //    {
-            //        var abilityBarItem = AbilityBar.abilityBarItems[i];
-            //        item.Configure(abilityBarItem, i, AbilityBar.CooldownTimers[abilityBarItem.ability]);
-            //        itemLookup[abilityBarItem.ability] = item;
-            //        if (AbilityBar.CooldownTimers[abilityBarItem.ability] > 0)
-            //        {
-            //            item.StartCoroutine(item.PlayCooldownAnimation());
-            //        }
-            //    }
-            //    else
-            //    {
-            //        item.Configure(null, i, 0);
-            //    }
-            //}
+            DisplayAbilityBar(player?.CurrentAbilityBar, true);
         }
 
-        //like configure, but used only for displays (i.e. doesn't need a connected owner,
-        //and doesn't display any cooldowns)
-        public void DisplayAbilityBar(AbilityBar AbilityBar, bool displayInProgressCooldowns)
+        public void DisplayAbilityBar(AbilityBar abilityBar, bool displayInProgressCooldowns)
         {
             Clear();
+
+            AbilityBar = abilityBar;
+
             for (int i = 0; i < maxAbilities; i++)
             {
                 AbilityBarItemUI item = Instantiate(itemPrefab, layoutGroup.transform);
                 allItems.Add(item);
-                if (AbilityBar != null && i < AbilityBar.abilityBarItems.Count)
+                if (abilityBar != null && i < abilityBar.abilityBarItems.Count)
                 {
-                    var abilityBarItem = AbilityBar.abilityBarItems[i];
+                    var abilityBarItem = abilityBar.abilityBarItems[i];
                     if (displayInProgressCooldowns)
                     {
-                        item.Configure(abilityBarItem, i, AbilityBar.CooldownTimers[abilityBarItem.ability]);
+                        item.Configure(abilityBarItem, i, abilityBar.CooldownTimers[abilityBarItem.ability]);
                         itemLookup[abilityBarItem.ability] = item;
-                        if (AbilityBar.CooldownTimers[abilityBarItem.ability] > 0)
+                        if (abilityBar.CooldownTimers[abilityBarItem.ability] > 0)
                         {
                             item.StartCoroutine(item.PlayCooldownAnimation());
                         }
@@ -114,7 +101,7 @@ namespace RPGPlatformer.UI
 
             if (player != null)
             {
-                player.AbilityBarResetEvent -= Redraw;
+                player.AbilityBarResetEvent -= RedrawPlayerAbilityBar;
             }
         }
     }

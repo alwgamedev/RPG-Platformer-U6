@@ -43,16 +43,26 @@ namespace RPGPlatformer.Combat
         {
             SerializableCharacterAbilityBarData data = new()
             {
-                unarmedAbilityBarItems = new(UnarmedAbilities.DefaultAbilityBarData()
+                unarmedAbilityBarItems = new(UnarmedAbilities.DefaultAbilityBarItems()
                     .Select(x => (SerializableUnarmedAbilityBarItem)CreateSerializableVersion(x))),
-                mageAbilityBarItems = new(MageAbilities.DefaultAbilityBarData()
+                mageAbilityBarItems = new(MageAbilities.DefaultAbilityBarItems()
                     .Select(x => (SerializableMageAbilityBarItem)CreateSerializableVersion(x))),
-                meleeAbilityBarItems = new(MeleeAbilities.DefaultAbilityBarData()
+                meleeAbilityBarItems = new(MeleeAbilities.DefaultAbilityBarItems()
                     .Select(x => (SerializableMeleeAbilityBarItem)CreateSerializableVersion(x))),
-                rangedAbilityBarItems = new(RangedAbilities.DefaultAbilityBarData()
+                rangedAbilityBarItems = new(RangedAbilities.DefaultAbilityBarItems()
                     .Select(x => (SerializableRangedAbilityBarItem)CreateSerializableVersion(x)))
             };
             return data;
+        }
+
+        public Dictionary<CombatStyle, AbilityBar> BuildAllAbilityBars(ICombatController cc = null)
+        {
+            Dictionary<CombatStyle, AbilityBar> GetAbilityBar = new();
+            foreach (var combatStyle in CombatStyles.CoreCombatStyles)
+            {
+                GetAbilityBar[combatStyle] = CreateAbilityBar(combatStyle, cc);
+            }
+            return GetAbilityBar;
         }
 
         public AbilityBar CreateAbilityBar(CombatStyle combatStyle, ICombatController cc)
@@ -65,10 +75,14 @@ namespace RPGPlatformer.Combat
         {
             return combatStyle switch
             {
-                CombatStyle.Mage => mageAbilityBarItems.Where(x => x != null),
-                CombatStyle.Melee => meleeAbilityBarItems.Where(x => x != null),
-                CombatStyle.Ranged => rangedAbilityBarItems.Where(x => x != null),
-                CombatStyle.Unarmed => unarmedAbilityBarItems.Where(x => x != null),
+                CombatStyle.Mage => mageAbilityBarItems?.Where(x => x != null) 
+                    ?? new List<SerializableMageAbilityBarItem>(),
+                CombatStyle.Melee => meleeAbilityBarItems?.Where(x => x != null)
+                    ?? new List<SerializableMeleeAbilityBarItem>(),
+                CombatStyle.Ranged => rangedAbilityBarItems?.Where(x => x != null)
+                    ?? new List<SerializableRangedAbilityBarItem>(),
+                CombatStyle.Unarmed => unarmedAbilityBarItems?.Where(x => x != null)
+                    ?? new List<SerializableUnarmedAbilityBarItem>(),
                 _ => null
             };
         }

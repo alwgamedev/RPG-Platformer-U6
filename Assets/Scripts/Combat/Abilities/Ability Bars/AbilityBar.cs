@@ -35,10 +35,10 @@ namespace RPGPlatformer.Combat
         {
             return combatStyle switch
             {
-                CombatStyle.Unarmed => UnarmedAbilities.DefaultAbilityBarData(),
-                CombatStyle.Mage => MageAbilities.DefaultAbilityBarData(),
-                CombatStyle.Melee => MeleeAbilities.DefaultAbilityBarData(),
-                CombatStyle.Ranged => RangedAbilities.DefaultAbilityBarData(),
+                CombatStyle.Unarmed => UnarmedAbilities.DefaultAbilityBarItems(),
+                CombatStyle.Mage => MageAbilities.DefaultAbilityBarItems(),
+                CombatStyle.Melee => MeleeAbilities.DefaultAbilityBarItems(),
+                CombatStyle.Ranged => RangedAbilities.DefaultAbilityBarItems(),
                 _ => null
             };
         }

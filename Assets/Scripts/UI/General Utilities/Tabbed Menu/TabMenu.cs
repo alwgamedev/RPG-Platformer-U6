@@ -27,7 +27,7 @@ namespace RPGPlatformer.UI
                 }
 
                 TabLookup[tab.Name] = tab;
-                tab.Button.onClick.AddListener(() => OpenTab(tab));
+                tab.TabButton.Button.onClick.AddListener(() => OpenTab(tab));
             }
 
             OnShow += () => OpenTab(tabs[0]);
@@ -37,7 +37,7 @@ namespace RPGPlatformer.UI
         {
             CloseAllTabs();
             tab.SetOpen(true);
-            tab.Button.Select();//LUCKILY Select() will not call Button.onClick
+            //tab.TabButton.Button.Select();//LUCKILY Select() will not call Button.onClick
             //(otherwise we'd run into an infinite loop OpenTab -> Button.Select -> Button.onClick -> OpenTab...)
             openTab = tab.Name;
         }

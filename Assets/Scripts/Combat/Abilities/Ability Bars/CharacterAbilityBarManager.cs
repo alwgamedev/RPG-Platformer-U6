@@ -7,15 +7,20 @@ namespace RPGPlatformer.Combat
         ICombatController cc;
 
         protected AbilityBar currentAbilityBar;
-
-        public Dictionary<CombatStyle, AbilityBar> GetAbilityBar = new();
+        protected Dictionary<CombatStyle, AbilityBar> GetAbilityBar = new()
+        {
+            [CombatStyle.Mage] = null,
+            [CombatStyle.Melee] = null,
+            [CombatStyle.Ranged] = null,
+            [CombatStyle.Unarmed] = null
+        };
 
         public AbilityBar CurrentAbilityBar => currentAbilityBar;
 
         public CharacterAbilityBarManager(ICombatController cc)
         {
             this.cc = cc;
-            RebuildDictionary();
+            //RebuildDictionary();
         }
 
         public void EquipAbilityBar(CombatStyle? combatStyle)
@@ -38,14 +43,14 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        private void RebuildDictionary()
-        {
-            GetAbilityBar.Clear();
+        //private void RebuildDictionary()
+        //{
+        //    GetAbilityBar.Clear();
 
-            GetAbilityBar.Add(CombatStyle.Unarmed, null);
-            GetAbilityBar.Add(CombatStyle.Melee, null);
-            GetAbilityBar.Add(CombatStyle.Mage, null);
-            GetAbilityBar.Add(CombatStyle.Ranged, null);
-        }
+        //    GetAbilityBar.Add(CombatStyle.Unarmed, null);
+        //    GetAbilityBar.Add(CombatStyle.Melee, null);
+        //    GetAbilityBar.Add(CombatStyle.Mage, null);
+        //    GetAbilityBar.Add(CombatStyle.Ranged, null);
+        //}
     }
 }

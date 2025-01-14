@@ -29,13 +29,13 @@ namespace RPGPlatformer.UI
             }
         }
 
-        public override void CloseAllTabs()
-        {
-            foreach (var tab in tabs)
-            {
-                tab.ObscureButton(true);
-            }
-            openTab = null;
-        }
+        //public override void CloseAllTabs()
+        //{
+        //    foreach (var tab in tabs)
+        //    {
+        //        tab.ObscureButton(true);
+        //    }
+        //    openTab = null;
+        //}
     }
 }

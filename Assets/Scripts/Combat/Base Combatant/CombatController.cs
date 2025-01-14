@@ -8,7 +8,6 @@ using RPGPlatformer.Movement;
 using System.Threading;
 using RPGPlatformer.SceneManagement;
 
-
 namespace RPGPlatformer.Combat
 {
     [RequireComponent(typeof(TickTimer))]

@@ -6,6 +6,18 @@ namespace RPGPlatformer.Combat
 {
     public static class AbilityTools
     {
+        public static List<AbilityBarItem> DefaultAbilityBarItems(CombatStyle combatStyle)
+        {
+            return combatStyle switch
+            {
+                CombatStyle.Mage => MageAbilities.DefaultAbilityBarItems(),
+                CombatStyle.Melee => MeleeAbilities.DefaultAbilityBarItems(),
+                CombatStyle.Ranged => RangedAbilities.DefaultAbilityBarItems(),
+                CombatStyle.Unarmed => UnarmedAbilities.DefaultAbilityBarItems(),
+                _ => new List<AbilityBarItem>()
+            };
+        }
+
         public static IEnumerable<AttackAbility> GetAllAbilities(CombatStyle combatStyle)
         {
             return combatStyle switch

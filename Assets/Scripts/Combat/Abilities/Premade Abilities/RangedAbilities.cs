@@ -36,7 +36,7 @@ namespace RPGPlatformer.Combat
             };
         }
 
-        public static List<AbilityBarItem> DefaultAbilityBarData()
+        public static List<AbilityBarItem> DefaultAbilityBarItems()
         {
             return new()
             {

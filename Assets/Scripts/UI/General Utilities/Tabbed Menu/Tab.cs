@@ -10,12 +10,11 @@ namespace RPGPlatformer.UI
     public class Tab
     {
         [SerializeField] string name;
-        [SerializeField] Button button;
-        [SerializeField] GameObject buttonObscurer;
+        [SerializeField] ObscurableButton tabButton;
         [SerializeField] GameObject content;
 
         public string Name => name;
-        public Button Button => button;
+        public ObscurableButton TabButton => tabButton;
         public GameObject Content => content;
 
         public void SetOpen(bool val)
@@ -24,12 +23,12 @@ namespace RPGPlatformer.UI
             {
                 content.SetActive(val);
             }
-            buttonObscurer.SetActive(!val);
+            tabButton.Obscure(!val);
         }
 
         public void ObscureButton(bool val)
         {
-            buttonObscurer.SetActive(val);
+            tabButton.Obscure(val);
         }
     }
 }
