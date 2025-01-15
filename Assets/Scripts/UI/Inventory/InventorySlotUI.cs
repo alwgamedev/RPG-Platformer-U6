@@ -1,10 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
-using RPGPlatformer.Inventory;
 using UnityEngine.EventSystems;
 using TMPro;
-using RPGPlatformer.SceneManagement;
+using RPGPlatformer.Inventory;
 
 namespace RPGPlatformer.UI
 {
@@ -24,7 +23,7 @@ namespace RPGPlatformer.UI
         public bool AllowReplacementIfCantSwap => false;
 
         public event Action OnDragResolved;
-        public event Action OnItemChanged;
+        //public event Action OnItemChanged;
 
         private void Awake()
         {
@@ -61,7 +60,7 @@ namespace RPGPlatformer.UI
         {
             item = data?.Item();
             quantity = data?.Quantity() ?? 0;
-            OnItemChanged?.Invoke();
+            //OnItemChanged?.Invoke();
             //we don't need to control quantity here, because the data will be copied from the backing inventory, where
             //max stackable is already enforced
         }
@@ -70,7 +69,7 @@ namespace RPGPlatformer.UI
         {
             item = null;
             quantity = 0;
-            OnItemChanged?.Invoke();
+            //OnItemChanged?.Invoke();
         }
 
         public virtual void UseItem()
@@ -152,7 +151,7 @@ namespace RPGPlatformer.UI
         {
             Destroy(draggableChild.gameObject);//in case the draggable is detached from the slot when it is destroyed
             OnDragResolved = null;
-            OnItemChanged = null;
+            //OnItemChanged = null;
         }
     }
 }

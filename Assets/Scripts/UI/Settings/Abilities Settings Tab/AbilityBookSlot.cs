@@ -3,11 +3,9 @@ using UnityEngine.EventSystems;
 
 namespace RPGPlatformer.UI
 {
-    public class AbilityBookItemUI : AbilityBarItemUI, IPointerEnterHandler
+    public class AbilityBookSlot : AbilityBarSlot, IPointerEnterHandler
     {
         public event Action PointerEnter;
-
-        protected override void Awake() { }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
@@ -16,6 +14,8 @@ namespace RPGPlatformer.UI
 
         protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             PointerEnter = null;
         }
     }

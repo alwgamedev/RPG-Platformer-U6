@@ -1,9 +1,12 @@
 ﻿namespace RPGPlatformer.Combat
 {
-    public class AbilityBarItem
+    public class AbilityBarItem : IAbilityBarItem
     {
-        public readonly AttackAbility ability;
-        public readonly bool includeInAutoCastCycle;
+        AttackAbility ability;
+        bool includeInAutoCastCycle;
+
+        public AttackAbility Ability => ability;
+        public bool IncludeInAutoCastCycle => includeInAutoCastCycle;
 
         public AbilityBarItem() { }
 

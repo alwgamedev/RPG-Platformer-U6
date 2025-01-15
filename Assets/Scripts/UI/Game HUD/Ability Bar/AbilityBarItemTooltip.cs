@@ -14,13 +14,13 @@ namespace RPGPlatformer.UI
         [SerializeField] Color plusStatColor = Color.blue;
         [SerializeField] Color minusStatColor = Color.red;
 
-        public void Configure(AbilityBarItem item)
+        public void Configure(AttackAbility ability)
         {
-            AttackAbility ability = item.ability;
-
             Clear();
 
-            titleText.text = item.ability.GetAbilityName();
+            if (ability == null) return;
+
+            titleText.text = ability.GetAbilityName();
 
             if (ability.Description != null)
             {

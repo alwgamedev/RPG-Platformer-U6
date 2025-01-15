@@ -325,7 +325,6 @@ namespace RPGPlatformer.Combat
 
         public void StoreAction(Action action)//these functions would be better in the animation control class
         {
-            Debug.Log($"storing an action. is the action null? {action == null}");
             StoredAction = action;
             StartChannel();//so that auto-cast cycle will not interrupt the animation
             StoredAction += () => EndChannel();
@@ -333,7 +332,6 @@ namespace RPGPlatformer.Combat
 
         public void ExecuteStoredAction()
         {
-            Debug.Log($"executing stored action. is it null? {StoredAction == null}");
             StoredAction?.Invoke();
             StoredAction = null;
         }

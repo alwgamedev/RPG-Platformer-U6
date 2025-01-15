@@ -40,14 +40,15 @@ namespace RPGPlatformer.UI
 
             List<AbilityBarItem> items = currentlySelectedCombatStyle.HasValue ?
                 AbilityTools.DefaultAbilityBarItems(currentlySelectedCombatStyle.Value) : new();
-            displayBar.DisplayAbilityBar(new(null, items), false);
+            displayBar.ConnectAbilityBar(new(null, items), 
+                AbilityBarUI.DefaultAcceptedCombatStyles(currentlySelectedCombatStyle));
         }
 
         public override void Redraw()
         {
             currentlySelectedCombatStyle = null;
             RebuildDictionary();
-            RedrawAbilityBar();
+            UpdateAbilityBarUI();
         }
 
         public override bool TrySaveTab(out string resultMessage)
@@ -60,7 +61,7 @@ namespace RPGPlatformer.UI
         {
             UpdateStoredAbilityBars();
             currentlySelectedCombatStyle = combatStyle;
-            RedrawAbilityBar();
+            UpdateAbilityBarUI();
         }
 
         private void UpdateStoredAbilityBars()
@@ -71,7 +72,7 @@ namespace RPGPlatformer.UI
             }
         }
 
-        private void RedrawAbilityBar()
+        private void UpdateAbilityBarUI()
         {
             if (currentlySelectedCombatStyle.HasValue)
             {
@@ -79,13 +80,16 @@ namespace RPGPlatformer.UI
                 {
                     if (entry.Key == currentlySelectedCombatStyle.Value)
                     {
-                        displayBar.DisplayAbilityBar(CurrentBars[currentlySelectedCombatStyle.Value], false);
+                        displayBar.ConnectAbilityBar(CurrentBars[currentlySelectedCombatStyle.Value],
+                            AbilityBarUI.DefaultAcceptedCombatStyles(currentlySelectedCombatStyle));
                         return;
+                        //displayBar.DisplayAbilityBar(CurrentBars[currentlySelectedCombatStyle.Value], false);
+                        //return;
                     }
                 }
             }
 
-            displayBar.DisplayAbilityBar(null, false);
+            //displayBar.DisplayAbilityBar(null, false);
         }
 
         private void RebuildDictionary()

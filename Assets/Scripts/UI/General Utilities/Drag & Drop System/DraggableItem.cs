@@ -9,6 +9,9 @@ namespace RPGPlatformer.UI
     public class DraggableItem<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
         where T : class
     {
+        [SerializeField] bool removeItemFromSourceOnSuccessfulDrop = true;
+        [SerializeField] bool removeItemFromSourceOnFailedDrop = false;
+
         IDragSource<T> source;
         Canvas parentCanvas;
         CanvasGroup canvasGroup;

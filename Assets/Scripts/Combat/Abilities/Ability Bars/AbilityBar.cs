@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using RPGPlatformer.Core;
+using UnityEditor.Playables;
+using static UnityEditor.Progress;
 
 namespace RPGPlatformer.Combat
 {
@@ -12,11 +14,13 @@ namespace RPGPlatformer.Combat
 
         private bool subscribedToController;
 
-        public ICombatController controller;
-        public List<AbilityBarItem> abilityBarItems = new();
+        List<AbilityBarItem> abilityBarItems = new();
+        List<AttackAbility> abilities = new();
 
+        public ICombatController Controller { get; private set; }
         public bool Configured { get; private set; }
-        public List<AttackAbility> Abilities { get; private set; } = new();
+        public List<AbilityBarItem> AbilityBarItems => abilityBarItems;
+        public List<AttackAbility> Abilities => abilities;
         public Dictionary<AttackAbility, bool> CooldownTracker { get; private set; } = new();
         public Dictionary<AttackAbility, float> CooldownTimers { get; private set; } = new();
 
@@ -27,50 +31,43 @@ namespace RPGPlatformer.Combat
 
         public AbilityBar(ICombatController controller, List<AbilityBarItem> abilityBarItems)
         {
-            this.controller = controller;
-            this.abilityBarItems = abilityBarItems?.GroupBy(y => y.ability).Select(z => z.First()).ToList() ?? new();
-        }
-
-        public static List<AbilityBarItem> GetDefaultAbilityBarItems(CombatStyle combatStyle)
-        {
-            return combatStyle switch
-            {
-                CombatStyle.Unarmed => UnarmedAbilities.DefaultAbilityBarItems(),
-                CombatStyle.Mage => MageAbilities.DefaultAbilityBarItems(),
-                CombatStyle.Melee => MeleeAbilities.DefaultAbilityBarItems(),
-                CombatStyle.Ranged => RangedAbilities.DefaultAbilityBarItems(),
-                _ => null
-            };
-        }
-
-        public static AbilityBar DefaultAbilityBar(ICombatController cc, CombatStyle combatStyle)
-        {
-            return new(cc, GetDefaultAbilityBarItems(combatStyle));
+            Controller = controller;
+            this.abilityBarItems = abilityBarItems?.GroupBy(y => y.Ability).Select(z => z.First()).ToList() ?? new();
+            //Abilities = new();
+            //foreach (var item in AbilityBarItems)
+            //{
+            //    if(item.Ability != null)
+            //    {
+            //        Abilities.Add(item.Ability);
+            //    }
+            //}
         }
 
         public AttackAbility GetAbility(int index)
         {
-            if(Abilities == null || index < 0 || index >= Abilities.Count) return null;
-            return Abilities[index];
+            if(abilities == null || index < 0 || index >= abilities.Count) return null;
+            return abilities[index];//Abilities[index];
         }
 
         public AttackAbility GetAutoCastAbility()
         {
-            try
-            {
-                return abilityBarItems.FirstOrDefault(
-                    x => x.includeInAutoCastCycle && !CooldownTracker[x.ability]).ability;
-            }
-            catch
-            {
-                return null;
-            }
+            return abilityBarItems?.FirstOrDefault(
+                    x => x.IncludeInAutoCastCycle && !CooldownTracker[x.Ability])?.Ability;
+            //try
+            //{
+            //    return AbilityBarItems.FirstOrDefault(
+            //        x => x.IncludeInAutoCastCycle && !CooldownTracker[x.Ability]).Ability;
+            //}
+            //catch
+            //{
+            //    return null;
+            //}
         }
 
         public bool AbilityValid(AttackAbility ability)
         {
             return ability != null 
-                && (Abilities?.Contains(ability) ?? false) 
+                && (abilities?.Contains(ability) ?? false) 
                 && (CooldownTracker?.TryGetValue(ability, out _) ?? false);
         }
 
@@ -131,26 +128,49 @@ namespace RPGPlatformer.Combat
         public void Configure()
         {
             //Debug.Log("Number of ability bar items provided: " + abilityBarItems.Count);
-            foreach (var item in abilityBarItems)
+            foreach (var item in AbilityBarItems)
             {
-                AttackAbility ability = item.ability;
-                if (ability != null)
-                {
-                    Abilities.Add(item.ability);
-                    CooldownTracker.Add(item.ability, false);
-                    CooldownTimers.Add(item.ability, 0);
-                }
-                else
-                {
-                    Debug.Log("Provided ability was null.");
-                }
+                var ability = item?.Ability;
+                if (ability == null) continue;
+
+                abilities.Add(ability);
+                CooldownTracker.Add(ability, false);
+                CooldownTimers.Add(ability, 0);
             }
-            if (!subscribedToController)
+            if (!subscribedToController && Controller != null)
             {
-                controller.OnCooldownStarted += StartCooldown;
+                Controller.OnCooldownStarted += StartCooldown;
                 subscribedToController = true;
             }
             Configured = true;
+        }
+
+        public void MatchItems(List<AbilityBarItem> items)
+        {
+            abilityBarItems = items;
+            abilities.Clear();
+            foreach (var item in AbilityBarItems)
+            {
+                var ability = item?.Ability;
+                if (item?.Ability == null) continue;
+
+                abilities.Add(ability);
+                if (CooldownTracker.ContainsKey(ability))
+                {
+                    continue;
+                }
+                CooldownTracker[ability] = false;
+                CooldownTimers[ability] = 0;
+            }
+
+            foreach (var entry in CooldownTracker)
+            {
+                if (!abilities.Contains(entry.Key))
+                {
+                    CooldownTracker.Remove(entry.Key);
+                    CooldownTimers.Remove(entry.Key);
+                }
+            }
         }
     }
 }

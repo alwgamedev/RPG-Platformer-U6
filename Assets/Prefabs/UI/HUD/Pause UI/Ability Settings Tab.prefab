@@ -101,7 +101,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -281.26}
+  m_AnchoredPosition: {x: 400, y: -462.26}
   m_SizeDelta: {x: 730, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1511479588191556570
@@ -361,10 +361,9 @@ MonoBehaviour:
   blockRaycastsWhenShown: 1
   pauseAction: 2
   unpauseAction: 2
-  itemPrefab: {fileID: 6764695787028652031, guid: e8904e4041ce14e48b23214253dc10b7, type: 3}
+  slotPrefab: {fileID: 6764695787028652031, guid: e8904e4041ce14e48b23214253dc10b7, type: 3}
   layoutGroup: {fileID: 7722641950128118475}
-  maxAbilities: 12
-  isPlayerAbilityBar: 0
+  numSlots: 12
   usePlayerAbilityBarLength: 0
   tooltip: {fileID: 6735618100486945707}
 --- !u!225 &354445501986031069
@@ -694,7 +693,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -222.655}
+  m_AnchoredPosition: {x: 400, y: -245.655}
   m_SizeDelta: {x: 730, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2346632741642049207
@@ -2752,11 +2751,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6769048177614455839, guid: 23724d0103858be4ca2329f07723016e, type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.9269845
       objectReference: {fileID: 0}
     - target: {fileID: 6769048177614455839, guid: 23724d0103858be4ca2329f07723016e, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6798840714574956648, guid: 23724d0103858be4ca2329f07723016e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3912,6 +3911,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5728941776646291402}
     m_Modifications:
+    - target: {fileID: 843653687994250871, guid: 356f16ba13092944d9afb0a330d83a56, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 843653687994250871, guid: 356f16ba13092944d9afb0a330d83a56, type: 3}
+      propertyPath: slotPrefab
+      value: 
+      objectReference: {fileID: 7273750633505963401, guid: a01f82f373df7ad418acb0a2427f7048, type: 3}
     - target: {fileID: 843653687994250871, guid: 356f16ba13092944d9afb0a330d83a56, type: 3}
       propertyPath: maxAbilities
       value: 0

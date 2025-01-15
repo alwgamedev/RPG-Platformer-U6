@@ -16,7 +16,7 @@ namespace RPGPlatformer.UI
 
         public override bool CanCreateTooltip()
         {
-            return abilityBarSlot.AbilityBarItem?.ability != null && tooltipPrefab;
+            return abilityBarSlot.AbilityBarItem?.Ability != null && tooltipPrefab;
             //later we may want to allow these to be disabled in Settings
         }
 
@@ -24,7 +24,7 @@ namespace RPGPlatformer.UI
         {
             if(tooltip.TryGetComponent<AbilityBarItemTooltip>(out var abilityTooltip))
             {
-                abilityTooltip.Configure(abilityBarSlot.AbilityBarItem);
+                abilityTooltip.Configure(abilityBarSlot.AbilityBarItem?.Ability);
             }
             else
             {

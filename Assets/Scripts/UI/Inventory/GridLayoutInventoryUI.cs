@@ -18,13 +18,13 @@ namespace RPGPlatformer.UI
             gridLayoutGroup = GetComponentInChildren<GridLayoutGroup>();
         }
 
-        protected override void Start()
-        {
-            if (owner != null && owner.Inventory != null)
-            {
-                ConnectOwner(owner);
-            }
-        }
+        //protected override void Start()
+        //{
+        //    if (owner != null && owner.Inventory != null)
+        //    {
+        //        ConnectOwner(owner);
+        //    }
+        //}
 
         public override void InitializeSlots(IInventoryOwner owner)
         {
