@@ -5,7 +5,7 @@ namespace RPGPlatformer.UI
 {
     public interface IDragSource<T> where T : class
     {
-        public Transform Transform { get; }
+        public Transform DraggableParentTransform { get; }
 
         public T Contents();
         public void RemoveItem();

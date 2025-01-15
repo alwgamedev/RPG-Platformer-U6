@@ -13,7 +13,8 @@ namespace RPGPlatformer.UI
 
         public EquippableItem EquippedItem => item as EquippableItem;
 
-        public override bool CanPlace(IInventorySlotDataContainer data)
+        public override bool CanPlace(IInventorySlotDataContainer data, 
+            IDragSource<IInventorySlotDataContainer> origin = null)
         {
             return data?.Item() == null || (data.Quantity() == 1 && data.Item() is EquippableItem equippableItem 
                 && equippableItem.EquippableItemData.Slot == slot);

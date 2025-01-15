@@ -1,21 +1,25 @@
-﻿using RPGPlatformer.SceneManagement;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace RPGPlatformer.UI
 {
-    [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
+    //[RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
     [RequireComponent(typeof(CanvasGroup))]
     public class DraggableItem<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
         where T : class
     {
-        [SerializeField] bool removeItemFromSourceOnSuccessfulDrop = true;
-        [SerializeField] bool removeItemFromSourceOnFailedDrop = false;
+        [SerializeField] bool keepItemInSourceWhenReplacing;
+            //i.e. if it cant swap and it goes to replace the target item, should the source remove its item
+            //or keep a copy there? e.g. when dragging from ability book onto ability bar, we want to replace
+            //the ability bar item, but also keep the item in the ability book
+        [SerializeField] bool removeItemFromSourceOnFailedDrop;
 
         IDragSource<T> source;
         Canvas parentCanvas;
         CanvasGroup canvasGroup;
-        bool canDrag = true;//mainly so that dragging gets cancelled when you pause
+        
+        public bool CanDrag { get; protected set; } = true;//mainly so that dragging gets cancelled when you pause
+        public bool IsDragging { get; protected set; }
 
         private void Awake()
         {
@@ -34,42 +38,52 @@ namespace RPGPlatformer.UI
 
         public void DisableDragging()
         {
-            canDrag = false;
-            CancelDrag();
+            CanDrag = false;
+            if (IsDragging)
+            {
+                CancelDrag();
+            }
         }
 
         public void ReenableDragging()
         {
-            canDrag = true;
+            CanDrag = true;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (source == null || !eventData.IsLeftMouseButtonEvent()) return;
+            if (!CanDrag || !eventData.IsLeftMouseButtonEvent()) return;
 
+            IsDragging = true;
             canvasGroup.blocksRaycasts = false;//or else the drop event doesn't register? (test it out)
             transform.SetParent(parentCanvas.transform, true);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!canDrag || !eventData.IsLeftMouseButtonEvent()) return;
-            transform.position = Camera.main.ScreenToWorldPoint((Vector3)eventData.position + parentCanvas.transform.position.z * Vector3.forward);
+            if (!CanDrag || !eventData.IsLeftMouseButtonEvent()) return;
+
+            transform.position = Camera.main.ScreenToWorldPoint((Vector3)eventData.position
+                + parentCanvas.transform.position.z * Vector3.forward);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if(!eventData.IsLeftMouseButtonEvent() && canDrag) return;
+            if(!eventData.IsLeftMouseButtonEvent() && CanDrag) return;
+
+            IsDragging = false;
 
             if (source != null)
             {
-                transform.SetParent(source.Transform);
+                transform.SetParent(source.DraggableParentTransform);
                 transform.localPosition = Vector3.zero;
             }
+
             canvasGroup.blocksRaycasts = true;
 
             IDropTarget<T> target;
-            if (!EventSystem.current.IsPointerOverGameObject())//"IsPointerOverGameObject()" really means pointer is over UI (not just any game object)
+            if (!EventSystem.current.IsPointerOverGameObject())
+                //"IsPointerOverGameObject()" really means pointer is over UI (not just any game object)
             {
                 target = parentCanvas.GetComponent<IDropTarget<T>>();
             }
@@ -95,38 +109,67 @@ namespace RPGPlatformer.UI
 
         private void DropItemOntoTarget(IDropTarget<T> target)
         {
-            if(target == null) return;
+            if(target == null)
+            {
+                OnFailedDrop();
+                return;
+            }
             else if (source != null && source is IDragDropSlot<T> sourceSlot && target is IDragDropSlot<T> targetSlot)
             {
-                Swap(sourceSlot, targetSlot);
-            }
-            else if(target.AllowReplacementIfCantSwap)
-            {
-                ReplaceTargetItem(target);
+                if (!TrySwap(sourceSlot, targetSlot) && target.AllowReplacementIfCantSwap)
+                {
+                    TryReplaceTargetItem(target);
+                }
             }
         }
 
-        private void Swap(IDragDropSlot<T> source, IDragDropSlot<T> target)
+        private bool TrySwap(IDragDropSlot<T> source, IDragDropSlot<T> target)
         {
             T sourceItem = source.Contents();
             T targetItem = target.Contents();
 
-            if (!source.CanPlace(targetItem) || !target.CanPlace(sourceItem)) return;
+            if (!target.CanPlace(sourceItem, source))
+            {
+                OnFailedDrop();
+                return false;
+            }
+            if (!source.CanPlace(targetItem, target))
+            {
+                return false;
+            }
 
             source.RemoveItem();
             target.RemoveItem();
             source.PlaceItem(targetItem);
             target.PlaceItem(sourceItem);
+            return true;
         }
 
-        private void ReplaceTargetItem(IDropTarget<T> target)
+        private bool TryReplaceTargetItem(IDropTarget<T> target)
         {
             T sourceItem = source.Contents();
 
-            if(!target.CanPlace(sourceItem)) return;
+            if(!target.CanPlace(sourceItem, source))
+            {
+                OnFailedDrop();
+                return false;
+            }
 
-            source.RemoveItem();
+            if (!keepItemInSourceWhenReplacing)
+                //in this case you may want to place a copy in the target instead... I think it'll be okay
+            {
+                source.RemoveItem();
+            }
             target.PlaceItem(sourceItem);
+            return true;
+        }
+
+        private void OnFailedDrop()
+        {
+            if (source != null && removeItemFromSourceOnFailedDrop)
+            {
+                source.RemoveItem();
+            }
         }
     }
 }

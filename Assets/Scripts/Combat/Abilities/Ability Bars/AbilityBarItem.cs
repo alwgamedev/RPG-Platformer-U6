@@ -15,5 +15,15 @@
             this.ability = ability;
             this.includeInAutoCastCycle = includeInAutoCastCycle;
         }
+
+        public void SetIncludeInAutoCastCycle(bool val)
+        {
+            includeInAutoCastCycle = val;
+        }
+
+        public void ToggleIncludeInAutoCastCycle()
+        {
+            includeInAutoCastCycle = !includeInAutoCastCycle;
+        }
     }
 }

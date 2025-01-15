@@ -14,6 +14,11 @@ namespace RPGPlatformer.UI
             abilityBookDisplay = GetComponentInChildren<AbilityBookUI>();
         }
 
+        //private void Start()
+        //{
+        //    LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+        //}
+
         public override void OpenTab(Tab tab)
         {
             base.OpenTab(tab);

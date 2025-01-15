@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using RPGPlatformer.Combat;
+using System.Linq;
 
 namespace RPGPlatformer.UI
 {
@@ -60,25 +61,9 @@ namespace RPGPlatformer.UI
                 slot.Configure(i, null);
                 slot.OnDragResolved += UpdateAbilityBar;
                 slots[i] = slot;
-                //if(bar?.AbilityBarItems != null && i < bar.AbilityBarItems.Count)
-                //{
-                //    var item = bar.AbilityBarItems[i];
-                //    slot.PlaceItem(item);
-                //    slot.DisplayItem(bar.CooldownTimers[item.Ability]); 
-                //    if (AbilityBar.AbilityBarItems[i]?.Ability != null)
-                //    {
-                //        FindSlot[AbilityBar.AbilityBarItems[i].Ability] = slot;
-                //    }
-                //    slot.OnDragResolved += UpdateAbilityBar;
-                //}
-                //else
-                //{
-                //    slot.DisplayItem(0);
-                //}
-                //slots[i] = slot;
             }
 
-            //RebuildDictionary();
+            Canvas.ForceUpdateCanvases();
         }
 
         public virtual void ConnectAbilityBar(AbilityBar abilityBar, CombatStyle? mainStyle)
@@ -89,6 +74,11 @@ namespace RPGPlatformer.UI
         public virtual void ConnectAbilityBar(AbilityBar abilityBar, IEnumerable<CombatStyle> acceptedCombatStyles)
         {
             AbilityBar = abilityBar;
+
+            if (AbilityBar != null && !AbilityBar.Configured)
+            {
+                AbilityBar.Configure();
+            }
 
             foreach(var slot in slots)
             {
@@ -138,20 +128,27 @@ namespace RPGPlatformer.UI
                     }
 
                     slot.DisplayItem(initialCD);
-                    slot.ValidAbility = a => AbilityBar.Abilities == null || !AbilityBar.Abilities.Contains(a);
                 }
                 else
                 {
                     slot.PlaceItem(null);
                     slot.DisplayItem(0);
                 }
+
+                slot.ValidAbility = (a, o) =>
+                {
+                    if(a == null)
+                    {
+                        return true;
+                    }
+                    bool c1 = !FindSlot.ContainsKey(a);
+                    bool c2 = o != null && o is AbilityBarSlot oSlot && slots.Contains(oSlot);
+                    return c1 || c2;
+                };
             }
         }
 
-        public virtual void Clear()
-        {
-            //to-do (if needed)
-        }
+        public virtual void Clear() { }
 
         protected void OnCooldownStart(AttackAbility ability)
         {

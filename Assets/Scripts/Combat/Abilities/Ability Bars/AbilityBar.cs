@@ -147,29 +147,35 @@ namespace RPGPlatformer.Combat
 
         public void MatchItems(List<AbilityBarItem> items)
         {
+            List<AttackAbility> deletedAbilities = new(abilities); 
+
             abilityBarItems = items;
             abilities.Clear();
+
             foreach (var item in AbilityBarItems)
             {
                 var ability = item?.Ability;
                 if (item?.Ability == null) continue;
 
                 abilities.Add(ability);
-                if (CooldownTracker.ContainsKey(ability))
+                deletedAbilities.Remove(ability);
+
+                if (!CooldownTracker.ContainsKey(ability))
                 {
-                    continue;
+                    CooldownTracker[ability] = false;
+                    CooldownTimers[ability] = 0;
                 }
-                CooldownTracker[ability] = false;
-                CooldownTimers[ability] = 0;
             }
 
-            foreach (var entry in CooldownTracker)
+            foreach (var ability in deletedAbilities)
             {
-                if (!abilities.Contains(entry.Key))
-                {
-                    CooldownTracker.Remove(entry.Key);
-                    CooldownTimers.Remove(entry.Key);
-                }
+                CooldownTracker.Remove(ability);
+                CooldownTimers.Remove(ability);
+                //if (!abilities.Contains(abilities))
+                //{
+                //    CooldownTracker.Remove(entry.Key);
+                //    CooldownTimers.Remove(entry.Key);
+                //}
             }
         }
     }

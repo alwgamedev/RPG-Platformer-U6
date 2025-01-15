@@ -19,7 +19,7 @@ namespace RPGPlatformer.UI
         protected InventoryItem item;
         protected int quantity;
 
-        public Transform Transform => transform;
+        public Transform DraggableParentTransform => transform;
         public bool AllowReplacementIfCantSwap => false;
 
         public event Action OnDragResolved;
@@ -51,7 +51,8 @@ namespace RPGPlatformer.UI
             return quantity;
         }
 
-        public virtual bool CanPlace(IInventorySlotDataContainer data)
+        public virtual bool CanPlace(IInventorySlotDataContainer data, 
+            IDragSource<IInventorySlotDataContainer> origin = null)
         {
             return true;
         }

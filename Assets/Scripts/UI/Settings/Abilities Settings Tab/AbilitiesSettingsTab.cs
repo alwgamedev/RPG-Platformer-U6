@@ -8,10 +8,10 @@ namespace RPGPlatformer.UI
 {
     public class AbilitiesSettingsTab : SettingsTab
     {
-        [SerializeField] Button mageButton;
-        [SerializeField] Button meleeButton;
-        [SerializeField] Button rangedButton;
-        [SerializeField] Button unarmedButton;
+        [SerializeField] ObscurableButton mageButton;
+        [SerializeField] ObscurableButton meleeButton;
+        [SerializeField] ObscurableButton rangedButton;
+        [SerializeField] ObscurableButton unarmedButton;
         [SerializeField] AbilityBarUI displayBar;
 
         CombatStyle? currentlySelectedCombatStyle;
@@ -28,10 +28,15 @@ namespace RPGPlatformer.UI
         {
             base.Awake();
 
-            mageButton.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Mage));
-            meleeButton.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Melee));
-            rangedButton.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Ranged));
-            unarmedButton.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Unarmed));
+            mageButton.Button.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Mage));
+            meleeButton.Button.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Melee));
+            rangedButton.Button.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Ranged));
+            unarmedButton.Button.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Unarmed));
+        }
+
+        private void Start()
+        {
+            displayBar.ConnectAbilityBar(null, new List<CombatStyle>());
         }
 
         public override void LoadDefaultSettings()

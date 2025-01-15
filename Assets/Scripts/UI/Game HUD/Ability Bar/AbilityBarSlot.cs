@@ -15,31 +15,37 @@ namespace RPGPlatformer.UI
         [SerializeField] protected Image cooldownFillImage;
         [SerializeField] protected TextMeshProUGUI keybindText;
         [SerializeField] protected GameObject autoCastCheckmark;
+        [SerializeField] protected Transform draggableParentTransform;
 
-        public Func<AttackAbility, bool> ValidAbility = a => true;
+        public Func<AttackAbility, IDragSource<AbilityBarItem>, bool> ValidAbility = (a, o) => false;
 
         protected int? abilityBarIndex = null;
-
         protected bool[] acceptedCombatStyles = new bool[Enum.GetValues(typeof(CombatStyle)).Length];
+        protected DraggableAbilityBarItem draggable;
 
         public AbilityBarItem AbilityBarItem { get; protected set; }
-        public Transform Transform => transform;
-        public bool AllowReplacementIfCantSwap => true;
+        public Transform DraggableParentTransform => draggableParentTransform;
+        public virtual bool AllowReplacementIfCantSwap => true;
 
         public event Action OnDragResolved;
+        //public event Action OnItemChanged;
 
         protected virtual void Awake()
         {
             SettingsManager.OnIAMConfigure += DisplayKeybind;
+            draggable = GetComponentInChildren<DraggableAbilityBarItem>();
         }
 
 
         //DRAG/DROP FUNCTIONS
 
-        public bool CanPlace(AbilityBarItem item)
+        //only used when dragging/dropping
+        public virtual bool CanPlace(AbilityBarItem item, IDragSource<AbilityBarItem> origin = null)
         {
-            return item?.Ability == null 
-                || (CanAcceptCombatStyle(item.Ability.CombatStyle) && ValidAbility(item.Ability));
+            if (item?.Ability == null) return false;
+
+            return CanAcceptCombatStyle(item.Ability.CombatStyle)
+                && ValidAbility(item.Ability, origin);
         }
 
         public bool CanAcceptCombatStyle(CombatStyle combatStyle)
@@ -54,11 +60,14 @@ namespace RPGPlatformer.UI
 
         public void DragComplete()
         {
+            //Debug.Log(draggableParentTransform != null);
+            //draggable.transform.SetParent(draggableParentTransform, true);
             OnDragResolved?.Invoke();
         }
 
         public void DropComplete()
         {
+            //draggable.transform.SetParent(draggableParentTransform, true);
             OnDragResolved?.Invoke();
         }
 
@@ -66,6 +75,18 @@ namespace RPGPlatformer.UI
         {
             StopAllCoroutines();
             AbilityBarItem = item;
+
+            if (draggable != null)
+            {
+                if (item?.Ability == null && draggable.CanDrag)
+                {
+                    draggable.DisableDragging();
+                }
+                else if (!draggable.CanDrag)
+                {
+                    draggable.ReenableDragging();
+                }
+            }
         }
 
         public void RemoveItem()
@@ -79,7 +100,7 @@ namespace RPGPlatformer.UI
 
         public void Configure(int? abilityBarIndex, IEnumerable<CombatStyle> acceptedCombatStyles)
         {
-            this.abilityBarIndex = abilityBarIndex;
+            SetAbilityBarIndex(abilityBarIndex);
             SetAcceptedCombatStyles(acceptedCombatStyles);
         }
 
@@ -89,6 +110,11 @@ namespace RPGPlatformer.UI
             DisplayAutoCastCheckmark(AbilityBarItem?.IncludeInAutoCastCycle ?? false);
             DisplayKeybind();
             InitializeCooldown(initialCooldownTime);
+        }
+
+        public void SetAbilityBarIndex(int? abilityBarIndex)
+        {
+            this.abilityBarIndex = abilityBarIndex;
         }
 
         public void SetAcceptedCombatStyles(IEnumerable<CombatStyle> combatStyles)
