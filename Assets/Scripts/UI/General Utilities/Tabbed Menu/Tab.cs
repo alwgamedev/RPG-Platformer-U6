@@ -23,12 +23,7 @@ namespace RPGPlatformer.UI
             {
                 content.SetActive(val);
             }
-            tabButton.Obscure(!val);
-        }
-
-        public void ObscureButton(bool val)
-        {
-            tabButton.Obscure(val);
+            tabButton.OnClicked(val);
         }
     }
 }

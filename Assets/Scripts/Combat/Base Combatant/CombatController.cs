@@ -133,22 +133,22 @@ namespace RPGPlatformer.Combat
             {
                 abilityBarData = SerializableCharacterAbilityBarData.DefaultAbilityBarData();
             }
-            ConfigureAbilityBarManager(abilityBarData);
+            HandleNewAbilityBarSettings(abilityBarData);
         }
 
-        protected virtual void ConfigureAbilityBarManager(SerializableCharacterAbilityBarData data)
+        protected virtual void HandleNewAbilityBarSettings(SerializableCharacterAbilityBarData data)
         {
-            abilityBarManager.Configure(data);
+            abilityBarManager.UpdateAbilityBars(data);
             UpdateEquippedAbilityBar();
         }
 
         protected virtual void UpdateEquippedAbilityBar()
         {
             abilityBarManager.EquipAbilityBar(combatant.EquippedWeapon?.CombatStyle);
-            if (CurrentAbilityBar != null && !CurrentAbilityBar.Configured)
-            {
-                CurrentAbilityBar.Configure();
-            }
+            //if (CurrentAbilityBar != null && !CurrentAbilityBar.Configured)
+            //{
+            //    CurrentAbilityBar.Configure();
+            //}
 
             AbilityBarResetEvent?.Invoke();
         }

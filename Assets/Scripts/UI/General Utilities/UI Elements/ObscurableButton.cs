@@ -13,26 +13,26 @@ namespace RPGPlatformer.UI
 
         private void Awake()
         {
-            button.onClick.AddListener(ToggleObscurer);
+            button.onClick.AddListener(() => OnClicked(true));
         }
 
-        public void Obscure(bool val)
+        public void OnClicked(bool selected)
         {
             if(obscurer != null)
             {
                 if(invertObscurerBehavior)
                 {
-                    val = !val;
+                    selected = !selected;
                 }
-                obscurer.SetActive(val);
+                obscurer.SetActive(!selected);
             }
         }
 
-        private void ToggleObscurer()
-        {
-            if (obscurer == null) return;
+        //private void ToggleObscurer()
+        //{
+        //    if (obscurer == null) return;
 
-            Obscure(!obscurer.activeSelf);
-        }
+        //    Obscure(!obscurer.activeSelf);
+        //}
     }
 }

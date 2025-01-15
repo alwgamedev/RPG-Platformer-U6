@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using RPGPlatformer.Combat;
 using System.Linq;
+using System;
 
 namespace RPGPlatformer.UI
 {
@@ -18,6 +19,8 @@ namespace RPGPlatformer.UI
         protected Dictionary<AttackAbility, AbilityBarSlot> FindSlot = new();
 
         public AbilityBar AbilityBar { get; protected set; }
+
+        public event Action AbilityBarChanged;
 
         public static IEnumerable<CombatStyle> DefaultAcceptedCombatStyles(CombatStyle? mainStyle)
         {
@@ -101,6 +104,8 @@ namespace RPGPlatformer.UI
             AbilityBar.MatchItems(items);
 
             UpdateAbilityBarUI();
+
+            AbilityBarChanged?.Invoke();
         }
 
         public void UpdateAbilityBarUI()

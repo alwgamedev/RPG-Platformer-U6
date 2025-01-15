@@ -50,6 +50,7 @@ namespace RPGPlatformer.UI
             resultMessage = null;
             if(SettingsManager.Instance == null)
             {
+                Debug.LogWarning("Can't save SettingsTab because SettingsManager doesn't have an instance.");
                 return false;
             }
 

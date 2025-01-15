@@ -60,14 +60,11 @@ namespace RPGPlatformer.UI
 
         public void DragComplete()
         {
-            //Debug.Log(draggableParentTransform != null);
-            //draggable.transform.SetParent(draggableParentTransform, true);
             OnDragResolved?.Invoke();
         }
 
         public void DropComplete()
         {
-            //draggable.transform.SetParent(draggableParentTransform, true);
             OnDragResolved?.Invoke();
         }
 
@@ -235,7 +232,7 @@ namespace RPGPlatformer.UI
         protected virtual void OnDestroy()
         {
             SettingsManager.OnIAMConfigure -= DisplayKeybind;
+            OnDragResolved = null;
         }
-
     }
 }

@@ -30,6 +30,7 @@ namespace RPGPlatformer.Combat
 
         public static SerializableAbilityBarItem CreateSerializableVersion(AbilityBarItem abilityBarItem)
         {
+            if (abilityBarItem?.Ability == null) return null;
             return CreateSerializableAbilityBarItem(abilityBarItem.Ability.CombatStyle, abilityBarItem.Ability.GetAbilityName(),
                 abilityBarItem.IncludeInAutoCastCycle);
         }

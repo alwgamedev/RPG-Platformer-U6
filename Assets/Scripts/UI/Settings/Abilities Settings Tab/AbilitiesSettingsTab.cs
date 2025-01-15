@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using RPGPlatformer.Combat;
 using System.Collections.Generic;
 using RPGPlatformer.Core;
+using System.Linq;
 
 namespace RPGPlatformer.UI
 {
@@ -32,11 +33,13 @@ namespace RPGPlatformer.UI
             meleeButton.Button.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Melee));
             rangedButton.Button.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Ranged));
             unarmedButton.Button.onClick.AddListener(() => SelectCombatStyle(CombatStyle.Unarmed));
+
+            displayBar.AbilityBarChanged += OnAbilityBarChanged;
         }
 
         private void Start()
         {
-            displayBar.ConnectAbilityBar(null, new List<CombatStyle>());
+            UpdateAbilityBarUI();
         }
 
         public override void LoadDefaultSettings()
@@ -51,14 +54,30 @@ namespace RPGPlatformer.UI
 
         public override void Redraw()
         {
-            currentlySelectedCombatStyle = null;
-            RebuildDictionary();
+            DeselectCombatStyle();
+            GetCurrentPlayerBars();
             UpdateAbilityBarUI();
         }
 
         public override bool TrySaveTab(out string resultMessage)
         {
+            UpdateStoredAbilityBars();
             resultMessage = "";
+
+            if(SettingsManager.Instance == null)
+            {
+                Debug.LogWarning("Can't save SettingsTab because SettingsManager doesn't have an instance.");
+                return false;
+            }
+
+            Dictionary<CombatStyle, List<AbilityBarItem>> itemsLookup = new();
+            foreach (var entry in CurrentBars)
+            {
+                itemsLookup[entry.Key] = entry.Value.AbilityBarItems;
+            }
+
+            SerializableCharacterAbilityBarData data = new(itemsLookup);
+            SettingsManager.Instance.SetPlayerAbilityBars(data);
             return true;
         }
 
@@ -69,12 +88,23 @@ namespace RPGPlatformer.UI
             UpdateAbilityBarUI();
         }
 
+        private void DeselectCombatStyle()
+        {
+            currentlySelectedCombatStyle = null;
+            mageButton.OnClicked(false);
+            meleeButton.OnClicked(false);
+            rangedButton.OnClicked(false);
+            unarmedButton.OnClicked(false);
+        }
+
         private void UpdateStoredAbilityBars()
         {
             if (currentlySelectedCombatStyle.HasValue)
             {
                 CurrentBars[currentlySelectedCombatStyle.Value] = displayBar.AbilityBar;
             }
+
+            HasUnsavedChanges = false;
         }
 
         private void UpdateAbilityBarUI()
@@ -93,15 +123,22 @@ namespace RPGPlatformer.UI
                     }
                 }
             }
-
-            //displayBar.DisplayAbilityBar(null, false);
+            else
+            {
+                displayBar.ConnectAbilityBar(null, new List<CombatStyle>());
+            }
         }
 
-        private void RebuildDictionary()
+        private void GetCurrentPlayerBars()
         {
             if (SettingsManager.Instance == null) return;
 
             CurrentBars = SettingsManager.Instance.PlayerAbilityBars.BuildAllAbilityBars();
+        }
+
+        private void OnAbilityBarChanged()
+        {
+            HasUnsavedChanges = true;
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RPGPlatformer.Combat
 {
     public class CharacterAbilityBarManager
     {
         ICombatController cc;
+        bool configured;
 
         protected AbilityBar currentAbilityBar;
         protected Dictionary<CombatStyle, AbilityBar> GetAbilityBar = new()
@@ -35,11 +37,21 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public void Configure(SerializableCharacterAbilityBarData data)
+        public void UpdateAbilityBars(SerializableCharacterAbilityBarData data)
         {
             foreach(var combatStyle in CombatStyles.CoreCombatStyles)
             {
-                GetAbilityBar[combatStyle] = data?.CreateAbilityBar(combatStyle, cc);
+                if (!GetAbilityBar.TryGetValue(combatStyle, out var bar) || bar == null || !bar.Configured)
+                {
+                    var newBar = data?.CreateAbilityBar(combatStyle, cc);
+                    GetAbilityBar[combatStyle] = data?.CreateAbilityBar(combatStyle, cc);
+                    newBar.Configure();
+                }
+                else
+                {
+                    var items = data?.CreateAbilityBarItems(combatStyle);
+                    GetAbilityBar[combatStyle].MatchItems(items);
+                }
             }
         }
 
