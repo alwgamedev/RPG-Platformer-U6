@@ -9,9 +9,7 @@ namespace RPGPlatformer.Movement
         [SerializeField] float runSpeed = 3;
         [SerializeField] float walkSpeed = 0.8f;
         [SerializeField] int maxNumJumps = 2;
-        [SerializeField] float jumpForce = 375;
-        //[SerializeField] Vector2 defaultJumpForce = 300 * Vector2.up;
-        //[SerializeField] Vector2 doubleJumpForce = 500 * Vector2.up;
+        [SerializeField] float jumpForce = 400;
 
         protected int currentJumpNum = 0;
         protected float maxSpeed;
@@ -67,13 +65,7 @@ namespace RPGPlatformer.Movement
             {
                 return jumpForce * Vector2.up;
             }
-            return (0.25f * SpeedFraction() * jumpForce) * Vector2.right + (1.35f * jumpForce) * Vector2.up;
-            //Vector2 force = currentJumpNum > 0 ? doubleJumpForce : defaultJumpForce;
-            //Vector2 adjustedForce = new Vector2(SpeedFraction() * force.x, force.y);
-            //force = adjustedForce.normalized * force.magnitude;
-            //return force;
-            //jump farther forward when moving faster,
-            //but jump higher when still.
+            return (0.25f * SpeedFraction() * jumpForce) * Vector2.right + jumpForce * Vector2.up;
         }
 
         public void ResetJumpNum()

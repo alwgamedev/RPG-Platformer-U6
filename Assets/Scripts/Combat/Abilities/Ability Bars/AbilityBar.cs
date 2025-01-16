@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-//using UnityEngine;
 using RPGPlatformer.Core;
-using Unity.VisualScripting;
-//using UnityEditor.Playables;
-//using static UnityEditor.Progress;
+using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
@@ -16,87 +12,71 @@ namespace RPGPlatformer.Combat
         private bool subscribedToController;
 
         List<AbilityBarItem> abilityBarItems = new();
-        
-        //public Dictionary<int, AttackAbility> GetAbility = new();
-        //List<AttackAbility> abilities = new();
+        //Dictionary<AttackAbility, bool> isAbilityOnCooldown = new();
+        //Dictionary<AttackAbility, float> cooldownTimers = new();
 
-        public ICombatController Controller { get; private set; }
+        public ICombatController CombatController { get; private set; }
         public bool Configured { get; private set; }
         public List<AbilityBarItem> AbilityBarItems => abilityBarItems;
-        //public List<AttackAbility> Abilities => abilities;
-        public Dictionary<AttackAbility, bool> CooldownTracker { get; private set; } = new();
+        public Dictionary<AttackAbility, bool> IsAbilityOnCooldown { get; private set; } = new();
         public Dictionary<AttackAbility, float> CooldownTimers { get; private set; } = new();
 
-        public AbilityBar()
-        {
-            abilityBarItems = new();
-        }
+        public AbilityBar() { }
 
         public AbilityBar(ICombatController controller, List<AbilityBarItem> abilityBarItems)
         {
-            Controller = controller;
+            CombatController = controller;
             this.abilityBarItems = abilityBarItems ?? new();
-                /*?.GroupBy(y => y.Ability).Select(z => z.First()).ToList()*/
-            //Abilities = new();
-            //foreach (var item in AbilityBarItems)
-            //{
-            //    if(item.Ability != null)
-            //    {
-            //        Abilities.Add(item.Ability);
-            //    }
-            //}
         }
 
         public AttackAbility GetAbility(int index)
         {
             if(abilityBarItems == null || index < 0 || index >= abilityBarItems.Count) return null;
-            return abilityBarItems[index]?.Ability;//Abilities[index];
+            return abilityBarItems[index]?.Ability;
         }
 
         public AttackAbility GetAutoCastAbility()
         {
-            return abilityBarItems?.FirstOrDefault(x => x?.Ability != null && x.IncludeInAutoCastCycle 
-                && !CooldownTracker[x.Ability])?.Ability;
-            //try
-            //{
-            //    return AbilityBarItems.FirstOrDefault(
-            //        x => x.IncludeInAutoCastCycle && !CooldownTracker[x.Ability]).Ability;
-            //}
-            //catch
-            //{
-            //    return null;
-            //}
+            foreach (var item in abilityBarItems)
+            {
+                if (item?.Ability == null) continue;
+                if (item.IncludeInAutoCastCycle && !IsAbilityOnCooldown[item.Ability])
+                {
+                    return item.Ability;
+                }
+            }
+            return null;
         }
 
         public bool AbilityValid(AttackAbility ability)
         {
-            return ability != null && CooldownTracker.ContainsKey(ability);
+            foreach (var entry in IsAbilityOnCooldown)
+            {
+                if (entry.Key == ability)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
 
-        public bool OnCooldown(AttackAbility ability)
+        public bool IsOnCooldown(AttackAbility ability)
         {
-            return !CooldownTracker.TryGetValue(ability, out bool value) || value;
+            foreach (var entry in IsAbilityOnCooldown)
+            {
+                if (entry.Key == ability)
+                {
+                    return entry.Value;
+                }
+            }
+            return true;
         }
-
-        //public bool OnCooldown(int index)
-        //{
-        //    if (abilityBarItems[index]?.Ability == null) return true;
-        //    return OnCooldown(abilityBarItems[index].Ability);
-        //    //try
-        //    //{
-        //    //    return OnCooldown(Abilities[index]);
-        //    //}
-        //    //catch (IndexOutOfRangeException)
-        //    //{
-        //    //    return true;
-        //    //}
-        //}
 
         public async void StartCooldown(AttackAbility ability)
         {
             if (!AbilityValid(ability)) return;
-            CooldownTracker[ability] = true;
+            IsAbilityOnCooldown[ability] = true;
             CooldownTimers[ability] = ability.Cooldown;
             while (CooldownTimers[ability] > 0)
             {
@@ -115,7 +95,7 @@ namespace RPGPlatformer.Combat
         public void EndCooldown(AttackAbility ability)
         {
             if (!AbilityValid(ability)) return;
-            CooldownTracker[ability] = false;
+            IsAbilityOnCooldown[ability] = false;
             CooldownTimers[ability] = 0;
         }
 
@@ -126,7 +106,7 @@ namespace RPGPlatformer.Combat
                 var ability = item?.Ability;
                 if (ability != null)
                 {
-                    CooldownTracker[ability] = false;
+                    IsAbilityOnCooldown[ability] = false;
                     CooldownTimers[ability] = ability.Cooldown;
                 }
             }
@@ -136,28 +116,25 @@ namespace RPGPlatformer.Combat
         //or maybe at the END of the list, because you want to use your "good binds" for the non-auto cast abilities
         public void Configure()
         {
-            //Debug.Log("Number of ability bar items provided: " + abilityBarItems.Count);
-            foreach (var item in AbilityBarItems)
+            foreach (var item in abilityBarItems)
             {
                 var ability = item?.Ability;
                 if (ability == null) continue;
 
-                //abilities.Add(ability);
-                CooldownTracker.Add(ability, false);
-                CooldownTimers.Add(ability, 0);
+                IsAbilityOnCooldown[ability] = false;
+                CooldownTimers[ability] = 0;
             }
-            if (!subscribedToController && Controller != null)
+            if (!subscribedToController && CombatController != null)
             {
-                Controller.OnCooldownStarted += StartCooldown;
+                CombatController.OnCooldownStarted += StartCooldown;
                 subscribedToController = true;
             }
+
             Configured = true;
         }
 
         public void MatchItems(IEnumerable<AbilityBarItem> items)
         {
-            //List<AttackAbility> deletedAbilities = abilityBarItems?.Select(x => x?.Ability).ToList() ?? new(); 
-
             abilityBarItems = items.ToList();
 
             foreach (var item in abilityBarItems)
@@ -165,26 +142,15 @@ namespace RPGPlatformer.Combat
                 var ability = item?.Ability;
                 if (item?.Ability == null) continue;
 
-                //deletedAbilities.Remove(ability);
-
-                if (!CooldownTracker.ContainsKey(ability))
+                if (!IsAbilityOnCooldown.ContainsKey(ability))
                 {
-                    CooldownTracker[ability] = false;
+                    IsAbilityOnCooldown[ability] = false;
                     CooldownTimers[ability] = 0;
                 }
             }
 
             //Keep the old abilities in the cooldown tracker so that you can't reset your cooldown timer
             //exploitatively by removing and adding back the ability on the ability bar!
-
-            //foreach (var ability in deletedAbilities)
-            //{
-            //    if (ability != null)
-            //    {
-            //        CooldownTracker.Remove(ability);
-            //        CooldownTimers.Remove(ability);
-            //    }
-            //}
         }
     }
 }

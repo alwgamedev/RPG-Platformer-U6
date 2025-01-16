@@ -67,7 +67,7 @@ namespace RPGPlatformer.Combat
         public event Action OnDeath;
         public event Action OnRevive;
         public event Action<float> HealthChangeEffected;
-            //^note parameter represents damage (so positive is damage taken, and negative is health gained)
+            //^parameter represents damage (so positive is damage taken, and negative is health gained)
 
 
         protected virtual void Awake()
@@ -133,10 +133,10 @@ namespace RPGPlatformer.Combat
             {
                 abilityBarData = SerializableCharacterAbilityBarData.DefaultAbilityBarData();
             }
-            HandleNewAbilityBarSettings(abilityBarData);
+            UpdateAbilityBars(abilityBarData);
         }
 
-        protected virtual void HandleNewAbilityBarSettings(SerializableCharacterAbilityBarData data)
+        protected virtual void UpdateAbilityBars(SerializableCharacterAbilityBarData data)
         {
             abilityBarManager.UpdateAbilityBars(data);
             UpdateEquippedAbilityBar();
@@ -144,12 +144,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void UpdateEquippedAbilityBar()
         {
-            abilityBarManager.EquipAbilityBar(combatant.EquippedWeapon?.CombatStyle);
-            //if (CurrentAbilityBar != null && !CurrentAbilityBar.Configured)
-            //{
-            //    CurrentAbilityBar.Configure();
-            //}
-
+            abilityBarManager.EquipAbilityBar(combatant.CurrentCombatStyle);
             AbilityBarResetEvent?.Invoke();
         }
 
@@ -171,7 +166,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual bool CanExecute(AttackAbility ability)
         {
-            return !CurrentAbilityBar.OnCooldown(ability) 
+            return !CurrentAbilityBar.IsOnCooldown(ability) 
                 && (!ability.ObeyGCD || !GlobalCooldown)
                 && (combatant.EquippedWeapon?.CombatStyle == ability.CombatStyle || ability.CombatStyle == CombatStyle.Any);
         }
@@ -185,7 +180,7 @@ namespace RPGPlatformer.Combat
                 CancelAbilityInProgress(false);
                 ability?.Execute(this);
             }
-            else if(!CurrentAbilityBar.OnCooldown(ability))
+            else if(!CurrentAbilityBar.IsOnCooldown(ability))
             {
                 queuedAbility = ability;
             }

@@ -38,7 +38,7 @@ namespace RPGPlatformer.Movement
             OnUpdate = HandleMoveInput;
         }
 
-        protected virtual void Update()
+        protected virtual void FixedUpdate()
         {
             OnUpdate?.Invoke();
         }

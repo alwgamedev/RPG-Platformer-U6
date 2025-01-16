@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
     public class CharacterAbilityBarManager
     {
         ICombatController cc;
-        bool configured;
 
         protected AbilityBar currentAbilityBar;
         protected Dictionary<CombatStyle, AbilityBar> GetAbilityBar = new()
@@ -22,7 +21,6 @@ namespace RPGPlatformer.Combat
         public CharacterAbilityBarManager(ICombatController cc)
         {
             this.cc = cc;
-            //RebuildDictionary();
         }
 
         public void EquipAbilityBar(CombatStyle? combatStyle)
@@ -44,8 +42,8 @@ namespace RPGPlatformer.Combat
                 if (!GetAbilityBar.TryGetValue(combatStyle, out var bar) || bar == null || !bar.Configured)
                 {
                     var newBar = data?.CreateAbilityBar(combatStyle, cc);
-                    GetAbilityBar[combatStyle] = data?.CreateAbilityBar(combatStyle, cc);
-                    newBar.Configure();
+                    GetAbilityBar[combatStyle] = newBar;
+                    newBar?.Configure();
                 }
                 else
                 {
@@ -54,15 +52,5 @@ namespace RPGPlatformer.Combat
                 }
             }
         }
-
-        //private void RebuildDictionary()
-        //{
-        //    GetAbilityBar.Clear();
-
-        //    GetAbilityBar.Add(CombatStyle.Unarmed, null);
-        //    GetAbilityBar.Add(CombatStyle.Melee, null);
-        //    GetAbilityBar.Add(CombatStyle.Mage, null);
-        //    GetAbilityBar.Add(CombatStyle.Ranged, null);
-        //}
     }
 }
