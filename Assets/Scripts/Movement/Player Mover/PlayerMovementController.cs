@@ -52,8 +52,6 @@ namespace RPGPlatformer.Movement
                 if (inputDisabled) return; 
                 mover.Jump(); 
             };
-
-            //SettingsManager.OnIAMConfigure -= OnIAMConfigure;
         }
 
         private void ComputeMoveInput()
@@ -67,7 +65,7 @@ namespace RPGPlatformer.Movement
             {
                 val += 1;
             }
-            moveInput = val;
+            MoveInput = val;
         }
 
         public void Pause()
@@ -90,8 +88,10 @@ namespace RPGPlatformer.Movement
             inputDisabled = false;
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             SettingsManager.OnIAMConfigure -= OnIAMConfigure;
         }
     }

@@ -18,19 +18,19 @@ namespace RPGPlatformer.AIControl
         {
             base.Configure();
 
-            StateGraph.pursuit.OnEntry += OnPursuitEntry;
-            StateGraph.pursuit.OnExit += OnPursuitExit;
+            //StateGraph.pursuit.OnEntry += OnPursuitEntry;
+            //StateGraph.pursuit.OnExit += OnPursuitExit;
         }
 
-        protected virtual void OnPursuitEntry()
-        {
-            driver.movementController.SetRunning(true);
-        }
+        //protected virtual void OnPursuitEntry()
+        //{
+        //    driver.movementController.SetRunning(true);
+        //}
 
-        protected virtual void OnPursuitExit()
-        {
-            driver.movementController.SetRunning(false);
-            driver.movementController.moveInput = 0;
-        }
+        //protected virtual void OnPursuitExit()
+        //{
+        //    driver.movementController.SetRunning(false);
+        //    driver.movementController.MoveInput = 0;
+        //}
     }
 }

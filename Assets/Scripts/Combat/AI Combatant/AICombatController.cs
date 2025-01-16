@@ -30,6 +30,7 @@ namespace RPGPlatformer.Combat
 
         public void StartAttacking()
         {
+            FireOneShot();
             CombatManager.OnWeaponTick += FireOneShot;
             combatant.Attack();
         }

@@ -51,5 +51,10 @@ namespace RPGPlatformer.Movement
         {
             animationControl.animator.SetTrigger("land");
         }
+
+        public void AnimateWallCling(bool val)
+        {
+            animationControl.animator.SetBool("wallCling", val);
+        }
     }
 }

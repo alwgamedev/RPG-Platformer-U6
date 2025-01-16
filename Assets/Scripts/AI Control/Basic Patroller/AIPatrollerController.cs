@@ -127,7 +127,8 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void OnPursuitExit()
         {
-            patroller.movementController.moveInput = 0;
+            patroller.movementController.SetRunning(false);
+            patroller.movementController.MoveInput = 0;
         }
 
         protected virtual void OnAttackEntry()

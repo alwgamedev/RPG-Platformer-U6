@@ -64,7 +64,7 @@ namespace RPGPlatformer.AIControl
             }
             else
             {
-                movementController.moveInput = target.Transform.position.x - transform.position.x;
+                movementController.MoveInput = target.Transform.position.x - transform.position.x;
             }
         }
 

@@ -10,16 +10,25 @@ namespace RPGPlatformer.Movement
     {
         protected AdvancedMover mover;
         protected AdvancedMovementStateManager movementManager;
-
-        public float moveInput = 0;
-
         protected Action<float> CurrentMoveAction;
-        protected Action OnUpdate;
+        protected Action OnFixedUpdate;
+        protected Action OnMoveInputChanged;
 
-        public bool SystemActive { get; set; }
+        private float moveInput = 0;//even child classes have to set it through the property!
+
         public Rigidbody2D Rigidbody => mover.MyRigidbody;
         public HorizontalOrientation CurrentOrientation => mover.CurrentOrientation;
         public IMover Mover => mover;
+        public float MoveInput
+        {
+            get => moveInput;
+            set
+            {
+                moveInput = value;
+                OnMoveInputChanged?.Invoke();
+            }
+        }
+
         public bool Running => mover.Running;
 
         protected virtual void Awake()
@@ -27,6 +36,8 @@ namespace RPGPlatformer.Movement
             mover = GetComponent<AdvancedMover>();
             movementManager = new(mover, GetComponent<AnimationControl>());
             movementManager.Configure();
+
+            OnFixedUpdate = HandleMoveInput;
         }
 
         protected virtual void OnEnable()
@@ -35,12 +46,16 @@ namespace RPGPlatformer.Movement
             movementManager.StateMachine.stateGraph.jumping.OnEntry += OnJumpingEntry;
             movementManager.StateMachine.stateGraph.airborne.OnEntry += OnAirborneEntry;
 
-            OnUpdate = HandleMoveInput;
+            if (mover.CanWallCling)
+            {
+                OnMoveInputChanged += HandleWallCling;
+                mover.AdjacentWallChanged += HandleWallCling;
+            }
         }
 
         protected virtual void FixedUpdate()
         {
-            OnUpdate?.Invoke();
+            OnFixedUpdate?.Invoke();
         }
 
         protected virtual void HandleMoveInput()
@@ -49,7 +64,19 @@ namespace RPGPlatformer.Movement
             {
                 CurrentMoveAction?.Invoke(moveInput);
             }
+
             movementManager.AnimateMovement(mover.SpeedFraction());
+        }
+
+        protected virtual void HandleWallCling()
+        {
+            if (moveInput != 0 && mover.AdjacentWall.HasValue
+                && Mathf.Sign(moveInput) == (int)mover.AdjacentWall.Value)
+            {
+                movementManager.AnimateWallCling(true);
+                return;
+            }
+            movementManager.AnimateWallCling(false);
         }
 
         public void SetRunning(bool val)
@@ -72,6 +99,7 @@ namespace RPGPlatformer.Movement
             {
                 SetOrientation(input);
                 mover.MoveAirborne(mover.CurrentOrientation);
+                movementManager.AnimateWallCling(false);
             };
         }
 
@@ -102,9 +130,21 @@ namespace RPGPlatformer.Movement
             SetOrientation(Mathf.Sign(target.x - transform.position.x));
         }
 
+        //public void CheckIfClingingToWall()
+        //{
+        //    if (mover.BeginWallCling(moveInput))
+        //    {
+        //        movementManager.AnimateWallCling(true);
+        //    }
+        //    else if (mover.EndWallCling(moveInput))
+        //    {
+        //        movementManager.AnimateWallCling(false);
+        //    }
+        //}
+
         public virtual void OnDeath()
         {
-            OnUpdate = null;
+            OnFixedUpdate = null;
             moveInput = 0;
             mover.OnDeath();
         }
@@ -112,11 +152,17 @@ namespace RPGPlatformer.Movement
         public virtual void OnRevival()
         {
             mover.OnRevival();
-            OnUpdate = () =>
+            OnFixedUpdate = () =>
             {
                 HandleMoveInput();
                 movementManager.AnimateMovement(mover.SpeedFraction());
             };
+        }
+
+        protected virtual void OnDestroy()
+        {
+            OnFixedUpdate = null;
+            OnMoveInputChanged = null;
         }
     }
 }

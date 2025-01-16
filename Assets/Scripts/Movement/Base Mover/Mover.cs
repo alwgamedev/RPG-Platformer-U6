@@ -12,15 +12,15 @@ namespace RPGPlatformer.Movement
 
     public class Mover : StateDriver, IMover
     {
-        [SerializeField] Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;//forces applied to rb upon character death
+        [SerializeField] Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
         [SerializeField] float deathTorque = 10;
 
         protected Collider2D myCollider;
         protected Rigidbody2D myRigidbody;
         protected float myHeight;
         protected float myWidth;
-        protected Vector3 localColliderRightCenter;//offset between transform.position and front center of collider
-        protected Vector3 localColliderLeftCenter;
+        protected Vector3 localColliderCenterRight;
+        protected Vector3 localColliderCenterLeft;
         protected bool jumping;
         protected bool airborne;
         protected bool verifyingJump;
@@ -31,8 +31,10 @@ namespace RPGPlatformer.Movement
 
         public Transform Transform => transform;
         public Rigidbody2D MyRigidbody => myRigidbody;
-        public Vector3 ColliderFront => transform.position + localColliderRightCenter;
-        public Vector3 ColliderBack => transform.position + localColliderLeftCenter;
+        public float Width => myWidth;
+        public float Height => myHeight;
+        public Vector3 ColliderCenterRight => transform.position + localColliderCenterRight;
+        public Vector3 ColliderCenterLeft => transform.position + localColliderCenterLeft;
 
 
         public HorizontalOrientation CurrentOrientation { get; protected set; }
@@ -51,26 +53,30 @@ namespace RPGPlatformer.Movement
 
             groundednessTolerance = 0.7f * myHeight;
 
-            localColliderRightCenter = myCollider.bounds.center + (myWidth / 4) * Vector3.right - transform.position;
-            localColliderLeftCenter = myCollider.bounds.center - (myWidth / 4) * Vector3.right - transform.position;
-
-            //PlayDelayedDeath = async () => await DelayedDeath();
+            localColliderCenterRight = myCollider.bounds.center + (myWidth / 4) * Vector3.right - transform.position;
+            localColliderCenterLeft = myCollider.bounds.center - (myWidth / 4) * Vector3.right - transform.position;
         }
 
-        private void Update()
+        protected virtual void Update()
         {
-            rightHit = Physics2D.Raycast(ColliderFront, -transform.up, groundednessTolerance, 
+            rightHit = Physics2D.Raycast(ColliderCenterRight, -transform.up, groundednessTolerance, 
                 LayerMask.GetMask("Ground"));
-            leftHit = Physics2D.Raycast(ColliderBack, -transform.up, groundednessTolerance, 
+            leftHit = Physics2D.Raycast(ColliderCenterLeft, -transform.up, groundednessTolerance, 
                 LayerMask.GetMask("Ground"));
-            if(rightHit || leftHit)
+
+            UpdateState();
+        }
+
+        protected virtual void UpdateState()
+        {
+            if (rightHit || leftHit)
             {
-                if((jumping && !verifyingJump) || (airborne && !verifyingAirborne))
+                if ((jumping && !verifyingJump) || (airborne && !verifyingAirborne))
                 {
                     TriggerLanding();
                 }
             }
-            else if(!jumping && !airborne)
+            else if (!jumping && !airborne)
             {
                 TriggerAirborne();
             }
@@ -103,11 +109,12 @@ namespace RPGPlatformer.Movement
             {
                 return;
             }
-            float delta = 0;
+            float delta;
             Vector2 velocity = myRigidbody.linearVelocity;
             if (clampXOnly)
             {
-                delta = ClampedDeltaV(acceleration * Time.deltaTime, maxSpeed, new Vector2(velocity.x, 0), new Vector2(Mathf.Sign(direction.x), 0));
+                delta = ClampedDeltaV(acceleration * Time.deltaTime, maxSpeed, new (velocity.x, 0), 
+                    new (Mathf.Sign(direction.x), 0));
                 //option to only clamp horizontal velocity (e.g. when airborne)
             }
             else
