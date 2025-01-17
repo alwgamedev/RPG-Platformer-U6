@@ -168,7 +168,8 @@ namespace RPGPlatformer.Combat
         {
             return !CurrentAbilityBar.IsOnCooldown(ability) 
                 && (!ability.ObeyGCD || !GlobalCooldown)
-                && (combatant.EquippedWeapon?.CombatStyle == ability.CombatStyle || ability.CombatStyle == CombatStyle.Any);
+                && (combatant.EquippedWeapon?.CombatStyle == ability.CombatStyle 
+                || ability.CombatStyle == CombatStyle.Any);
         }
 
         protected virtual void ExecuteAbility(AttackAbility ability)

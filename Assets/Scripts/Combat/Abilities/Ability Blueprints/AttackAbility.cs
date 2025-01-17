@@ -24,6 +24,7 @@ namespace RPGPlatformer.Combat
         public string AnimationState { get; init; }//can leave null if no animation (will just get a warning in the editor)
         public Func<PoolableEffect> GetCombatantExecuteEffect { get; init; }
         public Func<PoolableEffect> GetHitEffect { get; init; }
+        public virtual bool IsAsyncAbility => false;//for convenience
         public bool ObeyGCD { get; init; }
         public bool UseActiveAimingWhilePoweringUp { get; init; }
         public bool HoldAimOnRelease { get; init; }
@@ -50,7 +51,7 @@ namespace RPGPlatformer.Combat
 
         public virtual void Execute(ICombatController controller)
         {
-            if (!CanExecuteAbility(controller)) return;
+            if (!CanBeExecuted(controller)) return;
             controller.Combatant.Attack();
             OnExecute?.Invoke(controller);
             controller.OnAbilityExecute(this);
@@ -81,7 +82,7 @@ namespace RPGPlatformer.Combat
             return combatant.Wrath.FractionOfMax + WrathFractionChange >= 0;
         }
 
-        public bool CanExecuteAbility(ICombatController controller)
+        public bool CanBeExecuted(ICombatController controller)
         {
             if (!CombatantHasSufficientStamina(controller.Combatant))
             {

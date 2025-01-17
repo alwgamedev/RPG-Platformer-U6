@@ -28,7 +28,7 @@ namespace RPGPlatformer.UI
         public virtual bool AllowReplacementIfCantSwap => true;
 
         public event Action OnDragResolved;
-        //public event Action OnItemChanged;
+        public event Action OnItemChanged;//only used when item has been changed via RightClickMenu
 
         protected virtual void Awake()
         {
@@ -92,6 +92,23 @@ namespace RPGPlatformer.UI
             AbilityBarItem = null;
         }
 
+
+        //EDITING ITEM
+
+        public void RemoveItemWithNotification()
+        {
+            RemoveItem();
+            OnItemChanged?.Invoke();
+        }
+
+        public void ToggleAbilityIncludedInAutoCastCycle()
+        {
+            if (AbilityBarItem?.Ability == null) return;
+
+            AbilityBarItem.SetIncludeInAutoCastCycle(!AbilityBarItem.IncludeInAutoCastCycle);
+            DisplayAutoCastCheckmark(AbilityBarItem.IncludeInAutoCastCycle);
+            OnItemChanged?.Invoke();
+        }
 
         //SET-UP
 
@@ -233,6 +250,7 @@ namespace RPGPlatformer.UI
         {
             SettingsManager.OnIAMConfigure -= DisplayKeybind;
             OnDragResolved = null;
+            OnItemChanged = null;
         }
     }
 }

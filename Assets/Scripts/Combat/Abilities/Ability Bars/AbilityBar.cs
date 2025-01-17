@@ -39,10 +39,14 @@ namespace RPGPlatformer.Combat
         {
             foreach (var item in abilityBarItems)
             {
-                if (item?.Ability == null) continue;
-                if (item.IncludeInAutoCastCycle && !IsAbilityOnCooldown[item.Ability])
+                var ability = item?.Ability;
+                if (ability == null) continue;
+
+                if (item.IncludeInAutoCastCycle && !IsAbilityOnCooldown[ability]
+                    && ability.CombatantHasSufficientStamina(CombatController.Combatant)
+                    && ability.CombatantHasSufficientWrath(CombatController.Combatant))
                 {
-                    return item.Ability;
+                    return ability;
                 }
             }
             return null;

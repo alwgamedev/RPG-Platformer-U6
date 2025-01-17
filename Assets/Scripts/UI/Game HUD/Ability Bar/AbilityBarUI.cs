@@ -63,6 +63,7 @@ namespace RPGPlatformer.UI
                 var slot = Instantiate(slotPrefab, layoutGroup.transform);
                 slot.Configure(i, null);
                 slot.OnDragResolved += UpdateAbilityBar;
+                slot.OnItemChanged += UpdateAbilityBar;
                 slots[i] = slot;
             }
 
