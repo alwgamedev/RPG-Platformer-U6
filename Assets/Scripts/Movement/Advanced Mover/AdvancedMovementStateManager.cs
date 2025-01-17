@@ -28,7 +28,7 @@ namespace RPGPlatformer.Movement
 
         public void AnimateMovement(float value)
         {
-            animationControl.animator.SetFloat("speed", value, 0.1f, Time.deltaTime);
+            animationControl.animator.SetFloat("horSpeedFraction", value, 0.1f, Time.deltaTime);
         }
 
         public void AnimateJumping()
@@ -56,5 +56,10 @@ namespace RPGPlatformer.Movement
         {
             animationControl.animator.SetBool("wallCling", val);
         }
+
+        //public void SetWallAngle(float angle)//angle between -60 and 60
+        //{
+        //    animationControl.animator.SetFloat("wallAngle", (angle + 60) / 120);
+        //}
     }
 }

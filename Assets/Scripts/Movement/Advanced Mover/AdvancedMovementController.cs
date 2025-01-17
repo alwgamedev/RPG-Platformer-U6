@@ -12,6 +12,7 @@ namespace RPGPlatformer.Movement
         protected AdvancedMovementStateManager movementManager;
         protected Action<float> CurrentMoveAction;
         protected Action OnFixedUpdate;
+        protected Action OnUpdate;
         protected Action OnMoveInputChanged;
 
         private float moveInput = 0;//even child classes have to set it through the property!
@@ -37,7 +38,7 @@ namespace RPGPlatformer.Movement
             movementManager = new(mover, GetComponent<AnimationControl>());
             movementManager.Configure();
 
-            OnFixedUpdate = HandleMoveInput;
+            OnFixedUpdate += HandleMoveInput;
         }
 
         protected virtual void OnEnable()
@@ -46,11 +47,20 @@ namespace RPGPlatformer.Movement
             movementManager.StateMachine.stateGraph.jumping.OnEntry += OnJumpingEntry;
             movementManager.StateMachine.stateGraph.airborne.OnEntry += OnAirborneEntry;
 
+            OnUpdate += AnimateMovement;
+
             if (mover.CanWallCling)
             {
                 OnMoveInputChanged += HandleWallCling;
                 mover.AdjacentWallChanged += HandleWallCling;
+                //OnUpdate += UpdateWallAngle;
             }
+        }
+
+        protected virtual void Update()
+        {
+            OnUpdate?.Invoke();
+            //movementManager.AnimateMovement(mover.SpeedFraction());
         }
 
         protected virtual void FixedUpdate()
@@ -64,20 +74,28 @@ namespace RPGPlatformer.Movement
             {
                 CurrentMoveAction?.Invoke(moveInput);
             }
+        }
 
+        protected virtual void AnimateMovement()
+        {
             movementManager.AnimateMovement(mover.SpeedFraction());
         }
 
         protected virtual void HandleWallCling()
         {
-            if (moveInput != 0 && mover.AdjacentWall.HasValue
-                && Mathf.Sign(moveInput) == (int)mover.AdjacentWall.Value)
+            if (moveInput != 0 && mover.AdjacentWallSide.HasValue
+                && Mathf.Sign(moveInput) == (int)mover.AdjacentWallSide.Value)
             {
                 movementManager.AnimateWallCling(true);
                 return;
             }
             movementManager.AnimateWallCling(false);
         }
+
+        //protected virtual void UpdateWallAngle()
+        //{
+        //    movementManager.SetWallAngle(mover.AdjacentWallAngle);
+        //}
 
         public void SetRunning(bool val)
         {
@@ -161,6 +179,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void OnDestroy()
         {
+            OnUpdate = null;
             OnFixedUpdate = null;
             OnMoveInputChanged = null;
         }

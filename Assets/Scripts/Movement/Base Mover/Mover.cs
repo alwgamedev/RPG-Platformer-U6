@@ -26,8 +26,8 @@ namespace RPGPlatformer.Movement
         protected bool verifyingJump;
         protected bool verifyingAirborne;
         protected float groundednessTolerance;
-        protected RaycastHit2D rightHit;
-        protected RaycastHit2D leftHit;
+        protected RaycastHit2D rightGroundHit;
+        protected RaycastHit2D leftGroundHit;
 
         public Transform Transform => transform;
         public Rigidbody2D MyRigidbody => myRigidbody;
@@ -59,9 +59,9 @@ namespace RPGPlatformer.Movement
 
         protected virtual void Update()
         {
-            rightHit = Physics2D.Raycast(ColliderCenterRight, -transform.up, groundednessTolerance, 
+            rightGroundHit = Physics2D.Raycast(ColliderCenterRight, -transform.up, groundednessTolerance, 
                 LayerMask.GetMask("Ground"));
-            leftHit = Physics2D.Raycast(ColliderCenterLeft, -transform.up, groundednessTolerance, 
+            leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, -transform.up, groundednessTolerance, 
                 LayerMask.GetMask("Ground"));
 
             UpdateState();
@@ -69,7 +69,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void UpdateState()
         {
-            if (rightHit || leftHit)
+            if (rightGroundHit || leftGroundHit)
             {
                 if ((jumping && !verifyingJump) || (airborne && !verifyingAirborne))
                 {
@@ -180,9 +180,9 @@ namespace RPGPlatformer.Movement
 
         public Vector2 GroundDirectionVector()
         {
-            if (rightHit && leftHit)
+            if (rightGroundHit && leftGroundHit)
             {
-                return (int)CurrentOrientation * (rightHit.point - leftHit.point).normalized;
+                return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
             }
             return (Vector2)transform.right * (int)CurrentOrientation;
         }

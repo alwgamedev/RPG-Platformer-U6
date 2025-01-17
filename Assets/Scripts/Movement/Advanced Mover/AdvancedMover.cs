@@ -16,8 +16,8 @@ namespace RPGPlatformer.Movement
         protected int currentJumpNum = 0;
         protected float maxSpeed;
         protected bool running;
-        protected HorizontalOrientation? adjacentWall;
-        protected bool isAgainstWall;
+        //protected float adjacentWallAngle;
+        protected HorizontalOrientation? adjacentWallSide;
 
         public bool CanWallCling => canWallCling;
         public float MaxSpeed => maxSpeed;
@@ -32,8 +32,8 @@ namespace RPGPlatformer.Movement
                 maxSpeed = running ? runSpeed : walkSpeed;
             }
         }
-
-        public HorizontalOrientation? AdjacentWall => adjacentWall;
+        //public float AdjacentWallAngle => adjacentWallAngle;
+        public HorizontalOrientation? AdjacentWallSide => adjacentWallSide;
 
         public event Action AdjacentWallChanged;
 
@@ -46,19 +46,16 @@ namespace RPGPlatformer.Movement
 
         protected override void UpdateState()
         {
-            if (canWallCling)
-            {
-                CheckIfIsAgainstWall();
-            }
+            CheckIfIsAgainstWall();
 
-            if (rightHit || leftHit || adjacentWall.HasValue)
+            if (rightGroundHit || leftGroundHit || adjacentWallSide.HasValue)
             {
                 if ((jumping && !verifyingJump) || (airborne && !verifyingAirborne))
                 {
                     TriggerLanding();
                 }
             }
-            else if (!jumping && !airborne && !adjacentWall.HasValue)
+            else if (!jumping && !airborne && !adjacentWallSide.HasValue)
             {
                 TriggerAirborne();
             }
@@ -91,7 +88,7 @@ namespace RPGPlatformer.Movement
 
         private bool CanJump()
         {
-            return currentJumpNum < maxNumJumps || adjacentWall.HasValue;
+            return currentJumpNum < maxNumJumps || adjacentWallSide.HasValue;
         }
 
         private Vector2 JumpForce()
@@ -115,42 +112,89 @@ namespace RPGPlatformer.Movement
             Running = !Running;
         }
 
-        private void CheckIfIsAgainstWall()
+        public void CheckIfIsAgainstWall()
         {
+            if (!canWallCling) return;
+
             if(verifyingJump)
             {
-                adjacentWall = null;
+                adjacentWallSide = null;
                 return;
             }
 
-            var oldVal = adjacentWall;
-            adjacentWall = GetAdjacentWall();
-            isAgainstWall = adjacentWall.HasValue;
+            var oldVal = adjacentWallSide;
+            UpdateAdjacentWall();
 
-            if(oldVal != adjacentWall)
+            if(oldVal != adjacentWallSide)
             {
                 AdjacentWallChanged?.Invoke();
             }
         }
 
-        public HorizontalOrientation? GetAdjacentWall()
+        public void UpdateAdjacentWall()
         {
-            var rightHit = Physics2D.Raycast(transform.position, Vector3.right, 
-                5 * myWidth, LayerMask.GetMask("Ground"));
-            var leftHit = Physics2D.Raycast(transform.position, - Vector3.right, 
-                5 * myWidth,
+            var rightHit = Physics2D.Raycast(ColliderCenterLeft, Vector3.right, 
+                3 * myWidth, LayerMask.GetMask("Ground"));
+            var leftHit = Physics2D.Raycast(ColliderCenterRight, - Vector3.right, 
+                3 * myWidth,
                 LayerMask.GetMask("Ground"));
 
             if (rightHit && (!leftHit || leftHit.distance > rightHit.distance))
             {
-                return HorizontalOrientation.right;
+                var rightHit1 = Physics2D.Raycast(ColliderCenterLeft + 0.4f * myHeight * Vector3.up, Vector3.right,
+                3 * myWidth, LayerMask.GetMask("Ground"));
+                if(!rightHit1)//both rightHit & rightHit1 must hit in order to register a wall,
+                    //otherwise you are considered to just be standing on a steep slope
+                {
+                    adjacentWallSide = null;
+                    return;
+                }
+
+                adjacentWallSide = HorizontalOrientation.right;
+                //UpdateWallAngle(rightHit);
+                return;
             }
-            if(leftHit && (!rightHit || rightHit.distance > leftHit.distance))
+            if (leftHit && (!rightHit || rightHit.distance > leftHit.distance))
             {
-                return HorizontalOrientation.left;
+                var leftHit1 = Physics2D.Raycast(ColliderCenterRight + 0.4f * myHeight * Vector3.up, - Vector3.right,
+                3 * myWidth, LayerMask.GetMask("Ground"));
+                if (!leftHit1)
+                {
+                    adjacentWallSide = null;
+                    return;
+                }
+                adjacentWallSide = HorizontalOrientation.left;
+                //UpdateWallAngle(leftHit);
+                return;
             }
-            return null;
+            //adjacentWallAngle = 0;
+            adjacentWallSide = null;
         }
+
+        //protected void UpdateWallAngle(RaycastHit2D wallHit)
+        //{
+        //    if (!adjacentWallSide.HasValue || !wallHit)
+        //    {
+        //        adjacentWallAngle = 0;
+        //        return;
+        //    }
+
+        //    int sideMult = (int)adjacentWallSide.Value;
+        //    Vector3 rayOrigin = sideMult > 0 ? ColliderCenterLeft : ColliderCenterRight;
+        //    rayOrigin += 0.1f * myHeight * Vector3.up;
+
+        //    var WallHit2 = Physics2D.Raycast(rayOrigin, sideMult * Vector3.right, LayerMask.GetMask("Ground"));
+        //    if (!WallHit2)
+        //    {
+        //        adjacentWallAngle = -60;
+        //        return;
+        //    }
+
+        //    var wallVector = wallHit.point - WallHit2.point;
+        //    float rawWallAngle = Mathf.Rad2Deg * Mathf.Atan2(wallVector.y, wallVector.x);
+        //    adjacentWallAngle = Mathf.Clamp(sideMult * (90 - rawWallAngle), -60, 60);
+        //    Debug.Log("clamped wall angle " + adjacentWallAngle);
+        //}
 
         protected override void OnDestroy()
         {
