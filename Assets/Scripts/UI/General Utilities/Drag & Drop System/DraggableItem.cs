@@ -17,8 +17,9 @@ namespace RPGPlatformer.UI
         IDragSource<T> source;
         Canvas parentCanvas;
         CanvasGroup canvasGroup;
+        bool canDrag = true;
         
-        public bool CanDrag { get; protected set; } = true;//mainly so that dragging gets cancelled when you pause
+        public bool CanDrag => canDrag && (source?.ItemCanBeDragged() ?? true);//mainly so that dragging gets cancelled when you pause
         public bool IsDragging { get; protected set; }
 
         private void Awake()
@@ -38,7 +39,7 @@ namespace RPGPlatformer.UI
 
         public void DisableDragging()
         {
-            CanDrag = false;
+            canDrag = false;
             if (IsDragging)
             {
                 CancelDrag();
@@ -47,7 +48,7 @@ namespace RPGPlatformer.UI
 
         public void ReenableDragging()
         {
-            CanDrag = true;
+            canDrag = true;
         }
 
         public void OnBeginDrag(PointerEventData eventData)

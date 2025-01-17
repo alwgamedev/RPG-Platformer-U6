@@ -21,7 +21,7 @@ namespace RPGPlatformer.UI
 
         protected int? abilityBarIndex = null;
         protected bool[] acceptedCombatStyles = new bool[Enum.GetValues(typeof(CombatStyle)).Length];
-        protected DraggableAbilityBarItem draggable;
+        //protected DraggableAbilityBarItem draggable;
 
         public AbilityBarItem AbilityBarItem { get; protected set; }
         public Transform DraggableParentTransform => draggableParentTransform;
@@ -33,7 +33,7 @@ namespace RPGPlatformer.UI
         protected virtual void Awake()
         {
             SettingsManager.OnIAMConfigure += DisplayKeybind;
-            draggable = GetComponentInChildren<DraggableAbilityBarItem>();
+            //draggable = GetComponentInChildren<DraggableAbilityBarItem>();
         }
 
 
@@ -51,6 +51,11 @@ namespace RPGPlatformer.UI
         public bool CanAcceptCombatStyle(CombatStyle combatStyle)
         {
             return acceptedCombatStyles[(int)combatStyle];
+        }
+
+        public bool ItemCanBeDragged()
+        {
+            return AbilityBarItem?.Ability != null;
         }
 
         public AbilityBarItem Contents()
@@ -73,17 +78,17 @@ namespace RPGPlatformer.UI
             StopAllCoroutines();
             AbilityBarItem = item;
 
-            if (draggable != null)
-            {
-                if (item?.Ability == null && draggable.CanDrag)
-                {
-                    draggable.DisableDragging();
-                }
-                else if (!draggable.CanDrag)
-                {
-                    draggable.ReenableDragging();
-                }
-            }
+            //if (draggable != null)
+            //{
+            //    if (item?.Ability == null && draggable.CanDrag)
+            //    {
+            //        draggable.DisableDragging();
+            //    }
+            //    else if (!draggable.CanDrag)
+            //    {
+            //        draggable.ReenableDragging();
+            //    }
+            //}
         }
 
         public void RemoveItem()
@@ -171,13 +176,22 @@ namespace RPGPlatformer.UI
 
         private void SetIcon(AttackAbility ability)
         {
+            if (ability == null)
+            {
+                abilityIcon.sprite = null;
+                abilityIcon.enabled = false;
+                return;
+            }
+            abilityIcon.enabled = true;
             SetIcon(GetIcon(ability));
+            abilityIcon.color = abilityIcon.sprite == null ? Color.blue : Color.white;
+            //^color TEMPORARY until we finish the ability icons
         }
 
         private void SetIcon(Sprite sprite)
         {
             abilityIcon.sprite = sprite;
-            abilityIcon.color = sprite == null ? Color.black : Color.white;
+            //abilityIcon.enabled = sprite != null;//color = sprite != null ? Color.white : Color.clear;
         }
 
         private void DisplayAutoCastCheckmark(bool val)

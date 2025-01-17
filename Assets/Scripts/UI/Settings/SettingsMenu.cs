@@ -7,8 +7,8 @@ namespace RPGPlatformer.UI
     public class SettingsMenu : TabMenu
     {
         [SerializeField] Button closeButton;
-        [SerializeField] Button saveTabButton;
-        [SerializeField] Button saveAllButton;
+        [SerializeField] AnimatedSaveButton saveTabButton;
+        [SerializeField] AnimatedSaveButton saveAllButton;
         //[SerializeField] Button openTabButton;
         [SerializeField] HidableUI popupPanel;
         [SerializeField] PopupWindow popupWindowPrefab;
@@ -40,8 +40,8 @@ namespace RPGPlatformer.UI
                 }
             }
 
-            saveTabButton.onClick.AddListener(SaveOpenTab);
-            saveAllButton.onClick.AddListener(SaveAllTabs);
+            saveTabButton.Button.onClick.AddListener(SaveOpenTab);
+            saveAllButton.Button.onClick.AddListener(SaveAllTabs);
 
             OnShow += ClosePopupPanel;
             OnShow += Redraw;
@@ -68,7 +68,7 @@ namespace RPGPlatformer.UI
             {
                 if(settingsTab.TrySaveTab(out string resultMessage))
                 {
-                    SpawnSaveSuccessPopup();
+                    saveTabButton.PlayEffect();
                 }
                 else
                 {
@@ -89,13 +89,13 @@ namespace RPGPlatformer.UI
                 }
             }
 
-            SpawnSaveSuccessPopup();
+            saveAllButton.PlayEffect();
         }
 
-        private void SpawnSaveSuccessPopup()
-        {
-            SpawnPopup("Success!", "Your settings have been saved.");
-        }
+        //private void SpawnSaveSuccessPopup()
+        //{
+        //    //SpawnPopup("Success!", "Your settings have been saved.");
+        //}
 
         private void SpawnSaveFailurePopup(string failureMessage)
         {

@@ -8,6 +8,7 @@ namespace RPGPlatformer.UI
         public Transform DraggableParentTransform { get; }
 
         public T Contents();
+        public bool ItemCanBeDragged();
         public void RemoveItem();
         public void DragComplete();
     }

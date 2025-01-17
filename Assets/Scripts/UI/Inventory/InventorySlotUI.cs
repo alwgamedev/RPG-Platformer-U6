@@ -40,6 +40,11 @@ namespace RPGPlatformer.UI
             return item?.ItemCopy().ToSlotData(quantity);
             //"return this" causes bigly issues
         }
+
+        public virtual bool ItemCanBeDragged()
+        {
+            return item != null;
+        }
         
         public InventoryItem Item()
         {
