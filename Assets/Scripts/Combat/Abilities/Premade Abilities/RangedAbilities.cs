@@ -64,6 +64,12 @@ namespace RPGPlatformer.Combat
 
         public static GrenadeLikeAbility Pierce = new()//basic
         {
+            Description = "Mow down your opponents with rapid bow fire.",
+            AbilityTags = new()
+            {
+                AbilityTag.ProjectileAbility,
+                AbilityTag.AutoCastable
+            },
             DelayedReleaseOfChannel = false,
             ObeyGCD = true,
             GetProjectile = () => (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Basic Arrow"),
@@ -72,12 +78,18 @@ namespace RPGPlatformer.Combat
             DisplayName = "Pierce",
             Cooldown = 0.48f,
             DamageMultiplier = 0.6f,
-            StaminaFractionChange = -0.01f,
+            StaminaFractionChange = -0.015f,
             WrathFractionChange = 0.05f
         };
 
         public static GrenadeLikeAbilityWithPowerUp PrecisionShot = new()//basic
         {
+            Description = "Draw back your bow and focus your aim to land an extra hard hit.",
+            AbilityTags = new()
+            {
+                AbilityTag.PowerUpAbility,
+                AbilityTag.ProjectileAbility
+            },
             CombatStyle = CombatStyle.Ranged,
             DisplayName = "Precision Shot",
             AnimationState = "Bow Shot",
@@ -93,6 +105,13 @@ namespace RPGPlatformer.Combat
 
         public static GrenadeLikeAbility FesteringWound = new()//basic bleed
         {
+            Description = "Someone snuck a rusty arrow into your quiver! It doesn't hit very hard, but" +
+            " it leaves a nasty, festering wound that will wear away at your opponent over time.",
+            AbilityTags = new()
+            {
+                AbilityTag.ProjectileAbility,
+                AbilityTag.Stun
+            },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Ranged,
             DisplayName = "Festering Wound",
@@ -110,6 +129,12 @@ namespace RPGPlatformer.Combat
 
         public static GrenadeLikeAbility Ensnare = new()//basic stun
         {
+            Description = "Briefly stun your target and regain stamina while they are immobilized.",
+            AbilityTags = new()
+            {
+                AbilityTag.ProjectileAbility,
+                AbilityTag.Stun
+            },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Ranged,
             DisplayName = "Ensnare",
@@ -125,6 +150,13 @@ namespace RPGPlatformer.Combat
 
         public static GrenadeLikeAbilityWithPowerUp Bombard = new()//threshold AoE
         {
+            Description = "Crash down on your opponents with an explosive arrow that deals heavy AoE damage.",
+            AbilityTags = new()
+            {
+                AbilityTag.AoeDamage,
+                AbilityTag.PowerUpAbility,
+                AbilityTag.ProjectileAbility
+            },
             CombatStyle = CombatStyle.Ranged,
             DisplayName = "Bombard",
             AnimationState = "Bow Shot",
@@ -142,6 +174,13 @@ namespace RPGPlatformer.Combat
 
         public static GrenadeLikeAbilityWithPowerUp MagicBullet = new()//threshold (multi-hit projectile)
         {
+            Description = "No one can explain how this arrow is able to pass through multiple enemies" +
+            " and still hit like a truck.",
+            AbilityTags = new()
+            {
+                AbilityTag.PowerUpAbility,
+                AbilityTag.ProjectileAbility
+            },
             CombatStyle = CombatStyle.Ranged,
             DisplayName = "Magic Bullet",
             AnimationState = "Bow Shot",
@@ -159,6 +198,13 @@ namespace RPGPlatformer.Combat
 
         public static GrenadeLikeAbilityWithPowerUp Ambush = new()//ultimate bleed
         {
+            Description = "Channel your accumulated wrath to fire an enchanted arrow that releases an" +
+            " ambush of enraged spirits on your target.",
+            AbilityTags = new()
+            {
+                AbilityTag.PowerUpAbility,
+                AbilityTag.ProjectileAbility
+            },
             CombatStyle = CombatStyle.Ranged,
             DisplayName = "Ambush",
             AnimationState = "Bow Shot",

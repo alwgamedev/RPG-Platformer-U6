@@ -32,7 +32,7 @@ namespace RPGPlatformer.UI
                 abilityTagsText.text += "<b>Tags:</b> ";
                 for (int i = 0; i < ability.AbilityTags.Count; i++)
                 {
-                    abilityTagsText.text += ability.AbilityTags[i].ToString().Replace('_', ' ');
+                    abilityTagsText.text += ability.AbilityTags[i];
                     if(i < ability.AbilityTags.Count - 1)
                     {
                         abilityTagsText.text += ", ";
@@ -75,13 +75,13 @@ namespace RPGPlatformer.UI
 
         public string FormattedStatChangeText(float fractionChange)//for wrath and stamina texts
         {
-            float percent = (Math.Sign(fractionChange) * (int)Math.Abs(fractionChange * 100));
+            float percent = fractionChange * 100;
             //silly but (int)(-0.01 * 100) was coming out as 0
             if(fractionChange >= 0)
             {
-                return $"<color=#{ColorUtility.ToHtmlStringRGB(plusStatColor)}>+{percent}%</color>";
+                return $"<color=#{ColorUtility.ToHtmlStringRGB(plusStatColor)}>+{percent:0.#}%</color>";
             }
-            return $"<color=#{ColorUtility.ToHtmlStringRGB(minusStatColor)}>{percent}%</color>";
+            return $"<color=#{ColorUtility.ToHtmlStringRGB(minusStatColor)}>{percent:0.#}%</color>";
             //to-do: the minus sign is not showing up correctly (even when use unicode symbol \u2212).
             //possibly the problem is fixed in Unity versions with LTS
         }

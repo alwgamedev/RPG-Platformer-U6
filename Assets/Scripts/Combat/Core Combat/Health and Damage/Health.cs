@@ -6,7 +6,9 @@ namespace RPGPlatformer.Combat
 {
     public class Health : MonoBehaviour, IHealth
     {
-        [SerializeField] bool takeDamageAutomatically;
+        [SerializeField] bool takeDamageAutomatically;//these 3 bools are mainly for the combat dummy.
+        [SerializeField] bool takeDefaultValueOnStart;//characters with a combat controller will set up 
+        [SerializeField] bool findStatBarInChildren;//their Health themselves
         [SerializeField] ReplenishableStat stat;
 
         public bool IsDead { get; private set; }
@@ -40,12 +42,15 @@ namespace RPGPlatformer.Combat
 
         private void Start()
         {
-            if (stat.statBar == null && !CompareTag("Player"))//this is just so the combat dummy's health displays
+            if (findStatBarInChildren)//this is just so the combat dummy's health displays
             {
                 stat.statBar = GetComponentInChildren<StatBarItem>();
             }
 
-            //stat.TakeDefaultValue();
+            if (takeDefaultValueOnStart)
+            {
+                stat.TakeDefaultValue();
+            }
         }
 
 

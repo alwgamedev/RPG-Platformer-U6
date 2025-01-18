@@ -9,10 +9,21 @@ namespace RPGPlatformer.Combat
 {
     using static IProjectileAbility;
 
-    public enum AbilityTag
+    public static class AbilityTag
     {
-        AoE_Damage, Bleed, Power_Up_Ability, Projectile_Ability, Stun
+        public const string AoeDamage = "AoE Damage";
+        public const string Bleed = "Bleed";
+        public const string PowerUpAbility = "Power-Up Ability";
+        public const string ProjectileAbility = "Projectile Ability";
+        public const string Stun = "Stun"; 
+        public const string AutoCastable = "Auto-Castable";
+
     }
+
+    //public enum AbilityTag
+    //{
+    //    AutoCastable, AoE_Damage, Bleed, Power_Up_Ability, Projectile_Ability, Stun
+    //}
 
     public class AttackAbility
     {
@@ -20,7 +31,7 @@ namespace RPGPlatformer.Combat
         public string DisplayName { protected get; init; }
         //^USE GetAbilityName INSTEAD! (DisplayName sometimes left null)
         public string Description { get; init; }//mainly for description of ability in tooltips
-        public List<AbilityTag> AbilityTags { get; init; } = new();
+        public List<string> AbilityTags { get; init; } = new();
         public string AnimationState { get; init; }//can leave null if no animation (will just get a warning in the editor)
         public Func<PoolableEffect> GetCombatantExecuteEffect { get; init; }
         public Func<PoolableEffect> GetHitEffect { get; init; }
@@ -34,7 +45,7 @@ namespace RPGPlatformer.Combat
         public float DamageMultiplier { get; init; } = 1;
         //public int? StunDurationInMilliseconds { get; init; } = null;
         public float? StunDuration { get; init; } = null;
-        public bool FreezeAnimationDuringStun { get; init; } = true;
+        public bool FreezeAnimationDuringStun { get; init; }
         //public bool ExecuteTriggeredInAnimation { get; init; }
         public int BleedCount { get; init; }//many different types of abilities (aoe, projectile, auto targeted) can have a bleed,
                                             //so it's easiest to just have every ability carry bleed stats (even though most don't need them).

@@ -68,6 +68,12 @@ namespace RPGPlatformer.Combat
 
         public static AutoTargetedBleed Swipe = new()//basic bleed
         {
+            Description = "Silent but deadly.",
+            AbilityTags = new() 
+            { 
+                AbilityTag.Bleed,
+                AbilityTag.AutoCastable
+            },
             ObeyGCD = true,
             AnimationState = "Swipe",
             GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Swipe Hit Effect"),
@@ -76,11 +82,18 @@ namespace RPGPlatformer.Combat
             BleedRate = 1200,
             AutoTarget = (controller) => TargetInFront(controller.Combatant),
             CombatStyle = CombatStyle.Melee,
-            Cooldown = 8
+            Cooldown = 8,
+            StaminaFractionChange = -0.08f,
+            WrathFractionChange = 0.08f
         };
 
         public static CloseRangeAbility Slash = new()//basic
         {
+            Description = "A quick close range attack that deals a heavy chunk of damage.",
+            AbilityTags = new() 
+            { 
+                AbilityTag.AutoCastable 
+            },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slash",
@@ -92,6 +105,12 @@ namespace RPGPlatformer.Combat
 
         public static CloseRangeAbility Uppercut = new()//basic
         {
+            Description = $"Deals more damage and generates more wrath than {nameof(Slash)}, but takes a higher toll" +
+            " on your stamina.",
+            AbilityTags = new() 
+            {
+                AbilityTag.AutoCastable
+            },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Uppercut",
@@ -104,6 +123,13 @@ namespace RPGPlatformer.Combat
 
         public static CloseRangeAbility Jab = new()//basic stun
         {
+            Description = "Surprise your opponent with a quick jab and regain stamina while" +
+                " they are briefly stunned.",
+            AbilityTags = new()
+            {
+                AbilityTag.Stun,
+                AbilityTag.AutoCastable
+            },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Jab",
@@ -118,6 +144,12 @@ namespace RPGPlatformer.Combat
 
         public static AutoTargetedBleed Slice = new()//thresh bleed
         {
+            Description = "Gather your wrath and stamina to slice a heavy, bleeding gash" +
+            " through your opponent's flesh.",
+            AbilityTags = new()
+            {
+                AbilityTag.Bleed
+            },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slice",
@@ -134,6 +166,11 @@ namespace RPGPlatformer.Combat
 
         public static CloseRangeAbility Thrust = new()//thresh
         {
+            Description = "Thrust your weapon at your nearest opponent, dealing immediate heavy damage.",
+            AbilityTags = new()
+            {
+                AbilityTag.AutoCastable
+            },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Thrust",
@@ -145,6 +182,14 @@ namespace RPGPlatformer.Combat
 
         public static AoeAbilityThatExecutesImmediately Slam = new(true)//thresh AoE Stun (should be comparable to Desecrate, with slightly higher damage + stun)
         {
+            Description = "Send a shockwave through the earth that deals heavy damage" +
+            " and stuns all nearby opponents.",
+            AbilityTags = new()
+            {
+                AbilityTag.AoeDamage,
+                AbilityTag.Stun,
+                AbilityTag.AutoCastable
+            },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slam",
@@ -156,12 +201,19 @@ namespace RPGPlatformer.Combat
             AoeRadius = 1.5f,
             GetAoeCenter = (controller) => controller.Combatant.Transform.position,
             ExcludeInstigator = true,
-            StunDuration = 2.5f,
-            FreezeAnimationDuringStun = false
+            StunDuration = 2.5f
+            //FreezeAnimationDuringStun = false
         };
 
         public static AoePowerUpAbility Ravage = new()//ultimate AoE
         {
+            Description = "Channel your accumulated wrath to deal massive damage to" +
+            " anything that dares come close.",
+            AbilityTags = new()
+            {
+                AbilityTag.AoeDamage,
+                AbilityTag.PowerUpAbility
+            },
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Ravage",
             HasPowerUpAnimation = true,

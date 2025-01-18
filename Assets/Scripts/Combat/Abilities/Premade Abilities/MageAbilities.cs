@@ -72,7 +72,8 @@ namespace RPGPlatformer.Combat
             Description = "Every wizard's first spell, a rapid-fire projectile ability.",
             AbilityTags = new()
             {
-                AbilityTag.Projectile_Ability
+                AbilityTag.ProjectileAbility,
+                AbilityTag.AutoCastable
             },
             DelayedReleaseOfChannel = false,
             ObeyGCD = true,
@@ -117,13 +118,15 @@ namespace RPGPlatformer.Combat
             CombatStyle = CombatStyle.Mage,
             DisplayName = "Daze",
             AnimationState = "Blast",
-            GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Rope Coil Effect"),
+            GetHitEffect = () 
+                => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Rope Coil Effect"),
             AutoTarget = TargetAimPosition,
             DamageMultiplier = 1.35f,
             Cooldown = 8,
             StunDuration = 1.2f,
             StaminaFractionChange = .18f,//gain stamina, because you can catch your breath while opponent is stunned
             WrathFractionChange = 0.05f
+            //FreezeAnimationDuringStun = false
         };
 
         public static GrenadeLikeAbilityWithPowerUp Demolish = new()//threshold AoE
@@ -132,11 +135,12 @@ namespace RPGPlatformer.Combat
             Description = "Demolish your opponents with a bigly large wrecking ball that explodes upon impact.",
             AbilityTags = new()
             {
-                AbilityTag.AoE_Damage,
-                AbilityTag.Power_Up_Ability,
-                AbilityTag.Projectile_Ability
+                AbilityTag.AoeDamage,
+                AbilityTag.PowerUpAbility,
+                AbilityTag.ProjectileAbility
             },
-            GetProjectile = () => (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Grenade Projectile"),
+            GetProjectile = () 
+                => (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Grenade Projectile"),
             GetHitAction = (ability) => GetHitActionAoeDamage(ability, 2.5f, false),
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Demolish",
@@ -149,23 +153,25 @@ namespace RPGPlatformer.Combat
 
         public static AoeAbilityThatExecutesOnNextFireButtonDown Captivate = new()//threshold AoE stun
         {
-            Description = "Summon the winter spirits to cast an icy freeze over your opponents.",
+            Description = "Call on the winter spirits to cast an icy freeze over your opponents.",
             AbilityTags = new()
             {
-                AbilityTag.AoE_Damage,
+                AbilityTag.AoeDamage,
                 AbilityTag.Stun
             },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Captivate",
-            GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Captivate Hit Effect"),
+            GetHitEffect = () 
+                => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Captivate Hit Effect"),
             Cooldown = 12,
             DamageMultiplier = 1.5f,
             StaminaFractionChange = 0.18f,//gain stamina, because you can catch your breath while your opponents are stunned
             WrathFractionChange = -.15f,
             StunDuration = 2.5f,
             GetData = (controller) => controller.GetAimPosition(),
-            AoeRadius = 1.5f
+            AoeRadius = 1.5f,
+            FreezeAnimationDuringStun = true
         };
 
         //hits only slightly higher than max power Demolish, but fires instantly and has better AoE, hence the steeper Stamina and Wrath costs
@@ -176,7 +182,8 @@ namespace RPGPlatformer.Combat
             "dealing heavy damage to any nearby enemies.",
             AbilityTags = new()
             {
-                AbilityTag.AoE_Damage
+                AbilityTag.AoeDamage,
+                AbilityTag.AutoCastable
             },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Mage,
@@ -196,7 +203,7 @@ namespace RPGPlatformer.Combat
             Description = "Invoke your opponent's inner malice and use it against them.",
             AbilityTags = new()
             {
-                AbilityTag.Power_Up_Ability,
+                AbilityTag.PowerUpAbility,
                 AbilityTag.Bleed
             },
             CombatStyle = CombatStyle.Mage,
