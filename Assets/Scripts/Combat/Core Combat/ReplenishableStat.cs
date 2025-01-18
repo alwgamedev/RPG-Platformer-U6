@@ -47,7 +47,23 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public void Start()
+        public void SetMaxValue(float value)
+        {
+            defaultValue = value;
+        }
+
+        public void SetDefaultValue(float value)
+        {
+            maxValue = value;
+        }
+
+        public void SetMaxAndDefaultValue(float value)
+        {
+            defaultValue = value;
+            maxValue = value;
+        }
+
+        public void TakeDefaultValue()
         {
             CurrentValue = defaultValue;
         }

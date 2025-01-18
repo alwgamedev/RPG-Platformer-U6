@@ -36,7 +36,7 @@ namespace RPGPlatformer.Core
         {
             CircularSkillIcons = new()
             {
-                [CharacterSkillBook.Health] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular health icon"),
+                [CharacterSkillBook.Fitness] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular health icon"),
                 [CharacterSkillBook.Defense] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular defense icon"),
                 [CharacterSkillBook.Magic] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular magic icon"),
                 [CharacterSkillBook.Melee] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular melee icon"),

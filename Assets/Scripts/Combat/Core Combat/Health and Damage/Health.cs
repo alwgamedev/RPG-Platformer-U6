@@ -45,7 +45,7 @@ namespace RPGPlatformer.Combat
                 stat.statBar = GetComponentInChildren<StatBarItem>();
             }
 
-            stat.Start();
+            //stat.TakeDefaultValue();
         }
 
 

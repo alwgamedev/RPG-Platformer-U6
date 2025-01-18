@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RPGPlatformer.Movement
 {
-    public enum HorizontalOrientation : int
+    public enum HorizontalOrientation
     {
         right = 1, left = -1
     }

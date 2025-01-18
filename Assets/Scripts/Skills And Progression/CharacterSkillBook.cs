@@ -6,7 +6,7 @@ namespace RPGPlatformer.Skills
     using static CombatStyles;
     public static class CharacterSkillBook
     {
-        public static CharacterSkill Health = new("Health");
+        public static CharacterSkill Fitness = new("Health");
         public static CharacterSkill Defense = new("Defense");
         public static CharacterSkill Magic = new("Magic");
         public static CharacterSkill Melee = new("Melee");
@@ -14,7 +14,7 @@ namespace RPGPlatformer.Skills
 
         public static readonly List<CharacterSkill> SkillList = new()
         {
-            Health, Defense, Magic, Melee, Ranged
+            Fitness, Defense, Magic, Melee, Ranged
         };
 
         public static CharacterSkill GetCombatSkill(CombatStyle combatStyle)

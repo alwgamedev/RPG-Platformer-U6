@@ -8,7 +8,9 @@ namespace RPGPlatformer.Movement
         public HorizontalOrientation CurrentOrientation { get; }
         public IMover Mover { get; }
 
-        public void FaceTarget(Transform target);
+        public void MoveTowards(Vector2 point);
+        public void MoveAwayFrom(Vector2 point);
+        public void FaceTowards(Transform target);
         public void FaceTarget(Vector2 target);
         public void OnDeath();
         public void OnRevival();

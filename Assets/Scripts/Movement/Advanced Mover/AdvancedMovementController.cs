@@ -146,14 +146,6 @@ namespace RPGPlatformer.Movement
             };
         }
 
-        //public virtual void OnAirborneEntry()
-        //{
-        //    CurrentMoveAction = (input) =>
-        //    {
-        //        mover.MoveAirborne((HorizontalOrientation)input);
-        //    };
-        //}
-
         public virtual void OnAirborneVerified()
         {
             if (movementManager.StateMachine.HasState(typeof(Airborne)))
@@ -173,7 +165,22 @@ namespace RPGPlatformer.Movement
             mover.SetOrientation((HorizontalOrientation)input);
         }
 
-        public void FaceTarget(Transform target)
+        public void MoveTowards(Vector2 point)
+        {
+            MoveInput = point.x - transform.position.x;
+        }
+
+        public void MoveAwayFrom(Vector2 point)
+        {
+            if (transform.position.x == point.x)
+            {
+                MoveInput = 1;
+                return;
+            }
+            MoveInput = transform.position.x - point.x;
+        }
+
+        public void FaceTowards(Transform target)
         {
             if (target)
             {
@@ -185,18 +192,6 @@ namespace RPGPlatformer.Movement
         {
             SetOrientation(Mathf.Sign(target.x - transform.position.x));
         }
-
-        //public void CheckIfClingingToWall()
-        //{
-        //    if (mover.BeginWallCling(moveInput))
-        //    {
-        //        movementManager.AnimateWallCling(true);
-        //    }
-        //    else if (mover.EndWallCling(moveInput))
-        //    {
-        //        movementManager.AnimateWallCling(false);
-        //    }
-        //}
 
         public virtual void OnDeath()
         {

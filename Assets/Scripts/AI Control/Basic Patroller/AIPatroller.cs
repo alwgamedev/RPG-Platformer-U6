@@ -2,6 +2,7 @@
 using RPGPlatformer.Core;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Movement;
+using System;
 
 namespace RPGPlatformer.AIControl
 {
@@ -11,8 +12,12 @@ namespace RPGPlatformer.AIControl
     {
         [SerializeField] protected float pursuitRange;
 
+        protected Action OnUpdate;
+
         public AdvancedMovementController movementController;
         public AICombatController combatController;
+
+        public IHealth CurrentTarget => combatController.currentTarget;
 
 
         protected virtual void Awake()
@@ -21,9 +26,14 @@ namespace RPGPlatformer.AIControl
             combatController = GetComponent<AICombatController>();
         }
 
-        protected virtual void Start()
+        protected virtual void OnEnable()
         {
-            //combatController.OnWeaponTick += combatController.FireOneShot;
+            combatController.CombatManager.OnWeaponTick += CheckMinimumCombatDistance;
+        }
+
+        protected virtual void Update()
+        {
+            OnUpdate?.Invoke();
         }
 
         public void PatrolBehavior()
@@ -31,9 +41,9 @@ namespace RPGPlatformer.AIControl
             //stand there for now
         }
 
-        public void SuspicionBehavior(IHealth target)
+        public void SuspicionBehavior(/*IHealth target*/)
         {
-            if (!TryGetDistance(target, out float distance))
+            if (!TryGetDistance(CurrentTarget, out float distance))
             {
                 return;
             }
@@ -47,14 +57,13 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        public void PursuitBehavior(IHealth target)
+        public void PursuitBehavior(/*IHealth target*/)
         {
-            if (!TryGetDistance(target, out float distance))
+            if (!TryGetDistance(CurrentTarget, out float distance))
             {
                 Trigger(typeof(Suspicion).Name);
-                return;
             }
-            if (combatController.Combatant.CanAttack(distance))
+            else if (combatController.Combatant.CanAttack(distance))
             {
                 Trigger(typeof(Attack).Name);
             }
@@ -64,7 +73,7 @@ namespace RPGPlatformer.AIControl
             }
             else
             {
-                movementController.MoveInput = target.Transform.position.x - transform.position.x;
+                movementController.MoveInput = CurrentTarget.Transform.position.x - transform.position.x;
             }
         }
 
@@ -72,12 +81,46 @@ namespace RPGPlatformer.AIControl
         {
             combatController.Combatant.OnTargetingFailed += () => Trigger(typeof(Pursuit).Name);
             combatController.StartAttacking();
+
         }
 
         public void StopAttacking()
         {
             combatController.Combatant.OnTargetingFailed -= () => Trigger(typeof(Pursuit).Name);
             combatController.StopAttacking();
+        }
+
+        public void CheckMinimumCombatDistance()
+        {
+            OnUpdate -= MaintainMinimumCombatDistance;
+
+            if (!TryGetDistance(CurrentTarget, out var d))
+            {
+                return;
+            }
+
+            if (d < combatController.MinimumCombatDistance)
+            {
+                OnUpdate += MaintainMinimumCombatDistance;
+            }
+        }
+
+        public void MaintainMinimumCombatDistance(/*Vector3 targetPosition*/)
+        {
+            if (!TryGetDistance(CurrentTarget, out var d))
+            {
+                OnUpdate -= MaintainMinimumCombatDistance;
+                return;
+            }
+            else if (d < combatController.MinimumCombatDistance)
+            {
+                movementController.MoveAwayFrom(CurrentTarget.Transform.position);
+            }
+            else
+            {
+                movementController.MoveInput = 0;
+                OnUpdate -= MaintainMinimumCombatDistance;
+            }
         }
 
         public bool TryGetDistance(IHealth target, out float distance)
@@ -87,19 +130,16 @@ namespace RPGPlatformer.AIControl
                 distance = Vector3.Distance(transform.position, target.Transform.position);
                 return true;
             }
-            else
-            {
-                distance = Mathf.Infinity;
-                return false;
-            }
+            distance = Mathf.Infinity;
+            return false;
         }
 
-        public void BeginPatrol()
+        public void TriggerPatrol()
         {
             Trigger(typeof(Patrol).Name);
         }
 
-        public void BecomeSuspicious()
+        public void TriggerSuspicion()
         {
             Trigger(typeof(Suspicion).Name);
         }

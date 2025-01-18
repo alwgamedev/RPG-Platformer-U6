@@ -1,5 +1,6 @@
 ﻿using RPGPlatformer.Combat;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace RPGPlatformer.Skills
 {
@@ -15,18 +16,18 @@ namespace RPGPlatformer.Skills
             
             if (totalDamage <= 0)
             {
-                recipient.GainExperience(CharacterSkillBook.Health, (int)(0.5f * xp));
-                recipient.GainExperience(CharacterSkillBook.Defense, (int)(0.5f * xp));
+                recipient.GainExperience(CharacterSkillBook.Fitness, (int)(0.25f * xp));
+                recipient.GainExperience(CharacterSkillBook.Defense, (int)(0.75f * xp));
             }
             else
             {
-                recipient.GainExperience(CharacterSkillBook.Health, (int)(0.3f * xp));
-                recipient.GainExperience(CharacterSkillBook.Defense, (int)(0.3f * xp));
+                recipient.GainExperience(CharacterSkillBook.Fitness, (int)(0.25f * xp));
+                recipient.GainExperience(CharacterSkillBook.Defense, (int)(0.35f * xp));
                 
                 foreach (var entry in dmgByStyle)
                 {
                     recipient.GainExperience(CharacterSkillBook.GetCombatSkill(entry.Key),
-                        (int)(0.4f * xp * entry.Value / totalDamage));
+                        (int)Mathf.Ceil(0.4f * xp * entry.Value / totalDamage));
                 }
             }
         }

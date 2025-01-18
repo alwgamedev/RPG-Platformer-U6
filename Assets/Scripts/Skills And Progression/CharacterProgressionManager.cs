@@ -26,6 +26,11 @@ namespace RPGPlatformer.Skills
             return progressionData.GetLevel(skill);
         }
 
+        public int AutoCalculatedHealthPoints()
+        {
+            return 4000 + (312 * (progressionData.GetLevel(CharacterSkillBook.Fitness) - 1));
+        }
+
         public void GainExperience(CharacterSkill skill, int xpToGain)
         {
             if (!canGainXP) return;

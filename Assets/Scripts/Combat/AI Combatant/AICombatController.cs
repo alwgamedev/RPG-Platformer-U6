@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.UI;
+using System;
 using UnityEngine;
 
 namespace RPGPlatformer.Combat
@@ -6,10 +7,13 @@ namespace RPGPlatformer.Combat
     public class AICombatController : CombatController
     {
         protected CombatantHealthBarCanvas healthBarCanvas;
+        //protected Action OnUpdate;
 
         public IHealth currentTarget;
 
         public CombatStateManager CombatManager => combatManager;
+        public virtual float MinimumCombatDistance 
+            => Mathf.Min(0.35f, combatant.EquippedWeapon.WeaponStats.AttackRange / 2);
 
         protected override void Awake()
         {
@@ -24,6 +28,7 @@ namespace RPGPlatformer.Combat
 
         public void FireOneShot()
         {
+            FaceAimPosition();
             Combatant.CheckIfTargetInRange(currentTarget, out _);
             RunAutoAbilityCycle(false);
         }
@@ -40,13 +45,28 @@ namespace RPGPlatformer.Combat
             CombatManager.OnWeaponTick -= FireOneShot;
         }
 
+        //public override void OnCombatEntry()
+        //{
+        //    base.OnCombatEntry();
+
+        //    //OnUpdate += FaceAimPosition;
+        //}
+
+        //public void MaintainMinimumCombatDistance()
+        //{
+        //    OnUpdate += MaintainMinimumCombatDistance;
+        //}
+
         public override void OnCombatExit()
         {
             base.OnCombatExit();
+
             if (combatant is AICombatant aic && !combatant.Health.IsDead)
             {
                 aic.damageTracker.ClearTracker();
             }
+
+            //OnUpdate -= MaintainMinimumCombatDistance;
         }
 
         public override Vector2 GetAimPosition()
@@ -62,7 +82,6 @@ namespace RPGPlatformer.Combat
         {
             base.Death();
 
-            //combatant.Health.Stat.statBar.gameObject.SetActive(false);
             Destroy(gameObject, 1.5f);
         }
 
@@ -75,5 +94,12 @@ namespace RPGPlatformer.Combat
         {
             healthBarCanvas.OnMouseExit();
         }
+
+        //protected override void OnDestroy()
+        //{
+        //    base.OnDestroy();
+
+        //    OnUpdate = null;
+        //}
     }
 }

@@ -530,7 +530,7 @@ PrefabInstance:
       addedObject: {fileID: 489266092333141542}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2106830352299838994}
+      addedObject: {fileID: 6876373199338205494}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1804393810644820113}
@@ -596,7 +596,7 @@ MonoBehaviour:
     rangedAbilityBarItems: []
   useDefaultAbilityBars: 1
   immuneToStuns: 0
---- !u!114 &2106830352299838994
+--- !u!114 &6876373199338205494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -605,7 +605,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 474939305929962993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be17c22abddbfb049a9220135a5d71a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 5dc0859befd8f7f4d9531c2e30cfd8be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: 
@@ -632,6 +632,7 @@ MonoBehaviour:
     replenishRate: -0.1
     autoReplenish: 0
     statBar: {fileID: 0}
+  useAutoCalculatedHealthPoints: 1
 --- !u!114 &1804393810644820113
 MonoBehaviour:
   m_ObjectHideFlags: 0

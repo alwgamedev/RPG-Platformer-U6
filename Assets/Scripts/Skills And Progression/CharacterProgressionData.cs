@@ -106,7 +106,7 @@ namespace RPGPlatformer.Skills
         {
             SkillLookup = new()
             {
-                [CharacterSkillBook.Health] = Health,
+                [CharacterSkillBook.Fitness] = Health,
                 [CharacterSkillBook.Defense] = Defense,
                 [CharacterSkillBook.Magic] = Magic,
                 [CharacterSkillBook.Melee] = Melee,

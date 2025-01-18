@@ -20,35 +20,13 @@ namespace RPGPlatformer.AIControl
 
         protected AIPatroller patroller;
         protected AIPatrollerStateManager stateManager;
-        //protected IHealth currentTarget;
         protected Action OnUpdate;
 
-        protected string currentState;//for testing
-        protected string storedState;
-
-        public IHealth CurrentTarget 
-        { 
+        public IHealth CurrentTarget
+        {
             get => patroller.combatController.currentTarget;
             protected set => patroller.combatController.currentTarget = value;
         }
-
-        //protected Health CurrentTarget
-        //{
-        //    get => currentTarget;
-        //    set
-        //    {
-        //        currentTarget = value;
-        //        patroller.combatController.currentTarget = value;
-        //        if (value != null)
-        //        {
-        //            patroller.BecomeSuspicious();
-        //        }
-        //        else
-        //        {
-        //            stateManager.StateMachine.SetCurrentState(stateManager.StateGraph.patrol);
-        //        }
-        //    }
-        //}
 
         protected virtual void Awake()
         {
@@ -61,14 +39,13 @@ namespace RPGPlatformer.AIControl
         private void OnEnable()
         {
             stateManager.StateGraph.patrol.OnEntry += OnPatrolEntry;
-            stateManager.StateGraph.suspicion.OnEntry += OnSuspicionEntry;
+            stateManager.StateGraph.patrol.OnExit += OnPatrolExit;
+            stateManager.StateGraph.suspicion.OnEntry += OnSuspicionEntry; 
+            stateManager.StateGraph.suspicion.OnExit += OnSuspicionExit;
             stateManager.StateGraph.pursuit.OnEntry += OnPursuitEntry;
             stateManager.StateGraph.pursuit.OnExit += OnPursuitExit;
             stateManager.StateGraph.attack.OnEntry += OnAttackEntry;
             stateManager.StateGraph.attack.OnExit += OnAttackExit;
-
-            stateManager.StateMachine.StateChange += (state) => currentState = state.GetType().Name;
-            stateManager.StateMachine.StateStored += (state) => storedState = state.GetType().Name;
         }
 
         private void Start()
@@ -93,35 +70,42 @@ namespace RPGPlatformer.AIControl
             CurrentTarget = targetHealth;
             if (targetHealth != null)
             {
-                patroller.BecomeSuspicious();
+                patroller.TriggerSuspicion();
             }
             else
             {
-                patroller.BeginPatrol();
+                patroller.TriggerPatrol();
             }
         }
 
         protected virtual void OnPatrolEntry()
         {
-            //Debug.Log($"{gameObject.name} entering Patrol");
             if (CurrentTarget != null)
             {
                 SetCurrentTarget(null, false);
             }
             patroller.movementController.SetRunning(false);
-            OnUpdate = patroller.PatrolBehavior;
+            OnUpdate += patroller.PatrolBehavior;
+        }
+
+        protected virtual void OnPatrolExit()
+        {
+            OnUpdate -= patroller.PatrolBehavior;
         }
 
         protected virtual void OnSuspicionEntry()
         {
-            //Debug.Log($"{gameObject.name} entering Suspicion");
-            OnUpdate = () => patroller.SuspicionBehavior(CurrentTarget);
+            OnUpdate += patroller.SuspicionBehavior;
+        }
+
+        protected virtual void OnSuspicionExit()
+        {
+            OnUpdate -= patroller.SuspicionBehavior;
         }
 
         protected virtual void OnPursuitEntry()
         {
-            //Debug.Log($"{gameObject.name} entering Pursuit");
-            OnUpdate = () => patroller.PursuitBehavior(CurrentTarget);
+            OnUpdate += patroller.PursuitBehavior;
             patroller.movementController.SetRunning(true);
         }
 
@@ -129,18 +113,18 @@ namespace RPGPlatformer.AIControl
         {
             patroller.movementController.SetRunning(false);
             patroller.movementController.MoveInput = 0;
+            OnUpdate -= patroller.PursuitBehavior;
         }
 
         protected virtual void OnAttackEntry()
         {
-            //Debug.Log("Attack");
-            OnUpdate = null;
             patroller.StartAttacking();
         }
 
         protected virtual void OnAttackExit()
         {
             patroller.StopAttacking();
+            //OnUpdate -= patroller.MaintainMinimumCombatDistance;
         }
 
         protected virtual void OnDeath()
@@ -150,16 +134,19 @@ namespace RPGPlatformer.AIControl
 
         public void EnableInput()
         {
-            //Debug.Log("Enabling input.");
             stateManager.Unfreeze();
         }
 
         public void DisableInput()
         {
-            //Debug.Log("Disabling input.");
             OnUpdate = null;
             stateManager.Freeze();
             stateManager.StateMachine.ForceCurrentState(stateManager.StateGraph.inactive);
+        }
+
+        private void OnDestroy()
+        {
+            OnUpdate = null;
         }
     }
 }

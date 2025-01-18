@@ -30,6 +30,7 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected WeaponSO weaponSO;
         [SerializeField] protected ReplenishableStat stamina = new();
         [SerializeField] protected ReplenishableStat wrath = new();
+        [SerializeField] protected bool useAutoCalculatedHealthPoints;
 
         protected CharacterProgressionManager progressionManager;
         protected InventoryManager inventory;
@@ -40,10 +41,9 @@ namespace RPGPlatformer.Combat
 
         public string DisplayName => $"<b>{displayName}</b>";
         public int CombatLevel => progressionManager.CombatLevel;
-        public bool IsPlayer { get; protected set; }
+        public virtual bool IsPlayer => false;
         public string TargetLayer => targetLayer;
         public string TargetTag => targetTag;
-        //public float AdditiveDamageBonus => 0;//EVENTUALLY: will compute based on equipment, stats, and any active buffs
         public InventoryManager Inventory => inventory;
         public Dictionary<EquipmentSlots, ItemSlot> EquipSlots => equipSlots;
         public Transform Transform => transform;
@@ -68,7 +68,7 @@ namespace RPGPlatformer.Combat
             inventory = GetComponent<InventoryManager>();
             dropSpawner = GetComponent<DropSpawner>();
 
-            IsPlayer = CompareTag("Player");
+            //IsPlayer = CompareTag("Player");
 
             equipSlots = new()
             {
@@ -79,22 +79,14 @@ namespace RPGPlatformer.Combat
             };
         }
 
-        private void OnEnable()
-        {
-            if (IsPlayer)
-            {
-                Health.Stat.statBar = GameObject.Find("Player Health Bar").GetComponent<StatBarItem>();
-                Stamina.statBar = GameObject.Find("Player Stamina Bar").GetComponent<StatBarItem>();
-                Wrath.statBar = GameObject.Find("Player Wrath Bar").GetComponent<StatBarItem>();
-            }
-
-            stamina.autoReplenish = true;
-        }
+        //private void OnEnable()
+        //{
+        //    ConfigureReplenishableStats();
+        //}
 
         private void Start()
         {
-            stamina.Start();
-            wrath.Start();
+            ConfigureReplenishableStats();
         }
 
         private void Update()
@@ -127,6 +119,34 @@ namespace RPGPlatformer.Combat
                 / CharacterSkillBook.Defense.XPTable.MaxLevel;
             return 1 - (0.1f * defenseProgress);//hence at max defense you get 10% damage reduction
             //TO-DO: factor in armour, DEFENSE LEVEL, and buffs
+        }
+
+
+        //STATS
+
+        protected virtual void ConfigureReplenishableStats()
+        {
+            //if (IsPlayer)
+            //{
+            //    Health.Stat.statBar = GameObject.Find("Player Health Bar").GetComponent<StatBarItem>();
+            //    Stamina.statBar = GameObject.Find("Player Stamina Bar").GetComponent<StatBarItem>();
+            //    Wrath.statBar = GameObject.Find("Player Wrath Bar").GetComponent<StatBarItem>();
+
+            //    Health.Stat.SetDefaultValue(progressionManager.AutoCalculatedHealthPoints());
+            //}
+
+            if(useAutoCalculatedHealthPoints)
+            {
+                Health.Stat.SetMaxAndDefaultValue(progressionManager.AutoCalculatedHealthPoints());
+            }
+
+            stamina.autoReplenish = true;
+            //health and wrath auto-replenish will change when you enter and exit combat
+            //this is set up by the combat manager
+
+            Health.Stat.TakeDefaultValue();
+            stamina.TakeDefaultValue();
+            wrath.TakeDefaultValue();
         }
 
 
