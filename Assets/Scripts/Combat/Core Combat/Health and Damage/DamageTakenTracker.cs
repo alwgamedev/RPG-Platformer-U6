@@ -25,25 +25,22 @@ namespace RPGPlatformer.Combat
         {
             if (damageDealer == null) return;
 
-            if(damageDealer.CurrentCombatStyle.HasValue)
-            {
-                CombatStyle style = damageDealer.CurrentCombatStyle.Value;
+            CombatStyle style = damageDealer.CurrentCombatStyle;
 
-                if (!DamageLookup.ContainsKey(damageDealer))
+            if (!DamageLookup.ContainsKey(damageDealer))
+            {
+                DamageLookup[damageDealer] = new Dictionary<CombatStyle, float>()
                 {
-                    DamageLookup[damageDealer] = new Dictionary<CombatStyle, float>()
-                    { 
-                        [style] = damage 
-                    };
-                }
-                else if (!DamageLookup[damageDealer].ContainsKey(style))
-                {
-                    DamageLookup[damageDealer][style] = damage;
-                }
-                else
-                {
-                    DamageLookup[damageDealer][style] += damage;
-                }
+                    [style] = damage
+                };
+            }
+            else if (!DamageLookup[damageDealer].ContainsKey(style))
+            {
+                DamageLookup[damageDealer][style] = damage;
+            }
+            else
+            {
+                DamageLookup[damageDealer][style] += damage;
             }
         }
 

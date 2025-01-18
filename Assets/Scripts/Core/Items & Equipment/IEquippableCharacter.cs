@@ -5,9 +5,13 @@ namespace RPGPlatformer.Core
 {
     public interface IEquippableCharacter
     {
-        public Dictionary<ItemSlot.EquipmentSlots, ItemSlot> EquipSlots { get; }
+        public Dictionary<EquipmentSlot, ItemSlot> EquipSlots { get; }
 
-        public void EquipItem(EquippableItem item, ItemSlot.EquipmentSlots slot, bool handleUnequippedItem = true);
+        public bool CanEquip(EquippableItem item);
+
+        public void EquipItem(EquippableItem item, /*EquipmentSlot slot,*/ bool handleUnequippedItem = true);
+
+        public void UnequipItem(EquipmentSlot slot, bool handleUnequippedItem = true);
 
         public void HandleUnequippedItem(EquippableItem item);
     }

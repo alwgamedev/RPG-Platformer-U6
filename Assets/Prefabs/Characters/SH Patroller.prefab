@@ -516,6 +516,7 @@ MonoBehaviour:
   walkSpeed: 0.8
   maxNumJumps: 2
   jumpForce: 375
+  canWallCling: 0
 --- !u!114 &-5414364659089102069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,7 +529,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ac3c0ee2d07cb418ae27c5793f9ab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveInput: 0
 --- !u!114 &-2177855670895466878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,6 +645,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   takeDamageAutomatically: 0
+  takeDefaultValueOnStart: 0
+  findStatBarInChildren: 0
   stat:
     minValue: 0
     maxValue: 5000
@@ -673,7 +675,8 @@ MonoBehaviour:
   offhandSlot: {fileID: 2277802274543843807}
   mainhandElbow: {fileID: 408011811868376633}
   chestBone: {fileID: 1054953398681727986}
-  weaponSO: {fileID: 0}
+  defaultWeaponSO: {fileID: 0}
+  unarmedWeaponSO: {fileID: 11400000, guid: 4139e115d9f5ac74f91fbb9f83f3303b, type: 2}
   stamina:
     minValue: 0
     maxValue: 100
@@ -688,6 +691,7 @@ MonoBehaviour:
     replenishRate: 0
     autoReplenish: 0
     statBar: {fileID: 0}
+  useAutoCalculatedHealthPoints: 0
   combatXPReward: 24
 --- !u!114 &8912017489112769141
 MonoBehaviour:

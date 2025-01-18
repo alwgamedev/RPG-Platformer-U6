@@ -4,13 +4,13 @@ using RPGPlatformer.Inventory;
 
 namespace RPGPlatformer.Core
 {
+    public enum EquipmentSlot
+    {
+        Head, Torso, Mainhand, Offhand
+    }
+
     public class ItemSlot : MonoBehaviour
     {
-        public enum EquipmentSlots
-        {
-            Head, Torso, Mainhand, Offhand
-        }
-
         [SerializeField] string sortingLayer;
         [SerializeField] int sortingOrder;
         [SerializeField] bool equipOnStart;
@@ -23,19 +23,24 @@ namespace RPGPlatformer.Core
 
         public string SortingLayer => sortingLayer;
         public int SortingOrder => sortingOrder;
-        public static int NumEquipmentSlots => Enum.GetNames(typeof(EquipmentSlots)).Length;
+        public static int NumEquipmentSlots => Enum.GetNames(typeof(EquipmentSlot)).Length;
 
         public event Action OnItemEquipped;
 
-        public static EquipmentSlots EquipmentSlot(int slot)
-        {
-            return (EquipmentSlots)slot;
-        }
+        //public static bool IsWeaponSlot(EquipmentSlot slot)
+        //{
+        //    return slot == EquipmentSlot.Mainhand || equip
+        //}
 
-        public static int SlotIndex(EquipmentSlots slot)
-        {
-            return (int)slot;
-        }
+        //public static EquipmentSlots EquipmentSlot(int slot)
+        //{
+        //    return (EquipmentSlots)slot;
+        //}
+
+        //public static int SlotIndex(EquipmentSlots slot)
+        //{
+        //    return (int)slot;
+        //}
 
         private void Start()
         {

@@ -5,8 +5,6 @@ using RPGPlatformer.Core;
 
 namespace RPGPlatformer.UI
 {
-    using static ItemSlot;
-
     public class EquipmentInspectorUI : HidableUI
     {
         [SerializeField] EquipmentInspectorSlotUI headSlot;
@@ -14,7 +12,7 @@ namespace RPGPlatformer.UI
         [SerializeField] EquipmentInspectorSlotUI mainhandSlot;
         [SerializeField] EquipmentInspectorSlotUI offhandSlot;
 
-        Dictionary<EquipmentSlots, EquipmentInspectorSlotUI> slots = new();
+        Dictionary<EquipmentSlot, EquipmentInspectorSlotUI> slots = new();
 
         IEquippableCharacter player;
 
@@ -26,10 +24,10 @@ namespace RPGPlatformer.UI
 
             slots = new()
             {
-                [EquipmentSlots.Head] = headSlot,
-                [EquipmentSlots.Torso] = torsoSlot,
-                [EquipmentSlots.Mainhand] = mainhandSlot,
-                [EquipmentSlots.Offhand] = offhandSlot
+                [EquipmentSlot.Head] = headSlot,
+                [EquipmentSlot.Torso] = torsoSlot,
+                [EquipmentSlot.Mainhand] = mainhandSlot,
+                [EquipmentSlot.Offhand] = offhandSlot
             };
         }
 
@@ -59,12 +57,12 @@ namespace RPGPlatformer.UI
 
                 if (charSlot.EquipppedItem != displayedItem)
                 {
-                    character.EquipItem((EquippableItem)displayedItem, entry.Key, false);
+                    character.EquipItem((EquippableItem)displayedItem, false);
                 }
             }
         }
 
-        public void UpdateUI(IEquippableCharacter character, EquipmentSlots equipSlot)
+        public void UpdateUI(IEquippableCharacter character, EquipmentSlot equipSlot)
         {
             EquippableItem equippedItem = character.EquipSlots[equipSlot].EquipppedItem;
             slots[equipSlot].PlaceItem(equippedItem?.ToSlotData(1));

@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseData:
     lookupName: Unarmed (SH)
-    displayName: Unarmed Weapon
-    description: A true fighter uses their fists!
+    displayName: Unarmed
+    description: I am a peaceful warrior... who punches my enemies in the face!
     icon: {fileID: -162445357528718373, guid: a6210b498d6eff1419e75c6f6702ea72, type: 3}
-    maxStackable: 1
+    maxStack: 1
   equippableItemData:
     prefab: {fileID: 0}
-    slot: 0
+    slot: 2
   weaponStats:
-    baseDamage: 69
+    baseDamage: 40
     attackRange: 0.6
     baseAttackRate: 10
   animatorOverrideController: {fileID: 22100000, guid: 878581dc1900c55489253a28ad1711dd, type: 2}

@@ -25,8 +25,11 @@ namespace RPGPlatformer.Inventory
             if (owner is not IEquippableCharacter character) return;
             OnUse = () =>
             {
-                owner.Inventory.RemoveFromSlot(slotIndex);
-                character.EquipItem(this, equippableItemData.Slot);
+                if (character.CanEquip(this))
+                {
+                    owner.Inventory.RemoveFromSlot(slotIndex);
+                    character.EquipItem(this/*, equippableItemData.Slot*/);
+                }
             };
         }
         //base class sets OnUsed = null and OnRelease = null when remove from inventory

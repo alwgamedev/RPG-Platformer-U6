@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
+using RPGPlatformer.Core;
+using RPGPlatformer.Effects;
 
 namespace RPGPlatformer.Combat
 {
-    using static CombatStyles;
-
-    public static class UnarmedAbilities
+     public static class UnarmedAbilities
     {
         public enum UnarmedAbilitiesEnum
         {
@@ -50,10 +49,19 @@ namespace RPGPlatformer.Combat
 
         public static CloseRangeAbility Punch = new()
         {
+            Description = "A real fighter uses their fists.",
+            AbilityTags = new()
+            {
+                AbilityTag.AutoCastable
+            },
             ObeyGCD = true,
             CombatStyle = CombatStyle.Unarmed,
             AnimationState = "Punch",
-            Cooldown = 3
+            GetHitEffect = ()
+                => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Punch Hit Effect"),
+            Cooldown = 0.75f,
+            StaminaFractionChange = -0.04f,
+            WrathFractionChange = 0.02f
         };
 
         public static IEnumerable<AttackAbility> AllAbilities = new List<AttackAbility>()

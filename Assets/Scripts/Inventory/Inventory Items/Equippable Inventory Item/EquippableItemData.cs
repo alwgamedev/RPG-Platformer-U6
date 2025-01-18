@@ -1,17 +1,16 @@
 ﻿using System;
 using UnityEngine;
+using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Inventory
 {
-    using static RPGPlatformer.Core.ItemSlot;
-
     [Serializable]
     public class EquippableItemData
     {
         [SerializeField] protected GameObject prefab;
-        [SerializeField] protected EquipmentSlots slot;
+        [SerializeField] protected EquipmentSlot slot;
 
         public GameObject Prefab => prefab;
-        public EquipmentSlots Slot => slot;
+        public EquipmentSlot Slot => slot;
     }
 }

@@ -617,7 +617,8 @@ MonoBehaviour:
   offhandSlot: {fileID: 7650158103898965196}
   mainhandElbow: {fileID: 8079246410893591338}
   chestBone: {fileID: 8869067454454271713}
-  weaponSO: {fileID: 0}
+  defaultWeaponSO: {fileID: 0}
+  unarmedWeaponSO: {fileID: 11400000, guid: 4139e115d9f5ac74f91fbb9f83f3303b, type: 2}
   stamina:
     minValue: 0
     maxValue: 100
@@ -774,6 +775,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   takeDamageAutomatically: 0
+  takeDefaultValueOnStart: 0
+  findStatBarInChildren: 0
   stat:
     minValue: 0
     maxValue: 8000

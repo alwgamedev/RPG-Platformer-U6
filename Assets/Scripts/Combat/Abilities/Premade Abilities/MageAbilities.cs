@@ -141,7 +141,7 @@ namespace RPGPlatformer.Combat
             },
             GetProjectile = () 
                 => (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Grenade Projectile"),
-            GetHitAction = (ability) => GetHitActionAoeDamage(ability, 2.5f, false),
+            GetHitAction = (ability) => GetHitActionAoeDamage(ability, 1.5f, false),
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Demolish",
             HasChannelAnimation = true,
@@ -170,7 +170,7 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = -.15f,
             StunDuration = 2.5f,
             GetData = (controller) => controller.GetAimPosition(),
-            AoeRadius = 1.5f,
+            AoeRadius = 1,
             FreezeAnimationDuringStun = true
         };
 
@@ -195,7 +195,7 @@ namespace RPGPlatformer.Combat
             StaminaFractionChange = -.25f,
             WrathFractionChange = -.25f,
             GetAoeCenter = (controller) => controller.Combatant.Transform.position,
-            AoeRadius = 2f,
+            AoeRadius = 1.5f,
         };
 
         public static AutoTargetedPowerUpBleed Invoke = new()//ultimate bleed

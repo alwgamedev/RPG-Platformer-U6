@@ -198,7 +198,7 @@ namespace RPGPlatformer.Combat
             DamageMultiplier = 4.2f,
             StaminaFractionChange = -.25f,
             WrathFractionChange = -.25f,
-            AoeRadius = 1.5f,
+            AoeRadius = 1.25f,
             GetAoeCenter = (controller) => controller.Combatant.Transform.position,
             ExcludeInstigator = true,
             StunDuration = 2.5f
@@ -225,7 +225,7 @@ namespace RPGPlatformer.Combat
             DamageMultiplier = 3,
             StaminaFractionChange = .25f,
             WrathFractionChange = -.75f,
-            AoeRadius = 1.5f,
+            AoeRadius = 1.25f,
             GetAoeCenter = (controller) => controller.Combatant.Transform.position,
             ExcludeInstigator = true
         };

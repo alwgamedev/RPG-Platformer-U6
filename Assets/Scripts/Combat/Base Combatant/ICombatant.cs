@@ -9,6 +9,8 @@ namespace RPGPlatformer.Combat
         public string DisplayName { get; }
         public int CombatLevel { get; }
         public IWeapon EquippedWeapon { get; }
+        public IWeapon DefaultWeapon { get; }
+        public IWeapon UnarmedWeapon { get; }
         public ReplenishableStat Stamina { get; }
         public ReplenishableStat Wrath { get; }
         public IHealth Health { get; }

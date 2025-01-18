@@ -7,7 +7,7 @@ namespace RPGPlatformer.UI
 {
     public class EquipmentInspectorSlotUI : InventorySlotUI
     {
-        ItemSlot.EquipmentSlots slot;
+        EquipmentSlot slot;
         
         Action unequipAction;
 
@@ -20,10 +20,10 @@ namespace RPGPlatformer.UI
                 && equippableItem.EquippableItemData.Slot == slot);
         }
 
-        public void Configure(IEquippableCharacter character, ItemSlot.EquipmentSlots slot)
+        public void Configure(IEquippableCharacter character, EquipmentSlot slot)
         {
             this.slot = slot;
-            unequipAction = () => character.EquipItem(null, this.slot, true);
+            unequipAction = () => character.UnequipItem(slot);//character.EquipItem(null, slot, true);
         }
 
         public void UnequipFromSlot()

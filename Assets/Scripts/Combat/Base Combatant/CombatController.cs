@@ -107,7 +107,7 @@ namespace RPGPlatformer.Combat
                 await GetStunned(duration, freezeAnimation, GlobalGameTools.Instance.TokenSource);
             combatant.Health.HealthChanged += OnHealthChanged;
 
-            combatant.EquipWeaponSO();
+            combatant.EquipDefaultWeapon();
         }
 
         protected virtual void Update()
@@ -423,7 +423,7 @@ namespace RPGPlatformer.Combat
             }
 
             Vector2 aimVector = aimPos - (Vector2)combatant.MainhandElbow.transform.position;
-            Vector2 forearmVector = combatant.EquipSlots[ItemSlot.EquipmentSlots.Mainhand].transform.position - combatant.MainhandElbow.transform.position;
+            Vector2 forearmVector = combatant.EquipSlots[EquipmentSlot.Mainhand].transform.position - combatant.MainhandElbow.transform.position;
             float deltaAngle = Vector2.SignedAngle(forearmVector, aimVector);
 
             float angle = combatant.ChestBone.eulerAngles.z + deltaAngle;
@@ -554,7 +554,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void Revival()
         {
-            combatant.EquipSlots[ItemSlot.EquipmentSlots.Mainhand].gameObject.SetActive(true);
+            combatant.EquipSlots[EquipmentSlot.Mainhand].gameObject.SetActive(true);
             MovementController?.OnRevival();
             EnableInput();
             OnRevive?.Invoke();

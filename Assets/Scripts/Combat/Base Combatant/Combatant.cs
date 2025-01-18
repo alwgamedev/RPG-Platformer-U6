@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using RPGPlatformer.Core;
-using RPGPlatformer.UI;
 using RPGPlatformer.Effects;
 using RPGPlatformer.Inventory;
 using RPGPlatformer.Loot;
@@ -10,8 +9,6 @@ using RPGPlatformer.Skills;
 
 namespace RPGPlatformer.Combat
 {
-    using static ItemSlot;
-
     [RequireComponent(typeof(CharacterProgressionManager))]
     [RequireComponent(typeof(InventoryManager))]
     [RequireComponent(typeof(DropSpawner))]
@@ -27,16 +24,19 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected ItemSlot offhandSlot;
         [SerializeField] protected Transform mainhandElbow;
         [SerializeField] protected Transform chestBone;
-        [SerializeField] protected WeaponSO weaponSO;
+        [SerializeField] protected WeaponSO defaultWeaponSO;
+        [SerializeField] protected WeaponSO unarmedWeaponSO;
         [SerializeField] protected ReplenishableStat stamina = new();
         [SerializeField] protected ReplenishableStat wrath = new();
         [SerializeField] protected bool useAutoCalculatedHealthPoints;
 
         protected CharacterProgressionManager progressionManager;
         protected InventoryManager inventory;
-        protected Dictionary<EquipmentSlots, ItemSlot> equipSlots = new();
+        protected Dictionary<EquipmentSlot, ItemSlot> equipSlots = new();
         protected DropSpawner dropSpawner;
         protected Weapon equippedWeapon;
+        protected Weapon defaultWeapon;
+        protected Weapon unarmedWeapon;
         protected Health health;
 
         public string DisplayName => $"<b>{displayName}</b>";
@@ -45,12 +45,14 @@ namespace RPGPlatformer.Combat
         public string TargetLayer => targetLayer;
         public string TargetTag => targetTag;
         public InventoryManager Inventory => inventory;
-        public Dictionary<EquipmentSlots, ItemSlot> EquipSlots => equipSlots;
+        public Dictionary<EquipmentSlot, ItemSlot> EquipSlots => equipSlots;
         public Transform Transform => transform;
         public Transform MainhandElbow => mainhandElbow;
         public Transform ChestBone => chestBone;
         public IWeapon EquippedWeapon => equippedWeapon;
-        public CombatStyle? CurrentCombatStyle => equippedWeapon?.CombatStyle;
+        public IWeapon DefaultWeapon => defaultWeapon;
+        public IWeapon UnarmedWeapon => unarmedWeapon;
+        public CombatStyle CurrentCombatStyle => equippedWeapon?.CombatStyle ?? CombatStyle.Unarmed;
         public IProjectile QueuedProjectile { get; set; }
         public IHealth Health => health;
         public ReplenishableStat Stamina => stamina;
@@ -72,17 +74,14 @@ namespace RPGPlatformer.Combat
 
             equipSlots = new()
             {
-                [EquipmentSlots.Head] = headSlot,
-                [EquipmentSlots.Torso] = torsoSlot,
-                [EquipmentSlots.Mainhand] = mainhandSlot,
-                [EquipmentSlots.Offhand] = offhandSlot
+                [EquipmentSlot.Head] = headSlot,
+                [EquipmentSlot.Torso] = torsoSlot,
+                [EquipmentSlot.Mainhand] = mainhandSlot,
+                [EquipmentSlot.Offhand] = offhandSlot
             };
-        }
 
-        //private void OnEnable()
-        //{
-        //    ConfigureReplenishableStats();
-        //}
+            InitializeDefaultWeapons();
+        }
 
         private void Start()
         {
@@ -118,7 +117,7 @@ namespace RPGPlatformer.Combat
             float defenseProgress = progressionManager.GetLevel(CharacterSkillBook.Defense)
                 / CharacterSkillBook.Defense.XPTable.MaxLevel;
             return 1 - (0.1f * defenseProgress);//hence at max defense you get 10% damage reduction
-            //TO-DO: factor in armour, DEFENSE LEVEL, and buffs
+            //TO-DO: factor in armour and buffs
         }
 
 
@@ -126,22 +125,13 @@ namespace RPGPlatformer.Combat
 
         protected virtual void ConfigureReplenishableStats()
         {
-            //if (IsPlayer)
-            //{
-            //    Health.Stat.statBar = GameObject.Find("Player Health Bar").GetComponent<StatBarItem>();
-            //    Stamina.statBar = GameObject.Find("Player Stamina Bar").GetComponent<StatBarItem>();
-            //    Wrath.statBar = GameObject.Find("Player Wrath Bar").GetComponent<StatBarItem>();
-
-            //    Health.Stat.SetDefaultValue(progressionManager.AutoCalculatedHealthPoints());
-            //}
-
             if(useAutoCalculatedHealthPoints)
             {
                 Health.Stat.SetMaxAndDefaultValue(progressionManager.AutoCalculatedHealthPoints());
             }
 
             stamina.autoReplenish = true;
-            //health and wrath auto-replenish will change when you enter and exit combat
+            //health and wrath auto-replenish will change when you enter and exit combat.
             //this is set up by the combat manager
 
             Health.Stat.TakeDefaultValue();
@@ -176,27 +166,83 @@ namespace RPGPlatformer.Combat
 
         //EQUIPMENT
 
-        public void EquipWeaponSO()
+        public void EquipMainhandWeapon(Weapon weapon)
+        {
+            EquipItem(weapon ?? unarmedWeapon, true);
+        }
+
+        public void EquipDefaultWeapon()
+        {
+            EquipMainhandWeapon(defaultWeapon);
+        }
+
+        public void InitializeDefaultWeapons()
+        {
+            defaultWeapon = CreateWeaponFromSO(defaultWeaponSO);
+            unarmedWeapon = CreateWeaponFromSO(unarmedWeaponSO);
+        }
+
+        public Weapon CreateWeaponFromSO(WeaponSO weaponSO)
         {
             if(weaponSO)
             {
-                EquipItem((EquippableItem)weaponSO.CreateInstanceOfItem(), EquipmentSlots.Mainhand);
+                return (Weapon)weaponSO.CreateInstanceOfItem();
             }
+            return null;
         }
 
-        public void EquipItem(EquippableItem item, EquipmentSlots slot, bool handleUnequippedItem = true)
+        public bool CanEquip(EquippableItem item)
         {
+            return item != null && equipSlots.ContainsKey(item.EquippableItemData.Slot);
+        }
+
+        public void EquipItem(EquippableItem item, bool handleUnequippedItem = true)
+        {
+            if (!CanEquip(item)) return;
+
+            EquipmentSlot slot = item.EquippableItemData.Slot;
+
             ItemSlot equipSlot = equipSlots[slot];
             EquippableItem oldItem = equipSlot.EquipppedItem;
             equipSlot.EquipItem(item);
 
-            if (item is Weapon weapon && item.EquippableItemData.Slot == EquipmentSlots.Mainhand)
+            if (item is Weapon weapon && slot == EquipmentSlot.Mainhand)
             {
                 equippedWeapon = weapon;
                 OnWeaponEquip?.Invoke();
+                if (oldItem == unarmedWeapon)
+                {
+                    return;
+                    //so that we don't handle unequipped in this case
+                }
             }
 
-            if (handleUnequippedItem && oldItem != null)
+            if (handleUnequippedItem)
+            {
+                HandleUnequippedItem(oldItem);
+            }
+        }
+
+        public void UnequipItem(EquipmentSlot slot, bool handleUnequippedItem = true)
+        {
+            if (!equipSlots.ContainsKey(slot)) return;
+
+            ItemSlot equipSlot = equipSlots[slot];
+            EquippableItem oldItem = equipSlot.EquipppedItem;
+            equipSlot.EquipItem(null);
+
+            if (slot == EquipmentSlot.Mainhand)
+            {
+                equippedWeapon = unarmedWeapon;
+                OnWeaponEquip?.Invoke();
+                if (oldItem == unarmedWeapon)
+                {
+                    return;
+                    //so that we don't handle unequipped in this case
+                }
+            }
+
+            if (handleUnequippedItem)
             {
                 HandleUnequippedItem(oldItem);
             }
@@ -204,6 +250,7 @@ namespace RPGPlatformer.Combat
 
         public void HandleUnequippedItem(EquippableItem item)
         {
+            if (item == null) return;
             inventory.DistributeToFirstAvailableSlots(item.ToSlotData());
         }
 
