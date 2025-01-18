@@ -16,7 +16,7 @@ namespace RPGPlatformer.Movement
         protected int currentJumpNum = 0;
         protected float maxSpeed;
         protected bool running;
-        //protected float adjacentWallAngle;
+        protected Quaternion adjacentWallAngle;
         protected HorizontalOrientation? adjacentWallSide;
 
         public bool CanWallCling => canWallCling;
@@ -33,6 +33,7 @@ namespace RPGPlatformer.Movement
             }
         }
         //public float AdjacentWallAngle => adjacentWallAngle;
+        public Quaternion AdjacentWallAngle => adjacentWallAngle;
         public HorizontalOrientation? AdjacentWallSide => adjacentWallSide;
 
         public event Action AdjacentWallChanged;
@@ -133,68 +134,79 @@ namespace RPGPlatformer.Movement
 
         public void UpdateAdjacentWall()
         {
+            //CHECK BOTH SIDES rather than just checking current orientation side, because current orientation
+            //can be inaccurate when approach the wall from freefall state
+
             var rightHit = Physics2D.Raycast(ColliderCenterLeft, Vector3.right, 
-                3 * myWidth, LayerMask.GetMask("Ground"));
+                3.5f * myWidth, LayerMask.GetMask("Ground"));
+
+            //Debug.DrawLine(ColliderCenterLeft, ColliderCenterLeft + 3.5f * myWidth * Vector3.right, Color.red);
+
             var leftHit = Physics2D.Raycast(ColliderCenterRight, - Vector3.right, 
-                3 * myWidth,
+                3.5f * myWidth,
                 LayerMask.GetMask("Ground"));
+
+            //Debug.DrawLine(ColliderCenterRight, ColliderCenterLeft - 3.5f * myWidth * Vector3.right, Color.blue);
 
             if (rightHit && (!leftHit || leftHit.distance > rightHit.distance))
             {
-                var rightHit1 = Physics2D.Raycast(ColliderCenterLeft + 0.4f * myHeight * Vector3.up, Vector3.right,
+                //Debug.DrawLine(rightHit.point + 0.005f * Vector2.right, rightHit.point - 0.005f * Vector2.right,
+                //    Color.yellow);
+
+                var rightHit1 = Physics2D.Raycast(ColliderCenterLeft + 0.3f * myHeight * Vector3.up, Vector3.right,
                 3 * myWidth, LayerMask.GetMask("Ground"));
-                if(!rightHit1)//both rightHit & rightHit1 must hit in order to register a wall,
+
+                //Debug.DrawLine(ColliderCenterLeft + 0.25f * myHeight * Vector3.up,
+                //    ColliderCenterLeft + 0.25f * myHeight * Vector3.up + 3 * myWidth * Vector3.right, Color.red);
+
+                if (!rightHit1)//both rightHit & rightHit1 must hit in order to register a wall,
                     //otherwise you are considered to just be standing on a steep slope
                 {
+                    adjacentWallAngle = Quaternion.identity;
                     adjacentWallSide = null;
                     return;
                 }
 
+                //Debug.DrawLine(rightHit1.point + 0.005f * Vector2.right, rightHit1.point - 0.005f * Vector2.right,
+                //
+
+                var wall = rightHit1.point - rightHit.point;
+                float wallAngle = Mathf.Rad2Deg * Mathf.Atan2(wall.y, wall.x);
+                adjacentWallAngle = Quaternion.Euler(0, 0, wallAngle - 90);
                 adjacentWallSide = HorizontalOrientation.right;
-                //UpdateWallAngle(rightHit);
                 return;
             }
             if (leftHit && (!rightHit || rightHit.distance > leftHit.distance))
             {
-                var leftHit1 = Physics2D.Raycast(ColliderCenterRight + 0.4f * myHeight * Vector3.up, - Vector3.right,
-                3 * myWidth, LayerMask.GetMask("Ground"));
+                //Debug.DrawLine(leftHit.point + 0.005f * Vector2.right, leftHit.point - 0.005f * Vector2.right,
+                //    Color.yellow);
+
+                var leftHit1 = Physics2D.Raycast(ColliderCenterRight + 0.3f * myHeight * Vector3.up, - Vector3.right,
+                3 * myWidth, LayerMask.GetMask("Ground")); 
+                
+                //Debug.DrawLine(ColliderCenterRight + 0.25f * myHeight * Vector3.up,
+                //    ColliderCenterLeft + 0.25f * myHeight * Vector3.up - 3 * myWidth * Vector3.right, Color.blue);
+
+
                 if (!leftHit1)
                 {
+                    transform.rotation = Quaternion.identity;
                     adjacentWallSide = null;
                     return;
                 }
+
+                //Debug.DrawLine(leftHit1.point + 0.005f * Vector2.right, leftHit1.point - 0.005f * Vector2.right,
+                //    Color.yellow);
+
+                var wall = leftHit1.point - leftHit.point;
+                float wallAngle = Mathf.Rad2Deg * Mathf.Atan2(wall.y, wall.x);
+                adjacentWallAngle = Quaternion.Euler(0, 0, wallAngle - 90);
                 adjacentWallSide = HorizontalOrientation.left;
-                //UpdateWallAngle(leftHit);
                 return;
             }
-            //adjacentWallAngle = 0;
+            adjacentWallAngle = Quaternion.identity;
             adjacentWallSide = null;
         }
-
-        //protected void UpdateWallAngle(RaycastHit2D wallHit)
-        //{
-        //    if (!adjacentWallSide.HasValue || !wallHit)
-        //    {
-        //        adjacentWallAngle = 0;
-        //        return;
-        //    }
-
-        //    int sideMult = (int)adjacentWallSide.Value;
-        //    Vector3 rayOrigin = sideMult > 0 ? ColliderCenterLeft : ColliderCenterRight;
-        //    rayOrigin += 0.1f * myHeight * Vector3.up;
-
-        //    var WallHit2 = Physics2D.Raycast(rayOrigin, sideMult * Vector3.right, LayerMask.GetMask("Ground"));
-        //    if (!WallHit2)
-        //    {
-        //        adjacentWallAngle = -60;
-        //        return;
-        //    }
-
-        //    var wallVector = wallHit.point - WallHit2.point;
-        //    float rawWallAngle = Mathf.Rad2Deg * Mathf.Atan2(wallVector.y, wallVector.x);
-        //    adjacentWallAngle = Mathf.Clamp(sideMult * (90 - rawWallAngle), -60, 60);
-        //    Debug.Log("clamped wall angle " + adjacentWallAngle);
-        //}
 
         protected override void OnDestroy()
         {

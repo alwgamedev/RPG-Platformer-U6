@@ -23,7 +23,7 @@ namespace RPGPlatformer.Movement
             GetState(typeof(Jumping).Name).OnEntry += AnimateJumping;
             GetState(typeof(Jumping).Name).OnEntryToSameState += AnimateDoubleJump;
 
-            GetState(typeof(Airborne).Name).OnEntry += AnimateFreefall;
+            //GetState(typeof(Airborne).Name).OnEntry += AnimateFreefall;
         }
 
         public void AnimateMovement(float value)
@@ -57,9 +57,14 @@ namespace RPGPlatformer.Movement
             animationControl.animator.SetBool("wallCling", val);
         }
 
-        //public void SetWallAngle(float angle)//angle between -60 and 60
-        //{
-        //    animationControl.animator.SetFloat("wallAngle", (angle + 60) / 120);
-        //}
+        public void AnimateWallScramble(bool val)
+        {
+            animationControl.animator.SetBool("wallScramble", val);
+        }
+
+        public void SetDownSpeed(float yVelocity)
+        {
+            animationControl.animator.SetFloat("downSpeed", Mathf.Clamp(-yVelocity / 2, 0, 1));
+        }
     }
 }

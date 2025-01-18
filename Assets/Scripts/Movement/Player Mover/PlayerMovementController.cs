@@ -1,6 +1,6 @@
-﻿using RPGPlatformer.Core;
+﻿using UnityEngine;
+using RPGPlatformer.Core;
 using RPGPlatformer.SceneManagement;
-
 
 namespace RPGPlatformer.Movement
 {

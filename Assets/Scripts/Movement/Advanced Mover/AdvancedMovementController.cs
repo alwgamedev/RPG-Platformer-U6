@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using RPGPlatformer.Core;
+using Unity.VisualScripting;
 
 namespace RPGPlatformer.Movement
 {
@@ -17,7 +18,7 @@ namespace RPGPlatformer.Movement
 
         private float moveInput = 0;//even child classes have to set it through the property!
 
-        public Rigidbody2D Rigidbody => mover.MyRigidbody;
+        public Rigidbody2D Rigidbody => mover.Rigidbody;
         public HorizontalOrientation CurrentOrientation => mover.CurrentOrientation;
         public IMover Mover => mover;
         public float MoveInput
@@ -45,15 +46,17 @@ namespace RPGPlatformer.Movement
         {
             movementManager.StateMachine.stateGraph.grounded.OnEntry += OnGroundedEntry;
             movementManager.StateMachine.stateGraph.jumping.OnEntry += OnJumpingEntry;
-            movementManager.StateMachine.stateGraph.airborne.OnEntry += OnAirborneEntry;
+            //movementManager.StateMachine.stateGraph.airborne.OnEntry += OnAirborneEntry;
+
+            mover.AirborneVerified += OnAirborneVerified;
 
             OnUpdate += AnimateMovement;
 
             if (mover.CanWallCling)
             {
-                OnMoveInputChanged += HandleWallCling;
-                mover.AdjacentWallChanged += HandleWallCling;
-                //OnUpdate += UpdateWallAngle;
+                OnMoveInputChanged += HandleWallInteraction;
+                mover.AdjacentWallChanged += HandleWallInteraction;
+                OnUpdate += SetDownSpeed;
             }
         }
 
@@ -81,21 +84,42 @@ namespace RPGPlatformer.Movement
             movementManager.AnimateMovement(mover.SpeedFraction());
         }
 
-        protected virtual void HandleWallCling()
+        protected virtual void SetDownSpeed()
+        {
+            movementManager.SetDownSpeed(mover.Rigidbody.linearVelocityY);
+        }
+
+        protected virtual void HandleWallInteraction()
         {
             if (moveInput != 0 && mover.AdjacentWallSide.HasValue
                 && Mathf.Sign(moveInput) == (int)mover.AdjacentWallSide.Value)
             {
-                movementManager.AnimateWallCling(true);
+                AnimateWallSlide(false);
+                AnimateWallCling(true);
                 return;
             }
-            movementManager.AnimateWallCling(false);
+            AnimateWallCling(false);
+
+            if(mover.AdjacentWallSide.HasValue && mover.CurrentOrientation == mover.AdjacentWallSide.Value)
+            {
+                AnimateWallSlide(true);
+            }
+            else
+            {
+                AnimateWallSlide(false);
+            }
         }
 
-        //protected virtual void UpdateWallAngle()
-        //{
-        //    movementManager.SetWallAngle(mover.AdjacentWallAngle);
-        //}
+        protected virtual void AnimateWallCling(bool val)
+        {
+            movementManager.AnimateWallCling(val);
+            transform.rotation = val ? mover.AdjacentWallAngle : Quaternion.identity;
+        }
+
+        protected virtual void AnimateWallSlide(bool val)
+        {
+            movementManager.AnimateWallScramble(val);
+        }
 
         public void SetRunning(bool val)
         {
@@ -117,16 +141,30 @@ namespace RPGPlatformer.Movement
             {
                 SetOrientation(input);
                 mover.MoveAirborne(mover.CurrentOrientation);
-                movementManager.AnimateWallCling(false);
+                AnimateWallCling(false);
+                AnimateWallSlide(false);
             };
         }
 
-        public virtual void OnAirborneEntry()
+        //public virtual void OnAirborneEntry()
+        //{
+        //    CurrentMoveAction = (input) =>
+        //    {
+        //        mover.MoveAirborne((HorizontalOrientation)input);
+        //    };
+        //}
+
+        public virtual void OnAirborneVerified()
         {
-            CurrentMoveAction = (input) =>
+            if (movementManager.StateMachine.HasState(typeof(Airborne)))
             {
-                mover.MoveAirborne((HorizontalOrientation)input);
-            };
+                CurrentMoveAction = (input) =>
+                {
+                    mover.MoveAirborne((HorizontalOrientation)input);
+                };
+
+                movementManager.AnimateFreefall();
+            }
         }
 
         public virtual void SetOrientation(float input)

@@ -30,7 +30,7 @@ namespace RPGPlatformer.Movement
         protected RaycastHit2D leftGroundHit;
 
         public Transform Transform => transform;
-        public Rigidbody2D MyRigidbody => myRigidbody;
+        public Rigidbody2D Rigidbody => myRigidbody;
         public float Width => myWidth;
         public float Height => myHeight;
         public Vector3 ColliderCenterRight => transform.position + localColliderCenterRight;
@@ -40,6 +40,7 @@ namespace RPGPlatformer.Movement
         public HorizontalOrientation CurrentOrientation { get; protected set; }
 
         public event Action<HorizontalOrientation> UpdatedXScale;
+        public event Action AirborneVerified;
 
         protected virtual void Awake()
         {
@@ -51,7 +52,7 @@ namespace RPGPlatformer.Movement
             myHeight = myCollider.bounds.max.y - myCollider.bounds.min.y;
             myWidth = myCollider.bounds.max.x - myCollider.bounds.min.x;
 
-            groundednessTolerance = 0.7f * myHeight;
+            groundednessTolerance = 0.68f * myHeight;
 
             localColliderCenterRight = myCollider.bounds.center + (myWidth / 4) * Vector3.right - transform.position;
             localColliderCenterLeft = myCollider.bounds.center - (myWidth / 4) * Vector3.right - transform.position;
@@ -147,15 +148,19 @@ namespace RPGPlatformer.Movement
         protected async void VerifyJump()
         {
             verifyingJump = true;
-            await Task.Delay(100, GlobalGameTools.Instance.TokenSource.Token);
+            await Task.Delay(200, GlobalGameTools.Instance.TokenSource.Token);
             verifyingJump = false;
         }
 
         protected async void VerifyAirborne()
         {
             verifyingAirborne = true;
-            await Task.Delay(100, GlobalGameTools.Instance.TokenSource.Token);
+            await Task.Delay(200, GlobalGameTools.Instance.TokenSource.Token);
             verifyingAirborne = false;
+            if (!leftGroundHit && !rightGroundHit)
+            {
+                AirborneVerified?.Invoke();
+            }
         }
 
         protected Vector2 OrientForce(Vector2 force)
