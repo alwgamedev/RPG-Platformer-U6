@@ -46,7 +46,7 @@ namespace RPGPlatformer.UI
                 : ClearTooltipImmediate;
         }
 
-        protected virtual void OnEnable()
+        protected virtual void Start()
         {
             if (TryGetComponent(out RightClickMenuSpawner rcms))
             {

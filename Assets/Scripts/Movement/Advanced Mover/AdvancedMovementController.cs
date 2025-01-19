@@ -21,7 +21,7 @@ namespace RPGPlatformer.Movement
         public Rigidbody2D Rigidbody => mover.Rigidbody;
         public HorizontalOrientation CurrentOrientation => mover.CurrentOrientation;
         public IMover Mover => mover;
-        public float MoveInput
+        public virtual float MoveInput
         {
             get => moveInput;
             set
@@ -36,21 +36,18 @@ namespace RPGPlatformer.Movement
         protected virtual void Awake()
         {
             mover = GetComponent<AdvancedMover>();
-            movementManager = new(mover, GetComponent<AnimationControl>());
-            movementManager.Configure();
+            //InitializeMovementManager();
 
             OnFixedUpdate += HandleMoveInput;
         }
 
-        protected virtual void OnEnable()
+        protected virtual void Start()
         {
-            movementManager.StateMachine.stateGraph.grounded.OnEntry += OnGroundedEntry;
-            movementManager.StateMachine.stateGraph.jumping.OnEntry += OnJumpingEntry;
-            movementManager.StateMachine.stateGraph.freefall.OnExit += OnAirborneExit;
-
-            mover.FreefallVerified += OnAirborneVerified;
+            InitializeMovementManager();
 
             OnUpdate += AnimateMovement;
+
+            mover.FreefallVerified += OnFreefallVerified;
 
             if (mover.DetectWalls)
             {
@@ -67,6 +64,16 @@ namespace RPGPlatformer.Movement
         protected virtual void FixedUpdate()
         {
             OnFixedUpdate?.Invoke();
+        }
+
+        private void InitializeMovementManager()
+        {
+            movementManager = new(mover, GetComponent<AnimationControl>());
+            movementManager.Configure();
+
+            movementManager.StateMachine.stateGraph.grounded.OnEntry += OnGroundedEntry;
+            movementManager.StateMachine.stateGraph.jumping.OnEntry += OnJumpingEntry;
+            movementManager.StateMachine.stateGraph.freefall.OnExit += OnFreefallExit;
         }
 
 
@@ -190,16 +197,16 @@ namespace RPGPlatformer.Movement
             CurrentMoveAction = JumpingMoveAction;
         }
 
-        protected virtual void OnAirborneVerified()
+        protected virtual void OnFreefallVerified()
         {
             if (movementManager.StateMachine.HasState(typeof(Freefall)))
             {
-                CurrentMoveAction = AirborneMoveAction;
+                CurrentMoveAction = FreefallMoveAction;
                 movementManager.AnimateFreefall();
             }
         }
 
-        protected void OnAirborneExit()
+        protected void OnFreefallExit()
         {
             mover.UpdateXScale();
         }
@@ -213,13 +220,13 @@ namespace RPGPlatformer.Movement
         protected virtual void JumpingMoveAction(float input)
         {
             SetOrientation(input);
-            mover.MoveAirborne(mover.CurrentOrientation);
+            mover.MoveFreefall(mover.CurrentOrientation);
         }
 
-        protected virtual void AirborneMoveAction(float input)
+        protected virtual void FreefallMoveAction(float input)
         {
             SetOrientation(input, false);
-            mover.MoveAirborne((HorizontalOrientation)input);
+            mover.MoveFreefall((HorizontalOrientation)input);
         }
 
 

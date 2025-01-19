@@ -33,7 +33,7 @@ namespace RPGPlatformer.UI
             BuildCursorLookup();
         }
 
-        private void OnEnable()
+        private void Start()
         {
             ICombatController playerCombatController = GameObject.Find("Player").GetComponent<ICombatController>();
             playerCombatController.OnChannelStarted += () => EquipAnimatedCursor(focusingRedCrosshairs);
@@ -48,10 +48,7 @@ namespace RPGPlatformer.UI
             playerCombatController.OnMaximumPowerAchieved += () => EquipAnimatedCursor(blinkingGreenCrosshairs);
 
             InteractableGameObject.HoveredIGOChanged += EquipIGOHoverCursor;
-        }
 
-        private void Start()
-        {
             EquipCursor(CursorType.Default, true);
         }
 

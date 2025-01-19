@@ -19,7 +19,7 @@ namespace RPGPlatformer.AIControl
         //items are (rc menu text, action) exactly like inventory item
         //actions can be e.g. Talk To, View Shop, Pickpocket, etc.
 
-        private void OnEnable()
+        private void Start()
         {
             InitializeInteractionOptions();
         }

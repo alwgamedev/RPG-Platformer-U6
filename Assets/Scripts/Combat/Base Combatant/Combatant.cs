@@ -80,7 +80,7 @@ namespace RPGPlatformer.Combat
                 [EquipmentSlot.Offhand] = offhandSlot
             };
 
-            InitializeDefaultWeapons();
+            InitializeWeaponSOs();
         }
 
         private void Start()
@@ -176,7 +176,7 @@ namespace RPGPlatformer.Combat
             EquipMainhandWeapon(defaultWeapon);
         }
 
-        public void InitializeDefaultWeapons()
+        public void InitializeWeaponSOs()
         {
             defaultWeapon = CreateWeaponFromSO(defaultWeaponSO);
             unarmedWeapon = CreateWeaponFromSO(unarmedWeaponSO);
@@ -227,9 +227,10 @@ namespace RPGPlatformer.Combat
         {
             if (!equipSlots.ContainsKey(slot)) return;
 
-            ItemSlot equipSlot = equipSlots[slot];
-            EquippableItem oldItem = equipSlot.EquipppedItem;
-            equipSlot.EquipItem(null);
+            var equipSlot = equipSlots[slot];
+            var oldItem = equipSlot.EquipppedItem;
+            var newItem = slot == EquipmentSlot.Mainhand ? unarmedWeapon : null;
+            equipSlot.EquipItem(newItem);
 
             if (slot == EquipmentSlot.Mainhand)
             {
@@ -238,7 +239,7 @@ namespace RPGPlatformer.Combat
                 if (oldItem == unarmedWeapon)
                 {
                     return;
-                    //so that we don't handle unequipped in this case
+                    //so that we don't HandleUnequippedItem and redistribute it to our inventory
                 }
             }
 

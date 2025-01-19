@@ -5,14 +5,6 @@ using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
-    //this will be a controller of a state system (with states patrol, pursue, attack)
-    //-- can pursue any game object (or Health maybe), not just player, so maybe you could have some areas
-    //where two factions of ai's are fighting each other, or their could be FRIENDLY ai and player companions
-    //that help you in combat
-    //it will also delegate to two sub-systems:
-    //(*)Combat Controller - responsible for executing abilities through the Combatant
-    //(*)Movement Controller - responsible for moving to destination through the Mover
-
     [RequireComponent(typeof(AIPatroller))]
     public class AIPatrollerController : MonoBehaviour, IInputSource
     {
@@ -25,31 +17,22 @@ namespace RPGPlatformer.AIControl
         public IHealth CurrentTarget
         {
             get => patroller.combatController.currentTarget;
-            protected set => patroller.combatController.currentTarget = value;
+            protected set
+            { 
+                patroller.combatController.currentTarget = value;
+                patroller.movementController.currentTarget = value;
+            }
         }
 
         protected virtual void Awake()
         {
             patroller = GetComponent<AIPatroller>();
-
-            stateManager = new(null, patroller);
-            stateManager.Configure();
-        }
-
-        private void OnEnable()
-        {
-            stateManager.StateGraph.patrol.OnEntry += OnPatrolEntry;
-            stateManager.StateGraph.patrol.OnExit += OnPatrolExit;
-            stateManager.StateGraph.suspicion.OnEntry += OnSuspicionEntry; 
-            stateManager.StateGraph.suspicion.OnExit += OnSuspicionExit;
-            stateManager.StateGraph.pursuit.OnEntry += OnPursuitEntry;
-            stateManager.StateGraph.pursuit.OnExit += OnPursuitExit;
-            stateManager.StateGraph.attack.OnEntry += OnAttackEntry;
-            stateManager.StateGraph.attack.OnExit += OnAttackExit;
         }
 
         private void Start()
         {
+            InitializeStateManager();
+
             if (playerEnemy)
             {
                 SetCurrentTarget(GameObject.Find("Player").GetComponent<IHealth>());
@@ -63,6 +46,21 @@ namespace RPGPlatformer.AIControl
         protected virtual void Update()
         {
             OnUpdate?.Invoke();
+        }
+
+        protected virtual void InitializeStateManager()
+        {
+            stateManager = new(null, patroller);
+            stateManager.Configure();
+
+            stateManager.StateGraph.patrol.OnEntry += OnPatrolEntry;
+            stateManager.StateGraph.patrol.OnExit += OnPatrolExit;
+            stateManager.StateGraph.suspicion.OnEntry += OnSuspicionEntry;
+            stateManager.StateGraph.suspicion.OnExit += OnSuspicionExit;
+            stateManager.StateGraph.pursuit.OnEntry += OnPursuitEntry;
+            stateManager.StateGraph.pursuit.OnExit += OnPursuitExit;
+            stateManager.StateGraph.attack.OnEntry += OnAttackEntry;
+            stateManager.StateGraph.attack.OnExit += OnAttackExit;
         }
 
         protected virtual void SetCurrentTarget(IHealth targetHealth, bool beginPatrolIfNoTarget = true)
@@ -118,12 +116,14 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void OnAttackEntry()
         {
+            patroller.movementController.EnableGapJumping(false);
             patroller.StartAttacking();
         }
 
         protected virtual void OnAttackExit()
         {
             patroller.StopAttacking();
+            patroller.movementController.EnableGapJumping(true);
             //OnUpdate -= patroller.MaintainMinimumCombatDistance;
         }
 

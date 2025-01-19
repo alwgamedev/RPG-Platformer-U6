@@ -511,13 +511,12 @@ MonoBehaviour:
   deathForce: {x: 120, y: 120}
   deathTorque: 10
   acceleration: 30
-  airborneAccelerationFactor: 0.8
+  freefallMovementAccelerationFactor: 0.8
   runSpeed: 2.4
   walkSpeed: 0.8
   maxNumJumps: 2
   jumpForce: 375
   detectWalls: 0
-  maxPermissibleDropOffFactor: 0
 --- !u!114 &8914383755510078053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,7 +529,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c2ea0e4247374408b6044e77652917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontMoveOverDropOffs: 1
+  dropOffHandlingOption: 1
+  canMoveDuringFreefall: 0
+  maxPermissibleDropOffHeightFactor: 3.5
 --- !u!114 &-2177855670895466878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -544,8 +545,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pursuitRange: 8
-  movementController: {fileID: 0}
-  combatController: {fileID: 0}
 --- !u!114 &2807143126115891349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573,14 +572,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeToLeaveCombat: 200
   abilityBarData:
-    unarmedAbilityBarItems: []
-    mageAbilityBarItems: []
+    unarmedAbilityBarItems:
+    - includeInAutoCastCycle: 1
+      ability: 0
+    mageAbilityBarItems:
+    - includeInAutoCastCycle: 1
+      ability: 0
     meleeAbilityBarItems:
     - includeInAutoCastCycle: 1
       ability: 4
     - includeInAutoCastCycle: 1
       ability: 3
-    rangedAbilityBarItems: []
+    rangedAbilityBarItems:
+    - includeInAutoCastCycle: 1
+      ability: 0
   useDefaultAbilityBars: 0
   immuneToStuns: 0
 --- !u!114 &3663846158437281456

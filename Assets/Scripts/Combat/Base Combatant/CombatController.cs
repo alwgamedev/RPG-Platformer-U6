@@ -53,6 +53,7 @@ namespace RPGPlatformer.Combat
         public IMovementController MovementController { get; protected set; }
         public virtual IInputSource InputSource { get; protected set; }
 
+        public event Action CombatManagerConfigured;
         public event Action CombatEntered;
         public event Action CombatExited;
         public event Action AbilityBarResetEvent;
@@ -72,35 +73,20 @@ namespace RPGPlatformer.Combat
 
         protected virtual void Awake()
         {
-            combatant = GetComponent<Combatant>();
-
-            combatManager = new(null, combatant, GetComponent<AnimationControl>(), timeToLeaveCombat);
-            combatManager.Configure();
-
+            combatant = GetComponent<Combatant>(); 
             MovementController = GetComponent<IMovementController>();
             InputSource = GetComponent<IInputSource>();
-
-            tickTimer = GetComponent<TickTimer>();
-            tickTimer.RandomizeStartValue = true;
-
-            InitializeAbilityBarManager();
-        }
-
-        protected virtual void OnEnable()
-        {
-            tickTimer.NewTickEvent += combatManager.OnNewTick;
-
-            OnChannelEnded += () => combatManager.animationControl.animator.SetTrigger("ceaseAttack");
-
-            combatManager.StateGraph.inCombat.OnEntry += OnCombatEntry;
-            combatManager.StateGraph.inCombat.OnExit += OnCombatExit;
-            combatManager.StateGraph.dead.OnEntry += Death;
-            combatManager.StateGraph.dead.OnExit += Revival;
-            combatManager.OnWeaponTick += OnWeaponTick;
         }
 
         protected virtual void Start()
         {
+            InitializeCombatManager();//doing both of these here because they depend on the combatant
+            InitializeAbilityBarManager();
+
+            tickTimer = GetComponent<TickTimer>();
+            tickTimer.RandomizeStartValue = true;
+            tickTimer.NewTick += combatManager.OnNewTick;
+
             combatant.OnTargetingFailed += OnTargetingFailed;
             combatant.OnWeaponEquip += OnWeaponEquip;
             combatant.Health.OnStunned += async (duration, freezeAnimation) => 
@@ -124,7 +110,23 @@ namespace RPGPlatformer.Combat
         }
 
 
-        //ABILITY BARS
+        //SET-UP
+
+        protected virtual void InitializeCombatManager()
+        {
+            combatManager = new(null, combatant, GetComponent<AnimationControl>(), timeToLeaveCombat);
+            combatManager.Configure();
+
+            OnChannelEnded += () => combatManager.animationControl.animator.SetTrigger("ceaseAttack");
+
+            combatManager.StateGraph.inCombat.OnEntry += OnCombatEntry;
+            combatManager.StateGraph.inCombat.OnExit += OnCombatExit;
+            combatManager.StateGraph.dead.OnEntry += Death;
+            combatManager.StateGraph.dead.OnExit += Revival;
+            combatManager.OnWeaponTick += OnWeaponTick;
+
+            CombatManagerConfigured?.Invoke();
+        }
 
         protected virtual void InitializeAbilityBarManager()
         {
@@ -135,6 +137,9 @@ namespace RPGPlatformer.Combat
             }
             UpdateAbilityBars(abilityBarData);
         }
+
+
+        //ABILITY BARS
 
         protected virtual void UpdateAbilityBars(SerializableCharacterAbilityBarData data)
         {
@@ -151,8 +156,8 @@ namespace RPGPlatformer.Combat
 
     //ABILITY INPUT HANDLING
 
-    protected virtual void HandleAbilityInput(int index)
-        {
+        protected virtual void HandleAbilityInput(int index)
+        { 
             ExecuteAbility(CurrentAbilityBar.GetAbility(index));
         }
 
@@ -562,6 +567,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnDestroy()
         {
+            CombatManagerConfigured = null;
             AbilityBarResetEvent = null;
             OnCooldownStarted = null;
             OnFireButtonUp = null;

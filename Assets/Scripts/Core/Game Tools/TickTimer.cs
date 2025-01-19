@@ -11,7 +11,7 @@ namespace RPGPlatformer.Core
 
         public float TickCount { get; private set; } = 0;
 
-        public event Action NewTickEvent;
+        public event Action NewTick;
 
         private void Start()
         {
@@ -21,19 +21,19 @@ namespace RPGPlatformer.Core
             }
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             TickCount += Time.deltaTime;
             if (TickCount > TickLength)
             {
                 TickCount -= TickLength;
-                NewTickEvent?.Invoke();
+                NewTick?.Invoke();
             }
         }
 
         private void OnDestroy()
         {
-            NewTickEvent = null;
+            NewTick = null;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace RPGPlatformer.UI
         public event Action NewXPGainEventReceived;
         public event Action QueueEmptied;
 
-        private void OnEnable()
+        private void Awake()
         {
             xpGainedTextAnimation = xpGainedText.GetComponent<Animation>();
         }

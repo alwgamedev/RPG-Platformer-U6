@@ -15,17 +15,19 @@ namespace RPGPlatformer.Combat
         protected override void Awake()
         {
             base.Awake();
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
 
             SettingsManager.OnIAMConfigure += OnIAMConfigure;
             SettingsManager.NewAbilityBarSettings += UpdateAbilityBars;
 
             InteractableGameObject.IGOClicked += OnIGOClicked;
         }
+
+        //protected override void OnEnable()
+        //{
+        //    base.OnEnable();
+
+
+        //}
 
         protected override void Start()
         {

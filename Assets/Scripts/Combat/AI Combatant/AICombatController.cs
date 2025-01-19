@@ -18,12 +18,17 @@ namespace RPGPlatformer.Combat
         protected override void Awake()
         {
             base.Awake();
+        }
 
+        protected override void Start()
+        {
             healthBarCanvas = GetComponentInChildren<CombatantHealthBarCanvas>();
             if (healthBarCanvas != null)
             {
                 healthBarCanvas.Configure(this);
             }
+
+            base.Start();
         }
 
         public void FireOneShot()

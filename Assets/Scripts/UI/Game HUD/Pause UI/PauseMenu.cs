@@ -12,10 +12,8 @@ namespace RPGPlatformer.UI
 
         public Button SettingsButton => settingsButton;
 
-        protected override void OnEnable()
+        protected void Start()
         {
-            base.OnEnable();
-
             resumeButton.onClick.AddListener(Resume);
         }
 

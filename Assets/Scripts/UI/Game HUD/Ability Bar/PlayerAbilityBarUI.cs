@@ -7,10 +7,8 @@ namespace RPGPlatformer.UI
     {
         IAbilityBarOwner player;
 
-        protected override void OnEnable()
+        protected virtual void Start()
         {
-            base.OnEnable();
-
             player = FindAnyObjectByType<PlayerCombatController>();
             player.AbilityBarResetEvent += DisplayPlayerAbilityBar;
             player.OnCooldownStarted += OnCooldownStart;

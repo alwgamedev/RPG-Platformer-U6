@@ -6,7 +6,7 @@ using System;
 
 namespace RPGPlatformer.AIControl
 {
-    [RequireComponent(typeof(AdvancedMovementController))]
+    [RequireComponent(typeof(AIMovementController))]
     [RequireComponent(typeof(AICombatController))]
     public class AIPatroller : StateDriver
     {
@@ -14,26 +14,39 @@ namespace RPGPlatformer.AIControl
 
         protected Action OnUpdate;
 
-        public AdvancedMovementController movementController;
-        public AICombatController combatController;
+        public AIMovementController movementController { get; protected set; }
+        public AICombatController combatController { get; protected set; }
 
         public IHealth CurrentTarget => combatController.currentTarget;
 
 
         protected virtual void Awake()
         {
-            movementController = GetComponent<AdvancedMovementController>();
+            movementController = GetComponent<AIMovementController>();
             combatController = GetComponent<AICombatController>();
         }
 
-        protected virtual void OnEnable()
+        protected virtual void Start()
         {
-            combatController.CombatManager.OnWeaponTick += CheckMinimumCombatDistance;
+            if (combatController.CombatManager != null)
+            {
+                OnCombatManagerConfigured();
+            }
+            else
+            {
+                combatController.CombatManagerConfigured += OnCombatManagerConfigured;
+            }
         }
 
         protected virtual void Update()
         {
             OnUpdate?.Invoke();
+        }
+
+        protected void OnCombatManagerConfigured()
+        {
+            combatController.CombatManager.OnWeaponTick += CheckMinimumCombatDistance;
+            combatController.CombatManagerConfigured -= OnCombatManagerConfigured;
         }
 
         public void PatrolBehavior()

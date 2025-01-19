@@ -79,7 +79,7 @@ namespace RPGPlatformer.Core
 
         protected virtual GameObject AttachPrefab(EquippableItem item)
         {
-            if(item == null)
+            if(item == null || item.EquippableItemData.Prefab == null)
             {
                 return null;
             }

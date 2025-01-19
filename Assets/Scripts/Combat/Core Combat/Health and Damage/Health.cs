@@ -32,16 +32,18 @@ namespace RPGPlatformer.Combat
         //    }
         //}
 
-        private void OnEnable()
-        {
-            if (takeDamageAutomatically)
-            {
-                HealthChanged += (damage, damageDealer) => GainHealth(-damage, true);
-            }
-        }
+        //private void OnEnable()
+        //{
+
+        //}
 
         private void Start()
         {
+            if (takeDamageAutomatically)//mainly for combat dummy
+            {
+                HealthChanged += (damage, damageDealer) => GainHealth(-damage, true);
+            }
+
             if (findStatBarInChildren)//this is just so the combat dummy's health displays
             {
                 stat.statBar = GetComponentInChildren<StatBarItem>();

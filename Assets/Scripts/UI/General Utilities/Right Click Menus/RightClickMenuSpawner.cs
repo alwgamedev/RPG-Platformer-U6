@@ -37,15 +37,17 @@ namespace RPGPlatformer.UI
             }
 
             igo = GetComponent<IInteractableGameObject>();
-        }
 
-        protected virtual void OnEnable()
-        {
             if (disableWhenPlayerIsDead)
             {
                 GlobalGameTools.OnPlayerDeath += ClearMenu;
             }
         }
+
+        //protected virtual void OnEnable()
+        //{
+            
+        //}
 
         public void Pause()
         {

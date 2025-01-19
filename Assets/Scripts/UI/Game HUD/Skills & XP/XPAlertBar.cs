@@ -12,7 +12,7 @@ namespace RPGPlatformer.UI
 
         Dictionary<CharacterSkill, XPAlert> activeXPAlerts = new();
 
-        private void OnEnable()
+        private void Start()
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             player.GetComponent<CharacterProgressionManager>().ExperienceGained +=

@@ -13,18 +13,18 @@ namespace RPGPlatformer.UI
 
         protected override void Awake()
         {
-            base.Awake();
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-
-            closeButton.onClick.AddListener(CloseInspector);
-
+            base.Awake(); 
+            
             LootDrop.OnLootSearched += DisplayLootDrop;//(lootDrop) => DisplayLootDrop(lootDrop);
 
             GlobalGameTools.OnPlayerDeath += CloseInspector;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            closeButton.onClick.AddListener(CloseInspector);
             
         }
 

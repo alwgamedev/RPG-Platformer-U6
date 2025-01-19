@@ -14,7 +14,7 @@ namespace RPGPlatformer.SceneManagement
         public event Action OnPause;
         public event Action OnUnpause;
 
-        private void OnEnable()
+        private void Awake()
         {
             SettingsManager.OnIAMConfigure += OnIAMConfigured;
         }

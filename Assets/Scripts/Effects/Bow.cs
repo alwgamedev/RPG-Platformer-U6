@@ -24,14 +24,17 @@ namespace RPGPlatformer.Effects
 
         Action OnUpdate;
 
-        private void Awake()
+        //private void Awake()
+        //{
+        //    ReturnToOrigin();
+        //}
+
+        private void Start()
         {
             ReturnToOrigin();
-        }
 
-        private void OnEnable()
-        {
             IMovementController movementController = GetComponentInParent<IMovementController>();
+
             if (movementController != null)
             {
                 currentOrientation = movementController.CurrentOrientation;

@@ -40,17 +40,11 @@ namespace RPGPlatformer.Loot
             inventory = GetComponent<InventoryManager>();
         }
 
-        private void OnEnable()
+        private void Start()
         {
             lifeTimer = 0;
 
-            inventory.OnInventoryChanged += () =>
-            {
-                if (inventory.IsEmpty())
-                {
-                    DestroyDrop();
-                }
-            };
+            inventory.OnInventoryChanged += HandleInventoryChanged;
         }
 
         private void Update()
@@ -63,13 +57,13 @@ namespace RPGPlatformer.Loot
             OnUpdate?.Invoke();
         }
 
-        //public override void OnMouseDown()
-        //{
-        //    if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
-        //    if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
-
-        //    TakeAll();
-        //}
+        private void HandleInventoryChanged()
+        {
+            if (inventory.IsEmpty())
+            {
+                DestroyDrop();
+            }
+        }
 
         public override void OnPointerClick(PointerEventData eventData)
         {
@@ -118,11 +112,6 @@ namespace RPGPlatformer.Loot
             OnLootSearched?.Invoke(this);
         }
 
-        //public void Examine()
-        //{
-        //    GameLog.Log("I should search this for loot.");
-        //}
-
         public void BeginInspection()
         {
             OnUpdate = () => PlayerInRangeWithNotifications();
@@ -133,27 +122,6 @@ namespace RPGPlatformer.Loot
         {
             OnUpdate = null;
         }
-
-        //private bool PlayerInRangeWithNotifications()
-        //{
-        //    if (!PlayerInRange())
-        //    {
-        //        OnPlayerOutOfRange();
-        //        PlayerOutOfRange?.Invoke();
-        //        return false;
-        //    }
-        //    return true;
-        //}
-
-        ////private bool PlayerInRange()
-        ////{
-        ////    if(player == null)
-        ////    {
-        ////        return false;
-        ////    }
-
-        ////    return Vector2.Distance(playerTransform.position, transform.position) < maxSearchableDistance;
-        ////}
 
         protected override void OnPlayerOutOfRange()
         {

@@ -12,7 +12,7 @@ namespace RPGPlatformer.Saving
 
     public class SavingSystem : MonoBehaviour
     {
-        private void OnEnable()
+        private void Awake()
         {
             SettingsManager.OnIAMConfigure += OnIAMConfigure;
         }

@@ -20,8 +20,6 @@ namespace RPGPlatformer.Movement
         protected Rigidbody2D myRigidbody;
         protected float myHeight;
         protected float myWidth;
-        protected Vector3 localColliderCenterRight;
-        protected Vector3 localColliderCenterLeft;
         protected bool jumping;
         protected bool freefalling;
         protected bool verifyingJump;
@@ -30,13 +28,13 @@ namespace RPGPlatformer.Movement
         protected RaycastHit2D rightGroundHit;
         protected RaycastHit2D leftGroundHit;
 
-        //public bool VerifyingJump => verifyingJump;
         public Transform Transform => transform;
         public Rigidbody2D Rigidbody => myRigidbody;
         public float Width => myWidth;
         public float Height => myHeight;
-        public Vector3 ColliderCenterRight => transform.position + localColliderCenterRight;
-        public Vector3 ColliderCenterLeft => transform.position + localColliderCenterLeft;
+        public Vector3 ColliderCenterRight => myCollider.bounds.center + 0.25f * myWidth * transform.right;
+        public Vector3 ColliderCenterLeft => myCollider.bounds.center - 0.25f * myWidth * transform.right;
+        public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myWidth * transform.up;
         public Vector3 ColliderCenterFront => CurrentOrientation == HorizontalOrientation.right ?
             ColliderCenterRight : ColliderCenterLeft;
         public Vector3 ColliderCenterBack => CurrentOrientation == HorizontalOrientation.right ?
@@ -64,9 +62,6 @@ namespace RPGPlatformer.Movement
             groundednessTolerance = 0.7f * myHeight;//a little extra than 0.5f * height, because sometimes the
             //ground collider is a bit below the surface (and we don't want to be randomly losing groundedness
             //as we walk over uneven terrain)
-
-            localColliderCenterRight = myCollider.bounds.center + (myWidth / 4) * Vector3.right - transform.position;
-            localColliderCenterLeft = myCollider.bounds.center - (myWidth / 4) * Vector3.right - transform.position;
         }
 
         protected virtual void Update()
@@ -153,10 +148,20 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        public virtual void Stop()
+        {
+            myRigidbody.linearVelocity = new Vector2(0, myRigidbody.linearVelocityY);
+        }
+
         public virtual void Jump(Vector2 force)
         {
             myRigidbody.AddForce(OrientForce(force), ForceMode2D.Impulse);
             TriggerJumping();
+        }
+
+        public Vector2 OrientForce(Vector2 force)
+        {
+            return (int)CurrentOrientation * force.x * Vector2.right + force.y * Vector2.up;
         }
 
         protected async void VerifyJump()
@@ -209,11 +214,6 @@ namespace RPGPlatformer.Movement
                 OnJump -= cts.Cancel;
                 OnDestroyed -= cts.Cancel;
             }
-        }
-
-        protected Vector2 OrientForce(Vector2 force)
-        {
-            return (int)CurrentOrientation * force.x * Vector2.right + force.y * Vector2.up;
         }
 
         public virtual void SetOrientation(HorizontalOrientation orientation, bool updateXScale = true)

@@ -69,14 +69,14 @@ namespace RPGPlatformer.Combat
 
             void StopGainingPower()
             {
-                controller.TickTimer.NewTickEvent -= GainPower;
+                controller.TickTimer.NewTick -= GainPower;
             }
 
             void StartAbilityPowerUp()
             {
                 controller.OnFireButtonUp += SetResult;
                 controller.OnMaximumPowerAchieved += StopGainingPower;
-                controller.TickTimer.NewTickEvent += GainPower;
+                controller.TickTimer.NewTick += GainPower;
                 controller.StartPowerUp(this);
                 if (HasPowerUpAnimation)
                 {
@@ -122,7 +122,7 @@ namespace RPGPlatformer.Combat
                 controller.OnFireButtonUp -= SetResult;
                 controller.OnChannelEnded -= Cancel;
                 controller.OnMaximumPowerAchieved -= StopGainingPower;
-                controller.TickTimer.NewTickEvent -= GainPower;
+                controller.TickTimer.NewTick -= GainPower;
 
                 registration.Dispose();
 

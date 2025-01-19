@@ -6,7 +6,7 @@ namespace RPGPlatformer.Movement
     public class AdvancedMover : Mover
     {
         [SerializeField] float acceleration = 30;
-        [SerializeField] float airborneAccelerationFactor = 0.8f;
+        [SerializeField] float freefallMovementAccelerationFactor = 0.8f;
         [SerializeField] float runSpeed = 3;
         [SerializeField] float walkSpeed = 0.8f;
         [SerializeField] int maxNumJumps = 2;
@@ -55,9 +55,9 @@ namespace RPGPlatformer.Movement
             Move(acceleration, maxSpeed, GroundDirectionVector(), false);
         }
 
-        public void MoveAirborne(HorizontalOrientation orientation)
+        public void MoveFreefall(HorizontalOrientation orientation)
         {
-            Move(acceleration * airborneAccelerationFactor, maxSpeed, Vector2.right * (int)orientation, true);
+            Move(acceleration * freefallMovementAccelerationFactor, maxSpeed, Vector2.right * (int)orientation, true);
         }
 
         public float SpeedFraction()
@@ -82,12 +82,12 @@ namespace RPGPlatformer.Movement
             NoAdjacentWall();
         }
 
-        private bool CanJump()
+        public bool CanJump()
         {
             return currentJumpNum < maxNumJumps; //|| adjacentWallSide.HasValue;
         }
 
-        private Vector2 JumpForce()
+        public Vector2 JumpForce()
         {
             if(currentJumpNum == 0)
             {
@@ -143,10 +143,11 @@ namespace RPGPlatformer.Movement
 
             var lowerHit = Physics2D.Raycast(ColliderCenterBack, (int)CurrentOrientation * Vector3.right,
                 3 * myWidth, LayerMask.GetMask("Ground"));
-            //Debug.DrawLine(ColliderCenterBack, ColliderCenterBack 
-            //    + 3 * myWidth *(int)CurrentOrientation * Vector3.right);
 
-            if(!lowerHit)
+            //Debug.DrawLine(ColliderCenterBack, ColliderCenterBack
+            //    + 3 * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
+
+            if (!lowerHit)
             {
                 NoAdjacentWall();
                 return;
@@ -154,8 +155,9 @@ namespace RPGPlatformer.Movement
 
             var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.3f * myHeight * Vector3.up,
                      (int)CurrentOrientation * Vector3.right, 3 * myWidth, LayerMask.GetMask("Ground"));
+
             //Debug.DrawLine(ColliderCenterBack + 0.3f * myHeight * Vector3.up, ColliderCenterBack
-            //    +0.3f * myHeight * Vector3.up + 3 * myWidth * (int)CurrentOrientation * Vector3.right);
+            //    + 0.3f * myHeight * Vector3.up + 3 * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
 
             if (!upperHit)
             {
@@ -179,23 +181,22 @@ namespace RPGPlatformer.Movement
             facingWall = false;
         }
 
-        public bool DropOffInFront(float heightFactor)
+        public bool DropOffInFront(float maxHeight)
         {
-            float spacing = 0.35f;
-            float maxHeight = heightFactor * myHeight;
+            float spacing = 0.2f;
             Vector2 origin = ColliderCenterFront + spacing * Vector3.right;
 
             for (int i = 0; i < 5; i++)
             {
                 var rc = Physics2D.Raycast(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right, 
                     -Vector2.up, maxHeight, LayerMask.GetMask("Ground"));
-                Debug.DrawLine(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right,
-                    origin + ((int)CurrentOrientation) * i * spacing * Vector2.right - maxHeight * Vector2.up,
-                    Color.blue);
+
+                //Debug.DrawLine(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right,
+                //    origin + ((int)CurrentOrientation) * i * spacing * Vector2.right - maxHeight * Vector2.up,
+                //    Color.blue);
 
                 if (!rc)
                 {
-                    Debug.Log($"{gameObject.name} detected drop off");
                     return true;
                 }
             }
