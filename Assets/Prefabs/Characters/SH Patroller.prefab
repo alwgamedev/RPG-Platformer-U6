@@ -386,7 +386,7 @@ PrefabInstance:
       addedObject: {fileID: -4096878558232519098}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -5414364659089102069}
+      addedObject: {fileID: 8914383755510078053}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: -2177855670895466878}
@@ -516,8 +516,9 @@ MonoBehaviour:
   walkSpeed: 0.8
   maxNumJumps: 2
   jumpForce: 375
-  canWallCling: 0
---- !u!114 &-5414364659089102069
+  detectWalls: 0
+  maxPermissibleDropOffFactor: 0
+--- !u!114 &8914383755510078053
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -526,9 +527,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8296160008381991138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ac3c0ee2d07cb418ae27c5793f9ab8, type: 3}
+  m_Script: {fileID: 11500000, guid: 67c2ea0e4247374408b6044e77652917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dontMoveOverDropOffs: 1
 --- !u!114 &-2177855670895466878
 MonoBehaviour:
   m_ObjectHideFlags: 0

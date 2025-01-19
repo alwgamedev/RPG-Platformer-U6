@@ -34,7 +34,7 @@ namespace RPGPlatformer.Movement
         }
         public Quaternion AdjacentWallAngle => adjacentWallAngle;
         public bool FacingWall => facingWall;
-        public virtual float MaxPermissibleDropoffHeight => 2 * myHeight;
+        //public virtual float MaxPermissibleDropoffHeight => 2 * myHeight;
 
         protected override void Awake()
         {
@@ -111,7 +111,7 @@ namespace RPGPlatformer.Movement
         public void BeginWallCling()
         {
             //if (!adjacentWallSide.HasValue) return;
-            if (jumping || airborne)
+            if (jumping || freefalling)
             {
                 TriggerLanding();
             }
@@ -142,9 +142,9 @@ namespace RPGPlatformer.Movement
             }
 
             var lowerHit = Physics2D.Raycast(ColliderCenterBack, (int)CurrentOrientation * Vector3.right,
-                4 * myWidth, LayerMask.GetMask("Ground"));
-            Debug.DrawLine(ColliderCenterBack, ColliderCenterBack 
-                + 4 * myWidth *(int)CurrentOrientation * Vector3.right);
+                3 * myWidth, LayerMask.GetMask("Ground"));
+            //Debug.DrawLine(ColliderCenterBack, ColliderCenterBack 
+            //    + 3 * myWidth *(int)CurrentOrientation * Vector3.right);
 
             if(!lowerHit)
             {
@@ -153,9 +153,9 @@ namespace RPGPlatformer.Movement
             }
 
             var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.3f * myHeight * Vector3.up,
-                     (int)CurrentOrientation * Vector3.right, 4 * myWidth, LayerMask.GetMask("Ground"));
-            Debug.DrawLine(ColliderCenterBack + 0.3f * myHeight * Vector3.up, ColliderCenterBack
-                +0.3f * myHeight * Vector3.up + 4 * myWidth * (int)CurrentOrientation * Vector3.right);
+                     (int)CurrentOrientation * Vector3.right, 3 * myWidth, LayerMask.GetMask("Ground"));
+            //Debug.DrawLine(ColliderCenterBack + 0.3f * myHeight * Vector3.up, ColliderCenterBack
+            //    +0.3f * myHeight * Vector3.up + 3 * myWidth * (int)CurrentOrientation * Vector3.right);
 
             if (!upperHit)
             {
@@ -179,18 +179,23 @@ namespace RPGPlatformer.Movement
             facingWall = false;
         }
 
-        public bool DropOffInFront()
+        public bool DropOffInFront(float heightFactor)
         {
-            float spacing = 0.2f;
+            float spacing = 0.35f;
+            float maxHeight = heightFactor * myHeight;
             Vector2 origin = ColliderCenterFront + spacing * Vector3.right;
 
             for (int i = 0; i < 5; i++)
             {
                 var rc = Physics2D.Raycast(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right, 
-                    -Vector2.up,
-                    MaxPermissibleDropoffHeight, LayerMask.GetMask("Ground"));
+                    -Vector2.up, maxHeight, LayerMask.GetMask("Ground"));
+                Debug.DrawLine(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right,
+                    origin + ((int)CurrentOrientation) * i * spacing * Vector2.right - maxHeight * Vector2.up,
+                    Color.blue);
+
                 if (!rc)
                 {
+                    Debug.Log($"{gameObject.name} detected drop off");
                     return true;
                 }
             }

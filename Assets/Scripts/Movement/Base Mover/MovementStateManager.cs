@@ -1,4 +1,3 @@
-//using System.Threading.Tasks;
 using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Movement

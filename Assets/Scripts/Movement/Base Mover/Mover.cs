@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using RPGPlatformer.Core;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace RPGPlatformer.Movement
 {
@@ -22,9 +23,9 @@ namespace RPGPlatformer.Movement
         protected Vector3 localColliderCenterRight;
         protected Vector3 localColliderCenterLeft;
         protected bool jumping;
-        protected bool airborne;
+        protected bool freefalling;
         protected bool verifyingJump;
-        protected bool verifyingAirborne;
+        protected bool verifyingFreefall;
         protected float groundednessTolerance;
         protected RaycastHit2D rightGroundHit;
         protected RaycastHit2D leftGroundHit;
@@ -45,7 +46,10 @@ namespace RPGPlatformer.Movement
         public HorizontalOrientation CurrentOrientation { get; protected set; }
 
         public event Action<HorizontalOrientation> UpdatedXScale;
-        public event Action AirborneVerified;
+        public event Action OnJump;
+        public event Action OnFreefall;
+        public event Action FreefallVerified;
+        public event Action OnDestroyed;
 
         protected virtual void Awake()
         {
@@ -80,34 +84,36 @@ namespace RPGPlatformer.Movement
         {
             if (rightGroundHit || leftGroundHit)
             {
-                if ((jumping && !verifyingJump) || (airborne && !verifyingAirborne))
+                if ((jumping && !verifyingJump) || (freefalling && !verifyingFreefall))
                 {
                     TriggerLanding();
                 }
             }
-            else if (!jumping && !airborne)
+            else if (!jumping && !freefalling)
             {
-                TriggerAirborne();
+                TriggerFreefall();
             }
         }
 
         protected virtual void TriggerLanding()
         {
             jumping = false;
-            airborne = false;
+            freefalling = false;
             Trigger(typeof(Grounded).Name);
         }
 
-        protected virtual void TriggerAirborne()
+        protected virtual void TriggerFreefall()
         {
-            airborne = true;
-            VerifyAirborne();
-            Trigger(typeof(Airborne).Name);
+            freefalling = true;
+            OnFreefall?.Invoke();//cancels any ongoing verification
+            VerifyFreefall();
+            Trigger(typeof(Freefall).Name);
         }
 
         protected virtual void TriggerJumping()
         {
             jumping = true;
+            OnJump?.Invoke();
             VerifyJump();
             Trigger(typeof(Jumping).Name);
         }
@@ -124,7 +130,7 @@ namespace RPGPlatformer.Movement
             {
                 delta = ClampedDeltaV(acceleration * Time.deltaTime, maxSpeed, new (velocity.x, 0), 
                     new (Mathf.Sign(direction.x), 0));
-                //option to only clamp horizontal velocity (e.g. when airborne)
+                //option to only clamp horizontal velocity (e.g. when freefalling)
             }
             else
             {
@@ -155,19 +161,53 @@ namespace RPGPlatformer.Movement
 
         protected async void VerifyJump()
         {
-            verifyingJump = true;
-            await Task.Delay(200, GlobalGameTools.Instance.TokenSource.Token);
-            verifyingJump = false;
+            using var cts = CancellationTokenSource
+                .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
+            try
+            {
+                OnJump += cts.Cancel;
+                verifyingJump = true;
+                await Task.Delay(200, cts.Token);
+                verifyingJump = false;
+            }
+            catch (TaskCanceledException)
+            {
+                verifyingFreefall = false;
+                return;
+            }
+            finally
+            {
+                OnJump -= cts.Cancel;
+            }
         }
 
-        protected async void VerifyAirborne()
+        protected async void VerifyFreefall()
         {
-            verifyingAirborne = true;
-            await Task.Delay(200, GlobalGameTools.Instance.TokenSource.Token);
-            verifyingAirborne = false;
-            if (!leftGroundHit && !rightGroundHit)
+            using var cts = CancellationTokenSource
+                .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
+            try
             {
-                AirborneVerified?.Invoke();
+                OnFreefall += cts.Cancel;
+                OnJump += cts.Cancel;
+                OnDestroyed += cts.Cancel;
+                verifyingFreefall = true;
+                await Task.Delay(200, cts.Token);
+                verifyingFreefall = false;
+                if (!leftGroundHit && !rightGroundHit)
+                {
+                    FreefallVerified?.Invoke();
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                verifyingFreefall = false;
+                return;
+            }
+            finally
+            {
+                OnFreefall -= cts.Cancel;
+                OnJump -= cts.Cancel;
+                OnDestroyed -= cts.Cancel;
             }
         }
 
@@ -220,9 +260,15 @@ namespace RPGPlatformer.Movement
 
         protected override void OnDestroy()
         {
+            OnDestroyed?.Invoke();
+
             base.OnDestroy();
 
             UpdatedXScale = null;
+            OnDestroyed = null;
+            OnJump = null;
+            OnFreefall = null;
+            FreefallVerified = null;
         }
     }
 }

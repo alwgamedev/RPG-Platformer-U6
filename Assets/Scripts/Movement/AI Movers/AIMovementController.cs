@@ -5,6 +5,7 @@ namespace RPGPlatformer.Movement
     public class AIMovementController : AdvancedMovementController
     {
         [SerializeField] bool dontMoveOverDropOffs;
+        [SerializeField] float maxPermissibleDropOffHeightFactor = 2;
 
         protected override void GroundedMoveAction(float input)
             //I am doing the drop off check here (rather than at the point where MoveInput is set)
@@ -13,12 +14,14 @@ namespace RPGPlatformer.Movement
         {
             SetOrientation(input);
 
-            if (dontMoveOverDropOffs && mover.DropOffInFront())
-            {
-                MoveInput = 0;//we may not want to do this because it triggers an event
-                //but for now it's harmless
+            if (dontMoveOverDropOffs && mover.DropOffInFront(maxPermissibleDropOffHeightFactor)) 
                 return;
-            }
+            //{
+            //    //MoveInput = 0;//we may not want to do this because it triggers an event
+            //    ////but for now it's harmless
+            //    ////(just returning would have the same effect)
+            //    return;
+            //}
 
             mover.MoveGrounded();
         }

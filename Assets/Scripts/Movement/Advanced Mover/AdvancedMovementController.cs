@@ -46,8 +46,9 @@ namespace RPGPlatformer.Movement
         {
             movementManager.StateMachine.stateGraph.grounded.OnEntry += OnGroundedEntry;
             movementManager.StateMachine.stateGraph.jumping.OnEntry += OnJumpingEntry;
+            movementManager.StateMachine.stateGraph.freefall.OnExit += OnAirborneExit;
 
-            mover.AirborneVerified += OnAirborneVerified;
+            mover.FreefallVerified += OnAirborneVerified;
 
             OnUpdate += AnimateMovement;
 
@@ -191,11 +192,16 @@ namespace RPGPlatformer.Movement
 
         protected virtual void OnAirborneVerified()
         {
-            if (movementManager.StateMachine.HasState(typeof(Airborne)))
+            if (movementManager.StateMachine.HasState(typeof(Freefall)))
             {
                 CurrentMoveAction = AirborneMoveAction;
                 movementManager.AnimateFreefall();
             }
+        }
+
+        protected void OnAirborneExit()
+        {
+            mover.UpdateXScale();
         }
 
         protected virtual void GroundedMoveAction(float input)
