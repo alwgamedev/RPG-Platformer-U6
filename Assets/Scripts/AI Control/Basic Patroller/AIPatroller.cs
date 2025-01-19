@@ -73,7 +73,7 @@ namespace RPGPlatformer.AIControl
             }
             else
             {
-                movementController.MoveInput = CurrentTarget.Transform.position.x - transform.position.x;
+                movementController.MoveTowards(CurrentTarget.Transform.position);
             }
         }
 
@@ -105,7 +105,7 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        public void MaintainMinimumCombatDistance(/*Vector3 targetPosition*/)
+        public void MaintainMinimumCombatDistance()
         {
             if (!TryGetDistance(CurrentTarget, out var d))
             {

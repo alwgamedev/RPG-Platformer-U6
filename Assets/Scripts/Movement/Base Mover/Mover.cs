@@ -29,12 +29,17 @@ namespace RPGPlatformer.Movement
         protected RaycastHit2D rightGroundHit;
         protected RaycastHit2D leftGroundHit;
 
+        //public bool VerifyingJump => verifyingJump;
         public Transform Transform => transform;
         public Rigidbody2D Rigidbody => myRigidbody;
         public float Width => myWidth;
         public float Height => myHeight;
         public Vector3 ColliderCenterRight => transform.position + localColliderCenterRight;
         public Vector3 ColliderCenterLeft => transform.position + localColliderCenterLeft;
+        public Vector3 ColliderCenterFront => CurrentOrientation == HorizontalOrientation.right ?
+            ColliderCenterRight : ColliderCenterLeft;
+        public Vector3 ColliderCenterBack => CurrentOrientation == HorizontalOrientation.right ?
+            ColliderCenterLeft : ColliderCenterRight;
 
 
         public HorizontalOrientation CurrentOrientation { get; protected set; }
@@ -52,7 +57,9 @@ namespace RPGPlatformer.Movement
             myHeight = myCollider.bounds.max.y - myCollider.bounds.min.y;
             myWidth = myCollider.bounds.max.x - myCollider.bounds.min.x;
 
-            groundednessTolerance = 0.68f * myHeight;
+            groundednessTolerance = 0.7f * myHeight;//a little extra than 0.5f * height, because sometimes the
+            //ground collider is a bit below the surface (and we don't want to be randomly losing groundedness
+            //as we walk over uneven terrain)
 
             localColliderCenterRight = myCollider.bounds.center + (myWidth / 4) * Vector3.right - transform.position;
             localColliderCenterLeft = myCollider.bounds.center - (myWidth / 4) * Vector3.right - transform.position;
@@ -60,10 +67,11 @@ namespace RPGPlatformer.Movement
 
         protected virtual void Update()
         {
-            rightGroundHit = Physics2D.Raycast(ColliderCenterRight, -transform.up, groundednessTolerance, 
+            rightGroundHit = Physics2D.Raycast(ColliderCenterRight, - transform.up, groundednessTolerance, 
                 LayerMask.GetMask("Ground"));
-            leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, -transform.up, groundednessTolerance, 
+            leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, - transform.up, groundednessTolerance, 
                 LayerMask.GetMask("Ground"));
+            //important to use transform.up or if use Vector2.up we can magically slide up walls
 
             UpdateState();
         }
@@ -168,12 +176,15 @@ namespace RPGPlatformer.Movement
             return (int)CurrentOrientation * force.x * Vector2.right + force.y * Vector2.up;
         }
 
-        public virtual void SetOrientation(HorizontalOrientation orientation)
+        public virtual void SetOrientation(HorizontalOrientation orientation, bool updateXScale = true)
         {
             if (orientation != CurrentOrientation)
             {
                 CurrentOrientation = orientation;
-                UpdateXScale();
+                if (updateXScale)
+                {
+                    UpdateXScale();
+                }
             }
         }
 
@@ -210,6 +221,7 @@ namespace RPGPlatformer.Movement
         protected override void OnDestroy()
         {
             base.OnDestroy();
+
             UpdatedXScale = null;
         }
     }

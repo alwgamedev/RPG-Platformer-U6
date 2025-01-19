@@ -22,8 +22,6 @@ namespace RPGPlatformer.Movement
 
             GetState(typeof(Jumping).Name).OnEntry += AnimateJumping;
             GetState(typeof(Jumping).Name).OnEntryToSameState += AnimateDoubleJump;
-
-            //GetState(typeof(Airborne).Name).OnEntry += AnimateFreefall;
         }
 
         public void AnimateMovement(float value)
@@ -50,6 +48,11 @@ namespace RPGPlatformer.Movement
         public void AnimateLanding()
         {
             animationControl.animator.SetTrigger("land");
+        }
+
+        public bool IsWallClinging()
+        {
+            return animationControl.animator.GetBool("wallCling");
         }
 
         public void AnimateWallCling(bool val)
