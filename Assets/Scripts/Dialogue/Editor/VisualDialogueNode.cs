@@ -4,11 +4,13 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Linq;
 
 namespace RPGPlatformer.Dialogue.Editor
 {
     public class VisualDialogueNode : Node
     {
+        public int numConversants;
         public DialogueNode dialogueNode;
         public Port inputPort;
         public List<Port> outputPorts = new();
@@ -18,10 +20,11 @@ namespace RPGPlatformer.Dialogue.Editor
 
         public event Action OutputPortsReady;
 
-        public VisualDialogueNode(DialogueNode dialogueNode)
+        public VisualDialogueNode(DialogueNode dialogueNode, int numConversants)
         {
             this.dialogueNode = dialogueNode;
             title = dialogueNode.name;
+            this.numConversants = numConversants;
         }
 
         public void Redraw()
@@ -39,16 +42,32 @@ namespace RPGPlatformer.Dialogue.Editor
             titleContainer.Clear();
             titleContainer.style.flexDirection = FlexDirection.Column;
 
-            Toggle toggle = new("Player speaking:")
+            //Toggle toggle = new("Player speaking:")
+            //{
+            //    value = dialogueNode.IsPlayerSpeaking()
+            //};
+            //toggle.style.unityTextAlign = TextAnchor.MiddleLeft;
+            //toggle.style.minWidth = 5;//label and the actual toggle
+            //toggle.ElementAt(0).style.fontSize = 11;
+            //toggle.RegisterValueChangedCallback((valueChangeEvent) =>
+            //{
+            //    dialogueNode.SetIsPlayerSpeaking(valueChangeEvent.newValue);
+            //});
+
+            List<string> conversantOptions = Enumerable.Range(0, numConversants).Select(x => x.ToString()).ToList();
+            if (dialogueNode.ConversantNumber() < 0 || dialogueNode.ConversantNumber() >= numConversants)
             {
-                value = dialogueNode.IsPlayerSpeaking()
-            };
-            toggle.style.unityTextAlign = TextAnchor.MiddleLeft;
-            toggle.style.minWidth = 5;//label and the actual toggle
-            toggle.ElementAt(0).style.fontSize = 11;
-            toggle.RegisterValueChangedCallback((valueChangeEvent) =>
+                dialogueNode.SetConversantNumber(0);
+            }
+
+            DropdownField conversantDropdown = new(conversantOptions, dialogueNode.ConversantNumber());
+            conversantDropdown.label = "Conversant #:";
+            conversantDropdown.style.unityTextAlign = TextAnchor.MiddleLeft;
+            conversantDropdown.style.minWidth = 5;
+            conversantDropdown.ElementAt(0).style.fontSize = 15;
+            conversantDropdown.RegisterValueChangedCallback((valueChangeEvent) =>
             {
-                dialogueNode.SetIsPlayerSpeaking(valueChangeEvent.newValue);
+                dialogueNode.SetConversantNumber(Int32.Parse(valueChangeEvent.newValue));
             });
 
 
@@ -57,7 +76,7 @@ namespace RPGPlatformer.Dialogue.Editor
             rootNodeToggle.style.minWidth = 15;
             rootNodeToggle.ElementAt(0).style.fontSize = 11;
 
-            titleContainer.Insert(0, toggle);
+            titleContainer.Insert(0, conversantDropdown);
             titleContainer.Insert(1, rootNodeToggle);
         }
 

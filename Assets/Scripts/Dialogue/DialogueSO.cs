@@ -8,6 +8,7 @@ namespace RPGPlatformer.Dialogue
     [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue/New Dialogue")]
     public class DialogueSO : ScriptableObject
     {
+        [SerializeField] int numConversants = 2;
         [SerializeField] DialogueNode rootNode;
         [SerializeField] List<DialogueNode> nodes = new();
         
@@ -25,6 +26,11 @@ namespace RPGPlatformer.Dialogue
             {
                 NodeLookup[node.UniqueID()] = node;
             }
+        }
+
+        public int NumConversants()
+        {
+            return numConversants;
         }
 
         public DialogueNode RootNode()

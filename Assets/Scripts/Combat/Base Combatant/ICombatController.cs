@@ -6,6 +6,7 @@ namespace RPGPlatformer.Combat
 {
     public interface ICombatController //: IGOSystemController
     {
+        public bool IsInCombat { get; }
         public bool ChannelingAbility { get; }
         public bool PoweringUp { get; }
         public bool FireButtonIsDown { get; }

@@ -14,7 +14,7 @@ namespace RPGPlatformer.Movement
         protected Action<float> CurrentMoveAction;
         protected Action OnFixedUpdate;
         protected Action OnUpdate;
-        protected Action OnMoveInputChanged;
+        //protected Action OnMoveInputChanged;
 
         protected float moveInput = 0;
 
@@ -27,7 +27,7 @@ namespace RPGPlatformer.Movement
             set
             {
                 moveInput = value;
-                OnMoveInputChanged?.Invoke();
+                //OnMoveInputChanged?.Invoke();
             }
         }
 
@@ -35,7 +35,8 @@ namespace RPGPlatformer.Movement
 
         protected virtual void Awake()
         {
-            mover = GetComponent<AdvancedMover>();
+            InitializeMover();
+            //mover = GetComponent<AdvancedMover>();
             //InitializeMovementManager();
 
             OnFixedUpdate += HandleMoveInput;
@@ -66,14 +67,20 @@ namespace RPGPlatformer.Movement
             OnFixedUpdate?.Invoke();
         }
 
-        private void InitializeMovementManager()
+        protected virtual void InitializeMovementManager()
         {
             movementManager = new(mover, GetComponent<AnimationControl>());
             movementManager.Configure();
 
-            movementManager.StateMachine.stateGraph.grounded.OnEntry += OnGroundedEntry;
-            movementManager.StateMachine.stateGraph.jumping.OnEntry += OnJumpingEntry;
-            movementManager.StateMachine.stateGraph.freefall.OnExit += OnFreefallExit;
+            movementManager.StateGraph.grounded.OnEntry += OnGroundedEntry;
+            movementManager.StateGraph.jumping.OnEntry += OnJumpingEntry;
+            movementManager.StateGraph.freefall.OnEntry += OnFreefallEntry;
+            movementManager.StateGraph.freefall.OnExit += OnFreefallExit;
+        }
+
+        protected virtual void InitializeMover()
+        {
+            mover = GetComponent<AdvancedMover>();
         }
 
 
@@ -197,6 +204,8 @@ namespace RPGPlatformer.Movement
             CurrentMoveAction = JumpingMoveAction;
         }
 
+        protected virtual void OnFreefallEntry() { }
+
         protected virtual void OnFreefallVerified()
         {
             if (movementManager.StateMachine.HasState(typeof(Freefall)))
@@ -254,7 +263,7 @@ namespace RPGPlatformer.Movement
             CurrentMoveAction = null;
             OnUpdate = null;
             OnFixedUpdate = null;
-            OnMoveInputChanged = null;
+            //OnMoveInputChanged = null;
         }
     }
 }

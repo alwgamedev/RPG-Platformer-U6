@@ -7,7 +7,8 @@ namespace RPGPlatformer.Dialogue
 {
     public abstract class DialogueNode : ScriptableObject
     {
-        [SerializeField] protected bool isPlayerSpeaking;
+        [SerializeField] protected int conversantNumber;
+        //[SerializeField] protected bool isPlayerSpeaking;
         [SerializeField] protected List<string> textSegments = new();
         [SerializeField] protected string uniqueID;
         [SerializeField] protected Vector2 position;//store position in editor window
@@ -26,10 +27,15 @@ namespace RPGPlatformer.Dialogue
 
         public abstract string ContinuationID(int responseIndex);
 
-        public bool IsPlayerSpeaking()
+        public int ConversantNumber()
         {
-            return isPlayerSpeaking;
+            return conversantNumber;
         }
+
+        //public bool IsPlayerSpeaking()
+        //{
+        //    return isPlayerSpeaking;
+        //}
 
         public List<string> TextSegments()
         {
@@ -42,9 +48,15 @@ namespace RPGPlatformer.Dialogue
         }
 
 #if UNITY_EDITOR
-        public void SetIsPlayerSpeaking(bool val)
+        //public void SetIsPlayerSpeaking(bool val)
+        //{
+        //    isPlayerSpeaking = val;
+        //    EditorUtility.SetDirty(this);
+        //}
+
+        public void SetConversantNumber(int val)
         {
-            isPlayerSpeaking = val;
+            conversantNumber = val;
             EditorUtility.SetDirty(this);
         }
 

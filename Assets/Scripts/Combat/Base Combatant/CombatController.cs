@@ -43,6 +43,7 @@ namespace RPGPlatformer.Combat
         protected List<(float, bool)> activeStuns = new();
         //later can be managed by buff manager?
 
+        public bool IsInCombat => combatManager.StateMachine.HasState(typeof(InCombat));
         public AbilityBar CurrentAbilityBar => abilityBarManager.CurrentAbilityBar;
         public TickTimer TickTimer => tickTimer;
         public bool GlobalCooldown { get; protected set; }

@@ -121,7 +121,7 @@ namespace RPGPlatformer.Dialogue.Editor
 
         private VisualDialogueNode DrawNode(DialogueNode dialogueNode, Vector2 position)
         {
-            VisualDialogueNode node = new(dialogueNode);
+            VisualDialogueNode node = new(dialogueNode, dialogue.NumConversants());
             node.SetPosition(dialogueNode.Rect());
             AddElement(node);
 
@@ -217,9 +217,10 @@ namespace RPGPlatformer.Dialogue.Editor
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent menuEvent)
         {
-            Vector2 localMousePos = viewTransform.matrix.inverse.MultiplyPoint(menuEvent.localMousePosition);
-
             base.BuildContextualMenu(menuEvent);
+            if (dialogue == null) return;
+
+            Vector2 localMousePos = viewTransform.matrix.inverse.MultiplyPoint(menuEvent.localMousePosition);
 
             menuEvent.menu.AppendAction("Add Dialogue Node With Auto Continuation", actionEvent =>
                 CreateNode<AutoContinuationDialogueNode>(localMousePos));

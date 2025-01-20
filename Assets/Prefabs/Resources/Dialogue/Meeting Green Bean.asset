@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
   m_Name: (AutoContinuationDialogueNode) a933c1d3-ab7e-43dc-8943-df7dd86c76db
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 1
+  conversantNumber: 0
   textSegments:
   - Oh, I see... For some reason I have no memory of this place.
   uniqueID: a933c1d3-ab7e-43dc-8943-df7dd86c76db
@@ -30,7 +30,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 084b3ed8c5fb85646b7313618ab2f6c8, type: 3}
   m_Name: (ChoicesDialogueNode) 64ed8cd0-4749-445a-88ea-8ab6cb3fb8b4
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 1
+  conversantNumber: 0
   textSegments: []
   uniqueID: 64ed8cd0-4749-445a-88ea-8ab6cb3fb8b4
   position: {x: -76, y: 46.4}
@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
   m_Name: (AutoContinuationDialogueNode) a76f7618-47da-40c1-be21-fd7bde29a09a
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 0
+  conversantNumber: 1
   textSegments:
   - Excuse my hastiness. I suppose I must introduce myself. I am Green Bean, and
     your great uncle Todd's former employee Steven once worked as a milkman in a
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
   m_Name: (AutoContinuationDialogueNode) 988c7b4f-5902-4e58-8ca2-f702224b430a
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 0
+  conversantNumber: 1
   textSegments:
   - Pardon?
   uniqueID: 988c7b4f-5902-4e58-8ca2-f702224b430a
@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169cada9d0d6b9745b76b51fc8d250cb, type: 3}
   m_Name: Meeting Green Bean
   m_EditorClassIdentifier: 
+  numConversants: 2
   rootNode: {fileID: -7395801003887672830}
   nodes:
   - {fileID: -7395801003887672830}
@@ -118,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
   m_Name: (AutoContinuationDialogueNode) b72919c3-4291-4324-928e-cff5e852cb3e
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 0
+  conversantNumber: 1
   textSegments:
   - Worry not, my stick friend. We welcome you back with open arms. All will make
     sense in due time..
@@ -138,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
   m_Name: (AutoContinuationDialogueNode) b41ac66b-7d78-4bb9-a681-93f16e125265
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 0
+  conversantNumber: 1
   textSegments:
   - Splendid! Follow me.
   uniqueID: b41ac66b-7d78-4bb9-a681-93f16e125265
@@ -156,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
   m_Name: (AutoContinuationDialogueNode) b1ebbd0c-0b4f-4ccc-918c-aacc48a17332
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 1
+  conversantNumber: 0
   textSegments:
   - I'm confused.
   uniqueID: b1ebbd0c-0b4f-4ccc-918c-aacc48a17332
@@ -174,7 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 084b3ed8c5fb85646b7313618ab2f6c8, type: 3}
   m_Name: (ChoicesDialogueNode) b1f87cb8-5ff9-456b-9116-9ba6d8214444
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 0
+  conversantNumber: 1
   textSegments:
   - Proud adventurer, welcome to the realm! We're so glad you've finally arrived.
   - There is so much for us to do, so much to see. I can't wait! We must get started
@@ -204,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40c52cd841bf5f429284f25aa793294, type: 3}
   m_Name: (AutoContinuationDialogueNode) 7b4dd367-91a2-434e-b57b-6f4218e622a2
   m_EditorClassIdentifier: 
-  isPlayerSpeaking: 0
+  conversantNumber: 1
   textSegments:
   - Egad!
   uniqueID: 7b4dd367-91a2-434e-b57b-6f4218e622a2

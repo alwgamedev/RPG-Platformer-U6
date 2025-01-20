@@ -383,7 +383,7 @@ PrefabInstance:
       addedObject: {fileID: -4241576377121345369}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -4096878558232519098}
+      addedObject: {fileID: 4525019488547108527}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8914383755510078053}
@@ -496,7 +496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultAnimatorController: {fileID: 9100000, guid: f90d3ed9ffdfe574f9306cbb60489f9e, type: 2}
   animator: {fileID: 0}
---- !u!114 &-4096878558232519098
+--- !u!114 &4525019488547108527
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -505,16 +505,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8296160008381991138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68597781190fc664c9df98261ab08878, type: 3}
+  m_Script: {fileID: 11500000, guid: 131665986c071fe42af6f4959aff4e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   deathForce: {x: 120, y: 120}
   deathTorque: 10
-  acceleration: 30
+  acceleration: 50
   freefallMovementAccelerationFactor: 0.8
   runSpeed: 2.4
   walkSpeed: 0.8
-  maxNumJumps: 2
+  maxNumJumps: 1
   jumpForce: 375
   detectWalls: 0
 --- !u!114 &8914383755510078053
@@ -532,6 +532,7 @@ MonoBehaviour:
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 2.5
+  dropOffStopDistance: 0.5
 --- !u!114 &-2177855670895466878
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -39,6 +39,12 @@ namespace RPGPlatformer.Movement
             ColliderCenterRight : ColliderCenterLeft;
         public Vector3 ColliderCenterBack => CurrentOrientation == HorizontalOrientation.right ?
             ColliderCenterLeft : ColliderCenterRight;
+        public RaycastHit2D RightGroundHit => rightGroundHit;
+        public RaycastHit2D LeftGroundHit => leftGroundHit;
+        public RaycastHit2D FrontGroundHit => CurrentOrientation == HorizontalOrientation.right ?
+            rightGroundHit : leftGroundHit;
+        public RaycastHit2D BackGroundHit => CurrentOrientation == HorizontalOrientation.right ?
+            leftGroundHit : rightGroundHit;
 
 
         public HorizontalOrientation CurrentOrientation { get; protected set; }

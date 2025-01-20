@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using RPGPlatformer.Dialogue;
-using System.Linq;
+using RPGPlatformer.Core;
 
 namespace RPGPlatformer.UI
 {
@@ -31,7 +31,7 @@ namespace RPGPlatformer.UI
 
         public event Action<int> ResponseSelected;
 
-        public void SetUpWindow(DialogueNode dialogueNode, string conversantName, string playerName)
+        public void SetUpWindow(DialogueNode dialogueNode, string conversantName/*, string playerName*/)
         {
             Clear();//just in case there is something there from the prefab;
 
@@ -58,19 +58,19 @@ namespace RPGPlatformer.UI
 
                 if (textSegments != null && textSegments.Count > 0)
                 {
-                    string speakerName = dialogueNode.IsPlayerSpeaking() ? playerName : conversantName;
-                    DisplayMainDialogue(speakerName);
-                    nextButton.onClick.AddListener(() => DisplayResponseChoices(playerName));
+                    //string speakerName = dialogueNode.IsPlayerSpeaking() ? playerName : conversantName;
+                    DisplayMainDialogue(conversantName/*speakerName*/);
+                    nextButton.onClick.AddListener(() => DisplayResponseChoices(/*playerName*/));
                 }
                 else
                 {
-                    DisplayResponseChoices(playerName);
+                    DisplayResponseChoices(/*playerName*/);
                 }
             }
             else
             {
-                string speakerName = dialogueNode.IsPlayerSpeaking() ? playerName : conversantName;
-                DisplayMainDialogue(speakerName);
+                //string speakerName = dialogueNode.IsPlayerSpeaking() ? playerName : conversantName;
+                DisplayMainDialogue(conversantName/*speakerName*/);
                 nextButton.onClick.AddListener(() => ResponseSelected?.Invoke(0));
             }
 
@@ -86,11 +86,11 @@ namespace RPGPlatformer.UI
             StartCoroutine(SequentiallyFadeInDialogueSegments());
         }
 
-        public void DisplayResponseChoices(string playerName)
+        public void DisplayResponseChoices(/*string playerName*/)
         {
             StopAllCoroutines();
 
-            speakerLabel.text = playerName;
+            speakerLabel.text = GlobalGameTools.PlayerName;
 
             dialogueContainer.gameObject.SetActive(false);
             choicesContainer.gameObject.SetActive(true);

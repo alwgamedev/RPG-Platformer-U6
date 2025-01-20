@@ -7,15 +7,18 @@ namespace RPGPlatformer.Movement
     {
         ignore, stop, tryToJump
     }
+
+    //[RequireComponent(typeof(AIMover))]
     public class AIMovementController : AdvancedMovementController
     {
         [SerializeField] protected DropOffHandlingOption dropOffHandlingOption = DropOffHandlingOption.stop;
         [SerializeField] protected bool canMoveDuringFreefall;
-        [SerializeField] protected float maxPermissibleDropOffHeightFactor = 2.5f;
+        [SerializeField] protected float maxPermissibleDropOffHeightFactor = 3;
+        [SerializeField] protected float dropOffStopDistance = 0.5f;
 
-        //protected bool jumpingGap;
-        protected bool gapJumpingEnabled;
+        protected bool jumpingEnabled;
         protected bool stuckAtLedge;
+        protected AIMover aiMover;
 
         public IHealth currentTarget;
 
@@ -26,17 +29,30 @@ namespace RPGPlatformer.Movement
             get => base.MoveInput;
             set
             {
-                if (!movementManager.StateMachine.HasState(typeof(Jumping)))
-                    //don't change move input while jumping
+                if (movementManager.StateMachine.HasState(typeof(Grounded)))
+                    //don't change move input while airborne
                 {
                     base.MoveInput = value;
                 }
             }
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            mover = mover as AIMover;
+        }
+
         protected override void Start()
         {
             base.Start();
+        }
+
+        protected override void InitializeMover()
+        {
+            aiMover = GetComponent<AIMover>();
+            mover = aiMover;
         }
 
         protected override void GroundedMoveAction(float input)
@@ -49,10 +65,10 @@ namespace RPGPlatformer.Movement
             if (stuckAtLedge) return;
 
             if (input != 0 && dropOffHandlingOption != DropOffHandlingOption.ignore 
-                && !movementManager.StateMachine.HasState(typeof(Jumping))
-                && mover.DropOffInFront(MaxPermissibleDropOffHeight))
+                && movementManager.StateMachine.HasState(typeof(Grounded))
+                && aiMover.DropOffInFront(MaxPermissibleDropOffHeight, out var dist))
             {
-                if (dropOffHandlingOption == DropOffHandlingOption.stop)
+                if (dropOffHandlingOption == DropOffHandlingOption.stop && dist < dropOffStopDistance)
                 {
                     mover.Stop();
                     stuckAtLedge = true;
@@ -60,17 +76,18 @@ namespace RPGPlatformer.Movement
                 }
                 else if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
                 {
-                    if (CanJumpGap(out var landingPt))
+                    if (jumpingEnabled && aiMover.CanJumpGap(out var landingPt))
                     {
 
                         if (currentTarget == null
                             || Vector2.Distance(landingPt, currentTarget.Transform.position) <
                             Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
                         {
+                            mover.MoveGrounded();//before jump to get speed up
                             mover.Jump();
-                            //jumpingGap = true;
+                            return;
                         }
-                        else
+                        else if (dist < dropOffStopDistance)
                         {
                             mover.Stop();
                             return;
@@ -78,7 +95,7 @@ namespace RPGPlatformer.Movement
                             //jumping will bring it closer to target
                         }
                     }
-                    else
+                    else if (dist < dropOffStopDistance)
                     {
                         mover.Stop();
                         stuckAtLedge = true;
@@ -90,67 +107,23 @@ namespace RPGPlatformer.Movement
             mover.MoveGrounded();
         }
 
-        public void EnableGapJumping(bool val)
+        public void SetDetectWalls(bool val)
         {
-            gapJumpingEnabled = val;
+            if (val && !mover.DetectWalls)
+            {
+                aiMover.SetDetectWalls(true);
+                OnUpdate += HandleAdjacentWallInteraction;
+            }
+            else if (!val && mover.DetectWalls)
+            {
+                aiMover.SetDetectWalls(false);
+                OnUpdate -= HandleAdjacentWallInteraction;
+            }
         }
 
-        protected virtual bool CanJumpGap(out Vector2 landingPoint)
+        public void EnableJumping(bool val)
         {
-            landingPoint = default;
-
-            if (!mover.CanJump() || !gapJumpingEnabled)
-            {
-                return false;
-            }
-
-            Trajectory jumpTrajectory =
-                MovementTools.ImpulseForceTrajectory(mover, mover.OrientForce(mover.JumpForce()));
-
-            float dt = jumpTrajectory.timeToReturnToLevel / 20;
-
-            for (int i = 10; i <= 30; i++)
-            {
-                Vector2 hitOrigin = jumpTrajectory.position(i * dt);
-                var hit = Physics2D.Raycast(hitOrigin, -Vector2.up, 0.5f * mover.Height,
-                        LayerMask.GetMask("Ground"));
-
-                //Debug.DrawLine(hitOrigin, hitOrigin - 0.5f * mover.Height * Vector2.up, Color.blue, 3);
-
-                if (hit && hit.distance > 0)
-                {
-                    landingPoint = hit.point;
-
-                    //check if landing area is level ground
-                    var hit1Origin = hitOrigin + ((int)mover.CurrentOrientation) * mover.Width * Vector2.right;
-                    var hit1 = Physics2D.Raycast(hit1Origin, -Vector2.up, 0.5f * mover.Height,
-                        LayerMask.GetMask("Ground"));
-
-                    //Debug.DrawLine(hit1Origin, hit1Origin - 0.5f * mover.Height * Vector2.up, Color.red, 3);
-
-                    if (!hit1 || hit1.distance == 0)
-                    {
-                        continue;
-                    }
-
-                    Vector2 ground = hit1.point - hit.point;
-                    //Debug.DrawLine(hit.point, hit1.point, Color.yellow, 3);
-
-                    float groundAngle = Mathf.Rad2Deg * Mathf.Atan2(ground.y, ground.x);
-                    groundAngle = Mathf.Abs(groundAngle);
-                    if (mover.CurrentOrientation == HorizontalOrientation.left)
-                    {
-                        groundAngle = 180 - groundAngle;
-                    }
-
-                    if (groundAngle > 60)
-                    {
-                        return false;
-                    }
-                    return true;
-                }
-            }
-            return false;
+            jumpingEnabled = val;
         }
 
         public override void SetOrientation(float input, bool updateXScale = true)
@@ -166,8 +139,39 @@ namespace RPGPlatformer.Movement
 
         protected override void OnGroundedEntry()
         {
+            SetDetectWalls(false);
+
             base.OnGroundedEntry();
-            //jumpingGap = false;
+        }
+
+        protected override void OnFreefallEntry()
+        {
+            SetDetectWalls(true);
+
+            if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
+            {
+                if (mover.CanJump())
+                {
+                    mover.Stop();
+                    SetOrientation(-(int)CurrentOrientation);
+                    mover.Jump(mover.OrientForce(aiMover.EmergencyJumpForce()));
+                }
+            }
+        }
+
+        protected override void OnJumpingEntry()
+        {
+            SetDetectWalls(true);
+
+            base.OnJumpingEntry();
+        }
+
+        protected override void HandleAdjacentWallInteraction()
+        {
+            if (moveInput != 0 && mover.FacingWall)
+            {
+                moveInput = 0;
+            }
         }
 
         protected override void FreefallMoveAction(float input)

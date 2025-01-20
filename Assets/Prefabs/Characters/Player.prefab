@@ -558,6 +558,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3968954806054087251}
+    - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 369643323770825565}
   m_SourcePrefab: {fileID: 100100000, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
 --- !u!1 &474939305929962993 stripped
 GameObject:
@@ -663,7 +666,7 @@ MonoBehaviour:
   deathForce: {x: 120, y: 120}
   deathTorque: 10
   acceleration: 30
-  airborneAccelerationFactor: 0.8
+  freefallMovementAccelerationFactor: 0.8
   runSpeed: 3
   walkSpeed: 1.2
   maxNumJumps: 2
@@ -784,6 +787,19 @@ MonoBehaviour:
     replenishRate: 0.06
     autoReplenish: 1
     statBar: {fileID: 0}
+--- !u!114 &369643323770825565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474939305929962993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf41558dad9b7a498723e33b83485b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  conversantName: Player
 --- !u!114 &1709556298534080478 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6049851851736670886, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}

@@ -116,14 +116,14 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void OnAttackEntry()
         {
-            patroller.movementController.EnableGapJumping(false);
+            patroller.movementController.EnableJumping(false);
             patroller.StartAttacking();
         }
 
         protected virtual void OnAttackExit()
         {
             patroller.StopAttacking();
-            patroller.movementController.EnableGapJumping(true);
+            patroller.movementController.EnableJumping(true);
             //OnUpdate -= patroller.MaintainMinimumCombatDistance;
         }
 

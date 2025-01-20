@@ -22,7 +22,6 @@ namespace RPGPlatformer.Core
         public ObjectPoolCollection EffectPooler { get; private set; }
 
         public static event Action OnPlayerDeath;
-
         public static event Action InstanceReady;
 
         private void Awake()

@@ -37,7 +37,7 @@ namespace RPGPlatformer.AIControl
             {
                 primaryAction = ($"Talk to {displayName}", () =>
                     {
-                        dialogueTrigger.TriggerDialogue(0, displayName, GlobalGameTools.PlayerName);
+                        dialogueTrigger.TriggerDialogue(0);
                         OnUpdate = () => PlayerInRangeWithNotifications();
                     }
                 );
