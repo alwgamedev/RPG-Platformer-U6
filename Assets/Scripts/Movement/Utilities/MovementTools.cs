@@ -4,6 +4,8 @@ namespace RPGPlatformer.Movement
 {
     public static partial class MovementTools
     {
+        public const float sqrt3 = 1.73f;
+
         //this is the trajectory of the mover.ColliderCenterBottom point
         //assumes velocity will only be acted on by gravity (e.g. moveSpeed will not change during the trajectory)
         public static Trajectory ImpulseForceTrajectory(AdvancedMover mover, Vector2 impulseForce)

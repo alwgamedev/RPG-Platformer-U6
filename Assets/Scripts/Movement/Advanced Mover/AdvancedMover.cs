@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGPlatformer.Movement
@@ -181,24 +181,39 @@ namespace RPGPlatformer.Movement
             facingWall = false;
         }
 
+        //detects both drop offs and step-ups
         public bool DropOffInFront(float maxHeight)
         {
-            float spacing = 0.2f;
-            Vector2 origin = ColliderCenterFront + spacing * Vector3.right;
+            float spacing = 0.1f;
+            maxHeight += 0.5f * myHeight;//shifting up higher to help detect step-ups
+            Vector2 origin = ColliderCenterFront + 0.5f * myHeight * Vector3.up;
+            Vector2 directlyBelowCharacter = ColliderCenterFront - groundednessTolerance * Vector3.up;
 
-            for (int i = 0; i < 5; i++)
+            List<Vector2> hits = new() { directlyBelowCharacter };
+
+            //Debug.DrawLine(ColliderCenterFront, directlyBelowCharacter, Color.green);
+
+            for (int i = 1; i <= 10; i++)
             {
                 var rc = Physics2D.Raycast(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right, 
                     -Vector2.up, maxHeight, LayerMask.GetMask("Ground"));
 
                 //Debug.DrawLine(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right,
                 //    origin + ((int)CurrentOrientation) * i * spacing * Vector2.right - maxHeight * Vector2.up,
-                //    Color.blue);
+                //    Color.green);
 
                 if (!rc)
                 {
                     return true;
                 }
+
+                if (rc.point.y - hits[i - 1].y > spacing * (2 + MovementTools.sqrt3))
+                //more than 60deg slope detected
+                {
+                    return true;
+                }
+
+                hits.Add(rc.point);
             }
             return false;
         }

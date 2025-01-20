@@ -42,12 +42,6 @@ namespace RPGPlatformer.Core
 
         public event Action OnConfigure;
 
-        //public void ClearAbilityBarBindings()
-        //{
-        //    abilityBarBindingPaths.Clear();
-        //    AbilityBarActions.Clear();
-        //}
-
         public virtual void Configure()
         {
             if (SettingsManager.Instance == null)

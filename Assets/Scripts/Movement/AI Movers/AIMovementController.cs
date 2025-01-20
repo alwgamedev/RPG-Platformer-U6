@@ -11,9 +11,9 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected DropOffHandlingOption dropOffHandlingOption = DropOffHandlingOption.stop;
         [SerializeField] protected bool canMoveDuringFreefall;
-        [SerializeField] protected float maxPermissibleDropOffHeightFactor = 3.5f;
+        [SerializeField] protected float maxPermissibleDropOffHeightFactor = 2.5f;
 
-        protected bool jumpingGap;
+        //protected bool jumpingGap;
         protected bool gapJumpingEnabled;
         protected bool stuckAtLedge;
 
@@ -26,7 +26,8 @@ namespace RPGPlatformer.Movement
             get => base.MoveInput;
             set
             {
-                if (!jumpingGap)
+                if (!movementManager.StateMachine.HasState(typeof(Jumping)))
+                    //don't change move input while jumping
                 {
                     base.MoveInput = value;
                 }
@@ -48,7 +49,7 @@ namespace RPGPlatformer.Movement
             if (stuckAtLedge) return;
 
             if (input != 0 && dropOffHandlingOption != DropOffHandlingOption.ignore 
-                && !jumpingGap//check here so that jumpers dont do unnecessary drop off detection while jumping
+                && !movementManager.StateMachine.HasState(typeof(Jumping))
                 && mover.DropOffInFront(MaxPermissibleDropOffHeight))
             {
                 if (dropOffHandlingOption == DropOffHandlingOption.stop)
@@ -67,7 +68,7 @@ namespace RPGPlatformer.Movement
                             Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
                         {
                             mover.Jump();
-                            jumpingGap = true;
+                            //jumpingGap = true;
                         }
                         else
                         {
@@ -142,7 +143,7 @@ namespace RPGPlatformer.Movement
                         groundAngle = 180 - groundAngle;
                     }
 
-                    if (groundAngle > 40)
+                    if (groundAngle > 60)
                     {
                         return false;
                     }
@@ -166,7 +167,7 @@ namespace RPGPlatformer.Movement
         protected override void OnGroundedEntry()
         {
             base.OnGroundedEntry();
-            jumpingGap = false;
+            //jumpingGap = false;
         }
 
         protected override void FreefallMoveAction(float input)

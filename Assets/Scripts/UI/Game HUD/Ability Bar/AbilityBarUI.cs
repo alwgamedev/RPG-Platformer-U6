@@ -12,7 +12,6 @@ namespace RPGPlatformer.UI
         [SerializeField] protected AbilityBarSlot slotPrefab;
         [SerializeField] protected LayoutGroup layoutGroup;
         [SerializeField] protected int numSlots = AbilityBar.playerAbilityBarLength;
-        //[SerializeField] protected bool isPlayerAbilityBar;
         [SerializeField] protected bool usePlayerAbilityBarLength;
 
         protected AbilityBarSlot[] slots;

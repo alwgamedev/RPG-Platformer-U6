@@ -22,13 +22,6 @@ namespace RPGPlatformer.Combat
             InteractableGameObject.IGOClicked += OnIGOClicked;
         }
 
-        //protected override void OnEnable()
-        //{
-        //    base.OnEnable();
-
-
-        //}
-
         protected override void Start()
         {
             base.Start();
@@ -36,6 +29,7 @@ namespace RPGPlatformer.Combat
             combatant.OnInventoryOverflow += OnInventoryOverflow;
 
             var spaghetti = InventoryItemSO.FindByName("Spaghetti");
+            var staff = InventoryItemSO.FindByName("Basic Staff (SH)");
             var bow = InventoryItemSO.FindByName("Basic Bow (SH)");
             var sword = InventoryItemSO.FindByName("Basic Sword (SH)");
             var gold = InventoryItemSO.FindByName("Gold Coins");
@@ -50,6 +44,7 @@ namespace RPGPlatformer.Combat
 
             combatant.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
             combatant.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
+            combatant.TakeLoot(staff.CreateInstanceOfItem().ToSlotData(1));
             combatant.TakeLoot(bow.CreateInstanceOfItem().ToSlotData(1));
             combatant.TakeLoot(sword.CreateInstanceOfItem().ToSlotData(1));
             combatant.TakeLoot(cookie.CreateInstanceOfItem().ToSlotData(8));
