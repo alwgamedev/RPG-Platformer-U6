@@ -324,11 +324,14 @@ namespace RPGPlatformer.Combat
 
         public virtual void OnInsufficientWrath() { }
 
-        public void StoreAction(Action action)//these functions would be better in the animation control class
+        public void StoreAction(Action action, bool channelWhileStored = true)//these functions would be better in the animation control class
         {
             StoredAction = action;
-            StartChannel();//so that auto-cast cycle will not interrupt the animation
-            StoredAction += () => EndChannel();
+            if (channelWhileStored)
+            {
+                StartChannel();//so that auto-cast cycle will not interrupt the animation
+                StoredAction += () => EndChannel();
+            }
         }
 
         public void ExecuteStoredAction()

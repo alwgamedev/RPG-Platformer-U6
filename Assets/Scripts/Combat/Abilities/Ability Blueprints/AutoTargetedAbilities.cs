@@ -10,23 +10,48 @@ namespace RPGPlatformer.Combat
     public class AutoTargetedAbility : AttackAbility
     {
         public Func<ICombatController, IHealth> AutoTarget;
+        public new Action<ICombatController, IHealth> OnExecute;
 
-        public AutoTargetedAbility(bool executeTriggeredInAnimation = false)
+        public AutoTargetedAbility(bool executeTriggeredInAnimation = false, bool channelWhileStored = true)
         {
             if (executeTriggeredInAnimation)
             {
-                OnExecute = (controller) => controller.StoreAction(() =>
-                    DealDamageWithRangeCheck(controller.Combatant, AutoTarget(controller),
-                        ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect));
+                OnExecute = (controller, target) => controller.StoreAction(() =>
+                    DealDamage(controller.Combatant, target,
+                        ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect),
+                        channelWhileStored);
             }
             else
             {
-                OnExecute = (controller) => DealDamageWithRangeCheck(controller.Combatant, AutoTarget(controller),
-                       ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+                OnExecute = (controller, target) => DealDamage(controller.Combatant,
+                    target, ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect);
             }
         }
+
+        public override void Execute(ICombatController controller)
+        {
+            if (!CanBeExecuted(controller)) return;
+
+            IHealth target = AutoTarget(controller);
+            controller.Combatant.CheckIfTargetInRange(target, out var result);
+            if (!result) return;
+
+            controller.Combatant.Attack();
+            OnExecute?.Invoke(controller, target);
+            controller.OnAbilityExecute(this);
+
+            PoolableEffect effect = GetCombatantExecuteEffect?.Invoke();
+            if (effect)
+            {
+                effect.PlayAtPosition(controller.Combatant.Transform);
+            }
+
+            UpdateCombatantStats(controller.Combatant);
+        }
+
         public static void DealDamageWithRangeCheck(ICombatant combatant, IHealth target, float damage,
-            float? stunDuration = null, bool freezeAnimationDuringStun = true, Func<PoolableEffect> getHitEffect = null)
+            float? stunDuration = null, bool freezeAnimationDuringStun = true, 
+            Func<PoolableEffect> getHitEffect = null)
         {
             combatant.CheckIfTargetInRange(target, out bool result);
             if (result)
@@ -69,7 +94,8 @@ namespace RPGPlatformer.Combat
     //(*) base AttackAbility stats
     public class CloseRangeAbility : AutoTargetedAbility
     {
-        public CloseRangeAbility() : base()
+        public CloseRangeAbility(bool executeTriggeredInAnimation = false, bool channelWhileStored = true) 
+            : base(executeTriggeredInAnimation, channelWhileStored)
         {
             AutoTarget = (controller) => TargetInFront(controller.Combatant);
         }
@@ -83,16 +109,18 @@ namespace RPGPlatformer.Combat
     {
         public AutoTargetedBleed() : base()
         {
-            OnExecute = async (controller) =>
-            {
-                IHealth target = AutoTarget?.Invoke(controller);
-                controller.Combatant.CheckIfTargetInRange(target, out bool result);
-                if (result)
-                {
-                    await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant), 
+            OnExecute = async (controller, target) =>
+            await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
                         BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
-                }
-            };
+            //{
+            //    //IHealth target = AutoTarget?.Invoke(controller);
+            //    controller.Combatant.CheckIfTargetInRange(target, out bool result);
+            //    if (result)
+            //    {
+            //        await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant), 
+            //            BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
+            //    }
+            //};
         }
     }
 
@@ -101,7 +129,8 @@ namespace RPGPlatformer.Combat
     //(*) base AttackAbility stats
     //(*) OnExecute = Action<(Health, int)>
     //(*) whether it HasChannelAnimation (bool)
-    public class AutoTargetOnNextFireButtonDown : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<IHealth>
+    public class AutoTargetOnNextFireButtonDown 
+        : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<IHealth>
     {
         public Func<ICombatController, IHealth> AutoTarget;
 
@@ -135,8 +164,8 @@ namespace RPGPlatformer.Combat
         public AutoTargetOnNextFireButtonDownBleed() : base()
         {
             OnExecute = async (controller, target) =>
-                await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant), BleedCount, BleedRate, 
-                DamagePerBleedIteration, GetHitEffect);
+                await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
+                BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
         }
     }
 

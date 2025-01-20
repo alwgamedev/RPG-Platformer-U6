@@ -47,7 +47,7 @@ namespace RPGPlatformer.Combat
             };
         }
 
-        public static CloseRangeAbility Punch = new()
+        public static CloseRangeAbility Punch = new(true, false)
         {
             Description = "A real fighter uses their fists.",
             AbilityTags = new()

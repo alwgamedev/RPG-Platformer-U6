@@ -31,7 +31,7 @@ namespace RPGPlatformer.Combat
         public void EndPowerUp();
         public void OnAbilityExecute(AttackAbility ability);
         public void MaximumPowerAchieved();
-        public void StoreAction(Action action);
+        public void StoreAction(Action action, bool channelWhileStored = true);
         public void OnWeaponEquip();
         public void OnCombatEntry();
         public void OnCombatExit();
