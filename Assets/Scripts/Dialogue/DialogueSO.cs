@@ -8,9 +8,10 @@ namespace RPGPlatformer.Dialogue
     [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue/New Dialogue")]
     public class DialogueSO : ScriptableObject
     {
-        [SerializeField] int numConversants = 2;
+        //[SerializeField] int numConversants = 2;
         [SerializeField] DialogueNode rootNode;
         [SerializeField] List<DialogueNode> nodes = new();
+        [SerializeField] List<string> conversantNames = new();
         
         Dictionary<string, DialogueNode> NodeLookup = new();
 
@@ -28,9 +29,9 @@ namespace RPGPlatformer.Dialogue
             }
         }
 
-        public int NumConversants()
+        public List<string> ConversantNames()
         {
-            return numConversants;
+            return conversantNames;
         }
 
         public DialogueNode RootNode()

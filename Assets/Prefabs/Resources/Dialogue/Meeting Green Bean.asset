@@ -95,7 +95,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169cada9d0d6b9745b76b51fc8d250cb, type: 3}
   m_Name: Meeting Green Bean
   m_EditorClassIdentifier: 
-  numConversants: 2
   rootNode: {fileID: -7395801003887672830}
   nodes:
   - {fileID: -7395801003887672830}
@@ -107,6 +106,9 @@ MonoBehaviour:
   - {fileID: -8826577858490077295}
   - {fileID: 1302174551884799749}
   - {fileID: 1832879515553895035}
+  conversantNames:
+  - Player
+  - Green Bean
 --- !u!114 &1302174551884799749
 MonoBehaviour:
   m_ObjectHideFlags: 0

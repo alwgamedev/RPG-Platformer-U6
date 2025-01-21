@@ -10,11 +10,9 @@ namespace RPGPlatformer.Dialogue
     //[RequireComponent(typeof(InteractableGameObject))]
     public class DialogueTrigger : MonoBehaviour
     {
-        //[SerializeField] List<DialogueSO> dialogues = new();
         [SerializeField] List<DialogueTriggerData> dialogues;
 
         public static event Action<DialogueTriggerData> DialogueTriggered;
-        //signature (dialogue, conversantName, playerName)
         public static event Action DialogueCancelled;
 
         public void CancelDialogue()
@@ -37,36 +35,6 @@ namespace RPGPlatformer.Dialogue
 
         public void TriggerDialogue(DialogueTriggerData data)
         {
-            if (!data.AllowPlayerToEnterCombatDuringDialogue)
-            {
-                var player = FindAnyObjectByType<PlayerCombatController>();
-                if (player != null)
-                {
-                    Debug.Log($"is the player in combat? {player.IsInCombat}");
-                    if (player.IsInCombat)
-                    {
-                        CancelOnCombatEntry();
-                        return;
-
-                    }
-
-                    player.CombatEntered += CancelOnCombatEntry;
-                    DialogueCancelled += CancellationHandler;
-
-                    void CancelOnCombatEntry()
-                    {
-                        GameLog.Log("You cannot participate in this dialogue while in combat.");
-                        CancelDialogue();
-                    }
-
-                    void CancellationHandler()
-                    {
-                        player.CombatEntered -= CancelOnCombatEntry;
-                        DialogueCancelled -= CancellationHandler;
-                    }
-                }
-            }
-
             DialogueTriggered?.Invoke(data);
         }
     }

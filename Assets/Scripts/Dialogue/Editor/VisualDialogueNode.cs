@@ -10,7 +10,7 @@ namespace RPGPlatformer.Dialogue.Editor
 {
     public class VisualDialogueNode : Node
     {
-        public int numConversants;
+        public List<string> conversantNames;
         public DialogueNode dialogueNode;
         public Port inputPort;
         public List<Port> outputPorts = new();
@@ -20,11 +20,11 @@ namespace RPGPlatformer.Dialogue.Editor
 
         public event Action OutputPortsReady;
 
-        public VisualDialogueNode(DialogueNode dialogueNode, int numConversants)
+        public VisualDialogueNode(DialogueNode dialogueNode, List<string> conversantNames)
         {
             this.dialogueNode = dialogueNode;
             title = dialogueNode.name;
-            this.numConversants = numConversants;
+            this.conversantNames = conversantNames;
         }
 
         public void Redraw()
@@ -54,20 +54,20 @@ namespace RPGPlatformer.Dialogue.Editor
             //    dialogueNode.SetIsPlayerSpeaking(valueChangeEvent.newValue);
             //});
 
-            List<string> conversantOptions = Enumerable.Range(0, numConversants).Select(x => x.ToString()).ToList();
-            if (dialogueNode.ConversantNumber() < 0 || dialogueNode.ConversantNumber() >= numConversants)
-            {
-                dialogueNode.SetConversantNumber(0);
-            }
+            //List<string> conversantOptions = Enumerable.Range(0, numConversants).Select(x => x.ToString()).ToList();
+            //if (dialogueNode.ConversantNumber() < 0 || dialogueNode.ConversantNumber() >= numConversants)
+            //{
+            //    dialogueNode.SetConversantNumber(0);
+            //}
 
-            DropdownField conversantDropdown = new(conversantOptions, dialogueNode.ConversantNumber());
+            DropdownField conversantDropdown = new(conversantNames, dialogueNode.ConversantNumber());
             conversantDropdown.label = "Conversant #:";
             conversantDropdown.style.unityTextAlign = TextAnchor.MiddleLeft;
             conversantDropdown.style.minWidth = 5;
             conversantDropdown.ElementAt(0).style.fontSize = 15;
             conversantDropdown.RegisterValueChangedCallback((valueChangeEvent) =>
             {
-                dialogueNode.SetConversantNumber(Int32.Parse(valueChangeEvent.newValue));
+                dialogueNode.SetConversantNumber(conversantDropdown.index);
             });
 
 

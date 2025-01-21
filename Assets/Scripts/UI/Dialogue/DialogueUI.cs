@@ -3,6 +3,8 @@ using System.Linq;
 using UnityEngine;
 using RPGPlatformer.Dialogue;
 using RPGPlatformer.Core;
+using RPGPlatformer.Combat;
+using System;
 
 namespace RPGPlatformer.UI
 {
@@ -10,45 +12,23 @@ namespace RPGPlatformer.UI
     {
         [SerializeField] DialogueWindow dialogueWindowPrefab;
 
-        //DialogueTriggerData activeDialogue;
         DialogueSO activeDialogue;
         List<string> conversantNames = new();
         DialogueNode currentNode;
         DialogueWindow activeWindow;
-        //string conversantName;
-        //string playerName = "Player";
+
+        public event Action DialogueEnded;
 
         protected override void Awake()
         {
             base.Awake();
 
-            DialogueTrigger.DialogueTriggered += StartDialogue;
+            DialogueTrigger.DialogueTriggered += HandleDialogueTrigger;//StartDialogue;
             DialogueTrigger.DialogueCancelled += EndDialogue;
-
-            //if (GlobalGameTools.Instance != null)
-            //{
-            //    playerName = GlobalGameTools.PlayerName;
-            //}
-            //else
-            //{
-            //    GlobalGameTools.InstanceReady += InitializePlayerName;
-            //}
         }
-
-        //protected void InitializePlayerName()
-        //{
-        //    playerName = GlobalGameTools.PlayerName;
-        //    GlobalGameTools.InstanceReady -= InitializePlayerName;
-        //}
 
         public void StartDialogue(DialogueTriggerData data/*DialogueSO dialogue, string conversantName, string playerName*/)
         {
-            if (!data.IsValid())
-            {
-                Debug.Log($"Unable to start dialogue, because {nameof(DialogueTriggerData)} is invalid.");
-                return;
-            }
-
             activeDialogue = data.DialogueSO;
             currentNode = activeDialogue.RootNode();
             conversantNames = data.Conversants.Select(x => x.ConversantName).ToList();
@@ -62,12 +42,58 @@ namespace RPGPlatformer.UI
             activeDialogue = null;
             currentNode = null;
             conversantNames = null;
-            //conversantName = null;
-            //playerName = null;
+            DialogueEnded?.Invoke();
             Hide();
         }
 
-        private void DisplayDialogueNode(DialogueNode dialogueNode/*, string conversantName*/)
+        private void HandleDialogueTrigger(DialogueTriggerData data)
+        {
+            if (activeDialogue != null)
+            {
+                GameLog.Log("Exit the current dialogue before starting another.");
+                return;
+            }
+
+            if (!data.IsValid())
+            {
+                Debug.Log($"Unable to start dialogue, because {nameof(DialogueTriggerData)} is invalid.");
+                return;
+            }
+
+            if (!data.AllowPlayerToEnterCombatDuringDialogue)
+            {
+                var player = FindAnyObjectByType<PlayerCombatController>();
+
+                if (player != null)
+                {
+                    if (player.IsInCombat)
+                    {
+                        CancelOnCombatEntry();
+                        return;
+                    }
+
+                    player.CombatEntered += CancelOnCombatEntry;
+                    DialogueEnded += DialogueEndedHandler;
+
+                    void CancelOnCombatEntry()
+                    {
+                        GameLog.Log("You cannot participate in this dialogue while in combat.");
+                        EndDialogue();
+                    }
+
+                    void DialogueEndedHandler()
+                    {
+                        player.CombatEntered -= CancelOnCombatEntry;
+                        DialogueEnded -= DialogueEndedHandler;
+                        //because we still need to unsubscribe when the dialogue ends naturally
+                    }
+                }
+
+                StartDialogue(data);
+            }
+        }
+
+        private void DisplayDialogueNode(DialogueNode dialogueNode)
         {
             CloseActiveWindow();
 
@@ -75,14 +101,14 @@ namespace RPGPlatformer.UI
             string conversantName = conversantNames[dialogueNode.ConversantNumber()];
 
             activeWindow = Instantiate(dialogueWindowPrefab, transform);
-            activeWindow.SetUpWindow(dialogueNode, conversantName/*, playerName*/);
+            activeWindow.SetUpWindow(dialogueNode, conversantName);
 
             if(!activeDialogue.HasContinuation(dialogueNode))
             {
                 activeWindow.NextButtonContainer.SetActive(false);
             }
 
-            activeWindow.CloseButton.onClick.AddListener(CloseActiveWindow);
+            activeWindow.CloseButton.onClick.AddListener(EndDialogue);
             activeWindow.ResponseSelected += DisplayContinuation;
             //(^even for a choice node where the responses have no continuation (i.e. the choices are just 
             //closing remarks) we should subscribe DisplayContinuation so that the dialogue closes
@@ -112,7 +138,7 @@ namespace RPGPlatformer.UI
         {
             base.OnDestroy();
 
-            DialogueTrigger.DialogueTriggered -= StartDialogue;
+            DialogueTrigger.DialogueTriggered -= HandleDialogueTrigger;
             DialogueTrigger.DialogueCancelled -= EndDialogue;
         }
     }

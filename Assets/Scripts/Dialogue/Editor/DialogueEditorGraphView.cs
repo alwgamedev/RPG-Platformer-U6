@@ -121,7 +121,7 @@ namespace RPGPlatformer.Dialogue.Editor
 
         private VisualDialogueNode DrawNode(DialogueNode dialogueNode, Vector2 position)
         {
-            VisualDialogueNode node = new(dialogueNode, dialogue.NumConversants());
+            VisualDialogueNode node = new(dialogueNode, dialogue.ConversantNames());
             node.SetPosition(dialogueNode.Rect());
             AddElement(node);
 

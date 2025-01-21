@@ -17,7 +17,8 @@ namespace RPGPlatformer.Dialogue
 
         public bool IsValid()
         {
-            return dialogueSO != null && conversants != null && dialogueSO.NumConversants() == conversants.Count;
+            return dialogueSO != null && conversants != null 
+                && dialogueSO.ConversantNames().Count == conversants.Count;
         }
 
         public string ConversantName(int i)
