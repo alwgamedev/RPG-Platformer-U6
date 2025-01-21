@@ -1,9 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
 using System;
-using System.Threading.Tasks;
-using System.Threading;
-using RPGPlatformer.Core;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Movement;
 using RPGPlatformer.SceneManagement;
@@ -23,23 +20,26 @@ namespace RPGPlatformer.UI
 
         bool inCombat;
         bool dead;
-        //Canvas popupTargetCanvas;
-        Action Destroyed;
+        IMover parentMover;
+        //Action Destroyed;
 
-        private void Start()
-        {
-            var mover = GetComponentInParent<IMover>();
-            if(mover != null)
-            {
-                mover.UpdatedXScale += (orientation) => Unflip(mover.Transform);
-            }
+        //private void Start()
+        //{
+        //    parentMover = GetComponentInParent<IMover>();
+        //    if(parentMover != null)
+        //    {
+        //        parentMover.UpdatedXScale += Unflip;
+        //    }
             
-            //popupTargetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
-        }
+        //    //popupTargetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
+        //}
 
         public void Configure(ICombatController cc)
         {
             if (cc == null) return;
+
+            parentMover = cc.Combatant.Transform.GetComponent<IMover>();
+            parentMover.UpdatedXScale += Unflip;
 
             cc.Combatant.Health.Stat.statBar = statBar;
             tmp.text = $"{cc.Combatant.DisplayName} (Level {cc.Combatant.CombatLevel})";
@@ -130,13 +130,15 @@ namespace RPGPlatformer.UI
             }
         }
 
-        private void Unflip(Transform parent)
+        private void Unflip(HorizontalOrientation orientation)
         {
+            if (parentMover == null) return;
+
             //meaning either your parent is backwards (-1), and you're with it (1), or you're backwards (-1)
             //relative to your parent (1)
             //we should just using the orientation sent by UpdatedXScale,
             //but for some reason this was not always reliable
-            if (Mathf.Sign(parent.localScale.x) * Mathf.Sign(transform.localScale.x) < 0)
+            if (Mathf.Sign(parentMover.Transform.localScale.x) * Mathf.Sign(transform.localScale.x) < 0)
             {
                 transform.localScale = new(-transform.localScale.x, transform.localScale.y,
                 transform.localScale.z);
@@ -145,11 +147,16 @@ namespace RPGPlatformer.UI
 
         protected override void OnDestroy()
         {
-            Destroyed?.Invoke();
+            //Destroyed?.Invoke();
+
+            if (parentMover != null)
+            {
+                parentMover.UpdatedXScale -= Unflip;
+            }
 
             base.OnDestroy();
 
-            Destroyed = null;
+            //Destroyed = null;
         }
     }
 }

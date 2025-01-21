@@ -342,6 +342,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 6412203882815245979, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      propertyPath: m_labelHash
+      value: 1.8689996e-25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412203882815245979, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      propertyPath: m_CategoryHash
+      value: 1.8689996e-25
+      objectReference: {fileID: 0}
     - target: {fileID: 6582619175974578768, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -402,9 +410,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8760684093804332189}
-    - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1385283763275751422}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4714593124907249367}
@@ -615,19 +620,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropPrefab: {fileID: 6284128859392026527, guid: 46707d3bb305f474a930c60eb8bad290, type: 3}
---- !u!114 &1385283763275751422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8296160008381991138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41e838991cdcbf540bce40d397f03c9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numSlots: 20
 --- !u!114 &4714593124907249367
 MonoBehaviour:
   m_ObjectHideFlags: 0

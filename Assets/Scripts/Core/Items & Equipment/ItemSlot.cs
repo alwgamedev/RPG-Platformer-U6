@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 using RPGPlatformer.Inventory;
+using System.Collections.Generic;
+using UnityEngine.U2D.Animation;
+using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEditor.Progress;
 
 namespace RPGPlatformer.Core
 {
@@ -14,9 +18,12 @@ namespace RPGPlatformer.Core
         [SerializeField] string sortingLayer;
         [SerializeField] int sortingOrder;
         [SerializeField] bool equipOnStart;
-        [SerializeField] EquippableItemSO defaultItem;
+        [SerializeField] EquippableItemSO defaultItem; 
+        [SerializeField] List<SpriteResolver> dependentResolvers = new();
 
         EquippableItem equippedItem;
+        Dictionary<string, SpriteResolver> SpriteResolverForCategory = new();
+        Dictionary<string, string> DefaultLabelForCategory = new();
 
         public EquippableItem EquipppedItem => equippedItem;
         public GameObject EquippedItemGO { get; protected set; }
@@ -27,20 +34,10 @@ namespace RPGPlatformer.Core
 
         public event Action OnItemEquipped;
 
-        //public static bool IsWeaponSlot(EquipmentSlot slot)
-        //{
-        //    return slot == EquipmentSlot.Mainhand || equip
-        //}
-
-        //public static EquipmentSlots EquipmentSlot(int slot)
-        //{
-        //    return (EquipmentSlots)slot;
-        //}
-
-        //public static int SlotIndex(EquipmentSlots slot)
-        //{
-        //    return (int)slot;
-        //}
+        private void Awake()
+        {
+            BuildDictionaries();
+        }
 
         private void Start()
         {
@@ -50,14 +47,28 @@ namespace RPGPlatformer.Core
             }
         }
 
+        private void BuildDictionaries()
+        {
+            foreach (var resolver in dependentResolvers)
+            {
+                string category = resolver.GetCategory();
+                SpriteResolverForCategory[category] = resolver;
+                DefaultLabelForCategory[category] = resolver.GetLabel();
+            }
+        }
+
+        //NOTE: EquipItem(null) will work perfectly for unequipping
         public void EquipItem(EquippableItem item)
         {
-            equippedItem = item;
             if (EquippedItemGO)
             {
                 Destroy(EquippedItemGO);
             }
+
+            equippedItem = item;
+            SwapSprites(equippedItem);
             EquippedItemGO = AttachPrefab(equippedItem);
+
             if (EquippedItemGO)
             {
                 SpriteRenderer sprite = EquippedItemGO.GetComponentInChildren<SpriteRenderer>();
@@ -77,15 +88,41 @@ namespace RPGPlatformer.Core
             OnItemEquipped?.Invoke();
         }
 
+        protected virtual void SwapSprites(EquippableItem item)
+        {
+            var swapData = item?.EquippableItemData?.SpriteSwapData;
+
+            foreach (var entry in SpriteResolverForCategory)
+            {
+                entry.Value.SetCategoryAndLabel(entry.Key, GetLabel(entry.Key, swapData));
+            }
+        }
+
+        string GetLabel(string category, List<SpriteSwapData> itemData)
+        {
+            if (itemData == null)
+            {
+                return DefaultLabelForCategory[category];
+            }
+
+            foreach (var datum in itemData)
+            {
+                if (datum.Category == category)
+                {
+                    return datum.Label;
+                }
+            }
+            return DefaultLabelForCategory[category];
+        }
+
         protected virtual GameObject AttachPrefab(EquippableItem item)
         {
-            if(item == null || item.EquippableItemData.Prefab == null)
+            if (item?.EquippableItemData?.Prefab != null)
             {
-                return null;
+                return Instantiate(item.EquippableItemData.Prefab, transform);
             }
-            return Instantiate(item.EquippableItemData.Prefab, transform);
+            return null;
         }
-        //armour slots may have a different protocol for doing this (they may need to set a sprite in sprite library)
 
         private void OnDestroy()
         {

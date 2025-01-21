@@ -34,6 +34,7 @@ namespace RPGPlatformer.Combat
             var sword = InventoryItemSO.FindByName("Basic Sword (SH)");
             var gold = InventoryItemSO.FindByName("Gold Coins");
             var cookie = InventoryItemSO.FindByName("Cookie");
+            var redBody = InventoryItemSO.FindByName("Red Body");
 
             //combatant.Inventory.DistributeToFirstAvailableSlots(spaghetti);
             //combatant.Inventory.DistributeToFirstAvailableSlots(spaghetti);
@@ -49,6 +50,7 @@ namespace RPGPlatformer.Combat
             combatant.TakeLoot(sword.CreateInstanceOfItem().ToSlotData(1));
             combatant.TakeLoot(cookie.CreateInstanceOfItem().ToSlotData(8));
             combatant.TakeLoot(gold.CreateInstanceOfItem().ToSlotData(773));
+            combatant.TakeLoot(redBody.CreateInstanceOfItem().ToSlotData(1));
         }
 
         void OnIAMConfigure()
