@@ -93,8 +93,8 @@ namespace RPGPlatformer.Movement
             {
                 return jumpForce * Vector2.up;
             }
-            return (0.27f * SpeedFraction() * jumpForce) * Vector2.right 
-                + (1.25f - Mathf.Clamp((0.6f * myRigidbody.linearVelocityY) - 1, -0.15f, 0.4f))
+            return (0.2f * SpeedFraction() * jumpForce) * Vector2.right 
+                + (1.18f - Mathf.Clamp((0.6f * myRigidbody.linearVelocityY) - 1, -0.15f, 0.25f))
                 * jumpForce * Vector2.up;
         }
 
