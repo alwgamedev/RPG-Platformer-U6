@@ -32,9 +32,9 @@ namespace RPGPlatformer.Movement
         public Rigidbody2D Rigidbody => myRigidbody;
         public float Width => myWidth;
         public float Height => myHeight;
-        public Vector3 ColliderCenterRight => myCollider.bounds.center + 0.25f * myWidth * transform.right;
-        public Vector3 ColliderCenterLeft => myCollider.bounds.center - 0.25f * myWidth * transform.right;
-        public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myWidth * transform.up;
+        public Vector3 ColliderCenterRight => myCollider.bounds.center + 0.5f * myWidth * transform.right;
+        public Vector3 ColliderCenterLeft => myCollider.bounds.center - 0.5f * myWidth * transform.right;
+        public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
         public Vector3 ColliderCenterFront => CurrentOrientation == HorizontalOrientation.right ?
             ColliderCenterRight : ColliderCenterLeft;
         public Vector3 ColliderCenterBack => CurrentOrientation == HorizontalOrientation.right ?
