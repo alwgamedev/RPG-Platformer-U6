@@ -60,6 +60,11 @@ namespace RPGPlatformer.Movement
             animationControl.animator.SetBool("wallCling", val);
         }
 
+        public bool IsWallScrambling()
+        {
+            return animationControl.animator.GetBool("wallScramble");
+        }
+
         public void AnimateWallScramble(bool val)
         {
             animationControl.animator.SetBool("wallScramble", val);

@@ -30,24 +30,27 @@ namespace RPGPlatformer.Movement
             set
             {
                 if (movementManager.StateMachine.HasState(typeof(Grounded)))
-                    //don't change move input while airborne
+                    //ai will never change move input while airborne
+                    //(except if they hit wall then move input is set to 0 so they don't cling)
                 {
                     base.MoveInput = value;
+                }
+                else if (mover.FacingWall)
+                {
+                    base.MoveInput = 0;
                 }
             }
         }
 
-        protected override void Awake()
-        {
-            base.Awake();
+        //protected override void Awake()
+        //{
+        //    base.Awake();
+        //}
 
-            mover = mover as AIMover;
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-        }
+        //protected override void Start()
+        //{
+        //    base.Start();
+        //}
 
         protected override void InitializeMover()
         {
@@ -107,19 +110,21 @@ namespace RPGPlatformer.Movement
             mover.MoveGrounded();
         }
 
-        public void SetDetectWalls(bool val)
-        {
-            if (val && !mover.DetectWalls)
-            {
-                aiMover.SetDetectWalls(true);
-                OnUpdate += HandleAdjacentWallInteraction;
-            }
-            else if (!val && mover.DetectWalls)
-            {
-                aiMover.SetDetectWalls(false);
-                OnUpdate -= HandleAdjacentWallInteraction;
-            }
-        }
+        //public void SetDetectWalls(bool val)
+        //{
+        //    if (val && !detectWalls/*!mover.DetectWalls*/)
+        //    {
+        //        //aiMover.SetDetectWalls(true);
+        //        detectWalls = true;
+        //        OnUpdate += HandleAdjacentWallInteraction;
+        //    }
+        //    else if (!val && detectWalls/*mover.DetectWalls*/)
+        //    {
+        //        //aiMover.SetDetectWalls(false);
+        //        detectWalls = false;
+        //        OnUpdate -= HandleAdjacentWallInteraction;
+        //    }
+        //}
 
         public void EnableJumping(bool val)
         {
@@ -137,38 +142,38 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected override void OnGroundedEntry()
-        {
-            SetDetectWalls(false);
+        //protected override void OnGroundedEntry()
+        //{
+        //    //SetDetectWalls(false);
 
-            base.OnGroundedEntry();
-        }
+        //    base.OnGroundedEntry();
+        //}
 
-        protected override void OnFreefallEntry()
-        {
-            SetDetectWalls(true);
+        //protected override void OnFreefallEntry()
+        //{
+        //    //SetDetectWalls(true);
 
-            if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
-            {
-                if (mover.CanJump())
-                {
-                    mover.Stop();
-                    SetOrientation(-(int)CurrentOrientation);
-                    mover.Jump(mover.OrientForce(aiMover.EmergencyJumpForce()));
-                }
-            }
-        }
+        //    //if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
+        //    //{
+        //    //    if (mover.CanJump())
+        //    //    {
+        //    //        mover.Stop();
+        //    //        SetOrientation(-(int)CurrentOrientation);
+        //    //        mover.Jump(mover.OrientForce(aiMover.EmergencyJumpForce()));
+        //    //    }
+        //    //}
+        //}
 
-        protected override void OnJumpingEntry()
-        {
-            SetDetectWalls(true);
+        //protected override void OnJumpingEntry()
+        //{
+        //    //SetDetectWalls(true);
 
-            base.OnJumpingEntry();
-        }
+        //    base.OnJumpingEntry();
+        //}
 
         protected override void HandleAdjacentWallInteraction()
         {
-            if (moveInput != 0 && mover.FacingWall)
+            if (mover.FacingWall)
             {
                 moveInput = 0;
             }

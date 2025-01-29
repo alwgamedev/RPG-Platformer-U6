@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -11,15 +10,16 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected float walkSpeed = 0.8f;
         [SerializeField] protected int maxNumJumps = 2;
         [SerializeField] protected float jumpForce = 400;
-        [SerializeField] protected bool detectWalls;
+        //[SerializeField] protected bool detectWalls;
 
         protected int currentJumpNum = 0;
         protected float maxSpeed;
         protected bool running;
         protected Quaternion adjacentWallAngle;
         protected bool facingWall;
+        //protected Action OnUpdate;
 
-        public virtual bool DetectWalls => detectWalls;
+        //public virtual bool DetectWalls => detectWalls;
         public float MaxSpeed => maxSpeed;
         public float RunSpeed => runSpeed;
         public float WalkSpeed => walkSpeed;
@@ -32,7 +32,7 @@ namespace RPGPlatformer.Movement
                 maxSpeed = running ? runSpeed : walkSpeed;
             }
         }
-        public Quaternion AdjacentWallAngle => adjacentWallAngle;
+        public Quaternion AdjacentWallAngle => adjacentWallAngle; //measured from positive y-axis (i.e. 0 = vertical)
         public bool FacingWall => facingWall;
         //public virtual float MaxPermissibleDropoffHeight => 2 * myHeight;
 
@@ -41,11 +41,17 @@ namespace RPGPlatformer.Movement
             base.Awake();
 
             maxSpeed = walkSpeed;
+
+            //if (detectWalls)
+            //{
+            //    OnUpdate += UpdateAdjacentWall;
+            //}
         }
 
         protected override void Update()
         {
-            UpdateAdjacentWall();
+            //UpdateAdjacentWall();
+            //OnUpdate?.Invoke();
 
             base.Update();
         }
@@ -62,8 +68,11 @@ namespace RPGPlatformer.Movement
 
         public float SpeedFraction()
         {
-            float speed = Mathf.Abs(myRigidbody.linearVelocity.x);
-            return Mathf.Clamp(speed / runSpeed, 0, 1);
+            //return myRigidbody.linearVelocity.magnitude / runSpeed;
+            //Debug.Log(myRigidbody.linearVelocityX / runSpeed);
+            return Mathf.Abs(myRigidbody.linearVelocityX / runSpeed);
+            //float speed = Mathf.Abs(myRigidbody.linearVelocity.x);
+            //return Mathf.Clamp(speed / runSpeed, 0, 1);
         }
 
         public void Jump()
@@ -130,10 +139,7 @@ namespace RPGPlatformer.Movement
 
         public void UpdateAdjacentWall()
         {
-            //CHECK BOTH SIDES rather than just checking current orientation side, because current orientation
-            //can be inaccurate when approach the wall from freefall state
-
-            if (!detectWalls) return;
+            //if (!detectWalls) return;
 
             if (verifyingJump)
             {
@@ -169,6 +175,7 @@ namespace RPGPlatformer.Movement
             {
                 facingWall = true;
                 //use last calculated wall angle in this case 
+                //which will be Quaternion.identity if coming from a non-wall situtation
                 return;
             }
             //else if (!midHit & lowerHit)

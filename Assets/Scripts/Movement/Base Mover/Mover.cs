@@ -65,9 +65,9 @@ namespace RPGPlatformer.Movement
             myHeight = myCollider.bounds.max.y - myCollider.bounds.min.y;
             myWidth = myCollider.bounds.max.x - myCollider.bounds.min.x;
 
-            groundednessTolerance = 0.7f * myHeight;//a little extra than 0.5f * height, because sometimes the
+            groundednessTolerance = 0.75f * myHeight;//a little extra than 0.5f * height, because sometimes the
             //ground collider is a bit below the surface (and we don't want to be randomly losing groundedness
-            //as we walk over uneven terrain)
+            //as we walk over uneven terrain. Also the back hit needs to go quite far on steep terrain)
         }
 
         protected virtual void Update()

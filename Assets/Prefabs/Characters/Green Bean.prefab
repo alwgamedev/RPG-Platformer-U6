@@ -208,6 +208,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9011513413079839493, guid: e13390690e108ae4abe8f2d8302803bc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2070437807594523328}
+    - targetCorrespondingSourceObject: {fileID: 9011513413079839493, guid: e13390690e108ae4abe8f2d8302803bc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4431716515061652100}
   m_SourcePrefab: {fileID: 100100000, guid: e13390690e108ae4abe8f2d8302803bc, type: 3}
 --- !u!1 &1765907394187610111 stripped
 GameObject:
@@ -273,7 +276,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogues:
-  - {fileID: 11400000, guid: 62722b6ee91dfaf45b07dfd45b0ffbc6, type: 2}
+  - allowPlayerToEnterCombatDuringDialogue: 0
+    dialogueSO: {fileID: 0}
+    conversants: []
+    AllowPlayerToEnterCombatDuringDialogue: 0
 --- !u!114 &7848575408194583545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,3 +308,16 @@ MonoBehaviour:
   examineText: I wonder why they call him that?
   cursorType: 1
   maxInteractableDistance: 2.5
+--- !u!114 &4431716515061652100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765907394187610111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 646b03013cb1bcd48a4a1d3abb3c3900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  conversantName: Green Bean

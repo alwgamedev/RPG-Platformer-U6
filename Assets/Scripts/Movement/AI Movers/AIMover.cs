@@ -6,10 +6,10 @@ namespace RPGPlatformer.Movement
     public class AIMover : AdvancedMover
     {
 
-        public void SetDetectWalls(bool val)
-        {
-            detectWalls = val;
-        }
+        //public void SetDetectWalls(bool val)
+        //{
+        //    detectWalls = val;
+        //}
 
         public virtual Vector2 EmergencyJumpForce()
         {

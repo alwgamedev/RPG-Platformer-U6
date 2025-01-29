@@ -84,7 +84,8 @@ namespace RPGPlatformer.AIControl
             {
                 Trigger(typeof(Suspicion).Name);
             }
-            else
+            else if (Mathf.Abs(CurrentTarget.Transform.position.x - transform.position.x) > 0.2f)
+                //to avoid ai stuttering back and forth when their target is directly above them
             {
                 movementController.MoveTowards(CurrentTarget.Transform.position);
             }

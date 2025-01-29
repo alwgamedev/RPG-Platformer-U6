@@ -350,7 +350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_LinearDamping
-      value: 0.05
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_AngularDamping
@@ -435,6 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de355e656f54b6e47b36934d1af82e4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  detectWalls: 1
 --- !u!114 &489266092333141542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,13 +522,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathForce: {x: 120, y: 120}
   deathTorque: 10
-  acceleration: 35
+  acceleration: 50
   freefallMovementAccelerationFactor: 0.8
   runSpeed: 3
   walkSpeed: 1.2
   maxNumJumps: 2
   jumpForce: 375
-  detectWalls: 1
 --- !u!114 &253623311915411687
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -220,7 +220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1438071659803653533, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Size.x
-      value: 0.15
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 1438071659803653533, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Size.y
@@ -370,6 +370,10 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 80
       objectReference: {fileID: 0}
+    - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7914369839194740457, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -422,6 +426,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8912017489112769141}
+    - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -197496574333184021}
   m_SourcePrefab: {fileID: 100100000, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
 --- !u!4 &408011811868376633 stripped
 Transform:
@@ -515,13 +522,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathForce: {x: 120, y: 120}
   deathTorque: 10
-  acceleration: 50
+  acceleration: 100
   freefallMovementAccelerationFactor: 0.8
   runSpeed: 2.4
   walkSpeed: 0.8
   maxNumJumps: 1
   jumpForce: 375
-  detectWalls: 0
 --- !u!114 &8914383755510078053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -534,6 +540,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c2ea0e4247374408b6044e77652917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  detectWalls: 0
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 2.5
@@ -722,3 +729,16 @@ MonoBehaviour:
       level: 3
       xp: 0
   canGainXP: 0
+--- !u!114 &-197496574333184021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296160008381991138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e838991cdcbf540bce40d397f03c9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numSlots: 20

@@ -10,7 +10,7 @@ using RPGPlatformer.Skills;
 namespace RPGPlatformer.Combat
 {
     [RequireComponent(typeof(CharacterProgressionManager))]
-    [RequireComponent(typeof(InventoryManager))]
+    //[RequireComponent(typeof(InventoryManager))]
     [RequireComponent(typeof(DropSpawner))]
     [RequireComponent(typeof(Health))]
     public class Combatant : StateDriver, ICombatant, IInventoryOwner, ILooter, ILootDropper

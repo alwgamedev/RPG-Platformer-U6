@@ -8,7 +8,9 @@ namespace RPGPlatformer.Movement
     [RequireComponent(typeof(AdvancedMover))]
     public class AdvancedMovementController : MonoBehaviour, IMovementController
     {
-        protected bool wallClinging;
+        [SerializeField] protected bool detectWalls;
+
+        //protected bool wallClinging;
         protected AdvancedMover mover;
         protected AdvancedMovementStateManager movementManager;
         protected Action<float> CurrentMoveAction;
@@ -50,8 +52,9 @@ namespace RPGPlatformer.Movement
 
             mover.FreefallVerified += OnFreefallVerified;
 
-            if (mover.DetectWalls)
+            if (detectWalls)
             {
+                OnUpdate += mover.UpdateAdjacentWall;
                 OnUpdate += SetDownSpeed;
                 OnUpdate += HandleAdjacentWallInteraction;
             }
@@ -66,6 +69,11 @@ namespace RPGPlatformer.Movement
         {
             OnFixedUpdate?.Invoke();
         }
+
+        //protected virtual void LateUpdate()
+        //{
+        //    AnimateMovement();
+        //}
 
         protected virtual void InitializeMovementManager()
         {
@@ -151,7 +159,7 @@ namespace RPGPlatformer.Movement
             if (moveInput != 0 && mover.FacingWall && !movementManager.StateMachine.HasState(typeof(Grounded)))
             {
                 movementManager.AnimateWallScramble(false);
-                if (!wallClinging || !movementManager.IsWallClinging())
+                if (/*!wallClinging ||*/ !movementManager.IsWallClinging())
                 //^just being safe by checking that wall cling animation is also playing
                 {
                     BeginWallCling();
@@ -163,14 +171,14 @@ namespace RPGPlatformer.Movement
                 return;
             }
 
-            if (wallClinging || movementManager.IsWallClinging())
+            if (/*wallClinging ||*/ movementManager.IsWallClinging())
             {
                 EndWallCling();
                 return;
             }
 
             if (!movementManager.StateMachine.HasState(typeof(Jumping))
-                && mover.FacingWall)
+                && mover.FacingWall && Mathf.Abs(mover.AdjacentWallAngle.eulerAngles.z) < 20)
             {
                 movementManager.AnimateWallScramble(true);
             }
@@ -182,7 +190,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void BeginWallCling()
         {
-            wallClinging = true;
+            //wallClinging = true;
             movementManager.AnimateWallCling(true);
             mover.BeginWallCling();
         }
@@ -191,7 +199,7 @@ namespace RPGPlatformer.Movement
         {
             movementManager.AnimateWallCling(false);
             mover.EndWallCling();
-            wallClinging = false;
+            //wallClinging = false;
         }
 
         protected virtual void OnGroundedEntry()
