@@ -1724,7 +1724,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.015}
-  m_Size: {x: 0.12, y: 0.67}
+  m_Size: {x: 0.12, y: 0.65}
   m_Direction: 0
 --- !u!1 &5310595416460678184
 GameObject:
@@ -1758,6 +1758,59 @@ Transform:
   - {fileID: 6774562503698128353}
   m_Father: {fileID: 8609178569787007470}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 185.079}
+--- !u!1 &5724064652610251535
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 842856214290176192}
+  - component: {fileID: 3765934904992673524}
+  m_Layer: 0
+  m_Name: Legs Slot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &842856214290176192
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5724064652610251535}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8609178569787007470}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3765934904992673524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5724064652610251535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aef215ff67f76874f90a3e49c9a406d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingLayer: Player
+  sortingOrder: 0
+  equipOnStart: 1
+  defaultItem: {fileID: 0}
+  dependentResolvers:
+  - {fileID: 6412203882815245979}
+  - {fileID: 7988346556627662775}
+  - {fileID: 3039519831530666342}
+  - {fileID: 6445032724999368039}
 --- !u!1 &5872303378183973796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1790,6 +1843,7 @@ Transform:
   - {fileID: 4564879318682870681}
   - {fileID: 2913085200303721711}
   - {fileID: 8816786915262164707}
+  - {fileID: 842856214290176192}
   m_Father: {fileID: 7674114100050327667}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &5911280039691431279

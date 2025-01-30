@@ -17,10 +17,16 @@ MonoBehaviour:
     displayName: Basic Staff
     description: A basic staff
     icon: {fileID: 6250548456142871353, guid: f3d66307f4760ab46ac076485ca5d996, type: 3}
-    maxStackable: 1
+    maxStack: 1
   equippableItemData:
+    slot: 3
+    damageBonus: 0
+    defenseBonus: 0
+    levelReqs:
+    - skill: 2
+      level: 1
     prefab: {fileID: 8777287664807218854, guid: e3fd15d3edafe224ea2760313dc29ec4, type: 3}
-    slot: 2
+    spriteSwapData: []
   weaponStats:
     baseDamage: 250
     attackRange: 8

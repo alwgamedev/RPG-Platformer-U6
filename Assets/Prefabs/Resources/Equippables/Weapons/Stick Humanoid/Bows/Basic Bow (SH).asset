@@ -17,10 +17,16 @@ MonoBehaviour:
     displayName: Basic Bow
     description: A basic bow
     icon: {fileID: 2589477999225594112, guid: 45690b297d6febd46b7dfaf0baaa889e, type: 3}
-    maxStackable: 1
+    maxStack: 1
   equippableItemData:
+    slot: 3
+    damageBonus: 0
+    defenseBonus: 0
+    levelReqs:
+    - skill: 4
+      level: 1
     prefab: {fileID: 7710583885491714212, guid: 102c7d7911ce5e345898daa3ec878377, type: 3}
-    slot: 2
+    spriteSwapData: []
   weaponStats:
     baseDamage: 275
     attackRange: 8

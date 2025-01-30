@@ -1,10 +1,13 @@
-﻿using RPGPlatformer.Core;
+﻿using NUnit.Framework;
+using RPGPlatformer.Core;
+using RPGPlatformer.UI;
+using Unity.VisualScripting;
 
 namespace RPGPlatformer.Inventory
 {
     public class EquippableItem : InventoryItem
     {
-        protected EquippableItemData equippableItemData;
+        protected EquippableItemData equippableItemData = new();
 
         public EquippableItemData EquippableItemData => equippableItemData;
 
@@ -36,7 +39,26 @@ namespace RPGPlatformer.Inventory
 
         public override string TooltipText()
         {
-            return $"{equippableItemData.Slot} Slot Item";
+            var result = $"{equippableItemData.Slot} Slot Item"
+                + $"\nDamage Bonus: {equippableItemData.DamageBonus: 0.#}"
+                + $"\nDefense Bonus: {equippableItemData.DefenseBonus: 0.#}";
+
+            return result + LevelReqsText();
+        }
+
+        public string LevelReqsText()
+        {
+            string result = "";
+
+            var levelReqs = equippableItemData.LevelReqs;
+            if (levelReqs != null)
+            {
+                for (int i = 0; i < levelReqs.Count; i++)
+                {
+                    result += $"\n<b>Requires</b> level {levelReqs[i].Level} {levelReqs[i].Skill}";
+                }
+            }
+            return result;
         }
 
         protected override void InitializeRightClickActions()

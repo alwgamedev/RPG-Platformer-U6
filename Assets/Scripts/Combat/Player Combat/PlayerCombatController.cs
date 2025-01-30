@@ -35,6 +35,8 @@ namespace RPGPlatformer.Combat
             var gold = InventoryItemSO.FindByName("Gold Coins");
             var cookie = InventoryItemSO.FindByName("Cookie");
             var redBody = InventoryItemSO.FindByName("Red Body");
+            var bwTop = InventoryItemSO.FindByName("Blue Wizard Top");
+            var bwPants = InventoryItemSO.FindByName("Blue Wizard Pants");
 
             //combatant.Inventory.DistributeToFirstAvailableSlots(spaghetti);
             //combatant.Inventory.DistributeToFirstAvailableSlots(spaghetti);
@@ -51,6 +53,8 @@ namespace RPGPlatformer.Combat
             combatant.TakeLoot(cookie.CreateInstanceOfItem().ToSlotData(8));
             combatant.TakeLoot(gold.CreateInstanceOfItem().ToSlotData(773));
             combatant.TakeLoot(redBody.CreateInstanceOfItem().ToSlotData(1));
+            combatant.TakeLoot(bwTop.CreateInstanceOfItem().ToSlotData(1));
+            combatant.TakeLoot(bwPants.CreateInstanceOfItem().ToSlotData(1));
         }
 
         void OnIAMConfigure()

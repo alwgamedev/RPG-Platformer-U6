@@ -15,12 +15,15 @@ MonoBehaviour:
   baseData:
     lookupName: Unarmed (SH)
     displayName: Unarmed
-    description: I am a peaceful warrior... who punches my enemies in the face!
+    description: I am a peaceful warrior... who punches my enemies in the face.
     icon: {fileID: 3444236696459982074, guid: aef6e244dcf9ab24ebfc18227fff3b70, type: 3}
     maxStack: 1
   equippableItemData:
+    slot: 3
+    damageBonus: 0
+    defenseBonus: 0
     prefab: {fileID: 0}
-    slot: 2
+    spriteSwapData: []
   weaponStats:
     baseDamage: 40
     attackRange: 0.75

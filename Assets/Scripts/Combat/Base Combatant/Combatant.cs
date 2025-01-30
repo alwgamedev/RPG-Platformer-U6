@@ -10,7 +10,7 @@ using RPGPlatformer.Skills;
 namespace RPGPlatformer.Combat
 {
     [RequireComponent(typeof(CharacterProgressionManager))]
-    //[RequireComponent(typeof(InventoryManager))]
+    [RequireComponent(typeof(InventoryManager))]
     [RequireComponent(typeof(DropSpawner))]
     [RequireComponent(typeof(Health))]
     public class Combatant : StateDriver, ICombatant, IInventoryOwner, ILooter, ILootDropper
@@ -20,6 +20,7 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected string targetTag;
         [SerializeField] protected ItemSlot headSlot;
         [SerializeField] protected ItemSlot torsoSlot;
+        [SerializeField] protected ItemSlot legsSlot;
         [SerializeField] protected ItemSlot mainhandSlot;
         [SerializeField] protected ItemSlot offhandSlot;
         [SerializeField] protected Transform mainhandElbow;
@@ -76,6 +77,7 @@ namespace RPGPlatformer.Combat
             {
                 [EquipmentSlot.Head] = headSlot,
                 [EquipmentSlot.Torso] = torsoSlot,
+                [EquipmentSlot.Legs] = legsSlot,
                 [EquipmentSlot.Mainhand] = mainhandSlot,
                 [EquipmentSlot.Offhand] = offhandSlot
             };
@@ -100,11 +102,20 @@ namespace RPGPlatformer.Combat
 
         public float AdditiveDamageBonus()
         {
-            if (equippedWeapon == null) return 0;
-            return AdditiveDamageBonus(equippedWeapon.CombatStyle);
+            float total = 0;
+            foreach (var entry in equipSlots)
+            {
+                total += entry.Value.EquipppedItem?.EquippableItemData.DamageBonus ?? 0;
+            }
+
+            if (equippedWeapon != null)
+            {
+                total += LevelBasedDamageBonus(equippedWeapon.CombatStyle);
+            }
+            return total;
         }
 
-        public float AdditiveDamageBonus(CombatStyle combatStyle)
+        public float LevelBasedDamageBonus(CombatStyle combatStyle)
         {
             if(CharacterSkillBook.GetCombatSkill(combatStyle) == null) return 0;
             return 4.5f * progressionManager.GetLevel(CharacterSkillBook.GetCombatSkill(combatStyle));
@@ -114,10 +125,24 @@ namespace RPGPlatformer.Combat
 
         public float DamageTakenMultiplier()
         {
+            return Mathf.Max(1 - LevelBasedDamageReduction() - (DefenseBonus() / 500), 0);
+        }
+
+        public float LevelBasedDamageReduction()
+        {
             float defenseProgress = progressionManager.GetLevel(CharacterSkillBook.Defense)
                 / CharacterSkillBook.Defense.XPTable.MaxLevel;
-            return 1 - (0.1f * defenseProgress);//hence at max defense you get 10% damage reduction
-            //TO-DO: factor in armour and buffs
+            return 0.1f * defenseProgress;//hence at max defense you get 10% universal damage reduction
+        }
+
+        public float DefenseBonus()
+        {
+            float total = 0;
+            foreach (var entry in equipSlots)
+            {
+                total += entry.Value.EquipppedItem?.EquippableItemData.DefenseBonus ?? 0;
+            }
+            return total;
         }
 
 
@@ -166,14 +191,41 @@ namespace RPGPlatformer.Combat
 
         //EQUIPMENT
 
-        public void EquipMainhandWeapon(Weapon weapon)
+        public void EquipDefaultWeapon()
+        //caution these should really only be used in start because
+        //they add the item to your inventory
+        //(which runs the risk of creating duplicates of the item in your inventory)
         {
-            EquipItem(weapon ?? unarmedWeapon, true);
+            if (!CanEquip(defaultWeapon))
+            {
+                EquipItem(unarmedWeapon);
+                HandleUnequippedItem(defaultWeapon);
+            }
+            else
+            {
+                EquipItem(defaultWeapon);
+            }
         }
 
-        public void EquipDefaultWeapon()
+        public void EquipDefaultArmour()
+        //caution these should really only be used in start because
+        //they add the item to your inventory
+        //(which runs the risk of creating duplicates of the item in your inventory)
         {
-            EquipMainhandWeapon(defaultWeapon);
+            foreach (var entry in equipSlots)
+            {
+                if (entry.Key == EquipmentSlot.Mainhand || entry.Key == EquipmentSlot.Offhand) continue;
+
+                var item = entry.Value.DefaultItem;
+                if (!CanEquip(item))
+                { 
+                    HandleUnequippedItem(item);
+                }
+                else
+                {
+                    EquipItem(item);
+                }
+            }
         }
 
         public void InitializeWeaponSOs()
@@ -193,8 +245,28 @@ namespace RPGPlatformer.Combat
 
         public bool CanEquip(EquippableItem item)
         {
-            return item != null && equipSlots.ContainsKey(item.EquippableItemData.Slot);
+            if (item == null || !equipSlots.ContainsKey(item.EquippableItemData.Slot))
+            {
+                return false;
+            }
+
+            if (item.EquippableItemData.LevelReqs != null)
+            {
+                foreach (var req in item.EquippableItemData.LevelReqs)
+                {
+                    if (!progressionManager.TryGetLevel(CharacterSkillBook.GetCharacterSkill(req.Skill),
+                        out var lvl) || req.Level > lvl)
+                    {
+                        OnEquipmentLevelReqFailed();
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
+
+        public virtual void OnEquipmentLevelReqFailed() { }
 
         public void EquipItem(EquippableItem item, bool handleUnequippedItem = true)
         {
@@ -204,7 +276,10 @@ namespace RPGPlatformer.Combat
 
             ItemSlot equipSlot = equipSlots[slot];
             EquippableItem oldItem = equipSlot.EquipppedItem;
-            equipSlot.EquipItem(item);
+            if (item != unarmedWeapon)
+            {
+                equipSlot.EquipItem(item);
+            }
 
             if (item is Weapon weapon && slot == EquipmentSlot.Mainhand)
             {

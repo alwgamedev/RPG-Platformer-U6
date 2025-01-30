@@ -17,12 +17,18 @@ MonoBehaviour:
     displayName: Basic Sword
     description: A basic sword
     icon: {fileID: -3753825769889500098, guid: 84dba6aba0447314892495a8ce8c0d7d, type: 3}
-    maxStackable: 1
+    maxStack: 1
   equippableItemData:
+    slot: 3
+    damageBonus: 0
+    defenseBonus: 0
+    levelReqs:
+    - skill: 3
+      level: 1
     prefab: {fileID: 5569887202535814591, guid: 766091662efaa7a4cbd02bb6e1c8ed7a, type: 3}
-    slot: 2
+    spriteSwapData: []
   weaponStats:
-    baseDamage: 350
+    baseDamage: 325
     attackRange: 0.75
     baseAttackRate: 12
   animatorOverrideController: {fileID: 22100000, guid: 878581dc1900c55489253a28ad1711dd, type: 2}

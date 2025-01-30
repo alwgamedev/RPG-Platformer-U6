@@ -80,13 +80,13 @@ namespace RPGPlatformer.Skills
         public bool TryGetProgressionData(CharacterSkill skill, out SkillProgressionData data)
         {
             data = null;
-
+            if (skill == null)
             if (SkillLookup == null)
             {
                 Configure();
             }
 
-            if (!SkillLookup.ContainsKey(skill))
+            if (skill == null || !SkillLookup.ContainsKey(skill))
             {
                 Debug.Log($"{GetType().Name} could not find data for that skill.");
                 return false;

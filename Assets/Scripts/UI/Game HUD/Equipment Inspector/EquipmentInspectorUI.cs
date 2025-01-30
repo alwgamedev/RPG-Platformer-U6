@@ -9,6 +9,7 @@ namespace RPGPlatformer.UI
     {
         [SerializeField] EquipmentInspectorSlotUI headSlot;
         [SerializeField] EquipmentInspectorSlotUI torsoSlot;
+        [SerializeField] EquipmentInspectorSlotUI legsSlot;
         [SerializeField] EquipmentInspectorSlotUI mainhandSlot;
         [SerializeField] EquipmentInspectorSlotUI offhandSlot;
 
@@ -26,6 +27,7 @@ namespace RPGPlatformer.UI
             {
                 [EquipmentSlot.Head] = headSlot,
                 [EquipmentSlot.Torso] = torsoSlot,
+                [EquipmentSlot.Legs] = legsSlot,
                 [EquipmentSlot.Mainhand] = mainhandSlot,
                 [EquipmentSlot.Offhand] = offhandSlot
             };

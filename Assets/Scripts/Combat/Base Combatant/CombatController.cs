@@ -94,6 +94,7 @@ namespace RPGPlatformer.Combat
                 await GetStunned(duration, freezeAnimation, GlobalGameTools.Instance.TokenSource);
             combatant.Health.HealthChanged += OnHealthChanged;
 
+            combatant.EquipDefaultArmour();
             combatant.EquipDefaultWeapon();
         }
 

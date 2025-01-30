@@ -10,22 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d97f5c08517d3f4ea90abe2594a2636, type: 3}
-  m_Name: Blue Wizard Hat
+  m_Name: Blue Wizard Pants
   m_EditorClassIdentifier: 
   baseData:
-    lookupName: Blue Wizard Hat
-    displayName: Blue Wizard Hat
-    description: A magical blue hat.
-    icon: {fileID: 823331213280329801, guid: c1f8d9ea84af0da4184142c460b52779, type: 3}
+    lookupName: Blue Wizard Pants
+    displayName: Blue Wizard Pants
+    description: Magical, stylish, and blue.
+    icon: {fileID: 21300000, guid: 9ca6b77608ce71b45945b6565711b197, type: 3}
     maxStack: 1
   equippableItemData:
-    slot: 0
+    slot: 2
     damageBonus: 0
-    defenseBonus: 2
+    defenseBonus: 4
     levelReqs:
     - skill: 2
       level: 3
     - skill: 1
       level: 2
-    prefab: {fileID: 7002690631440323578, guid: 7a7bf3222636998469cbd231ad264314, type: 3}
-    spriteSwapData: []
+    prefab: {fileID: 0}
+    spriteSwapData:
+    - category: ThighL
+      label: Blue Wizard ThighL
+    - category: ThighR
+      label: Blue Wizard ThighR
+    - category: ShinL
+      label: Blue Wizard ShinL
+    - category: ShinR
+      label: Blue Wizard ShinR

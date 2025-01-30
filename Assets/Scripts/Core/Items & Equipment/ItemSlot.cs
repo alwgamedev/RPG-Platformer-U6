@@ -10,21 +10,24 @@ namespace RPGPlatformer.Core
 {
     public enum EquipmentSlot
     {
-        Head, Torso, Mainhand, Offhand
+        Head, Torso, Legs, Mainhand, Offhand
     }
 
     public class ItemSlot : MonoBehaviour
     {
         [SerializeField] string sortingLayer;
         [SerializeField] int sortingOrder;
-        [SerializeField] bool equipOnStart;
-        [SerializeField] EquippableItemSO defaultItem; 
+        //[SerializeField] bool equipOnStart;
+        [SerializeField] EquippableItemSO defaultItemSO; 
         [SerializeField] List<SpriteResolver> dependentResolvers = new();
 
+        //IEquippableEntity parent;
+        EquippableItem defaultItem;
         EquippableItem equippedItem;
         Dictionary<string, SpriteResolver> SpriteResolverForCategory = new();
         Dictionary<string, string> DefaultLabelForCategory = new();
 
+        public EquippableItem DefaultItem => defaultItem;
         public EquippableItem EquipppedItem => equippedItem;
         public GameObject EquippedItemGO { get; protected set; }
 
@@ -37,15 +40,39 @@ namespace RPGPlatformer.Core
         private void Awake()
         {
             BuildDictionaries();
-        }
 
-        private void Start()
-        {
-            if (defaultItem && equipOnStart)
+            if (defaultItemSO != null)
             {
-                EquipItem((EquippableItem)defaultItem.CreateInstanceOfItem());
+                defaultItem = (EquippableItem)defaultItemSO.CreateInstanceOfItem();
+            }
+            else
+            {
+                defaultItem = null;
             }
         }
+
+        //private void Start()
+        //{
+        //    //if (equipOnStart && defaultItemSO != null)
+        //    //{
+        //    //    var parent = GetComponentInParent<IEquippableEntity>();
+        //    //    var defaultItem = (EquippableItem)defaultItemSO.CreateInstanceOfItem();
+
+        //    //    if (parent == null || parent.CanEquip(defaultItem))
+        //    //    {
+        //    //        EquipItem(defaultItem);
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        parent?.HandleUnequippedItem(defaultItem);
+        //    //    }
+        //    //}
+        //}
+
+        //public void EquipDefaultItem()
+        //{
+
+        //}
 
         private void BuildDictionaries()
         {

@@ -8,7 +8,8 @@ namespace RPGPlatformer.UI
     public class EquipmentInspectorSlotUI : InventorySlotUI
     {
         EquipmentSlot slot;
-        
+        IEquippableCharacter player;
+
         Action unequipAction;
 
         public EquippableItem EquippedItem => item as EquippableItem;
@@ -16,14 +17,19 @@ namespace RPGPlatformer.UI
         public override bool CanPlace(IInventorySlotDataContainer data, 
             IDragSource<IInventorySlotDataContainer> origin = null)
         {
-            return data?.Item() == null || (data.Quantity() == 1 && data.Item() is EquippableItem equippableItem 
-                && equippableItem.EquippableItemData.Slot == slot);
+            return data?.Item() == null
+                || (data.Quantity() == 1
+                && data.Item() is EquippableItem equippableItem
+                && equippableItem.EquippableItemData.Slot == slot
+                && player != null
+                && player.CanEquip(equippableItem));
         }
 
-        public void Configure(IEquippableCharacter character, EquipmentSlot slot)
+        public void Configure(IEquippableCharacter player, EquipmentSlot slot)
         {
             this.slot = slot;
-            unequipAction = () => character.UnequipItem(slot);//character.EquipItem(null, slot, true);
+            this.player = player;
+            unequipAction = () => player.UnequipItem(slot);//character.EquipItem(null, slot, true);
         }
 
         public void UnequipFromSlot()

@@ -27,5 +27,14 @@ namespace RPGPlatformer.Combat
         {
             return new Weapon(baseData, equippableItemData, weaponStats, combatStyle, animatorOverrideController);
         }
+
+        public override string TooltipText()
+        {
+            var result = $"{equippableItemData.Slot} {combatStyle} Weapon"
+                + $"\nBase Damage: {weaponStats.BaseDamage: 0.##}"
+                + $"\nAttack Range: {weaponStats.AttackRange: 0.##}";
+
+            return result + LevelReqsText();
+        }
     }
 }

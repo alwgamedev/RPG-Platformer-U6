@@ -15,5 +15,10 @@ namespace RPGPlatformer.Combat
 
             base.ConfigureReplenishableStats();
         }
+
+        public override void OnEquipmentLevelReqFailed()
+        {
+            GameLog.Log("You do not meet the level requirements to equip that item.");
+        }
     }
 }

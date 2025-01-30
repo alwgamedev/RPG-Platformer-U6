@@ -149,12 +149,12 @@ namespace RPGPlatformer.Movement
 
 
             var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.3f * myHeight * Vector3.up,
-                     (int)CurrentOrientation * Vector3.right, 3.5f * myWidth, LayerMask.GetMask("Ground"));
+                     (int)CurrentOrientation * Vector3.right, 4.5f * myWidth, LayerMask.GetMask("Ground"));
             var midHit = Physics2D.Raycast(ColliderCenterBack, (int)CurrentOrientation * Vector3.right,
-                3.5f * myWidth, LayerMask.GetMask("Ground")); 
+                4.5f * myWidth, LayerMask.GetMask("Ground")); 
             var lowerHit = Physics2D.Raycast(ColliderCenterBack - 0.3f * myHeight * Vector3.up,
                 (int)CurrentOrientation * Vector3.right,
-                3.5f * myWidth, LayerMask.GetMask("Ground"));
+                4.5f * myWidth, LayerMask.GetMask("Ground"));
 
             //Debug.DrawLine(ColliderCenterBack, ColliderCenterBack
             //    + 3.5f * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
