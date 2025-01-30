@@ -2,20 +2,24 @@
 
 namespace RPGPlatformer.Inventory
 {
+    [Serializable]
     public class InventorySlotDataContainer : IInventorySlotDataContainer
     {
         protected InventoryItem item;
         protected int quantity;
 
-        public InventoryItem Item()
-        {
-            return item;
-        }
+        public InventoryItem Item { get => item; set => item = value; }
+        public int Quantity { get => quantity; set => quantity = value; }
 
-        public int Quantity()
-        {
-            return quantity;
-        }
+        //public InventoryItem Item()
+        //{
+        //    return Item;
+        //}
+
+        //public int Quantity()
+        //{
+        //    return Quantity;
+        //}
 
         public InventorySlotDataContainer(InventoryItem item, int quantity)
         {

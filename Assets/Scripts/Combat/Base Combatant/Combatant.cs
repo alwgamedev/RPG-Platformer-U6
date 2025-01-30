@@ -71,8 +71,6 @@ namespace RPGPlatformer.Combat
             inventory = GetComponent<InventoryManager>();
             dropSpawner = GetComponent<DropSpawner>();
 
-            //IsPlayer = CompareTag("Player");
-
             equipSlots = new()
             {
                 [EquipmentSlot.Head] = headSlot,
@@ -254,8 +252,7 @@ namespace RPGPlatformer.Combat
             {
                 foreach (var req in item.EquippableItemData.LevelReqs)
                 {
-                    if (!progressionManager.TryGetLevel(CharacterSkillBook.GetCharacterSkill(req.Skill),
-                        out var lvl) || req.Level > lvl)
+                    if (progressionManager.GetLevel(req.Skill) < req.Level)
                     {
                         OnEquipmentLevelReqFailed();
                         return false;
@@ -365,7 +362,7 @@ namespace RPGPlatformer.Combat
 
         public void HandleInventoryOverflow(IInventorySlotDataContainer data)
         {
-            if (data?.Item() != null && data.Quantity() > 0)
+            if (data?.Item != null && data.Quantity > 0)
             {
                 DropLoot(data);
                 OnInventoryOverflow?.Invoke();
@@ -378,7 +375,7 @@ namespace RPGPlatformer.Combat
 
             for (int i = 0; i < data.Length; i++)
             {
-                if (data[i]?.Item() != null && data[i].Quantity() > 0)
+                if (data[i]?.Item != null && data[i].Quantity > 0)
                 {
                     DropLoot(data);
                     OnInventoryOverflow?.Invoke();

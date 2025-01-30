@@ -17,14 +17,14 @@ namespace RPGPlatformer.UI
         public override bool CanCreateTooltip()
         {
             if (!base.CanCreateTooltip()) return false;
-            return slotComponent.Item() != null && tooltipPrefab;
+            return slotComponent.Item != null && tooltipPrefab;
         }
 
         public override void ConfigureTooltip(GameObject tooltip)
         {
             if (tooltip.TryGetComponent<InventoryItemTooltip>(out var abilityTooltip))
             {
-                abilityTooltip.Configure(slotComponent.Item());
+                abilityTooltip.Configure(slotComponent.Item);
             }
             else
             {

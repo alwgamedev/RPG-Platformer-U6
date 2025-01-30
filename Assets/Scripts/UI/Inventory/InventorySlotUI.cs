@@ -21,6 +21,8 @@ namespace RPGPlatformer.UI
 
         public Transform DraggableParentTransform => transform;
         public bool AllowReplacementIfCantSwap => false;
+        public InventoryItem Item => item;
+        public int Quantity => quantity;
 
         public event Action OnDragResolved;
         //public event Action OnItemChanged;
@@ -45,16 +47,6 @@ namespace RPGPlatformer.UI
         {
             return item != null;
         }
-        
-        public InventoryItem Item()
-        {
-            return item;
-        }
-
-        public int Quantity()
-        {
-            return quantity;
-        }
 
         public virtual bool CanPlace(IInventorySlotDataContainer data, 
             IDragSource<IInventorySlotDataContainer> origin = null)
@@ -64,8 +56,8 @@ namespace RPGPlatformer.UI
 
         public void PlaceItem(IInventorySlotDataContainer data)
         {
-            item = data?.Item();
-            quantity = data?.Quantity() ?? 0;
+            item = data?.Item;
+            quantity = data?.Quantity ?? 0;
             //OnItemChanged?.Invoke();
             //we don't need to control quantity here, because the data will be copied from the backing inventory, where
             //max stackable is already enforced

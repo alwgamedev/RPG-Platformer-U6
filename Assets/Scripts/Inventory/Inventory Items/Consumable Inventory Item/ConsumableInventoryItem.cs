@@ -55,7 +55,7 @@ namespace RPGPlatformer.Inventory
                 if (dosesRemaining > 0)
                 {
                     var data = owner.Inventory.RemoveFromSlot(slotIndex, 1);
-                    ((ConsumableInventoryItem)data.Item()).ConsumeDose();
+                    ((ConsumableInventoryItem)data.Item).ConsumeDose();
                     combatant.Health.ReceiveDamage(-stats.HealthGained, null);
                     if (owner.IsPlayer)
                     {

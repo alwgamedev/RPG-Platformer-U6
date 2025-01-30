@@ -7,7 +7,7 @@ namespace RPGPlatformer.UI
     {
         public override void ConfigureMenu(GameObject menu)
         {
-            EquippableItem item = slotComponent.Item() as EquippableItem;
+            EquippableItem item = slotComponent.Item as EquippableItem;
             EquipmentInspectorSlotUI slot = slotComponent as EquipmentInspectorSlotUI;
 
             CreateAndConfigureButton(menu, menuButtonPrefab, $"Unequip {item.BaseData.DisplayName}", slot.UnequipFromSlot);

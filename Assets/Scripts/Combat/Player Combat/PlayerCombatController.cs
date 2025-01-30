@@ -38,13 +38,6 @@ namespace RPGPlatformer.Combat
             var bwTop = InventoryItemSO.FindByName("Blue Wizard Top");
             var bwPants = InventoryItemSO.FindByName("Blue Wizard Pants");
 
-            //combatant.Inventory.DistributeToFirstAvailableSlots(spaghetti);
-            //combatant.Inventory.DistributeToFirstAvailableSlots(spaghetti);
-            //combatant.Inventory.DistributeToFirstAvailableSlots(bow);
-            //combatant.Inventory.DistributeToFirstAvailableSlots(sword);
-            //combatant.Inventory.DistributeToFirstAvailableSlots(cookie, 8);
-            //combatant.Inventory.DistributeToFirstAvailableSlots(gold, 773);
-
             combatant.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
             combatant.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
             combatant.TakeLoot(staff.CreateInstanceOfItem().ToSlotData(1));

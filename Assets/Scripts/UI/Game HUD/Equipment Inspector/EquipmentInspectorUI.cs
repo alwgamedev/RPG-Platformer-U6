@@ -55,7 +55,7 @@ namespace RPGPlatformer.UI
             foreach(var entry in slots)
             {
                 var charSlot = character.EquipSlots[entry.Key];
-                var displayedItem = entry.Value.Item();
+                var displayedItem = entry.Value.Item;
 
                 if (charSlot.EquipppedItem != displayedItem)
                 {

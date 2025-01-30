@@ -13,12 +13,22 @@ namespace RPGPlatformer.Inventory
 
         public List<(string, Action)> RightClickActions { get; protected set; } = new();
 
-        public InventoryItemData BaseData => baseData;
+        public InventoryItemData BaseData { get => baseData; set => baseData = value; }
 
         public InventoryItem(InventoryItemData data)
         {
             baseData = data;
             InitializeRightClickActions();
+        }
+
+        public SerializableInventoryItem ConvertToSerializable()
+        {
+            var ser = new SerializableInventoryItem()
+            {
+                LookupName = baseData.LookupName
+            };
+
+            return ser;
         }
 
         public static bool ItemsAreOfSameType(InventoryItem item1, InventoryItem item2)
@@ -88,5 +98,7 @@ namespace RPGPlatformer.Inventory
                 ($"Use {baseData.DisplayName}", Use),
             };
         }
+
+
     }
 }

@@ -17,9 +17,9 @@ namespace RPGPlatformer.UI
         public override bool CanPlace(IInventorySlotDataContainer data, 
             IDragSource<IInventorySlotDataContainer> origin = null)
         {
-            return data?.Item() == null
-                || (data.Quantity() == 1
-                && data.Item() is EquippableItem equippableItem
+            return data?.Item == null
+                || (data.Quantity == 1
+                && data.Item is EquippableItem equippableItem
                 && equippableItem.EquippableItemData.Slot == slot
                 && player != null
                 && player.CanEquip(equippableItem));

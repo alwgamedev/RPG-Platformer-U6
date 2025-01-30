@@ -9,19 +9,16 @@ namespace RPGPlatformer.Skills
     {
         Dictionary<CharacterSkill, SkillProgressionData> SkillLookup;
 
-        [SerializeField] SkillProgressionData health = new();
+        [SerializeField] SkillProgressionData fitness = new();
         [SerializeField] SkillProgressionData defense = new();
         [SerializeField] SkillProgressionData magic = new();
         [SerializeField] SkillProgressionData melee = new();
-        [SerializeField] SkillProgressionData range = new();
+        [SerializeField] SkillProgressionData ranged = new();
 
-        //TO-DO: cache total level and combat level and only recompute when needed (minor performance improvement)
-
-        //all need to be public get/set in order to serialize to json
-        public SkillProgressionData Health
+        public SkillProgressionData Fitness
         {
-            get => health;
-            set => health = value ?? new();
+            get => fitness;
+            set => fitness = value ?? new();
         }
         public SkillProgressionData Defense
         {
@@ -38,15 +35,15 @@ namespace RPGPlatformer.Skills
             get => melee;
             set => melee = value ?? new();
         }
-        public SkillProgressionData Range
+        public SkillProgressionData Ranged
         {
-            get => range;
-            set => range = value ?? new();
+            get => ranged;
+            set => ranged = value ?? new();
         }
 
         public int GetLevel(CharacterSkill skill)
         {
-            return GetProgressionData(skill).Level;
+            return SkillLookup[skill].Level;
         }
 
         public int TotalLevel()
@@ -54,67 +51,69 @@ namespace RPGPlatformer.Skills
             int result = 0;
             foreach (var entry in SkillLookup)
             {
-                if(entry.Value != null)
-                {
-                    result += entry.Value.Level;
-                }
+                result += entry.Value.Level;
             }
             return result;
         }
 
         public int CombatLevel()
         {
-            return Health.Level + Defense.Level + Math.Max(Math.Max(Magic.Level, Melee.Level), Range.Level);
+            return fitness.Level + defense.Level + Math.Max(Math.Max(magic.Level, melee.Level), ranged.Level);
         }
 
         public SkillProgressionData GetProgressionData(CharacterSkill skill)
         {
-            if(SkillLookup == null)
+            if (SkillLookup == null)
             {
                 Configure();
             }
             return SkillLookup[skill];
         }
 
-        //below this is mainly to allow flexible initialization of the dictionary
-        public bool TryGetProgressionData(CharacterSkill skill, out SkillProgressionData data)
-        {
-            data = null;
-            if (skill == null)
-            if (SkillLookup == null)
-            {
-                Configure();
-            }
+        ////this is mainly to allow flexible initialization of the dictionary
+        //public bool TryGetProgressionData(CharacterSkill skill, out SkillProgressionData data)
+        //{
+        //    data = null;
+        //    if (skill == null)
+        //    if (SkillLookup == null)
+        //    {
+        //        Configure();
+        //    }
 
-            if (skill == null || !SkillLookup.ContainsKey(skill))
-            {
-                Debug.Log($"{GetType().Name} could not find data for that skill.");
-                return false;
-            }
+        //    if (skill == null || !SkillLookup.ContainsKey(skill))
+        //    {
+        //        Debug.Log($"{GetType().Name} could not find data for that skill.");
+        //        return false;
+        //    }
 
-            data = SkillLookup[skill];
-            return true;
-        }
+        //    data = SkillLookup[skill];
+        //    return true;
+        //}
 
         public void Configure()
         {
             BuildLookup();
-            InitializeLevels();
+            RecomputeLevels();
         }
 
         protected void BuildLookup()
         {
             SkillLookup = new()
             {
-                [CharacterSkillBook.Fitness] = Health,
-                [CharacterSkillBook.Defense] = Defense,
-                [CharacterSkillBook.Magic] = Magic,
-                [CharacterSkillBook.Melee] = Melee,
-                [CharacterSkillBook.Ranged] = Range
+                [CharacterSkillBook.Fitness] = fitness,
+                [CharacterSkillBook.Defense] = defense,
+                [CharacterSkillBook.Magic] = magic,
+                [CharacterSkillBook.Melee] = melee,
+                [CharacterSkillBook.Ranged] = ranged
             };
         }
 
-        protected void InitializeLevels()
+        //protected void RecomputeLevel(CharacterSkill skill)
+        //{
+        //    SkillLookup[skill].RecomputeLevel(skill.XPTable);
+        //}
+
+        protected void RecomputeLevels()
         {
             foreach(var entry in SkillLookup)
             {

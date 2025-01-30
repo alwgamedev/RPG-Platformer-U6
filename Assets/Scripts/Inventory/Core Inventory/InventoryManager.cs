@@ -1,10 +1,13 @@
+using RPGPlatformer.Saving;
 using System;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using UnityEngine;
 
 namespace RPGPlatformer.Inventory
 {
-    public class InventoryManager : MonoBehaviour, IInventoryManager
+    public class InventoryManager : MonoBehaviour, IInventoryManager, ISavable
     {
         [SerializeField] protected int numSlots = 20;
 
@@ -24,6 +27,18 @@ namespace RPGPlatformer.Inventory
             {
                 slots[i] = new InventorySlot();
             }
+        }
+
+        public JsonNode CaptureState()
+        {
+            return JsonSerializer.SerializeToNode(slots.Select(x => x.ConvertToSerializable()));
+        }
+
+        public void RestoreState(JsonNode jNode)
+        {
+            var ser = jNode.Deserialize<SerializableInventorySlot[]>();
+            slots = ser.Select(x => x?.CreateSlot()).ToArray();
+            OnInventoryChanged?.Invoke();
         }
 
         public virtual bool TryAddNewSlot()
@@ -57,12 +72,12 @@ namespace RPGPlatformer.Inventory
 
         public InventoryItem GetItemInSlot(int i)
         {
-            return slots[i].Item();
+            return slots[i].Item;
         }
 
         public int GetQuantityInSlot(int i)
         {
-            return slots[i].Quantity();
+            return slots[i].Quantity;
         }
 
         public IInventorySlotDataContainer GetDataForSlot(int i)
@@ -103,7 +118,7 @@ namespace RPGPlatformer.Inventory
         //if slot is filled, it will place in first available
         public void PlaceInSlot(int i, IInventorySlotDataContainer data)
         {
-            if (slots[i].Item() != null && !InventoryItem.ItemsAreOfSameType(data.Item(), slots[i].Item()))
+            if (slots[i].Item != null && !InventoryItem.ItemsAreOfSameType(data.Item, slots[i].Item))
             {
                 DistributeToFirstAvailableSlots(data);
                 return;
@@ -131,19 +146,19 @@ namespace RPGPlatformer.Inventory
 
         public IInventorySlotDataContainer DistributeToFirstAvailableSlots(IInventorySlotDataContainer data)
         {
-            if(data == null || data.Item() == null)
+            if(data == null || data.Item == null)
             {
                 return null;
             }
 
-            int remaining = data.Quantity();
+            int remaining = data.Quantity;
             if (remaining <= 0)
             {
                 OnInventoryChanged?.Invoke();
                 return null;
             }
 
-            int i = FindFirstVacantSlotOfType(data.Item());
+            int i = FindFirstVacantSlotOfType(data.Item);
             if(i >= 0)
             {
                 return DistributeToFirstAvailableSlots(CorePlaceItem(i, data));
@@ -178,7 +193,7 @@ namespace RPGPlatformer.Inventory
 
         public IInventorySlotDataContainer RemoveAllFromSlot(int i)
         {
-            return RemoveFromSlot(i, slots[i].Quantity());
+            return RemoveFromSlot(i, slots[i].Quantity);
         }
 
         public IInventorySlotDataContainer[] RemoveAllItems()
@@ -194,7 +209,7 @@ namespace RPGPlatformer.Inventory
         {
             for (int i = 0; i < slots.Length; i++)
             {
-                if (slots[i].Item() == null)
+                if (slots[i].Item == null)
                 {
                     return i;
                 }
@@ -206,7 +221,7 @@ namespace RPGPlatformer.Inventory
         {
             for (int i = 0; i < slots.Length; i++)
             {
-                if (slots[i].HasSpaceForMore() && InventoryItem.ItemsAreOfSameType(item, slots[i].Item()))
+                if (slots[i].HasSpaceForMore() && InventoryItem.ItemsAreOfSameType(item, slots[i].Item))
                 {
                     return i;
                 }
@@ -217,17 +232,17 @@ namespace RPGPlatformer.Inventory
         private IInventorySlotDataContainer CorePlaceItem(int i, IInventorySlotDataContainer data)
         {
             var leftOver = slots[i].PlaceItem(data);
-            slots[i].Item()?.OnPlacedInInventorySlot(owner, i);
+            slots[i].Item?.OnPlacedInInventorySlot(owner, i);
             return leftOver;
         }
 
         private IInventorySlotDataContainer CoreRemoveItem(int i, int quantity = 1)
         {
             var data = slots[i].Remove(quantity);
-            data?.Item()?.OnRemovedFromInventorySlot();//if it gave us an item copy, then OnRemoved will be null, so either way this works
-            if (slots[i].Quantity() == 0)
+            data?.Item?.OnRemovedFromInventorySlot();//if it gave us an item copy, then OnRemoved will be null, so either way this works
+            if (slots[i].Quantity == 0)
             {
-                slots[i].Item()?.OnRemovedFromInventorySlot();
+                slots[i].Item?.OnRemovedFromInventorySlot();
                 slots[i].EmptySlot();
             }
             return data;
