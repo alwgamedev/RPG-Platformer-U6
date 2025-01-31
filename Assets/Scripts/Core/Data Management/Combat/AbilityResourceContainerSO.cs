@@ -14,7 +14,7 @@ namespace RPGPlatformer.Core
         [Header("Melee Abilities")]
         [SerializeField] List<MeleeAbilityResource> meleeAbilityResources;
 
-        [Header("Range Abilities")]
+        [Header("Ranged Abilities")]
         [SerializeField] List<RangedAbilityResource> rangedAbilityResources;
 
         [Header("Unarmed Abilities")]
@@ -36,8 +36,12 @@ namespace RPGPlatformer.Core
 
         public bool TryGetResources(AttackAbility ability, out AbilityResourceData data)
         {
+            Debug.Log($"getting resources for ability with name {ability.GetTrimmedAbilityName()}");
             IEnumerable<AbilityResource> resources = GetResourcesList(ability.CombatStyle);
-            data = resources?.FirstOrDefault(x => x.AbilityName == ability.GetAbilityName())?.AbilityData;
+            data = resources?.FirstOrDefault(x => x.TrimmedAbilityName == ability.GetTrimmedAbilityName())?
+                .AbilityData;
+            //sometimes x.AbilityName will come from an enum and have no spaces, sometimes not.
+            //so to be safe just remove space from both x.AbName and ability.GetAbName()
             return data != null;
         }
     }

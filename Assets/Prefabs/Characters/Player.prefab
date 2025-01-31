@@ -523,7 +523,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathForce: {x: 120, y: 120}
   deathTorque: 10
-  acceleration: 100
+  acceleration: 60
   freefallMovementAccelerationFactor: 0.8
   runSpeed: 3
   walkSpeed: 1.2
@@ -541,7 +541,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba2a4521b396f64c94d5e03b79e8579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RandomizeStartValue: 0
+  tickLength: 0.06
+  randomizeStartValue: 0
 --- !u!114 &39310523017424953
 MonoBehaviour:
   m_ObjectHideFlags: 0

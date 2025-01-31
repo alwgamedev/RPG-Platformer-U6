@@ -61,6 +61,11 @@ namespace RPGPlatformer.Combat
             return DisplayName ?? AnimationState;
         }
 
+        public string GetTrimmedAbilityName()
+        {
+            return GetAbilityName().Replace(" ", "");
+        }
+
         public virtual void Execute(ICombatController controller)
         {
             if (!CanBeExecuted(controller)) return;

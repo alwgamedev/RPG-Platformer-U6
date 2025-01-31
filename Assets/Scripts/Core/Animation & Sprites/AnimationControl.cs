@@ -8,9 +8,6 @@ namespace RPGPlatformer.Core
         public RuntimeAnimatorController defaultAnimatorController;
         public Animator animator;
 
-        //TO-DO: add a get reference to the runtimeAnimatorController, so that movement can access its SetFloat, SetTrigger etc.,
-        //and use this script (or a derived class) for movement (instead of everything having different, but essentially the same, animator scripts)
-
         private void Awake()
         {
             animator = GetComponent<Animator>();

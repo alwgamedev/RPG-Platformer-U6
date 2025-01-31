@@ -17,9 +17,7 @@ namespace RPGPlatformer.Movement
         protected bool running;
         protected Quaternion adjacentWallAngle;
         protected bool facingWall;
-        //protected Action OnUpdate;
 
-        //public virtual bool DetectWalls => detectWalls;
         public float MaxSpeed => maxSpeed;
         public float RunSpeed => runSpeed;
         public float WalkSpeed => walkSpeed;
@@ -32,8 +30,8 @@ namespace RPGPlatformer.Movement
                 maxSpeed = running ? runSpeed : walkSpeed;
             }
         }
-        public Quaternion AdjacentWallAngle => adjacentWallAngle; //measured from positive y-axis (i.e. 0 = vertical)
-        public bool FacingWall => facingWall;
+        public float AdjacentWallAngle => adjacentWallAngle.eulerAngles.z;//note this will be in [0, 360]
+        public bool FacingWall => facingWall /*&& IsExceptableWallAngle(AdjacentWallAngle)*/;
         //public virtual float MaxPermissibleDropoffHeight => 2 * myHeight;
 
         protected override void Awake()
@@ -137,6 +135,11 @@ namespace RPGPlatformer.Movement
             transform.rotation = Quaternion.identity;
         }
 
+        //public bool IsExceptableWallAngle(float angle)
+        //{
+        //    return angle < 30 || angle > 330;
+        //}
+
         public void UpdateAdjacentWall()
         {
             //if (!detectWalls) return;
@@ -148,16 +151,21 @@ namespace RPGPlatformer.Movement
             }
 
 
-            var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.3f * myHeight * Vector3.up,
-                     (int)CurrentOrientation * Vector3.right, 4.5f * myWidth, LayerMask.GetMask("Ground"));
-            var midHit = Physics2D.Raycast(ColliderCenterBack, (int)CurrentOrientation * Vector3.right,
-                4.5f * myWidth, LayerMask.GetMask("Ground")); 
-            var lowerHit = Physics2D.Raycast(ColliderCenterBack - 0.3f * myHeight * Vector3.up,
-                (int)CurrentOrientation * Vector3.right,
-                4.5f * myWidth, LayerMask.GetMask("Ground"));
+            var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
+                     (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
+            var midHit = Physics2D.Raycast(ColliderCenterBack + 0.1f * myHeight * Vector3.up, 
+                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground")); 
+            var lowerHit = Physics2D.Raycast(ColliderCenterBack - 0.1f * myHeight * Vector3.up,
+                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
 
-            //Debug.DrawLine(ColliderCenterBack, ColliderCenterBack
-            //    + 3.5f * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
+            //Debug.DrawLine(ColliderCenterBack + 0.1f * myHeight * Vector3.up, ColliderCenterBack
+            //    + 0.1f * myHeight * Vector3.up + 1.75f * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
+            //Debug.DrawLine(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
+            //    ColliderCenterBack + 0.4f * myHeight * Vector3.up + 1.75f * myWidth
+            //    * (int)CurrentOrientation * Vector3.right, Color.blue);
+            //Debug.DrawLine(ColliderCenterBack - 0.1f * myHeight * Vector3.up,
+            //    ColliderCenterBack - 0.1f * myHeight * Vector3.up + 1.75f * myWidth
+            //    * (int)CurrentOrientation * Vector3.right, Color.blue);
 
             if (midHit && lowerHit)
             {
@@ -174,8 +182,7 @@ namespace RPGPlatformer.Movement
             else if (!midHit && upperHit)
             {
                 facingWall = true;
-                //use last calculated wall angle in this case 
-                //which will be Quaternion.identity if coming from a non-wall situtation
+                adjacentWallAngle = Quaternion.identity;
                 return;
             }
             //else if (!midHit & lowerHit)

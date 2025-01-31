@@ -168,7 +168,8 @@ namespace RPGPlatformer.Combat
 
         public virtual void RunAutoAbilityCycle(bool runOffGCD)
         {
-            if (!postCancellationLock && !ChannelingAbility && ((queuedAbility == null && !GlobalCooldown) || runOffGCD))
+            if (!postCancellationLock && !ChannelingAbility 
+                && ((queuedAbility == null && !GlobalCooldown) || runOffGCD))
             {
                 ExecuteAbility(CurrentAbilityBar?.GetAutoCastAbility());
             }

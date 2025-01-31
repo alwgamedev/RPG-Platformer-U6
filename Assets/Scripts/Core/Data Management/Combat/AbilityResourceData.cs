@@ -1,8 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using RPGPlatformer.Combat;
-using RPGPlatformer.Effects;
-using Unity.VisualScripting;
 
 namespace RPGPlatformer.Core
 {
@@ -22,12 +20,13 @@ namespace RPGPlatformer.Core
         //(idea is to basically use the AbilityResourcesSO as a dictionary for looking up ability data)
 
         //we could eventually use AbilityResourcesSO to store the effects as well
-        //(and populate the Poolers from those effects)
+        //(**and populate the Poolers from those effects)
     }
 
     public abstract class AbilityResource
     {
         public abstract string AbilityName { get; }
+        public string TrimmedAbilityName => AbilityName.Replace(" ", "");
         public abstract AbilityResourceData AbilityData { get; }
     }
 

@@ -156,7 +156,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void HandleAdjacentWallInteraction()
         {
-            if (moveInput != 0 && mover.FacingWall && !movementManager.StateMachine.HasState(typeof(Grounded)))
+            if (moveInput != 0 && mover.FacingWall /*&& !movementManager.StateMachine.HasState(typeof(Grounded))*/)
             {
                 movementManager.AnimateWallScramble(false);
                 if (/*!wallClinging ||*/ !movementManager.IsWallClinging())
@@ -178,7 +178,7 @@ namespace RPGPlatformer.Movement
             }
 
             if (!movementManager.StateMachine.HasState(typeof(Jumping))
-                && mover.FacingWall && Mathf.Abs(mover.AdjacentWallAngle.eulerAngles.z) < 20)
+                && mover.FacingWall /*&& Mathf.Abs(mover.AdjacentWallAngle.eulerAngles.z) < 20*/)
             {
                 movementManager.AnimateWallScramble(true);
             }
