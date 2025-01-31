@@ -8,18 +8,8 @@ namespace RPGPlatformer.Inventory
         protected InventoryItem item;
         protected int quantity;
 
-        public InventoryItem Item { get => item; set => item = value; }
-        public int Quantity { get => quantity; set => quantity = value; }
-
-        //public InventoryItem Item()
-        //{
-        //    return Item;
-        //}
-
-        //public int Quantity()
-        //{
-        //    return Quantity;
-        //}
+        public InventoryItem Item => item;
+        public int Quantity => quantity;
 
         public InventorySlotDataContainer(InventoryItem item, int quantity)
         {

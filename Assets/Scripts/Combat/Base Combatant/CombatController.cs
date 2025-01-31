@@ -54,6 +54,7 @@ namespace RPGPlatformer.Combat
         public IMovementController MovementController { get; protected set; }
         public virtual IInputSource InputSource { get; protected set; }
 
+        public event Action OnDisabled;
         public event Action CombatManagerConfigured;
         public event Action CombatEntered;
         public event Action CombatExited;
@@ -77,6 +78,8 @@ namespace RPGPlatformer.Combat
             combatant = GetComponent<Combatant>(); 
             MovementController = GetComponent<IMovementController>();
             InputSource = GetComponent<IInputSource>();
+
+            OnDisabled += () => EndChannel();
         }
 
         protected virtual void Start()
@@ -85,7 +88,7 @@ namespace RPGPlatformer.Combat
             InitializeAbilityBarManager();
 
             tickTimer = GetComponent<TickTimer>();
-            tickTimer.RandomizeStartValue = true;
+            tickTimer.randomizeStartValue = true;
             tickTimer.NewTick += combatManager.OnNewTick;
 
             combatant.OnTargetingFailed += OnTargetingFailed;
@@ -413,7 +416,7 @@ namespace RPGPlatformer.Combat
             aimingActionInUse = false;
         }
 
-        public virtual float ComputeAimAngle()//rotate chest so that mainhand forearm points toward aim position
+        public virtual float ComputeAimAngleChange()//rotate chest so that mainhand forearm points toward aim position
         {
             bool moving = MovementController.Rigidbody.linearVelocity.magnitude > Mathf.Epsilon;
             if (FireButtonIsDown && !moving)
@@ -426,37 +429,43 @@ namespace RPGPlatformer.Combat
 
             if (moving)//if moving reflect the point to be in front of you
             {
-                if ((facingRight && aimPos.x < transform.position.x) || (!facingRight && aimPos.x > transform.position.x))
+                if ((facingRight && aimPos.x < transform.position.x) 
+                    || (!facingRight && aimPos.x > transform.position.x))
                 {
                     aimPos -= 2 * (aimPos.x - transform.position.x) * Vector2.right;
                 }
             }
-
-            Vector2 aimVector = aimPos - (Vector2)combatant.MainhandElbow.transform.position;
-            Vector2 forearmVector = combatant.EquipSlots[EquipmentSlot.Mainhand].transform.position - combatant.MainhandElbow.transform.position;
+            Transform mainHand = combatant.EquipSlots[EquipmentSlot.Mainhand].transform;
+            Vector2 aimVector = aimPos - (Vector2)mainHand.position;
+            Vector2 forearmVector = combatant.EquipSlots[EquipmentSlot.Mainhand].transform.position 
+                - combatant.MainhandElbow.transform.position;
             float deltaAngle = Vector2.SignedAngle(forearmVector, aimVector);
+            return deltaAngle;
+            //NOTE: animations should set mainhand slot angle to 0 (in case something like
+            //the wall cling animation is overriding mainhand slot rotation)
 
-            float angle = combatant.ChestBone.eulerAngles.z + deltaAngle;
-            angle -= (float) Math.Floor(angle / 360) * 360;//take angle % 360
+            //float angle = combatant.ChestBone.eulerAngles.z + deltaAngle;
+            //angle -= (float) Math.Floor(angle / 360) * 360;//take angle % 360
 
-            if(facingRight)
-            {
-                return Mathf.Clamp(angle, 60, 150);
-            }
-            else
-            {
-                return Mathf.Clamp(angle, 210, 300);
-            }
+            //if(facingRight)
+            //{
+            //    return Mathf.Clamp(angle, 60, 150);
+            //}
+            //else
+            //{
+            //    return Mathf.Clamp(angle, 210, 300);
+            //}
         }
 
         protected void RotateToAngle(float angle)
         {
-            combatant.ChestBone.eulerAngles = angle * Vector3.forward;
+            combatant.ChestBone.Rotate(Vector3.forward, angle);
+            //combatant.ChestBone.eulerAngles = angle * Vector3.forward;
         }
 
         protected void ActiveAiming()
         {
-            RotateToAngle(ComputeAimAngle());
+            RotateToAngle(ComputeAimAngleChange());
         }
 
         protected void WhileHoldingAimAngle(float angle)
@@ -472,7 +481,7 @@ namespace RPGPlatformer.Combat
         public async void HoldAim(int duration)
         {
             if (duration == 0) return;
-            float angle = ComputeAimAngle();
+            float angle = ComputeAimAngleChange();
             Action localAimAction = () => WhileHoldingAimAngle(angle);
             StartAimingAction(localAimAction);
             await Task.Delay(duration);
@@ -511,6 +520,10 @@ namespace RPGPlatformer.Combat
             }
 
             TaskCompletionSource<object> tcs = new();
+            //using a tcs instead of linked cts or registration, because we need to do some additional stuff
+            //even after cancellation (and when linked cts has been cancelled, it takes a bit of extra
+            //effort to figure out what was the source of cancellation and whether we should still do
+            //the "extra stuff")
 
             void CompleteEarly()
             {
@@ -520,6 +533,7 @@ namespace RPGPlatformer.Combat
             try
             {
                 combatManager.StateGraph.dead.OnEntry += CompleteEarly;
+                OnDisabled += CompleteEarly;
                 Task result = await Task.WhenAny(MiscTools.DelayGameTime(stunDuration, tokenSource.Token), tcs.Task);
                 if (tokenSource.IsCancellationRequested) return;
 
@@ -537,6 +551,7 @@ namespace RPGPlatformer.Combat
             finally
             {
                 combatManager.StateGraph.dead.OnEntry -= CompleteEarly;
+                OnDisabled -= CompleteEarly;
             }
         }
 
@@ -570,8 +585,14 @@ namespace RPGPlatformer.Combat
             OnRevive?.Invoke();
         }
 
+        protected virtual void OnDisable()
+        {
+            OnDisabled?.Invoke();
+        }
+
         protected virtual void OnDestroy()
         {
+            OnDisabled = null;
             CombatManagerConfigured = null;
             AbilityBarResetEvent = null;
             OnCooldownStarted = null;

@@ -13,7 +13,7 @@ namespace RPGPlatformer.Combat
         public bool DelayedReleaseOfChannel { get; init; } = true;
         public bool HasChannelAnimation { get; init; } = false;
         public Func<ICombatController, CancellationTokenSource, Task<T>> Prepare { get; init; }
-        //Very important: Prepare must cancel when game ends
+        //Prepare is responsible for cancelling itself when the token is cancelled
         public new Action<ICombatController, T> OnExecute { get; init; }
 
         public override void Execute(ICombatController controller)
@@ -25,9 +25,15 @@ namespace RPGPlatformer.Combat
         {
             if (!CanBeExecuted(controller)) return;
 
+            //NOTE: although it would be convenient, we don't cancel OnChannelEnded here.
+            //It is better to do that in the "innermost layer" of tasks (so in the Prepare function)
+            //or else we get issues.
+            //(Hence you need to make sure that every Prepare function you write cancels itself OnChannelEnded)
+
             try
             {
                 controller.StartChannel();
+
                 if (HasChannelAnimation)
                 {
                     controller.PlayChannelAnimation(AnimationState, CombatStyle);
@@ -38,6 +44,8 @@ namespace RPGPlatformer.Combat
                 {
                     throw new TaskCanceledException();
                 }
+                //Prepare should be a function that throws TaskCanceledExc when cts is cancelled,
+                //but I'm still checking cts.IsCancellatioRequested here just to be extra safe
 
                 controller.Combatant.Attack();
                 OnExecute?.Invoke(controller, args);
@@ -59,7 +67,7 @@ namespace RPGPlatformer.Combat
             finally
             {
                 if (controller != null && controller.ChannelingAbility)
-                {
+                { 
                     controller.EndChannel(DelayedReleaseOfChannel);
                 }
             }
@@ -87,7 +95,8 @@ namespace RPGPlatformer.Combat
             Prepare = GetDataOnFireButtonDown;
         }
 
-        public async Task<T> GetDataOnFireButtonDown(ICombatController controller, CancellationTokenSource tokenSource)
+        public async Task<T> GetDataOnFireButtonDown(ICombatController controller, 
+            CancellationTokenSource tokenSource)
         {
             if (controller.FireButtonIsDown) return this.GetData(controller);
 

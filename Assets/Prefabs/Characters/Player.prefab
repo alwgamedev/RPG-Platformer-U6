@@ -523,7 +523,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathForce: {x: 120, y: 120}
   deathTorque: 10
-  acceleration: 50
+  acceleration: 100
   freefallMovementAccelerationFactor: 0.8
   runSpeed: 3
   walkSpeed: 1.2
@@ -606,7 +606,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressionData:
-    health:
+    fitness:
       level: 1
       xp: 0
     defense:
@@ -618,7 +618,7 @@ MonoBehaviour:
     melee:
       level: 1
       xp: 0
-    range:
+    ranged:
       level: 1
       xp: 0
   canGainXP: 1

@@ -79,7 +79,7 @@ namespace RPGPlatformer.Combat
             GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Swipe Hit Effect"),
             DamageMultiplier = 0.8f,
             BleedCount = 5,
-            BleedRate = 1200,
+            BleedRate = 1.2f,
             AutoTarget = (controller) => TargetInFront(controller.Combatant),
             CombatStyle = CombatStyle.Melee,
             Cooldown = 8,
@@ -158,7 +158,7 @@ namespace RPGPlatformer.Combat
             Cooldown = 12,
             DamageMultiplier = 1.05f,
             BleedCount = 4,
-            BleedRate = 1000,
+            BleedRate = 1,
             AutoTarget = (controller) => TargetInFront(controller.Combatant),
             StaminaFractionChange = -.18f,
             WrathFractionChange = -.25f

@@ -124,7 +124,7 @@ namespace RPGPlatformer.Combat
             StaminaFractionChange = -0.08f,
             WrathFractionChange = 0.08f,
             BleedCount = 5,
-            BleedRate = 1200
+            BleedRate = 1.2f
         };
 
         public static GrenadeLikeAbility Ensnare = new()//basic stun
@@ -221,7 +221,7 @@ namespace RPGPlatformer.Combat
             StaminaFractionChange = 0.25f,
             WrathFractionChange = -0.75f,
             BleedCount = 6,
-            BleedRate = 500
+            BleedRate = 0.5f
         };
 
 

@@ -117,8 +117,7 @@ namespace RPGPlatformer.Combat
         {
             if(CharacterSkillBook.GetCombatSkill(combatStyle) == null) return 0;
             return 4.5f * progressionManager.GetLevel(CharacterSkillBook.GetCombatSkill(combatStyle));
-            //TO-DO: + bonuses from equipment and active buffs
-            //NOTE: at max level 40 this gives +180 damage (then times ability's damage multiplier)
+            //at max level 40 this gives +180 damage (then times ability's damage multiplier)
         }
 
         public float DamageTakenMultiplier()
@@ -130,7 +129,8 @@ namespace RPGPlatformer.Combat
         {
             float defenseProgress = progressionManager.GetLevel(CharacterSkillBook.Defense)
                 / CharacterSkillBook.Defense.XPTable.MaxLevel;
-            return 0.1f * defenseProgress;//hence at max defense you get 10% universal damage reduction
+            return 0.1f * defenseProgress;
+            //hence at max defense you get 10% universal damage reduction
         }
 
         public float DefenseBonus()

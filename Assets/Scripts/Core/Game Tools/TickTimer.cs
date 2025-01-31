@@ -5,28 +5,30 @@ namespace RPGPlatformer.Core
 {
     public class TickTimer : MonoBehaviour//will be part of persistent objects
     {
-        public readonly float TickLength = 0.06f;
+        [SerializeField] protected float tickLength = 0.06f;
 
-        public bool RandomizeStartValue;
+        public bool randomizeStartValue;//just public because CombatController sets it to true
 
-        public float TickCount { get; private set; } = 0;
+        protected float tickTime;
+
+        public float TickTime => tickTime;
 
         public event Action NewTick;
 
         private void Start()
         {
-            if (RandomizeStartValue)
+            if (randomizeStartValue)
             {
-                TickCount = UnityEngine.Random.Range(0, TickLength);
+                tickTime = UnityEngine.Random.Range(0, tickLength);
             }
         }
 
         private void Update()
         {
-            TickCount += Time.deltaTime;
-            if (TickCount > TickLength)
+            tickTime += Time.deltaTime;
+            if (tickTime > tickLength)
             {
-                TickCount -= TickLength;
+                tickTime -= tickLength;
                 NewTick?.Invoke();
             }
         }

@@ -106,7 +106,7 @@ namespace RPGPlatformer.Combat
             StaminaFractionChange = -0.08f,
             WrathFractionChange = 0.08f,
             BleedCount = 5,
-            BleedRate = 1200
+            BleedRate = 1.2f
         };
 
         public static AutoTargetOnNextFireButtonDownSingleDamage Daze = new()//basic stun
@@ -227,7 +227,7 @@ namespace RPGPlatformer.Combat
             PowerGainRate = 12,//maximum power multiplier of 2.5x
             AutoTarget = TargetAimPosition,
             BleedCount = 6,
-            BleedRate = 1200,
+            BleedRate = 1.2f,
             DamagePerBleedIteration = (iteration, baseDamage) =>
             {
                 return iteration switch

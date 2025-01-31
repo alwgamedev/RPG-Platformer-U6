@@ -47,9 +47,10 @@ namespace RPGPlatformer.Combat
         public float? StunDuration { get; init; } = null;
         public bool FreezeAnimationDuringStun { get; init; }
         //public bool ExecuteTriggeredInAnimation { get; init; }
-        public int BleedCount { get; init; }//many different types of abilities (aoe, projectile, auto targeted) can have a bleed,
-                                            //so it's easiest to just have every ability carry bleed stats (even though most don't need them).
-        public int BleedRate { get; init; }
+        public int BleedCount { get; init; }
+        //many different types of abilities (aoe, projectile, auto targeted) can have a bleed,
+        //so it's easiest to just have every ability carry bleed stats (even though most don't need them).
+        public float BleedRate { get; init; }//in seconds now that we're delaying game time
         public Func<int, float, float> DamagePerBleedIteration { get; init; } = (i, x) => x;
         public Action<ICombatController> OnExecute { get; init; }
         //OnExecute should be instructions for how the combat controller should execute the ability.
@@ -79,7 +80,8 @@ namespace RPGPlatformer.Combat
 
         public float ComputeDamage(ICombatant combatant)
         {
-            return DamageMultiplier * (combatant.AdditiveDamageBonus() + combatant.EquippedWeapon.WeaponStats.BaseDamage);
+            return DamageMultiplier * (combatant.AdditiveDamageBonus() 
+                + combatant.EquippedWeapon.WeaponStats.BaseDamage);
         }
 
 
@@ -148,14 +150,12 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public static async Task Bleed(IDamageDealer damageDealer, IHealth targetHealth, float baseDamage, int count, int rate, 
-            Func<int, float, float> damagePerBleedIteration = null, Func<PoolableEffect> getHitEffect = null,
-            bool useHitEffectOnlyOnFirstHit = false)
+        public static async Task Bleed(IDamageDealer damageDealer, IHealth targetHealth, float baseDamage, 
+            int count, float rate, Func<int, float, float> damagePerBleedIteration = null, 
+            Func<PoolableEffect> getHitEffect = null, bool useHitEffectOnlyOnFirstHit = false)
         {
-            if (damagePerBleedIteration == null)
-            {
-                damagePerBleedIteration = (i, x) => x;
-            }
+            damagePerBleedIteration ??= (i, x) => x;
+
             void BleedHit(int j)
             {
                 if (useHitEffectOnlyOnFirstHit && j > 0)
@@ -164,7 +164,8 @@ namespace RPGPlatformer.Combat
                 }
                 else
                 {
-                    DealDamage(damageDealer, targetHealth, damagePerBleedIteration(j, baseDamage), null, false, getHitEffect);
+                    DealDamage(damageDealer, targetHealth, damagePerBleedIteration(j, baseDamage), 
+                        null, false, getHitEffect);
                 }
             }
             for (int i = 0; i < count; i++)
@@ -173,7 +174,7 @@ namespace RPGPlatformer.Combat
                 BleedHit(i);
                 if (i < count - 1)
                 {
-                    await Task.Delay(rate, GlobalGameTools.Instance.TokenSource.Token);
+                    await MiscTools.DelayGameTime(rate, GlobalGameTools.Instance.TokenSource.Token);
                 }
             }
         }

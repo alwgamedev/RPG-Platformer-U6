@@ -21,7 +21,8 @@ namespace RPGPlatformer.Combat
             {
                 if(collider.gameObject.TryGetComponent(out IHealth colliderHealth))
                 {
-                    DealDamage(controller.Combatant, colliderHealth, ability.ComputeDamage(controller.Combatant) * projectile.PowerMultiplier, 
+                    DealDamage(controller.Combatant, colliderHealth, 
+                        ability.ComputeDamage(controller.Combatant) * projectile.PowerMultiplier, 
                         ability.StunDuration, ability.FreezeAnimationDuringStun, ability.GetHitEffect);
                 }
                 //NOTE: power multiplier is passed on to the projectile, because it needs a place to be stored between end of PowerUp and
@@ -29,7 +30,8 @@ namespace RPGPlatformer.Combat
             };
         }
 
-        public static GetHitActionDelegate GetHitActionAoeDamage(AttackAbility ability, float aoeRadius, bool excludeInstigator)
+        public static GetHitActionDelegate GetHitActionAoeDamage(AttackAbility ability, float aoeRadius, 
+            bool excludeInstigator)
         {
             return (controller, projectile) => (collider) =>
             {
@@ -42,7 +44,8 @@ namespace RPGPlatformer.Combat
             };
         }
 
-        public static GetHitActionDelegate GetHitActionBleedDamage(AttackAbility ability, bool useHitEffectOnlyOnFirstHit = false)
+        public static GetHitActionDelegate GetHitActionBleedDamage(AttackAbility ability, 
+            bool useHitEffectOnlyOnFirstHit = false)
         {
             return (controller, projectile) => async (collider) =>
             {
