@@ -36,7 +36,6 @@ namespace RPGPlatformer.Core
 
         public bool TryGetResources(AttackAbility ability, out AbilityResourceData data)
         {
-            Debug.Log($"getting resources for ability with name {ability.GetTrimmedAbilityName()}");
             IEnumerable<AbilityResource> resources = GetResourcesList(ability.CombatStyle);
             data = resources?.FirstOrDefault(x => x.TrimmedAbilityName == ability.GetTrimmedAbilityName())?
                 .AbilityData;
