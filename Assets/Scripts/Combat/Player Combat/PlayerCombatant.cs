@@ -9,9 +9,22 @@ namespace RPGPlatformer.Combat
 
         protected override void ConfigureReplenishableStats()
         {
-            Health.Stat.statBar = GameObject.Find("Player Health Bar").GetComponent<StatBarItem>();
-            Stamina.statBar = GameObject.Find("Player Stamina Bar").GetComponent<StatBarItem>();
-            Wrath.statBar = GameObject.Find("Player Wrath Bar").GetComponent<StatBarItem>();
+            var healthBar = GameObject.Find("Player Health Bar");
+            var staminaBar = GameObject.Find("Player Stamina Bar");
+            var wrathBar = GameObject.Find("Player Wrath Bar");
+
+            if (healthBar)
+            {
+                Health.Stat.statBar = healthBar.GetComponent<StatBarItem>();
+            }
+            if (staminaBar)
+            {
+                Stamina.statBar = staminaBar.GetComponent<StatBarItem>();
+            }
+            if (wrathBar)
+            {
+                Wrath.statBar = wrathBar.GetComponent<StatBarItem>();
+            }
 
             base.ConfigureReplenishableStats();
         }

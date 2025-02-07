@@ -4,7 +4,7 @@ namespace RPGPlatformer.Environment
 {
     public class DynamicFoliageController : MonoBehaviour
     {
-        [Range(0, 1)][SerializeField] float externalInfluence = 0;
+        //[Range(0, 1)][SerializeField] float externalInfluence = 0;
         [SerializeField] float easeInTime = .15f;
         [SerializeField] float easeOutTime = .15f;
         [Min(0)][SerializeField] float minSpeedToTrigger = 0.5f;
