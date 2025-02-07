@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace RPGPlatformer.Core
@@ -36,11 +37,18 @@ namespace RPGPlatformer.Core
         ////BOOLS FOR KEY HELD DOWN
         public bool MoveLeftHeldDown { get; private set; }
         public bool MoveRightHeldDown { get; private set; }
+        public bool MouseOverUI {  get; private set; }
 
 
         //ALERT CONTROLLER SYSTEMS WHEN CONFIGURED
 
         public event Action OnConfigure;
+
+        private void Update()
+        {
+            MouseOverUI = EventSystem.current.IsPointerOverGameObject();
+            //because it doesn't like when you check IsPointerOverGameObject() within event callbacks
+        }
 
         public virtual void Configure()
         {

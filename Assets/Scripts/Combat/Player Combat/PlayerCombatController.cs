@@ -56,11 +56,9 @@ namespace RPGPlatformer.Combat
 
             iam.LeftClickAction.started += (context) =>
             {
-                if(inputDisabled) return;
-                if (!EventSystem.current.IsPointerOverGameObject() && !InteractableGameObject.MouseOverAnyIGO)
-                {
-                    FireButtonDown();
-                }
+                if(inputDisabled || iam.MouseOverUI || InteractableGameObject.MouseOverAnyIGO) return;
+                
+                FireButtonDown();
             };
             iam.LeftClickAction.canceled += (context) =>
             {

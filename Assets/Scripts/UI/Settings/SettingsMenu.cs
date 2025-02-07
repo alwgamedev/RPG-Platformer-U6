@@ -40,8 +40,8 @@ namespace RPGPlatformer.UI
                 }
             }
 
-            saveTabButton.Button.onClick.AddListener(SaveOpenTab);
-            saveAllButton.Button.onClick.AddListener(SaveAllTabs);
+            saveTabButton.Button.onClick.AddListener(() => TrySaveOpenTab());
+            saveAllButton.Button.onClick.AddListener(() => TrySaveAllTabs());
 
             OnShow += ClosePopupPanel;
             OnShow += Redraw;
@@ -61,7 +61,7 @@ namespace RPGPlatformer.UI
             }
         }
 
-        private void SaveOpenTab()
+        private bool TrySaveOpenTab()
         {
             if(openTab != null && SettingsTabLookup.TryGetValue(openTab, out var settingsTab)
                 && settingsTab != null)
@@ -69,15 +69,19 @@ namespace RPGPlatformer.UI
                 if(settingsTab.TrySaveTab(out string resultMessage))
                 {
                     saveTabButton.PlayEffect();
+                    return true;
                 }
                 else
                 {
                     SpawnSaveFailurePopup(resultMessage);
+                    return false;
                 }
             }
+
+            return true;
         }
 
-        private void SaveAllTabs()
+        private bool TrySaveAllTabs()
         {
             foreach(var entry in SettingsTabLookup)
             {
@@ -85,11 +89,12 @@ namespace RPGPlatformer.UI
                 {
                     string msg = $"<b>{entry.Key}:</b> {failureMessage}";
                     SpawnSaveFailurePopup(msg);
-                    return;
+                    return false;
                 }
             }
 
             saveAllButton.PlayEffect();
+            return true;
         }
 
         //private void SpawnSaveSuccessPopup()
@@ -107,7 +112,18 @@ namespace RPGPlatformer.UI
             var popup = SpawnPopup("You have unsaved changes", "Are you sure you want to exit?");
             var yesButton = popup.AddButton("Yes");
             var noButton = popup.AddButton("No");
-            yesButton.onClick.AddListener(Hide);
+            yesButton.onClick.AddListener(() =>
+            {
+                if (TrySaveAllTabs())
+                {
+                    Hide();
+                    //Note: hide closes the popup panel
+                }
+                else
+                {
+                    Destroy(popup.gameObject);
+                }
+            });
             noButton.onClick.AddListener(ClosePopupPanel);
         }
 
