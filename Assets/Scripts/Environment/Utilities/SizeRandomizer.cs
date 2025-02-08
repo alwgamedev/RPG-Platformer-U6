@@ -10,12 +10,13 @@ namespace RPGPlatformer.Environment
         [SerializeField] bool randomizeYScale;
         [SerializeField] float minYScale;
         [SerializeField] float maxYScale;
+        [SerializeField] Transform parent;
         [SerializeField] Transform anchor;
 
-        private void Awake()
+        private void OnEnable()
         {
             Vector3 anchorPos = default;
-            if (anchor != null)
+            if (anchor && parent)
             {
                 anchorPos = anchor.position;
             }
@@ -41,9 +42,9 @@ namespace RPGPlatformer.Environment
 
             transform.localScale = new Vector3(xScale, yScale, transform.localScale.z);
 
-            if (anchor != null)
+            if (anchor && parent)
             {
-                transform.position += anchorPos - anchor.position;
+                parent.localPosition += anchorPos - anchor.position;
             }
         }
     }

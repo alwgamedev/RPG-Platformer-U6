@@ -15,10 +15,10 @@ namespace RPGPlatformer.Environment
         bool easingIn;
         bool easingOut;
 
-        float defaultInfluence;
+        Vector2 defaultInfluence;
         float externalInfluenceStrength = 1;
 
-        int externalInfluenceProperty = Shader.PropertyToID("_ExternalInfluence");
+        int influenceVelocityProperty = Shader.PropertyToID("_InfluenceVelocity");
 
         private void Awake()
         {
@@ -35,14 +35,14 @@ namespace RPGPlatformer.Environment
         private void Start()
         {
             foliageController = GetComponent<DynamicFoliageController>();
-            foliageMaterial = GetComponent<SpriteRenderer>().material;
-            defaultInfluence = foliageMaterial.GetFloat(externalInfluenceProperty);
+            foliageMaterial = GetComponentInChildren<SpriteRenderer>().material;
+            defaultInfluence = foliageMaterial.GetVector(influenceVelocityProperty);
         }
 
         private bool CanTriggerInfluence(Collider2D collider)
         {
             return collider && collider.attachedRigidbody
-                && Mathf.Abs(collider.attachedRigidbody.linearVelocityX) > foliageController.MinSpeedToTrigger;
+                && collider.attachedRigidbody.linearVelocity.magnitude > foliageController.MinSpeedToTrigger;
 
         }
 
@@ -50,7 +50,13 @@ namespace RPGPlatformer.Environment
         {
             if (!easingIn && CanTriggerInfluence(collider))
             {
-                TryEaseIn(collider.attachedRigidbody.linearVelocityX);
+                float orientation = Mathf.Sign(collider.transform.localScale.x);
+                if ((transform.position.x < collider.transform.position.x && orientation > 0)
+                    || (transform.position .x > collider.transform.position.x && orientation < 0))
+                {
+                    orientation *= -1;
+                }
+                TryEaseIn(collider.attachedRigidbody.linearVelocity, orientation);
             }
         }
 
@@ -58,6 +64,7 @@ namespace RPGPlatformer.Environment
         {
             if (!easingOut)
             {
+                //Debug.Log("exit");
                 TryEaseOut();
             }
         }
@@ -65,11 +72,11 @@ namespace RPGPlatformer.Environment
         //Have to do this because TriggerEnter/Exit can get called even when game object is inactive,
         //and inactive game object can't start a coroutine (so without it we were getting a flood of errors every
         //time we exited play mode)
-        private void TryEaseIn(float velocity)
+        private void TryEaseIn(Vector2 velocity, float orientation)
         {
             if (gameObject.activeInHierarchy)
             {
-                StartCoroutine(EaseIn(velocity));
+                StartCoroutine(EaseIn(velocity, orientation));
             }
         }
 
@@ -81,10 +88,11 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        IEnumerator EaseIn(float velocity)
+        IEnumerator EaseIn(Vector2 velocity, float orientation)
         {
             easingIn = true;
             easingOut = false;
+            foliageController.SetFoliageInfluenceOrientation(foliageMaterial, orientation);
 
             velocity *= externalInfluenceStrength;
             float timer = 0;
@@ -96,15 +104,15 @@ namespace RPGPlatformer.Environment
                     yield break;
                 }
                 float progress = timer / foliageController.EaseInTime;
-                float newVelocity = (1 - progress) * defaultInfluence + progress * velocity;
-                foliageController.SetFoliageInfluence(foliageMaterial, newVelocity);
+                Vector2 newVelocity = (1 - progress) * defaultInfluence + progress * velocity;
+                foliageController.SetFoliageInfluenceVelocity(foliageMaterial, newVelocity);
                 timer += Time.deltaTime;
                 yield return null;
             }
 
             if (easingIn)
             {
-                foliageController.SetFoliageInfluence(foliageMaterial, velocity);
+                foliageController.SetFoliageInfluenceVelocity(foliageMaterial, velocity);
                 easingIn = false;
             }
         }
@@ -114,7 +122,7 @@ namespace RPGPlatformer.Environment
             easingOut = true;
             easingIn = false;
 
-            float startingInfluence = foliageMaterial.GetFloat(externalInfluenceProperty);
+            Vector2 startingInfluence = foliageMaterial.GetVector(influenceVelocityProperty);
             float timer = 0;
 
             while (timer < foliageController.EaseOutTime)
@@ -124,15 +132,15 @@ namespace RPGPlatformer.Environment
                     yield break;
                 }
                 float progress = timer / foliageController.EaseOutTime;
-                float newVelocity = (1 - progress) * startingInfluence + progress * defaultInfluence;
-                foliageController.SetFoliageInfluence(foliageMaterial, newVelocity);
+                Vector2 newVelocity = (1 - progress) * startingInfluence + progress * defaultInfluence;
+                foliageController.SetFoliageInfluenceVelocity(foliageMaterial, newVelocity);
                 timer += Time.deltaTime;
                 yield return null;
             }
 
             if (easingOut)
             {
-                foliageController.SetFoliageInfluence(foliageMaterial, defaultInfluence);
+                foliageController.SetFoliageInfluenceVelocity(foliageMaterial, defaultInfluence);
                 easingOut = false;
             }
         }

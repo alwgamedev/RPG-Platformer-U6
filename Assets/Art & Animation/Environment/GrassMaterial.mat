@@ -55,12 +55,15 @@ Material:
     m_Floats:
     - _EnableExternalAlpha: 0
     - _ExternalInfluence: 0
+    - _InfluenceOrientation: 0
+    - _VerticalInfluenceFactor: 0.25
     - _WindIntensity: 25
     - _WindScale: 2
     - _WindSpeed: 0.15
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _InfluenceVelocity: {r: 0, g: 0, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

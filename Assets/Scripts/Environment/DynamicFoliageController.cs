@@ -13,11 +13,22 @@ namespace RPGPlatformer.Environment
         public float EaseOutTime => easeOutTime;
         public float MinSpeedToTrigger => minSpeedToTrigger;
 
-        int externalInfluenceProperty = Shader.PropertyToID("_ExternalInfluence");
+        int influenceVelocityProperty = Shader.PropertyToID("_InfluenceVelocity");
+        int influenceOrientationProperty = Shader.PropertyToID("_InfluenceOrientation");
 
-        public void SetFoliageInfluence(Material mat, float xVelocity)
+        public void SetFoliageInfluenceVelocity(Material mat, Vector2 velocity)
         {
-            mat.SetFloat(externalInfluenceProperty, xVelocity);
+            mat.SetVector(influenceVelocityProperty, velocity);
         }
+
+        public void SetFoliageInfluenceOrientation(Material mat, float orientation)
+        {
+            mat.SetFloat(influenceOrientationProperty, orientation);
+        }
+
+        //public void LerpFoliageInfluence(Material mat, Vector2 influenceVelocity)
+        //{
+        //    mat.SetVector(externalInfluenceProperty, Mathf.Lerp())
+        //}
     }
 }
