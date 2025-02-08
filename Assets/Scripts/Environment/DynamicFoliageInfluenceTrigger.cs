@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using RPGPlatformer.Combat;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RPGPlatformer.Environment
@@ -14,6 +16,7 @@ namespace RPGPlatformer.Environment
 
         bool easingIn;
         bool easingOut;
+        Collider2D influencingCollider;
 
         Vector2 defaultInfluence;
         float externalInfluenceStrength = 1;
@@ -39,6 +42,14 @@ namespace RPGPlatformer.Environment
             defaultInfluence = foliageMaterial.GetVector(influenceVelocityProperty);
         }
 
+        private void Update()
+        {
+            if (influencingCollider != null && !influencingCollider.gameObject.activeInHierarchy)
+            {
+                EndInfluence(influencingCollider);
+            }
+        }
+
         private bool CanTriggerInfluence(Collider2D collider)
         {
             return collider && collider.attachedRigidbody
@@ -50,24 +61,41 @@ namespace RPGPlatformer.Environment
         {
             if (!easingIn && CanTriggerInfluence(collider))
             {
-                float orientation = Mathf.Sign(collider.transform.localScale.x);
-                if ((transform.position.x < collider.transform.position.x && orientation > 0)
-                    || (transform.position .x > collider.transform.position.x && orientation < 0))
-                {
-                    orientation *= -1;
-                }
-                TryEaseIn(collider.attachedRigidbody.linearVelocity, orientation);
+                BeginInfluence(collider);
             }
         }
 
         private void OnTriggerExit2D(Collider2D collider)
         {
-            if (!easingOut)
+            EndInfluence(collider);
+        }
+
+        private void BeginInfluence(Collider2D collider)
+        {
+            influencingCollider = collider;
+
+            float orientation = Mathf.Sign(collider.transform.localScale.x);
+            if ((transform.position.x < collider.transform.position.x && orientation > 0)
+                || (transform.position.x > collider.transform.position.x && orientation < 0))
             {
-                //Debug.Log("exit");
-                TryEaseOut();
+                orientation *= -1;
+            }
+            TryEaseIn(collider.attachedRigidbody.linearVelocity, orientation);
+        }
+
+        private void EndInfluence(Collider2D collider)
+        {
+            if (collider == influencingCollider)
+            {
+                influencingCollider = null;
+                if (!easingOut)
+                {
+                    TryEaseOut();
+                }
             }
         }
+
+
 
         //Have to do this because TriggerEnter/Exit can get called even when game object is inactive,
         //and inactive game object can't start a coroutine (so without it we were getting a flood of errors every
