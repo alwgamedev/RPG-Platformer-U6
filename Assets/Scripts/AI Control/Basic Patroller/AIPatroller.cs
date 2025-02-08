@@ -93,14 +93,14 @@ namespace RPGPlatformer.AIControl
 
         public void StartAttacking()
         {
-            combatController.Combatant.OnTargetingFailed += () => Trigger(typeof(Pursuit).Name);
+            combatController.Combatant.OnTargetingFailed += TriggerPursuit;
             combatController.StartAttacking();
 
         }
 
         public void StopAttacking()
         {
-            combatController.Combatant.OnTargetingFailed -= () => Trigger(typeof(Pursuit).Name);
+            combatController.Combatant.OnTargetingFailed -= TriggerPursuit;
             combatController.StopAttacking();
         }
 
@@ -156,6 +156,11 @@ namespace RPGPlatformer.AIControl
         public void TriggerSuspicion()
         {
             Trigger(typeof(Suspicion).Name);
+        }
+
+        public void TriggerPursuit()
+        {
+            Trigger(typeof(Pursuit).Name);
         }
     }
 }

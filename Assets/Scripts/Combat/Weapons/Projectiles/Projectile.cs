@@ -112,7 +112,8 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnCollide(Collider2D collider)
         {
-            if (collider.gameObject.transform != shooter && hits < maxHits)
+            if (collider.gameObject.activeInHierarchy 
+                && collider.gameObject.transform != shooter && hits < maxHits)
             {
                 hits++;
                 if(hits >= maxHits && freezePositionOnFinalImpact)

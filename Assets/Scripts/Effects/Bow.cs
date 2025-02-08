@@ -54,8 +54,7 @@ namespace RPGPlatformer.Effects
 
         public void BeginPull(Transform puller)
         {
-            StopAllCoroutines();
-            ReturnToOrigin();
+            BowReset();
             stringGrabPt.SetParent(puller);
             stringGrabPt.localPosition = Vector3.zero;
         }
@@ -68,6 +67,7 @@ namespace RPGPlatformer.Effects
 
         public void BowReset()
         {
+            OnUpdate = null;
             StopAllCoroutines();
             ReturnToOrigin();
         }
@@ -80,13 +80,19 @@ namespace RPGPlatformer.Effects
         private IEnumerator ReleaseBowString(float speed, float tolerance, float bounceBackFraction)
         {
             float timer = 0;
-            OnUpdate += () => timer += Time.deltaTime;
-            while(Vector3.Distance(stringGrabPt.position, stringGrabPtOrigin.position) > tolerance && timer < stringVibrationTimeOut)
+
+            void UpdateTimer()
+            {
+                timer += Time.deltaTime;
+            }
+
+            OnUpdate += UpdateTimer;
+            while(Vector3.Distance(stringGrabPt.position, stringGrabPtOrigin.position) > tolerance 
+                && timer < stringVibrationTimeOut)
             {
                 yield return MoveToPoint(stringGrabPt, stringGrabPtOrigin, speed, bounceBackFraction);
             }
-            OnUpdate -= () => timer += Time.deltaTime;
-            ReturnToOrigin();
+            BowReset();
         }
 
         private IEnumerator MoveToPoint(Transform movingObject, Transform target, float speed, float overShootFraction)
