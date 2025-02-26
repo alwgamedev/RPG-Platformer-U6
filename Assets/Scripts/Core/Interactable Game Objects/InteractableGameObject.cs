@@ -17,6 +17,7 @@ namespace RPGPlatformer.Core
     //why use pointer events instead of OnMouseOver etc.?
     //because pointer events are detected by trigger colliders, so we can expand the object's
     //interactable area by adding a trigger collider that won't affect its physics interactions
+    //NOTE that this means we NEED to keep a Physics2D Raycaster on the main camera
     {
         [SerializeField] protected string displayName;
         [SerializeField] protected string examineText;
@@ -37,16 +38,6 @@ namespace RPGPlatformer.Core
         public event Action PlayerOutOfRange;
 
         public static InteractableGameObject HoveredIGO => hoveredIGO;
-
-        //public static InteractableGameObject HoveredIGO
-        //{
-        //    get => hoveredIGO;
-        //    protected set
-        //    {
-        //        hoveredIGO = value;
-        //        HoveredIGOChanged?.Invoke();
-        //    }
-        //}
         public static bool MouseOverAnyIGO => HoveredIGO != null;
 
         public static event Action HoveredIGOChanged;
@@ -143,23 +134,6 @@ namespace RPGPlatformer.Core
 
         //MOUSE EVENT CALLBACKS
 
-        //public virtual void OnMouseEnter()
-        //{
-        //    MouseOver = true;
-        //    HoveredIGO = this;
-        //}
-
-        //public void OnMouseExit()
-        //{
-        //    MouseOver = false;
-        //    if (!MouseOverAny())
-        //    {
-        //        HoveredIGO = null;
-        //    }
-        //}
-
-        //public abstract void OnMouseDown();
-
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
             MouseOver = true;
@@ -183,11 +157,8 @@ namespace RPGPlatformer.Core
         private static bool MouseOverAny()
         {
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if (Physics2D.OverlapCircleAll(mousePosition, 0.05f, LayerMask.GetMask("Interactable Game Elements")).Length > 0)
-            {
-                return true;
-            }
-            return false;
+            return Physics2D.OverlapCircleAll(mousePosition, 0.05f, LayerMask.GetMask("Interactable Game Elements"))
+                .Length != 0;
         }
 
         protected virtual void OnDestroy()

@@ -33,8 +33,7 @@ namespace RPGPlatformer.Combat
             if (!CanBeExecuted(controller)) return;
 
             IHealth target = AutoTarget(controller);
-            controller.Combatant.CheckIfTargetInRange(target, out var result);
-            if (!result) return;
+            if (!controller.Combatant.TargetInRange(target)) return;
 
             controller.Combatant.Attack();
             OnExecute?.Invoke(controller, target);
@@ -53,8 +52,7 @@ namespace RPGPlatformer.Combat
             float? stunDuration = null, bool freezeAnimationDuringStun = true, 
             Func<PoolableEffect> getHitEffect = null)
         {
-            combatant.CheckIfTargetInRange(target, out bool result);
-            if (result)
+            if (combatant.TargetInRange(target))
             {
                 DealDamage(combatant, target, damage, stunDuration, freezeAnimationDuringStun, getHitEffect);
             }

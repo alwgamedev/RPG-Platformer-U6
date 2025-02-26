@@ -76,8 +76,7 @@ namespace RPGPlatformer.Combat
         public static void EndChannelIfTargetNotInRange(ICombatController controller, IHealth target,
             bool delayedReleaseOfChannel)
         {
-            controller.Combatant.CheckIfTargetInRange(target, out bool result);
-            if (!result)
+            if (!controller.Combatant.TargetInRange(target))
             {
                 controller.EndChannel(delayedReleaseOfChannel);
             }

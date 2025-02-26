@@ -20,6 +20,7 @@ namespace RPGPlatformer.Movement
 
         protected float moveInput = 0;
 
+        public bool Moving => moveInput != 0;
         public Rigidbody2D Rigidbody => mover.Rigidbody;
         public HorizontalOrientation CurrentOrientation => mover.CurrentOrientation;
         public IMover Mover => mover;

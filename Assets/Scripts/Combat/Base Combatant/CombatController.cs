@@ -224,7 +224,10 @@ namespace RPGPlatformer.Combat
         {
             queuedAbility = null;
             FireButtonIsDown = true;
-            FaceAimPosition();
+            if (!MovementController.Moving)
+            {
+                FaceAimPosition();
+            }
             combatant.Stamina.autoReplenish = false;
             RunAutoAbilityCycle(true);
         }

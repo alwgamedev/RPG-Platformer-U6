@@ -1,6 +1,4 @@
-﻿using RPGPlatformer.Combat;
-using System.Collections;
-using Unity.VisualScripting;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace RPGPlatformer.Environment
@@ -10,6 +8,7 @@ namespace RPGPlatformer.Environment
         [SerializeField] bool randomizeExternalInfluenceStrength;
         [Min(0)][SerializeField] float minExternalInfluenceStrength;
         [Min(0)][SerializeField] float maxExternalInfluenceStrength;
+        [SerializeField] float snapBackRate = 1;
 
         DynamicFoliageController foliageController;
         Material foliageMaterial;
@@ -159,8 +158,10 @@ namespace RPGPlatformer.Environment
                 {
                     yield break;
                 }
-                float progress = timer / foliageController.EaseOutTime;
-                Vector2 newVelocity = (1 - progress) * startingInfluence + progress * defaultInfluence;
+                float p = timer / foliageController.EaseOutTime;
+                p = Mathf.Pow(p, snapBackRate);
+                Vector2 newVelocity = (1 - p) * startingInfluence 
+                    + p * defaultInfluence;
                 foliageController.SetFoliageInfluenceVelocity(foliageMaterial, newVelocity);
                 timer += Time.deltaTime;
                 yield return null;

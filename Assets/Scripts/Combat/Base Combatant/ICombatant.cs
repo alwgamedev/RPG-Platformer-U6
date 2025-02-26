@@ -21,7 +21,7 @@ namespace RPGPlatformer.Combat
         public IHealth FindTarget(Vector2 position, float searchRadius);
         public bool CanAttack(IHealth target);
         public bool CanAttack(float distance);
-        public void CheckIfTargetInRange(IHealth target, out bool result);//checks if CanAttack, and, if not, fires an "OnTargetingFailed" event
+        public bool TargetInRange(IHealth target);
         public void PrepareProjectile(IProjectile projectile, Func<Vector2> getAimPos, float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
         public void PrepareAndShootProjectile(IProjectile projectile, Func<Vector2> getAimPos, float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
         public void Attack();

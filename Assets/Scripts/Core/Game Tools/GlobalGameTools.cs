@@ -15,6 +15,7 @@ namespace RPGPlatformer.Core
         public static bool PlayerIsDead { get; private set; }
         public static string PlayerName { get; private set; } = "Player";
 
+        //public Camera MainCamera { get; private set; }//because we are using the perspective camera
         public CancellationTokenSource TokenSource {  get; private set; }
         public TickTimer TickTimer { get; private set; }
         public ResourcesManager ResourcesManager => resourcesManager;

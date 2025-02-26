@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
-    using static CombatStyles;
 
     public class DamageTakenTracker
     {
@@ -61,7 +60,8 @@ namespace RPGPlatformer.Combat
             return DamageLookup[damageDealer];
         }
 
-        public static Dictionary<CombatStyle, float> PercentOfTotalDamageDealtByStyle(Dictionary<CombatStyle, float> rawDamages)
+        public static Dictionary<CombatStyle, float> PercentOfTotalDamageDealtByStyle(
+            Dictionary<CombatStyle, float> rawDamages)
         {
             if (rawDamages == null) return null;
 

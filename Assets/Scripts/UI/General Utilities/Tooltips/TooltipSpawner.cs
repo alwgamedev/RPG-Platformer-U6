@@ -17,7 +17,6 @@ namespace RPGPlatformer.UI
 
         protected GameObject activeTooltip;
         protected Canvas targetCanvas;
-        //protected bool mouseOverSpawner;
 
         Action PointerEnter;
         Action PointerExit;
@@ -123,17 +122,6 @@ namespace RPGPlatformer.UI
             ClearTooltip();
         }
 
-        //private void OnMouseEnter()
-        //{
-        //    OnPointerEnter(null);
-        //}
-
-        //private void OnMouseExit()
-        //{
-        //    OnPointerExit(null);
-        //}
-
-        //NOTE: The tooltip should have its pivot in UPPER RIGHT CORNER.
         private void RepositionTooltip()
         {
             activeTooltip.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
@@ -184,8 +172,9 @@ namespace RPGPlatformer.UI
 
         protected virtual Vector3 GetPosition()
         {
-            return Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition) 
-                + targetCanvas.transform.position.z * Vector3.forward;
+            var p = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            p.z = targetCanvas.transform.position.z;
+            return p;
         }
 
         protected virtual void OnGUI()

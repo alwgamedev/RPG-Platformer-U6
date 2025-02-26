@@ -398,17 +398,14 @@ namespace RPGPlatformer.Combat
             return equippedWeapon != null && distance < equippedWeapon.WeaponStats.AttackRange;
         }
 
-        public void CheckIfTargetInRange(IHealth target, out bool result)
+        public bool TargetInRange(IHealth target)
         {
             if (!CanAttack(target))
             {
-                result = false;
                 OnTargetingFailed?.Invoke();
+                return false;
             }
-            else
-            {
-                result = true;
-            }
+            return true;
         }
 
         public virtual IHealth FindTarget(Vector2 position, float searchRadius)
