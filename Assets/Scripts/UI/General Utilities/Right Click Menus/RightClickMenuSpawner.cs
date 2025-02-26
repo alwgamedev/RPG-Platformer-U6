@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using RPGPlatformer.Core;
 using RPGPlatformer.SceneManagement;
+using UnityEngine.InputSystem;
 
 namespace RPGPlatformer.UI
 {
@@ -38,6 +39,22 @@ namespace RPGPlatformer.UI
             {
                 GlobalGameTools.OnPlayerDeath += ClearMenu;
             }
+
+            if (SettingsManager.Instance && SettingsManager.Instance.IAM.actionMap != null)
+            {
+                OnIAMConfigure();
+            }
+            SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            //subscribe in either case, so that we are linked up to the latest action map whenever it
+            //gets rebuilt (e.g. due to input bindings change or something)
+        }
+
+        protected void OnIAMConfigure()
+        {
+            var iam = SettingsManager.Instance.IAM;
+            iam.LeftClickAction.canceled += CancelOnMouseUp;
+            iam.RightClickAction.canceled += CancelOnMouseUp;
+            SettingsManager.OnIAMConfigure -= OnIAMConfigure;
         }
 
         public void Pause()
@@ -72,22 +89,19 @@ namespace RPGPlatformer.UI
             }
         }
 
-        protected virtual void OnGUI()
+        protected void CancelOnMouseUp(InputAction.CallbackContext ctx)
         {
-            if (Event.current.type == EventType.MouseUp)
+            if (justSpawnedMenu)
             {
-                if(justSpawnedMenu)
-                {
-                    justSpawnedMenu = false;
-                    return;
-                }
-                else if(activeMenu)
-                {
-                    GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
-                    if (currentSelected && currentSelected.transform.IsChildOf(activeMenu.transform)) return;
-                    if (igo != null && igo.MouseOver) return;
-                    ClearMenu();
-                }
+                justSpawnedMenu = false;
+                return;
+            }
+            else if (activeMenu)
+            {
+                GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
+                if (currentSelected && currentSelected.transform.IsChildOf(activeMenu.transform)) return;
+                if (igo != null && igo.MouseOver) return;
+                ClearMenu();
             }
         }
 

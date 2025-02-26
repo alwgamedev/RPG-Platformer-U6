@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
+using RPGPlatformer.Core;
 
 namespace RPGPlatformer.UI
 {
@@ -43,6 +45,20 @@ namespace RPGPlatformer.UI
             inputField = GetComponentInChildren<GameLogInputField>();
             inputField.InputSubmitted += (input) => EnableInputField(false);
             EnableInputField(false);
+
+            if (SettingsManager.Instance && SettingsManager.Instance.IAM.actionMap != null)
+            {
+                OnIAMConfigure();
+            }
+            SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            //still subscribe in case action map gets rebuilt due to input bindings change or something
+        }
+
+        private void OnIAMConfigure()
+        {
+            var iam = SettingsManager.Instance.IAM;
+            iam.LeftClickAction.started += DisableInputFieldOnMouseDown;
+            iam.RightClickAction.started += DisableInputFieldOnMouseDown;
         }
 
         public static void Log(string text)
@@ -101,9 +117,9 @@ namespace RPGPlatformer.UI
             }
         }
 
-        private void OnGUI()
+        private void DisableInputFieldOnMouseDown(InputAction.CallbackContext ctx)
         {
-            if (inputField.gameObject.activeSelf && Event.current.isMouse)
+            if (inputField.gameObject.activeSelf)
             {
                 EnableInputField(false);
             }

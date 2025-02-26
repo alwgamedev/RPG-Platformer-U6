@@ -64,8 +64,9 @@ namespace RPGPlatformer.UI
         {
             if (!CanDrag || !eventData.IsLeftMouseButtonEvent()) return;
 
-            transform.position = Camera.main.ScreenToWorldPoint((Vector3)eventData.position
-                + parentCanvas.transform.position.z * Vector3.forward);
+            var p = Camera.main.ScreenToWorldPoint(eventData.position);
+            p.z = parentCanvas.transform.position.z;
+            transform.position = p;
         }
 
         public void OnEndDrag(PointerEventData eventData)

@@ -136,6 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipPrefab: {fileID: 3572679408131154265, guid: 46d9efde41c9ac7419019ede5f80d839, type: 3}
   spawnDelay: 0.75
+  clearDelay: 0
 --- !u!1 &1486805118475947665
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,7 +262,7 @@ CanvasGroup:
   m_GameObject: {fileID: 2804487718841204273}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
+  m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!114 &5610908272122442225
@@ -276,6 +277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a8c20ae8f332b645a979eb8a0f235f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keepItemInSourceWhenReplacing: 0
+  removeItemFromSourceOnFailedDrop: 0
 --- !u!114 &4450373066690366686
 MonoBehaviour:
   m_ObjectHideFlags: 0

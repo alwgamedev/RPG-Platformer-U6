@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using RPGPlatformer.SceneManagement;
 using RPGPlatformer.Core;
 using System.Threading;
+using UnityEngine.InputSystem;
 
 namespace RPGPlatformer.UI
 {
@@ -43,6 +44,13 @@ namespace RPGPlatformer.UI
             TooltipClear = clearDelay > 0 ? 
                 async () => await ClearTooltipDelayed(GlobalGameTools.Instance.TokenSource.Token) 
                 : ClearTooltipImmediate;
+
+            if (SettingsManager.Instance && SettingsManager.Instance.IAM.actionMap != null)
+            {
+                OnIAMConfigure();
+            }
+            SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            //still subscribe in case action map gets rebuilt due to input bindings change or something
         }
 
         protected virtual void Start()
@@ -51,6 +59,13 @@ namespace RPGPlatformer.UI
             {
                 rcms.MenuSpawned += ClearTooltipImmediate;
             }
+        }
+
+        protected void OnIAMConfigure()
+        {
+            var iam = SettingsManager.Instance.IAM;
+            iam.LeftClickAction.started += ClearOnMouseDown;
+            iam.RightClickAction.started += ClearOnMouseDown;
         }
 
         public void Pause()
@@ -124,7 +139,8 @@ namespace RPGPlatformer.UI
 
         private void RepositionTooltip()
         {
-            activeTooltip.GetComponent<RectTransform>().RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
+            activeTooltip.GetComponent<RectTransform>()
+                .RepositionToFitInArea(targetCanvas.GetComponent<RectTransform>());
         }
 
         private GameObject InstantiateTooltipPrefab()
@@ -177,12 +193,9 @@ namespace RPGPlatformer.UI
             return p;
         }
 
-        protected virtual void OnGUI()
+        protected void ClearOnMouseDown(InputAction.CallbackContext ctx)
         {
-            if (activeTooltip && Event.current.type == EventType.MouseDown)
-            {
-                ClearTooltipImmediate();
-            }
+            ClearTooltipImmediate();
         }
 
         private void OnDisable()
