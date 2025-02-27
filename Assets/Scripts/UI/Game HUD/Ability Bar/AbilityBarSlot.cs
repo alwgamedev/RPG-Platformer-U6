@@ -21,7 +21,6 @@ namespace RPGPlatformer.UI
 
         protected int? abilityBarIndex = null;
         protected bool[] acceptedCombatStyles = new bool[Enum.GetValues(typeof(CombatStyle)).Length];
-        //protected DraggableAbilityBarItem draggable;
 
         public AbilityBarItem AbilityBarItem { get; protected set; }
         public Transform DraggableParentTransform => draggableParentTransform;
@@ -33,7 +32,6 @@ namespace RPGPlatformer.UI
         protected virtual void Awake()
         {
             SettingsManager.OnIAMConfigure += DisplayKeybind;
-            //draggable = GetComponentInChildren<DraggableAbilityBarItem>();
         }
 
 
@@ -77,18 +75,6 @@ namespace RPGPlatformer.UI
         {
             StopAllCoroutines();
             AbilityBarItem = item;
-
-            //if (draggable != null)
-            //{
-            //    if (item?.Ability == null && draggable.CanDrag)
-            //    {
-            //        draggable.DisableDragging();
-            //    }
-            //    else if (!draggable.CanDrag)
-            //    {
-            //        draggable.ReenableDragging();
-            //    }
-            //}
         }
 
         public void RemoveItem()

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4945256755163395498}
   - component: {fileID: 298019095065908162}
-  - component: {fileID: 8647284029635038487}
-  - component: {fileID: 7514423214357767953}
+  - component: {fileID: 6326334277559542786}
+  - component: {fileID: 1369133801614781117}
   m_Layer: 12
   m_Name: Grass Blade
   m_TagString: Untagged
@@ -81,7 +81,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.25, y: 0.2}
   m_EdgeRadius: 0
---- !u!114 &8647284029635038487
+--- !u!114 &6326334277559542786
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,13 +90,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 687016793682930749}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 279478f9e3f41fa468e71e9caeeead50, type: 3}
+  m_Script: {fileID: 11500000, guid: 53bbc228d80c752419bb53fd26ff4ab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   easeInTime: 0.12
-  easeOutTime: 0.4
-  minSpeedToTrigger: 0
---- !u!114 &7514423214357767953
+  easeOutTime: 0.35
+  randomizeEaseInTime: 1
+  randomizeEaseOutTime: 1
+  maxInfluence: 30
+--- !u!114 &1369133801614781117
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,13 +107,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 687016793682930749}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 940affceaec16f44690d8aa80def19ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 417fd0623f689b24ca50f479b46d8a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   randomizeExternalInfluenceStrength: 1
-  minExternalInfluenceStrength: 0.4
-  maxExternalInfluenceStrength: 0.6
-  snapBackRate: 0.2
+  minExternalInfluenceStrength: 6
+  maxExternalInfluenceStrength: 8
 --- !u!1 &4350004078775253573
 GameObject:
   m_ObjectHideFlags: 0
