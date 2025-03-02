@@ -40,7 +40,7 @@ ScriptedImporter:
     spriteMeshType: 0
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 2000
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -152,7 +152,7 @@ ScriptedImporter:
     customData: 
     rect:
       serializedVersion: 2
-      x: 2708
+      x: 2700
       y: 744
       width: 860
       height: 670
@@ -164,7 +164,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 2708, y: 744}
+    uvTransform: {x: 2700, y: 744}
     spritePosition: {x: 804, y: 0}
   - name: Lichen0
     originalName: 
@@ -196,7 +196,7 @@ ScriptedImporter:
     customData: 
     rect:
       serializedVersion: 2
-      x: 3576
+      x: 3568
       y: 744
       width: 446
       height: 611
@@ -208,7 +208,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 3576, y: 744}
+    uvTransform: {x: 3568, y: 744}
     spritePosition: {x: 3238, y: 552}
   - name: Left End Merged
     originalName: 
@@ -232,19 +232,19 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 3485, y: 4}
     spritePosition: {x: 224, y: 549}
-  - name: Tilable Right Half Merged
+  - name: Tilable Middle
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 15, y: 0, z: 15, w: 0}
     customData: 
     rect:
       serializedVersion: 2
       x: 4
       y: 744
-      width: 1344
+      width: 2688
       height: 701
-    spriteID: c9756a966e686e74f89c254ebbe79330
+    spriteID: 27b1433388b157343a6217def8481018
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -253,28 +253,6 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 744}
-    spritePosition: {x: 2058, y: 1523}
-  - name: Tilable Left Half Merged
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 1356
-      y: 744
-      width: 1344
-      height: 701
-    spriteID: b7eb527afb797994b9e5f66303b26b55
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 1356, y: 744}
     spritePosition: {x: 714, y: 1523}
   - name: Moss 0 Merged
     originalName: 
@@ -399,7 +377,7 @@ ScriptedImporter:
     parentIndex: -1
     spriteID: a64514f7a141ed444accef20c2f8ce26
     layerID: 0
-    mosaicPosition: {x: 2708, y: 744}
+    mosaicPosition: {x: 2700, y: 744}
     flatten: 0
     isImported: 1
     isVisible: 1
@@ -419,7 +397,7 @@ ScriptedImporter:
     parentIndex: -1
     spriteID: 405829d06677e9d4c826886980e87947
     layerID: 0
-    mosaicPosition: {x: 3576, y: 744}
+    mosaicPosition: {x: 3568, y: 744}
     flatten: 0
     isImported: 1
     isVisible: 1
@@ -433,23 +411,13 @@ ScriptedImporter:
     flatten: 0
     isImported: 1
     isVisible: 1
-  - name: Tilable Right Half Merged
-    spriteName: Tilable Right Half Merged
+  - name: Tilable Middle
+    spriteName: Tilable Middle
     isGroup: 0
     parentIndex: -1
-    spriteID: c9756a966e686e74f89c254ebbe79330
+    spriteID: 27b1433388b157343a6217def8481018
     layerID: 0
     mosaicPosition: {x: 4, y: 744}
-    flatten: 0
-    isImported: 1
-    isVisible: 1
-  - name: Tilable Left Half Merged
-    spriteName: Tilable Left Half Merged
-    isGroup: 0
-    parentIndex: -1
-    spriteID: b7eb527afb797994b9e5f66303b26b55
-    layerID: 0
-    mosaicPosition: {x: 1356, y: 744}
     flatten: 0
     isImported: 1
     isVisible: 1
