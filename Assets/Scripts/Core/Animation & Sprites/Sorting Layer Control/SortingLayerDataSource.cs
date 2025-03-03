@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RPGPlatformer.Core
 {
@@ -6,5 +7,7 @@ namespace RPGPlatformer.Core
     {
         public int? SortingLayerID { get; }
         public int? SortingOrder { get; }
+
+        public event Action DataUpdated;
     }
 }

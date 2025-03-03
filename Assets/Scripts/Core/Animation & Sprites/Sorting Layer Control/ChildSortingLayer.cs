@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.U2D;
 
 namespace RPGPlatformer.Core
@@ -11,6 +12,8 @@ namespace RPGPlatformer.Core
         [SerializeField] Transform dataSource;
 
         SortingLayerDataSource slds;
+
+        public event Action DataUpdated;
 
         public int? SortingLayerID
         {
@@ -50,31 +53,21 @@ namespace RPGPlatformer.Core
 
         private void OnValidate()
         {
+            UpdateSLC();
+
             UpdateSortingData();
+
+            DataUpdated?.Invoke();
         }
 
         public void UpdateSortingData()
         {
-            if (dataSource == null)
+            if (slds != null)
             {
-                Debug.LogWarning($"{GetType().Name} component on {gameObject.name} is missing a " +
-                    $"sorting layer data source (Transform).");
-                return;
+                SetSortingData(slds.SortingLayerID, slds.SortingOrder);
             }
 
-            dataSource.TryGetComponent(out slds);
-
-            if (ignoreParentSortingData) return;
-
-            if (slds == null)
-            {
-                Debug.LogWarning($"{GetType().Name} component on {gameObject.name} has a reference to a " +
-                    $"transform for its sorting layer data source, but that transform does not " +
-                    $"have a SortingLayerDataSource component.");
-                return;
-            }
-
-            SetSortingData(slds.SortingLayerID, slds.SortingOrder);
+            DataUpdated?.Invoke(); 
         }
 
         private void SetSortingData(int? layerID, int? layerOrder)
@@ -93,6 +86,37 @@ namespace RPGPlatformer.Core
             {
                 ssr.sortingLayerID = layerID.Value;
                 ssr.sortingOrder = layerOrder.Value + orderDelta;
+            }
+        }
+
+        private void UpdateSLC()
+        {
+            if (slds != null)
+            {
+                slds.DataUpdated -= UpdateSortingData;
+            }
+
+            if (dataSource == null)
+            {
+                Debug.LogWarning($"{GetType().Name} component on {gameObject.name} is missing a " +
+                    $"sorting layer data source (Transform).");
+                slds = null;
+                return;
+            }
+
+            //for parents that have both SLC and CSL, give priority to the SLC as the data source
+            SortingLayerDataSource s = dataSource.GetComponent<SortingLayerControl>();
+
+            if (s == null)
+            {
+                dataSource.TryGetComponent(out s);
+            }
+
+            slds = s;
+
+            if (slds != null && slds != (SortingLayerDataSource)this)
+            {
+                slds.DataUpdated += UpdateSortingData;
             }
         }
     }

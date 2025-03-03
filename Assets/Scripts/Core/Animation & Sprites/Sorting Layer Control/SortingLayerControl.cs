@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
@@ -12,6 +13,8 @@ namespace RPGPlatformer.Core
         //sprites may be dependent on this SLC without being a child of its transform
         //PUSH TO GITHUB BEFORE YOU DO THIS IN CASE YOU LOSE A BUNCH OF WORK
         //alternatively use an event all dependent sprites subscribe to
+
+        public event Action DataUpdated;
 
         public int? SortingLayerID
         {
@@ -27,15 +30,19 @@ namespace RPGPlatformer.Core
 
         private void OnValidate()
         {
-            UpdateChildren();
+            //UpdateChildren();
+
+            //DataUpdated = null;
+
+            DataUpdated?.Invoke();
         }
 
-        public void UpdateChildren()
-        {
-            foreach (var child in GetComponentsInChildren<ChildSortingLayer>())
-            {
-                child.UpdateSortingData();
-            }
-        }
+        //public void UpdateChildren()
+        //{
+        //    foreach (var child in GetComponentsInChildren<ChildSortingLayer>())
+        //    {
+        //        child.UpdateSortingData();
+        //    }
+        //}
     }
 }
