@@ -96,13 +96,7 @@ namespace RPGPlatformer.Core
                 slds.DataUpdated -= UpdateSortingData;
             }
 
-            if (dataSource == null)
-            {
-                Debug.LogWarning($"{GetType().Name} component on {gameObject.name} is missing a " +
-                    $"sorting layer data source (Transform).");
-                slds = null;
-                return;
-            }
+            if (dataSource == null) return;
 
             //for parents that have both SLC and CSL, give priority to the SLC as the data source
             SortingLayerDataSource s = dataSource.GetComponent<SortingLayerControl>();
