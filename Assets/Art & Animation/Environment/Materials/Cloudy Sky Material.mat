@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Forest Ground Mist Material
+  m_Name: Cloudy Sky Material
   m_Shader: {fileID: -6465566751694194690, guid: 87c1be86e8e1bda48891424bb19047df, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -66,22 +66,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BoundaryFadeRate: 2
+    - _BoundaryFadeRate: 3
     - _BoundaryFadeSize: 0.3
     - _EnableExternalAlpha: 0
-    - _FogDensity: 1
-    - _FogSize: 20
+    - _FogDensity: 0.4
+    - _FogSize: 30
     - _UVFadeBoundary: 0.4
     - _ZWrite: 0
     m_Colors:
-    - _BoundaryFadeSizesLRTB: {r: 0, g: 0, b: 0, a: 0}
+    - _BoundaryFadeSizesLRTB: {r: 0, g: 0, b: 0, a: 0.75}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _FillScale: {r: 1, g: 1, b: 1, a: 0}
     - _FogColor: {r: 1, g: 1, b: 1, a: 1}
-    - _FogSpeed: {r: -0.035, g: 0.04, b: 0, a: 0}
+    - _FogSpeed: {r: -0.02, g: 0, b: 0, a: 0}
     - _ObjectScale: {r: 1, g: 1, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _Strech: {r: 0.6, g: 1, b: 1, a: 0}
-    - _Stretch: {r: 0.6, g: 1, b: 0, a: 0}
+    - _Stretch: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

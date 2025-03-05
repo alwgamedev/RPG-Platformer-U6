@@ -113,5 +113,13 @@ namespace RPGPlatformer.Core
                 slds.DataUpdated += UpdateSortingData;
             }
         }
+
+        private void OnDestroy()
+        {
+            if (slds != null)
+            {
+                slds.DataUpdated -= UpdateSortingData;
+            }
+        }
     }
 }

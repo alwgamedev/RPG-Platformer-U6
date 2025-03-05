@@ -30,19 +30,12 @@ namespace RPGPlatformer.Core
 
         private void OnValidate()
         {
-            //UpdateChildren();
-
-            //DataUpdated = null;
-
             DataUpdated?.Invoke();
         }
 
-        //public void UpdateChildren()
-        //{
-        //    foreach (var child in GetComponentsInChildren<ChildSortingLayer>())
-        //    {
-        //        child.UpdateSortingData();
-        //    }
-        //}
+        private void OnDestroy()
+        {
+            DataUpdated = null;
+        }
     }
 }
