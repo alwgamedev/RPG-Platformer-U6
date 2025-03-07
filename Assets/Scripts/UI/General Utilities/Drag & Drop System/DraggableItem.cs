@@ -85,7 +85,6 @@ namespace RPGPlatformer.UI
 
             IDropTarget<T> target;
             if (!EventSystem.current.IsPointerOverGameObject())
-                //"IsPointerOverGameObject()" really means pointer is over UI (not just any game object)
             {
                 target = parentCanvas.GetComponent<IDropTarget<T>>();
             }

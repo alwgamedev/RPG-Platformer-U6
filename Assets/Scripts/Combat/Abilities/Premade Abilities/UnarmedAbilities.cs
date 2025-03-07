@@ -54,6 +54,7 @@ namespace RPGPlatformer.Combat
             {
                 AbilityTag.AutoCastable
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Unarmed,
             AnimationState = "Punch",

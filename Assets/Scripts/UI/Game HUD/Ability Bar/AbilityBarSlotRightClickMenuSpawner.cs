@@ -29,7 +29,7 @@ namespace RPGPlatformer.UI
 
             var toggleAction = item.IncludeInAutoCastCycle ?
                 "Remove from auto-cast cycle" : "Include in auto-cast cycle";
-            if (!item.Ability.IsAsyncAbility)
+            if (item.Ability.CanBeIncludedInAutoCastCycle)
             {
                 CreateAndConfigureButton(menu, menuButtonPrefab, toggleAction,
                 slotComponent.ToggleAbilityIncludedInAutoCastCycle);

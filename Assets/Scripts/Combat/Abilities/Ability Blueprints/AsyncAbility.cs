@@ -9,7 +9,7 @@ namespace RPGPlatformer.Combat
     //Description: waits for a Task<T> Prepare to complete, like aiming or powering up, then passes along the T result to the OnExecute method
     public class AsyncAbility<T> : AttackAbility
     {
-        public override bool IsAsyncAbility => true;
+        //public override bool IsAsyncAbility => true;
         public bool DelayedReleaseOfChannel { get; init; } = true;
         public bool HasChannelAnimation { get; init; } = false;
         public Func<ICombatController, CancellationTokenSource, Task<T>> Prepare { get; init; }

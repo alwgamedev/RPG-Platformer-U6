@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e816b751458a4354794a3b6c19dbbcd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleEffect: {fileID: 9007913753112864877}
   requeAutomaticallyAtEndOfEffect: 1
+  requeOnParentDeath: 0
+  particleEffect: {fileID: 9007913753112864877}
 --- !u!1 &7670362496825958833
 GameObject:
   m_ObjectHideFlags: 0
@@ -4881,6 +4882,7 @@ ParticleSystemRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

@@ -75,6 +75,7 @@ namespace RPGPlatformer.Combat
                 AbilityTag.ProjectileAbility,
                 AbilityTag.AutoCastable
             },
+            CanBeIncludedInAutoCastCycle = true,
             DelayedReleaseOfChannel = false,
             ObeyGCD = true,
             GetProjectile = () => 
@@ -187,6 +188,7 @@ namespace RPGPlatformer.Combat
                 AbilityTag.AoeDamage,
                 AbilityTag.AutoCastable
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Desecrate",

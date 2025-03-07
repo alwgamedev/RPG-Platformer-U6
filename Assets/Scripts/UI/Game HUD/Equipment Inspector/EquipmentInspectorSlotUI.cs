@@ -29,7 +29,7 @@ namespace RPGPlatformer.UI
         {
             this.slot = slot;
             this.player = player;
-            unequipAction = () => player.UnequipItem(slot);//character.EquipItem(null, slot, true);
+            unequipAction = () => player.UnequipItem(slot);
         }
 
         public void UnequipFromSlot()

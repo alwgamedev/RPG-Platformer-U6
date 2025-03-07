@@ -74,6 +74,7 @@ namespace RPGPlatformer.Combat
                 AbilityTag.Bleed,
                 AbilityTag.AutoCastable
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             AnimationState = "Swipe",
             GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Swipe Hit Effect"),
@@ -94,6 +95,7 @@ namespace RPGPlatformer.Combat
             { 
                 AbilityTag.AutoCastable 
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slash",
@@ -111,6 +113,7 @@ namespace RPGPlatformer.Combat
             {
                 AbilityTag.AutoCastable
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Uppercut",
@@ -130,6 +133,7 @@ namespace RPGPlatformer.Combat
                 AbilityTag.Stun,
                 AbilityTag.AutoCastable
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Jab",
@@ -150,6 +154,7 @@ namespace RPGPlatformer.Combat
             {
                 AbilityTag.Bleed
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slice",
@@ -171,6 +176,7 @@ namespace RPGPlatformer.Combat
             {
                 AbilityTag.AutoCastable
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Thrust",
@@ -190,6 +196,7 @@ namespace RPGPlatformer.Combat
                 AbilityTag.Stun,
                 AbilityTag.AutoCastable
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slam",

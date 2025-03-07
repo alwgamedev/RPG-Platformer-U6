@@ -35,7 +35,8 @@ namespace RPGPlatformer.Combat
         public string AnimationState { get; init; }//can leave null if no animation (will just get a warning in the editor)
         public Func<PoolableEffect> GetCombatantExecuteEffect { get; init; }
         public Func<PoolableEffect> GetHitEffect { get; init; }
-        public virtual bool IsAsyncAbility => false;//for convenience
+        public bool CanBeIncludedInAutoCastCycle { get; init; }
+        //public virtual bool IsAsyncAbility => false;//for convenience
         public bool ObeyGCD { get; init; }
         public bool UseActiveAimingWhilePoweringUp { get; init; }
         public bool HoldAimOnRelease { get; init; }

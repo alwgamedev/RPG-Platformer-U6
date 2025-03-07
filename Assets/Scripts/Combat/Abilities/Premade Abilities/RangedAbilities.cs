@@ -70,6 +70,7 @@ namespace RPGPlatformer.Combat
                 AbilityTag.ProjectileAbility,
                 AbilityTag.AutoCastable
             },
+            CanBeIncludedInAutoCastCycle = true,
             DelayedReleaseOfChannel = false,
             ObeyGCD = true,
             GetProjectile = () => (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Basic Arrow"),
@@ -112,6 +113,7 @@ namespace RPGPlatformer.Combat
                 AbilityTag.ProjectileAbility,
                 AbilityTag.Stun
             },
+            CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             CombatStyle = CombatStyle.Ranged,
             DisplayName = "Festering Wound",
@@ -136,6 +138,7 @@ namespace RPGPlatformer.Combat
                 AbilityTag.Stun
             },
             ObeyGCD = true,
+            CanBeIncludedInAutoCastCycle = true,
             CombatStyle = CombatStyle.Ranged,
             DisplayName = "Ensnare",
             AnimationState = "Bow QuickShot",

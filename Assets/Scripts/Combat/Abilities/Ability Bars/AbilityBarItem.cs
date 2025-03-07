@@ -6,7 +6,7 @@
         bool includeInAutoCastCycle;
 
         public AttackAbility Ability => ability;
-        public bool IncludeInAutoCastCycle => includeInAutoCastCycle;
+        public bool IncludeInAutoCastCycle => ability.CanBeIncludedInAutoCastCycle && includeInAutoCastCycle;
 
         public AbilityBarItem() { }
 
