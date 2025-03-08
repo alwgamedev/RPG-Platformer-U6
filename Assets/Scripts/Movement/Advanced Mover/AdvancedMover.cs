@@ -66,11 +66,7 @@ namespace RPGPlatformer.Movement
 
         public float SpeedFraction()
         {
-            //return myRigidbody.linearVelocity.magnitude / runSpeed;
-            //Debug.Log(myRigidbody.linearVelocityX / runSpeed);
-            return Mathf.Abs(myRigidbody.linearVelocityX / runSpeed);
-            //float speed = Mathf.Abs(myRigidbody.linearVelocity.x);
-            //return Mathf.Clamp(speed / runSpeed, 0, 1);
+            return myRigidbody.linearVelocity.magnitude / runSpeed;
         }
 
         public void Jump()
@@ -96,13 +92,16 @@ namespace RPGPlatformer.Movement
 
         public Vector2 JumpForce()
         {
-            if(currentJumpNum == 0)
-            {
-                return jumpForce * Vector2.up;
-            }
-            return (0.2f * SpeedFraction() * jumpForce) * Vector2.right 
-                + (1.18f - Mathf.Clamp((0.6f * myRigidbody.linearVelocityY) - 1, -0.15f, 0.25f))
-                * jumpForce * Vector2.up;
+            float mult = currentJumpNum > 0 ? 1.18f : 1f;
+            return mult * jumpForce * Vector2.up;
+
+            //if(currentJumpNum == 0)
+            //{
+            //    return jumpForce * Vector2.up;
+            //}
+            //return (0.2f * SpeedFraction() * jumpForce) * Vector2.right 
+            //    + (1.18f - Mathf.Clamp((0.6f * myRigidbody.linearVelocityY) - 1, -0.15f, 0.25f))
+            //    * jumpForce * Vector2.up;
         }
 
         public void ResetJumpNum()
@@ -158,13 +157,13 @@ namespace RPGPlatformer.Movement
             var lowerHit = Physics2D.Raycast(ColliderCenterBack - 0.2f * myHeight * Vector3.up,
                 (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
 
-            //Debug.DrawLine(ColliderCenterBack + 0.1f * myHeight * Vector3.up, ColliderCenterBack
-            //    + 0.1f * myHeight * Vector3.up + 1.75f * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
             //Debug.DrawLine(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
             //    ColliderCenterBack + 0.4f * myHeight * Vector3.up + 1.75f * myWidth
             //    * (int)CurrentOrientation * Vector3.right, Color.blue);
-            //Debug.DrawLine(ColliderCenterBack - 0.1f * myHeight * Vector3.up,
-            //    ColliderCenterBack - 0.1f * myHeight * Vector3.up + 1.75f * myWidth
+            //Debug.DrawLine(ColliderCenterBack + 0.1f * myHeight * Vector3.up, ColliderCenterBack
+            //    + 0.1f * myHeight * Vector3.up + 1.75f * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
+            //Debug.DrawLine(ColliderCenterBack - 0.2f * myHeight * Vector3.up,
+            //    ColliderCenterBack - 0.2f * myHeight * Vector3.up + 1.75f * myWidth
             //    * (int)CurrentOrientation * Vector3.right, Color.blue);
 
             if (midHit && lowerHit)
@@ -185,11 +184,13 @@ namespace RPGPlatformer.Movement
                 adjacentWallAngle = Quaternion.identity;
                 return;
             }
-            //else if (!midHit & lowerHit)
-            //{
-            //    facingWall = true;
-            //    return;
-            //}
+            else if (!midHit & lowerHit)
+            {
+                if (jumping || freefalling)
+                {
+                    TriggerLanding();
+                }
+            }
 
             NoAdjacentWall();
         }
