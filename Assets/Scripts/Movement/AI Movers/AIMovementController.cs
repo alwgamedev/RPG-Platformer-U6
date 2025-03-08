@@ -16,7 +16,7 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected float maxPermissibleDropOffHeightFactor = 3;
         [SerializeField] protected float dropOffStopDistance = 0.5f;
 
-        protected bool jumpingEnabled;
+        protected bool jumpingEnabled = true;
         protected bool stuckAtLedge;
         protected AIMover aiMover;
 
@@ -58,6 +58,12 @@ namespace RPGPlatformer.Movement
             mover = aiMover;
         }
 
+        protected override void ConfigureWallDetection()
+        {
+            base.ConfigureWallDetection();
+            mover.AwkwardWallMoment += () => MoveInput = 0;
+        }
+
         protected override void GroundedMoveAction(float input)
             //I am doing the drop off check here (rather than at the point where MoveInput is set)
             //so that orientation is accurate (without having to do an unecessary SetOrientation every time we
@@ -73,7 +79,7 @@ namespace RPGPlatformer.Movement
             {
                 if (dropOffHandlingOption == DropOffHandlingOption.stop && dist < dropOffStopDistance)
                 {
-                    mover.Stop();
+                    Stop();
                     stuckAtLedge = true;
                     return;
                 }
@@ -92,7 +98,8 @@ namespace RPGPlatformer.Movement
                         }
                         else if (dist < dropOffStopDistance)
                         {
-                            mover.Stop();
+                            //mover.Stop();
+                            Stop();
                             return;
                             //stopped, but not considered stuck at ledge, so it can continue re-evaluating whether
                             //jumping will bring it closer to target
@@ -100,7 +107,8 @@ namespace RPGPlatformer.Movement
                     }
                     else if (dist < dropOffStopDistance)
                     {
-                        mover.Stop();
+                        //mover.Stop();
+                        Stop();
                         stuckAtLedge = true;
                         return;
                     }
@@ -109,22 +117,6 @@ namespace RPGPlatformer.Movement
 
             mover.MoveGrounded();
         }
-
-        //public void SetDetectWalls(bool val)
-        //{
-        //    if (val && !detectWalls/*!mover.DetectWalls*/)
-        //    {
-        //        //aiMover.SetDetectWalls(true);
-        //        detectWalls = true;
-        //        OnUpdate += HandleAdjacentWallInteraction;
-        //    }
-        //    else if (!val && detectWalls/*mover.DetectWalls*/)
-        //    {
-        //        //aiMover.SetDetectWalls(false);
-        //        detectWalls = false;
-        //        OnUpdate -= HandleAdjacentWallInteraction;
-        //    }
-        //}
 
         public void EnableJumping(bool val)
         {
@@ -142,40 +134,11 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        //protected override void OnGroundedEntry()
-        //{
-        //    //SetDetectWalls(false);
-
-        //    base.OnGroundedEntry();
-        //}
-
-        //protected override void OnFreefallEntry()
-        //{
-        //    //SetDetectWalls(true);
-
-        //    //if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
-        //    //{
-        //    //    if (mover.CanJump())
-        //    //    {
-        //    //        mover.Stop();
-        //    //        SetOrientation(-(int)CurrentOrientation);
-        //    //        mover.Jump(mover.OrientForce(aiMover.EmergencyJumpForce()));
-        //    //    }
-        //    //}
-        //}
-
-        //protected override void OnJumpingEntry()
-        //{
-        //    //SetDetectWalls(true);
-
-        //    base.OnJumpingEntry();
-        //}
-
         protected override void HandleAdjacentWallInteraction()
         {
             if (mover.FacingWall)
             {
-                moveInput = 0;
+                MoveInput = 0;
             }
         }
 

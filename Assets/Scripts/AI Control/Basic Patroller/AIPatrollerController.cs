@@ -110,20 +110,20 @@ namespace RPGPlatformer.AIControl
         protected virtual void OnPursuitExit()
         {
             patroller.movementController.SetRunning(false);
-            patroller.movementController.MoveInput = 0;
+            patroller.movementController.Stop();
             OnUpdate -= patroller.PursuitBehavior;
         }
 
         protected virtual void OnAttackEntry()
         {
-            patroller.movementController.EnableJumping(false);
+            //patroller.movementController.EnableJumping(false);
             patroller.StartAttacking();
         }
 
         protected virtual void OnAttackExit()
         {
             patroller.StopAttacking();
-            patroller.movementController.EnableJumping(true);
+            //patroller.movementController.EnableJumping(true);
             //OnUpdate -= patroller.MaintainMinimumCombatDistance;
         }
 

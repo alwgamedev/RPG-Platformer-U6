@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -30,9 +31,9 @@ namespace RPGPlatformer.Movement
                 maxSpeed = running ? runSpeed : walkSpeed;
             }
         }
-        public float AdjacentWallAngle => adjacentWallAngle.eulerAngles.z;//note this will be in [0, 360]
-        public bool FacingWall => facingWall /*&& IsExceptableWallAngle(AdjacentWallAngle)*/;
-        //public virtual float MaxPermissibleDropoffHeight => 2 * myHeight;
+        public bool FacingWall => facingWall;
+
+        public event Action AwkwardWallMoment;
 
         protected override void Awake()
         {
@@ -184,11 +185,12 @@ namespace RPGPlatformer.Movement
                 adjacentWallAngle = Quaternion.identity;
                 return;
             }
-            else if (!midHit & lowerHit)
+            else if (midHit || lowerHit)
             {
                 if (jumping || freefalling)
                 {
                     TriggerLanding();
+                    AwkwardWallMoment?.Invoke();
                 }
             }
 
@@ -205,6 +207,12 @@ namespace RPGPlatformer.Movement
         {
             adjacentWallAngle = Quaternion.identity;
             facingWall = false;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            AwkwardWallMoment = null;
         }
     }
 }

@@ -24,13 +24,14 @@ namespace RPGPlatformer.Movement
         public Rigidbody2D Rigidbody => mover.Rigidbody;
         public HorizontalOrientation CurrentOrientation => mover.CurrentOrientation;
         public IMover Mover => mover;
-        public virtual float MoveInput
+        public virtual float MoveInput 
+            //looks very silly, but AIMovementControllers will override this,
+            //so do need this here
         {
             get => moveInput;
             set
             {
                 moveInput = value;
-                //OnMoveInputChanged?.Invoke();
             }
         }
 
@@ -39,8 +40,6 @@ namespace RPGPlatformer.Movement
         protected virtual void Awake()
         {
             InitializeMover();
-            //mover = GetComponent<AdvancedMover>();
-            //InitializeMovementManager();
 
             OnFixedUpdate += HandleMoveInput;
         }
@@ -55,9 +54,7 @@ namespace RPGPlatformer.Movement
 
             if (detectWalls)
             {
-                OnUpdate += mover.UpdateAdjacentWall;
-                OnUpdate += SetDownSpeed;
-                OnUpdate += HandleAdjacentWallInteraction;
+                ConfigureWallDetection();
             }
         }
 
@@ -90,6 +87,14 @@ namespace RPGPlatformer.Movement
         protected virtual void InitializeMover()
         {
             mover = GetComponent<AdvancedMover>();
+        }
+
+        protected virtual void ConfigureWallDetection()
+        {
+            OnUpdate += mover.UpdateAdjacentWall;
+            OnUpdate += SetDownSpeed;
+            OnUpdate += HandleAdjacentWallInteraction;
+            //mover.AwkwardWallMoment += () => MoveInput = 0;
         }
 
 
@@ -134,6 +139,12 @@ namespace RPGPlatformer.Movement
             mover.SetOrientation((HorizontalOrientation)input, updateXScale);
         }
 
+        public virtual void Stop()
+        {
+            mover.Stop();
+            MoveInput = 0;
+        }
+
         
         //STATE CHANGE HANDLERS
 
@@ -157,11 +168,10 @@ namespace RPGPlatformer.Movement
 
         protected virtual void HandleAdjacentWallInteraction()
         {
-            if (moveInput != 0 && mover.FacingWall /*&& !movementManager.StateMachine.HasState(typeof(Grounded))*/)
+            if (moveInput != 0 && mover.FacingWall)
             {
                 movementManager.AnimateWallScramble(false);
-                if (/*!wallClinging ||*/ !movementManager.IsWallClinging())
-                //^just being safe by checking that wall cling animation is also playing
+                if (!movementManager.IsWallClinging())
                 {
                     BeginWallCling();
                 }
@@ -172,14 +182,14 @@ namespace RPGPlatformer.Movement
                 return;
             }
 
-            if (/*wallClinging ||*/ movementManager.IsWallClinging())
+            if (movementManager.IsWallClinging())
             {
                 EndWallCling();
                 return;
             }
 
             if (!movementManager.StateMachine.HasState(typeof(Jumping))
-                && mover.FacingWall /*&& Mathf.Abs(mover.AdjacentWallAngle.eulerAngles.z) < 20*/)
+                && mover.FacingWall)
             {
                 movementManager.AnimateWallScramble(true);
             }
