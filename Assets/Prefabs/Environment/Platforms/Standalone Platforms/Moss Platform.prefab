@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6935707715227163054}
   - component: {fileID: 8214549206853674094}
   - component: {fileID: 6577878397060003545}
-  - component: {fileID: 234151689486351569}
   m_Layer: 3
   m_Name: Moss Platform
   m_TagString: Ground
@@ -137,62 +136,17 @@ PolygonCollider2D:
     m_Paths:
     - - {x: -1.3595581, y: 0.3606267}
       - {x: -2.0237198, y: 0.26430082}
-      - {x: -2.190445, y: 0.018455505}
-      - {x: -2.0319214, y: -0.23473454}
+      - {x: -2.190445, y: 0.12507582}
+      - {x: -2.0943375, y: -0.26594067}
       - {x: -0.91033936, y: -0.25885534}
       - {x: 0.2942505, y: -0.16388893}
       - {x: 0.92658997, y: -0.17000675}
-      - {x: 2.0466614, y: -0.111961365}
-      - {x: 2.236786, y: 0.061282158}
+      - {x: 2.0960693, y: -0.1535697}
+      - {x: 2.1729126, y: -0.06737089}
+      - {x: 2.2003784, y: 0.1887064}
       - {x: 2.0281525, y: 0.26624107}
       - {x: 1.6044998, y: 0.277884}
       - {x: 1.1040802, y: 0.30807447}
       - {x: 0.77350616, y: 0.26022053}
       - {x: -0.7027359, y: 0.31640053}
   m_UseDelaunayMesh: 0
---- !u!61 &234151689486351569
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7769354940273374972}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.05}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.55219, y: 0.938}
-    newSize: {x: 45.521896, y: 9.38}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 4.2, y: 0.5}
-  m_EdgeRadius: 0

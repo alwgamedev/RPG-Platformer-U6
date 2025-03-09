@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4537053528868355318}
   - component: {fileID: 8331853500176995876}
   - component: {fileID: 7788252087780613526}
-  - component: {fileID: 1661405159084497417}
   m_Layer: 3
   m_Name: Mini Moss Platform
   m_TagString: Ground
@@ -138,55 +137,10 @@ PolygonCollider2D:
     - - {x: 0.36854553, y: 0.29640293}
       - {x: -0.026290894, y: 0.32712364}
       - {x: -0.38909912, y: 0.2887206}
-      - {x: -0.57270813, y: 0.08021593}
-      - {x: -0.41296387, y: -0.23695612}
-      - {x: 0.38008118, y: -0.23450708}
-      - {x: 0.4449463, y: -0.10508299}
-      - {x: 0.5432739, y: 0.10298729}
+      - {x: -0.5087433, y: 0.18148041}
+      - {x: -0.5062256, y: -0.19165373}
+      - {x: -0.34762573, y: -0.2839532}
+      - {x: 0.3827362, y: -0.27980947}
+      - {x: 0.49822998, y: -0.18236303}
+      - {x: 0.49797058, y: 0.18026829}
   m_UseDelaunayMesh: 1
---- !u!61 &1661405159084497417
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5159964465112952917}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.05}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.284, y: 0.896}
-    newSize: {x: 12.84, y: 8.96}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 0.5}
-  m_EdgeRadius: 0
