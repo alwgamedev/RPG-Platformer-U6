@@ -14,6 +14,7 @@ namespace RPGPlatformer.Core
         SortingLayerDataSource slds;
 
         public event Action DataUpdated;
+        public event Action Destroyed;
 
         public int? SortingLayerID
         {
@@ -53,10 +54,8 @@ namespace RPGPlatformer.Core
 
         private void OnValidate()
         {
-            UpdateSLC();
-
+            UpdateSLDS();
             UpdateSortingData();
-
             DataUpdated?.Invoke();
         }
 
@@ -89,37 +88,59 @@ namespace RPGPlatformer.Core
             }
         }
 
-        private void UpdateSLC()
+        private void UpdateSLDS()
+        {
+            UnhookCurrentSLDS();
+
+            if (dataSource == null) return;
+
+            SortingLayerDataSource s = dataSource.GetComponent<SortingLayerControl>();
+            //for game objects that have both an SLC and CSL, we prioritize using the SLC as the data source
+            //so that a CLS can also have a SLC component attached and use that as its data source
+
+            if (s == null)
+            {
+                s = dataSource.GetComponent<SortingLayerDataSource>();
+            }
+
+            HookUpNewSLDS(s);
+        }
+
+        private void UnhookCurrentSLDS()
         {
             if (slds != null)
             {
                 slds.DataUpdated -= UpdateSortingData;
+                slds.Destroyed -= OnDataSourceDestroyed;
+                slds = null;
             }
+        }
 
-            if (dataSource == null) return;
-
-            //for parents that have both SLC and CSL, give priority to the SLC as the data source
-            SortingLayerDataSource s = dataSource.GetComponent<SortingLayerControl>();
-
-            if (s == null)
-            {
-                dataSource.TryGetComponent(out s);
-            }
-
+        private void HookUpNewSLDS(SortingLayerDataSource s)
+        {
             slds = s;
 
             if (slds != null && slds != (SortingLayerDataSource)this)
             {
                 slds.DataUpdated += UpdateSortingData;
+                slds.Destroyed += OnDataSourceDestroyed;
+                UpdateSortingData();
             }
+        }
+
+        private void OnDataSourceDestroyed()
+        {
+            dataSource = null;
+            UnhookCurrentSLDS();
         }
 
         private void OnDestroy()
         {
-            if (slds != null)
-            {
-                slds.DataUpdated -= UpdateSortingData;
-            }
+            UnhookCurrentSLDS();
+            Destroyed?.Invoke();
+
+            DataUpdated = null;
+            Destroyed = null;
         }
     }
 }

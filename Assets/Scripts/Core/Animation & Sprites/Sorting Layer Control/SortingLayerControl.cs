@@ -9,12 +9,8 @@ namespace RPGPlatformer.Core
         [SerializeField] SerializableSortingLayer sortingLayer;
         [SerializeField] int sortingOrder;
 
-        //TO-DO: only updates sorting layers which are children of its transform. however other 
-        //sprites may be dependent on this SLC without being a child of its transform
-        //PUSH TO GITHUB BEFORE YOU DO THIS IN CASE YOU LOSE A BUNCH OF WORK
-        //alternatively use an event all dependent sprites subscribe to
-
         public event Action DataUpdated;
+        public event Action Destroyed;
 
         public int? SortingLayerID
         {
@@ -35,7 +31,10 @@ namespace RPGPlatformer.Core
 
         private void OnDestroy()
         {
+            Destroyed?.Invoke();
+
             DataUpdated = null;
+            Destroyed = null;
         }
     }
 }

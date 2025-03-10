@@ -9,5 +9,6 @@ namespace RPGPlatformer.Core
         public int? SortingOrder { get; }
 
         public event Action DataUpdated;
+        public event Action Destroyed;
     }
 }
