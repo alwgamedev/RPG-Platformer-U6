@@ -16,7 +16,7 @@ namespace RPGPlatformer.Core
 
         public void SetAnimatorOverride(AnimatorOverrideController animOverride)
         {
-            if (!animator) return;
+            if (!animator || animOverride == null) return;
             animator.runtimeAnimatorController = animOverride;
             //I believe setting to null will default back to the original controller
         }

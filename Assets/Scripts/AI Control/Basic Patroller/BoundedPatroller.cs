@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
@@ -8,34 +9,74 @@ namespace RPGPlatformer.AIControl
         [SerializeField] protected Transform rightBound;
         [SerializeField] protected float patrolDestinationTolerance = 0.1f;
 
-        public override void PatrolBehavior()
+        protected Action PatrolAction;
+
+        public override void BeginPatrol()
         {
-            DefaultPatrolBehavior();
+            patrolDestination = NewPatrolDestination();
+            PatrolAction = MoveTowardsPatrolDestination;
         }
 
-        protected override bool PatrolDestinationReached(Vector2 destination)
+        public override void PatrolBehavior()
+        {
+            PatrolAction?.Invoke();
+        }
+
+        public virtual void MoveTowardsPatrolDestination()
+        {
+            if (CombatTarget != null && ScanForTarget(null))
+            {
+                return;
+            }
+            if (PatrolDestinationReached(patrolDestination))
+            {
+                if (hangTime > 0)
+                {
+                    MovementController.Stop();
+                    hangTimer = 0;
+                    PatrolAction = HangOut;
+                }
+                else
+                {
+                    BeginPatrol();
+                }
+            }
+            else
+            {
+                MovementController.MoveTowards(patrolDestination);
+            }
+        }
+
+        public virtual void HangOut()
+        {
+            if (CombatTarget != null && ScanForTarget(null))
+            {
+                return;
+            }
+
+            hangTimer += Time.deltaTime;
+
+            if (hangTimer > hangTime)
+            {
+                BeginPatrol();
+            }
+        }
+
+        protected virtual bool PatrolDestinationReached(Vector2 destination)
         {
             return Mathf.Abs(transform.position.x - patrolDestination.x) < patrolDestinationTolerance;
         }
 
-        protected override void OnPatrolDestinationReached()
+        protected Vector2 NewPatrolDestination()
         {
-            patrolDestination = Random.Range(leftBound.position.x, rightBound.position.x) * Vector2.right;
+            return UnityEngine.Random.Range(leftBound.position.x, rightBound.position.x) * Vector2.right;
+            
         }
 
-        //protected override void SuspiciousButTargetOutOfRange()
-        //{
-        //    suspicionTimer += Time.deltaTime;
-
-        //    if (suspicionTimer > suspicionTimerMax)
-        //    {
-        //        TriggerPatrol();
-        //    }
-        //}
-
-        //public override void EndSuspicion()
-        //{
-        //    suspicionTimer = 0;
-        //}
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            PatrolAction = null;
+        }
     }
 }

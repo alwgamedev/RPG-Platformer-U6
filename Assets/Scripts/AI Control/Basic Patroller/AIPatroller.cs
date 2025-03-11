@@ -7,14 +7,16 @@ using System;
 namespace RPGPlatformer.AIControl
 {
     [RequireComponent(typeof(AIMovementController))]
-    [RequireComponent(typeof(AICombatController))]
+    //[RequireComponent(typeof(AICombatController))]
     public class AIPatroller : StateDriver
     {
         [SerializeField] protected float pursuitRange;
-        [SerializeField] protected float suspicionTimerMax = 5;
+        [SerializeField] protected float suspicionTime = 5;
+        [SerializeField] protected float hangTime = 2;//e.g. to stop for a few seconds btwn patrol destinations
 
         protected bool TriggerPursuitSubscribedToCombatantTargetingFailed;
         protected float suspicionTimer;
+        protected float hangTimer;
         protected Vector2 patrolDestination;
         protected Action OnUpdate;
 
@@ -102,37 +104,39 @@ namespace RPGPlatformer.AIControl
             return false;
         }
 
+        public virtual void BeginPatrol() { }
+
         public virtual void PatrolBehavior() { }
 
-        public void DefaultPatrolBehavior()
-        {
-            if (CombatTarget != null && ScanForTarget(null))
-            {
-                return;
-            }
-            else if (PatrolDestinationReached(patrolDestination))
-            {
-                OnPatrolDestinationReached();
-            }
-            else
-            {
-                MovementController.MoveTowards(patrolDestination);
-            }
-        }
+        //public void DefaultPatrolBehavior()
+        //{
+        //    if (CombatTarget != null && ScanForTarget(null))
+        //    {
+        //        return;
+        //    }
+        //    else if (PatrolDestinationReached(patrolDestination))
+        //    {
+        //        OnPatrolDestinationReached();
+        //    }
+        //    else
+        //    {
+        //        MovementController.MoveTowards(patrolDestination);
+        //    }
+        //}
 
-        //useful to have this as a virtual method -- most of the time we will just check
-        //distance < tolerance, but some patrollers may only care about x-value (e.g. if bounded patroller
-        //chose a random destination, the y-value of the point may be below ground, making it impossible to get
-        //within tolerance of the point, so the bounded patroller should only check x-value)
-        protected virtual bool PatrolDestinationReached(Vector2 destination)
-        {
-            return false;
-        }
+        ////useful to have this as a virtual method -- most of the time we will just check
+        ////distance < tolerance, but some patrollers may only care about x-value (e.g. if bounded patroller
+        ////chose a random destination, the y-value of the point may be below ground, making it impossible to get
+        ////within tolerance of the point, so the bounded patroller should only check x-value)
+        //protected virtual bool PatrolDestinationReached(Vector2 destination)
+        //{
+        //    return false;
+        //}
 
-        protected virtual void OnPatrolDestinationReached() 
-        {
-            //e.g. calculate next patrol destination
-        }
+        //protected virtual void OnPatrolDestinationReached() 
+        //{
+        //    //e.g. calculate next patrol destination
+        //}
 
         public virtual void SuspicionBehavior()
         {
@@ -143,13 +147,13 @@ namespace RPGPlatformer.AIControl
         {
             suspicionTimer += Time.deltaTime;
 
-            if (suspicionTimer > suspicionTimerMax)
+            if (suspicionTimer > suspicionTime)
             {
                 Trigger(typeof(Patrol).Name);
             }
         }
 
-        public virtual void ResetSuspicionTimer()
+        public void ResetSuspicionTimer()
         {
             suspicionTimer = 0;
         }

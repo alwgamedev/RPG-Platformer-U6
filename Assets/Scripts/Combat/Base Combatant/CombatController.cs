@@ -357,8 +357,12 @@ namespace RPGPlatformer.Combat
         {
             EndChannel();
             combatant.ReturnQueuedProjectileToPool();
-
             UpdateEquippedAbilityBar();
+
+            if (combatManager.StateMachine.HasState(typeof(InCombat).Name))
+            {
+                combatManager.InstallWeaponAnimOverride();
+            }
         }
 
         public virtual void OnCombatEntry()

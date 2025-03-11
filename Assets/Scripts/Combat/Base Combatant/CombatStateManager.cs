@@ -73,6 +73,14 @@ namespace RPGPlatformer.Combat
             }
         }
 
+        public void InstallWeaponAnimOverride()
+        {
+            if (driver.EquippedWeapon != null)
+            {
+                animationControl.SetAnimatorOverride(((Weapon)driver.EquippedWeapon).AnimatorOverrideController);
+            }
+        }
+
         protected void ResetCombatTimer()
         {
             combatTimer = 0;
@@ -80,16 +88,13 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnInitialCombatEntry()
         {
-            if (driver.EquippedWeapon != null)
-            {
-                animationControl.SetAnimatorOverride(((Weapon)driver.EquippedWeapon).AnimatorOverrideController);
-            }
+            InstallWeaponAnimOverride();
             driver.Health.Stat.autoReplenish = false;
             driver.Wrath.autoReplenish = false;
             OnCombatEntry();
         }
 
-        protected virtual void OnCombatEntry()//triggers when combatant attacks or takes damage
+        protected virtual void OnCombatEntry()
         {
             ResetCombatTimer();
         }

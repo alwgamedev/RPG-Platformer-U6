@@ -11,7 +11,7 @@ namespace RPGPlatformer.AIControl
     public class AIPatrollerController : MonoBehaviour, IInputSource
     {
         [SerializeField] protected bool playerEnemy = true;
-        [SerializeField] bool forgetCombatTargetOnPatrolEntry;
+        //[SerializeField] bool forgetCombatTargetOnPatrolEntry;
 
         protected AIPatroller patroller;
         protected AIPatrollerStateManager stateManager;
@@ -113,6 +113,7 @@ namespace RPGPlatformer.AIControl
             //}
 
             patroller.MovementController.SetRunning(false);
+            patroller.BeginPatrol();
         }
 
         protected virtual void OnSuspicionExit()
