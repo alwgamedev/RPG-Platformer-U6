@@ -212,7 +212,12 @@ namespace RPGPlatformer.Combat
         {
             foreach (var entry in equipSlots)
             {
-                if (entry.Key == EquipmentSlot.Mainhand || entry.Key == EquipmentSlot.Offhand) continue;
+                if (entry.Value == null 
+                    || entry.Key == EquipmentSlot.Mainhand 
+                    || entry.Key == EquipmentSlot.Offhand)
+                {
+                    continue;
+                }
 
                 var item = entry.Value.DefaultItem;
                 if (!CanEquip(item))

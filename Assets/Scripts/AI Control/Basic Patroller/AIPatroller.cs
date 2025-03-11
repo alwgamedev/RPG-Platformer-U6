@@ -85,23 +85,20 @@ namespace RPGPlatformer.AIControl
 
         protected bool ScanForTarget(Action TargetOutOfRange = null)
         {
-            if (!TryGetDistance(CombatTarget, out float distance))
+            if (!TryGetDistance(CombatTarget, out float distance) || distance > pursuitRange)
             {
                 TargetOutOfRange?.Invoke();
                 return false;
             }
+
             if (CombatController != null && CombatController.Combatant.CanAttack(distance))
             {
                 Trigger(typeof(Attack).Name);
                 return true;
             }
-            if (distance < pursuitRange)
-            {
-                Trigger(typeof(Pursuit).Name);
-                return true;
-            }
 
-            return false;
+            Trigger(typeof(Pursuit).Name);
+            return true;
         }
 
         public virtual void BeginPatrol() { }
@@ -160,7 +157,7 @@ namespace RPGPlatformer.AIControl
 
         public void PursuitBehavior()
         {
-            if (!TryGetDistance(CombatTarget, out float distance))
+            if (!TryGetDistance(CombatTarget, out float distance) || distance > pursuitRange)
             {
                 Trigger(typeof(Suspicion).Name);
             }
@@ -168,10 +165,10 @@ namespace RPGPlatformer.AIControl
             {
                 Trigger(typeof(Attack).Name);
             }
-            else if (distance > pursuitRange)
-            {
-                Trigger(typeof(Suspicion).Name);
-            }
+            //else if (distance > pursuitRange)
+            //{
+            //    Trigger(typeof(Suspicion).Name);
+            //}
             else if (Mathf.Abs(CombatTarget.Transform.position.x - transform.position.x) > 0.25f)
                 //to avoid ai stuttering back and forth when their target is directly above them
             {
