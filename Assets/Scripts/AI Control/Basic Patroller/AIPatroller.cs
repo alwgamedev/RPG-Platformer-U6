@@ -12,6 +12,7 @@ namespace RPGPlatformer.AIControl
     {
         [SerializeField] protected float pursuitRange;
 
+        protected Vector2 patrolDestination;
         protected Action OnUpdate;
 
         public AIMovementController movementController { get; protected set; }
@@ -49,10 +50,33 @@ namespace RPGPlatformer.AIControl
             combatController.CombatManagerConfigured -= OnCombatManagerConfigured;
         }
 
-        public void PatrolBehavior()
+        public virtual void PatrolBehavior()
         {
-            //stand there for now
+            //just stand there by default
         }
+
+        public void DefaultPatrolBehavior()
+        {
+            if (PatrolDestinationReached(patrolDestination))
+            {
+                OnPatrolDestinationReached();
+            }
+            else
+            {
+                movementController.MoveTowards(patrolDestination);
+            }
+        }
+
+        //useful to have this as a virtual method -- most of the time we will just check
+        //distance < tolerance, but some patrollers may only care about x-value (e.g. if bounded patroller
+        //chose a random destination, the y-value of the point may be below ground, making it impossible to get
+        //within tolerance of the point, so the bounded patroller should only check x-value)
+        public virtual bool PatrolDestinationReached(Vector2 destination)
+        {
+            return false;
+        }
+
+        public virtual void OnPatrolDestinationReached() { }
 
         public void SuspicionBehavior(/*IHealth target*/)
         {
@@ -165,6 +189,13 @@ namespace RPGPlatformer.AIControl
         public void TriggerPursuit()
         {
             Trigger(typeof(Pursuit).Name);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            OnUpdate = null;
         }
     }
 }

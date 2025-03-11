@@ -10,6 +10,16 @@ namespace RPGPlatformer.Combat
     public class CombatStateMachine<T> : StateMachine<T> where T : CombatStateGraph
     {
         public CombatStateMachine() : base() { }
+
+        public override void SetCurrentState(State newState)
+        {
+            if (newState == stateGraph.dead)
+            {
+                Unfreeze();
+            }
+
+            base.SetCurrentState(newState);
+        }
     }
 
     public abstract class CombatState : State { }

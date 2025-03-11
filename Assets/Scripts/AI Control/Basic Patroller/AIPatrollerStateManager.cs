@@ -13,24 +13,5 @@ namespace RPGPlatformer.AIControl
         where T2 : AIPatroller
     {
         public AIPatrollerStateManager(T1 stateMachine, T2 patroller) : base(stateMachine, patroller) { }
-
-        public override void Configure()
-        {
-            base.Configure();
-
-            //StateGraph.pursuit.OnEntry += OnPursuitEntry;
-            //StateGraph.pursuit.OnExit += OnPursuitExit;
-        }
-
-        //protected virtual void OnPursuitEntry()
-        //{
-        //    driver.movementController.SetRunning(true);
-        //}
-
-        //protected virtual void OnPursuitExit()
-        //{
-        //    driver.movementController.SetRunning(false);
-        //    driver.movementController.MoveInput = 0;
-        //}
     }
 }

@@ -8,7 +8,6 @@ namespace RPGPlatformer.Movement
         ignore, stop, tryToJump
     }
 
-    //[RequireComponent(typeof(AIMover))]
     public class AIMovementController : AdvancedMovementController
     {
         [SerializeField] protected DropOffHandlingOption dropOffHandlingOption = DropOffHandlingOption.stop;
@@ -41,16 +40,6 @@ namespace RPGPlatformer.Movement
                 }
             }
         }
-
-        //protected override void Awake()
-        //{
-        //    base.Awake();
-        //}
-
-        //protected override void Start()
-        //{
-        //    base.Start();
-        //}
 
         protected override void InitializeMover()
         {
@@ -98,7 +87,6 @@ namespace RPGPlatformer.Movement
                         }
                         else if (dist < dropOffStopDistance)
                         {
-                            //mover.Stop();
                             Stop();
                             return;
                             //stopped, but not considered stuck at ledge, so it can continue re-evaluating whether
@@ -107,7 +95,6 @@ namespace RPGPlatformer.Movement
                     }
                     else if (dist < dropOffStopDistance)
                     {
-                        //mover.Stop();
                         Stop();
                         stuckAtLedge = true;
                         return;

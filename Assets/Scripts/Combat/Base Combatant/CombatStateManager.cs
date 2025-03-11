@@ -123,10 +123,6 @@ namespace RPGPlatformer.Combat
             {
                 animationControl.PlayAnimationState("Take Damage", "Top Layer", 0);
             }
-            //else if(damage < 0)
-            //{
-            //    //play a health gained animation/effect
-            //}
         }
     }
 }

@@ -10,13 +10,11 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected bool detectWalls;
 
-        //protected bool wallClinging;
         protected AdvancedMover mover;
         protected AdvancedMovementStateManager movementManager;
         protected Action<float> CurrentMoveAction;
         protected Action OnFixedUpdate;
         protected Action OnUpdate;
-        //protected Action OnMoveInputChanged;
 
         protected float moveInput = 0;
 
@@ -68,11 +66,6 @@ namespace RPGPlatformer.Movement
             OnFixedUpdate?.Invoke();
         }
 
-        //protected virtual void LateUpdate()
-        //{
-        //    AnimateMovement();
-        //}
-
         protected virtual void InitializeMovementManager()
         {
             movementManager = new(mover, GetComponent<AnimationControl>());
@@ -94,7 +87,6 @@ namespace RPGPlatformer.Movement
             OnUpdate += mover.UpdateAdjacentWall;
             OnUpdate += SetDownSpeed;
             OnUpdate += HandleAdjacentWallInteraction;
-            //mover.AwkwardWallMoment += () => MoveInput = 0;
         }
 
 

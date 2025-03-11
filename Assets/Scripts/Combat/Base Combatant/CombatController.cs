@@ -40,7 +40,9 @@ namespace RPGPlatformer.Combat
         //cleared in EndChannel, should not be used with async abilities
         //(think I could adjust it to work, but rather keep things simple and reliable for now)
 
-        protected List<(float, bool)> activeStuns = new();
+        int activeStuns;
+        int activeStunsThatFreezeAnimation;
+        //protected List<(float, bool)> activeStuns = new();
         //later can be managed by buff manager?
 
         public bool IsInCombat => combatManager.StateMachine.HasState(typeof(InCombat));
@@ -515,11 +517,13 @@ namespace RPGPlatformer.Combat
         {
             if (combatant.Health.IsDead || immuneToStuns) return;
 
-            var stunData = (stunDuration, freezeAnimation);
-            activeStuns.Add(stunData);
+            //var stunData = (stunDuration, freezeAnimation);
+            //activeStuns.Add(stunData);
+            activeStuns++;
             DisableInput();
             if (freezeAnimation)
             {
+                activeStunsThatFreezeAnimation++;
                 combatManager.Freeze();
             }
 
@@ -541,13 +545,19 @@ namespace RPGPlatformer.Combat
                 Task result = await Task.WhenAny(MiscTools.DelayGameTime(stunDuration, tokenSource.Token), tcs.Task);
                 if (tokenSource.IsCancellationRequested) return;
 
-                activeStuns.Remove(stunData);
+                //activeStuns.Remove(stunData);
+                activeStuns--;
 
-                if (freezeAnimation && activeStuns.Where(x => x.Item2 = true).Count() == 0)
+                if (freezeAnimation /*&& activeStuns.Where(x => x.Item2 = true).Count() == 0*/)
                 {
-                    combatManager.Unfreeze();
+                    activeStunsThatFreezeAnimation--;
+                    if (activeStunsThatFreezeAnimation == 0 && !combatant.Health.IsDead)
+                    {
+                        //note if died while stunned, state machine will have already unfrozen
+                        combatManager.Unfreeze();
+                    }
                 }
-                if (activeStuns.Count == 0 && !combatant.Health.IsDead)
+                if (activeStuns == 0 && !combatant.Health.IsDead)
                 {
                     InputSource.EnableInput();
                 }
@@ -575,7 +585,7 @@ namespace RPGPlatformer.Combat
         protected virtual void Death()
         {
             DisableInput();
-            combatManager.animationControl.Freeze(false);//UNFREEZE, in case animation was frozen due to a stun
+            //combatManager.animationControl.Freeze(false);//UNFREEZE, in case animation was frozen due to a stun
             combatant.OnDeath();
             MovementController?.OnDeath();
             OnDeath?.Invoke();

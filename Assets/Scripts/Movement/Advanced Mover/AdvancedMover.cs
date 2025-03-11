@@ -11,7 +11,6 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected float walkSpeed = 0.8f;
         [SerializeField] protected int maxNumJumps = 2;
         [SerializeField] protected float jumpForce = 400;
-        //[SerializeField] protected bool detectWalls;
 
         protected int currentJumpNum = 0;
         protected float maxSpeed;
@@ -40,19 +39,6 @@ namespace RPGPlatformer.Movement
             base.Awake();
 
             maxSpeed = walkSpeed;
-
-            //if (detectWalls)
-            //{
-            //    OnUpdate += UpdateAdjacentWall;
-            //}
-        }
-
-        protected override void Update()
-        {
-            //UpdateAdjacentWall();
-            //OnUpdate?.Invoke();
-
-            base.Update();
         }
 
         public void MoveGrounded()
@@ -88,7 +74,7 @@ namespace RPGPlatformer.Movement
 
         public bool CanJump()
         {
-            return currentJumpNum < maxNumJumps; //|| adjacentWallSide.HasValue;
+            return currentJumpNum < maxNumJumps;
         }
 
         public Vector2 JumpForce()
@@ -135,15 +121,8 @@ namespace RPGPlatformer.Movement
             transform.rotation = Quaternion.identity;
         }
 
-        //public bool IsExceptableWallAngle(float angle)
-        //{
-        //    return angle < 30 || angle > 330;
-        //}
-
         public void UpdateAdjacentWall()
         {
-            //if (!detectWalls) return;
-
             if (verifyingJump)
             {
                 NoAdjacentWall();
