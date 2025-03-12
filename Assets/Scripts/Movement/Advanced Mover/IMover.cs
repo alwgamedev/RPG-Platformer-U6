@@ -9,6 +9,6 @@ namespace RPGPlatformer.Movement
         public float Width { get; }
         public float Height { get; }
 
-        public event Action<HorizontalOrientation> UpdatedXScale;
+        public event Action<HorizontalOrientation> DirectionChanged;
     }
 }

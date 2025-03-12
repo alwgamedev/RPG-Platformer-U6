@@ -3,6 +3,7 @@ using UnityEngine;
 using RPGPlatformer.Core;
 using System.Threading.Tasks;
 using System.Threading;
+using UnityEditor.Experimental.GraphView;
 
 namespace RPGPlatformer.Movement
 {
@@ -32,24 +33,28 @@ namespace RPGPlatformer.Movement
         public Rigidbody2D Rigidbody => myRigidbody;
         public float Width => myWidth;
         public float Height => myHeight;
-        public Vector3 ColliderCenterRight => myCollider.bounds.center + 0.45f * myWidth * transform.right;
-        public Vector3 ColliderCenterLeft => myCollider.bounds.center - 0.45f * myWidth * transform.right;
+        public Vector3 ColliderCenterRight => myCollider.bounds.center + 0.45f * myWidth * (int)CurrentOrientation
+            * transform.right;
+        public Vector3 ColliderCenterLeft => myCollider.bounds.center - 0.45f * myWidth * (int)CurrentOrientation
+            * transform.right;
+        public Vector3 ColliderCenterFront => myCollider.bounds.center + 0.45f * myWidth * transform.right;
+        public Vector3 ColliderCenterBack => myCollider.bounds.center - 0.45f * myWidth * transform.right;
         public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
-        public Vector3 ColliderCenterFront => CurrentOrientation == HorizontalOrientation.right ?
-            ColliderCenterRight : ColliderCenterLeft;
-        public Vector3 ColliderCenterBack => CurrentOrientation == HorizontalOrientation.right ?
-            ColliderCenterLeft : ColliderCenterRight;
-        public RaycastHit2D RightGroundHit => rightGroundHit;
-        public RaycastHit2D LeftGroundHit => leftGroundHit;
-        public RaycastHit2D FrontGroundHit => CurrentOrientation == HorizontalOrientation.right ?
-            rightGroundHit : leftGroundHit;
-        public RaycastHit2D BackGroundHit => CurrentOrientation == HorizontalOrientation.right ?
-            leftGroundHit : rightGroundHit;
+        //public Vector3 ColliderCenterFront => CurrentOrientation == HorizontalOrientation.right ?
+        //    ColliderCenterRight : ColliderCenterLeft;
+        //public Vector3 ColliderCenterBack => CurrentOrientation == HorizontalOrientation.right ?
+        //    ColliderCenterLeft : ColliderCenterRight;
+        //public RaycastHit2D RightGroundHit => rightGroundHit;
+        //public RaycastHit2D LeftGroundHit => leftGroundHit;
+        //public RaycastHit2D FrontGroundHit => CurrentOrientation == HorizontalOrientation.right ?
+        //    rightGroundHit : leftGroundHit;
+        //public RaycastHit2D BackGroundHit => CurrentOrientation == HorizontalOrientation.right ?
+        //    leftGroundHit : rightGroundHit;
 
 
         public HorizontalOrientation CurrentOrientation { get; protected set; }
 
-        public event Action<HorizontalOrientation> UpdatedXScale;
+        public event Action<HorizontalOrientation> DirectionChanged;
         public event Action OnJump;
         public event Action OnFreefall;
         public event Action FreefallVerified;
@@ -79,6 +84,22 @@ namespace RPGPlatformer.Movement
             //important to use transform.up or if use Vector2.up we can magically slide up walls
 
             UpdateState();
+
+            //if (Input.GetKeyDown(KeyCode.U))
+            //{
+            //    transform.right = new Vector3(1, 1, 0);
+            //    //CurrentOrientation = (HorizontalOrientation)(-(int)CurrentOrientation);
+            //    //UpdatedXScale?.Invoke(CurrentOrientation);
+            //    //Debug.Log("tright: " + transform.right);
+            //    //Debug.Log("tup: " + transform.up);
+            //    //Debug.Log("tforward: " + transform.forward);
+            //    //Debug.Log("tlocalscale: " + transform.localScale);
+            //    //Debug.Log("trotation: " + transform.rotation.eulerAngles);
+            //}
+            //if (Input.GetKeyDown(KeyCode.I))
+            //{
+            //    transform.right = new Vector3(-1, 1, 0);
+            //}
         }
 
         protected virtual void UpdateState()
@@ -119,12 +140,20 @@ namespace RPGPlatformer.Movement
             Trigger(typeof(Jumping).Name);
         }
 
-        public void Move(float acceleration, float maxSpeed, Vector2 direction, bool clampXOnly)
+        public void Move(float acceleration, float maxSpeed, Vector2 direction, bool rotateToGroundDirection = true, 
+            bool clampXOnly = false)
         {
             if (direction == Vector2.zero)
             {
                 return;
             }
+
+            if (rotateToGroundDirection)
+            {
+                transform.rotation = Quaternion.LookRotation((int)CurrentOrientation * Vector3.forward,
+                (int)CurrentOrientation * direction.CCWPerp());
+            }
+
             float delta;
             Vector2 velocity = myRigidbody.linearVelocity;
             if (clampXOnly)
@@ -222,31 +251,57 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        public virtual void SetOrientation(HorizontalOrientation orientation, bool updateXScale = true)
+        public virtual void SetOrientation(HorizontalOrientation orientation, bool updateDirectionFaced, 
+            bool forceSendNotification)
         {
             if (orientation != CurrentOrientation)
             {
                 CurrentOrientation = orientation;
-                if (updateXScale)
+
+                if (updateDirectionFaced)
                 {
-                    UpdateXScale();
+                    UpdateDirectionFaced();
+                }
+
+                else if (forceSendNotification)
+                {
+                    DirectionChanged?.Invoke(CurrentOrientation);
                 }
             }
         }
 
-        public virtual void UpdateXScale()
+        public virtual bool FacingWrongDirection()
         {
-            transform.localScale = new Vector3((int)CurrentOrientation * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            UpdatedXScale.Invoke(CurrentOrientation);
+            return (int)CurrentOrientation * transform.right.x < 0;
+        }
+
+        public virtual void UpdateDirectionFaced()
+        {
+            if (FacingWrongDirection())
+            {
+                transform.rotation = Quaternion.LookRotation(-transform.forward, transform.up);
+                DirectionChanged?.Invoke(CurrentOrientation);
+            }
+            //transform.localScale = new Vector3((int)CurrentOrientation * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            //DirectionChanged.Invoke(CurrentOrientation);
+        }
+
+        public void ZeroOutRotation()
+        {
+            transform.rotation = Quaternion.LookRotation((int)CurrentOrientation * Vector3.forward, Vector3.up);
         }
 
         public Vector2 GroundDirectionVector()
         {
             if (rightGroundHit && leftGroundHit)
             {
+                //Debug.Log("'right' hit (in local coords, i.e. front hit):" + rightGroundHit.point);
+                //Debug.Log("'left' hit: " + leftGroundHit.point);
                 return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
+                //return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
+                //return (FrontGroundHit.point - BackGroundHit.point).normalized;
             }
-            return (Vector2)transform.right * (int)CurrentOrientation;
+            return (Vector2)transform.right; /* * (int)CurrentOrientation;*/
         }
 
         public void OnDeath()
@@ -270,7 +325,7 @@ namespace RPGPlatformer.Movement
 
             base.OnDestroy();
 
-            UpdatedXScale = null;
+            DirectionChanged = null;
             OnDestroyed = null;
             OnJump = null;
             OnFreefall = null;

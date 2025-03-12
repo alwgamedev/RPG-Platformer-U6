@@ -21,5 +21,10 @@ namespace RPGPlatformer.Movement
 
             return new(mover.ColliderCenterBottom, -2 * v0.y / g.y, Position);
         }
+
+        public static Vector2 CCWPerp(this Vector2 v)
+        {
+            return new Vector2(-v.y, v.x);
+        }
     }
 }

@@ -58,7 +58,7 @@ namespace RPGPlatformer.Movement
             //so that orientation is accurate (without having to do an unecessary SetOrientation every time we
             //set MoveInput)
         {
-            SetOrientation(input);
+            SetOrientation(input, !matchRotationToGround, matchRotationToGround);
 
             if (stuckAtLedge) return;
 
@@ -81,7 +81,7 @@ namespace RPGPlatformer.Movement
                             || Vector2.Distance(landingPt, currentTarget.Transform.position) <
                             Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
                         {
-                            mover.MoveGrounded();//before jump to get speed up
+                            mover.MoveGrounded(matchRotationToGround);//before jump to get speed up
                             mover.Jump();
                             return;
                         }
@@ -102,7 +102,7 @@ namespace RPGPlatformer.Movement
                 }
             }
 
-            mover.MoveGrounded();
+            mover.MoveGrounded(matchRotationToGround);
         }
 
         public void EnableJumping(bool val)
@@ -110,10 +110,11 @@ namespace RPGPlatformer.Movement
             jumpingEnabled = val;
         }
 
-        public override void SetOrientation(float input, bool updateXScale = true)
+        public override void SetOrientation(float input, bool updateDirectionFaced = true, bool forceSendNotification = false)
         {
             HorizontalOrientation oldOrientation = mover.CurrentOrientation;
-            base.SetOrientation(input, updateXScale);
+
+            base.SetOrientation(input, updateDirectionFaced, forceSendNotification);
 
             if (mover.CurrentOrientation != oldOrientation)
             {

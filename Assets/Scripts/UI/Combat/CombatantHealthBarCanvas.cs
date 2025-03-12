@@ -39,7 +39,7 @@ namespace RPGPlatformer.UI
             if (cc == null) return;
 
             parentMover = cc.Combatant.Transform.GetComponent<IMover>();
-            parentMover.UpdatedXScale += Unflip;
+            parentMover.DirectionChanged += Unflip;
 
             cc.Combatant.Health.Stat.statBar = statBar;
             tmp.text = $"{cc.Combatant.DisplayName} (Level {cc.Combatant.CombatLevel})";
@@ -151,7 +151,7 @@ namespace RPGPlatformer.UI
 
             if (parentMover != null)
             {
-                parentMover.UpdatedXScale -= Unflip;
+                parentMover.DirectionChanged -= Unflip;
             }
 
             base.OnDestroy();

@@ -138,7 +138,10 @@ namespace RPGPlatformer.Combat
             float total = 0;
             foreach (var entry in equipSlots)
             {
-                total += entry.Value.EquipppedItem?.EquippableItemData.DefenseBonus ?? 0;
+                if (entry.Value != null)
+                {
+                    total += entry.Value.EquipppedItem?.EquippableItemData.DefenseBonus ?? 0;
+                }
             }
             return total;
         }

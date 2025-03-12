@@ -38,7 +38,7 @@ namespace RPGPlatformer.Effects
             if (movementController != null)
             {
                 currentOrientation = movementController.CurrentOrientation;
-                movementController.Mover.UpdatedXScale += (value) => currentOrientation = value;
+                movementController.Mover.DirectionChanged += (value) => currentOrientation = value;
             }
         }
 

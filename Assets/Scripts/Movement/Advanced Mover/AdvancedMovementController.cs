@@ -9,6 +9,7 @@ namespace RPGPlatformer.Movement
     public class AdvancedMovementController : MonoBehaviour, IMovementController
     {
         [SerializeField] protected bool detectWalls;
+        [SerializeField] protected bool matchRotationToGround;
 
         protected AdvancedMover mover;
         protected AdvancedMovementStateManager movementManager;
@@ -72,6 +73,7 @@ namespace RPGPlatformer.Movement
             movementManager.Configure();
 
             movementManager.StateGraph.grounded.OnEntry += OnGroundedEntry;
+            //movementManager.StateGraph.grounded.OnExit += OnGroundedExit;
             movementManager.StateGraph.jumping.OnEntry += OnJumpingEntry;
             movementManager.StateGraph.freefall.OnEntry += OnFreefallEntry;
             movementManager.StateGraph.freefall.OnExit += OnFreefallExit;
@@ -122,13 +124,12 @@ namespace RPGPlatformer.Movement
 
         public void FaceTarget(Vector2 target)
         {
-            SetOrientation(Mathf.Sign(target.x - transform.position.x));
+            SetOrientation(Mathf.Sign(target.x - transform.position.x), true);
         }
 
-        public virtual void SetOrientation(float input, bool updateXScale = true)
+        public virtual void SetOrientation(float input, bool updateDirectionFaced = true, bool forceSendNotification = false)
         {
-            input = Mathf.Sign(input);
-            mover.SetOrientation((HorizontalOrientation)input, updateXScale);
+            mover.SetOrientation((HorizontalOrientation)Mathf.Sign(input), updateDirectionFaced, forceSendNotification);
         }
 
         public virtual void Stop()
@@ -210,6 +211,14 @@ namespace RPGPlatformer.Movement
             CurrentMoveAction = GroundedMoveAction;
         }
 
+        //protected virtual void OnGroundedExit()
+        //{
+        //    if (matchRotationToGround)
+        //    {
+        //        mover.ZeroOutRotation();
+        //    }
+        //}
+
         protected virtual void OnJumpingEntry()
         {
             CurrentMoveAction = JumpingMoveAction;
@@ -228,25 +237,25 @@ namespace RPGPlatformer.Movement
 
         protected void OnFreefallExit()
         {
-            mover.UpdateXScale();
+            mover.UpdateDirectionFaced();
         }
 
         protected virtual void GroundedMoveAction(float input)
         {
-            SetOrientation(input);
-            mover.MoveGrounded();
+            SetOrientation(input, !matchRotationToGround, matchRotationToGround);
+            mover.MoveGrounded(matchRotationToGround);
         }
 
         protected virtual void JumpingMoveAction(float input)
         {
-            SetOrientation(input);
+            SetOrientation(input, true);
             mover.MoveFreefall(mover.CurrentOrientation);
         }
 
         protected virtual void FreefallMoveAction(float input)
         {
             SetOrientation(input, false);
-            mover.MoveFreefall((HorizontalOrientation)input);
+            mover.MoveFreefall(mover.CurrentOrientation);
         }
 
 

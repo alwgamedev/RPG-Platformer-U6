@@ -13,7 +13,7 @@ namespace RPGPlatformer.Core
             Mover mover = GetComponentInParent<Mover>();
             if (mover)
             {
-                mover.UpdatedXScale += FlipSides;
+                mover.DirectionChanged += FlipSides;
             }
         }
 
