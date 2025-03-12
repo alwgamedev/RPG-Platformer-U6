@@ -47,6 +47,11 @@ namespace RPGPlatformer.Movement
             mover = aiMover;
         }
 
+        //protected override void InitializeMoveActions()
+        //{
+        //    GroundedMoveAction = AIGroundedMoveAction;
+        //}
+
         protected override void ConfigureWallDetection()
         {
             base.ConfigureWallDetection();
@@ -58,7 +63,7 @@ namespace RPGPlatformer.Movement
             //so that orientation is accurate (without having to do an unecessary SetOrientation every time we
             //set MoveInput)
         {
-            SetOrientation(input, !matchRotationToGround, matchRotationToGround);
+            SetOrientation(input);
 
             if (stuckAtLedge) return;
 
@@ -81,7 +86,7 @@ namespace RPGPlatformer.Movement
                             || Vector2.Distance(landingPt, currentTarget.Transform.position) <
                             Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
                         {
-                            mover.MoveGrounded(matchRotationToGround);//before jump to get speed up
+                            mover.MoveGrounded(matchRotationToGround);
                             mover.Jump();
                             return;
                         }

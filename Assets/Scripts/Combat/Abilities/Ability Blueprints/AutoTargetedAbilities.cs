@@ -68,17 +68,18 @@ namespace RPGPlatformer.Combat
 
         public static IHealth TargetInFront(ICombatant combatant)//almost all melee abilities will use this
         {
-            Transform transform = combatant.Transform;
+            //Transform transform = combatant.Transform;
             float radius = combatant.EquippedWeapon.WeaponStats.AttackRange / 2;
-            Vector2 center = transform.position + radius * Mathf.Sign(transform.localScale.x) * transform.right;
+            Vector2 center = combatant.Transform.position 
+                + radius /** Mathf.Sign(combatant.Transform.localScale.x)*/ * combatant.Transform.right;
             return combatant.FindTarget(center, radius);
         }
 
         public static IHealth TargetCentered(ICombatant combatant)
         {
-            Transform transform = combatant.Transform;
+            //Transform transform = combatant.Transform;
             float radius = combatant.EquippedWeapon.WeaponStats.AttackRange;
-            return combatant.FindTarget(transform.position, radius);
+            return combatant.FindTarget(combatant.Transform.position, radius);
         }
 
         public static IHealth TargetAimPosition(ICombatController controller)
@@ -110,15 +111,6 @@ namespace RPGPlatformer.Combat
             OnExecute = async (controller, target) =>
             await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
                         BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
-            //{
-            //    //IHealth target = AutoTarget?.Invoke(controller);
-            //    controller.Combatant.CheckIfTargetInRange(target, out bool result);
-            //    if (result)
-            //    {
-            //        await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant), 
-            //            BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
-            //    }
-            //};
         }
     }
 

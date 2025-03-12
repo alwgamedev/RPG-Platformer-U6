@@ -134,11 +134,7 @@ namespace RPGPlatformer.UI
         {
             if (parentMover == null) return;
 
-            //meaning either your parent is backwards (-1), and you're with it (1), or you're backwards (-1)
-            //relative to your parent (1)
-            //we should just using the orientation sent by UpdatedXScale,
-            //but for some reason this was not always reliable
-            if (Mathf.Sign(parentMover.Transform.localScale.x) * Mathf.Sign(transform.localScale.x) < 0)
+            if (parentMover.Transform.right.x * transform.localScale.x < 0)
             {
                 transform.localScale = new(-transform.localScale.x, transform.localScale.y,
                 transform.localScale.z);

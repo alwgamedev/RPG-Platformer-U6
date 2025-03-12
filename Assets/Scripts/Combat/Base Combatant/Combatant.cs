@@ -71,14 +71,35 @@ namespace RPGPlatformer.Combat
             inventory = GetComponent<InventoryManager>();
             dropSpawner = GetComponent<DropSpawner>();
 
-            equipSlots = new()
+            equipSlots = new();
+            
+            if (headSlot != null)
             {
-                [EquipmentSlot.Head] = headSlot,
-                [EquipmentSlot.Torso] = torsoSlot,
-                [EquipmentSlot.Legs] = legsSlot,
-                [EquipmentSlot.Mainhand] = mainhandSlot,
-                [EquipmentSlot.Offhand] = offhandSlot
-            };
+                equipSlots[EquipmentSlot.Head] = headSlot;
+            }
+            if (torsoSlot != null)
+            {
+                equipSlots[EquipmentSlot.Torso] = torsoSlot;
+            }
+            if (legsSlot != null)
+            {
+                equipSlots[EquipmentSlot.Legs] = legsSlot;
+            }
+            if (mainhandSlot != null)
+            {
+                equipSlots[EquipmentSlot.Mainhand] = mainhandSlot;
+            }
+            if (offhandSlot != null)
+            {
+                equipSlots[EquipmentSlot.Offhand] = offhandSlot;
+            }
+            //{
+            //    [EquipmentSlot.Head] = headSlot,
+            //    [EquipmentSlot.Torso] = torsoSlot,
+            //    [EquipmentSlot.Legs] = legsSlot,
+            //    [EquipmentSlot.Mainhand] = mainhandSlot,
+            //    [EquipmentSlot.Offhand] = offhandSlot
+            //};
 
             InitializeWeaponSOs();
         }
@@ -103,7 +124,10 @@ namespace RPGPlatformer.Combat
             float total = 0;
             foreach (var entry in equipSlots)
             {
-                total += entry.Value.EquipppedItem?.EquippableItemData.DamageBonus ?? 0;
+                if (entry.Value != null)
+                {
+                    total += entry.Value.EquipppedItem?.EquippableItemData.DamageBonus ?? 0;
+                }
             }
 
             if (equippedWeapon != null)
@@ -234,7 +258,7 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public void InitializeWeaponSOs()
+        public virtual void InitializeWeaponSOs()
         {
             defaultWeapon = CreateWeaponFromSO(defaultWeaponSO);
             unarmedWeapon = CreateWeaponFromSO(unarmedWeaponSO);
@@ -251,7 +275,7 @@ namespace RPGPlatformer.Combat
 
         public bool CanEquip(EquippableItem item)
         {
-            if (item == null || !equipSlots.ContainsKey(item.EquippableItemData.Slot))
+            if (item == null || !equipSlots.TryGetValue(item.EquippableItemData.Slot, out var slot) || slot == null)
             {
                 return false;
             }
@@ -305,9 +329,9 @@ namespace RPGPlatformer.Combat
 
         public void UnequipItem(EquipmentSlot slot, bool handleUnequippedItem = true)
         {
-            if (!equipSlots.ContainsKey(slot)) return;
+            equipSlots.TryGetValue(slot, out var equipSlot);
+            if (equipSlot == null) return;
 
-            var equipSlot = equipSlots[slot];
             var oldItem = equipSlot.EquipppedItem;
             var newItem = slot == EquipmentSlot.Mainhand ? unarmedWeapon : null;
             equipSlot.EquipItem(newItem);
@@ -397,7 +421,14 @@ namespace RPGPlatformer.Combat
 
         public bool CanAttack(IHealth health)
         {
-            if (health == null || health.IsDead) return false;
+            Debug.Log("Checking if can attack");
+            if (health == null || health.IsDead)
+            {
+                Debug.Log("target is null? " + health == null);
+                return false;
+            }
+            var d = Vector3.Distance(health.Transform.position, transform.position);
+            Debug.Log("distance: " + d);
             return CanAttack(Vector3.Distance(health.Transform.position, transform.position));
         }
 
@@ -410,6 +441,7 @@ namespace RPGPlatformer.Combat
         {
             if (!CanAttack(target))
             {
+                Debug.Log("target not in range");
                 OnTargetingFailed?.Invoke();
                 return false;
             }
@@ -419,6 +451,7 @@ namespace RPGPlatformer.Combat
         public virtual IHealth FindTarget(Vector2 position, float searchRadius)
         {
             Collider2D enemyCollider = Physics2D.OverlapCircle(position, searchRadius, LayerMask.GetMask(targetLayer));
+
             if (enemyCollider)
             {
                 if (enemyCollider.TryGetComponent(out IHealth health))

@@ -103,7 +103,10 @@ namespace RPGPlatformer.AIControl
 
         public virtual void BeginPatrol() { }
 
-        public virtual void PatrolBehavior() { }
+        public virtual void PatrolBehavior() 
+        {
+            ScanForTarget(null);
+        }
 
         //public void DefaultPatrolBehavior()
         //{
@@ -220,7 +223,7 @@ namespace RPGPlatformer.AIControl
                 return;
             }
 
-            if (d < CombatController.MinimumCombatDistance)
+            if (d < CombatController.AICombatant.MinimumCombatDistance)
             {
                 OnUpdate += MaintainMinimumCombatDistance;
             }
@@ -233,7 +236,7 @@ namespace RPGPlatformer.AIControl
                 OnUpdate -= MaintainMinimumCombatDistance;
                 return;
             }
-            else if (d < CombatController.MinimumCombatDistance)
+            else if (d < CombatController.AICombatant.MinimumCombatDistance)
             {
                 MovementController.MoveAwayFrom(CombatTarget.Transform.position);
             }

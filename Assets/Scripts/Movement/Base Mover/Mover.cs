@@ -251,7 +251,7 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        public virtual void SetOrientation(HorizontalOrientation orientation, bool updateDirectionFaced, 
+        public virtual void SetOrientation(HorizontalOrientation orientation, bool updateDirectionFaced, bool useLocalCoords,
             bool forceSendNotification)
         {
             if (orientation != CurrentOrientation)
@@ -260,7 +260,7 @@ namespace RPGPlatformer.Movement
 
                 if (updateDirectionFaced)
                 {
-                    UpdateDirectionFaced();
+                    UpdateDirectionFaced(useLocalCoords);
                 }
 
                 else if (forceSendNotification)
@@ -275,11 +275,20 @@ namespace RPGPlatformer.Movement
             return (int)CurrentOrientation * transform.right.x < 0;
         }
 
-        public virtual void UpdateDirectionFaced()
+        public virtual void UpdateDirectionFaced(bool useLocalCoords)
         {
             if (FacingWrongDirection())
             {
-                transform.rotation = Quaternion.LookRotation(-transform.forward, transform.up);
+                if (useLocalCoords)
+                {
+                    transform.rotation = Quaternion.LookRotation(-transform.forward, transform.up);
+                }
+                else
+                {
+                    //because for some reason using local coords applies a small (.001) rotation around z-axis every time
+                    //so I would only use that for movers that are rotating constantly to match ground angle
+                    transform.rotation = Quaternion.LookRotation((int)CurrentOrientation * Vector3.forward, Vector3.up);
+                }
                 DirectionChanged?.Invoke(CurrentOrientation);
             }
             //transform.localScale = new Vector3((int)CurrentOrientation * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
@@ -295,11 +304,7 @@ namespace RPGPlatformer.Movement
         {
             if (rightGroundHit && leftGroundHit)
             {
-                //Debug.Log("'right' hit (in local coords, i.e. front hit):" + rightGroundHit.point);
-                //Debug.Log("'left' hit: " + leftGroundHit.point);
                 return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
-                //return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
-                //return (FrontGroundHit.point - BackGroundHit.point).normalized;
             }
             return (Vector2)transform.right; /* * (int)CurrentOrientation;*/
         }

@@ -12,7 +12,6 @@ namespace RPGPlatformer.Combat
 {
     [RequireComponent(typeof(TickTimer))]
     [RequireComponent(typeof(AnimationControl))]
-    [RequireComponent(typeof(Combatant))]
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
     public class CombatController : MonoBehaviour, ICombatController, IAbilityBarOwner, IPausable
     {

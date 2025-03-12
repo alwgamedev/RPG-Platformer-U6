@@ -306,6 +306,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4767772116342306341, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      propertyPath: m_labelHash
+      value: 2.9092094e-34
+      objectReference: {fileID: 0}
     - target: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Name
       value: SH Patroller
@@ -552,6 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectWalls: 0
+  matchRotationToGround: 0
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 2.5
@@ -569,6 +574,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pursuitRange: 8
+  suspicionTime: 5
+  hangTime: 2
 --- !u!114 &2807143126115891349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,7 +631,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba2a4521b396f64c94d5e03b79e8579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RandomizeStartValue: 0
+  tickLength: 0.06
+  randomizeStartValue: 0
 --- !u!114 &8760684093804332189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663,7 +671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   takeDamageAutomatically: 0
-  takeDefaultValueOnStart: 0
+  takeDefaultValueOnStart: 1
   findStatBarInChildren: 0
   stat:
     minValue: 0
@@ -725,8 +733,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressionData:
-    health:
-      level: 3
+    fitness:
+      level: 1
       xp: 0
     defense:
       level: 3
@@ -737,8 +745,8 @@ MonoBehaviour:
     melee:
       level: 3
       xp: 0
-    range:
-      level: 3
+    ranged:
+      level: 1
       xp: 0
   canGainXP: 0
 --- !u!114 &-197496574333184021

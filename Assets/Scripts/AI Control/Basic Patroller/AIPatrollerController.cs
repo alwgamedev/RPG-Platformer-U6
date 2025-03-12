@@ -78,6 +78,8 @@ namespace RPGPlatformer.AIControl
             StateBehavior[stateManager.StateGraph.patrol] = patroller.PatrolBehavior;
             StateBehavior[stateManager.StateGraph.pursuit] = patroller.PursuitBehavior;
             StateBehavior[stateManager.StateGraph.attack] = null;
+
+            stateMachine.StateChange += s => Debug.Log(s.GetType().Name);
         }
 
         public void PerformStateBehavior()
@@ -106,12 +108,6 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void OnPatrolEntry()
         {
-            //if (forgetCombatTargetOnPatrolEntry && patroller.CombatTarget != null)
-            //{
-            //    patroller.SetCombatTarget(null);
-            //    //???? but this triggers patrol again and you get stuck in a loop?
-            //}
-
             patroller.MovementController.SetRunning(false);
             patroller.BeginPatrol();
         }

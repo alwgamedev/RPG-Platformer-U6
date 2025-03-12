@@ -9,6 +9,7 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected int combatXPReward = 50;
 
         public DamageTakenTracker damageTracker;
+        public float MinimumCombatDistance { get; protected set; }
 
         protected override void Awake()
         {
@@ -21,6 +22,12 @@ namespace RPGPlatformer.Combat
         {
             damageTracker.RecordDamage(damage, damageDealer);
             return base.HandleHealthChange(damage, damageDealer);
+        }
+
+        public override void InitializeWeaponSOs()
+        {
+            base.InitializeWeaponSOs();
+            MinimumCombatDistance = unarmedWeapon?.WeaponStats.AttackRange / 2 ?? 0.35f;
         }
 
         public override void OnDeath()

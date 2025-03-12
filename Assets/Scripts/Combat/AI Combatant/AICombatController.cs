@@ -12,12 +12,13 @@ namespace RPGPlatformer.Combat
         public IHealth currentTarget;
 
         public CombatStateManager CombatManager => combatManager;
-        public virtual float MinimumCombatDistance 
-            => Mathf.Min(0.35f, combatant.EquippedWeapon.WeaponStats.AttackRange / 2);
+        public AICombatant AICombatant { get; protected set; }
 
         protected override void Awake()
         {
             base.Awake();
+
+            AICombatant = (AICombatant)combatant;
         }
 
         protected override void Start()
@@ -36,6 +37,7 @@ namespace RPGPlatformer.Combat
             FaceAimPosition();
             if (combatant.TargetInRange(currentTarget))
             {
+                Debug.Log("Attacking");
                 RunAutoAbilityCycle(false);
             }
         }

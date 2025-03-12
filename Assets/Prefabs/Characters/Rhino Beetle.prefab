@@ -19,12 +19,12 @@ GameObject:
   - component: {fileID: 1594106650238190481}
   - component: {fileID: 5072483244934643410}
   - component: {fileID: 4232548837455892979}
-  - component: {fileID: 8152595822272898028}
   - component: {fileID: 7909152550555218581}
   - component: {fileID: 8452712315555511255}
   - component: {fileID: 8600562904420163904}
   - component: {fileID: 2525433368886563850}
-  - component: {fileID: 6259811839974888491}
+  - component: {fileID: 4129447919136715259}
+  - component: {fileID: 5417805890505513155}
   m_Layer: 6
   m_Name: Rhino Beetle
   m_TagString: Enemy
@@ -83,7 +83,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 65
+  m_Mass: 90
   m_LinearDamping: 0
   m_AngularDamping: 0.5
   m_GravityScale: 1
@@ -126,9 +126,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathForce: {x: 0, y: 0}
   deathTorque: 0
-  acceleration: 50
+  acceleration: 150
   freefallMovementAccelerationFactor: 0.8
-  runSpeed: 2
+  runSpeed: 2.3
   walkSpeed: 1
   maxNumJumps: 0
   jumpForce: 400
@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectWalls: 0
+  matchRotationToGround: 1
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 3
@@ -240,45 +241,6 @@ MonoBehaviour:
     replenishRate: 0
     autoReplenish: 0
     statBar: {fileID: 0}
---- !u!114 &8152595822272898028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4640224479810571276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be17c22abddbfb049a9220135a5d71a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayName: Rhino Beetle
-  targetLayer: Player
-  targetTag: Player
-  headSlot: {fileID: 0}
-  torsoSlot: {fileID: 0}
-  legsSlot: {fileID: 0}
-  mainhandSlot: {fileID: 7147231459504823077}
-  offhandSlot: {fileID: 0}
-  mainhandElbow: {fileID: 0}
-  chestBone: {fileID: 0}
-  defaultWeaponSO: {fileID: 0}
-  unarmedWeaponSO: {fileID: 11400000, guid: ea5f665753fe54c42a75f6e2bc8921ba, type: 2}
-  stamina:
-    minValue: 0
-    maxValue: 100
-    defaultValue: 100
-    replenishRate: 0.2
-    autoReplenish: 0
-    statBar: {fileID: 0}
-  wrath:
-    minValue: 0
-    maxValue: 100
-    defaultValue: 0
-    replenishRate: 9
-    autoReplenish: 0
-    statBar: {fileID: 0}
-  useAutoCalculatedHealthPoints: 0
 --- !u!114 &7909152550555218581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,7 +289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pursuitRange: 4
   suspicionTime: 5
-  hangTime: 2
+  hangTime: 1
   leftBound: {fileID: 0}
   rightBound: {fileID: 0}
   patrolDestinationTolerance: 0.1
@@ -344,7 +306,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerEnemy: 1
---- !u!70 &6259811839974888491
+--- !u!114 &4129447919136715259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4640224479810571276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0951bec2fd809e841941820c0e074e77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayName: Rhino Beetle
+  targetLayer: Player
+  targetTag: Player
+  headSlot: {fileID: 0}
+  torsoSlot: {fileID: 0}
+  legsSlot: {fileID: 0}
+  mainhandSlot: {fileID: 7147231459504823077}
+  offhandSlot: {fileID: 0}
+  mainhandElbow: {fileID: 0}
+  chestBone: {fileID: 0}
+  defaultWeaponSO: {fileID: 0}
+  unarmedWeaponSO: {fileID: 11400000, guid: ea5f665753fe54c42a75f6e2bc8921ba, type: 2}
+  stamina:
+    minValue: 0
+    maxValue: 100
+    defaultValue: 100
+    replenishRate: 0.2
+    autoReplenish: 0
+    statBar: {fileID: 0}
+  wrath:
+    minValue: 0
+    maxValue: 100
+    defaultValue: 0
+    replenishRate: 0
+    autoReplenish: 0
+    statBar: {fileID: 0}
+  useAutoCalculatedHealthPoints: 0
+  combatXPReward: 5
+--- !u!70 &5417805890505513155
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -378,8 +380,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0008256442, y: 0.0047274237}
-  m_Size: {x: 1.1928638, y: 0.84365046}
+  m_Offset: {x: 0.0235386, y: 0.10289598}
+  m_Size: {x: 1.1190878, y: 0.9271549}
   m_Direction: 1
 --- !u!1 &6277706183260746356
 GameObject:
