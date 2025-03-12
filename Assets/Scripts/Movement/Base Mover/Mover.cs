@@ -3,7 +3,6 @@ using UnityEngine;
 using RPGPlatformer.Core;
 using System.Threading.Tasks;
 using System.Threading;
-using UnityEditor.Experimental.GraphView;
 
 namespace RPGPlatformer.Movement
 {
@@ -14,8 +13,10 @@ namespace RPGPlatformer.Movement
 
     public class Mover : StateDriver, IMover
     {
-        [SerializeField] Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
-        [SerializeField] float deathTorque = 10;
+        //[SerializeField] bool unfreezeRotationOnDeath;
+        //[SerializeField] Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
+        //[SerializeField] float deathTorque = 10;
+        //[SerializeField] Collider2D spriteCollider;
 
         protected Collider2D myCollider;
         protected Rigidbody2D myRigidbody;
@@ -63,7 +64,12 @@ namespace RPGPlatformer.Movement
         protected virtual void Awake()
         {
             myCollider = GetComponent<Collider2D>();
+            //myCollider = spriteCollider;
             myRigidbody = GetComponent<Rigidbody2D>();
+            //if (spriteCollider != null && spriteCollider != myCollider)
+            //{
+            //    spriteCollider.enabled = false;
+            //}
 
             CurrentOrientation = HorizontalOrientation.right;
 
@@ -295,10 +301,10 @@ namespace RPGPlatformer.Movement
             //DirectionChanged.Invoke(CurrentOrientation);
         }
 
-        public void ZeroOutRotation()
-        {
-            transform.rotation = Quaternion.LookRotation((int)CurrentOrientation * Vector3.forward, Vector3.up);
-        }
+        //public void ZeroOutRotation()
+        //{
+        //    transform.rotation = Quaternion.LookRotation((int)CurrentOrientation * Vector3.forward, Vector3.up);
+        //}
 
         public Vector2 GroundDirectionVector()
         {
@@ -309,17 +315,27 @@ namespace RPGPlatformer.Movement
             return (Vector2)transform.right; /* * (int)CurrentOrientation;*/
         }
 
+        //could move this to an animation event instead
         public void OnDeath()
         {
+            //if (spriteCollider != null)
+            //{
+            //    spriteCollider.enabled = true;
+            //}
             myRigidbody.freezeRotation = false;
-            myRigidbody.AddForce(-(int)CurrentOrientation * deathForce.x * Vector2.right
-                + deathForce.y * Vector2.up, ForceMode2D.Impulse);
-            myRigidbody.AddTorque((int)CurrentOrientation * deathTorque, ForceMode2D.Impulse);
+            myRigidbody.AddTorque(-5);
+            //myRigidbody.AddForce(deathForce, ForceMode2D.Impulse);
+            //myRigidbody.AddRelativeForce(deathForce);
+            //myRigidbody.AddTorque((int)CurrentOrientation * deathTorque, ForceMode2D.Impulse);
         }
 
         public void OnRevival()
         {
             myRigidbody.freezeRotation = true;
+            //if (spriteCollider != null)
+            //{
+            //    spriteCollider.enabled = false;
+            //}
             myRigidbody.rotation = 0;
             transform.position += myHeight / 8 * Vector3.up;
         }

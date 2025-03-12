@@ -77,9 +77,7 @@ namespace RPGPlatformer.AIControl
             StateBehavior[stateManager.StateGraph.suspicion] = patroller.SuspicionBehavior;
             StateBehavior[stateManager.StateGraph.patrol] = patroller.PatrolBehavior;
             StateBehavior[stateManager.StateGraph.pursuit] = patroller.PursuitBehavior;
-            StateBehavior[stateManager.StateGraph.attack] = null;
-
-            stateMachine.StateChange += s => Debug.Log(s.GetType().Name);
+            StateBehavior[stateManager.StateGraph.attack] = patroller.AttackBehavior;
         }
 
         public void PerformStateBehavior()
@@ -125,7 +123,8 @@ namespace RPGPlatformer.AIControl
         protected virtual void OnPursuitExit()
         {
             patroller.MovementController.SetRunning(false);
-            patroller.MovementController.Stop();
+            patroller.MovementController.MoveInput = 0;
+            //patroller.MovementController.HardStop();
         }
 
         protected virtual void OnAttackEntry()

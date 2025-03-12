@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using RPGPlatformer.UI;
+using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.Combat
 {
@@ -14,28 +15,12 @@ namespace RPGPlatformer.Combat
         public bool IsDead { get; private set; }
         public IDamageDealer Killer { get; private set; }
         public Transform Transform => transform; 
+        public float TargetingTolerance { get; private set; }
         public ReplenishableStat Stat => stat;
 
         public event Action<float, IDamageDealer> HealthChanged;
         public event Action<float, bool> OnStunned;//signature is (duration, freezeAnimation)
         public event Action<IDamageDealer> OnDeath;
-
-        //private void Awake()
-        //{
-        //    if (CompareTag("Player"))
-        //    {
-        //        stat.statBar = GameObject.Find("Player Health Bar").GetComponent<StatBarItem>();
-        //    }
-        //    else
-        //    {
-        //        stat.statBar = GetComponentInChildren<StatBarItem>();
-        //    }
-        //}
-
-        //private void OnEnable()
-        //{
-
-        //}
 
         private void Start()
         {
@@ -52,6 +37,11 @@ namespace RPGPlatformer.Combat
             if (takeDefaultValueOnStart)
             {
                 stat.TakeDefaultValue();
+            }
+
+            if (TryGetComponent(out IMover mover))
+            {
+                TargetingTolerance = mover.Width / 2;
             }
         }
 

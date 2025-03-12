@@ -37,7 +37,6 @@ namespace RPGPlatformer.Combat
             FaceAimPosition();
             if (combatant.TargetInRange(currentTarget))
             {
-                Debug.Log("Attacking");
                 RunAutoAbilityCycle(false);
             }
         }

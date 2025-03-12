@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1438071659803653533, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1444275369941910275, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -436,18 +440,6 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 85
       objectReference: {fileID: 0}
-    - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
-      propertyPath: m_LinearDrag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
-      propertyPath: m_LinearDamping
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
-      propertyPath: m_AngularDamping
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7914369839194740457, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -491,6 +483,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7236796960146519125, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
     - {fileID: 3827042375074102643, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+    - {fileID: 6178527847001827783, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -552,6 +545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectWalls: 1
+  matchRotationToGround: 0
 --- !u!114 &489266092333141542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -637,8 +631,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68597781190fc664c9df98261ab08878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathForce: {x: 120, y: 120}
-  deathTorque: 10
   acceleration: 50
   freefallMovementAccelerationFactor: 0.8
   runSpeed: 3

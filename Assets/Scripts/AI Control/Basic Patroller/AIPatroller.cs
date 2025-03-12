@@ -14,12 +14,14 @@ namespace RPGPlatformer.AIControl
         [SerializeField] protected float suspicionTime = 5;
         [SerializeField] protected float hangTime = 2;//e.g. to stop for a few seconds btwn patrol destinations
 
-        protected bool TriggerPursuitSubscribedToCombatantTargetingFailed;
+        protected bool correctingCombatDistance;
+        //protected bool TriggerPursuitSubscribedToCombatantTargetingFailed;
         protected float suspicionTimer;
         protected float hangTimer;
         protected Vector2 patrolDestination;
         protected Action OnUpdate;
 
+        public float TargetingTolerance { get; protected set; }
         public AIMovementController MovementController { get; protected set; }
         public AICombatController CombatController { get; protected set; }
 
@@ -48,6 +50,9 @@ namespace RPGPlatformer.AIControl
             {
                 return;
             }
+
+            TargetingTolerance = CombatController.Combatant.Health.TargetingTolerance;
+
             if (CombatController.CombatManager != null)
             {
                 OnCombatManagerConfigured();
@@ -65,7 +70,7 @@ namespace RPGPlatformer.AIControl
 
         protected void OnCombatManagerConfigured()
         {
-            CombatController.CombatManager.OnWeaponTick += CheckMinimumCombatDistance;
+            //CombatController.CombatManager.OnWeaponTick += CheckMinimumCombatDistance;
             CombatController.CombatManagerConfigured -= OnCombatManagerConfigured;
         }
 
@@ -163,6 +168,7 @@ namespace RPGPlatformer.AIControl
             if (!TryGetDistance(CombatTarget, out float distance) || distance > pursuitRange)
             {
                 Trigger(typeof(Suspicion).Name);
+                return;
             }
             else if (CombatController != null && CombatController.Combatant.CanAttack(distance))
             {
@@ -183,10 +189,26 @@ namespace RPGPlatformer.AIControl
             }
         }
 
+        public void AttackBehavior()
+        {
+            if (!TryGetDistance(CombatTarget, out var d))
+            {
+                TriggerSuspicion();
+            }
+            else if (!CombatController.Combatant.CanAttack(d))
+            {
+                TriggerPursuit();
+            }
+            else
+            {
+                MaintainMinimumCombatDistance(d);
+            }
+        }
+
         public void StartAttacking()
         {
             if (CombatController == null) return;
-            SubscribeTriggerPursuitToCombatantTargetingFailed(true);
+            //SubscribeTriggerPursuitToCombatantTargetingFailed(true);
             CombatController.StartAttacking();
 
         }
@@ -194,64 +216,75 @@ namespace RPGPlatformer.AIControl
         public void StopAttacking()
         {
             if (CombatController == null) return;
-            SubscribeTriggerPursuitToCombatantTargetingFailed(false);
+            //SubscribeTriggerPursuitToCombatantTargetingFailed(false);
             CombatController.StopAttacking();
         }
 
-        protected void SubscribeTriggerPursuitToCombatantTargetingFailed(bool val)
+        //protected void SubscribeTriggerPursuitToCombatantTargetingFailed(bool val)
+        //{
+        //    if (val == TriggerPursuitSubscribedToCombatantTargetingFailed) return;
+
+        //    if (val)
+        //    {
+        //        CombatController.Combatant.OnTargetingFailed += TriggerPursuit;
+        //        TriggerPursuitSubscribedToCombatantTargetingFailed = true;
+        //    }
+        //    else
+        //    {
+        //        CombatController.Combatant.OnTargetingFailed -= TriggerPursuit;
+        //        TriggerPursuitSubscribedToCombatantTargetingFailed = false;
+        //    }
+        //}
+
+        //public void CheckMinimumCombatDistance()
+        //{
+        //    OnUpdate -= MaintainMinimumCombatDistance;
+
+        //    if (!TryGetDistance(CombatTarget, out var d))
+        //    {
+        //        return;
+        //    }
+
+        //    if (d < CombatController.AICombatant.MinimumCombatDistance)
+        //    {
+        //        OnUpdate += MaintainMinimumCombatDistance;
+        //    }
+        //}
+
+        public void MaintainMinimumCombatDistance(float currentDistance)
         {
-            if (val == TriggerPursuitSubscribedToCombatantTargetingFailed) return;
-
-            if (val)
+            if (currentDistance < CombatController.AICombatant.MinimumCombatDistance)
             {
-                CombatController.Combatant.OnTargetingFailed += TriggerPursuit;
-                TriggerPursuitSubscribedToCombatantTargetingFailed = true;
-            }
-            else
-            {
-                CombatController.Combatant.OnTargetingFailed -= TriggerPursuit;
-                TriggerPursuitSubscribedToCombatantTargetingFailed = false;
-            }
-        }
-
-        public void CheckMinimumCombatDistance()
-        {
-            OnUpdate -= MaintainMinimumCombatDistance;
-
-            if (!TryGetDistance(CombatTarget, out var d))
-            {
-                return;
-            }
-
-            if (d < CombatController.AICombatant.MinimumCombatDistance)
-            {
-                OnUpdate += MaintainMinimumCombatDistance;
-            }
-        }
-
-        public void MaintainMinimumCombatDistance()
-        {
-            if (!TryGetDistance(CombatTarget, out var d))
-            {
-                OnUpdate -= MaintainMinimumCombatDistance;
-                return;
-            }
-            else if (d < CombatController.AICombatant.MinimumCombatDistance)
-            {
+                correctingCombatDistance = true;
                 MovementController.MoveAwayFrom(CombatTarget.Transform.position);
             }
-            else
+            else if (correctingCombatDistance)
             {
+                correctingCombatDistance = false;
                 MovementController.MoveInput = 0;
-                OnUpdate -= MaintainMinimumCombatDistance;
             }
+            //if (!TryGetDistance(CombatTarget, out var d))
+            //{
+            //    OnUpdate -= MaintainMinimumCombatDistance;
+            //    return;
+            //}
+            //else if (d < CombatController.AICombatant.MinimumCombatDistance)
+            //{
+            //    MovementController.MoveAwayFrom(CombatTarget.Transform.position);
+            //}
+            //else
+            //{
+            //    MovementController.MoveInput = 0;
+            //    OnUpdate -= MaintainMinimumCombatDistance;
+            //}
         }
 
         public bool TryGetDistance(IHealth target, out float distance)
         {
             if (target != null && !target.IsDead)
             {
-                distance = Vector3.Distance(transform.position, target.Transform.position);
+                distance = Vector3.Distance(transform.position, target.Transform.position) 
+                    - target.TargetingTolerance - TargetingTolerance;
                 return true;
             }
             distance = Mathf.Infinity;

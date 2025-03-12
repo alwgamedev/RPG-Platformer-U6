@@ -87,6 +87,18 @@ namespace RPGPlatformer.Movement
             inputDisabled = false;
         }
 
+        public override void OnDeath()
+        {
+            DisableInput();
+            base.OnDeath();
+        }
+
+        public override void OnRevival()
+        {
+            base.OnRevival();
+            EnableInput();
+        }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();

@@ -372,11 +372,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Mass
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
-      propertyPath: m_AngularDamping
-      value: 0
+      value: 85
       objectReference: {fileID: 0}
     - target: {fileID: 7914369839194740457, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Layer
@@ -535,8 +531,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 131665986c071fe42af6f4959aff4e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathForce: {x: 120, y: 120}
-  deathTorque: 10
+  unfreezeRotationOnDeath: 1
+  deathForce: {x: 0, y: 0}
+  deathTorque: 0
   acceleration: 100
   freefallMovementAccelerationFactor: 0.8
   runSpeed: 2.4

@@ -14,10 +14,12 @@ namespace RPGPlatformer.Movement
         protected AdvancedMover mover;
         protected AdvancedMovementStateManager movementManager;
 
-        //protected Action<float> GroundedMoveAction;
+        //protected bool disabled;
         protected Action<float> CurrentMoveAction;
         protected Action OnFixedUpdate;
+        protected Action TempFixedUpdate;
         protected Action OnUpdate;
+        protected Action TempUpdate;
 
         protected float moveInput = 0;
 
@@ -140,7 +142,7 @@ namespace RPGPlatformer.Movement
                 forceSendNotification);
         }
 
-        public virtual void Stop()
+        public virtual void HardStop()
         {
             mover.Stop();
             MoveInput = 0;
@@ -275,19 +277,26 @@ namespace RPGPlatformer.Movement
 
         public virtual void OnDeath()
         {
+            TempFixedUpdate = OnFixedUpdate;
+            TempUpdate = OnUpdate;
             OnFixedUpdate = null;
-            moveInput = 0;
+            OnUpdate = null;
+            HardStop();
+            movementManager.Freeze();
             mover.OnDeath();
         }
 
         public virtual void OnRevival()
         {
+            movementManager.Unfreeze();
             mover.OnRevival();
-            OnFixedUpdate = () =>
-            {
-                HandleMoveInput();
-                movementManager.AnimateMovement(mover.SpeedFraction());
-            };
+            OnFixedUpdate = TempFixedUpdate;
+            OnUpdate = TempUpdate;
+            //OnFixedUpdate = () =>
+            //{
+            //    HandleMoveInput();
+            //    movementManager.AnimateMovement(mover.SpeedFraction());
+            //};
         }
 
         protected virtual void OnDestroy()

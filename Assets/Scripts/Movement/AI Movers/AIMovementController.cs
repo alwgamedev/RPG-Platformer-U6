@@ -73,7 +73,7 @@ namespace RPGPlatformer.Movement
             {
                 if (dropOffHandlingOption == DropOffHandlingOption.stop && dist < dropOffStopDistance)
                 {
-                    Stop();
+                    HardStop();
                     stuckAtLedge = true;
                     return;
                 }
@@ -92,7 +92,7 @@ namespace RPGPlatformer.Movement
                         }
                         else if (dist < dropOffStopDistance)
                         {
-                            Stop();
+                            HardStop();
                             return;
                             //stopped, but not considered stuck at ledge, so it can continue re-evaluating whether
                             //jumping will bring it closer to target
@@ -100,7 +100,7 @@ namespace RPGPlatformer.Movement
                     }
                     else if (dist < dropOffStopDistance)
                     {
-                        Stop();
+                        HardStop();
                         stuckAtLedge = true;
                         return;
                     }

@@ -421,15 +421,13 @@ namespace RPGPlatformer.Combat
 
         public bool CanAttack(IHealth health)
         {
-            Debug.Log("Checking if can attack");
             if (health == null || health.IsDead)
             {
-                Debug.Log("target is null? " + health == null);
                 return false;
             }
             var d = Vector3.Distance(health.Transform.position, transform.position);
-            Debug.Log("distance: " + d);
-            return CanAttack(Vector3.Distance(health.Transform.position, transform.position));
+            return CanAttack(Vector3.Distance(health.Transform.position, transform.position) 
+                - health.TargetingTolerance - this.health.TargetingTolerance);
         }
 
         public bool CanAttack(float distance)
@@ -441,7 +439,6 @@ namespace RPGPlatformer.Combat
         {
             if (!CanAttack(target))
             {
-                Debug.Log("target not in range");
                 OnTargetingFailed?.Invoke();
                 return false;
             }

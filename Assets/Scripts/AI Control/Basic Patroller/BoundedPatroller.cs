@@ -32,7 +32,7 @@ namespace RPGPlatformer.AIControl
             {
                 if (hangTime > 0)
                 {
-                    MovementController.Stop();
+                    MovementController.HardStop();
                     hangTimer = 0;
                     PatrolAction = HangOut;
                 }
