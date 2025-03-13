@@ -11,7 +11,6 @@ namespace RPGPlatformer.AIControl
     public class AIPatrollerController : MonoBehaviour, IInputSource
     {
         [SerializeField] protected bool playerEnemy = true;
-        //[SerializeField] bool forgetCombatTargetOnPatrolEntry;
 
         protected AIPatroller patroller;
         protected AIPatrollerStateManager stateManager;
@@ -20,19 +19,6 @@ namespace RPGPlatformer.AIControl
         protected bool stateBehaviorSubscribed;
 
         protected Dictionary<State, Action> StateBehavior = new();
-
-        //public IHealth CurrentTarget
-        //{
-        //    get => patroller.combatController.currentTarget;
-        //    protected set
-        //    {
-        //        if (patroller.combatController != null)
-        //        {
-        //            patroller.combatController.currentTarget = value;
-        //        }
-        //        patroller.movementController.currentTarget = value;
-        //    }
-        //}
 
         protected virtual void Awake()
         {
@@ -124,7 +110,6 @@ namespace RPGPlatformer.AIControl
         {
             patroller.MovementController.SetRunning(false);
             patroller.MovementController.MoveInput = 0;
-            //patroller.MovementController.HardStop();
         }
 
         protected virtual void OnAttackEntry()

@@ -24,7 +24,7 @@ namespace RPGPlatformer.AIControl
 
         public virtual void MoveTowardsPatrolDestination()
         {
-            if (CombatTarget != null && ScanForTarget(null))
+            if (CurrentTarget != null && ScanForTarget(null))
             {
                 return;
             }
@@ -49,7 +49,7 @@ namespace RPGPlatformer.AIControl
 
         public virtual void HangOut()
         {
-            if (CombatTarget != null && ScanForTarget(null))
+            if (CurrentTarget != null && ScanForTarget(null))
             {
                 return;
             }

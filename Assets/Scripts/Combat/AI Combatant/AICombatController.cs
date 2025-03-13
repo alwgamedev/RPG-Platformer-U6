@@ -35,10 +35,7 @@ namespace RPGPlatformer.Combat
         public void FireOneShot()
         {
             FaceAimPosition();
-            if (combatant.TargetInRange(currentTarget))
-            {
-                RunAutoAbilityCycle(false);
-            }
+            RunAutoAbilityCycle(false);
         }
 
         public void StartAttacking()

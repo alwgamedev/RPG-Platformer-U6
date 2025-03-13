@@ -68,7 +68,7 @@ namespace RPGPlatformer.Combat
 
         public static IHealth TargetInFront(ICombatant combatant)//almost all melee abilities will use this
         {
-            float radius = combatant.EquippedWeapon.WeaponStats.AttackRange / 2;
+            float radius = combatant.EquippedWeapon.WeaponStats.AttackRange / 2 + combatant.Health.TargetingTolerance;
             Vector2 center = combatant.Transform.position 
                 + radius * Mathf.Sign(combatant.Transform.localScale.x) * combatant.Transform.right;
             return combatant.FindTarget(center, radius);

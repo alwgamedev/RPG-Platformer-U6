@@ -27,7 +27,7 @@ namespace RPGPlatformer.Combat
         public override void InitializeWeaponSOs()
         {
             base.InitializeWeaponSOs();
-            MinimumCombatDistance = unarmedWeapon?.WeaponStats.AttackRange / 2 ?? 0.35f;
+            MinimumCombatDistance = unarmedWeapon?.WeaponStats.AttackRange / 3 ?? 0.25f;
         }
 
         public override void OnDeath()

@@ -15,24 +15,30 @@ namespace RPGPlatformer.AIControl
         [SerializeField] protected float hangTime = 2;//e.g. to stop for a few seconds btwn patrol destinations
 
         protected bool correctingCombatDistance;
-        //protected bool TriggerPursuitSubscribedToCombatantTargetingFailed;
+        //protected bool triggerPursuitSubscribedToCombatantTargetingFailed;
         protected float suspicionTimer;
         protected float hangTimer;
         protected Vector2 patrolDestination;
+        protected IHealth currentTarget;
         protected Action OnUpdate;
 
-        public float TargetingTolerance { get; protected set; }
+        public float TargetingTolerance => CombatController.Combatant.Health.TargetingTolerance;
+        public float MinimumCombatDistance => CombatController.AICombatant.MinimumCombatDistance;
         public AIMovementController MovementController { get; protected set; }
         public AICombatController CombatController { get; protected set; }
 
-        public IHealth CombatTarget
+        public IHealth CurrentTarget
         {
-            get => CombatController != null ? CombatController.currentTarget : null;
+            get => currentTarget;
             protected set
             {
+                currentTarget = value;
                 if (CombatController != null)
                 {
                     CombatController.currentTarget = value;
+                }
+                if (MovementController != null)
+                {
                     MovementController.currentTarget = value;
                 }
             }
@@ -51,7 +57,7 @@ namespace RPGPlatformer.AIControl
                 return;
             }
 
-            TargetingTolerance = CombatController.Combatant.Health.TargetingTolerance;
+            //TargetingTolerance = CombatController.Combatant.Health.TargetingTolerance;
 
             if (CombatController.CombatManager != null)
             {
@@ -76,9 +82,9 @@ namespace RPGPlatformer.AIControl
 
         public virtual void SetCombatTarget(IHealth targetHealth)
         {
-            CombatTarget = targetHealth;
+            CurrentTarget = targetHealth;
 
-            if (CombatTarget != null)
+            if (CurrentTarget != null)
             {
                 TriggerSuspicion();
             }
@@ -90,7 +96,7 @@ namespace RPGPlatformer.AIControl
 
         protected bool ScanForTarget(Action TargetOutOfRange = null)
         {
-            if (!TryGetDistance(CombatTarget, out float distance) || distance > pursuitRange)
+            if (!TryGetDistance(CurrentTarget, out float distance) || distance > pursuitRange)
             {
                 TargetOutOfRange?.Invoke();
                 return false;
@@ -165,7 +171,7 @@ namespace RPGPlatformer.AIControl
 
         public void PursuitBehavior()
         {
-            if (!TryGetDistance(CombatTarget, out float distance) || distance > pursuitRange)
+            if (!TryGetDistance(CurrentTarget, out float distance) || distance > pursuitRange)
             {
                 Trigger(typeof(Suspicion).Name);
                 return;
@@ -174,14 +180,10 @@ namespace RPGPlatformer.AIControl
             {
                 Trigger(typeof(Attack).Name);
             }
-            //else if (distance > pursuitRange)
-            //{
-            //    Trigger(typeof(Suspicion).Name);
-            //}
-            else if (Mathf.Abs(CombatTarget.Transform.position.x - transform.position.x) > 0.25f)
+            else if (Mathf.Abs(CurrentTarget.Transform.position.x - transform.position.x) > MinimumCombatDistance)
                 //to avoid ai stuttering back and forth when their target is directly above them
             {
-                MovementController.MoveTowards(CombatTarget.Transform.position);
+                MovementController.MoveTowards(CurrentTarget.Transform.position);
             }
             else
             {
@@ -191,7 +193,7 @@ namespace RPGPlatformer.AIControl
 
         public void AttackBehavior()
         {
-            if (!TryGetDistance(CombatTarget, out var d))
+            if (!TryGetDistance(CurrentTarget, out var d))
             {
                 TriggerSuspicion();
             }
@@ -208,7 +210,6 @@ namespace RPGPlatformer.AIControl
         public void StartAttacking()
         {
             if (CombatController == null) return;
-            //SubscribeTriggerPursuitToCombatantTargetingFailed(true);
             CombatController.StartAttacking();
 
         }
@@ -216,7 +217,6 @@ namespace RPGPlatformer.AIControl
         public void StopAttacking()
         {
             if (CombatController == null) return;
-            //SubscribeTriggerPursuitToCombatantTargetingFailed(false);
             CombatController.StopAttacking();
         }
 
@@ -256,7 +256,7 @@ namespace RPGPlatformer.AIControl
             if (currentDistance < CombatController.AICombatant.MinimumCombatDistance)
             {
                 correctingCombatDistance = true;
-                MovementController.MoveAwayFrom(CombatTarget.Transform.position);
+                MovementController.MoveAwayFrom(CurrentTarget.Transform.position);
             }
             else if (correctingCombatDistance)
             {
@@ -285,6 +285,7 @@ namespace RPGPlatformer.AIControl
             {
                 distance = Vector3.Distance(transform.position, target.Transform.position) 
                     - target.TargetingTolerance - TargetingTolerance;
+                //Debug.Log("patroller calculated distance: " + distance);
                 return true;
             }
             distance = Mathf.Infinity;

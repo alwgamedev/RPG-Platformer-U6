@@ -425,9 +425,8 @@ namespace RPGPlatformer.Combat
             {
                 return false;
             }
-            var d = Vector3.Distance(health.Transform.position, transform.position);
-            return CanAttack(Vector3.Distance(health.Transform.position, transform.position) 
-                - health.TargetingTolerance - this.health.TargetingTolerance);
+            return CanAttack(Vector2.Distance(health.Transform.position, transform.position) - health.TargetingTolerance
+                - this.health.TargetingTolerance);
         }
 
         public bool CanAttack(float distance)

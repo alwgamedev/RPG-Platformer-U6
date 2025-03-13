@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using RPGPlatformer.Core;
@@ -323,7 +321,7 @@ namespace RPGPlatformer.Combat
             GlobalCooldown = true;
             StartCooldown(ability);
             PlayAnimation(ability.AnimationState, ability.CombatStyle);
-            Debug.Log($"playing ability animation {ability.AnimationState}");
+
             if (ability.HoldAimOnRelease)
             {
                 HoldAim(750);
