@@ -2,7 +2,7 @@
 
 namespace RPGPlatformer.Movement
 {
-    public static partial class MovementTools
+    public static class MovementTools
     {
         public const float sqrt3 = 1.73f;
 

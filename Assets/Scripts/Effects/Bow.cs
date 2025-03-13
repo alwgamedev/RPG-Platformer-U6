@@ -1,11 +1,11 @@
 using System;
-using System.Collections;
-using Unity.Mathematics;
 using UnityEngine;
 using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.Effects
 {
+    using static MovementTools;
+
     public class Bow : MonoBehaviour
     {
         [SerializeField] Transform topString;
@@ -15,19 +15,16 @@ namespace RPGPlatformer.Effects
         [SerializeField] Transform stringGrabPt;
         [SerializeField] Transform stringGrabPtOrigin;
         [SerializeField] Transform stringGrabPtParent;
-        [SerializeField] float stringVibrationTimeOut = 3;
-        [SerializeField] float stringVibrationSpeed = 10;
-        [Range(0,1)][SerializeField] float stringBounceBackFraction = 0.5f;
-        [Range(0,1)][SerializeField] float stringDistanceTolerance = .1f;
+        [SerializeField] float stringFrequencyMult = 15;
+        [SerializeField] float stringElasticity = 0.05f;//higher means string will return to rest faster
 
         HorizontalOrientation parentOrientation;
 
-        Action OnUpdate;
+        Vector2 u; //displacement of stringGrabPt from origin at moment of release, normalized
+        float d; //distance of stringGrabPt from origin at momvent of release
+        float t; //timeSinceRelease
 
-        //private void Awake()
-        //{
-        //    ReturnToOrigin();
-        //}
+        Action OnUpdate;
 
         private void Start()
         {
@@ -38,18 +35,23 @@ namespace RPGPlatformer.Effects
             if (movementController != null)
             {
                 parentOrientation = movementController.CurrentOrientation;
-                movementController.Mover.DirectionChanged += (value) => parentOrientation = value;
+                movementController.Mover.DirectionChanged += SetOrientation;
             }
         }
 
         private void Update()
         {
+            OnUpdate?.Invoke();
+
             if (stringGrabPt.hasChanged)
             {
                 StretchStrings();
             }
+        }
 
-            OnUpdate?.Invoke();
+        public void SetOrientation(HorizontalOrientation orientation)
+        {
+            parentOrientation = orientation;
         }
 
         public void BeginPull(Transform puller)
@@ -62,13 +64,18 @@ namespace RPGPlatformer.Effects
         public void ReleasePull()
         {
             stringGrabPt.SetParent(stringGrabPtParent, true);
-            StartCoroutine(ReleaseBowString(stringVibrationSpeed, stringDistanceTolerance, stringBounceBackFraction));
+
+            var v = stringGrabPtOrigin.position - stringGrabPt.position;
+            d = v.magnitude;
+            u = v / d;
+            t = 0;
+
+            OnUpdate = UpdateStringVibration;
         }
 
         public void BowReset()
         {
             OnUpdate = null;
-            StopAllCoroutines();
             ReturnToOrigin();
         }
 
@@ -77,72 +84,31 @@ namespace RPGPlatformer.Effects
             stringGrabPt.position = stringGrabPtOrigin.position;
         }
 
-        private IEnumerator ReleaseBowString(float speed, float tolerance, float bounceBackFraction)
+        private void UpdateStringVibration()
         {
-            float timer = 0;
+            t += Time.deltaTime;
 
-            void UpdateTimer()
+            var a = d - stringElasticity * t;
+
+            if (a < Mathf.Epsilon)
             {
-                timer += Time.deltaTime;
+                BowReset();
+                return;
             }
 
-            OnUpdate += UpdateTimer;
-            while(Vector3.Distance(stringGrabPt.position, stringGrabPtOrigin.position) > tolerance 
-                && timer < stringVibrationTimeOut)
-            {
-                yield return MoveToPoint(stringGrabPt, stringGrabPtOrigin, speed, bounceBackFraction);
-            }
-            BowReset();
-        }
-
-        private IEnumerator MoveToPoint(Transform movingObject, Transform target, float speed, float overShootFraction)
-        {
-            if (movingObject.position == target.position) 
-            {
-                yield break;
-            }
-
-            float distanceToOrigin = Vector3.Distance(movingObject.position, target.position);
-            float distanceToTravel = distanceToOrigin * (1 + overShootFraction);
-            float distanceTravelled = 0;
-            bool passedTarget = false;
-
-            while(distanceTravelled < distanceToTravel)
-            {
-                float delta = speed * Time.deltaTime;
-                Vector3 axis = (target.position - movingObject.position).normalized;
-                if(passedTarget)
-                {
-                    axis *= -1;
-                }
-
-                movingObject.position += delta * axis;
-                distanceTravelled += delta;
-                if(distanceTravelled >= distanceToOrigin)
-                {
-                    passedTarget = true;
-                }
-
-                yield return null;
-            }
+            Vector3 delta = a * Mathf.Cos(stringFrequencyMult * t) * u;
+            stringGrabPt.position = stringGrabPtOrigin.position + delta;
         }
 
         private void StretchStrings()
         {
-            Vector3 topGoal = TopStringGoalVector();
-            Vector3 bottomGoal = BottomStringGoalVector();
+            Vector2 topGoal = TopStringGoalVector();
+            Vector2 bottomGoal = BottomStringGoalVector();
 
-            float topAngle = Mathf.Atan2(topGoal.y, topGoal.x);
-            float bottomAngle = Mathf.Atan2(bottomGoal.y, bottomGoal.x);
-
-            if(parentOrientation == HorizontalOrientation.left)
-            {
-                topAngle = topAngle - Mathf.PI;
-                bottomAngle = bottomAngle - Mathf.PI;
-            }
-
-            topString.rotation = quaternion.RotateZ(topAngle);
-            bottomString.rotation = quaternion.RotateZ(bottomAngle);
+            topString.rotation = Quaternion.LookRotation(Vector3.forward, 
+                (int) parentOrientation * topGoal.CCWPerp());
+            bottomString.rotation = Quaternion.LookRotation(Vector3.forward, 
+                (int) parentOrientation * bottomGoal.CCWPerp());
 
             UpdateStringLengths(topGoal.magnitude, bottomGoal.magnitude);
         }
@@ -151,6 +117,7 @@ namespace RPGPlatformer.Effects
         {
             float topStringLength = TopStringLength();
             float bottomStringLength = BottomStringLength();
+
             if (topStringLength == 0 || bottomStringLength == 0) return;
 
             float topScaleFactor = topGoalLength / topStringLength;
@@ -170,9 +137,9 @@ namespace RPGPlatformer.Effects
 
         float BottomStringLength() => Vector2.Distance(bottomString.position, bottomStringEndPt.position);
 
-        Vector3 TopStringGoalVector() => stringGrabPt.position - topString.position;
+        Vector2 TopStringGoalVector() => stringGrabPt.position - topString.position;
 
-        Vector3 BottomStringGoalVector() => stringGrabPt.position - bottomString.position;
+        Vector2 BottomStringGoalVector() => stringGrabPt.position - bottomString.position;
 
         private void OnDisable()
         {
