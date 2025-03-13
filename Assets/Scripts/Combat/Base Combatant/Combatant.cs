@@ -50,6 +50,7 @@ namespace RPGPlatformer.Combat
         public Transform Transform => transform;
         public Transform MainhandElbow => mainhandElbow;
         public Transform ChestBone => chestBone;
+        public float AttackRange { get; protected set; }
         public IWeapon EquippedWeapon => equippedWeapon;
         public IWeapon DefaultWeapon => defaultWeapon;
         public IWeapon UnarmedWeapon => unarmedWeapon;
@@ -93,13 +94,8 @@ namespace RPGPlatformer.Combat
             {
                 equipSlots[EquipmentSlot.Offhand] = offhandSlot;
             }
-            //{
-            //    [EquipmentSlot.Head] = headSlot,
-            //    [EquipmentSlot.Torso] = torsoSlot,
-            //    [EquipmentSlot.Legs] = legsSlot,
-            //    [EquipmentSlot.Mainhand] = mainhandSlot,
-            //    [EquipmentSlot.Offhand] = offhandSlot
-            //};
+
+            OnWeaponEquip += UpdateAttackRange;
 
             InitializeWeaponSOs();
         }
@@ -187,6 +183,11 @@ namespace RPGPlatformer.Combat
             Health.Stat.TakeDefaultValue();
             stamina.TakeDefaultValue();
             wrath.TakeDefaultValue();
+        }
+
+        protected virtual void UpdateAttackRange()
+        {
+            AttackRange = equippedWeapon?.WeaponStats.AttackRange ?? 0;
         }
 
 
@@ -431,7 +432,7 @@ namespace RPGPlatformer.Combat
 
         public bool CanAttack(float distance)
         {
-            return equippedWeapon != null && distance < equippedWeapon.WeaponStats.AttackRange;
+            return equippedWeapon != null && distance < AttackRange;
         }
 
         public bool TargetInRange(IHealth target)

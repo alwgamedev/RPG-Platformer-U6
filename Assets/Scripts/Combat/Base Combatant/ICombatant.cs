@@ -8,6 +8,7 @@ namespace RPGPlatformer.Combat
     {
         public string DisplayName { get; }
         public int CombatLevel { get; }
+        public float AttackRange { get; }
         public IWeapon EquippedWeapon { get; }
         public IWeapon DefaultWeapon { get; }
         public IWeapon UnarmedWeapon { get; }
@@ -22,8 +23,10 @@ namespace RPGPlatformer.Combat
         public bool CanAttack(IHealth target);
         public bool CanAttack(float distance);
         public bool TargetInRange(IHealth target);
-        public void PrepareProjectile(IProjectile projectile, Func<Vector2> getAimPos, float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
-        public void PrepareAndShootProjectile(IProjectile projectile, Func<Vector2> getAimPos, float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
+        public void PrepareProjectile(IProjectile projectile, Func<Vector2> getAimPos, 
+            float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
+        public void PrepareAndShootProjectile(IProjectile projectile, Func<Vector2> getAimPos, 
+            float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
         public void Attack();
     }
 }

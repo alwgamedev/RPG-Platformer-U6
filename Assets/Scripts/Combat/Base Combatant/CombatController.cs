@@ -37,10 +37,8 @@ namespace RPGPlatformer.Combat
         //cleared in EndChannel, should not be used with async abilities
         //(think I could adjust it to work, but rather keep things simple and reliable for now)
 
-        int activeStuns;
-        int activeStunsThatFreezeAnimation;
-        //protected List<(float, bool)> activeStuns = new();
-        //later can be managed by buff manager?
+        protected int activeStuns;
+        protected int activeStunsThatFreezeAnimation;
 
         public bool IsInCombat => combatManager.StateMachine.HasState(typeof(InCombat));
         public AbilityBar CurrentAbilityBar => abilityBarManager.CurrentAbilityBar;
@@ -334,7 +332,8 @@ namespace RPGPlatformer.Combat
 
         public virtual void OnInsufficientWrath() { }
 
-        public void StoreAction(Action action, bool channelWhileStored = true)//these functions would be better in the animation control class
+        public void StoreAction(Action action, bool channelWhileStored = true)
+            //these functions would be better in the animation control class?
         {
             StoredAction = action;
             if (channelWhileStored)
@@ -402,7 +401,7 @@ namespace RPGPlatformer.Combat
 
         public virtual Vector2 GetAimPosition()
         {
-            return default;
+            return transform.position + (int)MovementController.CurrentOrientation * transform.right;
         }
 
         public virtual void FaceAimPosition()
@@ -427,54 +426,42 @@ namespace RPGPlatformer.Combat
 
         public virtual float ComputeAimAngleChange()//rotate chest so that mainhand forearm points toward aim position
         {
-            bool moving = MovementController.Rigidbody.linearVelocity.magnitude > Mathf.Epsilon;
+            var moving = MovementController.Rigidbody.linearVelocity.magnitude > Mathf.Epsilon;
+            var aimPos = GetAimPosition();
+            var facingRight = MovementController.CurrentOrientation == HorizontalOrientation.right;
+
             if (FireButtonIsDown && !moving)
             {
                 FaceAimPosition();
             }
 
-            Vector2 aimPos = GetAimPosition();
-            bool facingRight = MovementController.CurrentOrientation == HorizontalOrientation.right;
-
             if (moving)//if moving reflect the point to be in front of you
             {
-                if ((facingRight && aimPos.x < transform.position.x) 
+                if ((facingRight && aimPos.x < transform.position.x)
                     || (!facingRight && aimPos.x > transform.position.x))
                 {
                     aimPos -= 2 * (aimPos.x - transform.position.x) * Vector2.right;
                 }
             }
-            Transform mainHand = combatant.EquipSlots[EquipmentSlot.Mainhand].transform;
-            Vector2 aimVector = aimPos - (Vector2)mainHand.position;
-            Vector2 forearmVector = combatant.EquipSlots[EquipmentSlot.Mainhand].transform.position 
+
+            var mainHand = combatant.EquipSlots[EquipmentSlot.Mainhand].transform;
+            var aimVector = aimPos - (Vector2)mainHand.position;
+            var forearmVector = mainHand.position 
                 - combatant.MainhandElbow.transform.position;
-            float deltaAngle = Vector2.SignedAngle(forearmVector, aimVector);
-            return deltaAngle;
+
+            return Vector2.SignedAngle(forearmVector, aimVector);
             //NOTE: animations should set mainhand slot angle to 0 (in case something like
             //the wall cling animation is overriding mainhand slot rotation)
-
-            //float angle = combatant.ChestBone.eulerAngles.z + deltaAngle;
-            //angle -= (float) Math.Floor(angle / 360) * 360;//take angle % 360
-
-            //if(facingRight)
-            //{
-            //    return Mathf.Clamp(angle, 60, 150);
-            //}
-            //else
-            //{
-            //    return Mathf.Clamp(angle, 210, 300);
-            //}
         }
 
-        protected void RotateToAngle(float angle)
+        protected void RotateChest(float angle)
         {
             combatant.ChestBone.Rotate(Vector3.forward, angle);
-            //combatant.ChestBone.eulerAngles = angle * Vector3.forward;
         }
 
         protected void ActiveAiming()
         {
-            RotateToAngle(ComputeAimAngleChange());
+            RotateChest(ComputeAimAngleChange());
         }
 
         protected void WhileHoldingAimAngle(float angle)
@@ -484,13 +471,13 @@ namespace RPGPlatformer.Combat
             {
                 angle = 360 - angle;
             }
-            RotateToAngle(angle);
+            RotateChest(angle);
         }
 
         public async void HoldAim(int duration)
         {
             if (duration == 0) return;
-            float angle = ComputeAimAngleChange();
+            var angle = ComputeAimAngleChange();
             Action localAimAction = () => WhileHoldingAimAngle(angle);
             StartAimingAction(localAimAction);
             await Task.Delay(duration);
