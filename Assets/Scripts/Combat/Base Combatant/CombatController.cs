@@ -123,7 +123,7 @@ namespace RPGPlatformer.Combat
             combatManager = new(null, combatant, GetComponent<AnimationControl>(), timeToLeaveCombat);
             combatManager.Configure();
 
-            OnChannelEnded += () => combatManager.animationControl.animator.SetTrigger("ceaseAttack");
+            //OnChannelEnded += combatManager.CeaseAttack;
 
             combatManager.StateGraph.inCombat.OnEntry += OnCombatEntry;
             combatManager.StateGraph.inCombat.OnExit += OnCombatExit;
@@ -191,7 +191,7 @@ namespace RPGPlatformer.Combat
             if (CanExecute(ability))
             {
                 CancelAbilityInProgress(false);
-                ability?.Execute(this);
+                ability.Execute(this);
             }
             else if(!CurrentAbilityBar.IsOnCooldown(ability))
             {
@@ -206,6 +206,7 @@ namespace RPGPlatformer.Combat
         protected virtual void CancelAbilityInProgress(bool delayedReleaseOfChannel = false)
         {
             EndChannel(delayedReleaseOfChannel);
+            combatManager.CeaseAttack();
             combatant.CombatantReset();
         }
 
@@ -322,6 +323,7 @@ namespace RPGPlatformer.Combat
             GlobalCooldown = true;
             StartCooldown(ability);
             PlayAnimation(ability.AnimationState, ability.CombatStyle);
+            Debug.Log($"playing ability animation {ability.AnimationState}");
             if (ability.HoldAimOnRelease)
             {
                 HoldAim(750);

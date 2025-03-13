@@ -68,16 +68,14 @@ namespace RPGPlatformer.Combat
 
         public static IHealth TargetInFront(ICombatant combatant)//almost all melee abilities will use this
         {
-            //Transform transform = combatant.Transform;
             float radius = combatant.EquippedWeapon.WeaponStats.AttackRange / 2;
             Vector2 center = combatant.Transform.position 
-                + radius /** Mathf.Sign(combatant.Transform.localScale.x)*/ * combatant.Transform.right;
+                + radius * Mathf.Sign(combatant.Transform.localScale.x) * combatant.Transform.right;
             return combatant.FindTarget(center, radius);
         }
 
         public static IHealth TargetCentered(ICombatant combatant)
         {
-            //Transform transform = combatant.Transform;
             float radius = combatant.EquippedWeapon.WeaponStats.AttackRange;
             return combatant.FindTarget(combatant.Transform.position, radius);
         }

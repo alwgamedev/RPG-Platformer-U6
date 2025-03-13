@@ -532,7 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unfreezeRotationOnDeath: 1
-  deathForce: {x: 0, y: 0}
+  deathForce: {x: -150, y: 120}
   deathTorque: 0
   acceleration: 100
   freefallMovementAccelerationFactor: 0.8
@@ -540,6 +540,7 @@ MonoBehaviour:
   walkSpeed: 0.8
   maxNumJumps: 1
   jumpForce: 375
+  doubleJumpForceMultiplier: 1.18
 --- !u!114 &8914383755510078053
 MonoBehaviour:
   m_ObjectHideFlags: 0

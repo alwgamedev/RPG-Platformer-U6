@@ -482,7 +482,6 @@ namespace RPGPlatformer.Combat
         public void CombatantReset()
         {
             ReturnQueuedProjectileToPool();
-            //ResetBow();
             ReleaseBowPull();
         }
 

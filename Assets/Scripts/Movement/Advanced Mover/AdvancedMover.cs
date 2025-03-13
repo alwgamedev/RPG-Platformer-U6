@@ -11,8 +11,10 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected float walkSpeed = 0.8f;
         [SerializeField] protected int maxNumJumps = 2;
         [SerializeField] protected float jumpForce = 400;
+        [SerializeField] protected float doubleJumpForceMultiplier = 1.18f;
 
         protected int currentJumpNum = 0;
+        protected float doubleJumpForce;
         protected float maxSpeed;
         protected bool running;
         //protected Quaternion adjacentWallAngle;
@@ -40,6 +42,7 @@ namespace RPGPlatformer.Movement
             base.Awake();
 
             maxSpeed = walkSpeed;
+            doubleJumpForce = doubleJumpForceMultiplier * jumpForce;
         }
 
         public void MoveGrounded(bool matchRotationToGround = false)
@@ -49,7 +52,7 @@ namespace RPGPlatformer.Movement
 
         public void MoveFreefall(HorizontalOrientation orientation)
         {
-            Move(acceleration * freefallMovementAccelerationFactor, maxSpeed, Vector2.right * (int)orientation, false, true);
+            Move(acceleration * freefallMovementAccelerationFactor, maxSpeed, Vector2.right, false, true);
         }
 
         public float SpeedFraction()
@@ -80,16 +83,7 @@ namespace RPGPlatformer.Movement
 
         public Vector2 JumpForce()
         {
-            float mult = currentJumpNum > 0 ? 1.18f : 1f;
-            return mult * jumpForce * Vector2.up;
-
-            //if(currentJumpNum == 0)
-            //{
-            //    return jumpForce * Vector2.up;
-            //}
-            //return (0.2f * SpeedFraction() * jumpForce) * Vector2.right 
-            //    + (1.18f - Mathf.Clamp((0.6f * myRigidbody.linearVelocityY) - 1, -0.15f, 0.25f))
-            //    * jumpForce * Vector2.up;
+            return currentJumpNum > 0 ? doubleJumpForce * Vector2.up : jumpForce * Vector2.up;
         }
 
         public void ResetJumpNum()
@@ -104,24 +98,21 @@ namespace RPGPlatformer.Movement
 
         public void BeginWallCling()
         {
-            //if (!adjacentWallSide.HasValue) return;
             if (jumping || freefalling)
             {
                 TriggerLanding();
             }
-            //transform.rotation = adjacentWallAngle;
-            transform.rotation = Quaternion.LookRotation(transform.forward, adjacentWallDirection);
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, adjacentWallDirection);
         }
 
         public void MaintainWallCling()
         {
-            //transform.rotation = adjacentWallAngle;
-            transform.rotation = Quaternion.LookRotation(transform.forward, adjacentWallDirection);
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, adjacentWallDirection);
         }
 
         public void EndWallCling()
         {
-            transform.rotation = Quaternion.LookRotation(transform.forward, Vector3.up);
+            transform.rotation = Quaternion.identity;
         }
 
         public void UpdateAdjacentWall()
@@ -152,21 +143,18 @@ namespace RPGPlatformer.Movement
             if (midHit && lowerHit)
             {
                 facingWall = true;
-                //adjacentWallAngle = Quaternion.Euler(0, 0, WallAngle(lowerHit.point, midHit.point) - 90);
                 adjacentWallDirection = midHit.point - lowerHit.point;
                 return;
             }
             else if (midHit && upperHit)
             {
                 facingWall = true;
-                //adjacentWallAngle = Quaternion.Euler(0, 0, WallAngle(midHit.point, upperHit.point) - 90);
                 adjacentWallDirection = upperHit.point - midHit.point;
                 return;
             }
             else if (!midHit && upperHit)
             {
                 facingWall = true;
-                //adjacentWallAngle = Quaternion.identity;
                 adjacentWallDirection = Vector3.up;
                 return;
             }
@@ -182,15 +170,8 @@ namespace RPGPlatformer.Movement
             NoAdjacentWall();
         }
 
-        //protected float WallAngle(Vector3 lowerHit, Vector3 upperHit)
-        //{
-        //    var wall = upperHit - lowerHit;
-        //    return Mathf.Rad2Deg * Mathf.Atan2(wall.y, wall.x);
-        //}
-
         protected virtual void NoAdjacentWall()
         {
-            //adjacentWallAngle = Quaternion.identity;
             adjacentWallDirection = Vector3.up;
             facingWall = false;
         }

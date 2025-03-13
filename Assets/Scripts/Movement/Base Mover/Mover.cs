@@ -13,10 +13,9 @@ namespace RPGPlatformer.Movement
 
     public class Mover : StateDriver, IMover
     {
-        //[SerializeField] bool unfreezeRotationOnDeath;
-        //[SerializeField] Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
-        //[SerializeField] float deathTorque = 10;
-        //[SerializeField] Collider2D spriteCollider;
+        [SerializeField] bool unfreezeRotationOnDeath;
+        [SerializeField] Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
+        [SerializeField] float deathTorque = 10;
 
         protected Collider2D myCollider;
         protected Rigidbody2D myRigidbody;
@@ -34,12 +33,12 @@ namespace RPGPlatformer.Movement
         public Rigidbody2D Rigidbody => myRigidbody;
         public float Width => myWidth;
         public float Height => myHeight;
-        public Vector3 ColliderCenterRight => myCollider.bounds.center + 0.45f * myWidth * (int)CurrentOrientation
-            * transform.right;
-        public Vector3 ColliderCenterLeft => myCollider.bounds.center - 0.45f * myWidth * (int)CurrentOrientation
-            * transform.right;
-        public Vector3 ColliderCenterFront => myCollider.bounds.center + 0.45f * myWidth * transform.right;
-        public Vector3 ColliderCenterBack => myCollider.bounds.center - 0.45f * myWidth * transform.right;
+        public Vector3 ColliderCenterRight => myCollider.bounds.center + 0.45f * myWidth * transform.right;
+        public Vector3 ColliderCenterLeft => myCollider.bounds.center - 0.45f * myWidth * transform.right;
+        public Vector3 ColliderCenterFront => myCollider.bounds.center + 0.45f * myWidth 
+            * (int)CurrentOrientation * transform.right;
+        public Vector3 ColliderCenterBack => myCollider.bounds.center - 0.45f * myWidth 
+            * (int)CurrentOrientation * transform.right;
         public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
         //public Vector3 ColliderCenterFront => CurrentOrientation == HorizontalOrientation.right ?
         //    ColliderCenterRight : ColliderCenterLeft;
@@ -64,12 +63,7 @@ namespace RPGPlatformer.Movement
         protected virtual void Awake()
         {
             myCollider = GetComponent<Collider2D>();
-            //myCollider = spriteCollider;
             myRigidbody = GetComponent<Rigidbody2D>();
-            //if (spriteCollider != null && spriteCollider != myCollider)
-            //{
-            //    spriteCollider.enabled = false;
-            //}
 
             CurrentOrientation = HorizontalOrientation.right;
 
@@ -146,6 +140,8 @@ namespace RPGPlatformer.Movement
             Trigger(typeof(Jumping).Name);
         }
 
+        //Direction is assumed to be "right pointing" (as transform.right always points right in new system)
+        //(it will be multiplied by current orientation)
         public void Move(float acceleration, float maxSpeed, Vector2 direction, bool rotateToGroundDirection = true, 
             bool clampXOnly = false)
         {
@@ -156,38 +152,32 @@ namespace RPGPlatformer.Movement
 
             if (rotateToGroundDirection)
             {
-                transform.rotation = Quaternion.LookRotation((int)CurrentOrientation * Vector3.forward,
-                (int)CurrentOrientation * direction.CCWPerp());
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, direction.CCWPerp());
+                //this should work because our transform.right always points to right
             }
 
-            float delta;
-            Vector2 velocity = myRigidbody.linearVelocity;
-            if (clampXOnly)
+            direction *= (int)CurrentOrientation;
+            var velocity = clampXOnly ? new Vector2(myRigidbody.linearVelocity.x, 0) : myRigidbody.linearVelocity;
+            var dot = Vector2.Dot(velocity, direction);
+            if (dot <= 0 || velocity.magnitude < maxSpeed)
             {
-                delta = ClampedDeltaV(acceleration * Time.deltaTime, maxSpeed, new (velocity.x, 0), 
-                    new (Mathf.Sign(direction.x), 0));
-                //option to only clamp horizontal velocity (e.g. when freefalling)
+                myRigidbody.linearVelocity += acceleration * Time.deltaTime * direction;
             }
-            else
-            {
-                delta = ClampedDeltaV(acceleration * Time.deltaTime, maxSpeed, velocity, direction);
-            }
-            myRigidbody.linearVelocity += delta * direction;
         }
 
-        private float ClampedDeltaV(float defaultDeltaV, float maxSpeed, Vector2 velocity, Vector2 direction)
-        {
-            float dot = Vector2.Dot(velocity, direction);
-            float speed = velocity.magnitude;
-            if (dot <= 0 || speed <= maxSpeed)
-            {
-                return defaultDeltaV;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        //private float ClampedDeltaV(float defaultDeltaV, float maxSpeed, Vector2 velocity, Vector2 direction)
+        //{
+        //    float dot = Vector2.Dot(velocity, direction);
+        //    float speed = velocity.magnitude;
+        //    if (dot <= 0 || speed <= maxSpeed)
+        //    {
+        //        return defaultDeltaV;
+        //    }
+        //    else
+        //    {
+        //        return 0;
+        //    }
+        //}
 
         public virtual void Stop()
         {
@@ -257,8 +247,7 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        public virtual void SetOrientation(HorizontalOrientation orientation, bool updateDirectionFaced, bool useLocalCoords,
-            bool forceSendNotification)
+        public virtual void SetOrientation(HorizontalOrientation orientation, bool updateDirectionFaced)
         {
             if (orientation != CurrentOrientation)
             {
@@ -266,76 +255,46 @@ namespace RPGPlatformer.Movement
 
                 if (updateDirectionFaced)
                 {
-                    UpdateDirectionFaced(useLocalCoords);
-                }
-
-                else if (forceSendNotification)
-                {
-                    DirectionChanged?.Invoke(CurrentOrientation);
+                    UpdateDirectionFaced();
                 }
             }
         }
 
         public virtual bool FacingWrongDirection()
         {
-            return (int)CurrentOrientation * transform.right.x < 0;
+            return (int)CurrentOrientation * transform.localScale.x < 0;
         }
 
-        public virtual void UpdateDirectionFaced(bool useLocalCoords)
+        public virtual void UpdateDirectionFaced()
         {
             if (FacingWrongDirection())
             {
-                if (useLocalCoords)
-                {
-                    transform.rotation = Quaternion.LookRotation(-transform.forward, transform.up);
-                }
-                else
-                {
-                    //because for some reason using local coords applies a small (.001) rotation around z-axis every time
-                    //so I would only use that for movers that are rotating constantly to match ground angle
-                    transform.rotation = Quaternion.LookRotation((int)CurrentOrientation * Vector3.forward, Vector3.up);
-                }
-                DirectionChanged?.Invoke(CurrentOrientation);
+                transform.localScale = new Vector3(- transform.localScale.x, transform.localScale.y, transform.localScale.z);
+                DirectionChanged.Invoke(CurrentOrientation);
             }
-            //transform.localScale = new Vector3((int)CurrentOrientation * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            //DirectionChanged.Invoke(CurrentOrientation);
         }
 
-        //public void ZeroOutRotation()
-        //{
-        //    transform.rotation = Quaternion.LookRotation((int)CurrentOrientation * Vector3.forward, Vector3.up);
-        //}
-
+        //ALWAYS RIGHT POINTING
         public Vector2 GroundDirectionVector()
         {
             if (rightGroundHit && leftGroundHit)
             {
-                return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
+                return (rightGroundHit.point - leftGroundHit.point).normalized;
             }
-            return (Vector2)transform.right; /* * (int)CurrentOrientation;*/
+            return transform.right;
         }
 
-        //could move this to an animation event instead
+        //could hook this up to an animation event
         public void OnDeath()
         {
-            //if (spriteCollider != null)
-            //{
-            //    spriteCollider.enabled = true;
-            //}
-            myRigidbody.freezeRotation = false;
-            myRigidbody.AddTorque(-5);
-            //myRigidbody.AddForce(deathForce, ForceMode2D.Impulse);
-            //myRigidbody.AddRelativeForce(deathForce);
-            //myRigidbody.AddTorque((int)CurrentOrientation * deathTorque, ForceMode2D.Impulse);
+            myRigidbody.freezeRotation = !unfreezeRotationOnDeath;
+            myRigidbody.AddForce(OrientForce(deathForce), ForceMode2D.Impulse);
+            myRigidbody.AddTorque((int)CurrentOrientation * deathTorque, ForceMode2D.Impulse);
         }
 
         public void OnRevival()
         {
             myRigidbody.freezeRotation = true;
-            //if (spriteCollider != null)
-            //{
-            //    spriteCollider.enabled = false;
-            //}
             myRigidbody.rotation = 0;
             transform.position += myHeight / 8 * Vector3.up;
         }

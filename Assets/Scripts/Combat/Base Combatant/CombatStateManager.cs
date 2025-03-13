@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Combat
@@ -103,6 +104,12 @@ namespace RPGPlatformer.Combat
         {
             ResetCombatTimer();
             animationControl.RevertAnimatorOverride();
+        }
+
+        public virtual void CeaseAttack()
+        {
+            Debug.Log("cease attack");
+            animationControl.animator.SetTrigger("ceaseAttack");
         }
 
         protected virtual void OnNotInCombatEntry()

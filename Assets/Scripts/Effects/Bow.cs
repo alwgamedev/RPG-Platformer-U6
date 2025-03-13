@@ -20,7 +20,7 @@ namespace RPGPlatformer.Effects
         [Range(0,1)][SerializeField] float stringBounceBackFraction = 0.5f;
         [Range(0,1)][SerializeField] float stringDistanceTolerance = .1f;
 
-        HorizontalOrientation currentOrientation;
+        HorizontalOrientation parentOrientation;
 
         Action OnUpdate;
 
@@ -37,8 +37,8 @@ namespace RPGPlatformer.Effects
 
             if (movementController != null)
             {
-                currentOrientation = movementController.CurrentOrientation;
-                movementController.Mover.DirectionChanged += (value) => currentOrientation = value;
+                parentOrientation = movementController.CurrentOrientation;
+                movementController.Mover.DirectionChanged += (value) => parentOrientation = value;
             }
         }
 
@@ -135,7 +135,7 @@ namespace RPGPlatformer.Effects
             float topAngle = Mathf.Atan2(topGoal.y, topGoal.x);
             float bottomAngle = Mathf.Atan2(bottomGoal.y, bottomGoal.x);
 
-            if(currentOrientation == HorizontalOrientation.left)
+            if(parentOrientation == HorizontalOrientation.left)
             {
                 topAngle = topAngle - Mathf.PI;
                 bottomAngle = bottomAngle - Mathf.PI;

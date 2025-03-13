@@ -136,10 +136,9 @@ namespace RPGPlatformer.Movement
             SetOrientation(Mathf.Sign(target.x - transform.position.x));
         }
 
-        public virtual void SetOrientation(float input, bool updateDirectionFaced = true, bool forceSendNotification = false)
+        public virtual void SetOrientation(float input, bool updateDirectionFaced = true)
         {
-            mover.SetOrientation((HorizontalOrientation)Mathf.Sign(input), updateDirectionFaced, matchRotationToGround, 
-                forceSendNotification);
+            mover.SetOrientation((HorizontalOrientation)Mathf.Sign(input), updateDirectionFaced);
         }
 
         public virtual void HardStop()
@@ -239,7 +238,7 @@ namespace RPGPlatformer.Movement
 
         protected void OnFreefallExit()
         {
-            mover.UpdateDirectionFaced(false);
+            mover.UpdateDirectionFaced();
         }
 
         protected virtual void GroundedMoveAction(float input)
@@ -247,18 +246,6 @@ namespace RPGPlatformer.Movement
             SetOrientation(input);
             mover.MoveGrounded(matchRotationToGround);
         }
-
-        //protected virtual void StdGroundedMoveAction(float input)
-        //{
-        //    SetOrientation(input);
-        //    mover.MoveGrounded();
-        //}
-
-        //protected virtual void RotateToGroundMoveAction(float input)
-        //{
-        //    mover.MoveGrounded(true);
-        //    SetOrientation(input, false, true);
-        //}
 
         protected virtual void JumpingMoveAction(float input)
         {
@@ -268,7 +255,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void FreefallMoveAction(float input)
         {
-            SetOrientation(input, false);
+            SetOrientation(input);
             mover.MoveFreefall(mover.CurrentOrientation);
         }
 
@@ -281,7 +268,7 @@ namespace RPGPlatformer.Movement
             TempUpdate = OnUpdate;
             OnFixedUpdate = null;
             OnUpdate = null;
-            HardStop();
+            moveInput = 0;
             movementManager.Freeze();
             mover.OnDeath();
         }
@@ -292,11 +279,6 @@ namespace RPGPlatformer.Movement
             mover.OnRevival();
             OnFixedUpdate = TempFixedUpdate;
             OnUpdate = TempUpdate;
-            //OnFixedUpdate = () =>
-            //{
-            //    HandleMoveInput();
-            //    movementManager.AnimateMovement(mover.SpeedFraction());
-            //};
         }
 
         protected virtual void OnDestroy()

@@ -631,12 +631,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68597781190fc664c9df98261ab08878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unfreezeRotationOnDeath: 1
+  deathForce: {x: -150, y: 120}
+  deathTorque: 10
   acceleration: 50
   freefallMovementAccelerationFactor: 0.8
   runSpeed: 3
   walkSpeed: 1.2
   maxNumJumps: 2
   jumpForce: 375
+  doubleJumpForceMultiplier: 1.18
 --- !u!114 &253623311915411687
 MonoBehaviour:
   m_ObjectHideFlags: 0

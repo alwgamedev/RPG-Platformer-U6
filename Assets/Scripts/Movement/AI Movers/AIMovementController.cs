@@ -45,12 +45,9 @@ namespace RPGPlatformer.Movement
         {
             aiMover = GetComponent<AIMover>();
             mover = aiMover;
-        }
 
-        //protected override void InitializeMoveActions()
-        //{
-        //    GroundedMoveAction = AIGroundedMoveAction;
-        //}
+            mover.DirectionChanged += o => { stuckAtLedge = false; };
+        }
 
         protected override void ConfigureWallDetection()
         {
@@ -115,17 +112,12 @@ namespace RPGPlatformer.Movement
             jumpingEnabled = val;
         }
 
-        public override void SetOrientation(float input, bool updateDirectionFaced = true, bool forceSendNotification = false)
-        {
-            HorizontalOrientation oldOrientation = mover.CurrentOrientation;
+        //public override void SetOrientation(float input, bool updateDirectionFaced = true)
+        //{
+        //    HorizontalOrientation oldOrientation = mover.CurrentOrientation;
 
-            base.SetOrientation(input, updateDirectionFaced, forceSendNotification);
-
-            if (mover.CurrentOrientation != oldOrientation)
-            {
-                stuckAtLedge = false;
-            }
-        }
+        //    base.SetOrientation(input, updateDirectionFaced);
+        //}
 
         protected override void HandleAdjacentWallInteraction()
         {

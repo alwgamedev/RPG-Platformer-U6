@@ -21,18 +21,6 @@ namespace RPGPlatformer.UI
         bool inCombat;
         bool dead;
         IMover parentMover;
-        //Action Destroyed;
-
-        //private void Start()
-        //{
-        //    parentMover = GetComponentInParent<IMover>();
-        //    if(parentMover != null)
-        //    {
-        //        parentMover.UpdatedXScale += Unflip;
-        //    }
-            
-        //    //popupTargetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
-        //}
 
         public void Configure(ICombatController cc)
         {
@@ -56,10 +44,6 @@ namespace RPGPlatformer.UI
             };
             cc.OnDeath += OnDeath;
             cc.HealthChangeEffected += SpawnDamagePopup;
-
-            //MouseExit = mouseExitNameHideDelay > 0 ?
-            //    async () => await DelayedNameHide(GlobalGameTools.Instance.TokenSource.Token)
-            //    : HideNameIfNotInCombat;
 
             HideAll();
         }
@@ -134,25 +118,20 @@ namespace RPGPlatformer.UI
         {
             if (parentMover == null) return;
 
-            if (parentMover.Transform.right.x * transform.localScale.x < 0)
+            if (parentMover.Transform.localScale.x * transform.localScale.x < 0)
             {
-                transform.localScale = new(-transform.localScale.x, transform.localScale.y,
-                transform.localScale.z);
+                transform.localScale = new(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
             }
         }
 
         protected override void OnDestroy()
         {
-            //Destroyed?.Invoke();
-
             if (parentMover != null)
             {
                 parentMover.DirectionChanged -= Unflip;
             }
 
             base.OnDestroy();
-
-            //Destroyed = null;
         }
     }
 }

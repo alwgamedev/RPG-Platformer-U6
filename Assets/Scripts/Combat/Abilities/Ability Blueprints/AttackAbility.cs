@@ -15,7 +15,7 @@ namespace RPGPlatformer.Combat
         public const string Bleed = "Bleed";
         public const string PowerUpAbility = "Power-Up Ability";
         public const string ProjectileAbility = "Projectile Ability";
-        public const string Stun = "Stun"; 
+        public const string Stun = "Stun";
         public const string AutoCastable = "Auto-Castable";
 
     }
