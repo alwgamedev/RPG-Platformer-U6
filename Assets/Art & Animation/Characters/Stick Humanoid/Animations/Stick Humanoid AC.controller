@@ -592,7 +592,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: horSpeedFraction
+    m_ConditionEvent: speedFraction
     m_EventTreshold: 0.1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1827471242940631172}
@@ -1235,7 +1235,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 1
     m_Controller: {fileID: 9100000}
-  - m_Name: horSpeedFraction
+  - m_Name: speedFraction
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -1564,7 +1564,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 8296220960417716760}
   m_Tag: 
-  m_SpeedParameter: horSpeedFraction
+  m_SpeedParameter: speedFraction
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -2208,7 +2208,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: speed
     m_Mirror: 0
-  m_BlendParameter: horSpeedFraction
+  m_BlendParameter: speedFraction
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -2352,7 +2352,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: horSpeedFraction
+    m_ConditionEvent: speedFraction
     m_EventTreshold: 0.1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7492377384464263596}
