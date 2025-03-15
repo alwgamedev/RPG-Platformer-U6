@@ -23,7 +23,7 @@ namespace RPGPlatformer.Movement
 
         public float MaxPermissibleDropOffHeight => maxPermissibleDropOffHeightFactor * mover.Height;
 
-        public override float MoveInput 
+        public override Vector2 MoveInput 
         { 
             get => base.MoveInput;
             set
@@ -36,7 +36,7 @@ namespace RPGPlatformer.Movement
                 }
                 else if (mover.FacingWall)
                 {
-                    base.MoveInput = 0;
+                    SoftStop();
                 }
             }
         }
@@ -52,10 +52,10 @@ namespace RPGPlatformer.Movement
         protected override void ConfigureWallDetection()
         {
             base.ConfigureWallDetection();
-            mover.AwkwardWallMoment += () => MoveInput = 0;
+            mover.AwkwardWallMoment += SoftStop;
         }
 
-        protected override void GroundedMoveAction(float input)
+        protected override void GroundedMoveAction(Vector2 input)
             //I am doing the drop off check here (rather than at the point where MoveInput is set)
             //so that orientation is accurate (without having to do an unecessary SetOrientation every time we
             //set MoveInput)
@@ -64,7 +64,7 @@ namespace RPGPlatformer.Movement
 
             if (stuckAtLedge) return;
 
-            if (input != 0 && dropOffHandlingOption != DropOffHandlingOption.ignore 
+            if (input != Vector2.zero && dropOffHandlingOption != DropOffHandlingOption.ignore 
                 && movementManager.StateMachine.HasState(typeof(Grounded))
                 && aiMover.DropOffInFront(MaxPermissibleDropOffHeight, out var dist))
             {
@@ -112,28 +112,20 @@ namespace RPGPlatformer.Movement
             jumpingEnabled = val;
         }
 
-        //public override void SetOrientation(float input, bool updateDirectionFaced = true)
-        //{
-        //    HorizontalOrientation oldOrientation = mover.CurrentOrientation;
-
-        //    base.SetOrientation(input, updateDirectionFaced);
-        //}
-
         protected override void HandleAdjacentWallInteraction()
         {
             if (mover.FacingWall)
             {
-                MoveInput = 0;
+                SoftStop();
             }
         }
 
-        protected override void FreefallMoveAction(float input)
+        protected override void FreefallMoveAction(Vector2 input)
         {
-            if (!canMoveDuringFreefall) return;
-            //so that if ai do fall off a ledge, they don't continue trying to move forward and grip against
-            //a wall
-
-            base.FreefallMoveAction(input);
+            if (canMoveDuringFreefall)
+            {
+                base.FreefallMoveAction(input);
+            }
         }
     }
 }

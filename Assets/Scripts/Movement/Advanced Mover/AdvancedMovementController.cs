@@ -15,19 +15,19 @@ namespace RPGPlatformer.Movement
         protected AdvancedMovementStateManager movementManager;
 
         //protected bool disabled;
-        protected Action<float> CurrentMoveAction;
+        protected Action<Vector2> CurrentMoveAction;
         protected Action OnFixedUpdate;
         protected Action TempFixedUpdate;
         protected Action OnUpdate;
         protected Action TempUpdate;
 
-        protected float moveInput = 0;
+        protected Vector2 moveInput;
 
-        public bool Moving => moveInput != 0;
+        public bool Moving => moveInput != Vector2.zero;
         public Rigidbody2D Rigidbody => mover.Rigidbody;
         public HorizontalOrientation CurrentOrientation => mover.CurrentOrientation;
         public IMover Mover => mover;
-        public virtual float MoveInput 
+        public virtual Vector2 MoveInput 
             //looks very silly, but AIMovementControllers will override this,
             //so do need this here
         {
@@ -110,20 +110,20 @@ namespace RPGPlatformer.Movement
 
         public virtual void MoveTowards(Vector2 point)
         {
-            MoveInput = point.x - transform.position.x;
+            MoveInput = new (point.x - transform.position.x, 0);
         }
 
         public virtual void MoveAwayFrom(Vector2 point)
         {
             if (transform.position.x == point.x)
             {
-                MoveInput = 1;
+                MoveInput = Vector2.right;
                 return;
             }
-            MoveInput = transform.position.x - point.x;
+            MoveInput = new (transform.position.x - point.x, 0);
         }
 
-        public void FaceTowards(Transform target)
+        public void FaceTarget(Transform target)
         {
             if (target)
             {
@@ -131,20 +131,26 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        public void FaceTarget(Vector2 target)
+        public void FaceTarget(Vector3 target)
         {
-            SetOrientation(Mathf.Sign(target.x - transform.position.x));
+            SetOrientation(target - transform.position);
         }
 
-        public virtual void SetOrientation(float input, bool updateDirectionFaced = true)
+        public virtual void SetOrientation(Vector2 input, bool updateDirectionFaced = true)
         {
-            mover.SetOrientation((HorizontalOrientation)Mathf.Sign(input), updateDirectionFaced);
+            if (input.x == 0) return;
+            mover.SetOrientation((HorizontalOrientation)Mathf.Sign(input.x), updateDirectionFaced);
+        }
+
+        public virtual void SoftStop()
+        {
+            MoveInput = Vector2.zero;
         }
 
         public virtual void HardStop()
         {
             mover.Stop();
-            MoveInput = 0;
+            SoftStop();
         }
 
         
@@ -152,7 +158,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void HandleMoveInput()
         {
-            if (moveInput != 0)
+            if (moveInput != Vector2.zero)
             {
                 CurrentMoveAction?.Invoke(moveInput);
             }
@@ -170,7 +176,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void HandleAdjacentWallInteraction()
         {
-            if (moveInput != 0 && mover.FacingWall)
+            if (moveInput != Vector2.zero && mover.FacingWall)
             {
                 movementManager.AnimateWallScramble(false);
                 if (!movementManager.IsWallClinging())
@@ -241,19 +247,19 @@ namespace RPGPlatformer.Movement
             mover.UpdateDirectionFaced();
         }
 
-        protected virtual void GroundedMoveAction(float input)
+        protected virtual void GroundedMoveAction(Vector2 input)
         {
             SetOrientation(input);
             mover.MoveGrounded(matchRotationToGround);
         }
 
-        protected virtual void JumpingMoveAction(float input)
+        protected virtual void JumpingMoveAction(Vector2 input)
         {
             SetOrientation(input);
             mover.MoveFreefall(mover.CurrentOrientation);
         }
 
-        protected virtual void FreefallMoveAction(float input)
+        protected virtual void FreefallMoveAction(Vector2 input)
         {
             SetOrientation(input);
             mover.MoveFreefall(mover.CurrentOrientation);
@@ -268,7 +274,7 @@ namespace RPGPlatformer.Movement
             TempUpdate = OnUpdate;
             OnFixedUpdate = null;
             OnUpdate = null;
-            moveInput = 0;
+            moveInput = Vector2.zero;
             movementManager.Freeze();
             mover.OnDeath();
         }

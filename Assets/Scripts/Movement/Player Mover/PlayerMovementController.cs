@@ -1,4 +1,5 @@
-﻿using RPGPlatformer.Core;
+﻿using UnityEngine;
+using RPGPlatformer.Core;
 using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.Movement
@@ -55,16 +56,8 @@ namespace RPGPlatformer.Movement
 
         private void ComputeMoveInput()
         {
-            float val = 0;
-            if (SettingsManager.Instance.IAM.MoveLeftHeldDown)
-            {
-                val -= 1;
-            }
-            if (SettingsManager.Instance.IAM.MoveRightHeldDown)
-            {
-                val += 1;
-            }
-            MoveInput = val;
+            MoveInput = new Vector2((SettingsManager.Instance.IAM.MoveRightHeldDown ? 1 : 0)
+               - (SettingsManager.Instance.IAM.MoveLeftHeldDown ? 1 : 0), 0);
         }
 
         public void Pause()

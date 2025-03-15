@@ -7,23 +7,22 @@ using System;
 namespace RPGPlatformer.AIControl
 {
     [RequireComponent(typeof(AIMovementController))]
+    [RequireComponent(typeof(PatrolNavigator))]
     //[RequireComponent(typeof(AICombatController))]
     public class AIPatroller : StateDriver
     {
-        [SerializeField] protected float pursuitRange;
+        [SerializeField] protected float pursuitRange = 5;
         [SerializeField] protected float suspicionTime = 5;
-        [SerializeField] protected float hangTime = 2;//e.g. to stop for a few seconds btwn patrol destinations
-
         protected bool correctingCombatDistance;
-        //protected bool triggerPursuitSubscribedToCombatantTargetingFailed;
         protected float suspicionTimer;
         protected float hangTimer;
-        protected Vector2 patrolDestination;
         protected IHealth currentTarget;
+
         protected Action OnUpdate;
 
         public float TargetingTolerance => CombatController.Combatant.Health.TargetingTolerance;
         public float MinimumCombatDistance => CombatController.AICombatant.MinimumCombatDistance;
+        public PatrolNavigator PatrolNavigator { get; protected set; }
         public AIMovementController MovementController { get; protected set; }
         public AICombatController CombatController { get; protected set; }
 
@@ -48,6 +47,10 @@ namespace RPGPlatformer.AIControl
         {
             MovementController = GetComponent<AIMovementController>();
             CombatController = GetComponent<AICombatController>();
+            PatrolNavigator = GetComponent<PatrolNavigator>();
+
+            PatrolNavigator.PatrolComplete += OnPatrolComplete;
+            PatrolNavigator.BeginHangTime += MovementController.SoftStop;
         }
 
         protected virtual void Start()
@@ -112,42 +115,26 @@ namespace RPGPlatformer.AIControl
             return true;
         }
 
-        public virtual void BeginPatrol() { }
-
-        public virtual void PatrolBehavior() 
+        public virtual void BeginPatrol(PatrolMode mode, PatrolParemeters p)
         {
-            ScanForTarget(null);
+            PatrolNavigator.BeginPatrol(mode, p);
         }
 
-        //public void DefaultPatrolBehavior()
-        //{
-        //    if (CombatTarget != null && ScanForTarget(null))
-        //    {
-        //        return;
-        //    }
-        //    else if (PatrolDestinationReached(patrolDestination))
-        //    {
-        //        OnPatrolDestinationReached();
-        //    }
-        //    else
-        //    {
-        //        MovementController.MoveTowards(patrolDestination);
-        //    }
-        //}
+        public virtual void PatrolBehavior()
+        {
+            if (CurrentTarget == null || !ScanForTarget(null))
+            {
+                PatrolNavigator.PatrolBehavior(MovementController);
+            }
+        }
 
-        ////useful to have this as a virtual method -- most of the time we will just check
-        ////distance < tolerance, but some patrollers may only care about x-value (e.g. if bounded patroller
-        ////chose a random destination, the y-value of the point may be below ground, making it impossible to get
-        ////within tolerance of the point, so the bounded patroller should only check x-value)
-        //protected virtual bool PatrolDestinationReached(Vector2 destination)
-        //{
-        //    return false;
-        //}
+        //this gets called e.g. when you reach the end of a patrol path
+        public virtual void OnPatrolComplete() 
+        {
+            MovementController.SoftStop();
+            PatrolNavigator.BeginRest();
+        }
 
-        //protected virtual void OnPatrolDestinationReached() 
-        //{
-        //    //e.g. calculate next patrol destination
-        //}
 
         public virtual void SuspicionBehavior()
         {
@@ -187,7 +174,7 @@ namespace RPGPlatformer.AIControl
             }
             else
             {
-                MovementController.MoveInput = 0;
+                MovementController.SoftStop();
             }
         }
 
@@ -261,7 +248,7 @@ namespace RPGPlatformer.AIControl
             else if (correctingCombatDistance)
             {
                 correctingCombatDistance = false;
-                MovementController.MoveInput = 0;
+                MovementController.SoftStop();
             }
             //if (!TryGetDistance(CombatTarget, out var d))
             //{

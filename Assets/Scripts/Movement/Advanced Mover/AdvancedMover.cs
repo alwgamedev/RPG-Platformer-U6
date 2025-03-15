@@ -17,8 +17,7 @@ namespace RPGPlatformer.Movement
         protected float doubleJumpForce;
         protected float maxSpeed;
         protected bool running;
-        //protected Quaternion adjacentWallAngle;
-        protected Vector3 adjacentWallDirection = Vector3.up;
+        protected Vector2 adjacentWallDirection = Vector2.up;
         protected bool facingWall;
 
         public float MaxSpeed => maxSpeed;

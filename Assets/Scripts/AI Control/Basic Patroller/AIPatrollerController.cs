@@ -2,7 +2,6 @@
 using RPGPlatformer.Core;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace RPGPlatformer.AIControl
@@ -11,6 +10,8 @@ namespace RPGPlatformer.AIControl
     public class AIPatrollerController : MonoBehaviour, IInputSource
     {
         [SerializeField] protected bool playerEnemy = true;
+        [SerializeField] protected PatrolMode defaultPatrolMode;
+        [SerializeField] protected PatrolParemeters defaultPatrolParameters;
 
         protected AIPatroller patroller;
         protected AIPatrollerStateManager stateManager;
@@ -93,7 +94,7 @@ namespace RPGPlatformer.AIControl
         protected virtual void OnPatrolEntry()
         {
             patroller.MovementController.SetRunning(false);
-            patroller.BeginPatrol();
+            patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParameters);
         }
 
         protected virtual void OnSuspicionExit()
@@ -109,7 +110,7 @@ namespace RPGPlatformer.AIControl
         protected virtual void OnPursuitExit()
         {
             patroller.MovementController.SetRunning(false);
-            patroller.MovementController.MoveInput = 0;
+            patroller.MovementController.SoftStop();
         }
 
         protected virtual void OnAttackEntry()

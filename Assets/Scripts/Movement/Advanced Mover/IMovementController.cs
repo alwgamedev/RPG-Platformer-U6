@@ -11,8 +11,10 @@ namespace RPGPlatformer.Movement
 
         public void MoveTowards(Vector2 point);
         public void MoveAwayFrom(Vector2 point);
-        public void FaceTowards(Transform target);
-        public void FaceTarget(Vector2 target);
+        public void FaceTarget(Transform target);
+        public void FaceTarget(Vector3 target);
+        public void SoftStop();
+        public void HardStop();
         public void OnDeath();
         public void OnRevival();
     }

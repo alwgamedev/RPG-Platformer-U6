@@ -179,9 +179,16 @@ namespace RPGPlatformer.Movement
         //    }
         //}
 
-        public virtual void Stop()
+        public virtual void Stop(bool maintainVerticalVelocity = true)
         {
-            myRigidbody.linearVelocity = new Vector2(0, myRigidbody.linearVelocityY);
+            if (maintainVerticalVelocity)
+            {
+                myRigidbody.linearVelocity = new Vector2(0, myRigidbody.linearVelocityY);
+            }
+            else
+            {
+                myRigidbody.linearVelocity = Vector2.zero;
+            }
         }
 
         public virtual void Jump(Vector2 force)
