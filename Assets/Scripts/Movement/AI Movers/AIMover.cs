@@ -6,23 +6,19 @@ namespace RPGPlatformer.Movement
     public class AIMover : AdvancedMover
     {
 
-        //public void SetDetectWalls(bool val)
-        //{
-        //    detectWalls = val;
-        //}
-
         public virtual Vector2 EmergencyJumpForce()
         {
             return 0.5f * jumpForce * Vector2.right + 1.35f * jumpForce * Vector2.up;
         }
 
         //detects both drop offs and step-ups
-        public bool DropOffInFront(float maxHeight, out float distanceInFront)
+        public bool DropOffAhead(float maxHeight, HorizontalOrientation direction, out float distanceInFront)
         {
             distanceInFront = Mathf.Infinity;
-            float spacing = 0.1f;
+            float spacing = 0.15f;
             maxHeight += 0.5f * myHeight;//shifting up higher to help detect step-ups
-            Vector2 origin = ColliderCenterFront + 0.5f * myHeight * Vector3.up;
+            Vector2 origin = (direction == HorizontalOrientation.right ? ColliderCenterRight : ColliderCenterLeft) 
+                + 0.5f * myHeight * Vector3.up;
             Vector2 directlyBelowCharacter = ColliderCenterFront - groundednessTolerance * Vector3.up;
 
             List<Vector2> hits = new() { directlyBelowCharacter };
@@ -31,7 +27,7 @@ namespace RPGPlatformer.Movement
 
             for (int i = 1; i <= 10; i++)
             {
-                var rcOrigin = origin + ((int)CurrentOrientation) * i * spacing * Vector2.right;
+                var rcOrigin = origin + ((int) direction) * i * spacing * Vector2.right;
                 var rc = Physics2D.Raycast(rcOrigin, -Vector2.up, maxHeight, LayerMask.GetMask("Ground"));
 
                 //Debug.DrawLine(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right,

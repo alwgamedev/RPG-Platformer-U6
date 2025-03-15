@@ -44,6 +44,11 @@ namespace RPGPlatformer.Movement
             doubleJumpForce = doubleJumpForceMultiplier * jumpForce;
         }
 
+        public void MoveGroundedWithoutAcceleration(bool matchRotationToGround)
+        {
+            MoveWithoutAcceleration(maxSpeed, GroundDirectionVector(), matchRotationToGround);
+        }
+
         public void MoveGrounded(bool matchRotationToGround = false)
         {
             Move(acceleration, maxSpeed, GroundDirectionVector(), matchRotationToGround, false);

@@ -12,7 +12,7 @@ namespace RPGPlatformer.Movement
         {
             Vector2 g = Physics2D.gravity;
             Vector2 v0 = (impulseForce / mover.Rigidbody.mass) 
-                + mover.MaxSpeed * (int)mover.CurrentOrientation * Vector2.right;
+                + mover.MaxSpeed * (int)mover.CurrentOrientation * (Vector2)mover.transform.right;
 
             Vector2 Position(float t)
             {

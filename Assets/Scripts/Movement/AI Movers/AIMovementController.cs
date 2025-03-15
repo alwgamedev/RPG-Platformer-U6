@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using RPGPlatformer.Combat;
+using System;
 
 namespace RPGPlatformer.Movement
 {
@@ -21,7 +22,7 @@ namespace RPGPlatformer.Movement
 
         public IHealth currentTarget;
 
-        public float MaxPermissibleDropOffHeight => maxPermissibleDropOffHeightFactor * mover.Height;
+        public float MaxPermissibleDropOffHeight { get; protected set; }
 
         public override Vector2 MoveInput 
         { 
@@ -41,6 +42,13 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        protected override void Start()
+        {
+            base.Start();
+
+            MaxPermissibleDropOffHeight = maxPermissibleDropOffHeightFactor * mover.Height;
+        }
+
         protected override void InitializeMover()
         {
             aiMover = GetComponent<AIMover>();
@@ -55,6 +63,16 @@ namespace RPGPlatformer.Movement
             mover.AwkwardWallMoment += SoftStop;
         }
 
+        public bool DropOffAhead(HorizontalOrientation direction, out float distance)
+        {
+            if (dropOffHandlingOption == DropOffHandlingOption.ignore)
+            {
+                distance = Mathf.Infinity;
+                return false;
+            }
+            return aiMover.DropOffAhead(MaxPermissibleDropOffHeight, direction, out distance);
+        }
+
         protected override void GroundedMoveAction(Vector2 input)
             //I am doing the drop off check here (rather than at the point where MoveInput is set)
             //so that orientation is accurate (without having to do an unecessary SetOrientation every time we
@@ -64,9 +82,7 @@ namespace RPGPlatformer.Movement
 
             if (stuckAtLedge) return;
 
-            if (input != Vector2.zero && dropOffHandlingOption != DropOffHandlingOption.ignore 
-                && movementManager.StateMachine.HasState(typeof(Grounded))
-                && aiMover.DropOffInFront(MaxPermissibleDropOffHeight, out var dist))
+            if (input != Vector2.zero && DropOffAhead(CurrentOrientation, out var dist))
             {
                 if (dropOffHandlingOption == DropOffHandlingOption.stop && dist < dropOffStopDistance)
                 {
@@ -76,14 +92,14 @@ namespace RPGPlatformer.Movement
                 }
                 else if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
                 {
+                    //note can jump assumes you are moving at maxSpeed
                     if (jumpingEnabled && aiMover.CanJumpGap(out var landingPt))
                     {
-
                         if (currentTarget == null
                             || Vector2.Distance(landingPt, currentTarget.Transform.position) <
                             Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
                         {
-                            mover.MoveGrounded(matchRotationToGround);
+                            mover.MoveGroundedWithoutAcceleration(false);//get up to maxSpeed
                             mover.Jump();
                             return;
                         }

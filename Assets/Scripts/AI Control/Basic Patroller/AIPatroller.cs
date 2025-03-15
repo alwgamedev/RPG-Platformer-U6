@@ -205,65 +205,42 @@ namespace RPGPlatformer.AIControl
         {
             if (CombatController == null) return;
             CombatController.StopAttacking();
+            correctingCombatDistance = false;
         }
-
-        //protected void SubscribeTriggerPursuitToCombatantTargetingFailed(bool val)
-        //{
-        //    if (val == TriggerPursuitSubscribedToCombatantTargetingFailed) return;
-
-        //    if (val)
-        //    {
-        //        CombatController.Combatant.OnTargetingFailed += TriggerPursuit;
-        //        TriggerPursuitSubscribedToCombatantTargetingFailed = true;
-        //    }
-        //    else
-        //    {
-        //        CombatController.Combatant.OnTargetingFailed -= TriggerPursuit;
-        //        TriggerPursuitSubscribedToCombatantTargetingFailed = false;
-        //    }
-        //}
-
-        //public void CheckMinimumCombatDistance()
-        //{
-        //    OnUpdate -= MaintainMinimumCombatDistance;
-
-        //    if (!TryGetDistance(CombatTarget, out var d))
-        //    {
-        //        return;
-        //    }
-
-        //    if (d < CombatController.AICombatant.MinimumCombatDistance)
-        //    {
-        //        OnUpdate += MaintainMinimumCombatDistance;
-        //    }
-        //}
 
         public void MaintainMinimumCombatDistance(float currentDistance)
         {
+            //not very performance-conscious, because he will continue scanning for drop offs
+            //every frame that he is correcting combat distance,
+            //but I think it's better to just be safe and reliable
+            //(alternative is we tell the ai to just "go this direction, and keeping going without
+            //reassessing until you're far enough away again" -- if something else changes the AI's direction or
+            //move input in that time (or if we're on a small platform and there is a drop off on the other side)
+            //then we could have issues
             if (currentDistance < CombatController.AICombatant.MinimumCombatDistance)
             {
+                float direction =
+                    Mathf.Sign(transform.position.x - CurrentTarget.Transform.position.x);
+                if (MovementController.DropOffAhead((HorizontalOrientation)direction, out var d) 
+                    && d < 1.5f * MinimumCombatDistance)
+                {
+                    direction = -direction;
+
+                    if (MovementController.DropOffAhead((HorizontalOrientation)direction, out d)
+                        && d < 1.5f * MinimumCombatDistance)
+                    {
+                        return;
+                    }
+                }
+
                 correctingCombatDistance = true;
-                MovementController.MoveAwayFrom(CurrentTarget.Transform.position);
+                MovementController.MoveInput = new(direction, 0);
             }
             else if (correctingCombatDistance)
             {
                 correctingCombatDistance = false;
                 MovementController.SoftStop();
             }
-            //if (!TryGetDistance(CombatTarget, out var d))
-            //{
-            //    OnUpdate -= MaintainMinimumCombatDistance;
-            //    return;
-            //}
-            //else if (d < CombatController.AICombatant.MinimumCombatDistance)
-            //{
-            //    MovementController.MoveAwayFrom(CombatTarget.Transform.position);
-            //}
-            //else
-            //{
-            //    MovementController.MoveInput = 0;
-            //    OnUpdate -= MaintainMinimumCombatDistance;
-            //}
         }
 
         public bool TryGetDistance(IHealth target, out float distance)

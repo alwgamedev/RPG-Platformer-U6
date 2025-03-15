@@ -13,6 +13,7 @@ namespace RPGPlatformer.Movement
 
     public class Mover : StateDriver, IMover
     {
+        [SerializeField] float groundednessToleranceFactor = 0.7f;
         [SerializeField] bool unfreezeRotationOnDeath;
         [SerializeField] Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
         [SerializeField] float deathTorque = 10;
@@ -40,16 +41,6 @@ namespace RPGPlatformer.Movement
         public Vector3 ColliderCenterBack => myCollider.bounds.center - 0.45f * myWidth 
             * (int)CurrentOrientation * transform.right;
         public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
-        //public Vector3 ColliderCenterFront => CurrentOrientation == HorizontalOrientation.right ?
-        //    ColliderCenterRight : ColliderCenterLeft;
-        //public Vector3 ColliderCenterBack => CurrentOrientation == HorizontalOrientation.right ?
-        //    ColliderCenterLeft : ColliderCenterRight;
-        //public RaycastHit2D RightGroundHit => rightGroundHit;
-        //public RaycastHit2D LeftGroundHit => leftGroundHit;
-        //public RaycastHit2D FrontGroundHit => CurrentOrientation == HorizontalOrientation.right ?
-        //    rightGroundHit : leftGroundHit;
-        //public RaycastHit2D BackGroundHit => CurrentOrientation == HorizontalOrientation.right ?
-        //    leftGroundHit : rightGroundHit;
 
 
         public HorizontalOrientation CurrentOrientation { get; protected set; }
@@ -70,9 +61,12 @@ namespace RPGPlatformer.Movement
             myHeight = myCollider.bounds.max.y - myCollider.bounds.min.y;
             myWidth = myCollider.bounds.max.x - myCollider.bounds.min.x;
 
-            groundednessTolerance = 0.7f * myHeight;//a little extra than 0.5f * height, because sometimes the
+            groundednessTolerance = groundednessToleranceFactor * myHeight;//a little extra than 0.5f * height, because sometimes the
             //ground collider is a bit below the surface (and we don't want to be randomly losing groundedness
             //as we walk over uneven terrain. Also the back hit needs to go quite far on steep terrain)
+
+            //may make this higher for some AI (because they check for dropoffs only when moving grounded,
+            //and when they don't check for dropoffs they can walk off cliffs)
         }
 
         protected virtual void Update()
@@ -142,7 +136,7 @@ namespace RPGPlatformer.Movement
 
         //Direction is assumed to be "right pointing" (as transform.right always points right in new system)
         //(it will be multiplied by current orientation)
-        public void Move(float acceleration, float maxSpeed, Vector2 direction, bool rotateToGroundDirection = true, 
+        public void Move(float acceleration, float maxSpeed, Vector2 direction, bool rotateToDirection = true, 
             bool clampXOnly = false)
         {
             if (direction == Vector2.zero)
@@ -150,10 +144,9 @@ namespace RPGPlatformer.Movement
                 return;
             }
 
-            if (rotateToGroundDirection)
+            if (rotateToDirection)
             {
-                transform.rotation = Quaternion.LookRotation(Vector3.forward, direction.CCWPerp());
-                //this should work because our transform.right always points to right
+                RotateToDirection(direction);
             }
 
             direction *= (int)CurrentOrientation;
@@ -165,19 +158,24 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        //private float ClampedDeltaV(float defaultDeltaV, float maxSpeed, Vector2 velocity, Vector2 direction)
-        //{
-        //    float dot = Vector2.Dot(velocity, direction);
-        //    float speed = velocity.magnitude;
-        //    if (dot <= 0 || speed <= maxSpeed)
-        //    {
-        //        return defaultDeltaV;
-        //    }
-        //    else
-        //    {
-        //        return 0;
-        //    }
-        //}
+        public void MoveWithoutAcceleration(float maxSpeed, Vector2 direction, bool rotateToDirection = false)
+        {
+            if (direction == Vector2.zero) return;
+
+            if (rotateToDirection)
+            {
+                RotateToDirection(direction);
+            }
+
+            direction *= (int)CurrentOrientation;
+            myRigidbody.linearVelocity = maxSpeed * direction;
+        }
+
+        public void RotateToDirection(Vector2 direction)
+        {
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, direction.CCWPerp());
+            //CCWPerp always works because our transform.forward never changes
+        }
 
         public virtual void Stop(bool maintainVerticalVelocity = true)
         {

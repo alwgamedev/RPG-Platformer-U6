@@ -110,7 +110,8 @@ namespace RPGPlatformer.Movement
 
         public virtual void MoveTowards(Vector2 point)
         {
-            MoveInput = new (point.x - transform.position.x, 0);
+            Vector2 inp = new(point.x - transform.position.x, 0);
+            MoveInput = inp;
         }
 
         public virtual void MoveAwayFrom(Vector2 point)
@@ -120,7 +121,8 @@ namespace RPGPlatformer.Movement
                 MoveInput = Vector2.right;
                 return;
             }
-            MoveInput = new (transform.position.x - point.x, 0);
+            Vector2 inp = new (transform.position.x - point.x, 0);
+            MoveInput = inp;
         }
 
         public void FaceTarget(Transform target)
@@ -144,7 +146,9 @@ namespace RPGPlatformer.Movement
 
         public virtual void SoftStop()
         {
-            MoveInput = Vector2.zero;
+            //use moveInput rather than MoveInput to avoid stack overflow
+            //in AIMovementController's MoveInput.set method
+            moveInput = Vector2.zero;
         }
 
         public virtual void HardStop()
