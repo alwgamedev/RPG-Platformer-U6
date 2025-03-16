@@ -12,7 +12,8 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected bool detectWalls;
 
-        public bool Running => mover.Running;
+        public bool Jumping => movementManager.StateMachine.CurrentState == movementManager.StateGraph.jumping;
+        public bool Freefalling => movementManager.StateMachine.CurrentState == movementManager.StateGraph.freefall;
 
         protected override void Start()
         {
@@ -36,21 +37,40 @@ namespace RPGPlatformer.Movement
         protected virtual void ConfigureWallDetection()
         {
             OnUpdate += UpdateAndHandleWallInteraction;
-            //OnUpdate += mover.UpdateAdjacentWall;
-            //OnUpdate += SetDownSpeed;
-            //OnUpdate += HandleAdjacentWallInteraction;
+        }
+
+        protected override void InitializeMover()
+        {
+            base.InitializeMover();
+            UpdateMaxSpeed();
         }
 
 
         //BASIC FUNCTIONS
+        protected override void UpdateMover()
+        {
+            mover.UpdateGroundHits();
+            mover.UpdateState(Jumping, Freefalling);
+        }
 
-        public void SetRunning(bool val)
+        public virtual void ToggleRunning()
+        {
+            SetRunning(!mover.Running);
+        }
+
+        public virtual void SetRunning(bool val)
         {
             mover.Running = val;
+            UpdateMaxSpeed();
         }
 
 
         //STATE CHANGE HANDLERS
+
+        protected virtual void UpdateMaxSpeed()
+        {
+            mover.MaxSpeed = mover.Running ? mover.RunSpeed : mover.WalkSpeed;
+        }
 
         protected virtual void AnimateMovement()
         {
@@ -121,6 +141,9 @@ namespace RPGPlatformer.Movement
             CurrentMoveAction = JumpingMoveAction;
         }
 
+
+        //MOVE ACTIONS
+
         protected override void GroundedMoveAction(Vector2 input)
         {
             SetOrientation(input);
@@ -130,13 +153,13 @@ namespace RPGPlatformer.Movement
         protected virtual void JumpingMoveAction(Vector2 input)
         {
             SetOrientation(input);
-            mover.MoveFreefall(mover.CurrentOrientation);
+            mover.MoveFreefall(/*mover.CurrentOrientation*/);
         }
 
         protected override void FreefallMoveAction(Vector2 input)
         {
             SetOrientation(input);
-            mover.MoveFreefall(mover.CurrentOrientation);
+            mover.MoveFreefall(/*mover.CurrentOrientation*/);
         }
     }
 }

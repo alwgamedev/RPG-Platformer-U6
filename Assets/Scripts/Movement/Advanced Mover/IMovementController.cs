@@ -5,6 +5,8 @@ namespace RPGPlatformer.Movement
     public interface IMovementController
     {
         public bool Moving { get; }
+        public bool Jumping { get; }
+        public bool Freefalling { get; }
         public Rigidbody2D Rigidbody { get; }
         public HorizontalOrientation CurrentOrientation { get; }
         public IMover Mover { get; }

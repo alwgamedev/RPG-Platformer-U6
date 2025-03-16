@@ -198,8 +198,10 @@ namespace RPGPlatformer.AIControl
         {
             if (CombatController == null) return;
             CombatController.StartAttacking();
-            MovementController.SoftStop();
-
+            if (!MovementController.Jumping)
+            {
+                MovementController.SoftStop();
+            }
         }
 
         public void StopAttacking()
@@ -209,7 +211,7 @@ namespace RPGPlatformer.AIControl
             correctingCombatDistance = false;
         }
 
-        public void MaintainMinimumCombatDistance(float currentDistance)
+        public virtual void MaintainMinimumCombatDistance(float currentDistance)
         {
             //not very performance-conscious, because he will continue scanning for drop offs
             //every frame that he is correcting combat distance,

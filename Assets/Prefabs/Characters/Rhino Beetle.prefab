@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8609675182907158138}
   - component: {fileID: 3741463597107785236}
   - component: {fileID: 7596018891606991704}
-  - component: {fileID: 3837741818936051575}
+  - component: {fileID: 8820363439467063438}
   - component: {fileID: 6620261427313468017}
   - component: {fileID: 7059299931344284500}
   - component: {fileID: 7379611842876505481}
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultAnimatorController: {fileID: 9100000, guid: fe571b0b7cfc30743906ac0998cc5556, type: 2}
   animator: {fileID: 0}
---- !u!114 &3837741818936051575
+--- !u!114 &8820363439467063438
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,14 +122,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4640224479810571276}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 131665986c071fe42af6f4959aff4e8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 68597781190fc664c9df98261ab08878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundednessToleranceFactor: 0.7
   unfreezeRotationOnDeath: 0
   deathForce: {x: 0, y: 0}
   deathTorque: 0
   acceleration: 150
-  freefallMovementAccelerationFactor: 0.8
+  freefallAccelerationFactor: 0.8
   runSpeed: 2.3
   walkSpeed: 1
   maxNumJumps: 0
@@ -147,8 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c2ea0e4247374408b6044e77652917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectWalls: 0
   matchRotationToGround: 1
+  detectWalls: 0
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 3

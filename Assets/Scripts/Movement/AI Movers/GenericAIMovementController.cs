@@ -8,8 +8,10 @@ namespace RPGPlatformer.Movement
         ignore, stop, tryToJump
     }
 
+    [RequireComponent(typeof(AdvancedMover))]
     public abstract class GenericAIMovementController<T0, T1, T2, T3> : GenericAdvancedMovementController<T0, T1, T2, T3>
-        where T0 : AIMover
+        //where T0 : AIMover
+        where T0 : AdvancedMover
         where T1 : AdvancedMovementStateGraph
         where T2 : AdvancedMovementStateMachine<T1>
         where T3 : AdvancedMovementStateManager<T1, T2, T0>
@@ -75,53 +77,62 @@ namespace RPGPlatformer.Movement
         }
 
         protected override void GroundedMoveAction(Vector2 input)
-        //I am doing the drop off check here (rather than at the point where MoveInput is set)
-        //so that orientation is accurate (without having to do an unecessary SetOrientation every time we
-        //set MoveInput)
         {
             SetOrientation(input);
 
             if (stuckAtLedge) return;
 
-            if (input != Vector2.zero && DropOffAhead(CurrentOrientation, out var dist))
+            if (input != Vector2.zero && DropOffAhead(CurrentOrientation, out var dist)
+                && !HandleDropoffAhead(dist, out stuckAtLedge)) return;
+
+            mover.MoveGrounded(matchRotationToGround);
+        }
+
+        protected virtual bool HandleDropoffAhead(float dist, out bool stuckAtLedge)
+        {
+            stuckAtLedge = false;
+
+            if (dropOffHandlingOption == DropOffHandlingOption.stop && dist < dropOffStopDistance)
             {
-                if (dropOffHandlingOption == DropOffHandlingOption.stop && dist < dropOffStopDistance)
+                HardStop();
+                stuckAtLedge = true;
+                return false;
+            }
+            else if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
+            {
+                Debug.Log($"velocity before: {mover.Rigidbody.linearVelocity}");
+                mover.MoveGroundedWithoutAcceleration(mover.RunSpeed, false);
+                Debug.Log($"velocity after: {mover.Rigidbody.linearVelocity}");
+                //note can jump assumes you are moving at maxSpeed
+                if (jumpingEnabled && mover.CanJumpGap(out var landingPt))
                 {
-                    HardStop();
-                    stuckAtLedge = true;
-                    return;
-                }
-                else if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
-                {
-                    //note can jump assumes you are moving at maxSpeed
-                    if (jumpingEnabled && mover.CanJumpGap(out var landingPt))
+                    if (currentTarget == null
+                        || Vector2.Distance(landingPt, currentTarget.Transform.position) <
+                        Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
                     {
-                        if (currentTarget == null
-                            || Vector2.Distance(landingPt, currentTarget.Transform.position) <
-                            Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
-                        {
-                            mover.MoveGroundedWithoutAcceleration(false);//get up to maxSpeed
-                            mover.Jump();
-                            return;
-                        }
-                        else if (dist < dropOffStopDistance)
-                        {
-                            HardStop();
-                            return;
-                            //stopped, but not considered stuck at ledge, so it can continue re-evaluating whether
-                            //jumping will bring it closer to target
-                        }
+                        //mover.MoveGroundedWithoutAcceleration(mover.RunSpeed, false);//get up to maxSpeed
+                        mover.Jump();
+                        return true;
                     }
                     else if (dist < dropOffStopDistance)
                     {
                         HardStop();
-                        stuckAtLedge = true;
-                        return;
+                        return false;
+                        //stopped, but not considered stuck at ledge, so it can continue re-evaluating whether
+                        //jumping will bring it closer to target
                     }
                 }
+                else if (dist < dropOffStopDistance)
+                {
+                    HardStop();
+                    stuckAtLedge = true;
+                    return false;
+                }
+
+                return true;
             }
 
-            mover.MoveGrounded(matchRotationToGround);
+            return true;
         }
 
         public void EnableJumping(bool val)

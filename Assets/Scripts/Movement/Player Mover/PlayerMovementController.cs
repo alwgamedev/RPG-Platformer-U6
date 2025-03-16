@@ -22,7 +22,8 @@ namespace RPGPlatformer.Movement
             iam.ToggleRunAction.started += (context) =>
             {
                 if (inputDisabled) return;
-                mover.ToggleRun();
+                ToggleRunning();
+
             };
 
             iam.MoveRightAction.started += (context) =>

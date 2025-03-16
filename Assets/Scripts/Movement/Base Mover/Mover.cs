@@ -3,6 +3,7 @@ using UnityEngine;
 using RPGPlatformer.Core;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace RPGPlatformer.Movement
 {
@@ -121,9 +122,8 @@ namespace RPGPlatformer.Movement
             VerifyJump();
         }
 
-        //Direction is assumed to be "right pointing" (as transform.right always points right in new system)
-        //(it will be multiplied by current orientation)
-        public void Move(float acceleration, float maxSpeed, Vector2 direction, bool rotateToDirection = true, 
+        //direction assumed to be normalized
+        public void Move(float acceleration, float maxSpeed, Vector2 direction, bool rotateToDirection = false, 
             bool clampXOnly = false)
         {
             if (direction == Vector2.zero)
@@ -133,10 +133,10 @@ namespace RPGPlatformer.Movement
 
             if (rotateToDirection)
             {
-                RotateToDirection(direction);
+                RotateToDirection((int)CurrentOrientation * direction);
             }
 
-            direction *= (int)CurrentOrientation;
+            //direction *= (int)CurrentOrientation;
             var velocity = clampXOnly ? new Vector2(myRigidbody.linearVelocity.x, 0) : myRigidbody.linearVelocity;
             var dot = Vector2.Dot(velocity, direction);
             if (dot <= 0 || velocity.magnitude < maxSpeed)
@@ -154,7 +154,7 @@ namespace RPGPlatformer.Movement
                 RotateToDirection(direction);
             }
 
-            direction *= (int)CurrentOrientation;
+            //Debug.Log($"moving without acceleration in direction: {direction}");
             myRigidbody.linearVelocity = maxSpeed * direction;
         }
 
@@ -178,7 +178,7 @@ namespace RPGPlatformer.Movement
 
         public virtual void Jump(Vector2 force)
         {
-            myRigidbody.AddForce(OrientForce(force), ForceMode2D.Impulse);
+            myRigidbody.AddForce(force, ForceMode2D.Impulse);
             TriggerJumping();
         }
 
@@ -200,13 +200,28 @@ namespace RPGPlatformer.Movement
             }
             catch (TaskCanceledException)
             {
-                verifyingJump = false;
-                return;
+                JumpVerificationCatch();
             }
             finally
             {
-                OnJump -= cts.Cancel;
+                JumpVerificationFinally(cts);
             }
+        }
+
+        protected virtual void PrepareJumpVerification(CancellationTokenSource cts)
+        {
+            OnJump += cts.Cancel;
+        }
+
+        protected virtual void JumpVerificationCatch()
+        {
+            verifyingJump = false;
+            return;
+        }
+
+        protected virtual void JumpVerificationFinally(CancellationTokenSource cts)
+        {
+            OnJump -= cts.Cancel;
         }
 
         protected async void VerifyFreefall()
@@ -215,8 +230,7 @@ namespace RPGPlatformer.Movement
                 .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
             try
             {
-                OnFreefall += cts.Cancel;
-                OnJump += cts.Cancel;
+                PrepareFreefallVerification(cts);
                 verifyingFreefall = true;
                 await Task.Delay(200, cts.Token);
                 verifyingFreefall = false;
@@ -227,15 +241,30 @@ namespace RPGPlatformer.Movement
             }
             catch (TaskCanceledException)
             {
-                verifyingFreefall = false;
-                return;
+                FreefallVerificationCatch();
             }
             finally
             {
-                OnFreefall -= cts.Cancel;
-                OnJump -= cts.Cancel;
-                //OnDestroyed -= cts.Cancel;
+                FreefallVerificationFinally(cts);
             }
+        }
+
+        protected virtual void PrepareFreefallVerification(CancellationTokenSource cts)
+        {
+            OnFreefall += cts.Cancel;
+            OnJump += cts.Cancel;
+        }
+
+        protected virtual void FreefallVerificationCatch()
+        {
+            verifyingFreefall = false;
+            return;
+        }
+
+        protected virtual void FreefallVerificationFinally(CancellationTokenSource cts)
+        {
+            OnFreefall -= cts.Cancel;
+            OnJump -= cts.Cancel;
         }
 
         public virtual void SetOrientation(HorizontalOrientation orientation, bool updateDirectionFaced)
@@ -270,9 +299,9 @@ namespace RPGPlatformer.Movement
         {
             if (rightGroundHit && leftGroundHit)
             {
-                return (rightGroundHit.point - leftGroundHit.point).normalized;
+                return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
             }
-            return transform.right;
+            return (int)CurrentOrientation * transform.right;
         }
 
         //could hook this up to an animation event
@@ -292,12 +321,9 @@ namespace RPGPlatformer.Movement
 
         protected override void OnDestroy()
         {
-            //OnDestroyed?.Invoke();
-
             base.OnDestroy();
 
             DirectionChanged = null;
-            //OnDestroyed = null;
             OnJump = null;
             OnFreefall = null;
             FreefallVerified = null;

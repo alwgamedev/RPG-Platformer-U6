@@ -395,7 +395,7 @@ PrefabInstance:
       addedObject: {fileID: -4241576377121345369}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4525019488547108527}
+      addedObject: {fileID: 5255926580514553323}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8914383755510078053}
@@ -522,7 +522,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultAnimatorController: {fileID: 9100000, guid: f90d3ed9ffdfe574f9306cbb60489f9e, type: 2}
   animator: {fileID: 0}
---- !u!114 &4525019488547108527
+--- !u!114 &5255926580514553323
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -531,14 +531,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8296160008381991138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 131665986c071fe42af6f4959aff4e8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 68597781190fc664c9df98261ab08878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundednessToleranceFactor: 0.7
   unfreezeRotationOnDeath: 1
   deathForce: {x: -150, y: 120}
   deathTorque: 0
   acceleration: 100
-  freefallMovementAccelerationFactor: 0.8
+  freefallAccelerationFactor: 0.8
   runSpeed: 2.4
   walkSpeed: 0.8
   maxNumJumps: 1
@@ -556,8 +557,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c2ea0e4247374408b6044e77652917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectWalls: 0
   matchRotationToGround: 0
+  detectWalls: 0
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 2.5
@@ -720,7 +721,7 @@ MonoBehaviour:
     replenishRate: 0
     autoReplenish: 0
     statBar: {fileID: 0}
-  useAutoCalculatedHealthPoints: 0
+  useAutoCalculatedHealthPoints: 1
   combatXPReward: 24
 --- !u!114 &8912017489112769141
 MonoBehaviour:

@@ -7,10 +7,9 @@ namespace RPGPlatformer.Movement
     //    ignore, stop, tryToJump
     //}
 
-    [RequireComponent(typeof(AIMover))]
-    public class AIMovementController : GenericAIMovementController<AIMover, AdvancedMovementStateGraph, 
+    public class AIMovementController : GenericAIMovementController<AdvancedMover, AdvancedMovementStateGraph, 
         AdvancedMovementStateMachine,  AdvancedMovementStateManager<AdvancedMovementStateGraph, 
-            AdvancedMovementStateMachine, AIMover>>
+            AdvancedMovementStateMachine, AdvancedMover>>
         //AdvancedMovementController
     {
         //[SerializeField] protected DropOffHandlingOption dropOffHandlingOption = DropOffHandlingOption.stop;

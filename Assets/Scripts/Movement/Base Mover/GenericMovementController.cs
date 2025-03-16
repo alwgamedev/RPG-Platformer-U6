@@ -64,12 +64,12 @@ namespace RPGPlatformer.Movement
             OnFixedUpdate?.Invoke();
         }
 
-        protected virtual void UpdateMover()
-        {
-            mover.UpdateGroundHits();
-            mover.UpdateState(movementManager.StateMachine.HasState(typeof(Jumping)),
-                movementManager.StateMachine.HasState(typeof(Freefall)));
-        }
+        protected abstract void UpdateMover();
+        //{
+        //    mover.UpdateGroundHits();
+        //    mover.UpdateState(movementManager.StateMachine.CurrentState == movementManager.StateGraph.,
+        //        movementManager.StateMachine.HasState(typeof(Freefall)));
+        //}
 
         protected virtual void InitializeMovementManager()
         {

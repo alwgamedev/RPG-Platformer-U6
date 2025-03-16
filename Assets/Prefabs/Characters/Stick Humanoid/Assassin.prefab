@@ -128,6 +128,30 @@ PrefabInstance:
       propertyPath: groundednessToleranceFactor
       value: 0.85
       objectReference: {fileID: 0}
+    - target: {fileID: 5255926580514553323, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: runSpeed
+      value: 2.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5255926580514553323, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: jumpForce
+      value: 550
+      objectReference: {fileID: 0}
+    - target: {fileID: 5255926580514553323, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: jumpForce.y
+      value: 550
+      objectReference: {fileID: 0}
+    - target: {fileID: 5255926580514553323, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: acceleration
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5255926580514553323, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: unfreezeRotationOnDeath
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5255926580514553323, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: groundednessToleranceFactor
+      value: 0.85
+      objectReference: {fileID: 0}
     - target: {fileID: 6607619032969663128, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
       propertyPath: m_Mass
       value: 75
@@ -162,7 +186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
       propertyPath: dropOffStopDistance
-      value: 0.2
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
       propertyPath: dropOffHandlingOption
@@ -174,7 +198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
       propertyPath: maxPermissibleDropOffHeightFactor
-      value: 1.25
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
