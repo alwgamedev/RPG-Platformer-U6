@@ -1,17 +1,22 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Movement
 {
-    public class AdvancedMovementStateManager : MovementStateManager<MovementStateGraph, MovementStateMachine, AdvancedMover>
+    public class AdvancedMovementStateManager : AdvancedMovementStateManager<AdvancedMovementStateGraph,
+        AdvancedMovementStateMachine, AdvancedMover>
     {
-        AnimationControl animationControl;
+        public AdvancedMovementStateManager(AdvancedMover mover, AnimationControl animationControl)
+            : base(mover, animationControl) { }
+    }
 
-        public AdvancedMovementStateManager(AdvancedMover mover, AnimationControl animationControl) : base(null, mover)
-        {
-            this.animationControl = animationControl;
-        }
+    public class AdvancedMovementStateManager<T0, T1, T2> : MovementStateManager<T0, T1, T2>
+        where T0 : AdvancedMovementStateGraph
+        where T1 : AdvancedMovementStateMachine<T0>
+        where T2 : AdvancedMover
+    {
+        public AdvancedMovementStateManager(T2 mover, AnimationControl animationControl)
+            : base(mover, animationControl) { }
 
         public override void Configure()
         {
@@ -35,19 +40,9 @@ namespace RPGPlatformer.Movement
             animationControl.animator.ResetTrigger("land");//just in case
         }
 
-        private void AnimateDoubleJump()
+        public void AnimateDoubleJump()
         {
             animationControl.animator.SetTrigger("doubleJump");
-        }
-
-        public void AnimateFreefall()
-        {
-            animationControl.animator.SetTrigger("freefall");
-            animationControl.animator.ResetTrigger("land");
-        }
-        public void AnimateLanding()
-        {
-            animationControl.animator.SetTrigger("land");
         }
 
         public bool IsWallClinging()

@@ -75,25 +75,8 @@ namespace RPGPlatformer.Movement
                 LayerMask.GetMask("Ground"));
             leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, - transform.up, groundednessTolerance, 
                 LayerMask.GetMask("Ground"));
-            //important to use transform.up or if use Vector2.up we can magically slide up walls
 
             UpdateState();
-
-            //if (Input.GetKeyDown(KeyCode.U))
-            //{
-            //    transform.right = new Vector3(1, 1, 0);
-            //    //CurrentOrientation = (HorizontalOrientation)(-(int)CurrentOrientation);
-            //    //UpdatedXScale?.Invoke(CurrentOrientation);
-            //    //Debug.Log("tright: " + transform.right);
-            //    //Debug.Log("tup: " + transform.up);
-            //    //Debug.Log("tforward: " + transform.forward);
-            //    //Debug.Log("tlocalscale: " + transform.localScale);
-            //    //Debug.Log("trotation: " + transform.rotation.eulerAngles);
-            //}
-            //if (Input.GetKeyDown(KeyCode.I))
-            //{
-            //    transform.right = new Vector3(-1, 1, 0);
-            //}
         }
 
         protected virtual void UpdateState()

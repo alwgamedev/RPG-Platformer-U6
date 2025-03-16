@@ -4,19 +4,31 @@ namespace RPGPlatformer.Movement
 {
     public class MovementStateManager : MovementStateManager<MovementStateGraph, MovementStateMachine, Mover>
     {
-        public MovementStateManager(MovementStateMachine stateMachine = null, Mover mover = null) : base(stateMachine, mover) { }
+        public MovementStateManager(Mover mover, AnimationControl animationControl) 
+            : base(mover, animationControl) { }
     }
 
     public class MovementStateManager<T0, T1, T2> : StateManager<T0, T1, T2>
         where T0 : MovementStateGraph
-        where T1 : StateMachine<T0>
+        where T1 : MovementStateMachine<T0>
         where T2 : Mover
     {
-        public MovementStateManager(T1 stateMachine = null, T2 mover = null) : base(stateMachine, mover) { }
+        protected AnimationControl animationControl;
 
-        public override void Configure()
+        public MovementStateManager(T2 mover, AnimationControl animationControl) 
+            : base(null, mover)
         {
-            base.Configure();
+            this.animationControl = animationControl;
+        }
+
+        public void AnimateFreefall()
+        {
+            animationControl.animator.SetTrigger("freefall");
+            animationControl.animator.ResetTrigger("land");
+        }
+        public void AnimateLanding()
+        {
+            animationControl.animator.SetTrigger("land");
         }
     }
 }
