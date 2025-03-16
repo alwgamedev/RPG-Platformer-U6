@@ -29,8 +29,7 @@ namespace RPGPlatformer.Movement
         public HorizontalOrientation CurrentOrientation => mover.CurrentOrientation;
         public IMover Mover => mover;
         public virtual Vector2 MoveInput
-        //looks very silly, but AIMovementControllers will override this,
-        //so do need this here
+        //child classes may want to override get/set
         {
             get => moveInput;
             set
@@ -56,12 +55,20 @@ namespace RPGPlatformer.Movement
 
         protected virtual void Update()
         {
+            UpdateMover();
             OnUpdate?.Invoke();
         }
 
         protected virtual void FixedUpdate()
         {
             OnFixedUpdate?.Invoke();
+        }
+
+        protected virtual void UpdateMover()
+        {
+            mover.UpdateGroundHits();
+            mover.UpdateState(movementManager.StateMachine.HasState(typeof(Jumping)),
+                movementManager.StateMachine.HasState(typeof(Freefall)));
         }
 
         protected virtual void InitializeMovementManager()

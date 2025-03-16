@@ -10,7 +10,7 @@
         public FlyerStateMachine() : base() {}
     }
 
-    public class Flying : MoveState { }
+    public class Flying : Airborne { }
 
     public class FlyerStateGraph : AdvancedMovementStateGraph
     {

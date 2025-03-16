@@ -7,12 +7,11 @@ namespace RPGPlatformer.Core
 {
     public class DirectedGraph<T>
     {
-        //collection is like Enumerable (unordered collection) but you can also Add/Remove and use Contains
-        protected Collection<T> vertices;
-        protected Collection<(T, T)> edges;
+        protected HashSet<T> vertices;
+        protected HashSet<(T, T)> edges;
 
-        public IEnumerable<T> Vertices => vertices;
-        public IEnumerable<(T, T)> Edges => edges;
+        //public IEnumerable<T> Vertices => vertices;
+        //public IEnumerable<(T, T)> Edges => edges;
 
         public DirectedGraph()
         {
@@ -20,30 +19,25 @@ namespace RPGPlatformer.Core
             edges = new();
         }
 
-        public DirectedGraph(Collection<T> vertices = null, Collection<(T, T)> edges = null)
+        public DirectedGraph(ICollection<T> vertices = null, ICollection<(T, T)> edges = null)
         {
+            this.vertices = new();
             if (vertices != null)
             {
-                foreach (T vertex in vertices)
+                foreach (var vertex in vertices)
                 {
                     AddVertex(vertex);
                     //do it this way in case derived classes have extra conditions for adding vertices
                 }
             }
-            else
+
+            this.edges = new();
+            if (edges != null)
             {
-                this.vertices = new Collection<T>();
-            }
-            if (this.edges != null)
-            {
-                foreach ((T, T) edge in edges)
+                foreach (var edge in edges)
                 {
                     AddEdge(edge);
                 }
-            }
-            else
-            {
-                this.edges = new Collection<(T, T)>();
             }
         }
 

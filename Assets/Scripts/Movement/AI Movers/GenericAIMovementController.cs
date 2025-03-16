@@ -21,7 +21,6 @@ namespace RPGPlatformer.Movement
 
         protected bool jumpingEnabled = true;
         protected bool stuckAtLedge;
-        //protected AIMover aiMover;
 
         public IHealth currentTarget;
 
@@ -130,7 +129,7 @@ namespace RPGPlatformer.Movement
             jumpingEnabled = val;
         }
 
-        protected override void HandleAdjacentWallInteraction()
+        protected override void HandleAdjacentWallInteraction(bool airborne)
         {
             if (mover.FacingWall)
             {

@@ -198,6 +198,7 @@ namespace RPGPlatformer.AIControl
         {
             if (CombatController == null) return;
             CombatController.StartAttacking();
+            MovementController.SoftStop();
 
         }
 
@@ -214,9 +215,9 @@ namespace RPGPlatformer.AIControl
             //every frame that he is correcting combat distance,
             //but I think it's better to just be safe and reliable
             //(alternative is we tell the ai to just "go this direction, and keeping going without
-            //reassessing until you're far enough away again" -- if something else changes the AI's direction or
-            //move input in that time (or if we're on a small platform and there is a drop off on the other side)
-            //then we could have issues
+            //reassessing until you're far enough away again"
+            //-- in that case the player could theoretically walk the enemy over to a far away cliff (if the 
+            //enemy doesn't reassess at any point while getting walked toward the cliff)
             if (currentDistance < CombatController.AICombatant.MinimumCombatDistance)
             {
                 float direction =

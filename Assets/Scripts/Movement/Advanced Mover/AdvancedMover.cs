@@ -23,7 +23,7 @@ namespace RPGPlatformer.Movement
         public float MaxSpeed => maxSpeed;
         public float RunSpeed => runSpeed;
         public float WalkSpeed => walkSpeed;
-        public bool Running
+        public virtual bool Running
         {
             get => running;
             set
@@ -100,9 +100,9 @@ namespace RPGPlatformer.Movement
             Running = !Running;
         }
 
-        public void BeginWallCling()
+        public void BeginWallCling(bool airborne)
         {
-            if (jumping || freefalling)
+            if (airborne)
             {
                 TriggerLanding();
             }
@@ -119,7 +119,7 @@ namespace RPGPlatformer.Movement
             transform.rotation = Quaternion.identity;
         }
 
-        public void UpdateAdjacentWall()
+        public void UpdateAdjacentWall(bool airborne)
         {
             if (verifyingJump)
             {
@@ -127,6 +127,7 @@ namespace RPGPlatformer.Movement
                 return;
             }
 
+            //TO-DO: add more hits
 
             var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
                      (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
@@ -164,7 +165,7 @@ namespace RPGPlatformer.Movement
             }
             else if (midHit || lowerHit)
             {
-                if (jumping || freefalling)
+                if (airborne)
                 {
                     TriggerLanding();
                     AwkwardWallMoment?.Invoke();
@@ -176,7 +177,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void NoAdjacentWall()
         {
-            adjacentWallDirection = Vector3.up;
+            adjacentWallDirection = Vector2.up;
             facingWall = false;
         }
 

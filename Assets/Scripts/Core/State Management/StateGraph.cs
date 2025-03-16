@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace RPGPlatformer.Core
 {
@@ -11,19 +10,21 @@ namespace RPGPlatformer.Core
         public Dictionary<string, State> LookupState { get; protected set; } = new();
 
         public StateGraph() : base() { }
-        public StateGraph(Collection<State> vertices = null, Collection<(State, State)> edges = null) : base(vertices, edges) { }
+        public StateGraph(ICollection<State> vertices = null, ICollection<(State, State)> edges = null) 
+            : base(vertices, edges) { }
         //note that, because constructor adds the vertices one by one through "AddVertex", the dictionary gets populated automatically.
 
         public override State AddVertex(State state)
         {
             if (!ContainsStateOfType(state.GetType()))
             {
-                LookupState[state.GetType().Name] = state;
+                LookupState[state.name] = state;
                 return base.AddVertex(state);
             }
             else
             {
-                Debug.LogWarning($"Tried to add a vertex of type {state.GetType().Name} to {GetType().Name}, but it already contains a state of that type.");
+                Debug.LogWarning($"State graph of type {GetType()} already contains a " +
+                    $"state of type {state.name}");
                 return null;
             }
         }
@@ -34,41 +35,18 @@ namespace RPGPlatformer.Core
 
         public override void RemoveVertex(State state)
         {
-            LookupState.Remove(state.GetType().Name);
+            LookupState.Remove(state.name);
             base.RemoveVertex(state);
         }
 
         public State FindStateOfType(Type type)
         {
-            try
-            {
-                return vertices.First(x => x.GetType() == type);
-            }
-            catch (InvalidOperationException)
-            {
-                throw new StateNotFoundException(type);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message);
-                return null;
-            }
+            return vertices?.FirstOrDefault(v => v.name == type.Name);
         }
 
         public bool ContainsStateOfType(Type type)
         {
-            if (!typeof(State).IsAssignableFrom(type))
-            {
-                return false;
-            }
-            foreach (State state in vertices)
-            {
-                if (state.GetType().Name == type.Name)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return FindStateOfType(type) != null;
         }
 
         public virtual bool CanTransition(State state1, State state2)

@@ -35,9 +35,10 @@ namespace RPGPlatformer.Movement
 
         protected virtual void ConfigureWallDetection()
         {
-            OnUpdate += mover.UpdateAdjacentWall;
-            OnUpdate += SetDownSpeed;
-            OnUpdate += HandleAdjacentWallInteraction;
+            OnUpdate += UpdateAndHandleWallInteraction;
+            //OnUpdate += mover.UpdateAdjacentWall;
+            //OnUpdate += SetDownSpeed;
+            //OnUpdate += HandleAdjacentWallInteraction;
         }
 
 
@@ -61,14 +62,23 @@ namespace RPGPlatformer.Movement
             movementManager.SetDownSpeed(mover.Rigidbody.linearVelocityY);
         }
 
-        protected virtual void HandleAdjacentWallInteraction()
+        protected virtual void UpdateAndHandleWallInteraction()
+        {
+            var airborne = movementManager.StateMachine.CurrentState is Airborne;
+
+            mover.UpdateAdjacentWall(airborne);
+            SetDownSpeed();
+            HandleAdjacentWallInteraction(airborne);
+        }
+
+        protected virtual void HandleAdjacentWallInteraction(bool airborne)
         {
             if (moveInput != Vector2.zero && mover.FacingWall)
             {
                 movementManager.AnimateWallScramble(false);
                 if (!movementManager.IsWallClinging())
                 {
-                    BeginWallCling();
+                    BeginWallCling(airborne);
                 }
                 else
                 {
@@ -94,10 +104,10 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void BeginWallCling()
+        protected virtual void BeginWallCling(bool airborne)
         {
             movementManager.AnimateWallCling(true);
-            mover.BeginWallCling();
+            mover.BeginWallCling(airborne);
         }
 
         protected virtual void EndWallCling()

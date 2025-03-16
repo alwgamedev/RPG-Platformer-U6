@@ -1,16 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RPGPlatformer.Core
 {
     public abstract class State
     {
+        public readonly string name;
+
         public Action OnEntry;//fires only when entering from a different state
         public Action OnEntryToSameState;//fires when re-entering the same state
         public Action OnExit;//fires only when exiting to a different state
         public Action OnExitToSameState;//fires when exiting to the same state
 
         //NOTE: to prevent issues, it fires either entry OR reentry, not both.
-        //(because if both fired on state re-entry then we have to choose which fires first, and we can't always make the right choice
+        //(because if both fired on state re-entry then we have to choose which fires first,
+        //and we can't always make the right choice
+    
+        public State()
+        {
+            name = GetType().Name;
+        }
     }
 
     public class NullState : State { }

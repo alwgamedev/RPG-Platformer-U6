@@ -56,9 +56,9 @@ namespace RPGPlatformer.Core
         {
             State previousState = CurrentState;
             CurrentState = newState;
-            bool transitioningToSameState = previousState.Equals(CurrentState);
+            //bool transitioningToSameState = previousState.Equals(CurrentState);
 
-            if (transitioningToSameState)
+            if (previousState.Equals(CurrentState))
             {
                 previousState.OnExitToSameState?.Invoke();
                 CurrentState.OnEntryToSameState?.Invoke();
@@ -98,7 +98,7 @@ namespace RPGPlatformer.Core
 
         public bool HasState(string stateName)
         {
-            return CurrentState.GetType().Name == stateName;
+            return CurrentState.name == stateName;
         }
 
         public bool HasState(Type type)

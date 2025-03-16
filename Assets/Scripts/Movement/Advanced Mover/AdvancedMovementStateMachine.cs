@@ -10,7 +10,7 @@
         public AdvancedMovementStateMachine() : base() {}
     }
 
-    public class Jumping : MoveState { }
+    public class Jumping : Airborne { }
 
     public class AdvancedMovementStateGraph : MovementStateGraph
     {

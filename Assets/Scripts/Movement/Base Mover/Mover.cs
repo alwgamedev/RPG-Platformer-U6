@@ -22,8 +22,8 @@ namespace RPGPlatformer.Movement
         protected Rigidbody2D myRigidbody;
         protected float myHeight;
         protected float myWidth;
-        protected bool jumping;
-        protected bool freefalling;
+        //protected bool jumping;
+        //protected bool freefalling;
         protected bool verifyingJump;
         protected bool verifyingFreefall;
         protected float groundednessTolerance;
@@ -49,7 +49,7 @@ namespace RPGPlatformer.Movement
         public event Action OnJump;
         public event Action OnFreefall;
         public event Action FreefallVerified;
-        public event Action OnDestroyed;
+        //public event Action OnDestroyed;
 
         protected virtual void Awake()
         {
@@ -69,17 +69,21 @@ namespace RPGPlatformer.Movement
             //and when they don't check for dropoffs they can walk off cliffs)
         }
 
-        protected virtual void Update()
-        {
-            rightGroundHit = Physics2D.Raycast(ColliderCenterRight, - transform.up, groundednessTolerance, 
-                LayerMask.GetMask("Ground"));
-            leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, - transform.up, groundednessTolerance, 
-                LayerMask.GetMask("Ground"));
+        //protected virtual void Update()
+        //{
+        //    UpdateGroundHits();
+        //    UpdateState();
+        //}
 
-            UpdateState();
+        public virtual void UpdateGroundHits()
+        {
+            rightGroundHit = Physics2D.Raycast(ColliderCenterRight, -transform.up, groundednessTolerance,
+                LayerMask.GetMask("Ground"));
+            leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, -transform.up, groundednessTolerance,
+                LayerMask.GetMask("Ground"));
         }
 
-        protected virtual void UpdateState()
+        public virtual void UpdateState(bool jumping, bool freefalling)
         {
             if (rightGroundHit || leftGroundHit)
             {
@@ -96,14 +100,14 @@ namespace RPGPlatformer.Movement
 
         protected virtual void TriggerLanding()
         {
-            jumping = false;
-            freefalling = false;
+            //jumping = false;
+            //freefalling = false;
             Trigger(typeof(Grounded).Name);
         }
 
         protected virtual void TriggerFreefall()
         {
-            freefalling = true;
+            //freefalling = true;
             OnFreefall?.Invoke();//cancels any ongoing verification
             VerifyFreefall();
             Trigger(typeof(Freefall).Name);
@@ -111,10 +115,10 @@ namespace RPGPlatformer.Movement
 
         protected virtual void TriggerJumping()
         {
-            jumping = true;
+            //jumping = true;
             OnJump?.Invoke();
-            VerifyJump();
             Trigger(typeof(Jumping).Name);
+            VerifyJump();
         }
 
         //Direction is assumed to be "right pointing" (as transform.right always points right in new system)
@@ -196,7 +200,7 @@ namespace RPGPlatformer.Movement
             }
             catch (TaskCanceledException)
             {
-                verifyingFreefall = false;
+                verifyingJump = false;
                 return;
             }
             finally
@@ -213,7 +217,6 @@ namespace RPGPlatformer.Movement
             {
                 OnFreefall += cts.Cancel;
                 OnJump += cts.Cancel;
-                OnDestroyed += cts.Cancel;
                 verifyingFreefall = true;
                 await Task.Delay(200, cts.Token);
                 verifyingFreefall = false;
@@ -231,7 +234,7 @@ namespace RPGPlatformer.Movement
             {
                 OnFreefall -= cts.Cancel;
                 OnJump -= cts.Cancel;
-                OnDestroyed -= cts.Cancel;
+                //OnDestroyed -= cts.Cancel;
             }
         }
 
@@ -289,12 +292,12 @@ namespace RPGPlatformer.Movement
 
         protected override void OnDestroy()
         {
-            OnDestroyed?.Invoke();
+            //OnDestroyed?.Invoke();
 
             base.OnDestroy();
 
             DirectionChanged = null;
-            OnDestroyed = null;
+            //OnDestroyed = null;
             OnJump = null;
             OnFreefall = null;
             FreefallVerified = null;
