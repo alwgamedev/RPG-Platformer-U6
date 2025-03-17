@@ -56,6 +56,7 @@ namespace RPGPlatformer.Combat
             },
             CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
+            AllowExecuteWithoutTarget = true,
             CombatStyle = CombatStyle.Unarmed,
             AnimationState = "Punch",
             GetHitEffect = ()

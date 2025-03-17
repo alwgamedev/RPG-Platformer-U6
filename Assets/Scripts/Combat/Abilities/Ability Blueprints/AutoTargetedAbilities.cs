@@ -12,6 +12,8 @@ namespace RPGPlatformer.Combat
         public Func<ICombatController, IHealth> AutoTarget;
         public new Action<ICombatController, IHealth> OnExecute;
 
+        public bool AllowExecuteWithoutTarget { get; init; }
+
         public AutoTargetedAbility(bool executeTriggeredInAnimation = false, bool channelWhileStored = true)
         {
             if (executeTriggeredInAnimation)
@@ -33,7 +35,15 @@ namespace RPGPlatformer.Combat
             if (!CanBeExecuted(controller)) return;
 
             IHealth target = AutoTarget(controller);
-            if (!controller.Combatant.TargetInRange(target)) return;
+            if (!controller.Combatant.TargetInRange(target))
+            {
+                if (!AllowExecuteWithoutTarget)
+                {
+                    return;
+                }
+
+                target = null;
+            }
 
             controller.Combatant.Attack();
             OnExecute?.Invoke(controller, target);
@@ -48,8 +58,10 @@ namespace RPGPlatformer.Combat
             UpdateCombatantStats(controller.Combatant);
         }
 
+        //dont worry this is not being used for std auto-target abilities where range check is already done
+        //in execute (actually this method isn't being used at all rn)
         public static void DealDamageWithRangeCheck(ICombatant combatant, IHealth target, float damage,
-            float? stunDuration = null, bool freezeAnimationDuringStun = true, 
+            float? stunDuration = null, bool freezeAnimationDuringStun = true,
             Func<PoolableEffect> getHitEffect = null)
         {
             if (combatant.TargetInRange(target))

@@ -69,12 +69,13 @@ namespace RPGPlatformer.Combat
         public static AutoTargetedBleed Swipe = new()//basic bleed
         {
             Description = "Silent but deadly.",
-            AbilityTags = new() 
-            { 
+            AbilityTags = new()
+            {
                 AbilityTag.Bleed,
                 AbilityTag.AutoCastable
             },
             CanBeIncludedInAutoCastCycle = true,
+            AllowExecuteWithoutTarget = true,
             ObeyGCD = true,
             AnimationState = "Swipe",
             GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Swipe Hit Effect"),
@@ -97,6 +98,7 @@ namespace RPGPlatformer.Combat
             },
             CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
+            AllowExecuteWithoutTarget = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slash",
             Cooldown = 1.44f,
@@ -115,6 +117,7 @@ namespace RPGPlatformer.Combat
             },
             CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
+            AllowExecuteWithoutTarget = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Uppercut",
             Cooldown = 1.44f,
@@ -135,6 +138,7 @@ namespace RPGPlatformer.Combat
             },
             CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
+            AllowExecuteWithoutTarget = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Jab",
             GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Rope Coil Effect"),
