@@ -34,12 +34,12 @@ namespace RPGPlatformer.AIControl
 
         //BEGIN NEW NAVIGATION
 
-        public void BeginPatrol(PatrolMode mode, PatrolParemeters p)
+        public void BeginPatrol(PatrolMode mode, PatrolParemeters p, IMovementController m)
         {
             switch(mode)
             {
                 case PatrolMode.rest:
-                    BeginRest();
+                    BeginRest(m);
                     break;
                 case PatrolMode.bounded:
                     BeginBoundedPatrol(p);
@@ -53,9 +53,10 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        public void BeginRest()
+        public void BeginRest(IMovementController m)
         {
             CurrentMode = PatrolMode.rest;
+            m.SoftStop();
         }
 
         //making these transforms instead of just positions, in case in future we want to patrol between 
@@ -105,7 +106,7 @@ namespace RPGPlatformer.AIControl
 
             if (HasReachedDestination())
             {
-                DestinationReached();
+                OnDestinationReached();
                 return;
             }
 
@@ -138,7 +139,7 @@ namespace RPGPlatformer.AIControl
             return Vector2.Distance(transform.position, currentDestination) < destinationTolerance;
         }
 
-        public void DestinationReached()
+        public void OnDestinationReached()
         {
             switch(CurrentMode)
             {

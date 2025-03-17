@@ -1,16 +1,15 @@
 ﻿using RPGPlatformer.Core;
-using System.Diagnostics;
 
 namespace RPGPlatformer.AIControl
 {
-    public class AIPatrollerStateMachine : AIPatrollerStateMachine<AIPatrollerStateGraph>
+    public class CombatPatrollerStateMachine : CombatPatrollerStateMachine<CombatPatrollerStateGraph>
     {
-        public AIPatrollerStateMachine() : base() { }
+        public CombatPatrollerStateMachine() : base() { }
     }
 
-    public class AIPatrollerStateMachine<T> : StateMachine<T> where T : AIPatrollerStateGraph
+    public class CombatPatrollerStateMachine<T> : StateMachine<T> where T : CombatPatrollerStateGraph
     {
-        public AIPatrollerStateMachine() : base() { }
+        public CombatPatrollerStateMachine() : base() { }
     }
 
     public abstract class AIPatrollerState : State { }
@@ -21,7 +20,7 @@ namespace RPGPlatformer.AIControl
     public class Pursuit : Suspicion { }
     public class Attack : Suspicion { }
 
-    public class AIPatrollerStateGraph : StateGraph
+    public class CombatPatrollerStateGraph : StateGraph
     {
         public readonly Inactive inactive;
         public readonly Patrol patrol;
@@ -29,7 +28,7 @@ namespace RPGPlatformer.AIControl
         public readonly Pursuit pursuit;
         public readonly Attack attack;
 
-        public AIPatrollerStateGraph() : base()
+        public CombatPatrollerStateGraph() : base()
         {
             inactive = CreateNewVertex<Inactive>();
             patrol = CreateNewVertex<Patrol>();

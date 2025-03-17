@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace RPGPlatformer.Movement
+﻿namespace RPGPlatformer.Movement
 {
     //public enum DropOffHandlingOption
     //{

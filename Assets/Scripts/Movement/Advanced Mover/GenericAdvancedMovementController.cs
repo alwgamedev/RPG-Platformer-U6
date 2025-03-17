@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Movement
 {
@@ -12,6 +11,7 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected bool detectWalls;
 
+        public bool Grounded => movementManager.StateMachine.CurrentState == movementManager.StateGraph.grounded;
         public bool Jumping => movementManager.StateMachine.CurrentState == movementManager.StateGraph.jumping;
         public bool Freefalling => movementManager.StateMachine.CurrentState == movementManager.StateGraph.freefall;
 
@@ -47,6 +47,7 @@ namespace RPGPlatformer.Movement
 
 
         //BASIC FUNCTIONS
+
         protected override void UpdateMover()
         {
             mover.UpdateGroundHits();
@@ -84,11 +85,9 @@ namespace RPGPlatformer.Movement
 
         protected virtual void UpdateAndHandleWallInteraction()
         {
-            var airborne = movementManager.StateMachine.CurrentState is Airborne;
-
-            mover.UpdateAdjacentWall(airborne);
+            mover.UpdateAdjacentWall(!Grounded);
             SetDownSpeed();
-            HandleAdjacentWallInteraction(airborne);
+            HandleAdjacentWallInteraction(!Grounded);
         }
 
         protected virtual void HandleAdjacentWallInteraction(bool airborne)

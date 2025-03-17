@@ -40,7 +40,7 @@ namespace RPGPlatformer.UI
 
         public void Configure()
         {
-            inputField = GetComponentInChildren<GameLogInputField>();
+            inputField = GetComponentInChildren<GameLogInputField>(true);
             inputField.InputSubmitted += (input) => EnableInputField(false);
             EnableInputField(false);
 

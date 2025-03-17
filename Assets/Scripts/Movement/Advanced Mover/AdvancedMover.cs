@@ -54,7 +54,7 @@ namespace RPGPlatformer.Movement
                 (int)CurrentOrientation * Vector2.right, false, true);
         }
 
-        public float SpeedFraction()
+        public virtual float SpeedFraction()
         {
             return myRigidbody.linearVelocity.magnitude / runSpeed;
         }

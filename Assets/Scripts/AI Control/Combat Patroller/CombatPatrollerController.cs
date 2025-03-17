@@ -6,16 +6,16 @@ using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
-    [RequireComponent(typeof(AIPatroller))]
-    public class AIPatrollerController : MonoBehaviour, IInputSource
+    [RequireComponent(typeof(CombatPatroller))]
+    public class CombatPatrollerController : MonoBehaviour, IInputSource
     {
         [SerializeField] protected bool playerEnemy = true;
         [SerializeField] protected PatrolMode defaultPatrolMode;
         [SerializeField] protected PatrolParemeters defaultPatrolParameters;
 
-        protected AIPatroller patroller;
-        protected AIPatrollerStateManager stateManager;
-        protected AIPatrollerStateMachine stateMachine;
+        protected CombatPatroller patroller;
+        protected CombatPatrollerStateManager stateManager;
+        protected CombatPatrollerStateMachine stateMachine;
         protected Action OnUpdate;
         protected bool stateBehaviorSubscribed;
 
@@ -23,7 +23,7 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void Awake()
         {
-            patroller = GetComponent<AIPatroller>();
+            patroller = GetComponent<CombatPatroller>();
         }
 
         private void Start()

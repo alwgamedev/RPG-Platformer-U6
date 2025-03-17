@@ -24,7 +24,7 @@ namespace RPGPlatformer.AIControl
             if (collider.gameObject.TryGetComponent(out IPathPatroller p)
                 && p.TargetPoint?.Value == this)
             {
-                p.DestinationReached();
+                p.OnDestinationReached();
             }
         }
     }

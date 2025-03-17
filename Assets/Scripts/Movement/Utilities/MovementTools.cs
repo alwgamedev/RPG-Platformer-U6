@@ -12,7 +12,8 @@ namespace RPGPlatformer.Movement
         public static Trajectory ImpulseForceTrajectory(AdvancedMover mover, Vector2 impulseForce)
         {
             Vector2 g = Physics2D.gravity;
-            Vector2 v0 = (impulseForce / mover.Rigidbody.mass) + mover.Rigidbody.linearVelocity;
+            Vector2 v0 = (impulseForce / mover.Rigidbody.mass)
+                + mover.RunSpeed * (int)mover.CurrentOrientation * (Vector2)mover.transform.right;
 
             Vector2 Position(float t)
             {

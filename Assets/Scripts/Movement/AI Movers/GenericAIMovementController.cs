@@ -8,7 +8,6 @@ namespace RPGPlatformer.Movement
         ignore, stop, tryToJump
     }
 
-    [RequireComponent(typeof(AdvancedMover))]
     public abstract class GenericAIMovementController<T0, T1, T2, T3> : GenericAdvancedMovementController<T0, T1, T2, T3>
         //where T0 : AIMover
         where T0 : AdvancedMover
@@ -33,9 +32,7 @@ namespace RPGPlatformer.Movement
             get => base.MoveInput;
             set
             {
-                if (movementManager.StateMachine.HasState(typeof(Grounded)))
-                //ai will never change move input while airborne
-                //(except if they hit wall then move input is set to 0 so they don't cling)
+                if (CanSetMoveInput())
                 {
                     base.MoveInput = value;
                 }
@@ -66,6 +63,11 @@ namespace RPGPlatformer.Movement
             mover.AwkwardWallMoment += SoftStop;
         }
 
+        protected virtual bool CanSetMoveInput()
+        {
+            return Grounded;
+        }
+
         public bool DropOffAhead(HorizontalOrientation direction, out float distance)
         {
             if (dropOffHandlingOption == DropOffHandlingOption.ignore)
@@ -81,17 +83,17 @@ namespace RPGPlatformer.Movement
             SetOrientation(input);
 
             if (stuckAtLedge) return;
+            //note: direction change will set stuckAtLedge = false,
+            //but SetOrientation does not always trigger a direction change
 
             if (input != Vector2.zero && DropOffAhead(CurrentOrientation, out var dist)
-                && !HandleDropoffAhead(dist, out stuckAtLedge)) return;
+                && !HandleDropoffAhead(dist)) return;
 
             mover.MoveGrounded(matchRotationToGround);
         }
 
-        protected virtual bool HandleDropoffAhead(float dist, out bool stuckAtLedge)
+        protected virtual bool HandleDropoffAhead(float dist)
         {
-            stuckAtLedge = false;
-
             if (dropOffHandlingOption == DropOffHandlingOption.stop && dist < dropOffStopDistance)
             {
                 HardStop();
@@ -100,7 +102,7 @@ namespace RPGPlatformer.Movement
             }
             else if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
             {
-                mover.MoveGroundedWithoutAcceleration(mover.RunSpeed, false);
+                //mover.MoveGroundedWithoutAcceleration(mover.RunSpeed, false);
                 //note can jump assumes you are moving at maxSpeed
                 if (jumpingEnabled && mover.CanJumpGap(out var landingPt))
                 {
@@ -108,13 +110,15 @@ namespace RPGPlatformer.Movement
                         || Vector2.Distance(landingPt, currentTarget.Transform.position) <
                         Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
                     {
-                        //mover.MoveGroundedWithoutAcceleration(mover.RunSpeed, false);//get up to maxSpeed
+                        mover.MoveGroundedWithoutAcceleration(mover.RunSpeed, false);//get up to maxSpeed
                         mover.Jump();
+                        stuckAtLedge = false;
                         return true;
                     }
                     else if (dist < dropOffStopDistance)
                     {
                         HardStop();
+                        stuckAtLedge = false;
                         return false;
                         //stopped, but not considered stuck at ledge, so it can continue re-evaluating whether
                         //jumping will bring it closer to target
@@ -126,10 +130,10 @@ namespace RPGPlatformer.Movement
                     stuckAtLedge = true;
                     return false;
                 }
-
+                stuckAtLedge = false;
                 return true;
             }
-
+            stuckAtLedge = false;
             return true;
         }
 

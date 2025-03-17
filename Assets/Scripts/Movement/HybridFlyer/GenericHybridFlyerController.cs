@@ -2,31 +2,32 @@
 
 namespace RPGPlatformer.Movement
 {
-    public class GenericFlyerController<T0, T1, T2, T3> : GenericAdvancedMovementController<T0, T1, T2, T3>
-        where T0 : Flyer
-        where T1 : FlyerStateGraph
-        where T2 : FlyerStateMachine<T1>
-        where T3 : FlyerStateManager<T1, T2, T0>
+    public class GenericHybridFlyerController<T0, T1, T2, T3> : GenericAIMovementController<T0, T1, T2, T3>
+        where T0 : HybridFlyer
+        where T1 : HybridFlyerStateGraph
+        where T2 : HybridFlyerStateMachine<T1>
+        where T3 : HybridFlyerStateManager<T1, T2, T0>
     {
         public bool Flying => movementManager.StateMachine.CurrentState == movementManager.StateGraph.flying;
 
-        public override Vector2 MoveInput 
-        { 
-            get => base.MoveInput; 
+        public override Vector2 MoveInput
+        {
             set
             {
                 if (Flying)
                 {
-                    moveInput = value.normalized;//rn this is the only time it needs to be normalized
-                    //because other movement actions already use a unit direction vector
-                    //(GroundDirectionVector() gets normalized,
-                    //while flying uses the move input as the direction vector)
+                    value = value.normalized;
+                    //this is the only time where the move action directly uses the move input as its direction
                 }
-                else
-                {
-                    base.MoveInput = value;
-                }
+
+                base.MoveInput = value;
             }
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            mover.FlyingVerified += OnFlyingVerified;
         }
 
         protected override void ConfigureMovementManager()
@@ -35,6 +36,13 @@ namespace RPGPlatformer.Movement
 
             movementManager.StateGraph.flying.OnEntry += OnFlyingEntry;
             movementManager.StateGraph.flying.OnExit += OnFlyingExit;
+        }
+
+        // BASIC FUNCTIONS
+
+        public virtual void BeginFlying()
+        {
+            mover.BeginFlying();
         }
 
         protected override void UpdateMover()
@@ -57,15 +65,35 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        protected override void AnimateMovement()
+        {
+            if (!Flying)
+            {
+                base.AnimateMovement();
+            }
+        }
+
+        protected virtual void OnFlyingVerified()
+        {
+            if (Flying)
+            {
+                mover.SetLinearDamping(true);
+            }
+        }
+
         protected virtual void OnFlyingEntry()
         {
+            movementManager.AnimateMovement(0);
             UpdateMaxSpeed();
             CurrentMoveAction = FlyingMoveAction;
+            movementManager.OnFlyingEntry();
         }
 
         protected virtual void OnFlyingExit()
         {
             UpdateMaxSpeed();
+            movementManager.OnFlyingExit();
+            mover.SetLinearDamping(false);
         }
 
 

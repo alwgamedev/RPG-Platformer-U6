@@ -26,7 +26,7 @@ namespace RPGPlatformer.Movement
         //protected bool jumping;
         //protected bool freefalling;
         protected bool verifyingJump;
-        protected bool verifyingFreefall;
+        protected bool verifyingFreefall;//TO-DO: could we just have one variable "verifyingAirborne"?
         protected float groundednessTolerance;
         protected RaycastHit2D rightGroundHit;
         protected RaycastHit2D leftGroundHit;
@@ -110,8 +110,8 @@ namespace RPGPlatformer.Movement
         {
             //freefalling = true;
             OnFreefall?.Invoke();//cancels any ongoing verification
-            VerifyFreefall();
             Trigger(typeof(Freefall).Name);
+            VerifyFreefall();
         }
 
         protected virtual void TriggerJumping()
