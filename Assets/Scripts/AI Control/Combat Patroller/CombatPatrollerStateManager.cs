@@ -8,7 +8,7 @@ namespace RPGPlatformer.AIControl
             : base(stateMachine, patroller) { }
     }
 
-    public class CombatPatrollerStateManager<T0, T1, T2> : StateManager<T0, T1, T2>
+    public class CombatPatrollerStateManager<T0, T1, T2> : AIPatrollerStateManager<T0, T1, T2>
         where T0 : CombatPatrollerStateGraph
         where T1 : CombatPatrollerStateMachine<T0>
         where T2 : CombatPatroller

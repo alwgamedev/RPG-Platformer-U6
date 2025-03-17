@@ -9,21 +9,21 @@ namespace RPGPlatformer.AIControl
     [RequireComponent(typeof(AIMovementController))]
     [RequireComponent(typeof(PatrolNavigator))]
     [RequireComponent(typeof(AICombatController))]
-    public class CombatPatroller : StateDriver
+    public class CombatPatroller : AIPatroller
     {
         [SerializeField] protected float pursuitRange = 5;
         [SerializeField] protected float suspicionTime = 5;
         protected bool correctingCombatDistance;
         protected float suspicionTimer;
-        protected float hangTimer;
+        //protected float hangTimer;
         protected IHealth currentTarget;
 
-        protected Action OnUpdate;
+        //protected Action OnUpdate;
 
         public float TargetingTolerance => CombatController.Combatant.Health.TargetingTolerance;
         public float MinimumCombatDistance => CombatController.AICombatant.MinimumCombatDistance;
-        public PatrolNavigator PatrolNavigator { get; protected set; }
-        public AIMovementController MovementController { get; protected set; }
+        //public PatrolNavigator PatrolNavigator { get; protected set; }
+        //public AIMovementController MovementController { get; protected set; }
         public AICombatController CombatController { get; protected set; }
 
         public IHealth CurrentTarget
@@ -37,14 +37,18 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
-            MovementController = GetComponent<AIMovementController>();
-            CombatController = GetComponent<AICombatController>();
-            PatrolNavigator = GetComponent<PatrolNavigator>();
+            base.Awake();
 
-            PatrolNavigator.PatrolComplete += OnPatrolComplete;
-            PatrolNavigator.BeginHangTime += MovementController.SoftStop;
+            CombatController = GetComponent<AICombatController>();
+
+            //MovementController = GetComponent<AIMovementController>();
+            //CombatController = GetComponent<AICombatController>();
+            //PatrolNavigator = GetComponent<PatrolNavigator>();
+
+            //PatrolNavigator.PatrolComplete += OnPatrolComplete;
+            //PatrolNavigator.BeginHangTime += MovementController.SoftStop;
         }
 
         //protected virtual void Start()
@@ -59,10 +63,10 @@ namespace RPGPlatformer.AIControl
         //    }
         //}
 
-        protected virtual void Update()
-        {
-            OnUpdate?.Invoke();
-        }
+        //protected virtual void Update()
+        //{
+        //    OnUpdate?.Invoke();
+        //}
 
         //protected void OnCombatManagerConfigured()
         //{
@@ -102,24 +106,24 @@ namespace RPGPlatformer.AIControl
             return true;
         }
 
-        public virtual void BeginPatrol(PatrolMode mode, PatrolParemeters p)
-        {
-            PatrolNavigator.BeginPatrol(mode, p, MovementController);
-        }
+        //public virtual void BeginPatrol(PatrolMode mode, PatrolParemeters p)
+        //{
+        //    PatrolNavigator.BeginPatrol(mode, p, MovementController);
+        //}
 
-        public virtual void PatrolBehavior()
+        public override void PatrolBehavior()
         {
             if (CurrentTarget == null || !ScanForTarget(null))
             {
-                PatrolNavigator.PatrolBehavior(MovementController);
+                base.PatrolBehavior();
             }
         }
 
         //this gets called e.g. when you reach the end of a patrol path
-        public virtual void OnPatrolComplete() 
-        {
-            PatrolNavigator.BeginRest(MovementController);
-        }
+        //public virtual void OnPatrolComplete() 
+        //{
+        //    PatrolNavigator.BeginRest(MovementController);
+        //}
 
 
         public virtual void SuspicionBehavior()
@@ -244,10 +248,10 @@ namespace RPGPlatformer.AIControl
             return false;
         }
 
-        public void TriggerPatrol()
-        {
-            Trigger(typeof(Patrol).Name);
-        }
+        //public void TriggerPatrol()
+        //{
+        //    Trigger(typeof(Patrol).Name);
+        //}
 
         public void TriggerSuspicion()
         {
@@ -259,11 +263,11 @@ namespace RPGPlatformer.AIControl
             Trigger(typeof(Pursuit).Name);
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
+        //protected override void OnDestroy()
+        //{
+        //    base.OnDestroy();
 
-            OnUpdate = null;
-        }
+        //    OnUpdate = null;
+        //}
     }
 }
