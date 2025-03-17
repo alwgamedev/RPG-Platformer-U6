@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3608180259351807866}
   - component: {fileID: 8609675182907158138}
   - component: {fileID: 3741463597107785236}
+  - component: {fileID: 5417805890505513155}
   - component: {fileID: 7596018891606991704}
   - component: {fileID: 8820363439467063438}
   - component: {fileID: 6620261427313468017}
@@ -23,9 +24,8 @@ GameObject:
   - component: {fileID: 8452712315555511255}
   - component: {fileID: 2525433368886563850}
   - component: {fileID: 4129447919136715259}
-  - component: {fileID: 5417805890505513155}
-  - component: {fileID: 6286495894329936769}
   - component: {fileID: 8244550270408134216}
+  - component: {fileID: 7847680296851163206}
   m_Layer: 6
   m_Name: Rhino Beetle
   m_TagString: Enemy
@@ -99,6 +99,43 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!70 &5417805890505513155
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4640224479810571276}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.0235386, y: 0.10289598}
+  m_Size: {x: 1.1190878, y: 0.9271549}
+  m_Direction: 1
 --- !u!114 &7596018891606991704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +171,7 @@ MonoBehaviour:
   runSpeed: 2.3
   walkSpeed: 1
   maxNumJumps: 0
-  jumpForce: 400
+  jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
 --- !u!114 &6620261427313468017
 MonoBehaviour:
@@ -291,9 +328,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3721482397e32784a9209dc64e5f4195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerEnemy: 1
-  defaultPatrolMode: 0
+  defaultPatrolMode: 1
   defaultPatrolParameters: {fileID: 0}
+  playerEnemy: 1
 --- !u!114 &4129447919136715259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,58 +371,6 @@ MonoBehaviour:
     statBar: {fileID: 0}
   useAutoCalculatedHealthPoints: 0
   combatXPReward: 5
---- !u!70 &5417805890505513155
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4640224479810571276}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.0235386, y: 0.10289598}
-  m_Size: {x: 1.1190878, y: 0.9271549}
-  m_Direction: 1
---- !u!114 &6286495894329936769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4640224479810571276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f1a444140069304e96f7f73457d801c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destinationTolerance: 0.1
-  boundedPatrolHangTime: 1
-  pathPatrolHangTime: 0
 --- !u!114 &8244550270408134216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,6 +385,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pursuitRange: 5
   suspicionTime: 5
+--- !u!114 &7847680296851163206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4640224479810571276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f1a444140069304e96f7f73457d801c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destinationTolerance: 0.1
+  boundedPatrolHangTime: 1
+  pathPatrolHangTime: 0
 --- !u!1 &6277706183260746356
 GameObject:
   m_ObjectHideFlags: 0

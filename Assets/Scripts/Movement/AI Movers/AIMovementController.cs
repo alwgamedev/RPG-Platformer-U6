@@ -6,8 +6,7 @@
     //}
 
     public class AIMovementController : GenericAIMovementController<AdvancedMover, AdvancedMovementStateGraph, 
-        AdvancedMovementStateMachine,  AdvancedMovementStateManager<AdvancedMovementStateGraph, 
-            AdvancedMovementStateMachine, AdvancedMover>>
+        AdvancedMovementStateMachine,  AdvancedMovementStateManager>
         //AdvancedMovementController
     {
         //[SerializeField] protected DropOffHandlingOption dropOffHandlingOption = DropOffHandlingOption.stop;

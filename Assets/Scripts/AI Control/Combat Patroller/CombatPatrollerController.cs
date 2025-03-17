@@ -1,8 +1,13 @@
-﻿namespace RPGPlatformer.AIControl
+﻿using RPGPlatformer.Combat;
+using RPGPlatformer.Movement;
+
+namespace RPGPlatformer.AIControl
 {
     //[RequireComponent(typeof(CombatPatroller))]
-    public class CombatPatrollerController : GenericCombatPatrollerController<CombatPatroller,
-        CombatPatrollerStateGraph, CombatPatrollerStateMachine, CombatPatrollerStateManager>
+    public class CombatPatrollerController : GenericCombatPatrollerController<AIMovementController,
+        AdvancedMover, AdvancedMovementStateGraph, AdvancedMovementStateMachine, AdvancedMovementStateManager,
+        AICombatController, CombatPatroller, CombatPatrollerStateGraph, CombatPatrollerStateMachine,
+        CombatPatrollerStateManager>
     {
         //[SerializeField] protected bool playerEnemy = true;
         //[SerializeField] protected PatrolMode defaultPatrolMode;

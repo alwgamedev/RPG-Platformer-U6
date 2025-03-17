@@ -2,20 +2,26 @@
 using RPGPlatformer.Core;
 using System.Collections.Generic;
 using UnityEngine;
+using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.AIControl
 {
-    public class GenericAIPatrollerController<T0, T1, T2, T3> : MonoBehaviour, IInputSource
-        where T0 : AIPatroller
-        where T1 : AIPatrollerStateGraph
-        where T2 : AIPatrollerStateMachine<T1>
-        where T3 : AIPatrollerStateManager<T1, T2, T0>
+    public class GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3, T4> : MonoBehaviour, IInputSource
+        where T0 : GenericAdvancedMovementController<T00, T01, T02, T03>
+        where T00 : AdvancedMover
+        where T01 : AdvancedMovementStateGraph
+        where T02 : AdvancedMovementStateMachine<T01>
+        where T03 : AdvancedMovementStateManager<T01, T02, T00>
+        where T1 : GenericAIPatroller<T0, T00, T01, T02, T03>
+        where T2 : AIPatrollerStateGraph
+        where T3 : AIPatrollerStateMachine<T2>
+        where T4 : AIPatrollerStateManager<T2, T3, T0, T00, T01, T02, T03, T1>
     {
         [SerializeField] protected PatrolMode defaultPatrolMode;
         [SerializeField] protected PatrolParemeters defaultPatrolParameters;
 
-        protected T0 patroller;
-        protected T3 stateManager;
+        protected T1 patroller;
+        protected T4 stateManager;
 
         protected Action OnUpdate;
         protected bool stateBehaviorSubscribed;
@@ -24,7 +30,7 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void Awake()
         {
-            patroller = GetComponent<T0>();
+            patroller = GetComponent<T1>();
         }
 
         protected virtual void Start()
@@ -42,7 +48,7 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void InitializeStateManager()
         {
-            stateManager = (T3)Activator.CreateInstance(typeof(T3), null, patroller);
+            stateManager = (T4)Activator.CreateInstance(typeof(T4), null, patroller);
         }
 
         protected virtual void ConfigureStateManager()
