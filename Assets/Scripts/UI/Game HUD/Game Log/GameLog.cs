@@ -12,8 +12,7 @@ namespace RPGPlatformer.UI
         [SerializeField] TextMeshProUGUI content;
 
         GameLogInputField inputField;
-
-        List<int> messageCharacterMarkers = new();//[i] -> index in content.text of the last character of the i-th message
+        Queue<string> messages = new();
 
         public static GameLog Instance { get; private set; }
         public static GameLogInputField InputField => Instance.inputField;
@@ -23,7 +22,6 @@ namespace RPGPlatformer.UI
             if(Instance == null)
             {
                 Instance = this;
-                messageCharacterMarkers = new();
                 content.text = "";
             }
             else
@@ -78,11 +76,25 @@ namespace RPGPlatformer.UI
 
         private void PrivateLog(string text)
         {
-            if (text.Length == 0) return;
+            //if (string.IsNullOrEmpty(text)) return;
+            //we shouldn't ever be logging a null or empty message, so this is pointless
 
-            string message = content.text == "" ? text : "\n" + text;
-            content.text += message;
-            UpdateMessageCounterAndTrim(message);
+            messages.Enqueue(text);
+
+            if (messages.Count > maxMessages)
+            {
+                messages.Dequeue();
+                content.text = string.Join('\n', messages);
+            }
+            else if (messages.Count > 0)
+            {
+                content.text += "\n" + text;
+            }
+            else
+            {
+                content.text = text;
+            }
+            //UpdateMessageCounterAndTrim(message);
         }
 
         private void EnableInputField(bool val)
@@ -95,27 +107,27 @@ namespace RPGPlatformer.UI
             }
         }
 
-        private void UpdateMessageCounterAndTrim(string message)
-        {
-            messageCharacterMarkers.Add(content.text.Length);
-            if(messageCharacterMarkers.Count > maxMessages)
-            {
-                int lengthToDelete = messageCharacterMarkers[0];
-                content.text = content.text.Remove(0, lengthToDelete);
-                if (content.text[0] ==  '\n')
-                {
-                    content.text = content.text.Remove(0, 1);
-                    lengthToDelete += 1;
-                }
-                messageCharacterMarkers.RemoveAt(0);
-                for(int i = 0; i < messageCharacterMarkers.Count; i++)
-                {
-                    messageCharacterMarkers[i] = messageCharacterMarkers[i] - lengthToDelete;
-                }
+        //private void UpdateMessageCounterAndTrim(string message)
+        //{
+        //    messageCharacterMarkers.Add(content.text.Length);
+        //    if(messageCharacterMarkers.Count > maxMessages)
+        //    {
+        //        int lengthToDelete = messageCharacterMarkers[0];
+        //        content.text = content.text.Remove(0, lengthToDelete);
+        //        if (content.text[0] ==  '\n')
+        //        {
+        //            content.text = content.text.Remove(0, 1);
+        //            lengthToDelete += 1;
+        //        }
+        //        messageCharacterMarkers.RemoveAt(0);
+        //        for(int i = 0; i < messageCharacterMarkers.Count; i++)
+        //        {
+        //            messageCharacterMarkers[i] = messageCharacterMarkers[i] - lengthToDelete;
+        //        }
 
-                Canvas.ForceUpdateCanvases();
-            }
-        }
+        //        Canvas.ForceUpdateCanvases();//this is performance intensive too
+        //    }
+        //}
 
         private void DisableInputFieldOnMouseDown(InputAction.CallbackContext ctx)
         {

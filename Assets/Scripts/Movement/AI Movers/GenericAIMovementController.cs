@@ -100,9 +100,7 @@ namespace RPGPlatformer.Movement
             }
             else if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
             {
-                Debug.Log($"velocity before: {mover.Rigidbody.linearVelocity}");
                 mover.MoveGroundedWithoutAcceleration(mover.RunSpeed, false);
-                Debug.Log($"velocity after: {mover.Rigidbody.linearVelocity}");
                 //note can jump assumes you are moving at maxSpeed
                 if (jumpingEnabled && mover.CanJumpGap(out var landingPt))
                 {

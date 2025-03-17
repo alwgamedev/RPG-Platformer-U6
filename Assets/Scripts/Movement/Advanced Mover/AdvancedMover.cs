@@ -261,14 +261,6 @@ namespace RPGPlatformer.Movement
                     var ground = hit1.point - hit.point;
 
                     return ground.y < Mathf.Abs(ground.x) * MovementTools.tan60;
-                    //float groundAngle = Mathf.Rad2Deg * Mathf.Atan2(ground.y, ground.x);
-                    //groundAngle = Mathf.Abs(groundAngle);
-                    //if (CurrentOrientation == HorizontalOrientation.left)
-                    //{
-                    //    groundAngle = 180 - groundAngle;
-                    //}
-
-                    //return groundAngle <= 60;
                 }
             }
             return false;
