@@ -544,8 +544,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de355e656f54b6e47b36934d1af82e4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectWalls: 1
   matchRotationToGround: 0
+  detectWalls: 1
 --- !u!114 &489266092333141542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,15 +631,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68597781190fc664c9df98261ab08878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundednessToleranceFactor: 0.7
   unfreezeRotationOnDeath: 1
   deathForce: {x: -150, y: 120}
   deathTorque: 10
+  treatContactCharacterAsGround: 1
   acceleration: 50
-  freefallMovementAccelerationFactor: 0.8
+  freefallAccelerationFactor: 0.8
   runSpeed: 3
   walkSpeed: 1.2
   maxNumJumps: 2
-  jumpForce: 375
+  jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
 --- !u!114 &253623311915411687
 MonoBehaviour:

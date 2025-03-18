@@ -12,20 +12,17 @@ namespace RPGPlatformer.AIControl
 
         private void Awake()
         {
-            BuildPath();
+            WayPoints = new(pathWayPoints);
         }
 
-        private void BuildPath()
-        {
-            WayPoints = new ();
+        //private void BuildPath()
+        //{
+        //    WayPoints = new ();
 
-            for (int i = 0; i < pathWayPoints.Length; i++)
-            {
-                foreach (var w in pathWayPoints)
-                {
-                    WayPoints.AddLast(w);
-                }
-            }
-        }
+        //    foreach (var w in pathWayPoints)
+        //    {
+        //        WayPoints.AddLast(w);
+        //    }
+        //}
     }
 }

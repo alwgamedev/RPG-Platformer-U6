@@ -7,16 +7,19 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: true
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8370319335651681030}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.14999998
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 0.87
+  m_ExitTime: 1
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -172,7 +175,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: aca90cf3cb0830548906868f4cfb8e8a, type: 2}
     m_Threshold: 0.3
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.5
+    m_TimeScale: 3
     m_CycleOffset: 0
     m_DirectBlendParameter: speedFraction
     m_Mirror: 0
@@ -192,6 +195,12 @@ AnimatorController:
   m_Name: Shuttle Hawk AC
   serializedVersion: 5
   m_AnimatorParameters:
+  - m_Name: true
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 1
+    m_Controller: {fileID: 9100000}
   - m_Name: speedFraction
     m_Type: 1
     m_DefaultFloat: 0
@@ -282,7 +291,7 @@ AnimatorStateMachine:
     m_Position: {x: 380, y: -80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8370319335651681030}
-    m_Position: {x: 380, y: 20, z: 0}
+    m_Position: {x: 390, y: 20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7929008048887534217}
     m_Position: {x: 360, y: 280, z: 0}

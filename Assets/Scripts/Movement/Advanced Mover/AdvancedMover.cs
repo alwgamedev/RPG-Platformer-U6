@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGPlatformer.Movement
@@ -68,9 +67,9 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        public override void Jump(Vector2 force)
+        public override void Jump(Vector2 force, bool triggerJumping = true)
         {
-            base.Jump(force);
+            base.Jump(force, triggerJumping);
 
             NoAdjacentWall();
         }

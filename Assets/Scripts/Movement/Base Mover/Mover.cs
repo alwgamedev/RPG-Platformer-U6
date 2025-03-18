@@ -14,11 +14,13 @@ namespace RPGPlatformer.Movement
 
     public class Mover : StateDriver, IMover
     {
-        [SerializeField] float groundednessToleranceFactor = 0.7f;
-        [SerializeField] bool unfreezeRotationOnDeath;
-        [SerializeField] Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
-        [SerializeField] float deathTorque = 10;
+        [SerializeField] protected float groundednessToleranceFactor = 0.7f;
+        [SerializeField] protected bool unfreezeRotationOnDeath;
+        [SerializeField] protected Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
+        [SerializeField] protected float deathTorque = 10;
+        [SerializeField] protected bool treatContactCharacterAsGround;
 
+        protected int groundLayer;
         protected Collider2D myCollider;
         protected Rigidbody2D myRigidbody;
         protected float myHeight;
@@ -42,8 +44,6 @@ namespace RPGPlatformer.Movement
         public Vector3 ColliderCenterBack => myCollider.bounds.center - 0.45f * myWidth 
             * (int)CurrentOrientation * transform.right;
         public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
-
-
         public HorizontalOrientation CurrentOrientation { get; protected set; }
 
         public event Action<HorizontalOrientation> DirectionChanged;
@@ -62,6 +62,12 @@ namespace RPGPlatformer.Movement
             myHeight = myCollider.bounds.max.y - myCollider.bounds.min.y;
             myWidth = myCollider.bounds.max.x - myCollider.bounds.min.x;
 
+            groundLayer = LayerMask.GetMask("Ground");
+            if (treatContactCharacterAsGround)
+            {
+                groundLayer = groundLayer | LayerMask.GetMask("Contact Character");
+            }
+
             groundednessTolerance = groundednessToleranceFactor * myHeight;//a little extra than 0.5f * height, because sometimes the
             //ground collider is a bit below the surface (and we don't want to be randomly losing groundedness
             //as we walk over uneven terrain. Also the back hit needs to go quite far on steep terrain)
@@ -79,9 +85,12 @@ namespace RPGPlatformer.Movement
         public virtual void UpdateGroundHits()
         {
             rightGroundHit = Physics2D.Raycast(ColliderCenterRight, -transform.up, groundednessTolerance,
-                LayerMask.GetMask("Ground"));
+                groundLayer);
             leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, -transform.up, groundednessTolerance,
-                LayerMask.GetMask("Ground"));
+                groundLayer);
+
+            //Debug.DrawLine(ColliderCenterRight, ColliderCenterRight - groundednessTolerance * transform.up);
+            //Debug.DrawLine(ColliderCenterLeft, ColliderCenterLeft - groundednessTolerance * transform.up);
         }
 
         public virtual void UpdateState(bool jumping, bool freefalling)
@@ -176,10 +185,13 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        public virtual void Jump(Vector2 force)
+        public virtual void Jump(Vector2 force, bool triggerJumping = true)
         {
             myRigidbody.AddForce(force, ForceMode2D.Impulse);
-            TriggerJumping();
+            if (triggerJumping)
+            {
+                TriggerJumping();
+            }
         }
 
         public Vector2 OrientForce(Vector2 force)

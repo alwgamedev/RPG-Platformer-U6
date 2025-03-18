@@ -10,23 +10,10 @@ namespace RPGPlatformer.Movement
     {
         public bool Flying => movementManager.StateMachine.CurrentState == movementManager.StateGraph.flying;
 
-        public override Vector2 MoveInput
-        {
-            set
-            {
-                if (Flying)
-                {
-                    value = value.normalized;
-                    //this is the only time where the move action directly uses the move input as its direction
-                }
-
-                base.MoveInput = value;
-            }
-        }
-
         protected override void Start()
         {
             base.Start();
+
             mover.FlyingVerified += OnFlyingVerified;
         }
 
@@ -36,9 +23,23 @@ namespace RPGPlatformer.Movement
 
             movementManager.StateGraph.flying.OnEntry += OnFlyingEntry;
             movementManager.StateGraph.flying.OnExit += OnFlyingExit;
+
+            movementManager.StateMachine.StateChange += Debug.Log;
         }
 
         // BASIC FUNCTIONS
+
+        public override void MoveTowards(Vector2 point)
+        {
+            if (Flying)
+            {
+                MoveInput = point - (Vector2)transform.position;
+            }
+            else
+            {
+                base.MoveTowards(point);
+            }
+        }
 
         public virtual void BeginFlying()
         {
@@ -49,6 +50,11 @@ namespace RPGPlatformer.Movement
         {
             mover.UpdateGroundHits();
             mover.UpdateState(Flying, Jumping, Freefalling);
+        }
+
+        protected override bool CanSetMoveInput()
+        {
+            return Grounded || Flying;
         }
 
         //STATE CHANGE HANDLERS

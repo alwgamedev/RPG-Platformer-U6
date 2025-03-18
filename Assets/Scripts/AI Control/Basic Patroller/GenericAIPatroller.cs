@@ -38,7 +38,6 @@ namespace RPGPlatformer.AIControl
 
         public virtual void PatrolBehavior()
         {
-            Debug.Log($"performing patrol behavior. patrol mode: {PatrolNavigator.CurrentMode}");
             PatrolNavigator.PatrolBehavior(MovementController);
         }
 

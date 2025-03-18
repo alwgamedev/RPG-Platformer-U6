@@ -22,21 +22,21 @@ namespace RPGPlatformer.Movement
 
         public float FlightSpeed => flightSpeed;
 
-        private void Start()
+        protected virtual void Start()
         {
             defaultLinearDamping = myRigidbody.linearDamping;
         }
 
         public virtual void MoveFlying(Vector2 direction)
         {
-            Move(flightAcceleration, MaxSpeed, direction, false);
+            Move(flightAcceleration, MaxSpeed, direction.normalized, false);
         }
 
         public virtual void UpdateState(bool flying, bool jumping, bool freefalling)
         {
             if (rightGroundHit || leftGroundHit)
             {
-                if ((flying && !verifyingFlight && !awaitingFlightTakeOff) 
+                if ((flying && !verifyingFlight && !awaitingFlightTakeOff)
                     || (jumping && !verifyingJump) 
                     || (freefalling && !verifyingFreefall))
                 {
@@ -67,7 +67,7 @@ namespace RPGPlatformer.Movement
         public virtual void FlightTakeOffJump()
         {
             awaitingFlightTakeOff = false;
-            Jump(takeOffForce);
+            Jump(OrientForce(takeOffForce), false);
             VerifyFlight();
         }
 
@@ -75,16 +75,14 @@ namespace RPGPlatformer.Movement
         {
             using var cts = CancellationTokenSource
                 .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
+
             try
             {
                 PrepareFlightVerification(cts);
                 verifyingFlight = true;
                 await Task.Delay(200, cts.Token);
                 verifyingFlight = false;
-                if (!leftGroundHit && !rightGroundHit)
-                {
-                    FlyingVerified?.Invoke();
-                }
+                FlyingVerified?.Invoke();
             }
             catch (TaskCanceledException)
             {
@@ -104,7 +102,6 @@ namespace RPGPlatformer.Movement
             //these are in case you somehow land and then jump or freefall during verification period
             //to make sure that you end the verification and don't have a bunch of overlapping verifications 
             //confusing each others' outcomes
-            //(very unlikely to happen)
         }
 
         protected virtual void FlightVerificationCatch()

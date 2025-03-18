@@ -14,7 +14,7 @@ namespace RPGPlatformer.AIControl
     //Like a GPS for AIPatrollers
     public class PatrolNavigator : MonoBehaviour, IPathPatroller
     {
-        [SerializeField] float destinationTolerance = 0.1f;
+        [SerializeField] float destinationTolerance = 0.5f;
         [SerializeField] float boundedPatrolHangTime = 1;
         [SerializeField] float pathPatrolHangTime = 0;
 
@@ -25,7 +25,7 @@ namespace RPGPlatformer.AIControl
         Vector2 rightBound;
         Vector2 currentDestination;
 
-        public bool CheckHorizontalDistanceOnly { get; set; } = true;
+        //public bool CheckHorizontalDistanceOnly { get; set; } = true;
         public PatrolMode CurrentMode { get; private set; }
         public LinkedListNode<PatrolPoint> TargetPoint { get; private set; }
 
@@ -37,6 +37,8 @@ namespace RPGPlatformer.AIControl
 
         public void BeginPatrol(PatrolMode mode, PatrolParemeters p, IMovementController m)
         {
+            hangTimer = 0;
+
             switch(mode)
             {
                 case PatrolMode.rest:
@@ -106,7 +108,7 @@ namespace RPGPlatformer.AIControl
                 return;
             }
 
-            if (HasReachedDestination(CheckHorizontalDistanceOnly))
+            if (HasReachedDestination())
             {
                 OnDestinationReached();
                 return;
@@ -123,21 +125,13 @@ namespace RPGPlatformer.AIControl
                 return;
             }
 
-            if (TargetPoint != null)
-            {
-                m.MoveTowards(TargetPoint.Value.transform.position);
-            }
+            m.MoveTowards(TargetPoint.Value.transform.position);
         }
 
         //HANDLE DESTINATION REACHED
 
-        public bool HasReachedDestination(bool checkXOnly = true)
+        public bool HasReachedDestination()
         {
-            if (checkXOnly)
-            {
-                return Mathf.Abs(transform.position.x - currentDestination.x) < destinationTolerance;
-            }
-
             return Vector2.Distance(transform.position, currentDestination) < destinationTolerance;
         }
 
@@ -187,7 +181,8 @@ namespace RPGPlatformer.AIControl
                 return false;
             }
 
-            currentDestination = new(UnityEngine.Random.Range(leftBound.x, rightBound.x), 0);
+            currentDestination = new(UnityEngine.Random.Range(leftBound.x, rightBound.x), 
+                UnityEngine.Random.Range(Math.Min(leftBound.y, rightBound.y), Math.Max(leftBound.y, rightBound.y)));
             return true;
         }
 

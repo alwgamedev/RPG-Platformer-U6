@@ -15,40 +15,37 @@ namespace RPGPlatformer.AIControl
     public class ShuttleHawkController : GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3,
         AIPatrollerStateManager<T2, T3, T0, T00, T01, T02, T03, T1>>
     {
-       //[SerializeField] PatrolPath flightPath;
+        [SerializeField] PatrolPath flightPath;
 
-        //int boundedIterations;
+        int boundedIterations;
 
-        ////walk back and forth between bounds 3 times, then fly along flightPath
-        //protected override void OnPatrolDestinationReached()
-        //{
-        //    if (patroller.PatrolNavigator.CurrentMode == PatrolMode.bounded)
-        //    {
-        //        boundedIterations++;
+        //walk back and forth between bounds 3 times, then fly along flightPath
+        protected override void OnPatrolDestinationReached()
+        {
+            if (patroller.PatrolNavigator.CurrentMode == PatrolMode.bounded)
+            {
+                boundedIterations++;
 
-        //        if (boundedIterations > 2)
-        //        {
-        //            boundedIterations = 0;
-        //            patroller.PatrolNavigator.CheckHorizontalDistanceOnly = false;
-        //            patroller.BeginPatrol(PatrolMode.pathForwards, flightPath);
-        //            patroller.MovementController.BeginFlying();
-        //        }
-        //        else
-        //        {
-        //            if (boundedIterations == 1)
-        //            {
-        //                patroller.PatrolNavigator.CheckHorizontalDistanceOnly = true;
-        //            }
-        //            patroller.PatrolNavigator.GetNextDestination();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (!patroller.PatrolNavigator.GetNextDestination())
-        //        {
-        //            patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParameters);
-        //        }
-        //    }
-        //}
+                if (boundedIterations > 1)
+                {
+                    boundedIterations = 0;
+                    patroller.BeginPatrol(PatrolMode.pathForwards, flightPath);
+                    patroller.MovementController.SoftStop();
+                    patroller.MovementController.BeginFlying();
+                }
+                else
+                {
+                    patroller.PatrolNavigator.GetNextDestination();
+                }
+            }
+            else
+            {
+                if (!patroller.PatrolNavigator.GetNextDestination())
+                {
+                    Debug.Log("path complete; going back to bounded patrol (hopefully)");
+                    patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParameters);
+                }
+            }
+        }
     }
 }
