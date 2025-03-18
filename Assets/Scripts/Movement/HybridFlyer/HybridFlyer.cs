@@ -11,7 +11,7 @@ namespace RPGPlatformer.Movement
         [SerializeField] float inFlightLinearDamping = 30;
         [SerializeField] float flightAcceleration = 100;
         [SerializeField] float flightSpeed = 3;
-        [SerializeField] Vector2 takeOffForce = 400 * Vector2.right;
+        [SerializeField] Vector2 takeOffForce = 400 * Vector2.up;
 
         protected float defaultLinearDamping;
         protected bool awaitingFlightTakeOff;//for time between beginflying and takoff jump

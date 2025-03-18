@@ -40,9 +40,10 @@ namespace RPGPlatformer.AIControl
             InitializeStateManager();
             ConfigureStateManager();
             SubscribeStateBehaviorToUpdate(true);
-            InitializeState();
 
             patroller.PatrolNavigator.DestinationReached += OnPatrolDestinationReached;
+
+            InitializeState();
         }
 
         protected virtual void Update()

@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
+    [Serializable]
     public class PatrolPoint : MonoBehaviour
     {
         private void OnTriggerEnter2D(Collider2D collider)

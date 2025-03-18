@@ -19,6 +19,7 @@ namespace RPGPlatformer.Movement
         {
             base.Start();
 
+            UpdateMaxSpeed();
             OnUpdate += AnimateMovement;
 
             if (detectWalls)
@@ -42,7 +43,6 @@ namespace RPGPlatformer.Movement
         protected override void InitializeMover()
         {
             base.InitializeMover();
-            UpdateMaxSpeed();
         }
 
 

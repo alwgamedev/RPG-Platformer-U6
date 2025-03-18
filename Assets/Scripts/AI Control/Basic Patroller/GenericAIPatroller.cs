@@ -23,7 +23,6 @@ namespace RPGPlatformer.AIControl
             MovementController = GetComponent<T>();
             PatrolNavigator = GetComponent<PatrolNavigator>();
 
-            //PatrolNavigator.DestinationReached += OnPatrolDestinationReached;
             PatrolNavigator.BeginHangTime += MovementController.SoftStop;
         }
 
@@ -39,6 +38,7 @@ namespace RPGPlatformer.AIControl
 
         public virtual void PatrolBehavior()
         {
+            Debug.Log($"performing patrol behavior. patrol mode: {PatrolNavigator.CurrentMode}");
             PatrolNavigator.PatrolBehavior(MovementController);
         }
 

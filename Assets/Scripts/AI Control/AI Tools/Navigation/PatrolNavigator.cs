@@ -25,6 +25,7 @@ namespace RPGPlatformer.AIControl
         Vector2 rightBound;
         Vector2 currentDestination;
 
+        public bool CheckHorizontalDistanceOnly { get; set; } = true;
         public PatrolMode CurrentMode { get; private set; }
         public LinkedListNode<PatrolPoint> TargetPoint { get; private set; }
 
@@ -63,19 +64,20 @@ namespace RPGPlatformer.AIControl
         //two dynamic (possibly moving) objects
         public void BeginBoundedPatrol(PatrolParemeters bounds)
         {
+            var bds = bounds.Content as Transform[];
+
             CurrentMode = PatrolMode.bounded;
-            leftBound = ((Transform)bounds.Content[0]).position;
-            rightBound = ((Transform)bounds.Content[1]).position;
+            leftBound = bds[0].position;
+            rightBound = bds[1].position;
             GetNextBoundedDestination();
         }
 
-        public void BeginPathPatrol(PatrolParemeters paths, bool forwards, bool chooseRandomPath = false)
+        public void BeginPathPatrol(PatrolParemeters paths, bool forwards)
         {
-            var ps = paths.Content as LinkedList<PatrolPoint>[];
-            int i = chooseRandomPath ? UnityEngine.Random.Range(0, ps.Length) : 0;
+            var ps = paths.Content as LinkedList<PatrolPoint>;
 
             CurrentMode = forwards ? PatrolMode.pathForwards : PatrolMode.pathBackwards;
-            TargetPoint = forwards ? ps[i].First : ps[i].Last;
+            TargetPoint = forwards ? ps.First : ps.Last;
         }
 
 
@@ -104,7 +106,7 @@ namespace RPGPlatformer.AIControl
                 return;
             }
 
-            if (HasReachedDestination())
+            if (HasReachedDestination(CheckHorizontalDistanceOnly))
             {
                 OnDestinationReached();
                 return;
@@ -144,13 +146,13 @@ namespace RPGPlatformer.AIControl
             switch(CurrentMode)
             {
                 case PatrolMode.bounded:
-                    BoundedDestinationReached();
+                    OnBoundedDestinationReached();
                     break;
                 case PatrolMode.pathForwards:
-                    PathDestinationReached(true);
+                    OnPathDestinationReached(true);
                     break;
                 case PatrolMode.pathBackwards:
-                    PathDestinationReached(false);
+                    OnPathDestinationReached(false);
                     break;
             }
         }
@@ -166,7 +168,7 @@ namespace RPGPlatformer.AIControl
             };
         }
 
-        private void BoundedDestinationReached()
+        private void OnBoundedDestinationReached()
         {
             if (boundedPatrolHangTime > 0)
             {
@@ -189,7 +191,7 @@ namespace RPGPlatformer.AIControl
             return true;
         }
 
-        private void PathDestinationReached(bool forwards)
+        private void OnPathDestinationReached(bool forwards)
         {
             if (pathPatrolHangTime > 0)
             {
@@ -210,6 +212,7 @@ namespace RPGPlatformer.AIControl
         private void OnDestroy()
         {
             DestinationReached = null;
+            BeginHangTime = null;
         }
     }
 }
