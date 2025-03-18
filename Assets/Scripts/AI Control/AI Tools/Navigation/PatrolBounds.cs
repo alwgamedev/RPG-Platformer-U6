@@ -13,10 +13,7 @@ namespace RPGPlatformer.AIControl
 
         private void Awake()
         {
-            if (left != null && right != null)
-            { 
-                bounds = new Transform[] { left, right }; 
-            }
+            bounds = new Transform[] { left, right }; 
         }
     }
 }

@@ -28,6 +28,8 @@ namespace RPGPlatformer.AIControl
 
         protected Dictionary<State, Action> StateBehavior = new();
 
+        public bool Patrolling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.patrol;
+
         protected virtual void Awake()
         {
             patroller = GetComponent<T1>();
@@ -39,6 +41,8 @@ namespace RPGPlatformer.AIControl
             ConfigureStateManager();
             SubscribeStateBehaviorToUpdate(true);
             InitializeState();
+
+            patroller.PatrolNavigator.DestinationReached += OnPatrolDestinationReached;
         }
 
         protected virtual void Update()
@@ -94,6 +98,14 @@ namespace RPGPlatformer.AIControl
         {
             patroller.MovementController.SetRunning(false);
             patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParameters);
+        }
+
+        protected virtual void OnPatrolDestinationReached()
+        {
+            if (Patrolling && !patroller.PatrolNavigator.GetNextDestination())
+            {
+                patroller.BeginPatrol(PatrolMode.rest, null);
+            }
         }
 
         public virtual void EnableInput()

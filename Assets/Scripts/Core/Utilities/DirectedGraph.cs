@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
@@ -19,7 +17,7 @@ namespace RPGPlatformer.Core
             edges = new();
         }
 
-        public DirectedGraph(ICollection<T> vertices = null, ICollection<(T, T)> edges = null)
+        public DirectedGraph(IEnumerable<T> vertices = null, IEnumerable<(T, T)> edges = null)
         {
             this.vertices = new();
             if (vertices != null)
@@ -64,7 +62,8 @@ namespace RPGPlatformer.Core
                 edges.Add(edge);
                 return edge;
             }
-            Debug.LogWarning("Edge could not be added to graph (one of the vertices is invalid).");
+            Debug.LogWarning("Edge could not be added to graph (one of the vertices is invalid," +
+                " or the edge is already present).");
             return edge;
 
         }
@@ -92,10 +91,7 @@ namespace RPGPlatformer.Core
 
         public virtual void RemoveEdge((T, T) edge)
         {
-            if (edges.Contains(edge))
-            {
-                edges.Remove(edge);
-            }
+            edges.Remove(edge);
         }
     }
 

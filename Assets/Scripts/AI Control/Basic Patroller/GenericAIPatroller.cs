@@ -23,7 +23,7 @@ namespace RPGPlatformer.AIControl
             MovementController = GetComponent<T>();
             PatrolNavigator = GetComponent<PatrolNavigator>();
 
-            PatrolNavigator.PatrolComplete += OnPatrolComplete;
+            //PatrolNavigator.DestinationReached += OnPatrolDestinationReached;
             PatrolNavigator.BeginHangTime += MovementController.SoftStop;
         }
 
@@ -43,10 +43,13 @@ namespace RPGPlatformer.AIControl
         }
 
         //this gets called e.g. when you reach the end of a patrol path
-        public virtual void OnPatrolComplete()
-        {
-            PatrolNavigator.BeginRest(MovementController);
-        }
+        //public virtual void OnPatrolDestinationReached()
+        //{
+        //    if (!PatrolNavigator.GetNextDestionation())
+        //    {
+        //        BeginPatrol(PatrolMode.rest, null);
+        //    }
+        //}
 
         public void TriggerPatrol()
         {

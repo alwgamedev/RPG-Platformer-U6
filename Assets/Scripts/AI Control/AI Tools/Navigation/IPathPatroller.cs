@@ -7,6 +7,7 @@ namespace RPGPlatformer.AIControl
     {
         public LinkedListNode<PatrolPoint> TargetPoint { get; }
 
-        public void OnDestinationReached(); //implementing class can decide whether to target Node.next or Node.prev
+        public void OnDestinationReached(); 
+        //implementing class can decide whether to target node.Next or node.Prev
     }
 }

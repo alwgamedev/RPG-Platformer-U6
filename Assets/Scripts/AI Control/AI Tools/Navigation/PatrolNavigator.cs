@@ -28,7 +28,7 @@ namespace RPGPlatformer.AIControl
         public PatrolMode CurrentMode { get; private set; }
         public LinkedListNode<PatrolPoint> TargetPoint { get; private set; }
 
-        public event Action PatrolComplete;
+        public event Action DestinationReached;
         public event Action BeginHangTime;
 
 
@@ -155,6 +155,17 @@ namespace RPGPlatformer.AIControl
             }
         }
 
+        public bool GetNextDestination()
+        {
+            return CurrentMode switch
+            {
+                PatrolMode.bounded => GetNextBoundedDestination(),
+                PatrolMode.pathForwards => GetNextPathDestination(true),
+                PatrolMode.pathBackwards => GetNextPathDestination(false),
+                _ => false
+            };
+        }
+
         private void BoundedDestinationReached()
         {
             if (boundedPatrolHangTime > 0)
@@ -162,12 +173,20 @@ namespace RPGPlatformer.AIControl
                 hangTimer = boundedPatrolHangTime;
                 BeginHangTime?.Invoke();
             }
-            GetNextBoundedDestination();
+
+            DestinationReached?.Invoke();
+            //GetNextBoundedDestination();
         }
 
-        private void GetNextBoundedDestination()
+        private bool GetNextBoundedDestination()
         {
+            if (leftBound == null ||  rightBound == null)
+            {
+                return false;
+            }
+
             currentDestination = new(UnityEngine.Random.Range(leftBound.x, rightBound.x), 0);
+            return true;
         }
 
         private void PathDestinationReached(bool forwards)
@@ -178,17 +197,19 @@ namespace RPGPlatformer.AIControl
                 BeginHangTime?.Invoke();
             }
 
+            DestinationReached?.Invoke();
+        }
+
+        private bool GetNextPathDestination(bool forwards)
+        {
             TargetPoint = forwards ? TargetPoint?.Next : TargetPoint?.Previous;
 
-            if (TargetPoint == null)
-            {
-                PatrolComplete?.Invoke();
-            }
+            return TargetPoint != null;
         }
 
         private void OnDestroy()
         {
-            PatrolComplete = null;
+            DestinationReached = null;
         }
     }
 }
