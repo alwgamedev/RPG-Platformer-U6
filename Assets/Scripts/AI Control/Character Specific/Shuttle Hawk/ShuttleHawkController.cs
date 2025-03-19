@@ -42,7 +42,6 @@ namespace RPGPlatformer.AIControl
             {
                 if (!patroller.PatrolNavigator.GetNextDestination())
                 {
-                    Debug.Log("path complete; going back to bounded patrol (hopefully)");
                     patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParameters);
                 }
             }

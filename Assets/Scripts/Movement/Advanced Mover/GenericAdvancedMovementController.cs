@@ -11,9 +11,7 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected bool detectWalls;
 
-        public bool Grounded => movementManager.StateMachine.CurrentState == movementManager.StateGraph.grounded;
         public bool Jumping => movementManager.StateMachine.CurrentState == movementManager.StateGraph.jumping;
-        public bool Freefalling => movementManager.StateMachine.CurrentState == movementManager.StateGraph.freefall;
 
         protected override void Start()
         {
@@ -32,7 +30,7 @@ namespace RPGPlatformer.Movement
         {
             base.ConfigureMovementManager();
 
-            movementManager.StateGraph.jumping.OnEntry += OnJumpingEntry;
+            //movementManager.StateGraph.jumping.OnEntry += OnJumpingEntry;
         }
 
         protected virtual void ConfigureWallDetection()
@@ -135,30 +133,30 @@ namespace RPGPlatformer.Movement
             mover.EndWallCling();
         }
 
-        protected virtual void OnJumpingEntry()
-        {
-            CurrentMoveAction = JumpingMoveAction;
-        }
+        //protected virtual void OnJumpingEntry()
+        //{
+        //    CurrentMoveAction = JumpingMoveAction;
+        //}
 
 
         //MOVE ACTIONS
 
-        protected override void GroundedMoveAction(Vector2 input)
-        {
-            SetOrientation(input);
-            mover.MoveGrounded(matchRotationToGround);
-        }
+        //protected override void GroundedMoveAction(Vector2 input)
+        //{
+        //    SetOrientation(input, currentMovementOptions.FlipSprite);
+        //    mover.MoveGrounded(currentMovementOptions);
+        //}
 
-        protected virtual void JumpingMoveAction(Vector2 input)
-        {
-            SetOrientation(input);
-            mover.MoveFreefall(/*mover.CurrentOrientation*/);
-        }
+        //protected virtual void JumpingMoveAction(Vector2 input)
+        //{
+        //    SetOrientation(input, currentMovementOptions.FlipSprite);
+        //    mover.MoveHorizontally(currentMovementOptions);
+        //}
 
-        protected override void FreefallMoveAction(Vector2 input)
-        {
-            SetOrientation(input);
-            mover.MoveFreefall(/*mover.CurrentOrientation*/);
-        }
+        //protected override void FreefallMoveAction(Vector2 input)
+        //{
+        //    SetOrientation(input, currentMovementOptions.FlipSprite);
+        //    mover.MoveHorizontally(currentMovementOptions);
+        //}
     }
 }

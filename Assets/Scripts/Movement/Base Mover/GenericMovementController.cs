@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using RPGPlatformer.Core;
 
@@ -11,18 +13,23 @@ namespace RPGPlatformer.Movement
         where T2 : MovementStateMachine<T1>
         where T3 : MovementStateManager<T1, T2, T0>
     {
+        [SerializeField] MovementOptions[] movementOptions;
         [SerializeField] protected bool matchRotationToGround;
 
         protected T0 mover;
         protected T3 movementManager;
 
-        protected Action<Vector2> CurrentMoveAction;
+        protected Func<Vector2> GetMoveDirection = () => default;
+        //protected Action<Vector2> CurrentMoveAction;
         protected Action OnFixedUpdate;
         protected Action TempFixedUpdate;
         protected Action OnUpdate;
         protected Action TempUpdate;
 
         protected Vector2 moveInput;
+
+        protected MovementOptions currentMovementOptions;
+        protected Dictionary<string, MovementOptions> GetMovementOptions = new();
 
         public bool Moving => moveInput != Vector2.zero;
         public Rigidbody2D Rigidbody => mover.Rigidbody;
@@ -38,9 +45,15 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        public bool Grounded => movementManager.StateMachine.CurrentState == movementManager.StateGraph.grounded;
+
+        public bool Freefalling => movementManager.StateMachine.CurrentState == movementManager.StateGraph.freefall;
+
         protected virtual void Awake()
         {
             InitializeMover();
+
+            BuildMovementOptionsDictionary();
 
             OnFixedUpdate += HandleMoveInput;
         }
@@ -64,12 +77,14 @@ namespace RPGPlatformer.Movement
             OnFixedUpdate?.Invoke();
         }
 
-        protected abstract void UpdateMover();
-        //{
-        //    mover.UpdateGroundHits();
-        //    mover.UpdateState(movementManager.StateMachine.CurrentState == movementManager.StateGraph.,
-        //        movementManager.StateMachine.HasState(typeof(Freefall)));
-        //}
+        protected virtual void BuildMovementOptionsDictionary()
+        {
+            foreach (var type in Enum.GetValues(typeof(MovementType)))
+            {
+                GetMovementOptions[((MovementType)type).ToString()]
+                    = movementOptions.FirstOrDefault(x => x.MovementType == (MovementType)type);
+            }
+        }
 
         protected virtual void InitializeMovementManager()
         {
@@ -80,9 +95,11 @@ namespace RPGPlatformer.Movement
         {
             movementManager.Configure();
 
-            movementManager.StateGraph.grounded.OnEntry += OnGroundedEntry;
+            //movementManager.StateGraph.grounded.OnEntry += OnGroundedEntry;
             movementManager.StateGraph.freefall.OnEntry += OnFreefallEntry;
             movementManager.StateGraph.freefall.OnExit += OnFreefallExit;
+
+            movementManager.StateMachine.StateChange += UpdateMoveOptions;
         }
 
         protected virtual void InitializeMover()
@@ -92,6 +109,28 @@ namespace RPGPlatformer.Movement
 
 
         //BASIC FUNCTIONS
+
+        protected abstract void UpdateMover();
+
+        protected virtual void UpdateMoveOptions(State state)
+        {
+            if (state == movementManager.StateGraph.freefall) return;
+
+            currentMovementOptions = GetMovementOptions[state.name];
+            GetMoveDirection = MoveDirectionFunction(currentMovementOptions.MoveDirection);
+        }
+
+        protected virtual Func<Vector2> MoveDirectionFunction(MoveDirection d)
+        {
+            return d switch
+            {
+                MoveDirection.Ground => mover.GroundDirectionVector,
+                MoveDirection.Input => MoveInputDirection,
+                MoveDirection.Horizontal => OrientationDirection,
+                MoveDirection.Vertical => VerticalOrientationDirection,
+                _ => () => default
+            };
+        }
 
         public virtual void MoveTowards(Vector2 point)
         {
@@ -142,6 +181,21 @@ namespace RPGPlatformer.Movement
             SoftStop();
         }
 
+        protected Vector2 MoveInputDirection()
+        {
+            return moveInput.normalized;
+        }
+
+        protected Vector2 OrientationDirection()
+        {
+            return (int)CurrentOrientation * Vector2.right;
+        }
+
+        protected Vector2 VerticalOrientationDirection()
+        {
+            return (int)CurrentOrientation * Vector2.up;
+        }
+
 
         //STATE CHANGE HANDLERS
 
@@ -149,22 +203,25 @@ namespace RPGPlatformer.Movement
         {
             if (moveInput != Vector2.zero)
             {
-                CurrentMoveAction?.Invoke(moveInput);
+                //CurrentMoveAction?.Invoke(moveInput);
+                SetOrientation(moveInput, currentMovementOptions.FlipSprite);
+                mover.Move(GetMoveDirection(), currentMovementOptions);
             }
         }
 
-        protected virtual void OnGroundedEntry()
-        {
-            CurrentMoveAction = GroundedMoveAction;
-        }
+        //protected virtual void OnGroundedEntry()
+        //{
+        //    CurrentMoveAction = GroundedMoveAction;
+        //}
 
         protected virtual void OnFreefallEntry() { }
 
         protected virtual void OnFreefallVerified()
         {
-            if (movementManager.StateMachine.HasState(typeof(Freefall)))
+            if (Freefalling)
             {
-                CurrentMoveAction = FreefallMoveAction;
+                //CurrentMoveAction = FreefallMoveAction;
+                UpdateMoveOptions(movementManager.StateGraph.freefall);
                 movementManager.AnimateFreefall();
             }
         }
@@ -174,9 +231,9 @@ namespace RPGPlatformer.Movement
             mover.UpdateDirectionFaced();
         }
 
-        protected abstract void GroundedMoveAction(Vector2 input);
+        //protected abstract void GroundedMoveAction(Vector2 input);
 
-        protected abstract void FreefallMoveAction(Vector2 input);
+        //protected abstract void FreefallMoveAction(Vector2 input);
 
 
         //DEATH AND DESTROY HANDLERS
@@ -202,7 +259,8 @@ namespace RPGPlatformer.Movement
 
         protected virtual void OnDestroy()
         {
-            CurrentMoveAction = null;
+            //CurrentMoveAction = null;
+            GetMoveDirection = null;
             OnUpdate = null;
             OnFixedUpdate = null;
         }

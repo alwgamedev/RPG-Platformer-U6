@@ -18,7 +18,7 @@ namespace RPGPlatformer.Movement
         protected bool verifyingFlight;
 
         public event Action OnBeginFlying;
-        public event Action FlyingVerified;
+        //public event Action FlyingVerified;
 
         public float FlightSpeed => flightSpeed;
 
@@ -27,9 +27,9 @@ namespace RPGPlatformer.Movement
             defaultLinearDamping = myRigidbody.linearDamping;
         }
 
-        public virtual void MoveFlying(Vector2 direction)
+        public virtual void MoveFlying(Vector2 direction, bool matchRotationToDirection = false)
         {
-            Move(flightAcceleration, MaxSpeed, direction.normalized, false);
+            Move(flightAcceleration, MaxSpeed, direction.normalized, matchRotationToDirection, false);
         }
 
         public virtual void UpdateState(bool flying, bool jumping, bool freefalling)
@@ -82,7 +82,7 @@ namespace RPGPlatformer.Movement
                 verifyingFlight = true;
                 await Task.Delay(200, cts.Token);
                 verifyingFlight = false;
-                FlyingVerified?.Invoke();
+                //FlyingVerified?.Invoke();
             }
             catch (TaskCanceledException)
             {
@@ -145,7 +145,7 @@ namespace RPGPlatformer.Movement
         {
             base.OnDestroy();
             OnBeginFlying = null;
-            FlyingVerified = null;
+            //FlyingVerified = null;
         }
     }
 }

@@ -23,7 +23,6 @@ namespace RPGPlatformer.Movement
 
         public float RunSpeed => runSpeed;
         public float WalkSpeed => walkSpeed;
-        public virtual float MaxSpeed { get; set; }
         public virtual bool Running { get; set; }
         public bool FacingWall => facingWall;
 
@@ -33,25 +32,23 @@ namespace RPGPlatformer.Movement
         {
             base.Awake();
 
-            //maxSpeed = walkSpeed;
             doubleJumpForce = doubleJumpForceMultiplier * jumpForce;
         }
 
-        public void MoveGroundedWithoutAcceleration(float maxSpeed, bool matchRotationToGround)
-        {
-            MoveWithoutAcceleration(maxSpeed, GroundDirectionVector(), matchRotationToGround);
-        }
+        //public void MoveGroundedWithoutAcceleration(float maxSpeed, MovementOptions options)
+        //{
+        //    MoveWithoutAcceleration(maxSpeed, GroundDirectionVector(), options);
+        //}
 
-        public void MoveGrounded(bool matchRotationToGround = false)
-        {
-            Move(acceleration, MaxSpeed, GroundDirectionVector(), matchRotationToGround, false);
-        }
+        //public void MoveGrounded(MovementOptions options)
+        //{
+        //    Move(GroundDirectionVector(), options);
+        //}
 
-        public void MoveFreefall(/*HorizontalOrientation orientation*/)
-        {
-            Move(acceleration * freefallAccelerationFactor, MaxSpeed, 
-                (int)CurrentOrientation * Vector2.right, false, true);
-        }
+        //public void MoveHorizontally(MovementOptions options)
+        //{
+        //    Move((int)CurrentOrientation * Vector2.right, options);
+        //}
 
         public virtual float SpeedFraction()
         {
@@ -124,11 +121,11 @@ namespace RPGPlatformer.Movement
             //TO-DO: add more hits
 
             var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
-                     (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
+                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, groundLayer);
             var midHit = Physics2D.Raycast(ColliderCenterBack + 0.1f * myHeight * Vector3.up, 
-                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground")); 
+                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, groundLayer); 
             var lowerHit = Physics2D.Raycast(ColliderCenterBack - 0.2f * myHeight * Vector3.up,
-                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
+                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, groundLayer);
 
             //Debug.DrawLine(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
             //    ColliderCenterBack + 0.4f * myHeight * Vector3.up + 1.75f * myWidth
@@ -194,7 +191,7 @@ namespace RPGPlatformer.Movement
             for (int i = 1; i <= 15; i++)
             {
                 var rcOrigin = origin + ((int)direction) * i * spacing * Vector2.right;
-                var rc = Physics2D.Raycast(rcOrigin, -Vector2.up, maxHeight, LayerMask.GetMask("Ground"));
+                var rc = Physics2D.Raycast(rcOrigin, -Vector2.up, maxHeight, groundLayer);
 
                 //Debug.DrawLine(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right,
                 //    origin + ((int)CurrentOrientation) * i * spacing * Vector2.right - maxHeight * Vector2.up,
@@ -235,8 +232,7 @@ namespace RPGPlatformer.Movement
             for (int i = 10; i <= 30; i++)
             {
                 var hitOrigin = jumpTrajectory.position(i * dt);
-                var hit = Physics2D.Raycast(hitOrigin, -Vector2.up, 0.5f * myHeight,
-                        LayerMask.GetMask("Ground"));
+                var hit = Physics2D.Raycast(hitOrigin, -Vector2.up, 0.5f * myHeight, groundLayer);
 
                 //Debug.DrawLine(hitOrigin, hitOrigin - 0.5f * myHeight * Vector2.up, Color.blue, 3);
 
@@ -247,8 +243,7 @@ namespace RPGPlatformer.Movement
                     //check if landing area is level ground
                     //YES this is important because the hit could be the side of a cliff
                     var hit1Origin = hitOrigin + ((int)CurrentOrientation) * myWidth * Vector2.right;
-                    var hit1 = Physics2D.Raycast(hit1Origin, -Vector2.up, 0.5f * myHeight,
-                        LayerMask.GetMask("Ground"));
+                    var hit1 = Physics2D.Raycast(hit1Origin, -Vector2.up, 0.5f * myHeight, groundLayer);
 
                     //Debug.DrawLine(hit1Origin, hit1Origin - 0.5f * myHeight * Vector2.up, Color.red, 3);
 

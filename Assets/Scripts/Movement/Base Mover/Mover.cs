@@ -3,7 +3,6 @@ using UnityEngine;
 using RPGPlatformer.Core;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Collections.Generic;
 
 namespace RPGPlatformer.Movement
 {
@@ -14,6 +13,7 @@ namespace RPGPlatformer.Movement
 
     public class Mover : StateDriver, IMover
     {
+        //[SerializeField] protected MovementOptions[] movementOptions;
         [SerializeField] protected float groundednessToleranceFactor = 0.7f;
         [SerializeField] protected bool unfreezeRotationOnDeath;
         [SerializeField] protected Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
@@ -25,16 +25,17 @@ namespace RPGPlatformer.Movement
         protected Rigidbody2D myRigidbody;
         protected float myHeight;
         protected float myWidth;
-        //protected bool jumping;
-        //protected bool freefalling;
         protected bool verifyingJump;
         protected bool verifyingFreefall;//TO-DO: could we just have one variable "verifyingAirborne"?
         protected float groundednessTolerance;
         protected RaycastHit2D rightGroundHit;
         protected RaycastHit2D leftGroundHit;
 
+        //protected Dictionary<MovementType, MovementOptions> GetMovementOptions = new();
+
         public Transform Transform => transform;
         public Rigidbody2D Rigidbody => myRigidbody;
+        public virtual float MaxSpeed { get; set; }
         public float Width => myWidth;
         public float Height => myHeight;
         public Vector3 ColliderCenterRight => myCollider.bounds.center + 0.45f * myWidth * transform.right;
@@ -45,12 +46,12 @@ namespace RPGPlatformer.Movement
             * (int)CurrentOrientation * transform.right;
         public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
         public HorizontalOrientation CurrentOrientation { get; protected set; }
+        public int GroundLayer => groundLayer;
 
         public event Action<HorizontalOrientation> DirectionChanged;
         public event Action OnJump;
         public event Action OnFreefall;
         public event Action FreefallVerified;
-        //public event Action OnDestroyed;
 
         protected virtual void Awake()
         {
@@ -68,18 +69,18 @@ namespace RPGPlatformer.Movement
                 groundLayer = groundLayer | LayerMask.GetMask("Contact Character");
             }
 
-            groundednessTolerance = groundednessToleranceFactor * myHeight;//a little extra than 0.5f * height, because sometimes the
-            //ground collider is a bit below the surface (and we don't want to be randomly losing groundedness
-            //as we walk over uneven terrain. Also the back hit needs to go quite far on steep terrain)
+            groundednessTolerance = groundednessToleranceFactor * myHeight;
 
-            //may make this higher for some AI (because they check for dropoffs only when moving grounded,
-            //and when they don't check for dropoffs they can walk off cliffs)
+            //BuildMovementOptionsDictionary();
         }
 
-        //protected virtual void Update()
+        //protected virtual void BuildMovementOptionsDictionary()
         //{
-        //    UpdateGroundHits();
-        //    UpdateState();
+        //    foreach (var type in Enum.GetValues(typeof(MovementType)))
+        //    {
+        //        GetMovementOptions[(MovementType)type] 
+        //            = movementOptions.FirstOrDefault(x => x.MovementType == (MovementType)type);
+        //    }
         //}
 
         public virtual void UpdateGroundHits()
@@ -131,47 +132,80 @@ namespace RPGPlatformer.Movement
             VerifyJump();
         }
 
+        public virtual void Move(Vector2 direction, MovementOptions options)
+        {
+            Move(direction, MaxSpeed, options);
+        }
+
+        public virtual void MoveWithoutAcceleration(Vector2 direction, MovementOptions options)
+        {
+            MoveWithoutAcceleration(direction, MaxSpeed, options);
+        }
+
         //direction assumed to be normalized
-        public void Move(float acceleration, float maxSpeed, Vector2 direction, bool rotateToDirection = false, 
-            bool clampXOnly = false)
+        public void Move(Vector2 direction, float maxSpeed, MovementOptions options)
         {
             if (direction == Vector2.zero)
             {
                 return;
             }
 
-            if (rotateToDirection)
+            if (options.RotateToDirection)
             {
-                RotateToDirection((int)CurrentOrientation * direction);
+                transform.rotation = options.RotateTransformRightTo((int)CurrentOrientation * direction);
             }
 
-            //direction *= (int)CurrentOrientation;
-            var velocity = clampXOnly ? new Vector2(myRigidbody.linearVelocity.x, 0) : myRigidbody.linearVelocity;
+            var velocity = options.ClampXVelocityOnly ? 
+                new Vector2(myRigidbody.linearVelocity.x, 0) : myRigidbody.linearVelocity;
             var dot = Vector2.Dot(velocity, direction);
             if (dot <= 0 || velocity.magnitude < maxSpeed)
             {
-                myRigidbody.linearVelocity += acceleration * Time.deltaTime * direction;
+                myRigidbody.linearVelocity += options.Acceleration * Time.deltaTime * direction;
             }
         }
 
-        public void MoveWithoutAcceleration(float maxSpeed, Vector2 direction, bool rotateToDirection = false)
+        //public void Move(float acceleration, float maxSpeed, Vector2 direction, bool rotateToDirection = false, 
+        //    bool clampXOnly = false)
+        //{
+        //    if (direction == Vector2.zero)
+        //    {
+        //        return;
+        //    }
+
+        //    if (rotateToDirection)
+        //    {
+        //        //multiply by CurrentOrientation, bc this is where we want transform.right to point
+        //        RotateToDirection((int)CurrentOrientation * direction);
+        //    }
+
+        //    //direction *= (int)CurrentOrientation;
+        //    var velocity = clampXOnly ? new Vector2(myRigidbody.linearVelocity.x, 0) : myRigidbody.linearVelocity;
+        //    var dot = Vector2.Dot(velocity, direction);
+        //    if (dot <= 0 || velocity.magnitude < maxSpeed)
+        //    {
+        //        myRigidbody.linearVelocity += acceleration * Time.deltaTime * direction;
+        //    }
+        //}
+
+        public void MoveWithoutAcceleration(Vector2 direction, float maxSpeed, MovementOptions options)
         {
             if (direction == Vector2.zero) return;
 
-            if (rotateToDirection)
+            if (options.RotateToDirection)
             {
-                RotateToDirection(direction);
+                transform.rotation = options.RotateTransformRightTo((int)CurrentOrientation * direction);
             }
 
             //Debug.Log($"moving without acceleration in direction: {direction}");
             myRigidbody.linearVelocity = maxSpeed * direction;
         }
 
-        public void RotateToDirection(Vector2 direction)
-        {
-            transform.rotation = Quaternion.LookRotation(Vector3.forward, direction.CCWPerp());
-            //CCWPerp always works because our transform.forward never changes
-        }
+        //rotates so that transform.right points in given direction
+        //public void RotateToDirection(Vector2 direction)
+        //{
+        //    transform.rotation = Quaternion.LookRotation(Vector3.forward, direction.CCWPerp());
+        //    //CCWPerp always works because our transform.forward never changes
+        //}
 
         public virtual void Stop(bool maintainVerticalVelocity = true)
         {
