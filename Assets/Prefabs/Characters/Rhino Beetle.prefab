@@ -186,6 +186,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c2ea0e4247374408b6044e77652917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementOptions:
+  - movementType: 0
+    moveDirection: 0
+    acceleration: 150
+    flipSprite: 1
+    clampXVelocityOnly: 0
+    rotateToDirection: 1
+    maxRotationAngle: 1.57
+    minRotationAngle: -1.57
+    maxRotation: {x: 0.0007962743, y: 0.9999997}
+    minRotation: {x: 0.0007962743, y: -0.9999997}
+  - movementType: 1
+    moveDirection: 2
+    acceleration: 120
+    flipSprite: 0
+    clampXVelocityOnly: 1
+    rotateToDirection: 0
+    maxRotationAngle: 1.57
+    minRotationAngle: -1.57
+    maxRotation: {x: 0.0007962743, y: 0.9999997}
+    minRotation: {x: 0.0007962743, y: -0.9999997}
   matchRotationToGround: 1
   detectWalls: 0
   dropOffHandlingOption: 1

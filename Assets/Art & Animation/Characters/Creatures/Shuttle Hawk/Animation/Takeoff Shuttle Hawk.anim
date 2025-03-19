@@ -29,35 +29,35 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: {x: 0, y: 0, z: 136.618}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
+        inSlope: {x: 0, y: 0, z: 35.718266}
+        outSlope: {x: 0, y: 0, z: 35.718266}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 0.76666665
-        value: {x: 0, y: 0, z: 113.734}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 154.162}
+        inSlope: {x: 0, y: 0, z: 17.860006}
+        outSlope: {x: 0, y: 0, z: 17.860006}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 1.0166667
-        value: {x: 0, y: 0, z: 133.362}
-        inSlope: {x: 0, y: 0, z: 62.712406}
-        outSlope: {x: 0, y: 0, z: 62.712406}
+        value: {x: 0, y: 0, z: 156.841}
+        inSlope: {x: 0, y: 0, z: 22.171041}
+        outSlope: {x: 0, y: 0, z: 22.171041}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
         time: 1.25
-        value: {x: 0, y: 0, z: 144.045}
-        inSlope: {x: 0, y: 0, z: 76.5538}
-        outSlope: {x: 0, y: 0, z: 76.5538}
+        value: {x: 0, y: 0, z: 165.994}
+        inSlope: {x: 0, y: 0, z: 27.976557}
+        outSlope: {x: 0, y: 0, z: 27.976557}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
@@ -1612,35 +1612,35 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: 136.618
-        inSlope: 0
-        outSlope: 0
+        inSlope: 35.718266
+        outSlope: 35.718266
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 0.76666665
-        value: 113.734
-        inSlope: 0
-        outSlope: 0
+        value: 154.162
+        inSlope: 17.860006
+        outSlope: 17.860006
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1.0166667
-        value: 133.362
-        inSlope: 62.712406
-        outSlope: 62.712406
+        value: 156.841
+        inSlope: 22.171041
+        outSlope: 22.171041
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1.25
-        value: 144.045
-        inSlope: 76.5538
-        outSlope: 76.5538
+        value: 165.994
+        inSlope: 27.976557
+        outSlope: 27.976557
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
@@ -5280,7 +5280,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: hawk/body bone
+    path: hawk/body bone/wing bone
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5292,7 +5292,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: hawk/body bone
+    path: hawk/body bone/wing bone
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5304,7 +5304,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: hawk/body bone
+    path: hawk/body bone/wing bone
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5388,7 +5388,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: hawk/body bone/wing bone
+    path: hawk/body bone
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5400,7 +5400,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: hawk/body bone/wing bone
+    path: hawk/body bone
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5412,7 +5412,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: hawk/body bone/wing bone
+    path: hawk/body bone
     classID: 4
     script: {fileID: 0}
     flags: 0

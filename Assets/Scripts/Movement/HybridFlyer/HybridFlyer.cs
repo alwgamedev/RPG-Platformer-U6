@@ -27,10 +27,10 @@ namespace RPGPlatformer.Movement
             defaultLinearDamping = myRigidbody.linearDamping;
         }
 
-        public virtual void MoveFlying(Vector2 direction, bool matchRotationToDirection = false)
-        {
-            Move(flightAcceleration, MaxSpeed, direction.normalized, matchRotationToDirection, false);
-        }
+        //public virtual void MoveFlying(Vector2 direction, bool matchRotationToDirection = false)
+        //{
+        //    Move(flightAcceleration, MaxSpeed, direction.normalized, matchRotationToDirection, false);
+        //}
 
         public virtual void UpdateState(bool flying, bool jumping, bool freefalling)
         {

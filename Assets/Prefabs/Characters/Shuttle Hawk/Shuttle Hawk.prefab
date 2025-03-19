@@ -169,13 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca47ec9d6dee84c4fba99d3c04b13ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundedMovementOptions:
-    clampXOnly: 1
-    rotateToDirection: 0
-    maxRotationAngle: 0
-    minRotationAngle: 0
-    maxRotation: {x: 1, y: 0}
-    minRotation: {x: 1, y: 0}
   groundednessToleranceFactor: 0.55
   unfreezeRotationOnDeath: 0
   deathForce: {x: 120, y: 120}
@@ -218,13 +211,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e23b4b1cf2c051040a542ebde210516b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementOptions:
+  - movementType: 0
+    moveDirection: 0
+    acceleration: 50
+    flipSprite: 1
+    clampXVelocityOnly: 0
+    rotateToDirection: 0
+    maxRotationAngle: 0
+    minRotationAngle: 0
+    maxRotation: {x: 1, y: 0}
+    minRotation: {x: 1, y: 0}
+  - movementType: 1
+    moveDirection: 2
+    acceleration: 250
+    flipSprite: 1
+    clampXVelocityOnly: 0
+    rotateToDirection: 0
+    maxRotationAngle: 0
+    minRotationAngle: 0
+    maxRotation: {x: 1, y: 0}
+    minRotation: {x: 1, y: 0}
+  - movementType: 3
+    moveDirection: 1
+    acceleration: 40
+    flipSprite: 0
+    clampXVelocityOnly: 1
+    rotateToDirection: 1
+    maxRotationAngle: 1.2
+    minRotationAngle: -0.5
+    maxRotation: {x: 0.3623577, y: 0.9320391}
+    minRotation: {x: 0.87758255, y: -0.47942555}
   matchRotationToGround: 0
   detectWalls: 0
   dropOffHandlingOption: 0
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 3
   dropOffStopDistance: 0.5
-  matchRotationWhileFlying: 0
 --- !u!114 &80898664928263919
 MonoBehaviour:
   m_ObjectHideFlags: 0
