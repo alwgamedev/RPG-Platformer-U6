@@ -20,7 +20,6 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected float maxPermissibleDropOffHeightFactor = 3;
         [SerializeField] protected float dropOffStopDistance = 0.5f;
 
-        //protected bool jumpingEnabled = true;
         protected bool stuckAtLedge;
 
         public IHealth currentTarget;
@@ -101,20 +100,6 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        //protected override void GroundedMoveAction(Vector2 input)
-        //{
-        //    SetOrientation(input);
-
-        //    if (stuckAtLedge) return;
-        //    //note: direction change will set stuckAtLedge = false,
-        //    //but SetOrientation does not always trigger a direction change
-
-        //    if (input != Vector2.zero && DropOffAhead(CurrentOrientation, out var dist)
-        //        && !HandleDropoffAhead(dist)) return;
-
-        //    mover.MoveGrounded(matchRotationToGround);
-        //}
-
         protected virtual bool HandleDropoffAhead(float dist)
         {
             if (dropOffHandlingOption == DropOffHandlingOption.stop && dist < dropOffStopDistance)
@@ -125,14 +110,15 @@ namespace RPGPlatformer.Movement
             }
             else if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
             {
-                //CanJumpGap assumes you are moving at maxSpeed
+                //CanJumpGap assumes you are moving at runSpeed in direction +/- transform.right 
                 if (mover.CanJumpGap(out var landingPt))
                 {
                     if (currentTarget == null
                         || Vector2.Distance(landingPt, currentTarget.Transform.position) <
                         Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
                     {
-                        mover.MoveWithoutAcceleration(GetMoveDirection(), currentMovementOptions);//get up to maxSpeed
+                        mover.MoveWithoutAcceleration((int)CurrentOrientation * transform.right,
+                            mover.RunSpeed, currentMovementOptions);//get up to run speed
                         mover.Jump();
                         stuckAtLedge = false;
                         return true;
@@ -159,11 +145,6 @@ namespace RPGPlatformer.Movement
             return true;
         }
 
-        //public void EnableJumping(bool val)
-        //{
-        //    jumpingEnabled = val;
-        //}
-
         protected override void HandleAdjacentWallInteraction(bool airborne)
         {
             if (mover.FacingWall)
@@ -171,13 +152,5 @@ namespace RPGPlatformer.Movement
                 SoftStop();
             }
         }
-
-        //protected override void FreefallMoveAction(Vector2 input)
-        //{
-        //    if (canMoveDuringFreefall)
-        //    {
-        //        base.FreefallMoveAction(input);
-        //    }
-        //}
     }
 }

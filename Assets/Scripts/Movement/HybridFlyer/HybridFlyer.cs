@@ -9,7 +9,7 @@ namespace RPGPlatformer.Movement
     public class HybridFlyer : AdvancedMover
     {
         [SerializeField] float inFlightLinearDamping = 30;
-        [SerializeField] float flightAcceleration = 100;
+        //[SerializeField] float flightAcceleration = 100;
         [SerializeField] float flightSpeed = 3;
         [SerializeField] Vector2 takeOffForce = 400 * Vector2.up;
 

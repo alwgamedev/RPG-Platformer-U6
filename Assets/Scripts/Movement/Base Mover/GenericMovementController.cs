@@ -7,20 +7,18 @@ using RPGPlatformer.Core;
 namespace RPGPlatformer.Movement
 {
     [RequireComponent(typeof(AnimationControl))]
-    public abstract class GenericMovementController<T0, T1, T2, T3> : MonoBehaviour
+    public abstract class GenericMovementController<T0, T1, T2, T3> : MonoBehaviour, IMovementController
         where T0 : Mover
         where T1 : MovementStateGraph
         where T2 : MovementStateMachine<T1>
         where T3 : MovementStateManager<T1, T2, T0>
     {
         [SerializeField] MovementOptions[] movementOptions;
-        [SerializeField] protected bool matchRotationToGround;
 
         protected T0 mover;
         protected T3 movementManager;
 
         protected Func<Vector2> GetMoveDirection = () => default;
-        //protected Action<Vector2> CurrentMoveAction;
         protected Action OnFixedUpdate;
         protected Action TempFixedUpdate;
         protected Action OnUpdate;
@@ -31,12 +29,23 @@ namespace RPGPlatformer.Movement
         protected MovementOptions currentMovementOptions;
         protected Dictionary<string, MovementOptions> GetMovementOptions = new();
 
-        public bool Moving => moveInput != Vector2.zero;
-        public Rigidbody2D Rigidbody => mover.Rigidbody;
+        public Vector2 RelativeVelocity
+        {
+            get
+            {
+                if (CurrentMount != null)
+                {
+                    return mover.Rigidbody.linearVelocity - CurrentMount.Velocity;
+                }
+                return mover.Rigidbody.linearVelocity;
+            }
+        }
         public HorizontalOrientation CurrentOrientation => mover.CurrentOrientation;
         public IMover Mover => mover;
+        public IMountableEntity CurrentMount { get; protected set; }
+        //can be any "ambient velocity source" (e.g. we are on a moving platform)
         public virtual Vector2 MoveInput
-        //child classes may want to override get/set
+        //child classes will override get/set
         {
             get => moveInput;
             set
@@ -44,10 +53,11 @@ namespace RPGPlatformer.Movement
                 moveInput = value;
             }
         }
+        public bool Moving => moveInput != Vector2.zero;
 
         public bool Grounded => movementManager.StateMachine.CurrentState == movementManager.StateGraph.grounded;
-
         public bool Freefalling => movementManager.StateMachine.CurrentState == movementManager.StateGraph.freefall;
+        public virtual bool Jumping => false;
 
         protected virtual void Awake()
         {
@@ -95,8 +105,7 @@ namespace RPGPlatformer.Movement
         {
             movementManager.Configure();
 
-            //movementManager.StateGraph.grounded.OnEntry += OnGroundedEntry;
-            movementManager.StateGraph.freefall.OnEntry += OnFreefallEntry;
+            //movementManager.StateGraph.freefall.OnEntry += OnFreefallEntry;
             movementManager.StateGraph.freefall.OnExit += OnFreefallExit;
 
             movementManager.StateMachine.StateChange += UpdateMoveOptions;
@@ -196,6 +205,53 @@ namespace RPGPlatformer.Movement
             return (int)CurrentOrientation * Vector2.up;
         }
 
+        public virtual float SpeedFraction(float maxSpeed)
+        {
+            return RelativeVelocity.magnitude / maxSpeed;
+        }
+
+        //note: can return negative (which you may want if you want animator to clamp negative to 0)
+        //so leaves you the option of whether you want to take abs later
+        public virtual float HorizontalSpeedFraction(float maxSpeed)
+        {
+            return RelativeVelocity.x / maxSpeed;
+        }
+
+        public virtual float VerticalSpeedFraction(float maxSpeed)
+        {
+            return RelativeVelocity.y / maxSpeed;
+        }
+
+        public virtual void Mount(IMountableEntity entity)
+        {
+            if (entity == null || entity == CurrentMount) return;
+
+            Dismount();
+
+            CurrentMount = entity;
+
+            entity.DirectionChanged += OnMountDirectionChanged;
+            entity.Destroyed += Dismount;
+        }
+
+        public virtual void Dismount()
+        {
+            if (CurrentMount == null) return;
+
+            CurrentMount.DirectionChanged -= OnMountDirectionChanged;
+            CurrentMount.Destroyed -= Dismount;
+            CurrentMount = null;
+        }
+
+        protected virtual void OnMountDirectionChanged(HorizontalOrientation o)
+        {
+            //flip direction rather than just SetDirection(o)
+            //bc e.g. we may have been facing backwards on the mount before
+            mover.SetOrientation((HorizontalOrientation)(-(int)CurrentOrientation), currentMovementOptions.FlipSprite);
+            var d = Vector2.Dot(transform.position - CurrentMount.Position, CurrentMount.TransformRight);
+            transform.position -= 2 * d * CurrentMount.TransformRight;
+        }
+
 
         //STATE CHANGE HANDLERS
 
@@ -203,24 +259,17 @@ namespace RPGPlatformer.Movement
         {
             if (moveInput != Vector2.zero)
             {
-                //CurrentMoveAction?.Invoke(moveInput);
                 SetOrientation(moveInput, currentMovementOptions.FlipSprite);
                 mover.Move(GetMoveDirection(), currentMovementOptions);
             }
         }
 
-        //protected virtual void OnGroundedEntry()
-        //{
-        //    CurrentMoveAction = GroundedMoveAction;
-        //}
-
-        protected virtual void OnFreefallEntry() { }
+        //protected virtual void OnFreefallEntry() { }
 
         protected virtual void OnFreefallVerified()
         {
             if (Freefalling)
             {
-                //CurrentMoveAction = FreefallMoveAction;
                 UpdateMoveOptions(movementManager.StateGraph.freefall);
                 movementManager.AnimateFreefall();
             }
@@ -230,10 +279,6 @@ namespace RPGPlatformer.Movement
         {
             mover.UpdateDirectionFaced();
         }
-
-        //protected abstract void GroundedMoveAction(Vector2 input);
-
-        //protected abstract void FreefallMoveAction(Vector2 input);
 
 
         //DEATH AND DESTROY HANDLERS
@@ -259,7 +304,6 @@ namespace RPGPlatformer.Movement
 
         protected virtual void OnDestroy()
         {
-            //CurrentMoveAction = null;
             GetMoveDirection = null;
             OnUpdate = null;
             OnFixedUpdate = null;

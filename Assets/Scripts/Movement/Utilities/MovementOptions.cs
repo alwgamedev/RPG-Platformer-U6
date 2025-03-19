@@ -36,8 +36,8 @@ namespace RPGPlatformer.Movement
         public bool ClampXVelocityOnly => clampXVelocityOnly;
         public bool RotateToDirection => rotateToDirection;
         
-        //r is desired direction for transform.right
-        //r should be a unit vector
+        //returns rotation q such that if transformation.rotation = q,
+        //then transform.right points in direction r
         public Quaternion RotateTransformRightTo(Vector2 r)
         {
             if (r.y > maxRotation.y)

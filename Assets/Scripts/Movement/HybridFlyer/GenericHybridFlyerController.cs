@@ -8,16 +8,7 @@ namespace RPGPlatformer.Movement
         where T2 : HybridFlyerStateMachine<T1>
         where T3 : HybridFlyerStateManager<T1, T2, T0>
     {
-        //[SerializeField] bool matchRotationWhileFlying;
-
         public bool Flying => movementManager.StateMachine.CurrentState == movementManager.StateGraph.flying;
-
-        protected override void Start()
-        {
-            base.Start();
-
-            //mover.FlyingVerified += OnFlyingVerified;
-        }
 
         protected override void ConfigureMovementManager()
         {
@@ -25,8 +16,6 @@ namespace RPGPlatformer.Movement
 
             movementManager.StateGraph.flying.OnEntry += OnFlyingEntry;
             movementManager.StateGraph.flying.OnExit += OnFlyingExit;
-
-            movementManager.StateMachine.StateChange += Debug.Log;
         }
 
 
@@ -76,7 +65,11 @@ namespace RPGPlatformer.Movement
 
         protected override void AnimateMovement()
         {
-            if (!Flying)
+            if (Flying)
+            {
+                movementManager.AnimateMovement(Mathf.Max(VerticalSpeedFraction(mover.FlightSpeed), 0));
+            }
+            else
             {
                 base.AnimateMovement();
             }
@@ -94,7 +87,6 @@ namespace RPGPlatformer.Movement
         {
             movementManager.AnimateMovement(0);
             UpdateMaxSpeed();
-            //CurrentMoveAction = FlyingMoveAction;
             mover.SetLinearDamping(true);
             movementManager.OnFlyingEntry();
         }

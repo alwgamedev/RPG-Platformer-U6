@@ -426,7 +426,7 @@ namespace RPGPlatformer.Combat
 
         public virtual float ComputeAimAngleChange()//rotate chest so that mainhand forearm points toward aim position
         {
-            var moving = MovementController.Rigidbody.linearVelocity.magnitude > Mathf.Epsilon;
+            var moving = MovementController.RelativeVelocity.magnitude > Mathf.Epsilon;
             var aimPos = GetAimPosition();
             var facingRight = MovementController.CurrentOrientation == HorizontalOrientation.right;
 

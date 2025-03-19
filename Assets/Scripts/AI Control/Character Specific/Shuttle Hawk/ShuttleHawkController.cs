@@ -26,7 +26,7 @@ namespace RPGPlatformer.AIControl
             {
                 boundedIterations++;
 
-                if (boundedIterations > 1)
+                if (boundedIterations > 2)
                 {
                     boundedIterations = 0;
                     patroller.BeginPatrol(PatrolMode.pathForwards, flightPath);

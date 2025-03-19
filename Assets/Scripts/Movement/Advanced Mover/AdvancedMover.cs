@@ -5,19 +5,14 @@ namespace RPGPlatformer.Movement
 {
     public class AdvancedMover : Mover
     {
-        [SerializeField] protected float acceleration = 30;
-        [SerializeField] protected float freefallAccelerationFactor = 0.8f;
         [SerializeField] protected float runSpeed = 3;
         [SerializeField] protected float walkSpeed = 0.8f;
         [SerializeField] protected int maxNumJumps = 2;
-        //[SerializeField] protected float jumpForce = 400;
         [SerializeField] protected Vector2 jumpForce = 375 * Vector2.up;
         [SerializeField] protected float doubleJumpForceMultiplier = 1.18f;
 
         protected int currentJumpNum = 0;
         protected Vector2 doubleJumpForce;
-        //protected float maxSpeed;
-        //protected bool running;
         protected Vector2 adjacentWallDirection = Vector2.up;
         protected bool facingWall;
 
@@ -33,26 +28,6 @@ namespace RPGPlatformer.Movement
             base.Awake();
 
             doubleJumpForce = doubleJumpForceMultiplier * jumpForce;
-        }
-
-        //public void MoveGroundedWithoutAcceleration(float maxSpeed, MovementOptions options)
-        //{
-        //    MoveWithoutAcceleration(maxSpeed, GroundDirectionVector(), options);
-        //}
-
-        //public void MoveGrounded(MovementOptions options)
-        //{
-        //    Move(GroundDirectionVector(), options);
-        //}
-
-        //public void MoveHorizontally(MovementOptions options)
-        //{
-        //    Move((int)CurrentOrientation * Vector2.right, options);
-        //}
-
-        public virtual float SpeedFraction()
-        {
-            return myRigidbody.linearVelocity.magnitude / runSpeed;
         }
 
         public void Jump()
@@ -85,11 +60,6 @@ namespace RPGPlatformer.Movement
         {
             currentJumpNum = 0;
         }
-
-        //public void ToggleRun()
-        //{
-        //    Running = !Running;
-        //}
 
         public void BeginWallCling(bool airborne)
         {
@@ -241,7 +211,7 @@ namespace RPGPlatformer.Movement
                     landingPoint = hit.point;
 
                     //check if landing area is level ground
-                    //YES this is important because the hit could be the side of a cliff
+                    //YES this is important because the hit could be the side of a shallow cliff
                     var hit1Origin = hitOrigin + ((int)CurrentOrientation) * myWidth * Vector2.right;
                     var hit1 = Physics2D.Raycast(hit1Origin, -Vector2.up, 0.5f * myHeight, groundLayer);
 

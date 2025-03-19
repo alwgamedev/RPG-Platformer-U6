@@ -13,7 +13,6 @@ namespace RPGPlatformer.Movement
 
     public class Mover : StateDriver, IMover
     {
-        //[SerializeField] protected MovementOptions[] movementOptions;
         [SerializeField] protected float groundednessToleranceFactor = 0.7f;
         [SerializeField] protected bool unfreezeRotationOnDeath;
         [SerializeField] protected Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
@@ -31,10 +30,9 @@ namespace RPGPlatformer.Movement
         protected RaycastHit2D rightGroundHit;
         protected RaycastHit2D leftGroundHit;
 
-        //protected Dictionary<MovementType, MovementOptions> GetMovementOptions = new();
-
         public Transform Transform => transform;
         public Rigidbody2D Rigidbody => myRigidbody;
+        public int GroundLayer => groundLayer;
         public virtual float MaxSpeed { get; set; }
         public float Width => myWidth;
         public float Height => myHeight;
@@ -46,7 +44,6 @@ namespace RPGPlatformer.Movement
             * (int)CurrentOrientation * transform.right;
         public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
         public HorizontalOrientation CurrentOrientation { get; protected set; }
-        public int GroundLayer => groundLayer;
 
         public event Action<HorizontalOrientation> DirectionChanged;
         public event Action OnJump;
@@ -70,18 +67,7 @@ namespace RPGPlatformer.Movement
             }
 
             groundednessTolerance = groundednessToleranceFactor * myHeight;
-
-            //BuildMovementOptionsDictionary();
         }
-
-        //protected virtual void BuildMovementOptionsDictionary()
-        //{
-        //    foreach (var type in Enum.GetValues(typeof(MovementType)))
-        //    {
-        //        GetMovementOptions[(MovementType)type] 
-        //            = movementOptions.FirstOrDefault(x => x.MovementType == (MovementType)type);
-        //    }
-        //}
 
         public virtual void UpdateGroundHits()
         {
@@ -111,14 +97,11 @@ namespace RPGPlatformer.Movement
 
         protected virtual void TriggerLanding()
         {
-            //jumping = false;
-            //freefalling = false;
             Trigger(typeof(Grounded).Name);
         }
 
         protected virtual void TriggerFreefall()
         {
-            //freefalling = true;
             OnFreefall?.Invoke();//cancels any ongoing verification
             Trigger(typeof(Freefall).Name);
             VerifyFreefall();
@@ -143,7 +126,7 @@ namespace RPGPlatformer.Movement
         }
 
         //direction assumed to be normalized
-        public void Move(Vector2 direction, float maxSpeed, MovementOptions options)
+        public virtual void Move(Vector2 direction, float maxSpeed, MovementOptions options)
         {
             if (direction == Vector2.zero)
             {
@@ -164,30 +147,7 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        //public void Move(float acceleration, float maxSpeed, Vector2 direction, bool rotateToDirection = false, 
-        //    bool clampXOnly = false)
-        //{
-        //    if (direction == Vector2.zero)
-        //    {
-        //        return;
-        //    }
-
-        //    if (rotateToDirection)
-        //    {
-        //        //multiply by CurrentOrientation, bc this is where we want transform.right to point
-        //        RotateToDirection((int)CurrentOrientation * direction);
-        //    }
-
-        //    //direction *= (int)CurrentOrientation;
-        //    var velocity = clampXOnly ? new Vector2(myRigidbody.linearVelocity.x, 0) : myRigidbody.linearVelocity;
-        //    var dot = Vector2.Dot(velocity, direction);
-        //    if (dot <= 0 || velocity.magnitude < maxSpeed)
-        //    {
-        //        myRigidbody.linearVelocity += acceleration * Time.deltaTime * direction;
-        //    }
-        //}
-
-        public void MoveWithoutAcceleration(Vector2 direction, float maxSpeed, MovementOptions options)
+        public virtual void MoveWithoutAcceleration(Vector2 direction, float maxSpeed, MovementOptions options)
         {
             if (direction == Vector2.zero) return;
 
@@ -196,16 +156,8 @@ namespace RPGPlatformer.Movement
                 transform.rotation = options.RotateTransformRightTo((int)CurrentOrientation * direction);
             }
 
-            //Debug.Log($"moving without acceleration in direction: {direction}");
             myRigidbody.linearVelocity = maxSpeed * direction;
         }
-
-        //rotates so that transform.right points in given direction
-        //public void RotateToDirection(Vector2 direction)
-        //{
-        //    transform.rotation = Quaternion.LookRotation(Vector3.forward, direction.CCWPerp());
-        //    //CCWPerp always works because our transform.forward never changes
-        //}
 
         public virtual void Stop(bool maintainVerticalVelocity = true)
         {
@@ -230,7 +182,9 @@ namespace RPGPlatformer.Movement
 
         public Vector2 OrientForce(Vector2 force)
         {
-            return (int)CurrentOrientation * force.x * Vector2.right + force.y * Vector2.up;
+            force.x *= (int)CurrentOrientation;
+            return force;
+            //return (int)CurrentOrientation * force.x * Vector2.right + force.y * Vector2.up;
         }
 
         protected async void VerifyJump()
@@ -340,7 +294,6 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        //ALWAYS RIGHT POINTING
         public Vector2 GroundDirectionVector()
         {
             if (rightGroundHit && leftGroundHit)

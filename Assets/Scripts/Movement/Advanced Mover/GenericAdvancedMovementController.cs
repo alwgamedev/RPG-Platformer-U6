@@ -11,7 +11,7 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected bool detectWalls;
 
-        public bool Jumping => movementManager.StateMachine.CurrentState == movementManager.StateGraph.jumping;
+        public override bool Jumping => movementManager.StateMachine.CurrentState == movementManager.StateGraph.jumping;
 
         protected override void Start()
         {
@@ -24,13 +24,6 @@ namespace RPGPlatformer.Movement
             {
                 ConfigureWallDetection();
             }
-        }
-
-        protected override void ConfigureMovementManager()
-        {
-            base.ConfigureMovementManager();
-
-            //movementManager.StateGraph.jumping.OnEntry += OnJumpingEntry;
         }
 
         protected virtual void ConfigureWallDetection()
@@ -73,7 +66,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void AnimateMovement()
         {
-            movementManager.AnimateMovement(mover.SpeedFraction());
+            movementManager.AnimateMovement(SpeedFraction(mover.RunSpeed));
         }
 
         protected virtual void SetDownSpeed()
@@ -132,31 +125,5 @@ namespace RPGPlatformer.Movement
             movementManager.AnimateWallCling(false);
             mover.EndWallCling();
         }
-
-        //protected virtual void OnJumpingEntry()
-        //{
-        //    CurrentMoveAction = JumpingMoveAction;
-        //}
-
-
-        //MOVE ACTIONS
-
-        //protected override void GroundedMoveAction(Vector2 input)
-        //{
-        //    SetOrientation(input, currentMovementOptions.FlipSprite);
-        //    mover.MoveGrounded(currentMovementOptions);
-        //}
-
-        //protected virtual void JumpingMoveAction(Vector2 input)
-        //{
-        //    SetOrientation(input, currentMovementOptions.FlipSprite);
-        //    mover.MoveHorizontally(currentMovementOptions);
-        //}
-
-        //protected override void FreefallMoveAction(Vector2 input)
-        //{
-        //    SetOrientation(input, currentMovementOptions.FlipSprite);
-        //    mover.MoveHorizontally(currentMovementOptions);
-        //}
     }
 }

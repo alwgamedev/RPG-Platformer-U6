@@ -53,7 +53,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 250
+  m_Mass: 500
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
@@ -169,22 +169,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca47ec9d6dee84c4fba99d3c04b13ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundednessToleranceFactor: 0.55
+  groundednessToleranceFactor: 0.65
   unfreezeRotationOnDeath: 0
   deathForce: {x: 120, y: 120}
   deathTorque: 10
   treatContactCharacterAsGround: 0
-  acceleration: 50
-  freefallAccelerationFactor: 0.8
   runSpeed: 1.5
   walkSpeed: 0.5
   maxNumJumps: 0
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
-  inFlightLinearDamping: 250
-  flightAcceleration: 250
+  inFlightLinearDamping: 50
   flightSpeed: 0.75
-  takeOffForce: {x: 0, y: 1000}
+  takeOffForce: {x: 0, y: 200}
 --- !u!114 &1519639630161499023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +211,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 50
+    acceleration: 60
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 0
@@ -224,9 +221,9 @@ MonoBehaviour:
     minRotation: {x: 1, y: 0}
   - movementType: 1
     moveDirection: 2
-    acceleration: 250
-    flipSprite: 1
-    clampXVelocityOnly: 0
+    acceleration: 48
+    flipSprite: 0
+    clampXVelocityOnly: 1
     rotateToDirection: 0
     maxRotationAngle: 0
     minRotationAngle: 0
@@ -234,15 +231,14 @@ MonoBehaviour:
     minRotation: {x: 1, y: 0}
   - movementType: 3
     moveDirection: 1
-    acceleration: 40
-    flipSprite: 0
-    clampXVelocityOnly: 1
+    acceleration: 450
+    flipSprite: 1
+    clampXVelocityOnly: 0
     rotateToDirection: 1
-    maxRotationAngle: 1.2
-    minRotationAngle: -0.5
-    maxRotation: {x: 0.3623577, y: 0.9320391}
-    minRotation: {x: 0.87758255, y: -0.47942555}
-  matchRotationToGround: 0
+    maxRotationAngle: 1.4
+    minRotationAngle: -0.1
+    maxRotation: {x: 0.16996716, y: 0.98544973}
+    minRotation: {x: 0.9950042, y: -0.09983342}
   detectWalls: 0
   dropOffHandlingOption: 0
   canMoveDuringFreefall: 0
@@ -611,12 +607,24 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 386791141387813222, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4349784470772455012}
+    - targetCorrespondingSourceObject: {fileID: 386791141387813222, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4018914529200880135}
+    - targetCorrespondingSourceObject: {fileID: 386791141387813222, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2297900583502636115}
     - targetCorrespondingSourceObject: {fileID: 3297364353584691495, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3861111817114640007}
     - targetCorrespondingSourceObject: {fileID: 4157741701538757237, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5290786962399419850}
+    - targetCorrespondingSourceObject: {fileID: 4157741701538757237, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7442329090891739724}
+    - targetCorrespondingSourceObject: {fileID: 4157741701538757237, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6846574381635170711}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
 --- !u!1 &5472133675264116708 stripped
 GameObject:
@@ -689,6 +697,56 @@ PolygonCollider2D:
       - {x: 1.3396467, y: 1.0447674}
       - {x: 0.9577399, y: 1.0659235}
   m_UseDelaunayMesh: 0
+--- !u!114 &7442329090891739724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5472133675264116708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34195455f956774ea8136700545d338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocitySource: {fileID: 791843766491106202}
+--- !u!70 &6846574381635170711
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5472133675264116708}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 32639
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 1.25, y: -1}
+  m_Size: {x: 5, y: 6}
+  m_Direction: 1
 --- !u!1 &6881852012333024438 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3297364353584691495, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
@@ -803,16 +861,67 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 9.493463, y: -0.59928644}
-      - {x: 8.895496, y: 2.1156073}
-      - {x: 6.380541, y: 3.5043635}
-      - {x: 3.553328, y: 3.1481628}
-      - {x: 0.77237815, y: 1.9555836}
-      - {x: -0.32262766, y: -0.59569013}
+    - - {x: 9.964764, y: -1.3601962}
+      - {x: 14.421762, y: 4.1468315}
+      - {x: 10.192605, y: 3.5104518}
+      - {x: 5.566829, y: 4.4536858}
+      - {x: -1.3084435, y: 8.300303}
+      - {x: -3.5153644, y: 5.3936954}
       - {x: -3.011234, y: -2.4475508}
       - {x: -1.0269274, y: -2.7415876}
       - {x: 1.5706034, y: -2.6117113}
-      - {x: 3.866188, y: -3.2594388}
-      - {x: 5.9342246, y: -3.2837582}
+      - {x: 2.906279, y: -2.7110617}
+      - {x: 5.325324, y: -2.6397483}
+      - {x: 7.6144795, y: -2.3153865}
       - {x: 9.229684, y: -1.8224788}
   m_UseDelaunayMesh: 0
+--- !u!114 &4018914529200880135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8583158195154451703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34195455f956774ea8136700545d338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocitySource: {fileID: 791843766491106202}
+--- !u!70 &2297900583502636115
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8583158195154451703}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 32639
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 7.129449, y: -1.7925247}
+  m_Size: {x: 8.740915, y: 6.5849905}
+  m_Direction: 1
