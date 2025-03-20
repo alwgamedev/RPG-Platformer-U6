@@ -18,6 +18,8 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float boundedPatrolHangTime = 1;
         [SerializeField] float pathPatrolHangTime = 0;
 
+        public bool checkHorizontalDistanceOnly;
+
         float hangTimer;
 
         //for bounded patrol
@@ -25,7 +27,6 @@ namespace RPGPlatformer.AIControl
         Vector2 rightBound;
         Vector2 currentDestination;
 
-        //public bool CheckHorizontalDistanceOnly { get; set; } = true;
         public PatrolMode CurrentMode { get; private set; }
         public LinkedListNode<PatrolPoint> TargetPoint { get; private set; }
 
@@ -132,6 +133,10 @@ namespace RPGPlatformer.AIControl
 
         public bool HasReachedDestination()
         {
+            if (checkHorizontalDistanceOnly)
+            {
+                return Mathf.Abs(transform.position.x - currentDestination.x) < destinationTolerance;
+            }
             return Vector2.Distance(transform.position, currentDestination) < destinationTolerance;
         }
 

@@ -18,7 +18,7 @@ namespace RPGPlatformer.Movement
         protected T0 mover;
         protected T3 movementManager;
 
-        protected Func<Vector2> GetMoveDirection = () => default;
+        protected Func<Vector2, Vector2> GetMoveDirection = (v) => default;
         protected Action OnFixedUpdate;
         protected Action TempFixedUpdate;
         protected Action OnUpdate;
@@ -134,33 +134,33 @@ namespace RPGPlatformer.Movement
             GetMoveDirection = MoveDirectionFunction(currentMovementOptions.MoveDirection);
         }
 
-        protected virtual Func<Vector2> MoveDirectionFunction(MoveDirection d)
+        protected virtual Func<Vector2, Vector2> MoveDirectionFunction(MoveDirection d)
         {
             return d switch
             {
-                MoveDirection.Ground => mover.GroundDirectionVector,
+                MoveDirection.Ground => v => mover.GroundDirectionVector(),
                 MoveDirection.Input => MoveInputDirection,
-                MoveDirection.Horizontal => OrientationDirection,
-                MoveDirection.Vertical => VerticalOrientationDirection,
-                _ => () => default
+                MoveDirection.Horizontal => v => OrientationDirection(),
+                MoveDirection.Vertical => v => VerticalOrientationDirection(),
+                _ => v => default
             };
         }
 
         public virtual void MoveTowards(Vector2 point)
         {
-            Vector2 inp = new(point.x - transform.position.x, 0);
-            MoveInput = inp;
+            //Vector2 inp = 
+            MoveInput = new(point.x - transform.position.x, 0);
         }
 
         public virtual void MoveAwayFrom(Vector2 point)
         {
-            if (transform.position.x == point.x)
-            {
-                MoveInput = Vector2.right;
-                return;
-            }
-            Vector2 inp = new(transform.position.x - point.x, 0);
-            MoveInput = inp;
+            //if (transform.position.x == point.x)
+            //{
+            //    MoveInput = Vector2.right;
+            //    return;
+            //}
+            //Vector2 inp = new(transform.position.x - point.x, 0);
+            MoveInput = new(transform.position.x - point.x, 0);
         }
 
         public void FaceTarget(Transform target)
@@ -195,7 +195,7 @@ namespace RPGPlatformer.Movement
             SoftStop();
         }
 
-        protected Vector2 MoveInputDirection()
+        protected Vector2 MoveInputDirection(Vector2 moveInput)
         {
             return moveInput.normalized;
         }
@@ -249,7 +249,7 @@ namespace RPGPlatformer.Movement
             CurrentMount.Destroyed -= Dismount;
             CurrentMount = null;
 
-            mover.SetGravityScale(1);
+            mover.ReturnGravityScaleToDefault();
         }
 
         protected virtual void OnMountDirectionChanged(HorizontalOrientation o)
@@ -274,8 +274,12 @@ namespace RPGPlatformer.Movement
             if (moveInput != Vector2.zero)
             {
                 SetOrientation(moveInput, currentMovementOptions.FlipSprite);
-                mover.Move(GetMoveDirection(), currentMovementOptions);
+                Move(moveInput);
             }
+        }
+        protected virtual void Move(Vector2 moveInput)
+        {
+            mover.Move(GetMoveDirection(moveInput), currentMovementOptions);
         }
 
         //protected virtual void OnFreefallEntry() { }

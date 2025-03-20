@@ -24,6 +24,7 @@ namespace RPGPlatformer.Movement
         protected Rigidbody2D myRigidbody;
         protected float myHeight;
         protected float myWidth;
+        protected float defaultGravityScale;
         protected bool verifyingJump;
         protected bool verifyingFreefall;//TO-DO: could we just have one variable "verifyingAirborne"?
         protected float groundednessTolerance;
@@ -32,7 +33,6 @@ namespace RPGPlatformer.Movement
 
         public Transform Transform => transform;
         public Rigidbody2D Rigidbody => myRigidbody;
-        public int GroundLayer => groundLayer;
         public virtual float MaxSpeed { get; set; }
         public float Width => myWidth;
         public float Height => myHeight;
@@ -67,6 +67,8 @@ namespace RPGPlatformer.Movement
             }
 
             groundednessTolerance = groundednessToleranceFactor * myHeight;
+
+            defaultGravityScale = myRigidbody.gravityScale;
         }
 
         public virtual void UpdateGroundHits()
@@ -76,8 +78,11 @@ namespace RPGPlatformer.Movement
             leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, -transform.up, groundednessTolerance,
                 groundLayer);
 
-            //Debug.DrawLine(ColliderCenterRight, ColliderCenterRight - groundednessTolerance * transform.up);
-            //Debug.DrawLine(ColliderCenterLeft, ColliderCenterLeft - groundednessTolerance * transform.up);
+            //if (rightGroundHit && leftGroundHit)
+            //{
+            //    Debug.DrawLine(ColliderCenterRight, rightGroundHit.point, Color.red);
+            //    Debug.DrawLine(ColliderCenterLeft, leftGroundHit.point, Color.red);
+            //}
         }
 
         public virtual void UpdateState(bool jumping, bool freefalling)
@@ -98,6 +103,11 @@ namespace RPGPlatformer.Movement
         public void SetGravityScale(float f)
         {
             myRigidbody.gravityScale = f;
+        }
+
+        public void ReturnGravityScaleToDefault()
+        {
+            SetGravityScale(defaultGravityScale);
         }
 
         protected virtual void TriggerLanding()

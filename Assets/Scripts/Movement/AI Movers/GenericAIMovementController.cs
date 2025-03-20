@@ -72,7 +72,7 @@ namespace RPGPlatformer.Movement
             if (Freefalling && !canMoveDuringFreefall) return false;
             if (Grounded && stuckAtLedge) return false;
             if (Grounded && DropOffAhead(CurrentOrientation, out var dist)
-                && !HandleDropoffAhead(dist)) return false;
+                && !HandlingDropoffAhead(dist)) return false;
 
             return true;
         }
@@ -87,26 +87,34 @@ namespace RPGPlatformer.Movement
             return mover.DropOffAhead(MaxPermissibleDropOffHeight, direction, out distance);
         }
 
-        protected override void HandleMoveInput()
-        {
-            if (moveInput != Vector2.zero)
-            {
-                SetOrientation(moveInput, currentMovementOptions.FlipSprite);
+        //protected override void HandleMoveInput()
+        //{
+        //    if (moveInput != Vector2.zero)
+        //    {
+        //        SetOrientation(moveInput, currentMovementOptions.FlipSprite);
 
-                if (CanMove())
-                {
-                    mover.Move(GetMoveDirection(), currentMovementOptions);
-                }
+        //        if (CanMove())
+        //        {
+        //            mover.Move(GetMoveDirection(moveInput), currentMovementOptions);
+        //        }
+        //    }
+        //}
+
+        protected override void Move(Vector2 moveInput)
+        {
+            if (CanMove())
+            {
+                base.Move(moveInput);
             }
         }
 
-        protected virtual bool HandleDropoffAhead(float dist)
+        protected virtual bool HandlingDropoffAhead(float dist)
         {
             if (dropOffHandlingOption == DropOffHandlingOption.stop && dist < dropOffStopDistance)
             {
                 HardStop();
                 stuckAtLedge = true;
-                return false;
+                return true;
             }
             else if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
             {
@@ -127,7 +135,7 @@ namespace RPGPlatformer.Movement
                     {
                         HardStop();
                         stuckAtLedge = false;
-                        return false;
+                        return true;
                         //stopped, but not considered stuck at ledge, so it can continue re-evaluating whether
                         //jumping will bring it closer to target
                     }
@@ -136,13 +144,11 @@ namespace RPGPlatformer.Movement
                 {
                     HardStop();
                     stuckAtLedge = true;
-                    return false;
+                    return true;
                 }
-                stuckAtLedge = false;
-                return true;
             }
             stuckAtLedge = false;
-            return true;
+            return false;
         }
 
         protected override void HandleAdjacentWallInteraction(bool airborne)

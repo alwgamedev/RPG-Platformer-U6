@@ -55,24 +55,22 @@ namespace RPGPlatformer.Movement
             };
         }
 
-        //protected override void HandleMoveInput()
-        //{
-        //    if (CurrentMount != null)
-        //    {
-        //        var inp = MoveInput;
-        //        inp.x *= (int)CurrentOrientation;
-        //        base.HandleMoveInput(inp);
-        //    }
-        //    else
-        //    {
-        //        base.HandleMoveInput();
-        //    }
-        //}
-
         private void UpdateMoveInput()
         {
             MoveInput = new Vector2((SettingsManager.Instance.IAM.MoveRightHeldDown ? 1 : 0)
                - (SettingsManager.Instance.IAM.MoveLeftHeldDown ? 1 : 0), 0);
+        }
+
+        protected override void Move(Vector2 moveInput)
+        {
+            if (CurrentMount != null && Grounded)
+            {
+                mover.MoveWithoutAcceleration(GetMoveDirection(moveInput), currentMovementOptions);
+            }
+            else
+            {
+                base.Move(moveInput);
+            }
         }
 
         public void Pause()

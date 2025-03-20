@@ -539,8 +539,6 @@ MonoBehaviour:
   deathForce: {x: -150, y: 120}
   deathTorque: 0
   treatContactCharacterAsGround: 0
-  acceleration: 100
-  freefallAccelerationFactor: 0.8
   runSpeed: 2.4
   walkSpeed: 0.8
   maxNumJumps: 1
@@ -589,7 +587,6 @@ MonoBehaviour:
     minRotationAngle: 0
     maxRotation: {x: 1, y: 0}
     minRotation: {x: 1, y: 0}
-  matchRotationToGround: 0
   detectWalls: 0
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
@@ -812,3 +809,4 @@ MonoBehaviour:
   destinationTolerance: 0.5
   boundedPatrolHangTime: 1
   pathPatrolHangTime: 0
+  checkHorizontalDistanceOnly: 1
