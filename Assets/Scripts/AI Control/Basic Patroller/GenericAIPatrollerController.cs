@@ -17,8 +17,8 @@ namespace RPGPlatformer.AIControl
         where T3 : AIPatrollerStateMachine<T2>
         where T4 : AIPatrollerStateManager<T2, T3, T0, T00, T01, T02, T03, T1>
     {
-        [SerializeField] protected PatrolMode defaultPatrolMode;
-        [SerializeField] protected PatrolParemeters defaultPatrolParameters;
+        [SerializeField] protected NavigationMode defaultPatrolMode;
+        [SerializeField] protected NavigationParameters defaultPatrolParameters;
 
         protected T1 patroller;
         protected T4 stateManager;
@@ -105,7 +105,7 @@ namespace RPGPlatformer.AIControl
         {
             if (Patrolling && !patroller.PatrolNavigator.GetNextDestination())
             {
-                patroller.BeginPatrol(PatrolMode.rest, null);
+                patroller.BeginPatrol(NavigationMode.rest, null);
             }
         }
 

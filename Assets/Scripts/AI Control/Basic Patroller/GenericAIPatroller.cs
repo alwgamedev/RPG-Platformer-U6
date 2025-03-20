@@ -5,7 +5,7 @@ using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.AIControl
 {
-    [RequireComponent(typeof(PatrolNavigator))]
+    [RequireComponent(typeof(AINavigator))]
     public class GenericAIPatroller<T, T0, T1, T2, T3> : StateDriver
         where T : GenericAdvancedMovementController<T0, T1, T2, T3>
         where T0 : AdvancedMover
@@ -15,13 +15,13 @@ namespace RPGPlatformer.AIControl
     {
         protected Action OnUpdate;
 
-        public PatrolNavigator PatrolNavigator { get; protected set; }
+        public AINavigator PatrolNavigator { get; protected set; }
         public T MovementController { get; protected set; }
 
         protected virtual void Awake()
         {
             MovementController = GetComponent<T>();
-            PatrolNavigator = GetComponent<PatrolNavigator>();
+            PatrolNavigator = GetComponent<AINavigator>();
 
             PatrolNavigator.BeginHangTime += MovementController.SoftStop;
         }
@@ -31,7 +31,12 @@ namespace RPGPlatformer.AIControl
             OnUpdate?.Invoke();
         }
 
-        public virtual void BeginPatrol(PatrolMode mode, PatrolParemeters p)
+        public virtual void BeginPatrol(NavigationMode mode, NavigationParameters p)
+        {
+            BeginPatrol(mode, p.Content);
+        }
+
+        public virtual void BeginPatrol(NavigationMode mode, object p)
         {
             PatrolNavigator.BeginPatrol(mode, p, MovementController);
         }

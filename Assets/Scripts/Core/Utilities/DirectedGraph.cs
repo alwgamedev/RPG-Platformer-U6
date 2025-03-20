@@ -55,16 +55,17 @@ namespace RPGPlatformer.Core
             return vertex;
         }
 
-        public virtual (T, T) AddEdge((T, T) edge)
+        public void AddEdge((T, T) edge)
         {
-            if (vertices.Contains(edge.Item1) && vertices.Contains(edge.Item2) && !edges.Contains(edge))
+            //shouldn't add duplicates of an already existing edge because
+            //a) hashsets don't allow "duplicates,"
+            //b) hashset checks for duplicates using Equals,
+            //c) equality of tuples is checked componentwise
+
+            if (vertices.Contains(edge.Item1) && vertices.Contains(edge.Item2))
             {
                 edges.Add(edge);
-                return edge;
             }
-            Debug.LogWarning("Edge could not be added to graph (one of the vertices is invalid," +
-                " or the edge is already present).");
-            return edge;
 
         }
 
@@ -72,6 +73,45 @@ namespace RPGPlatformer.Core
         {
             AddEdge(edge);
             AddEdge((edge.Item2, edge.Item1));
+        }
+
+        public void AddEdgeToAll(T vertex)
+        {
+            if (!vertices.Contains(vertex)) return;
+
+            foreach (var v in vertices)
+            {
+                if (!v.Equals(vertex))
+                {
+                    AddEdge((vertex, v));
+                }
+            }
+        }
+
+        public void AddEdgeFromAll(T vertex)
+        {
+            if (!vertices.Contains(vertex)) return;
+
+            foreach (var v in vertices)
+            {
+                if (!v.Equals(vertex))
+                {
+                    AddEdge((v, vertex));
+                }
+            }
+        }
+
+        public void AddEdgeBothWaysForAll(T vertex)
+        {
+            if (!vertices.Contains(vertex)) return;
+
+            foreach (var v in vertices)
+            {
+                if (!v.Equals(vertex))
+                {
+                    AddEdgeBothWays((v, vertex));
+                }
+            }
         }
 
         public virtual void RemoveVertex(T vertex)

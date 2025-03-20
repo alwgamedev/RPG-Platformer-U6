@@ -5,7 +5,7 @@ using RPGPlatformer.Movement;
 namespace RPGPlatformer.AIControl
 {
     //[RequireComponent(typeof(AIMovementController))]
-    [RequireComponent(typeof(PatrolNavigator))]
+    [RequireComponent(typeof(AINavigator))]
     //[RequireComponent(typeof(AICombatController))]
     public class CombatPatroller : GenericCombatPatroller<AIMovementController, 
         AdvancedMover, AdvancedMovementStateGraph, AdvancedMovementStateMachine, AdvancedMovementStateManager,
