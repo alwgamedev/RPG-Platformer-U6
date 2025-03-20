@@ -95,6 +95,11 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        public void SetGravityScale(float f)
+        {
+            myRigidbody.gravityScale = f;
+        }
+
         protected virtual void TriggerLanding()
         {
             Trigger(typeof(Grounded).Name);

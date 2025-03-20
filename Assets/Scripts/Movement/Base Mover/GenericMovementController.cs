@@ -85,6 +85,11 @@ namespace RPGPlatformer.Movement
         protected virtual void FixedUpdate()
         {
             OnFixedUpdate?.Invoke();
+
+            if (CurrentMount != null && Grounded)
+            {
+                mover.Rigidbody.linearVelocity -= Time.deltaTime * CurrentMount.LocalGravity;
+            }
         }
 
         protected virtual void BuildMovementOptionsDictionary()
@@ -184,9 +189,9 @@ namespace RPGPlatformer.Movement
             moveInput = Vector2.zero;
         }
 
-        public virtual void HardStop()
+        public virtual void HardStop(bool maintainVerticalVelocity = true)
         {
-            mover.Stop();
+            mover.Stop(maintainVerticalVelocity);
             SoftStop();
         }
 
@@ -232,6 +237,8 @@ namespace RPGPlatformer.Movement
 
             entity.DirectionChanged += OnMountDirectionChanged;
             entity.Destroyed += Dismount;
+
+            mover.SetGravityScale(0);
         }
 
         public virtual void Dismount()
@@ -241,6 +248,8 @@ namespace RPGPlatformer.Movement
             CurrentMount.DirectionChanged -= OnMountDirectionChanged;
             CurrentMount.Destroyed -= Dismount;
             CurrentMount = null;
+
+            mover.SetGravityScale(1);
         }
 
         protected virtual void OnMountDirectionChanged(HorizontalOrientation o)
@@ -248,14 +257,19 @@ namespace RPGPlatformer.Movement
             //flip direction rather than just SetDirection(o)
             //bc e.g. we may have been facing backwards on the mount before
             mover.SetOrientation((HorizontalOrientation)(-(int)CurrentOrientation), currentMovementOptions.FlipSprite);
-            var d = Vector2.Dot(transform.position - CurrentMount.Position, CurrentMount.TransformRight);
-            transform.position -= 2 * d * CurrentMount.TransformRight;
+            var d = Vector2.Dot(transform.position - CurrentMount.Position, CurrentMount.VelocitySourceTransformRight);
+            transform.position -= 2 * d * CurrentMount.VelocitySourceTransformRight;
         }
 
 
         //STATE CHANGE HANDLERS
 
         protected virtual void HandleMoveInput()
+        {
+            HandleMoveInput(MoveInput);
+        }
+
+        protected virtual void HandleMoveInput(Vector2 moveInput)
         {
             if (moveInput != Vector2.zero)
             {

@@ -5,7 +5,8 @@ namespace RPGPlatformer.Movement
 {
     public interface IMountableEntity
     {
-        public Vector3 TransformRight { get; }
+        public Vector2 LocalGravity { get; }
+        public Vector3 VelocitySourceTransformRight { get; }
         public Vector3 Position { get; }
         public Vector2 Velocity { get; }
 

@@ -29,23 +29,23 @@ namespace RPGPlatformer.Movement
             iam.MoveRightAction.started += (context) =>
             {
                 if (inputDisabled) return;
-                ComputeMoveInput();
+                UpdateMoveInput();
             };
             iam.MoveRightAction.canceled += (context) => 
             { 
                 if (inputDisabled) return; 
-                ComputeMoveInput(); 
+                UpdateMoveInput(); 
             };
             iam.MoveLeftAction.started += (context) => 
             { 
                 
                 if (inputDisabled) return; 
-                ComputeMoveInput(); 
+                UpdateMoveInput(); 
             };
             iam.MoveLeftAction.canceled += (context) => 
             { 
                 if (inputDisabled) return; 
-                ComputeMoveInput(); 
+                UpdateMoveInput(); 
             };
 
             iam.SpacebarAction.started += (context) => 
@@ -55,7 +55,21 @@ namespace RPGPlatformer.Movement
             };
         }
 
-        private void ComputeMoveInput()
+        //protected override void HandleMoveInput()
+        //{
+        //    if (CurrentMount != null)
+        //    {
+        //        var inp = MoveInput;
+        //        inp.x *= (int)CurrentOrientation;
+        //        base.HandleMoveInput(inp);
+        //    }
+        //    else
+        //    {
+        //        base.HandleMoveInput();
+        //    }
+        //}
+
+        private void UpdateMoveInput()
         {
             MoveInput = new Vector2((SettingsManager.Instance.IAM.MoveRightHeldDown ? 1 : 0)
                - (SettingsManager.Instance.IAM.MoveLeftHeldDown ? 1 : 0), 0);

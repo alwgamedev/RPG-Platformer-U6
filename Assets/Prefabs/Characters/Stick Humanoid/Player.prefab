@@ -547,7 +547,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 50
+    acceleration: 100
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 1
@@ -557,7 +557,7 @@ MonoBehaviour:
     minRotation: {x: 1, y: 0}
   - movementType: 1
     moveDirection: 2
-    acceleration: 40
+    acceleration: 60
     flipSprite: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
@@ -575,7 +575,6 @@ MonoBehaviour:
     minRotationAngle: 0
     maxRotation: {x: 1, y: 0}
     minRotation: {x: 1, y: 0}
-  matchRotationToGround: 0
   detectWalls: 1
 --- !u!114 &489266092333141542
 MonoBehaviour:
@@ -667,8 +666,6 @@ MonoBehaviour:
   deathForce: {x: -150, y: 120}
   deathTorque: 10
   treatContactCharacterAsGround: 1
-  acceleration: 50
-  freefallAccelerationFactor: 0.8
   runSpeed: 3
   walkSpeed: 1.2
   maxNumJumps: 2

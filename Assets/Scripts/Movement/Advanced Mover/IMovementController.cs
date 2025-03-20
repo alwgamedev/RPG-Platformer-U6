@@ -17,7 +17,7 @@ namespace RPGPlatformer.Movement
         public void FaceTarget(Transform target);
         public void FaceTarget(Vector3 target);
         public void SoftStop();
-        public void HardStop();
+        public void HardStop(bool maintainVerticalVelocity = true);
         public void OnDeath();
         public void OnRevival();
     }
