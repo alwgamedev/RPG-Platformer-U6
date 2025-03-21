@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace RPGPlatformer.AIControl
+﻿namespace RPGPlatformer.AIControl
 {
     //could be an interface instead; doesn't really matter rn
     public interface NavigationParameters

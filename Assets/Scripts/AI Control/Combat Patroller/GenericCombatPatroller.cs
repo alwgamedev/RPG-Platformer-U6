@@ -203,12 +203,12 @@ namespace RPGPlatformer.AIControl
             return false;
         }
 
-        public void TriggerSuspicion()
+        protected virtual void TriggerSuspicion()
         {
             Trigger(typeof(Suspicion).Name);
         }
 
-        public void TriggerPursuit()
+        protected virtual void TriggerPursuit()
         {
             Trigger(typeof(Pursuit).Name);
         }

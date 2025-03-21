@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using RPGPlatformer.Dialogue;
-using RPGPlatformer.Core;
 using RPGPlatformer.Combat;
 using System;
 
@@ -12,10 +12,15 @@ namespace RPGPlatformer.UI
     {
         [SerializeField] DialogueWindow dialogueWindowPrefab;
 
-        DialogueSO activeDialogue;
-        List<string> conversantNames = new();
+        //DialogueSO activeDialogue;
+        //string[] conversantNames;
+        DialogueTriggerData activeDialogue;
         DialogueNode currentNode;
         DialogueWindow activeWindow;
+
+        //nodeId => (actionName => unity event)
+        //Dictionary<string, Dictionary<string, UnityEvent<string[]>>> EntryActions = new();
+        //Dictionary<string, Dictionary<string, UnityEvent<string[]>>> ExitActions = new();
 
         public event Action DialogueEnded;
 
@@ -23,15 +28,14 @@ namespace RPGPlatformer.UI
         {
             base.Awake();
 
-            DialogueTrigger.DialogueTriggered += HandleDialogueTrigger;//StartDialogue;
+            DialogueTrigger.DialogueTriggered += HandleDialogueTrigger;
             DialogueTrigger.DialogueCancelled += EndDialogue;
         }
 
-        public void StartDialogue(DialogueTriggerData data/*DialogueSO dialogue, string conversantName, string playerName*/)
+        public void StartDialogue(DialogueTriggerData data)
         {
-            activeDialogue = data.DialogueSO;
-            currentNode = activeDialogue.RootNode();
-            conversantNames = data.Conversants.Select(x => x.ConversantName).ToList();
+            activeDialogue = data;
+            currentNode = activeDialogue.DialogueSO.RootNode();
             DisplayDialogueNode(currentNode);
             Show();
         }
@@ -41,7 +45,6 @@ namespace RPGPlatformer.UI
             CloseActiveWindow();
             activeDialogue = null;
             currentNode = null;
-            conversantNames = null;
             DialogueEnded?.Invoke();
             Hide();
         }
@@ -54,11 +57,11 @@ namespace RPGPlatformer.UI
                 return;
             }
 
-            if (!data.IsValid())
-            {
-                Debug.Log($"Unable to start dialogue, because {nameof(DialogueTriggerData)} is invalid.");
-                return;
-            }
+            //if (!data.IsValid())
+            //{
+            //    Debug.Log($"Unable to start dialogue, because {nameof(DialogueTriggerData)} is invalid.");
+            //    return;
+            //}
 
             if (!data.AllowPlayerToEnterCombatDuringDialogue)
             {
@@ -98,12 +101,12 @@ namespace RPGPlatformer.UI
             CloseActiveWindow();
 
             currentNode = dialogueNode;
-            string conversantName = conversantNames[dialogueNode.ConversantNumber()];
+            var conversantName = activeDialogue.ConversantName(dialogueNode);
 
             activeWindow = Instantiate(dialogueWindowPrefab, transform);
             activeWindow.SetUpWindow(dialogueNode, conversantName);
 
-            if(!activeDialogue.HasContinuation(dialogueNode))
+            if(!activeDialogue.DialogueSO.HasContinuation(dialogueNode))
             {
                 activeWindow.NextButtonContainer.SetActive(false);
             }
@@ -113,11 +116,14 @@ namespace RPGPlatformer.UI
             //(^even for a choice node where the responses have no continuation (i.e. the choices are just 
             //closing remarks) we should subscribe DisplayContinuation so that the dialogue closes
             //when that last choice is selected)
+
+            activeDialogue.ExecuteEntryActions(currentNode);
         }
 
         private void DisplayContinuation(int responseIndex)
         {
-            if(!activeDialogue.TryGetContinuation(currentNode, responseIndex, out var continuation))
+            activeDialogue.ExecuteExitActions(currentNode);
+            if(!activeDialogue.DialogueSO.TryGetContinuation(currentNode, responseIndex, out var continuation))
             {
                 EndDialogue();
                 return;

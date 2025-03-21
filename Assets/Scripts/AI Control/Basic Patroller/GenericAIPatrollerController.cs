@@ -18,13 +18,14 @@ namespace RPGPlatformer.AIControl
         where T4 : AIPatrollerStateManager<T2, T3, T0, T00, T01, T02, T03, T1>
     {
         [SerializeField] protected NavigationMode defaultPatrolMode;
-        [SerializeField] protected NavigationParameters defaultPatrolParameters;
+        [SerializeField] protected MbNavigationParameters defaultPatrolParameters;
 
         protected T1 patroller;
         protected T4 stateManager;
 
         protected Action OnUpdate;
         protected bool stateBehaviorSubscribed;
+        protected object defaultPatrolParams;//in case you want to supply different default params (non-mb)
 
         protected Dictionary<State, Action> StateBehavior = new();
 
@@ -33,6 +34,10 @@ namespace RPGPlatformer.AIControl
         protected virtual void Awake()
         {
             patroller = GetComponent<T1>();
+            if (defaultPatrolParameters)
+            {
+                defaultPatrolParams = defaultPatrolParameters.Content;
+            }
         }
 
         protected virtual void Start()
@@ -68,7 +73,7 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void InitializeState()
         {
-            patroller.TriggerPatrol();
+            BeginDefaultPatrol();
         }
 
         protected void PerformStateBehavior()
@@ -99,6 +104,11 @@ namespace RPGPlatformer.AIControl
         {
             patroller.MovementController.SetRunning(false);
             patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParameters);
+        }
+
+        protected virtual void BeginDefaultPatrol()
+        {
+            patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParams);
         }
 
         protected virtual void OnPatrolDestinationReached()

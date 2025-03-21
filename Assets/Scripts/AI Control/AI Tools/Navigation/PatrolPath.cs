@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
-    public class PatrolPath : MonoBehaviour, NavigationParameters
+    public class PatrolPath : MbNavigationParameters
     {
         [SerializeField] PatrolPathWayPoint[] pathWayPoints;
 
-        public object Content => WayPoints;
+        public override object Content => WayPoints;
         public LinkedList<PatrolPathWayPoint> WayPoints { get; private set; }
 
         private void Awake()

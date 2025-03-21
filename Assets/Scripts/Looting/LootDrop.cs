@@ -70,7 +70,7 @@ namespace RPGPlatformer.Loot
             base.OnPointerClick(eventData);
 
             if (!eventData.IsLeftMouseButtonEvent()) return;
-            if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
+            if (GlobalGameTools.PlayerIsInCombat|| !PlayerInRangeWithNotifications()) return;
 
             TakeAll();
         }

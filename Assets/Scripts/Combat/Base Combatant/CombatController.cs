@@ -40,7 +40,7 @@ namespace RPGPlatformer.Combat
         protected int activeStuns;
         protected int activeStunsThatFreezeAnimation;
 
-        public bool IsInCombat => combatManager.StateMachine.HasState(typeof(InCombat));
+        public bool IsInCombat => combatManager.StateMachine.CurrentState is InCombat;
         public AbilityBar CurrentAbilityBar => abilityBarManager.CurrentAbilityBar;
         public TickTimer TickTimer => tickTimer;
         public bool GlobalCooldown { get; protected set; }

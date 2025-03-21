@@ -201,9 +201,6 @@ PrefabInstance:
       addedObject: {fileID: 4992737660079078371}
     - targetCorrespondingSourceObject: {fileID: 9011513413079839493, guid: e13390690e108ae4abe8f2d8302803bc, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1887319086998107380}
-    - targetCorrespondingSourceObject: {fileID: 9011513413079839493, guid: e13390690e108ae4abe8f2d8302803bc, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7848575408194583545}
     - targetCorrespondingSourceObject: {fileID: 9011513413079839493, guid: e13390690e108ae4abe8f2d8302803bc, type: 3}
       insertIndex: -1
@@ -211,6 +208,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9011513413079839493, guid: e13390690e108ae4abe8f2d8302803bc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4431716515061652100}
+    - targetCorrespondingSourceObject: {fileID: 9011513413079839493, guid: e13390690e108ae4abe8f2d8302803bc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8283074641201920516}
   m_SourcePrefab: {fileID: 100100000, guid: e13390690e108ae4abe8f2d8302803bc, type: 3}
 --- !u!1 &1765907394187610111 stripped
 GameObject:
@@ -263,23 +263,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.75}
   m_EdgeRadius: 0
---- !u!114 &1887319086998107380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1765907394187610111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc16810594a28c4419d2a120013bcd30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogues:
-  - allowPlayerToEnterCombatDuringDialogue: 0
-    dialogueSO: {fileID: 0}
-    conversants: []
-    AllowPlayerToEnterCombatDuringDialogue: 0
 --- !u!114 &7848575408194583545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,3 +304,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   conversantName: Green Bean
+--- !u!114 &8283074641201920516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765907394187610111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da055bd7aaff1a548a56cd49c652dc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogues:
+  - allowPlayerToEnterCombatDuringDialogue: 0
+    dialogueSO: {fileID: 11400000, guid: 349588fc01d3daf4bbb7821328d3fbff, type: 2}
+    conversants:
+    - {fileID: 0}
+    - {fileID: 0}
+    entryActions: []
+    exitActions: []

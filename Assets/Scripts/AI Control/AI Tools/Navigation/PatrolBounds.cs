@@ -2,10 +2,10 @@
 
 namespace RPGPlatformer.AIControl
 {
-    public class PatrolBounds : MonoBehaviour, NavigationParameters
+    public class PatrolBounds : MbNavigationParameters
     {
         [SerializeField] Transform[] bounds;
 
-        public object Content => bounds;
+        public override object Content => bounds;
     }
 }

@@ -41,6 +41,8 @@ namespace RPGPlatformer.Dialogue.Editor
 
             foreach (var node in dialogue.Nodes())
             {
+                if (node == null) return;
+
                 VisualDialogueNode vNode = DrawNode(node, node.Rect().position);
                 if(dialogue.RootNode() == node)
                 {

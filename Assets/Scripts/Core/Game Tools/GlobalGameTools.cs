@@ -12,8 +12,10 @@ namespace RPGPlatformer.Core
         [SerializeField] ResourcesManager resourcesManager = new();
 
         public static GlobalGameTools Instance { get; private set; }
-        public static bool PlayerIsDead { get; private set; }
         public static string PlayerName { get; private set; } = "Player";
+        public static ICombatController Player { get; private set; }
+        public static bool PlayerIsDead => Player == null || Player.Combatant.Health.IsDead;
+        public static bool PlayerIsInCombat => Player != null && Player.IsInCombat;
 
         //public Camera MainCamera { get; private set; }//because we are using the perspective camera
         public CancellationTokenSource TokenSource {  get; private set; }
@@ -23,6 +25,8 @@ namespace RPGPlatformer.Core
         public ObjectPoolCollection EffectPooler { get; private set; }
 
         public static event Action OnPlayerDeath;
+        //useful to have this go through global game tools,
+        //so that subscribers don't have to worry about whether player exists yet
         public static event Action InstanceReady;
 
         private void Awake()
@@ -51,13 +55,16 @@ namespace RPGPlatformer.Core
 
             resourcesManager.InitializeResources();
 
-            PlayerCombatController player = FindAnyObjectByType<PlayerCombatController>();
-            player.OnDeath += () =>
-            {
-                PlayerIsDead = true;
-                OnPlayerDeath?.Invoke();
-            };
-            player.OnRevive += () => PlayerIsDead = false;
+            Player = FindAnyObjectByType<PlayerCombatController>();
+            Player.OnDeath += () => OnPlayerDeath?.Invoke();
+            //player.OnDeath += () =>
+            //{
+            //    PlayerIsDead = true;
+            //    OnPlayerDeath?.Invoke();
+            //};
+            //player.OnRevive += () => PlayerIsDead = false;
+            //player.CombatEntered += () => PlayerInCombat = true;
+            //player.CombatExited += () => PlayerInCombat = false;
         }
 
 
