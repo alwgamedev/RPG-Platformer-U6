@@ -15,12 +15,6 @@ namespace RPGPlatformer.Dialogue
         public string ActionName => actionName;
         public UnityEvent<string[]> Trigger => trigger;
 
-        public DialogueAction(string nodeID, string actionName)
-        {
-            this.nodeID = nodeID;
-            this.actionName = actionName;
-        }
-
         public DialogueAction(string nodeID, string actionName, UnityEvent<string[]> trigger)
         {
             this.nodeID = nodeID;

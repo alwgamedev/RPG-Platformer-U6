@@ -12,15 +12,9 @@ namespace RPGPlatformer.UI
     {
         [SerializeField] DialogueWindow dialogueWindowPrefab;
 
-        //DialogueSO activeDialogue;
-        //string[] conversantNames;
         DialogueTriggerData activeDialogue;
         DialogueNode currentNode;
         DialogueWindow activeWindow;
-
-        //nodeId => (actionName => unity event)
-        //Dictionary<string, Dictionary<string, UnityEvent<string[]>>> EntryActions = new();
-        //Dictionary<string, Dictionary<string, UnityEvent<string[]>>> ExitActions = new();
 
         public event Action DialogueEnded;
 
@@ -122,12 +116,19 @@ namespace RPGPlatformer.UI
 
         private void DisplayContinuation(int responseIndex)
         {
+            if (currentNode is ChoicesDialogueNode c)
+            {
+                activeDialogue.ExecuteResponseActions(c, responseIndex);
+            }
+
             activeDialogue.ExecuteExitActions(currentNode);
+
             if(!activeDialogue.DialogueSO.TryGetContinuation(currentNode, responseIndex, out var continuation))
             {
                 EndDialogue();
                 return;
             }
+
             DisplayDialogueNode(continuation);
         }
 

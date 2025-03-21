@@ -5,6 +5,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
+using UnityEditor.UIElements;
+using JetBrains.Annotations;
 
 namespace RPGPlatformer.Dialogue.Editor
 {
@@ -41,30 +43,13 @@ namespace RPGPlatformer.Dialogue.Editor
         {
             titleContainer.Clear();
             titleContainer.style.flexDirection = FlexDirection.Column;
-
-            //Toggle toggle = new("Player speaking:")
-            //{
-            //    value = dialogueNode.IsPlayerSpeaking()
-            //};
-            //toggle.style.unityTextAlign = TextAnchor.MiddleLeft;
-            //toggle.style.minWidth = 5;//label and the actual toggle
-            //toggle.ElementAt(0).style.fontSize = 11;
-            //toggle.RegisterValueChangedCallback((valueChangeEvent) =>
-            //{
-            //    dialogueNode.SetIsPlayerSpeaking(valueChangeEvent.newValue);
-            //});
-
-            //List<string> conversantOptions = Enumerable.Range(0, numConversants).Select(x => x.ToString()).ToList();
-            //if (dialogueNode.ConversantNumber() < 0 || dialogueNode.ConversantNumber() >= numConversants)
-            //{
-            //    dialogueNode.SetConversantNumber(0);
-            //}
+            titleContainer.style.minHeight = 50;
 
             DropdownField conversantDropdown = new(conversantNames, dialogueNode.ConversantNumber());
-            conversantDropdown.label = "Conversant #:";
-            conversantDropdown.style.unityTextAlign = TextAnchor.MiddleLeft;
-            conversantDropdown.style.minWidth = 5;
+            conversantDropdown.label = "Conversant Name:";
+            conversantDropdown.style.unityTextAlign = TextAnchor.UpperLeft;
             conversantDropdown.ElementAt(0).style.fontSize = 15;
+            conversantDropdown.ElementAt(0).style.minWidth = 5;
             conversantDropdown.RegisterValueChangedCallback((valueChangeEvent) =>
             {
                 dialogueNode.SetConversantNumber(conversantDropdown.index);
@@ -72,9 +57,9 @@ namespace RPGPlatformer.Dialogue.Editor
 
 
             rootNodeToggle = new("Root node:");
-            rootNodeToggle.style.unityTextAlign = TextAnchor.MiddleLeft;
-            rootNodeToggle.style.minWidth = 15;
+            rootNodeToggle.style.unityTextAlign = TextAnchor.UpperLeft;
             rootNodeToggle.ElementAt(0).style.fontSize = 11;
+            rootNodeToggle.ElementAt(0).style.minWidth = 5;
 
             titleContainer.Insert(0, conversantDropdown);
             titleContainer.Insert(1, rootNodeToggle);
@@ -120,7 +105,7 @@ namespace RPGPlatformer.Dialogue.Editor
                 text = "Response Choices"
             };
 
-            VisualElement MakeItem()
+            VisualElement ResponseChoiceContainer()
             {
                 VisualElement choiceContainer = new();
 
@@ -139,7 +124,7 @@ namespace RPGPlatformer.Dialogue.Editor
 
                 choiceContainer.Insert(0, textField);
                 choiceContainer.Insert(1, CreateContinuationPort());
-                if(outputPorts.Count == responseChoices.Count)
+                if (outputPorts.Count == responseChoices.Count)
                 {
                     outPutPortsReady = true;
                     OutputPortsReady?.Invoke();
@@ -154,11 +139,11 @@ namespace RPGPlatformer.Dialogue.Editor
                 TextField tf = elmt.Q<TextField>();
                 if (tf != null)
                 {
-                    tf.value = choicesNode.ResponseChoices()[index]?.choiceText ?? ""; 
+                    tf.value = choicesNode.ResponseChoices()[index]?.choiceText ?? "";
                 }
             };
 
-            ListView listView = new(responseChoices, 60, MakeItem, BindItem)
+            ListView listView = new(responseChoices, 60, ResponseChoiceContainer, BindItem)
             {
                 reorderable = true,
                 reorderMode = ListViewReorderMode.Animated,

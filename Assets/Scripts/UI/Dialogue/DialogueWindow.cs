@@ -16,9 +16,7 @@ namespace RPGPlatformer.UI
         [SerializeField] TextMeshProUGUI speakerLabel;
         [SerializeField] VerticalLayoutGroup dialogueContainer;
         [SerializeField] VerticalLayoutGroup choicesContainer;
-        [SerializeField] CanvasGroup dialogueSegmentPrefab;//use GetComponentInChildren<TMP> to set its text
-        //^idea: all dialogue segments will be installed at beginning of a dialogue node (so ui has correct size),
-        //but they will fade in 1by1
+        [SerializeField] CanvasGroup dialogueSegmentPrefab;
         [SerializeField] GameObject nextButtonContainer;
         [SerializeField] Button choiceButtonPrefab;
         [SerializeField] Button nextButton;
@@ -58,9 +56,8 @@ namespace RPGPlatformer.UI
 
                 if (textSegments != null && textSegments.Count > 0)
                 {
-                    //string speakerName = dialogueNode.IsPlayerSpeaking() ? playerName : conversantName;
-                    DisplayMainDialogue(conversantName/*speakerName*/);
-                    nextButton.onClick.AddListener(() => DisplayResponseChoices(/*playerName*/));
+                    DisplayMainDialogue(conversantName);
+                    nextButton.onClick.AddListener(() => DisplayResponseChoices());
                 }
                 else
                 {
@@ -69,9 +66,8 @@ namespace RPGPlatformer.UI
             }
             else
             {
-                //string speakerName = dialogueNode.IsPlayerSpeaking() ? playerName : conversantName;
-                DisplayMainDialogue(conversantName/*speakerName*/);
-                nextButton.onClick.AddListener(() => ResponseSelected?.Invoke(0));
+                DisplayMainDialogue(conversantName);
+                nextButton.onClick.AddListener(() => ResponseSelected?.Invoke(-1));
             }
 
         }

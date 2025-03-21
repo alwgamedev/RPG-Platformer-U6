@@ -4,13 +4,18 @@ using UnityEngine;
 
 namespace RPGPlatformer.Dialogue
 {
-    public partial class ChoicesDialogueNode : DialogueNode
+    public class ChoicesDialogueNode : DialogueNode
     {
         [SerializeField] List<ResponseChoiceData> responseChoices = new();
 
         public List<ResponseChoiceData> ResponseChoices()
         {
             return responseChoices;
+        }
+
+        public bool ValidResponse(int responseIndex)
+        {
+            return responseChoices != null && responseIndex >= 0 && responseIndex < responseChoices.Count;
         }
 
         public override string ContinuationID(int responseIndex)
