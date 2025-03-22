@@ -21,7 +21,7 @@ namespace RPGPlatformer.Combat
         public float AdditiveDamageBonus();
         public IHealth FindTarget(Vector2 position, float searchRadius);
         public bool CanAttack(IHealth target);
-        public bool CanAttack(float distance);
+        public bool CanAttack(float distance, float tolerance);
         public bool TargetInRange(IHealth target);
         public void PrepareProjectile(IProjectile projectile, Func<Vector2> getAimPos, 
             float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);

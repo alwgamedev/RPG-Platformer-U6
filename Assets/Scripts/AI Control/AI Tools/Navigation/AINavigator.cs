@@ -173,7 +173,8 @@ namespace RPGPlatformer.AIControl
             {
                 return Mathf.Abs(transform.position.x - currentDestination.x) < destinationTolerance;
             }
-            return Vector2.Distance(transform.position, currentDestination) < destinationTolerance;
+            return Vector2.SqrMagnitude((Vector2)transform.position - currentDestination) 
+                < destinationTolerance * destinationTolerance;
         }
 
         private void OnBoundedDestinationReached()
@@ -194,7 +195,7 @@ namespace RPGPlatformer.AIControl
                 return false;
             }
 
-            currentDestination = new(UnityEngine.Random.Range(leftBound.x, rightBound.x), 
+            currentDestination = new (UnityEngine.Random.Range(leftBound.x, rightBound.x), 
                 UnityEngine.Random.Range(Math.Min(leftBound.y, rightBound.y), Math.Max(leftBound.y, rightBound.y)));
             return true;
         }

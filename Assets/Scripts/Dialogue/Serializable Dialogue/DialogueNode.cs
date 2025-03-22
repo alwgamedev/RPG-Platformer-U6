@@ -1,4 +1,3 @@
-using RPGPlatformer.Core;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,7 +8,6 @@ namespace RPGPlatformer.Dialogue
     public abstract class DialogueNode : ScriptableObject
     {
         [SerializeField] protected int speakerIndex;
-        //[SerializeField] protected bool isPlayerSpeaking;
         [SerializeField] protected List<string> textSegments = new();
         [SerializeField] protected string uniqueID;
         [SerializeField] protected Vector2 position;//store position in editor window
@@ -35,11 +33,6 @@ namespace RPGPlatformer.Dialogue
             return speakerIndex;
         }
 
-        //public bool IsPlayerSpeaking()
-        //{
-        //    return isPlayerSpeaking;
-        //}
-
         public List<string> TextSegments()
         {
             return textSegments;
@@ -61,13 +54,7 @@ namespace RPGPlatformer.Dialogue
         }
 
 #if UNITY_EDITOR
-        //public void SetIsPlayerSpeaking(bool val)
-        //{
-        //    isPlayerSpeaking = val;
-        //    EditorUtility.SetDirty(this);
-        //}
-
-        public void SetSpeakerIndex(int val)
+         public void SetSpeakerIndex(int val)
         {
             speakerIndex = val;
             EditorUtility.SetDirty(this);

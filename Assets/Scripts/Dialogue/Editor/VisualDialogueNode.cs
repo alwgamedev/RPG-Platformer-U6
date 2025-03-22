@@ -17,10 +17,8 @@ namespace RPGPlatformer.Dialogue.Editor
         public List<Port> outputPorts = new();
         public bool outputPortsReady = false;
         public Toggle rootNodeToggle;
-        //public bool ignoreRootNodeToggleValueChange;
 
         SerializedObject serObject;
-        //ResponseChoiceDataPropertyDrawer responseChoiceDrawer = new();
 
         public event Action OutputPortsReady;
 
@@ -52,7 +50,6 @@ namespace RPGPlatformer.Dialogue.Editor
             titleContainer.style.minHeight = 50;
 
             rootNodeToggle = new("Root node:");
-            //rootNodeToggle.style.unityTextAlign = TextAnchor.UpperLeft;
             rootNodeToggle.ElementAt(0).style.fontSize = 11;
             rootNodeToggle.ElementAt(0).style.minWidth = 5;
 
@@ -60,7 +57,6 @@ namespace RPGPlatformer.Dialogue.Editor
             {
                 var actorDropDown = new DropdownField(actorNames, dialogueNode.SpeakerIndex());
                 actorDropDown.label = "Speaker Name:";
-                //actorDropDown.style.unityTextAlign = TextAnchor.UpperLeft;
                 actorDropDown.ElementAt(0).style.fontSize = 15;
                 actorDropDown.ElementAt(0).style.minWidth = 5;
                 actorDropDown.RegisterValueChangedCallback((valueChangeEvent) =>
@@ -71,8 +67,7 @@ namespace RPGPlatformer.Dialogue.Editor
             }
             else
             {
-                var noActorsMsg = new Label("Add actor names to dialogue!");
-                //noActorsMsg.style.unityTextAlign = TextAnchor.UpperLeft;
+                var noActorsMsg = new Label("Add actor names to dialogue SO.");
                 noActorsMsg.style.fontSize = 15;
                 titleContainer.Add(noActorsMsg);
             }

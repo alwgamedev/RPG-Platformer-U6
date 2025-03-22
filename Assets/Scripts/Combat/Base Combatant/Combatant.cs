@@ -426,13 +426,14 @@ namespace RPGPlatformer.Combat
             {
                 return false;
             }
-            return CanAttack(Vector2.Distance(health.Transform.position, transform.position) - health.TargetingTolerance
-                - this.health.TargetingTolerance);
+            return CanAttack(Vector2.SqrMagnitude(health.Transform.position - transform.position),
+                health.TargetingTolerance + this.health.TargetingTolerance);
         }
 
-        public bool CanAttack(float distance)
+        public bool CanAttack(float distanceSqrd, float tolerance)
         {
-            return equippedWeapon != null && distance < AttackRange;
+            var a = AttackRange + tolerance;
+            return equippedWeapon != null && distanceSqrd < a * a;
         }
 
         public bool TargetInRange(IHealth target)

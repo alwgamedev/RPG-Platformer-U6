@@ -21,7 +21,7 @@ namespace RPGPlatformer.Effects
         HorizontalOrientation parentOrientation;
 
         Vector2 u; //displacement of stringGrabPt from origin at moment of release, normalized
-        float d; //distance of stringGrabPt from origin at momvent of release
+        float d; //distance of stringGrabPt from origin at moment of release
         float t; //timeSinceRelease
 
         Action OnUpdate;

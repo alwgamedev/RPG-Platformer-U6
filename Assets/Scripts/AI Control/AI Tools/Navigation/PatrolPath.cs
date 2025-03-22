@@ -14,15 +14,5 @@ namespace RPGPlatformer.AIControl
         {
             WayPoints = new(pathWayPoints);
         }
-
-        //private void BuildPath()
-        //{
-        //    WayPoints = new ();
-
-        //    foreach (var w in pathWayPoints)
-        //    {
-        //        WayPoints.AddLast(w);
-        //    }
-        //}
     }
 }

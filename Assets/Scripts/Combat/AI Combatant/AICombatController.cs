@@ -7,7 +7,6 @@ namespace RPGPlatformer.Combat
     public class AICombatController : CombatController
     {
         protected CombatantHealthBarCanvas healthBarCanvas;
-        //protected Action OnUpdate;
 
         public IHealth currentTarget;
 
@@ -50,18 +49,6 @@ namespace RPGPlatformer.Combat
             CombatManager.OnWeaponTick -= FireOneShot;
         }
 
-        //public override void OnCombatEntry()
-        //{
-        //    base.OnCombatEntry();
-
-        //    //OnUpdate += FaceAimPosition;
-        //}
-
-        //public void MaintainMinimumCombatDistance()
-        //{
-        //    OnUpdate += MaintainMinimumCombatDistance;
-        //}
-
         public override void OnCombatExit()
         {
             base.OnCombatExit();
@@ -70,8 +57,6 @@ namespace RPGPlatformer.Combat
             {
                 aic.damageTracker.ClearTracker();
             }
-
-            //OnUpdate -= MaintainMinimumCombatDistance;
         }
 
         public override Vector2 GetAimPosition()
@@ -99,12 +84,5 @@ namespace RPGPlatformer.Combat
         {
             healthBarCanvas.OnMouseExit();
         }
-
-        //protected override void OnDestroy()
-        //{
-        //    base.OnDestroy();
-
-        //    OnUpdate = null;
-        //}
     }
 }

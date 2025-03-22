@@ -8,6 +8,6 @@ namespace RPGPlatformer.AIControl
         public LinkedListNode<PatrolPathWayPoint> TargetPoint { get; }
 
         public void OnDestinationReached(); 
-        //implementing class can decide whether to target node.Next or node.Prev
+        //e.g. continue to node.Next or node.Prev
     }
 }

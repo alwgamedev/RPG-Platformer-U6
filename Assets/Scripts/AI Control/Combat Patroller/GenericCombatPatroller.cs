@@ -15,6 +15,7 @@ namespace RPGPlatformer.AIControl
     {
         [SerializeField] protected float pursuitRange = 5;
         [SerializeField] protected float suspicionTime = 5;
+
         protected bool correctingCombatDistance;
         protected float suspicionTimer;
         protected IHealth currentTarget;
@@ -57,13 +58,14 @@ namespace RPGPlatformer.AIControl
 
         protected bool ScanForTarget(Action TargetOutOfRange = null)
         {
-            if (!TryGetDistance(CurrentTarget, out float distance) || distance > pursuitRange)
+            if (!TryGetDistanceSqrd(CurrentTarget, out float d2, out float t) 
+                || !InRange(d2, pursuitRange, t))
             {
                 TargetOutOfRange?.Invoke();
                 return false;
             }
 
-            if (CombatController.Combatant.CanAttack(distance))
+            if (CombatController.Combatant.CanAttack(d2, t))
             {
                 Trigger(typeof(Attack).Name);
                 return true;
@@ -104,12 +106,13 @@ namespace RPGPlatformer.AIControl
 
         public void PursuitBehavior()
         {
-            if (!TryGetDistance(CurrentTarget, out float distance) || distance > pursuitRange)
+            if (!TryGetDistanceSqrd(CurrentTarget, out float d2, out float t) 
+                || !InRange(d2, pursuitRange, t))
             {
                 Trigger(typeof(Suspicion).Name);
                 return;
             }
-            else if (CombatController.Combatant.CanAttack(distance))
+            else if (CombatController.Combatant.CanAttack(d2, t))
             {
                 Trigger(typeof(Attack).Name);
             }
@@ -126,11 +129,11 @@ namespace RPGPlatformer.AIControl
 
         public void AttackBehavior()
         {
-            if (!TryGetDistance(CurrentTarget, out var d))
+            if (!TryGetDistanceSqrd(CurrentTarget, out var d, out var t))
             {
                 TriggerSuspicion();
             }
-            else if (!CombatController.Combatant.CanAttack(d))
+            else if (!CombatController.Combatant.CanAttack(d, t))
             {
                 TriggerPursuit();
             }
@@ -156,7 +159,7 @@ namespace RPGPlatformer.AIControl
             correctingCombatDistance = false;
         }
 
-        public virtual void MaintainMinimumCombatDistance(float currentDistance)
+        public virtual void MaintainMinimumCombatDistance(float currentDistSqrd)
         {
             //not very performance-conscious, because he will continue scanning for drop offs
             //every frame that he is correcting combat distance,
@@ -165,7 +168,7 @@ namespace RPGPlatformer.AIControl
             //reassessing until you're far enough away again"
             //-- in that case the player could theoretically walk the enemy over to a far away cliff (if the 
             //enemy doesn't reassess at any point while getting walked toward the cliff)
-            if (currentDistance < CombatController.AICombatant.MinimumCombatDistance)
+            if (currentDistSqrd < MinimumCombatDistance * MinimumCombatDistance)
             {
                 float direction =
                     Mathf.Sign(transform.position.x - CurrentTarget.Transform.position.x);
@@ -191,15 +194,23 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        public bool TryGetDistance(IHealth target, out float distance)
+        public bool InRange(float distSqrd, float range, float tolerance)
+        {
+            var a = range + tolerance;
+            return distSqrd < a * a;
+        }
+
+        public bool TryGetDistanceSqrd(IHealth target, out float distanceSqrd, out float tolerance)
         {
             if (target != null && !target.IsDead)
             {
-                distance = Vector3.Distance(transform.position, target.Transform.position)
-                    - target.TargetingTolerance - TargetingTolerance;
+                distanceSqrd = Vector2.SqrMagnitude(transform.position - target.Transform.position);
+                //- target.TargetingTolerance - TargetingTolerance;
+                tolerance = target.TargetingTolerance + TargetingTolerance;
                 return true;
             }
-            distance = Mathf.Infinity;
+            distanceSqrd = Mathf.Infinity;
+            tolerance = Mathf.Infinity;
             return false;
         }
 
