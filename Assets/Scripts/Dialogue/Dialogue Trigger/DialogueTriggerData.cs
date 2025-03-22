@@ -10,12 +10,11 @@ namespace RPGPlatformer.Dialogue
     {
         [SerializeField] bool allowPlayerToEnterCombatDuringDialogue;
         [SerializeField] DialogueSO dialogueSO;
-        [SerializeField] DialogueActor[] conversants;
+        [SerializeField] DialogueActorData actors;
         [SerializeField] DialogueAction[] entryActions;
         [SerializeField] DialogueAction[] exitActions;
         [SerializeField] DialogueResponseAction[] responseActions;
 
-        Dictionary<int, DialogueActor> Conversants = new();
         Dictionary<string, Dictionary<string, UnityEvent<string[]>>> EntryActions = new();
         Dictionary<string, Dictionary<string, UnityEvent<string[]>>> ExitActions = new();
         Dictionary<string, Dictionary<int, Dictionary<string, UnityEvent<string[]>>>> ResponseActions = new();
@@ -24,13 +23,20 @@ namespace RPGPlatformer.Dialogue
         public bool AllowPlayerToEnterCombatDuringDialogue => allowPlayerToEnterCombatDuringDialogue;
         public DialogueSO DialogueSO => dialogueSO;
 
-        public string ConversantName(DialogueNode node)
+        //NOTE: it might seem useful to be able to "find actor by name,"
+        //e.g. to execute an action on one of the dialogue actor scripts,
+        //but those actions would be stored in the DialogueSO
+        //where the actors are identified by their speaker index,
+        //hence for now there is no use for "find actor by name"
+
+        public string SpeakerName(DialogueNode node)
         {
-            if (Conversants.TryGetValue(node.ConversantNumber(), out var n) && n != null)
-            {
-                return n.ActorName;
-            }
-            return "";
+            return actors[node.SpeakerIndex()].label;
+        }
+
+        public DialogueActor Actor(int index)
+        {
+            return actors[index].labelledObject;
         }
 
         public void ExecuteEntryActions(DialogueNode dialogueNode)
@@ -83,44 +89,62 @@ namespace RPGPlatformer.Dialogue
 
         public void OnBeforeSerialize()
         {
-            BeforeSerializeConversants();
-            BeforeSerializeEntryActions();
-            BeforeSerializeExitActions();
+            //BeforeSerializeConversants();
+            actors.OnBeforeSerialize(dialogueSO);
+            BeforeSerializeEntryOrExitActions(EntryActions, entryActions, GetEntryActions);
+            BeforeSerializeEntryOrExitActions(ExitActions, exitActions, GetExitActions);
+            //BeforeSerializeEntryActions();
+            //BeforeSerializeExitActions();
             BeforeSerializeResponseActions();
         }
 
         public void OnAfterDeserialize()
         {
-            AfterDeserializeConversants();
-            AfterDeserializeEntryActions();
-            AfterDeserializeExitActions();
+            //AfterDeserializeConversants();
+            actors.OnAfterDeserialize();
+            AfterDeserializeEntryOrExitActions(EntryActions, entryActions);
+            AfterDeserializeEntryOrExitActions(ExitActions, exitActions);
+            //AfterDeserializeEntryActions();
+            //AfterDeserializeExitActions();
             AfterDeserializeResponseActions();
         }
 
-        private void BeforeSerializeConversants()
+        //private void BeforeSerializeConversants()
+        //{
+        //    if (dialogueSO == null || dialogueSO.ActorNames() == null)
+        //    {
+        //        conversants = new DialogueActor[0];
+        //        return;
+        //    }
+
+        //    conversants = new DialogueActor[dialogueSO.ActorNames().Count];
+
+        //    for (int i = 0; i < conversants.Length; i++)
+        //    {
+        //        if (Conversants.TryGetValue(i, out var c))
+        //        {
+        //            conversants[i] = c;
+        //        }
+        //    }
+        //}
+
+        private List<DialogueActionData> GetEntryActions(DialogueNode node)
         {
-            if (dialogueSO == null || dialogueSO.ConversantNames() == null)
-            {
-                conversants = new DialogueActor[0];
-                return;
-            }
-
-            conversants = new DialogueActor[dialogueSO.ConversantNames().Count];
-
-            for (int i = 0; i < conversants.Length; i++)
-            {
-                if (Conversants.TryGetValue(i, out var c))
-                {
-                    conversants[i] = c;
-                }
-            }
+            return node != null ? node.EntryActions() : null; 
         }
 
-        private void BeforeSerializeEntryActions()
+        private List<DialogueActionData> GetExitActions(DialogueNode node)
+        {
+            return node != null ? node.ExitActions() : null;
+        }
+
+        private void BeforeSerializeEntryOrExitActions
+            (Dictionary<string, Dictionary<string, UnityEvent<string[]>>> lookup, DialogueAction[] arr,
+            Func<DialogueNode, List<DialogueActionData>> dialogueActions)
         {
             if (dialogueSO == null || dialogueSO.Nodes() == null)
             {
-                entryActions = new DialogueAction[0];
+                arr = new DialogueAction[0];
                 return;
             }
 
@@ -128,87 +152,136 @@ namespace RPGPlatformer.Dialogue
 
             foreach (var node in dialogueSO.Nodes())
             {
-                if (node == null || node.EntryActions() == null)
+                var dActions = dialogueActions(node);
+
+                if (dActions == null)
                     continue;
 
                 var id = node.UniqueID();
 
-                if (!EntryActions.ContainsKey(id))
+                if (!lookup.ContainsKey(id))
                 {
-                    EntryActions[id] = new();
+                    lookup[id] = new();
                 }
 
-                var nodeDict = EntryActions[id];
+                var nodeDict = lookup[id];
+
+                foreach (var action in dActions)
+                {
+                    if (!nodeDict.ContainsKey(action.ActionName))
+                    {
+                        nodeDict[action.ActionName] = new();
+                    }
+
+                    keys.Add((id, action.ActionName));
+                }
+            }
+
+            arr = new DialogueAction[keys.Count];
+
+            int j = 0;
+
+            foreach (var key in keys)
+            {
+                arr[j] = new DialogueAction(key.Item1, key.Item2,
+                    lookup[key.Item1][key.Item2]);
+                j++;
+            }
+        }
+
+        //private void BeforeSerializeEntryActions()
+        //{
+        //    if (dialogueSO == null || dialogueSO.Nodes() == null)
+        //    {
+        //        entryActions = new DialogueAction[0];
+        //        return;
+        //    }
+
+        //    HashSet<(string, string)> keys = new();
+
+        //    foreach (var node in dialogueSO.Nodes())
+        //    {
+        //        if (node == null || node.EntryActions() == null)
+        //            continue;
+
+        //        var id = node.UniqueID();
+
+        //        if (!EntryActions.ContainsKey(id))
+        //        {
+        //            EntryActions[id] = new();
+        //        }
+
+        //        var nodeDict = EntryActions[id];
                 
-                foreach (var action in node.EntryActions())
-                {
-                    if (!nodeDict.ContainsKey(action.ActionName))
-                    {
-                        nodeDict[action.ActionName] = new();
-                    }
+        //        foreach (var action in node.EntryActions())
+        //        {
+        //            if (!nodeDict.ContainsKey(action.ActionName))
+        //            {
+        //                nodeDict[action.ActionName] = new();
+        //            }
 
-                    keys.Add((id, action.ActionName));
-                }
-            }
+        //            keys.Add((id, action.ActionName));
+        //        }
+        //    }
 
-            entryActions = new DialogueAction[keys.Count];
+        //    entryActions = new DialogueAction[keys.Count];
 
-            int j = 0;
+        //    int j = 0;
 
-            foreach (var key in keys)
-            {
-                entryActions[j] = new DialogueAction(key.Item1, key.Item2,
-                    EntryActions[key.Item1][key.Item2]);
-                j++;
-            }
-        }
+        //    foreach (var key in keys)
+        //    {
+        //        entryActions[j] = new DialogueAction(key.Item1, key.Item2,
+        //            EntryActions[key.Item1][key.Item2]);
+        //        j++;
+        //    }
+        //}
 
-        private void BeforeSerializeExitActions()
-        {
-            if (dialogueSO == null || dialogueSO.Nodes() == null)
-            {
-                exitActions = new DialogueAction[0];
-                return;
-            }
+        //private void BeforeSerializeExitActions()
+        //{
+        //    if (dialogueSO == null || dialogueSO.Nodes() == null)
+        //    {
+        //        exitActions = new DialogueAction[0];
+        //        return;
+        //    }
 
-            HashSet<(string, string)> keys = new();
+        //    HashSet<(string, string)> keys = new();
 
-            foreach (var node in dialogueSO.Nodes())
-            {
-                if (node == null || node.ExitActions() == null)
-                    continue;
+        //    foreach (var node in dialogueSO.Nodes())
+        //    {
+        //        if (node == null || node.ExitActions() == null)
+        //            continue;
 
-                var id = node.UniqueID();
+        //        var id = node.UniqueID();
 
-                if (!ExitActions.ContainsKey(id))
-                {
-                    ExitActions[id] = new();
-                }
+        //        if (!ExitActions.ContainsKey(id))
+        //        {
+        //            ExitActions[id] = new();
+        //        }
 
-                var nodeDict = ExitActions[id];
+        //        var nodeDict = ExitActions[id];
 
-                foreach (var action in node.ExitActions())
-                {
-                    if (!nodeDict.ContainsKey(action.ActionName))
-                    {
-                        nodeDict[action.ActionName] = new();
-                    }
+        //        foreach (var action in node.ExitActions())
+        //        {
+        //            if (!nodeDict.ContainsKey(action.ActionName))
+        //            {
+        //                nodeDict[action.ActionName] = new();
+        //            }
 
-                    keys.Add((id, action.ActionName));
-                }
-            }
+        //            keys.Add((id, action.ActionName));
+        //        }
+        //    }
 
-            exitActions = new DialogueAction[keys.Count];
+        //    exitActions = new DialogueAction[keys.Count];
 
-            int j = 0;
+        //    int j = 0;
 
-            foreach (var key in keys)
-            {
-                exitActions[j] = new DialogueAction(key.Item1, key.Item2,
-                    ExitActions[key.Item1][key.Item2]);
-                j++;
-            }
-        }
+        //    foreach (var key in keys)
+        //    {
+        //        exitActions[j] = new DialogueAction(key.Item1, key.Item2,
+        //            ExitActions[key.Item1][key.Item2]);
+        //        j++;
+        //    }
+        //}
 
         private void BeforeSerializeResponseActions()
         {
@@ -273,51 +346,70 @@ namespace RPGPlatformer.Dialogue
             }
         }
 
-        private void AfterDeserializeConversants()
+        //private void AfterDeserializeConversants()
+        //{
+        //    Conversants = new();
+
+        //    if (conversants == null) return;
+
+        //    for (int i = 0; i < conversants.Length; i++)
+        //    {
+        //        Conversants[i] = conversants[i];
+        //    }
+        //}
+
+        private void AfterDeserializeEntryOrExitActions
+            (Dictionary<string, Dictionary<string, UnityEvent<string[]>>> lookup, DialogueAction[] arr)
         {
-            Conversants = new();
+            lookup = new();
 
-            if (conversants == null) return;
+            if (arr == null) return;
 
-            for (int i = 0; i < conversants.Length; i++)
+            for (int i = 0; i < arr.Length; i++)
             {
-                Conversants[i] = conversants[i];
-            }
-        }
-
-        private void AfterDeserializeEntryActions()
-        {
-            EntryActions = new();
-
-            if (entryActions == null) return;
-
-            for (int i = 0; i < entryActions.Length; i++)
-            {
-                var d = entryActions[i];
-                if (!EntryActions.ContainsKey(d.NodeID))
+                var action = arr[i];
+                if (!lookup.ContainsKey(action.NodeID))
                 {
-                    EntryActions[d.NodeID] = new();
+                    lookup[action.NodeID] = new();
                 }
-                EntryActions[d.NodeID][d.ActionName] = d.Trigger;
+                lookup[action.NodeID][action.ActionName] = action.Trigger;
             }
         }
 
-        private void AfterDeserializeExitActions()
-        {
-            ExitActions = new();
 
-            if (exitActions == null) return;
+        //private void AfterDeserializeEntryActions()
+        //{
+        //    EntryActions = new();
 
-            for (int i = 0; i < exitActions.Length; i++)
-            {
-                var d = exitActions[i];
-                if (!ExitActions.ContainsKey(d.NodeID))
-                {
-                    ExitActions[d.NodeID] = new();
-                }
-                ExitActions[d.NodeID][d.ActionName] = d.Trigger;
-            }
-        }
+        //    if (entryActions == null) return;
+
+        //    for (int i = 0; i < entryActions.Length; i++)
+        //    {
+        //        var d = entryActions[i];
+        //        if (!EntryActions.ContainsKey(d.NodeID))
+        //        {
+        //            EntryActions[d.NodeID] = new();
+        //        }
+        //        EntryActions[d.NodeID][d.ActionName] = d.Trigger;
+        //    }
+        //}
+
+        //private void AfterDeserializeExitActions()
+        //{
+        //    ExitActions = new();
+
+        //    if (exitActions == null) return;
+
+        //    for (int i = 0; i < exitActions.Length; i++)
+        //    {
+        //        var d = exitActions[i];
+        //        if (!ExitActions.ContainsKey(d.NodeID))
+        //        {
+        //            ExitActions[d.NodeID] = new();
+        //        }
+        //        ExitActions[d.NodeID][d.ActionName] = d.Trigger;
+        //    }
+        //}
 
         private void AfterDeserializeResponseActions()
         {

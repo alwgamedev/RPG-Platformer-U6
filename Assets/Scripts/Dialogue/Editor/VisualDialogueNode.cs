@@ -11,7 +11,7 @@ namespace RPGPlatformer.Dialogue.Editor
 {
     public class VisualDialogueNode : Node
     {
-        public List<string> conversantNames;
+        public List<string> actorNames;
         public DialogueNode dialogueNode;
         public Port inputPort;
         public List<Port> outputPorts = new();
@@ -24,11 +24,11 @@ namespace RPGPlatformer.Dialogue.Editor
 
         public event Action OutputPortsReady;
 
-        public VisualDialogueNode(DialogueNode dialogueNode, List<string> conversantNames)
+        public VisualDialogueNode(DialogueNode dialogueNode, List<string> actorNames)
         {
             this.dialogueNode = dialogueNode;
             title = dialogueNode.name;
-            this.conversantNames = conversantNames;
+            this.actorNames = actorNames;
             if (dialogueNode != null)
             {
                 serObject = new(dialogueNode);
@@ -51,24 +51,33 @@ namespace RPGPlatformer.Dialogue.Editor
             titleContainer.style.flexDirection = FlexDirection.Column;
             titleContainer.style.minHeight = 50;
 
-            DropdownField conversantDropdown = new(conversantNames, dialogueNode.ConversantNumber());
-            conversantDropdown.label = "Conversant Name:";
-            conversantDropdown.style.unityTextAlign = TextAnchor.UpperLeft;
-            conversantDropdown.ElementAt(0).style.fontSize = 15;
-            conversantDropdown.ElementAt(0).style.minWidth = 5;
-            conversantDropdown.RegisterValueChangedCallback((valueChangeEvent) =>
-            {
-                dialogueNode.SetConversantNumber(conversantDropdown.index);
-            });
-
-
             rootNodeToggle = new("Root node:");
-            rootNodeToggle.style.unityTextAlign = TextAnchor.UpperLeft;
+            //rootNodeToggle.style.unityTextAlign = TextAnchor.UpperLeft;
             rootNodeToggle.ElementAt(0).style.fontSize = 11;
             rootNodeToggle.ElementAt(0).style.minWidth = 5;
 
-            titleContainer.Insert(0, conversantDropdown);
-            titleContainer.Insert(1, rootNodeToggle);
+            if (actorNames != null && actorNames.Count > 0)
+            {
+                var actorDropDown = new DropdownField(actorNames, dialogueNode.SpeakerIndex());
+                actorDropDown.label = "Speaker Name:";
+                //actorDropDown.style.unityTextAlign = TextAnchor.UpperLeft;
+                actorDropDown.ElementAt(0).style.fontSize = 15;
+                actorDropDown.ElementAt(0).style.minWidth = 5;
+                actorDropDown.RegisterValueChangedCallback((valueChangeEvent) =>
+                {
+                    dialogueNode.SetSpeakerIndex(actorDropDown.index);
+                });
+                titleContainer.Add(actorDropDown);
+            }
+            else
+            {
+                var noActorsMsg = new Label("Add actor names to dialogue!");
+                //noActorsMsg.style.unityTextAlign = TextAnchor.UpperLeft;
+                noActorsMsg.style.fontSize = 15;
+                titleContainer.Add(noActorsMsg);
+            }
+
+            titleContainer.Add(rootNodeToggle);
         }
 
         private void RedrawInputContainer()
@@ -104,59 +113,7 @@ namespace RPGPlatformer.Dialogue.Editor
         {
             outputContainer.Clear();
 
-            //List<ResponseChoiceData> responseChoices = choicesNode.ResponseChoices();
-
             outputContainer.style.flexDirection = FlexDirection.Row;
-
-            //choicesFoldout.style.flexDirection = FlexDirection.Row;
-
-            //VisualElement ResponseChoiceContainer()
-            //{
-            //    VisualElement choiceContainer = new();
-
-            //    TextField textField = new();
-            //    textField.style.width = 150;
-            //    textField.style.maxHeight = 50;
-            //    textField.multiline = true;
-            //    textField.style.whiteSpace = WhiteSpace.Normal;
-            //    textField.RegisterValueChangedCallback((textChangeEvent) =>
-            //    {
-            //        ListView listView = choicesFoldout[0] as ListView;
-            //        List<TextField> textFields = listView.Query<TextField>().ToList();
-            //        int currentIndex = textFields.IndexOf(textField);
-            //        choicesNode.SetResponseChoiceText(currentIndex, textChangeEvent.newValue);
-            //    });
-
-            //    choiceContainer.Insert(0, textField);
-            //    choiceContainer.Insert(1, CreateContinuationPort());
-            //    if (outputPorts.Count == responseChoices.Count)
-            //    {
-            //        outPutPortsReady = true;
-            //        OutputPortsReady?.Invoke();
-            //    }
-
-            //    return choiceContainer;
-            //};
-
-            //void BindItem(VisualElement elmt, int index)
-            //{
-            //    if (elmt == null || choicesNode == null || choicesNode.ResponseChoices() == null) return;
-            //    TextField tf = elmt.Q<TextField>();
-            //    if (tf != null)
-            //    {
-            //        tf.value = choicesNode.ResponseChoices()[index]?.choiceText ?? "";
-            //    }
-            //};
-
-            //ListView listView = new(responseChoices, 60, ResponseChoiceContainer, BindItem)
-            //{
-            //    reorderable = true,
-            //    reorderMode = ListViewReorderMode.Animated,
-            //    showAddRemoveFooter = true
-            //};
-
-            //listView.itemsAdded += (args) => EditorUtility.SetDirty(choicesNode);
-            //listView.itemsRemoved += (args) => EditorUtility.SetDirty(choicesNode);
 
             var choicesList = new ListView()
             {
@@ -257,7 +214,33 @@ namespace RPGPlatformer.Dialogue.Editor
             listView.itemsAdded += (args) => EditorUtility.SetDirty(dialogueNode);
             listView.itemsRemoved += (args) => EditorUtility.SetDirty(dialogueNode);
 
-            dialogueFoldout.Insert(0, listView);
+            var entryActions = new ListView()
+            {
+                reorderable = true,
+                reorderMode = ListViewReorderMode.Animated,
+                showAddRemoveFooter = true,
+                showFoldoutHeader = true,
+                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
+            };
+            entryActions.headerTitle = "Node Entry Actions";
+            entryActions.style.minWidth = 250;
+            entryActions.BindProperty(serObject.FindProperty("entryActions"));
+
+            var exitActions = new ListView()
+            {
+                reorderable = true,
+                reorderMode = ListViewReorderMode.Animated,
+                showAddRemoveFooter = true,
+                showFoldoutHeader = true,
+                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
+            };
+            exitActions.headerTitle = "Node Exit Actions";
+            exitActions.style.minWidth = 250;
+            exitActions.BindProperty(serObject.FindProperty("exitActions"));
+
+            dialogueFoldout.Add(listView);
+            dialogueFoldout.Add(entryActions);
+            dialogueFoldout.Add(exitActions);
             extensionContainer.Insert(0, dialogueFoldout);
             extensionContainer.style.backgroundColor = new Color(.15f, .15f, .15f, 1);
 

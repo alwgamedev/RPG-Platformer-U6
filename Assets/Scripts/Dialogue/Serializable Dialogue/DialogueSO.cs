@@ -9,7 +9,7 @@ namespace RPGPlatformer.Dialogue
     {
         [SerializeField] DialogueNode rootNode;
         [SerializeField] List<DialogueNode> nodes = new();
-        [SerializeField] List<string> conversantNames = new();
+        [SerializeField] List<string> actorNames = new();
         
         Dictionary<string, DialogueNode> NodeLookup = new();
 
@@ -30,9 +30,9 @@ namespace RPGPlatformer.Dialogue
             }
         }
 
-        public List<string> ConversantNames()
+        public List<string> ActorNames()
         {
-            return conversantNames;
+            return actorNames;
         }
 
         public DialogueNode RootNode()

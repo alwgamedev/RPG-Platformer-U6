@@ -95,7 +95,7 @@ namespace RPGPlatformer.UI
             CloseActiveWindow();
 
             currentNode = dialogueNode;
-            var conversantName = activeDialogue.ConversantName(dialogueNode);
+            var conversantName = activeDialogue.SpeakerName(dialogueNode);
 
             activeWindow = Instantiate(dialogueWindowPrefab, transform);
             activeWindow.SetUpWindow(dialogueNode, conversantName);

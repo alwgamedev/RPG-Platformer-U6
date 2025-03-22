@@ -1,13 +1,10 @@
-﻿using RPGPlatformer.Combat;
-using RPGPlatformer.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace RPGPlatformer.Dialogue
 {
-    //[RequireComponent(typeof(InteractableGameObject))]
     public class DialogueTrigger : MonoBehaviour
     {
         [SerializeField] List<DialogueTriggerData> dialogues;

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1719549757301805141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
+  m_Name: (AutoContinuationDialogueNode) b910b781-af52-450c-af31-23d801b2b886
+  m_EditorClassIdentifier: 
+  speakerIndex: 0
+  textSegments: []
+  uniqueID: b910b781-af52-450c-af31-23d801b2b886
+  position: {x: 276.80002, y: 154.40001}
+  entryActions: []
+  exitActions: []
+  continuationID: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169cada9d0d6b9745b76b51fc8d250cb, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  rootNode: {fileID: 0}
+  nodes:
+  - {fileID: -1719549757301805141}
+  actorNames: []
