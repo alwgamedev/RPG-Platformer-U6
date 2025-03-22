@@ -45,23 +45,10 @@ namespace RPGPlatformer.Core.Editor
             var element = e.target as VisualElement;
             if (element == null) return;
 
-            if (IsChildOf<ListView>(element))
+            if (element.IsChildOf<ListView>())
             {
                 e.StopImmediatePropagation();
             }
-        }
-
-        private bool IsChildOf<T>(VisualElement element) where T : VisualElement
-        {
-            VisualElement currentParent = element.parent;
-            while (currentParent != null)
-            {
-                if (currentParent is T) return true;
-
-                currentParent = currentParent.parent;
-            }
-
-            return false;
         }
     }
 }

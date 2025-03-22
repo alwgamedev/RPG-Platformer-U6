@@ -7,7 +7,6 @@ namespace RPGPlatformer.Dialogue
     [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue/New Dialogue")]
     public class DialogueSO : ScriptableObject
     {
-        //[SerializeField] int numConversants = 2;
         [SerializeField] DialogueNode rootNode;
         [SerializeField] List<DialogueNode> nodes = new();
         [SerializeField] List<string> conversantNames = new();

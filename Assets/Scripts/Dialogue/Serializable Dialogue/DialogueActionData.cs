@@ -6,9 +6,10 @@ namespace RPGPlatformer.Dialogue
     [Serializable]
     public struct DialogueActionData
     {
-        [field: SerializeField]
-        public string ActionName { get; private set; }
-        [field: SerializeField]
-        public string[] Parameters { get; private set; }
+        [SerializeField] string actionName;
+        [SerializeField] string[] parameters;
+
+        public string ActionName => actionName;
+        public string[] Parameters => parameters;
     }
 }

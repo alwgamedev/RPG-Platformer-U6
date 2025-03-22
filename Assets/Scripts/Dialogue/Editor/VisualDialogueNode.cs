@@ -4,9 +4,8 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Linq;
 using UnityEditor.UIElements;
-using JetBrains.Annotations;
+using System.Linq;
 
 namespace RPGPlatformer.Dialogue.Editor
 {
@@ -16,9 +15,12 @@ namespace RPGPlatformer.Dialogue.Editor
         public DialogueNode dialogueNode;
         public Port inputPort;
         public List<Port> outputPorts = new();
-        public bool outPutPortsReady = false;
+        public bool outputPortsReady = false;
         public Toggle rootNodeToggle;
         //public bool ignoreRootNodeToggleValueChange;
+
+        SerializedObject serObject;
+        //ResponseChoiceDataPropertyDrawer responseChoiceDrawer = new();
 
         public event Action OutputPortsReady;
 
@@ -27,6 +29,10 @@ namespace RPGPlatformer.Dialogue.Editor
             this.dialogueNode = dialogueNode;
             title = dialogueNode.name;
             this.conversantNames = conversantNames;
+            if (dialogueNode != null)
+            {
+                serObject = new(dialogueNode);
+            }
         }
 
         public void Redraw()
@@ -79,7 +85,7 @@ namespace RPGPlatformer.Dialogue.Editor
 
         private void RedrawOutputContainer()
         {
-            outPutPortsReady = false;
+            outputPortsReady = false;
 
             if (dialogueNode is ChoicesDialogueNode choicesNode)
             {
@@ -89,7 +95,7 @@ namespace RPGPlatformer.Dialogue.Editor
             {
                 outputContainer.Clear();
                 outputContainer.Insert(0, CreateContinuationPort());
-                outPutPortsReady = true;
+                outputPortsReady = true;
                 OutputPortsReady?.Invoke();
             }
         }
@@ -98,63 +104,104 @@ namespace RPGPlatformer.Dialogue.Editor
         {
             outputContainer.Clear();
 
-            List<ResponseChoiceData> responseChoices = choicesNode.ResponseChoices();
+            //List<ResponseChoiceData> responseChoices = choicesNode.ResponseChoices();
 
-            Foldout choicesFoldout = new()
-            {
-                text = "Response Choices"
-            };
+            outputContainer.style.flexDirection = FlexDirection.Row;
 
-            VisualElement ResponseChoiceContainer()
-            {
-                VisualElement choiceContainer = new();
+            //choicesFoldout.style.flexDirection = FlexDirection.Row;
 
-                TextField textField = new();
-                textField.style.width = 150;
-                textField.style.maxHeight = 50;
-                textField.multiline = true;
-                textField.style.whiteSpace = WhiteSpace.Normal;
-                textField.RegisterValueChangedCallback((textChangeEvent) =>
-                {
-                    ListView listView = choicesFoldout[0] as ListView;
-                    List<TextField> textFields = listView.Query<TextField>().ToList();
-                    int currentIndex = textFields.IndexOf(textField);
-                    choicesNode.SetResponseChoiceText(currentIndex, textChangeEvent.newValue);
-                });
+            //VisualElement ResponseChoiceContainer()
+            //{
+            //    VisualElement choiceContainer = new();
 
-                choiceContainer.Insert(0, textField);
-                choiceContainer.Insert(1, CreateContinuationPort());
-                if (outputPorts.Count == responseChoices.Count)
-                {
-                    outPutPortsReady = true;
-                    OutputPortsReady?.Invoke();
-                }
+            //    TextField textField = new();
+            //    textField.style.width = 150;
+            //    textField.style.maxHeight = 50;
+            //    textField.multiline = true;
+            //    textField.style.whiteSpace = WhiteSpace.Normal;
+            //    textField.RegisterValueChangedCallback((textChangeEvent) =>
+            //    {
+            //        ListView listView = choicesFoldout[0] as ListView;
+            //        List<TextField> textFields = listView.Query<TextField>().ToList();
+            //        int currentIndex = textFields.IndexOf(textField);
+            //        choicesNode.SetResponseChoiceText(currentIndex, textChangeEvent.newValue);
+            //    });
 
-                return choiceContainer;
-            };
+            //    choiceContainer.Insert(0, textField);
+            //    choiceContainer.Insert(1, CreateContinuationPort());
+            //    if (outputPorts.Count == responseChoices.Count)
+            //    {
+            //        outPutPortsReady = true;
+            //        OutputPortsReady?.Invoke();
+            //    }
 
-            void BindItem(VisualElement elmt, int index)
-            {
-                if (elmt == null || choicesNode == null || choicesNode.ResponseChoices() == null) return;
-                TextField tf = elmt.Q<TextField>();
-                if (tf != null)
-                {
-                    tf.value = choicesNode.ResponseChoices()[index]?.choiceText ?? "";
-                }
-            };
+            //    return choiceContainer;
+            //};
 
-            ListView listView = new(responseChoices, 60, ResponseChoiceContainer, BindItem)
+            //void BindItem(VisualElement elmt, int index)
+            //{
+            //    if (elmt == null || choicesNode == null || choicesNode.ResponseChoices() == null) return;
+            //    TextField tf = elmt.Q<TextField>();
+            //    if (tf != null)
+            //    {
+            //        tf.value = choicesNode.ResponseChoices()[index]?.choiceText ?? "";
+            //    }
+            //};
+
+            //ListView listView = new(responseChoices, 60, ResponseChoiceContainer, BindItem)
+            //{
+            //    reorderable = true,
+            //    reorderMode = ListViewReorderMode.Animated,
+            //    showAddRemoveFooter = true
+            //};
+
+            //listView.itemsAdded += (args) => EditorUtility.SetDirty(choicesNode);
+            //listView.itemsRemoved += (args) => EditorUtility.SetDirty(choicesNode);
+
+            var choicesList = new ListView()
             {
                 reorderable = true,
                 reorderMode = ListViewReorderMode.Animated,
-                showAddRemoveFooter = true
+                showAddRemoveFooter = true,
+                showFoldoutHeader = true,
+                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
             };
+            choicesList.style.minWidth = 250;
+            choicesList.style.maxWidth = 325;
+            choicesList.headerTitle = "Response Choices";
+            choicesList.BindProperty(serObject.FindProperty("responseChoices"));
 
-            listView.itemsAdded += (args) => EditorUtility.SetDirty(choicesNode);
-            listView.itemsRemoved += (args) => EditorUtility.SetDirty(choicesNode);
+            choicesList.schedule.Execute(() => { }).Until(LVReady);
 
-            choicesFoldout.Insert(0, listView);
-            outputContainer.Insert(0, choicesFoldout);
+            //have to do this bc if you set bindItem before BindProperty is all set up,
+            //then it doesn't give you the good bindItem that does everything magically.
+            //looks like stupid hackery, and it is
+            bool LVReady()
+            {
+                var lv = choicesList.Q<ListView>();
+
+                if (lv == null || lv.bindItem == null)
+                    return false;
+
+                lv.bindItem += (elmt, i) =>
+                {
+                    if (elmt.Q<Port>() == null)
+                    {
+                        elmt.Add(CreateContinuationPort());
+                    }
+
+                    if (outputPortsReady == false
+                        && lv.Query<Port>().ToList().Count >= choicesNode.ResponseChoices().Count)
+                    {
+                        outputPortsReady = true;
+                        OutputPortsReady?.Invoke();
+                    }
+                };
+
+                return true;
+            }
+
+            outputContainer.Add(choicesList);
         }
 
         private Port CreateContinuationPort()
@@ -179,9 +226,9 @@ namespace RPGPlatformer.Dialogue.Editor
 
             VisualElement MakeItem()
             {
-                TextField textField = new TextField();
+                var textField = new TextField();
                 textField.style.width = 250;
-                textField.style.maxHeight = 50;
+                textField.style.maxHeight = 200;
                 textField.multiline = true;
                 textField.style.whiteSpace = WhiteSpace.Normal;
                 textField.RegisterValueChangedCallback((textChangeEvent) =>
@@ -195,7 +242,10 @@ namespace RPGPlatformer.Dialogue.Editor
 
             };
 
-            void BindItem(VisualElement elmt, int index) => (elmt as TextField).value = textSegments[index] ?? "";
+            void BindItem(VisualElement elmt, int index)
+            {
+                (elmt as TextField).value = dialogueNode.TextSegments()?[index] ?? "";
+            }
 
             ListView listView = new(textSegments, 60, MakeItem, BindItem)
             {
@@ -213,5 +263,5 @@ namespace RPGPlatformer.Dialogue.Editor
 
             RefreshExpandedState();
         }
+        }
     }
-}

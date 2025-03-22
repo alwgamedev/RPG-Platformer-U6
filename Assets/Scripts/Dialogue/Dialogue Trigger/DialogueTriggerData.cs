@@ -10,12 +10,12 @@ namespace RPGPlatformer.Dialogue
     {
         [SerializeField] bool allowPlayerToEnterCombatDuringDialogue;
         [SerializeField] DialogueSO dialogueSO;
-        [SerializeField] Conversant[] conversants;
+        [SerializeField] DialogueActor[] conversants;
         [SerializeField] DialogueAction[] entryActions;
         [SerializeField] DialogueAction[] exitActions;
         [SerializeField] DialogueResponseAction[] responseActions;
 
-        Dictionary<int, Conversant> Conversants = new();
+        Dictionary<int, DialogueActor> Conversants = new();
         Dictionary<string, Dictionary<string, UnityEvent<string[]>>> EntryActions = new();
         Dictionary<string, Dictionary<string, UnityEvent<string[]>>> ExitActions = new();
         Dictionary<string, Dictionary<int, Dictionary<string, UnityEvent<string[]>>>> ResponseActions = new();
@@ -28,7 +28,7 @@ namespace RPGPlatformer.Dialogue
         {
             if (Conversants.TryGetValue(node.ConversantNumber(), out var n) && n != null)
             {
-                return n.ConversantName;
+                return n.ActorName;
             }
             return "";
         }
@@ -101,11 +101,11 @@ namespace RPGPlatformer.Dialogue
         {
             if (dialogueSO == null || dialogueSO.ConversantNames() == null)
             {
-                conversants = new Conversant[0];
+                conversants = new DialogueActor[0];
                 return;
             }
 
-            conversants = new Conversant[dialogueSO.ConversantNames().Count];
+            conversants = new DialogueActor[dialogueSO.ConversantNames().Count];
 
             for (int i = 0; i < conversants.Length; i++)
             {

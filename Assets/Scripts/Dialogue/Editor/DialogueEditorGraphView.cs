@@ -10,6 +10,7 @@ namespace RPGPlatformer.Dialogue.Editor
 {
     public class DialogueEditorGraphView : GraphView
     {
+        //SerializedObject serializedObject;
         DialogueSO dialogue;
 
         Dictionary<DialogueNode, VisualDialogueNode> FindVisualNode = new();
@@ -30,13 +31,14 @@ namespace RPGPlatformer.Dialogue.Editor
 
         public void DisplayDialogue(DialogueSO dialogue)
         {
-            if (dialogue == null) return;
-
             this.dialogue = null;//so that OnGraphViewChanged doesn't affect selected dialogue
             DeleteElements(graphElements);
             FindVisualNode.Clear();
-            this.dialogue = dialogue;
 
+            if (dialogue == null) return;
+
+            this.dialogue = dialogue;
+            //serializedObject = new SerializedObject(this.dialogue);
             bool edgesDrawn = false;
 
             foreach (var node in dialogue.Nodes())
@@ -67,7 +69,7 @@ namespace RPGPlatformer.Dialogue.Editor
             {
                 foreach(var entry in FindVisualNode)
                 {
-                    if(!entry.Value.outPutPortsReady)
+                    if(!entry.Value.outputPortsReady)
                     {
                         return;
                     }
