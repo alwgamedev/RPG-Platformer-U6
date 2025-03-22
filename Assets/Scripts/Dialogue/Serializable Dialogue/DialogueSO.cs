@@ -47,7 +47,7 @@ namespace RPGPlatformer.Dialogue
 
         public bool HasContinuation(DialogueNode node)
         {
-            if (node is ChoicesDialogueNode choicesNode)
+            if (node is ResponseChoicesDialogueNode choicesNode)
             {
                 for (int i = 0; i < choicesNode.ResponseChoices().Count; i++)
                 {

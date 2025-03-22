@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Dialogue
 {
-    public class ChoicesDialogueNode : DialogueNode
+    public class ResponseChoicesDialogueNode : DialogueNode
     {
         [SerializeField] List<ResponseChoiceData> responseChoices = new();
 

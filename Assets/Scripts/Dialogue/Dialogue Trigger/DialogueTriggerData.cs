@@ -39,6 +39,12 @@ namespace RPGPlatformer.Dialogue
             return actors[index].labelledObject;
         }
 
+        public int DecideContinuation(DecisionDialogueNode decisionNode)
+        {
+            var decisionFunction = decisionNode.DecisionFunctionData();
+            return Actor(decisionFunction.ActorIndex).MakeDecision(decisionFunction.FunctionData);
+        }
+
         public void ExecuteEntryActions(DialogueNode dialogueNode)
         {
             if (dialogueNode == null || dialogueNode.EntryActions() == null
@@ -69,7 +75,7 @@ namespace RPGPlatformer.Dialogue
             }
         }
 
-        public void ExecuteResponseActions(ChoicesDialogueNode choicesNode, int responseIndex)
+        public void ExecuteResponseActions(ResponseChoicesDialogueNode choicesNode, int responseIndex)
         {
             if (choicesNode == null || !choicesNode.ValidResponse(responseIndex)
                 || choicesNode.ResponseChoices()[responseIndex].responseActions == null
@@ -176,7 +182,7 @@ namespace RPGPlatformer.Dialogue
 
             foreach (var node in dialogueSO.Nodes())
             {
-                var choicesNode = node as ChoicesDialogueNode;
+                var choicesNode = node as ResponseChoicesDialogueNode;
 
                 if (choicesNode == null || choicesNode.ResponseChoices() == null)
                     continue;

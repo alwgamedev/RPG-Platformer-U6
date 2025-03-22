@@ -13,7 +13,7 @@ namespace RPGPlatformer.Dialogue
         }
 
 #if UNITY_EDITOR
-        public override void SetContinuation(DialogueNode node, int responseIndex)
+        public override void SetContinuation(DialogueNode node, int index)
         {
             if(node)
             {
@@ -22,7 +22,7 @@ namespace RPGPlatformer.Dialogue
             }
         }
 
-        public override void RemoveContinuation(int responseIndex)
+        public override void RemoveContinuation(int index)
         {
             continuationID = null;
             EditorUtility.SetDirty(this);

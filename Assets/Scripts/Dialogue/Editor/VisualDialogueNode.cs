@@ -91,7 +91,7 @@ namespace RPGPlatformer.Dialogue.Editor
         {
             outputPortsReady = false;
 
-            if (dialogueNode is ChoicesDialogueNode choicesNode)
+            if (dialogueNode is ResponseChoicesDialogueNode choicesNode)
             {
                 RedrawChoicesOutputContainer(choicesNode);
             }
@@ -104,7 +104,7 @@ namespace RPGPlatformer.Dialogue.Editor
             }
         }
 
-        private void RedrawChoicesOutputContainer(ChoicesDialogueNode choicesNode)
+        private void RedrawChoicesOutputContainer(ResponseChoicesDialogueNode choicesNode)
         {
             outputContainer.Clear();
 

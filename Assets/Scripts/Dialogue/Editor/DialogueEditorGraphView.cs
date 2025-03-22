@@ -229,7 +229,7 @@ namespace RPGPlatformer.Dialogue.Editor
             menuEvent.menu.AppendAction("Add Dialogue Node With Auto Continuation", actionEvent =>
                 CreateNode<AutoContinuationDialogueNode>(localMousePos));
             menuEvent.menu.AppendAction("Add Dialogue Node With Response Choices", actionEvent =>
-                CreateNode<ChoicesDialogueNode>(localMousePos));
+                CreateNode<ResponseChoicesDialogueNode>(localMousePos));
         }
 
         private void AddGridBackground()

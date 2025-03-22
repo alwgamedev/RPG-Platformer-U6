@@ -26,7 +26,7 @@ namespace RPGPlatformer.Dialogue
             return uniqueID;
         }
 
-        public abstract string ContinuationID(int responseIndex);
+        public abstract string ContinuationID(int index);
 
         public int SpeakerIndex()
         {
@@ -60,9 +60,9 @@ namespace RPGPlatformer.Dialogue
             EditorUtility.SetDirty(this);
         }
 
-        public abstract void SetContinuation(DialogueNode node, int responseIndex);
+        public abstract void SetContinuation(DialogueNode node, int index);
 
-        public abstract void RemoveContinuation(int responseIndex);
+        public abstract void RemoveContinuation(int index);
 
         public abstract void EraseAnyOccurrencesOfChild(DialogueNode child);
 

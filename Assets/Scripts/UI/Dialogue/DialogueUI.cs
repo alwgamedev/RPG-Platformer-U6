@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using RPGPlatformer.Dialogue;
 using RPGPlatformer.Combat;
 using System;
+using RPGPlatformer.Core;
 
 namespace RPGPlatformer.UI
 {
@@ -51,15 +52,9 @@ namespace RPGPlatformer.UI
                 return;
             }
 
-            //if (!data.IsValid())
-            //{
-            //    Debug.Log($"Unable to start dialogue, because {nameof(DialogueTriggerData)} is invalid.");
-            //    return;
-            //}
-
             if (!data.AllowPlayerToEnterCombatDuringDialogue)
             {
-                var player = FindAnyObjectByType<PlayerCombatController>();
+                var player = GlobalGameTools.Player;
 
                 if (player != null)
                 {
@@ -106,7 +101,7 @@ namespace RPGPlatformer.UI
             }
 
             activeWindow.CloseButton.onClick.AddListener(EndDialogue);
-            activeWindow.ResponseSelected += DisplayContinuation;
+            activeWindow.RequestContinuation += DisplayContinuation;
             //(^even for a choice node where the responses have no continuation (i.e. the choices are just 
             //closing remarks) we should subscribe DisplayContinuation so that the dialogue closes
             //when that last choice is selected)
@@ -114,16 +109,20 @@ namespace RPGPlatformer.UI
             activeDialogue.ExecuteEntryActions(currentNode);
         }
 
-        private void DisplayContinuation(int responseIndex)
+        private void DisplayContinuation(int index)
         {
-            if (currentNode is ChoicesDialogueNode c)
+            if (currentNode is ResponseChoicesDialogueNode c)
             {
-                activeDialogue.ExecuteResponseActions(c, responseIndex);
+                activeDialogue.ExecuteResponseActions(c, index);
+            }
+            else if (currentNode is DecisionDialogueNode d)
+            {
+                index = activeDialogue.DecideContinuation(d);
             }
 
             activeDialogue.ExecuteExitActions(currentNode);
 
-            if(!activeDialogue.DialogueSO.TryGetContinuation(currentNode, responseIndex, out var continuation))
+            if(!activeDialogue.DialogueSO.TryGetContinuation(currentNode, index, out var continuation))
             {
                 EndDialogue();
                 return;

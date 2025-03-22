@@ -12,6 +12,11 @@ namespace RPGPlatformer.Dialogue
 
         public virtual string ActorName => actorName;
 
+        public int MakeDecision(DialogueActionData data)
+        {
+            return GetDecisionFunction[data.ActionName](data.Parameters);
+        }
+
         public bool TryMakeDecision(DialogueActionData data, out int decision)
         {
             if (GetDecisionFunction.TryGetValue(data.ActionName, out var func) && func != null)

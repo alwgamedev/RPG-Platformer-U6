@@ -27,7 +27,7 @@ namespace RPGPlatformer.UI
         public GameObject NextButtonContainer => nextButtonContainer;
         public Button CloseButton => closeButton;
 
-        public event Action<int> ResponseSelected;
+        public event Action<int> RequestContinuation;
 
         public void SetUpWindow(DialogueNode dialogueNode, string conversantName/*, string playerName*/)
         {
@@ -42,7 +42,7 @@ namespace RPGPlatformer.UI
                 textSegments.Add(textSegment);
             }
 
-            if (dialogueNode is ChoicesDialogueNode choicesNode)
+            if (dialogueNode is ResponseChoicesDialogueNode choicesNode)
             {
                 List<ResponseChoiceData> responseChoices = choicesNode.ResponseChoices();
 
@@ -51,7 +51,7 @@ namespace RPGPlatformer.UI
                     var choiceButton = Instantiate(choiceButtonPrefab, choicesContainer.transform);
                     choiceButton.GetComponentInChildren<TextMeshProUGUI>().text = responseChoices[i].choiceText;
                     int index = i;
-                    choiceButton.onClick.AddListener(() => ResponseSelected?.Invoke(index));
+                    choiceButton.onClick.AddListener(() => RequestContinuation?.Invoke(index));
                 }
 
                 if (textSegments != null && textSegments.Count > 0)
@@ -67,7 +67,7 @@ namespace RPGPlatformer.UI
             else
             {
                 DisplayMainDialogue(conversantName);
-                nextButton.onClick.AddListener(() => ResponseSelected?.Invoke(-1));
+                nextButton.onClick.AddListener(() => RequestContinuation?.Invoke(-1));
             }
 
         }
@@ -134,7 +134,7 @@ namespace RPGPlatformer.UI
                 b.onClick.RemoveAllListeners();
             }
 
-            ResponseSelected = null;
+            RequestContinuation = null;
         }
     }
 }
