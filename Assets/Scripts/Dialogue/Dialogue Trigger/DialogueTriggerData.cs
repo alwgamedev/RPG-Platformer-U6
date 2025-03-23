@@ -77,6 +77,7 @@ namespace RPGPlatformer.Dialogue
 
         public void ExecuteResponseActions(ResponseChoicesDialogueNode choicesNode, int responseIndex)
         {
+            //all this crap probably unnecessary
             if (choicesNode == null || !choicesNode.ValidResponse(responseIndex)
                 || choicesNode.ResponseChoices()[responseIndex].responseActions == null
                 || !ResponseActions.TryGetValue(choicesNode.UniqueID(), out var nodeDict)

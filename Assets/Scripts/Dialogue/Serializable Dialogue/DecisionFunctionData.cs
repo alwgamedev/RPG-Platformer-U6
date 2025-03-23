@@ -11,5 +11,11 @@ namespace RPGPlatformer.Dialogue
 
         public int ActorIndex => actorIndex;
         public DialogueActionData FunctionData => functionData;
+
+        //just so you don't accidentally set actorIndex without meaning to
+        public void SetActor(int index)
+        {
+            actorIndex = index;
+        }
     }
 }

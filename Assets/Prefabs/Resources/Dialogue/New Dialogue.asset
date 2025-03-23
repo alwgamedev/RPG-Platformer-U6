@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6140329269340182817
+--- !u!114 &-8693108834313099374
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,20 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
-  m_Name: (AutoContinuationDialogueNode) d9f93cd5-7c6c-493b-b682-9913870c3be3
+  m_Name: (AutoContinuationDialogueNode) 565d71bf-696f-4d2a-9929-51fe18456492
   m_EditorClassIdentifier: 
-  speakerIndex: 0
+  speakerIndex: 1
   textSegments:
-  - I am the big poop poop master! Fear me!
-  uniqueID: d9f93cd5-7c6c-493b-b682-9913870c3be3
-  position: {x: 146.34384, y: 123.82922}
+  - 
+  - aaaaaaaa
+  uniqueID: 565d71bf-696f-4d2a-9929-51fe18456492
+  position: {x: 274.40002, y: 322.4}
   entryActions:
-  - actionName: sampleEntryAction
+  - actionName: 
     parameters:
-    - shrimp
+    - 
+    - 
   exitActions: []
-  continuationID: 39a72941-45df-4ae9-89bc-d69d3a448dfa
---- !u!114 &-5753745247117335299
+  continuationID: abcfb8e4-ce9a-472a-854c-d3bd01a9b9fe
+--- !u!114 &-7605647422853199661
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -32,33 +34,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df86de3ebe60cdb4cbb82d54b01052e3, type: 3}
-  m_Name: (ChoicesDialogueNode) 39a72941-45df-4ae9-89bc-d69d3a448dfa
+  m_Script: {fileID: 11500000, guid: 45c7b06d03273fe46beda40e2edebd6d, type: 3}
+  m_Name: (DecisionDialogueNode) abcfb8e4-ce9a-472a-854c-d3bd01a9b9fe
   m_EditorClassIdentifier: 
   speakerIndex: 0
-  textSegments:
-  - POOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP
-  uniqueID: 39a72941-45df-4ae9-89bc-d69d3a448dfa
-  position: {x: -67.200005, y: 640.8}
+  textSegments: []
+  uniqueID: abcfb8e4-ce9a-472a-854c-d3bd01a9b9fe
+  position: {x: 576, y: 898.4}
   entryActions: []
-  exitActions:
-  - actionName: balloonExplode
-    parameters: []
-  responseChoices:
-  - choiceText: Thank you! Did you know that my middle name is poo-poo?
-    continuationID: d9f93cd5-7c6c-493b-b682-9913870c3be3
-    responseActions:
-    - actionName: GiveItem
+  exitActions: []
+  decisionFunctionData:
+    actorIndex: 2
+    functionData:
+      actionName: action
       parameters:
-      - poop
-    - actionName: RunAway
-      parameters: []
-  - choiceText: What?
-    continuationID: d9f93cd5-7c6c-493b-b682-9913870c3be3
-    responseActions:
-    - actionName: PunchFace
-      parameters:
-      - Carl
+      - p5
+      - p0
+  continuations:
+  - 
+  - 
+  - 
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,10 +66,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169cada9d0d6b9745b76b51fc8d250cb, type: 3}
   m_Name: New Dialogue
   m_EditorClassIdentifier: 
-  rootNode: {fileID: -6140329269340182817}
+  rootNode: {fileID: -8693108834313099374}
   nodes:
-  - {fileID: -6140329269340182817}
-  - {fileID: -5753745247117335299}
+  - {fileID: -8693108834313099374}
+  - {fileID: -7605647422853199661}
+  - {fileID: 7757134261114511548}
   actorNames:
-  - BobBB
   - Alice
+  - Bob
+  - Carl
+--- !u!114 &7757134261114511548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df86de3ebe60cdb4cbb82d54b01052e3, type: 3}
+  m_Name: (ResponseChoicesDialogueNode) b954abe5-aeb8-47cd-825c-e47e102a2c42
+  m_EditorClassIdentifier: 
+  speakerIndex: 0
+  textSegments: []
+  uniqueID: b954abe5-aeb8-47cd-825c-e47e102a2c42
+  position: {x: 1145.6, y: 1227.2}
+  entryActions: []
+  exitActions: []
+  responseChoices:
+  - choiceText: b
+    continuationID: abcfb8e4-ce9a-472a-854c-d3bd01a9b9fe
+    responseActions: []

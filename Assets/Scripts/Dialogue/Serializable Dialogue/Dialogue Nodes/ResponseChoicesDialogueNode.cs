@@ -31,12 +31,14 @@ namespace RPGPlatformer.Dialogue
             EditorUtility.SetDirty(this);
         }
 
-        public void SetResponseChoiceText(int index, string response)
+        public void SetResponseChoiceText(int responseIndex, string response)
         {
-            if(index < 0 || index >= responseChoices.Count) return;
-            responseChoices[index] ??= new();
-            responseChoices[index].choiceText = response;
-            EditorUtility.SetDirty(this);
+            if (ValidResponse(responseIndex))
+            {
+                responseChoices[responseIndex] ??= new();
+                responseChoices[responseIndex].choiceText = response;
+                EditorUtility.SetDirty(this);
+            }
         }
 
         public void RemoveResponseChoice(int index)
@@ -47,14 +49,20 @@ namespace RPGPlatformer.Dialogue
 
         public override void SetContinuation(DialogueNode node, int responseIndex)
         {
-            responseChoices[responseIndex].continuationID = node.UniqueID();
-            EditorUtility.SetDirty(this);
+            if (ValidResponse(responseIndex))
+            {
+                responseChoices[responseIndex].continuationID = node.UniqueID();
+                EditorUtility.SetDirty(this);
+            }
         }
 
         public override void RemoveContinuation(int responseIndex)
         {
-            responseChoices[responseIndex].RemoveContinuation();
-            EditorUtility.SetDirty(this);
+            if (ValidResponse(responseIndex))
+            {
+                responseChoices[responseIndex].RemoveContinuation();
+                EditorUtility.SetDirty(this);
+            }
         }
 
         public override void EraseAnyOccurrencesOfChild(DialogueNode child)

@@ -10,7 +10,6 @@ namespace RPGPlatformer.Dialogue.Editor
 {
     public class DialogueEditorGraphView : GraphView
     {
-        //SerializedObject serializedObject;
         DialogueSO dialogue;
 
         Dictionary<DialogueNode, VisualDialogueNode> FindVisualNode = new();
@@ -27,7 +26,7 @@ namespace RPGPlatformer.Dialogue.Editor
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter adapter)
         {
             return ports.Where(p => p.direction != startPort.direction && p.node != startPort.node).ToList();
-        }       
+        }
 
         public void DisplayDialogue(DialogueSO dialogue)
         {
@@ -38,14 +37,12 @@ namespace RPGPlatformer.Dialogue.Editor
             if (dialogue == null) return;
 
             this.dialogue = dialogue;
-            //serializedObject = new SerializedObject(this.dialogue);
-            bool edgesDrawn = false;
 
             foreach (var node in dialogue.Nodes())
             {
                 if (node == null) return;
 
-                VisualDialogueNode vNode = DrawNode(node, node.Rect().position);
+                var vNode = DrawNode(node, node.Rect().position);
                 if(dialogue.RootNode() == node)
                 {
                     vNode.rootNodeToggle.value = true;
@@ -55,32 +52,39 @@ namespace RPGPlatformer.Dialogue.Editor
             foreach(var entry in FindVisualNode)//do this after all nodes have been added to the dictionary
                 //so that we don't get an early complete when only one node is in there
             {
-                VisualDialogueNode vNode = entry.Value;
+                var vNode = entry.Value;
                 vNode.rootNodeToggle.RegisterValueChangedCallback(((valueChangeEvent) =>
                 {
                     OnRootNodeToggleChanged(vNode);
                 }));
-                entry.Value.OutputPortsReady += OutputPortsReadyHandler;
+                //entry.Value.OutputPortsReady += OutputPortsReadyHandler;
             }
 
-            //because the response choices listview seems to be building items after a delay
-            //(so that not all output ports were available yet when we went to draw edges)
-            void OutputPortsReadyHandler()
+            float startTime = Time.realtimeSinceStartup;
+            schedule.Execute(() => { }).Until(AllPortsReady);
+
+            bool AllPortsReady()
             {
-                foreach(var entry in FindVisualNode)
+                if (Time.realtimeSinceStartup - startTime > 1)
                 {
-                    if(!entry.Value.outputPortsReady)
-                    {
-                        return;
-                    }
-                    entry.Value.OutputPortsReady -= OutputPortsReadyHandler;
+                    return true;
                 }
 
-                if (!edgesDrawn)
+                if (FindVisualNode.Count != dialogue.Nodes().Count())
                 {
-                    DrawEdges(dialogue, FindVisualNode);
-                    edgesDrawn = true;
+                    return false;
                 }
+
+                foreach (var entry in FindVisualNode)
+                {
+                    if (!entry.Value.NodeReady())
+                    {
+                        return false;
+                    }
+                }
+
+                DrawEdges(dialogue, FindVisualNode);
+                return true;
             }
         }
 
@@ -109,13 +113,13 @@ namespace RPGPlatformer.Dialogue.Editor
         {
             foreach (var node in FindVisualNode.Values)
             {
-                for (int i = 0; i < node.outputPorts.Count; i++)
+                for (int i = 0; i < node.OutputPorts.Count; i++)
                 {
                     if (dialogue.TryGetContinuation(node.dialogueNode, i, out var continuationNode))
                     {
                         if (FindVisualNode.TryGetValue(continuationNode, out var visualContinuation))
                         {
-                            Edge edge = node.outputPorts[i].ConnectTo(visualContinuation.inputPort);
+                            var edge = node.OutputPorts[i].ConnectTo(visualContinuation.inputPort);
                             AddElement(edge);
                         }
                     }
@@ -125,12 +129,11 @@ namespace RPGPlatformer.Dialogue.Editor
 
         private VisualDialogueNode DrawNode(DialogueNode dialogueNode, Vector2 position)
         {
-            VisualDialogueNode node = new(dialogueNode, dialogue.ActorNames());
+            var node = new VisualDialogueNode(dialogueNode, dialogue.ActorNames());
             node.SetPosition(dialogueNode.Rect());
             AddElement(node);
-
             node.Redraw();
-
+            //node.OutputPortsRemoved += CleanDanglingEdges;
             return node;
         }
 
@@ -141,9 +144,9 @@ namespace RPGPlatformer.Dialogue.Editor
         {
             if (dialogue == null) return;
 
-            DialogueNode node = dialogue.CreateNode<T>();
+            var node = dialogue.CreateNode<T>();
             node.SetPosition(position);
-            VisualDialogueNode vNode = DrawNode(node, position);
+            var vNode = DrawNode(node, position);
             vNode.rootNodeToggle.RegisterValueChangedCallback((valueChangeEvent) =>
             {
                 OnRootNodeToggleChanged(vNode);
@@ -159,7 +162,7 @@ namespace RPGPlatformer.Dialogue.Editor
             {
                 foreach (var elmt in graphViewChange.elementsToRemove)
                 {
-                    VisualDialogueNode node = elmt as VisualDialogueNode;
+                    var node = elmt as VisualDialogueNode;
                     if (node != null)
                     {
                         if(node.dialogueNode == dialogue.RootNode())
@@ -170,13 +173,16 @@ namespace RPGPlatformer.Dialogue.Editor
                         FindVisualNode.Remove(node.dialogueNode);
                     }
 
-                    Edge edge = elmt as Edge;
+                    var edge = elmt as Edge;
                     if (edge != null)
                     {
-                        VisualDialogueNode parent = edge.output.node as VisualDialogueNode;
-                        VisualDialogueNode child = edge.input.node as VisualDialogueNode;
-                        int responseIndex = parent.outputPorts.IndexOf(edge.output);
-                        dialogue.RemoveChild(parent.dialogueNode, child.dialogueNode, responseIndex);
+                        var parent = edge.output?.node as VisualDialogueNode;
+                        var child = edge.input?.node as VisualDialogueNode;
+                        if (parent != null && child != null)
+                        {
+                            int responseIndex = parent.OutputPorts.IndexOf(edge.output);
+                            dialogue.RemoveChild(parent.dialogueNode, child.dialogueNode, responseIndex);
+                        }
                     }
                 }
             }
@@ -187,7 +193,7 @@ namespace RPGPlatformer.Dialogue.Editor
                 {
                     VisualDialogueNode parent = edge.output.node as VisualDialogueNode;
                     VisualDialogueNode child = edge.input.node as VisualDialogueNode;
-                    int responseIndex = parent.outputPorts.IndexOf(edge.output);
+                    int responseIndex = parent.OutputPorts.IndexOf(edge.output);
                     dialogue.SetContinuation(parent.dialogueNode, child.dialogueNode, responseIndex);
                 }
             }
@@ -226,10 +232,12 @@ namespace RPGPlatformer.Dialogue.Editor
 
             Vector2 localMousePos = viewTransform.matrix.inverse.MultiplyPoint(menuEvent.localMousePosition);
 
-            menuEvent.menu.AppendAction("Add Dialogue Node With Auto Continuation", actionEvent =>
+            menuEvent.menu.AppendAction("Add Auto Continuation Dialogue Node", actionEvent =>
                 CreateNode<AutoContinuationDialogueNode>(localMousePos));
-            menuEvent.menu.AppendAction("Add Dialogue Node With Response Choices", actionEvent =>
+            menuEvent.menu.AppendAction("Add Response Choices Dialogue Node", actionEvent =>
                 CreateNode<ResponseChoicesDialogueNode>(localMousePos));
+            menuEvent.menu.AppendAction("Add Decision Dialogue Node", actionEvent =>
+                CreateNode<DecisionDialogueNode>(localMousePos));
         }
 
         private void AddGridBackground()
