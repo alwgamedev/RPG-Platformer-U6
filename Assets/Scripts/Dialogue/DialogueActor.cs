@@ -1,4 +1,7 @@
-﻿using System;
+﻿using RPGPlatformer.Combat;
+using RPGPlatformer.Core;
+using RPGPlatformer.Movement;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,18 +11,29 @@ namespace RPGPlatformer.Dialogue
     {
         [SerializeField] protected string actorName;
 
-        Dictionary<string, Func<string[], int>> GetDecisionFunction;
+        protected Dictionary<string, Func<string[], int>> DecisionFunction = new();
 
         public virtual string ActorName => actorName;
 
+        protected virtual void Start()
+        {
+            BuildDecisionFunctionDict();
+        }
+
+        protected virtual void BuildDecisionFunctionDict() { }
+
+        public virtual void OnBeginDialogue() { }
+
+        public virtual void OnEndDialogue() { }
+
         public int MakeDecision(DialogueActionData data)
         {
-            return GetDecisionFunction[data.ActionName](data.Parameters);
+            return DecisionFunction[data.ActionName](data.Parameters);
         }
 
         public bool TryMakeDecision(DialogueActionData data, out int decision)
         {
-            if (GetDecisionFunction.TryGetValue(data.ActionName, out var func) && func != null)
+            if (DecisionFunction.TryGetValue(data.ActionName, out var func) && func != null)
             {
                 decision = func(data.Parameters);
                 return false;

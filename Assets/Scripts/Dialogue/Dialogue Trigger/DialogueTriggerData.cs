@@ -34,6 +34,11 @@ namespace RPGPlatformer.Dialogue
             return actors[node.SpeakerIndex()].label;
         }
 
+        public IEnumerable<DialogueActor> Actors()
+        {
+            return actors.GetActors();
+        }
+
         public DialogueActor Actor(int index)
         {
             return actors[index].labelledObject;

@@ -6,7 +6,8 @@ using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.AIControl
 {
-    public class GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3, T4> : MonoBehaviour, IInputSource
+    public class GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3, T4> : MonoBehaviour, 
+        IInputSource, IAIPatrollerController
         where T0 : GenericAdvancedMovementController<T00, T01, T02, T03>
         where T00 : AdvancedMover
         where T01 : AdvancedMovementStateGraph
@@ -106,12 +107,22 @@ namespace RPGPlatformer.AIControl
             patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParameters);
         }
 
-        protected virtual void BeginDefaultPatrol()
+        public virtual void BeginDefaultPatrol()
         {
-            patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParams);
+            BeginPatrol(defaultPatrolMode, defaultPatrolParams);
         }
 
-        protected virtual void OnPatrolDestinationReached()
+        public virtual void BeginPatrolRest()
+        {
+            BeginPatrol(NavigationMode.rest, null);
+        }
+
+        public virtual void BeginPatrol(NavigationMode mode, object param)
+        {
+            patroller.BeginPatrol(mode, param);
+        }
+
+        public virtual void OnPatrolDestinationReached()
         {
             if (Patrolling && !patroller.PatrolNavigator.GetNextDestination())
             {

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using Unity.VisualScripting;
-using JetBrains.Annotations;
-using Codice.Client.BaseCommands;
 
 namespace RPGPlatformer.Dialogue.Editor
 {
@@ -137,16 +133,47 @@ namespace RPGPlatformer.Dialogue.Editor
                 showFoldoutHeader = true,
                 virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
             };
-            lv.makeItem = () =>
+            //lv.makeItem = () =>
+            //{
+            //    var p = CreateContinuationPort();
+            //    p.Q<Label>().style.width = 0;
+            //    //we need the label because it stores the continuation id, but want to hide it bc looks ugly
+            //    return p;
+            //};
+
+            VisualElement MakeItem()
             {
                 var p = CreateContinuationPort();
-                p.Q<Label>().style.width = 0;
+                p.Q<Label>().style.color = Color.clear;
                 //we need the label because it stores the continuation id, but want to hide it bc looks ugly
                 return p;
             };
+
             lv.BindProperty(serObject.FindProperty("continuations"));
 
             outputContainer.Add(lv);
+
+            float startTime = Time.realtimeSinceStartup;
+            lv.schedule.Execute(() => { }).Until(LVReady);
+
+            //have to do this bc if you set bindItem before BindProperty is all set up,
+            //then it doesn't give you the good bindItem that does everything magically.
+            //looks like stupid hackery, and it is
+            bool LVReady()
+            {
+                if (Time.realtimeSinceStartup - startTime > 1)
+                {
+                    return true;
+                }
+
+                if (lv.makeItem == null)
+                {
+                    return false;
+                }
+
+                lv.makeItem = MakeItem;
+                return true;
+            }
 
             //have to do this bc if you set bindItem before BindProperty is all set up,
             //then it doesn't give you the good bindItem that does everything magically.
@@ -212,14 +239,6 @@ namespace RPGPlatformer.Dialogue.Editor
             return outputPort;
         }
 
-        //to hide the continuation ID shown when you make a connection
-        //(cheap workaround)
-        //private Port DecisionContinuationPort()
-        //{
-        //    var p = CreateContinuationPort();colo
-        //    return p;
-        //}
-
         private void RedrawExtensionsContainer()
         {
             extensionContainer.Clear();
@@ -279,12 +298,10 @@ namespace RPGPlatformer.Dialogue.Editor
             if (dialogueNode is DecisionDialogueNode decisionNode)
             {
                 var dialogueFct = serObject.FindProperty("decisionFunctionData");
-                //var actorIndex = dialogueFct.FindPropertyRelative("actorIndex");
                 var functionData = dialogueFct.FindPropertyRelative("functionData");
 
                 var container = new Foldout();
                 container.text = "Decision Function";
-                //var header = new Label("Decision Function");
 
                 var actorsDropDown = ActorsDropDown("Actor", decisionNode.DecisionFunctionData().ActorIndex);
                 actorsDropDown.RegisterValueChangedCallback((valueChangedEvent) =>
@@ -295,7 +312,6 @@ namespace RPGPlatformer.Dialogue.Editor
                 var fctData = new PropertyField(functionData);
                 fctData.BindProperty(functionData);
 
-                //container.Add(header);
                 container.Add(actorsDropDown);
                 container.Add(fctData);
 
@@ -303,7 +319,7 @@ namespace RPGPlatformer.Dialogue.Editor
 
                 extensionContainer.Add(container);
 
-                //>this also works fine (below), but we don't get actor names
+                //>this also works fine (below), but we don't get actor name dropdown
                 //var decisionFunctionData = new PropertyField(serObject.FindProperty("decisionFunctionData"));
                 //decisionFunctionData.BindProperty(serObject.FindProperty("decisionFunctionData"));
                 //extensionContainer.Add(decisionFunctionData);

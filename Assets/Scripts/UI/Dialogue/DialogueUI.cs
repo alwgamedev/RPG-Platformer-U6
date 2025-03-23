@@ -1,9 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 using RPGPlatformer.Dialogue;
-using RPGPlatformer.Combat;
 using System;
 using RPGPlatformer.Core;
 
@@ -17,7 +13,7 @@ namespace RPGPlatformer.UI
         DialogueNode currentNode;
         DialogueWindow activeWindow;
 
-        public event Action DialogueEnded;
+        Action DialogueEnded;
 
         protected override void Awake()
         {
@@ -31,6 +27,13 @@ namespace RPGPlatformer.UI
         {
             activeDialogue = data;
             currentNode = activeDialogue.DialogueSO.RootNode();
+            foreach (var actor in data.Actors())
+            {
+                if (actor)
+                {
+                    actor.OnBeginDialogue();
+                }
+            }
             DisplayDialogueNode(currentNode);
             Show();
         }
@@ -38,10 +41,16 @@ namespace RPGPlatformer.UI
         public void EndDialogue()
         {
             CloseActiveWindow();
+            Hide();
+
+            foreach (var actor in activeDialogue.Actors())
+            {
+                actor.OnEndDialogue();
+            }
+            DialogueEnded?.Invoke();
+
             activeDialogue = null;
             currentNode = null;
-            DialogueEnded?.Invoke();
-            Hide();
         }
 
         private void HandleDialogueTrigger(DialogueTriggerData data)
@@ -75,7 +84,10 @@ namespace RPGPlatformer.UI
 
                     void DialogueEndedHandler()
                     {
-                        player.CombatEntered -= CancelOnCombatEntry;
+                        if (player != null)
+                        {
+                            player.CombatEntered -= CancelOnCombatEntry;
+                        }
                         DialogueEnded -= DialogueEndedHandler;
                         //because we still need to unsubscribe when the dialogue ends naturally
                     }
@@ -90,8 +102,17 @@ namespace RPGPlatformer.UI
             CloseActiveWindow();
 
             currentNode = dialogueNode;
-            var conversantName = activeDialogue.SpeakerName(dialogueNode);
 
+            //allows you to use decision nodes with no text to navigate the dialogue tree
+            if (currentNode is DecisionDialogueNode decisionNode && decisionNode.TextSegments().Count == 0)
+            {
+                activeDialogue.ExecuteEntryActions(currentNode);
+                DisplayContinuation(0);
+                //display continuation will execute the decision function and pick the appropriate continuation
+                return;
+            }
+
+            var conversantName = activeDialogue.SpeakerName(dialogueNode);
             activeWindow = Instantiate(dialogueWindowPrefab, transform);
             activeWindow.SetUpWindow(dialogueNode, conversantName);
 
@@ -146,6 +167,8 @@ namespace RPGPlatformer.UI
 
             DialogueTrigger.DialogueTriggered -= HandleDialogueTrigger;
             DialogueTrigger.DialogueCancelled -= EndDialogue;
+
+            DialogueEnded = null;
         }
     }
 }

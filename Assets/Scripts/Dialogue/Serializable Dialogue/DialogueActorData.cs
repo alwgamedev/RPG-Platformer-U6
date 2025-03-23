@@ -21,6 +21,14 @@ namespace RPGPlatformer.Dialogue
             get => actors[i];
         }
 
+        public IEnumerable<DialogueActor> GetActors()
+        {
+            foreach (var actor in actors)
+            {
+                yield return actor.labelledObject;
+            }
+        }
+
         public void OnBeforeSerialize(DialogueSO dialogue)
         {
             if (dialogue == null || dialogue.ActorNames() == null)

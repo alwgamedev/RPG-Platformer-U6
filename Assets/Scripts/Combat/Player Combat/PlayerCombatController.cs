@@ -2,7 +2,6 @@
 using RPGPlatformer.Core;
 using RPGPlatformer.UI;
 using RPGPlatformer.Inventory;
-using UnityEngine.EventSystems;
 
 namespace RPGPlatformer.Combat
 {

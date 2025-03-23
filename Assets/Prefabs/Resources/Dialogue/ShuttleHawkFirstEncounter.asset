@@ -1,0 +1,310 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9175301991573288170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df86de3ebe60cdb4cbb82d54b01052e3, type: 3}
+  m_Name: (ResponseChoicesDialogueNode) 9812c815-e659-4e30-9545-97314c8499ae
+  m_EditorClassIdentifier: 
+  speakerIndex: 0
+  textSegments:
+  - Calm down, I've got a worm right here...
+  uniqueID: 9812c815-e659-4e30-9545-97314c8499ae
+  position: {x: 2139.2, y: 1088}
+  entryActions: []
+  exitActions: []
+  responseChoices:
+  - choiceText: Here's your worm. Now let's get going.
+    continuationID: fc3048d4-b9e6-40d4-a4a9-68eeabc7fb78
+    responseActions:
+    - actionName: PayFare
+      parameters:
+      - Worm
+  - choiceText: But hold on, I'm not quite ready.
+    continuationID: 83acc9c4-ec47-43fb-bdf2-dd4e0fb22a84
+    responseActions: []
+--- !u!114 &-8148294714265788241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
+  m_Name: (AutoContinuationDialogueNode) 02c937e1-ee7b-4613-a262-7e3e239ca209
+  m_EditorClassIdentifier: 
+  speakerIndex: 1
+  textSegments:
+  - Then get the squawk out of my nest, pal!
+  uniqueID: 02c937e1-ee7b-4613-a262-7e3e239ca209
+  position: {x: 1828, y: 1953.6}
+  entryActions: []
+  exitActions: []
+  continuationID: 
+--- !u!114 &-5944076216916709691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c7b06d03273fe46beda40e2edebd6d, type: 3}
+  m_Name: (DecisionDialogueNode) dfd48d49-9b59-44c6-beb4-aa531195d9e9
+  m_EditorClassIdentifier: 
+  speakerIndex: 1
+  textSegments:
+  - Fare, please.
+  - SQUAWK!
+  uniqueID: dfd48d49-9b59-44c6-beb4-aa531195d9e9
+  position: {x: 676, y: 1676}
+  entryActions: []
+  exitActions: []
+  decisionFunctionData:
+    actorIndex: 0
+    functionData:
+      actionName: HasItem
+      parameters:
+      - Worm
+  continuations:
+  - 9812c815-e659-4e30-9545-97314c8499ae
+  - 938171b3-02b6-4e02-abf6-389c4e2ed78a
+--- !u!114 &-2207411446009075578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
+  m_Name: (AutoContinuationDialogueNode) 95c8a602-3794-4e81-b762-5179cf9be7d0
+  m_EditorClassIdentifier: 
+  speakerIndex: 1
+  textSegments:
+  - Shuttle's leavin' soon. I'll take your fare now, squawk.
+  uniqueID: 95c8a602-3794-4e81-b762-5179cf9be7d0
+  position: {x: 620.8, y: 1286.4}
+  entryActions: []
+  exitActions: []
+  continuationID: 0e8205f7-06ed-4b33-8939-acc6a8380b44
+--- !u!114 &-349949078847830914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
+  m_Name: (AutoContinuationDialogueNode) d0b07c5e-af07-463a-bfbd-ba017a6d6779
+  m_EditorClassIdentifier: 
+  speakerIndex: 0
+  textSegments:
+  - WRM?
+  uniqueID: d0b07c5e-af07-463a-bfbd-ba017a6d6779
+  position: {x: 2171.2, y: 1671.2}
+  entryActions: []
+  exitActions: []
+  continuationID: ac6b1712-681f-4ece-89ee-4b9651d54ab7
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169cada9d0d6b9745b76b51fc8d250cb, type: 3}
+  m_Name: ShuttleHawkFirstEncounter
+  m_EditorClassIdentifier: 
+  rootNode: {fileID: 941126729543970547}
+  nodes:
+  - {fileID: 3828516515457430189}
+  - {fileID: 3412853625356664626}
+  - {fileID: -9175301991573288170}
+  - {fileID: 2429323634260231424}
+  - {fileID: 2354742920778858645}
+  - {fileID: -2207411446009075578}
+  - {fileID: -349949078847830914}
+  - {fileID: 2809647118886890647}
+  - {fileID: 941126729543970547}
+  - {fileID: -5944076216916709691}
+  - {fileID: 9031240647945812789}
+  - {fileID: -8148294714265788241}
+  actorNames:
+  - Player
+  - Hawk
+--- !u!114 &941126729543970547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c7b06d03273fe46beda40e2edebd6d, type: 3}
+  m_Name: (DecisionDialogueNode) 6060303f-25e7-4062-9699-0a973ef79da1
+  m_EditorClassIdentifier: 
+  speakerIndex: 1
+  textSegments: []
+  uniqueID: 6060303f-25e7-4062-9699-0a973ef79da1
+  position: {x: 130.12605, y: 1483.1572}
+  entryActions: []
+  exitActions: []
+  decisionFunctionData:
+    actorIndex: 1
+    functionData:
+      actionName: IsFirstEncounter
+      parameters: []
+  continuations:
+  - 95c8a602-3794-4e81-b762-5179cf9be7d0
+  - dfd48d49-9b59-44c6-beb4-aa531195d9e9
+--- !u!114 &2354742920778858645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
+  m_Name: (AutoContinuationDialogueNode) 83acc9c4-ec47-43fb-bdf2-dd4e0fb22a84
+  m_EditorClassIdentifier: 
+  speakerIndex: 1
+  textSegments:
+  - I don't got all day, squawk.
+  uniqueID: 83acc9c4-ec47-43fb-bdf2-dd4e0fb22a84
+  position: {x: 2651.2, y: 1202.4}
+  entryActions: []
+  exitActions:
+  - actionName: 
+    parameters: []
+  continuationID: 
+--- !u!114 &2429323634260231424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
+  m_Name: (AutoContinuationDialogueNode) fc3048d4-b9e6-40d4-a4a9-68eeabc7fb78
+  m_EditorClassIdentifier: 
+  speakerIndex: 1
+  textSegments:
+  - All passengers to the loading bay! Shuttle is preparing for departure.
+  uniqueID: fc3048d4-b9e6-40d4-a4a9-68eeabc7fb78
+  position: {x: 2651.2, y: 867.2}
+  entryActions:
+  - actionName: PrepareForDeparture
+    parameters: []
+  exitActions: []
+  continuationID: 
+--- !u!114 &2809647118886890647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
+  m_Name: (AutoContinuationDialogueNode) ac6b1712-681f-4ece-89ee-4b9651d54ab7
+  m_EditorClassIdentifier: 
+  speakerIndex: 1
+  textSegments:
+  - A <i>worm</i>, you squawk...
+  - Why don't you you take a long walk off a short branch and go find one?
+  uniqueID: ac6b1712-681f-4ece-89ee-4b9651d54ab7
+  position: {x: 2600.8, y: 1671.2}
+  entryActions: []
+  exitActions: []
+  continuationID: 
+--- !u!114 &3412853625356664626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c7b06d03273fe46beda40e2edebd6d, type: 3}
+  m_Name: (DecisionDialogueNode) 8e0065c6-ca0f-45c2-8481-2a911b9cfd13
+  m_EditorClassIdentifier: 
+  speakerIndex: 1
+  textSegments:
+  - Read the sign, squawk. We fly to the other side of the tree every hour, on the
+    hour. Fare's 1.00 WRM, no credit accepted.  Pay up or squawk off.
+  uniqueID: 8e0065c6-ca0f-45c2-8481-2a911b9cfd13
+  position: {x: 1585.6, y: 1286.4}
+  entryActions: []
+  exitActions: []
+  decisionFunctionData:
+    actorIndex: 0
+    functionData:
+      actionName: HasItem
+      parameters:
+      - Worm
+  continuations:
+  - 9812c815-e659-4e30-9545-97314c8499ae
+  - d0b07c5e-af07-463a-bfbd-ba017a6d6779
+--- !u!114 &3828516515457430189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
+  m_Name: (AutoContinuationDialogueNode) 0e8205f7-06ed-4b33-8939-acc6a8380b44
+  m_EditorClassIdentifier: 
+  speakerIndex: 0
+  textSegments:
+  - Shuttle?
+  - Fare?
+  uniqueID: 0e8205f7-06ed-4b33-8939-acc6a8380b44
+  position: {x: 1115.2, y: 1176.8}
+  entryActions: []
+  exitActions: []
+  continuationID: 8e0065c6-ca0f-45c2-8481-2a911b9cfd13
+--- !u!114 &9031240647945812789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bae67ff6ff4ea46b94a582e98d8818, type: 3}
+  m_Name: (AutoContinuationDialogueNode) 938171b3-02b6-4e02-abf6-389c4e2ed78a
+  m_EditorClassIdentifier: 
+  speakerIndex: 0
+  textSegments:
+  - I don't have any squawking worms, you bird!
+  uniqueID: 938171b3-02b6-4e02-abf6-389c4e2ed78a
+  position: {x: 1363.1007, y: 1952.8804}
+  entryActions: []
+  exitActions: []
+  continuationID: 02c937e1-ee7b-4613-a262-7e3e239ca209

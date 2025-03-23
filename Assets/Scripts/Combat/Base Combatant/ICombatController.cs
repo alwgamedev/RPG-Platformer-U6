@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
-    public interface ICombatController //: IGOSystemController
+    public interface ICombatController
     {
         public bool IsInCombat { get; }
         public bool ChannelingAbility { get; }
@@ -13,7 +13,6 @@ namespace RPGPlatformer.Combat
         public TickTimer TickTimer { get; }
         public ICombatant Combatant { get; }
 
-        //public event Action OnDisabled;
         public event Action CombatEntered;
         public event Action CombatExited;
         public event Action OnDeath;
