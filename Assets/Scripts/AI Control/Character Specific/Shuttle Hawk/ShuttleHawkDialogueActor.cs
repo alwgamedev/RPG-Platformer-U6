@@ -16,9 +16,10 @@ namespace RPGPlatformer.Dialogue
 
         protected override void BuildDecisionFunctionDict()
         {
+            //0 = false, 1 = true
             GetDecisionFunction = new()
             {
-                ["IsFirstEncounter"] = args => hasEncounteredPlayer ? 1 : 0
+                ["IsFirstEncounter"] = args => hasEncounteredPlayer ? 0 : 1
             };
         }
 

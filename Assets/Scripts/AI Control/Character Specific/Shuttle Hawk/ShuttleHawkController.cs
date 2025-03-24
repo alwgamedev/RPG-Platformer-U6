@@ -1,6 +1,7 @@
 using UnityEngine;
 using RPGPlatformer.Movement;
-using UnityEditor;
+using RPGPlatformer.Core;
+using RPGPlatformer.UI;
 
 namespace RPGPlatformer.AIControl
 {
@@ -19,19 +20,41 @@ namespace RPGPlatformer.AIControl
         [SerializeField] PatrolPath flightPath;
         [SerializeField] Transform departurePoint;
 
+        IInteractableNPC npc;
+
         public bool AwaitingDeparture 
             => stateManager.StateMachine.CurrentState == stateManager.StateGraph.awaitingDeparture;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            npc = GetComponent<IInteractableNPC>();
+        }
 
         protected override void ConfigureStateManager()
         {
             base.ConfigureStateManager();
 
             stateManager.StateGraph.awaitingDeparture.OnEntry += OnAwaitingDepartureEntry;
+            stateManager.StateGraph.patrol.OnExit += OnPatrolExit;
 
             StateBehavior[stateManager.StateGraph.awaitingDeparture] = patroller.AwaitingDepartureBehavior;
             StateBehavior[stateManager.StateGraph.shuttling] = patroller.PatrolBehavior;
             StateBehavior[stateManager.StateGraph.returningToNest] = patroller.PatrolBehavior;
             //later patroller may have more specific functions
+        }
+
+        protected override void OnPatrolEntry()
+        {
+            base.OnPatrolEntry();
+
+            npc.SetCursorTypeAndPrimaryAction(CursorType.Dialogue);
+        }
+
+        private void OnPatrolExit()
+        {
+            npc.SetCursorTypeAndPrimaryAction(CursorType.Default);
         }
 
         private void OnAwaitingDepartureEntry()

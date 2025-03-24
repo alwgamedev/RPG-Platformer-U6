@@ -44,7 +44,7 @@ namespace RPGPlatformer.AIControl
                     BeginRest(m);
                     break;
                 case NavigationMode.singleDestination:
-                    BeginSingleDestinationPatrol((Vector2)parameters);
+                    BeginSingleDestinationPatrol((Vector3)parameters);
                     break;
                 case NavigationMode.bounded:
                     BeginBoundedPatrol((Transform[])parameters);

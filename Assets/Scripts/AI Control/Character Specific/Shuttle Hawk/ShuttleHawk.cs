@@ -19,7 +19,7 @@ namespace RPGPlatformer.AIControl
 
         public void HeadToDeparturePoint(Transform departurePoint)
         {
-            BeginPatrol(NavigationMode.singleDestination, (Vector2)departurePoint.position);
+            BeginPatrol(NavigationMode.singleDestination, departurePoint.position);
         }
 
         public void AwaitingDepartureBehavior()

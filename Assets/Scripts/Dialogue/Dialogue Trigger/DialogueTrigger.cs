@@ -6,15 +6,29 @@ using UnityEngine;
 
 namespace RPGPlatformer.Dialogue
 {
-    public class DialogueTrigger : MonoBehaviour
+    public class DialogueTrigger : MonoBehaviour, IDialogueTrigger
     {
         [SerializeField] List<DialogueTriggerData> dialogues;
+
+        bool triggerEnabled = true;
 
         public event Action DialogueCancelRequested;
         public event Action<bool> DialogueBeganSuccessfully;
         public event Action DialogueEnded;
+        public event Action<bool> TriggerEnabled;
 
         public static event Action<DialogueTrigger, DialogueTriggerData> DialogueTriggered;
+
+        //NOTE: if your trigger is attached to an interactable NPC, it may be better to use
+        //NPC.SetCursorTypeAndPrimaryAction (it feels like a higher level script, which we should go to first)
+        public void EnableTrigger(bool val)
+        {
+            if (val != triggerEnabled)
+            {
+                triggerEnabled = val;
+                TriggerEnabled?.Invoke(val);
+            }
+        }
 
         public void RequestCancelDialogue()
         {
@@ -36,6 +50,14 @@ namespace RPGPlatformer.Dialogue
 
         public void TriggerDialogue(DialogueTriggerData data)
         {
+            if (!triggerEnabled)
+            {
+                //e.g. IntNPC calls TriggerDialogue
+                //and will be waiting for this event to unsubscribe certain fcts
+                DialogueBeganSuccessfully?.Invoke(false);
+                return;
+            }
+
             DialogueUI.DialogueBeganSuccessfully += DialogueBeganHandler;
             DialogueTriggered?.Invoke(this, data);
 
@@ -61,6 +83,7 @@ namespace RPGPlatformer.Dialogue
             DialogueCancelRequested = null;
             DialogueBeganSuccessfully = null;
             DialogueEnded = null;
+            TriggerEnabled = null;
         }
     }
 }

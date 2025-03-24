@@ -4,18 +4,19 @@ using RPGPlatformer.Core;
 using RPGPlatformer.Dialogue;
 using RPGPlatformer.UI;
 using UnityEngine.EventSystems;
-using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
-    public class InteractableNPC : InteractableGameObject
+    public class InteractableNPC : InteractableGameObject, IInteractableNPC
     {
         protected Action OnUpdate;
-        protected (string, Action) primaryAction = new();//i.e. left click action (if any)
+        protected string primaryActionKey;//i.e. left click action (if any)
         //Maybe this can be chosen from a set of pre-prepared static methods based on the IGO's CURSOR TYPE
         //(e.g. if cursor type dialogue, primaryAction = get component dialogueTrigger and trigger dialogue)
 
-        public List<(string, Action)> InteractionOptions { get; protected set; } = new();
+        //in the future maybe we could make a serializable class holding the description and a UnityEvent
+        //in order to set these in the inspector
+        protected Dictionary<string, Action> InteractionOptions = new();
         //items are (rc menu text, action) exactly like inventory item
         //actions can be e.g. Talk To, View Shop, Pickpocket, etc.
 
@@ -31,23 +32,101 @@ namespace RPGPlatformer.AIControl
             OnUpdate?.Invoke();
         }
 
+        public IEnumerable<(string, Action)> GetInteractionOptions()
+        {
+            //so this is always first in order (will want for RCM)
+            if (InteractionOptions.TryGetValue(primaryActionKey, out var a) && a != null)
+            {
+                yield return (primaryActionKey, a);
+            }
+
+            foreach (var entry in InteractionOptions)
+            {
+                if (entry.Key != primaryActionKey && entry.Value != null)
+                {
+                    yield return (entry.Key, entry.Value);
+                }
+            }
+        }
+
+        public virtual void SetCursorTypeAndPrimaryAction(CursorType cursorType, 
+            bool removePrimaryActionFromDict = true)
+        {
+            this.cursorType = cursorType;
+            SetPrimaryAction(cursorType, removePrimaryActionFromDict);
+        }
+
+        protected virtual void SetPrimaryAction(CursorType cursorType, bool removePreviousFromDict = true)
+        {
+            if (cursorType == CursorType.Default)
+            {
+                NoPrimaryAction(removePreviousFromDict);
+            }
+            if (cursorType == CursorType.Dialogue)
+            {
+                if (!TryGetComponent(out IDialogueTrigger dialogueTrigger))
+                {
+                    NoPrimaryAction(removePreviousFromDict);
+                    return;
+                }
+
+                SetPrimaryAction($"Talk to {displayName}", () => { TriggerDialogue(dialogueTrigger, 0); });
+                dialogueTrigger.TriggerEnabled += TriggerEnabledHandler;
+
+                //in the future we may generalize this (e.g. have an interface for
+                //"IntNPC Action Source" or something stupid) -- for now dialogue trigger is the only primary action
+                void TriggerEnabledHandler(bool val)
+                {
+                    if (val)
+                    {
+                        SetCursorTypeAndPrimaryAction(CursorType.Dialogue);
+                    }
+                    else
+                    {
+                        SetCursorTypeAndPrimaryAction(CursorType.Default);
+                    }
+                }
+            }
+        }
+
+        protected void SetPrimaryAction(string description, Action action, 
+            bool removePreviousFromDict = true)
+        {
+            if (description == null)
+            {
+                NoPrimaryAction(removePreviousFromDict);
+                return;
+            }
+            if (primaryActionKey != null && removePreviousFromDict)
+            {
+                InteractionOptions.Remove(primaryActionKey);
+            }
+
+            primaryActionKey = description;
+            InteractionOptions[primaryActionKey] = action;
+        }
+
+        protected void NoPrimaryAction(bool removePreviousFromDict = true)
+        {
+            if (primaryActionKey == null) return;
+
+            if (removePreviousFromDict)
+            {
+                InteractionOptions.Remove(primaryActionKey);
+            }
+
+            primaryActionKey = null;
+        }
+
         protected virtual void InitializeInteractionOptions()
         {
             InteractionOptions = new();
 
-            if (cursorType == CursorType.Dialogue && TryGetComponent(out DialogueTrigger dialogueTrigger))
-            {
-                primaryAction = ($"Talk to {displayName}", () =>
-                    {
-                        TriggerDialogue(dialogueTrigger, 0);
-                    }
-                );
-                InteractionOptions.Add(primaryAction);
-            }
+            SetPrimaryAction(cursorType);
         }
 
         //NOTE: trigger is assumed to be a component on the NPC, so they have the same lifetime
-        protected virtual void TriggerDialogue(DialogueTrigger trigger, int index)
+        protected virtual void TriggerDialogue(IDialogueTrigger trigger, int index)
         {
             trigger.DialogueBeganSuccessfully += DialogueBeganHandler;
 
@@ -84,15 +163,14 @@ namespace RPGPlatformer.AIControl
         {
             base.OnPointerClick(eventData);
 
+            if (primaryActionKey == null) return;
             if (!eventData.IsLeftMouseButtonEvent()) return;
             if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
 
-            primaryAction.Item2?.Invoke();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
+            if (InteractionOptions.TryGetValue(primaryActionKey, out var a))
+            {
+                a?.Invoke();
+            }
         }
     }
 }
