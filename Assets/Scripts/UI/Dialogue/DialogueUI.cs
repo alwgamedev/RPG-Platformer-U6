@@ -13,14 +13,15 @@ namespace RPGPlatformer.UI
         DialogueNode currentNode;
         DialogueWindow activeWindow;
 
-        Action DialogueEnded;
+        public static event Action<bool> DialogueBeganSuccessfully;//bool is whether it began successfully
+        public static event Action DialogueEnded;
 
         protected override void Awake()
         {
             base.Awake();
 
             DialogueTrigger.DialogueTriggered += HandleDialogueTrigger;
-            DialogueTrigger.DialogueCancelled += EndDialogue;
+            //DialogueTrigger.DialogueCancelled += EndDialogue;
         }
 
         public void StartDialogue(DialogueTriggerData data)
@@ -36,6 +37,8 @@ namespace RPGPlatformer.UI
             }
             DisplayDialogueNode(currentNode);
             Show();
+
+            DialogueBeganSuccessfully?.Invoke(true);
         }
 
         public void EndDialogue()
@@ -53,17 +56,19 @@ namespace RPGPlatformer.UI
                     }
                 }
             }
+
             DialogueEnded?.Invoke();
 
             activeDialogue = null;
             currentNode = null;
         }
 
-        private void HandleDialogueTrigger(DialogueTriggerData data)
+        private void HandleDialogueTrigger(DialogueTrigger trigger, DialogueTriggerData data)
         {
             if (activeDialogue != null)
             {
                 GameLog.Log("Exit the current dialogue before starting another.");
+                DialogueBeganSuccessfully?.Invoke(false);
                 return;
             }
 
@@ -75,12 +80,13 @@ namespace RPGPlatformer.UI
                 {
                     if (player.IsInCombat)
                     {
-                        CancelOnCombatEntry();
+                        GameLog.Log("You cannot participate in this dialogue while in combat.");
+                        DialogueBeganSuccessfully?.Invoke(false);
                         return;
                     }
 
                     player.CombatEntered += CancelOnCombatEntry;
-                    DialogueEnded += DialogueEndedHandler;
+                    DialogueEnded += DialogueEndCombatantHandler;
 
                     void CancelOnCombatEntry()
                     {
@@ -88,15 +94,27 @@ namespace RPGPlatformer.UI
                         EndDialogue();
                     }
 
-                    void DialogueEndedHandler()
+                    void DialogueEndCombatantHandler()
                     {
                         if (player != null)
                         {
                             player.CombatEntered -= CancelOnCombatEntry;
                         }
-                        DialogueEnded -= DialogueEndedHandler;
-                        //because we still need to unsubscribe when the dialogue ends naturally
+                        DialogueEnded -= DialogueEndCombatantHandler;
                     }
+                }
+
+                trigger.DialogueCancelRequested += EndDialogue;
+                DialogueEnded += DialogueEndTriggerHandler;
+
+                void DialogueEndTriggerHandler()
+                {
+                    if (trigger != null)
+                    {
+                        trigger.DialogueCancelRequested -= EndDialogue;
+                    }
+
+                    DialogueEnded -= DialogueEndTriggerHandler;
                 }
 
                 StartDialogue(data);
@@ -172,8 +190,9 @@ namespace RPGPlatformer.UI
             base.OnDestroy();
 
             DialogueTrigger.DialogueTriggered -= HandleDialogueTrigger;
-            DialogueTrigger.DialogueCancelled -= EndDialogue;
+            //DialogueTrigger.DialogueCancelled -= EndDialogue;
 
+            DialogueBeganSuccessfully = null;
             DialogueEnded = null;
         }
     }

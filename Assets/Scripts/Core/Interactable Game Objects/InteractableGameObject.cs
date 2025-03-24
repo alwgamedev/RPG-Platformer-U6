@@ -92,6 +92,11 @@ namespace RPGPlatformer.Core
             return true;
         }
 
+        protected virtual void SendNotificationIfPlayerOutOfRange()
+        {
+            PlayerInRangeWithNotifications();
+        }
+
         protected virtual bool PlayerInRange()
         {
             if (playerTransform == null)
@@ -99,7 +104,8 @@ namespace RPGPlatformer.Core
                 return false;
             }
 
-            return Vector2.Distance(playerTransform.position, transform.position) < maxInteractableDistance;
+            return Vector2.SqrMagnitude(playerTransform.position - transform.position) 
+                < maxInteractableDistance * maxInteractableDistance;
         }
 
         protected virtual void OnPlayerOutOfRange() { }

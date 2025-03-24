@@ -36,12 +36,38 @@ namespace RPGPlatformer.AIControl
             {
                 primaryAction = ($"Talk to {displayName}", () =>
                     {
-                        dialogueTrigger.TriggerDialogue(0);
-                        OnUpdate = () => PlayerInRangeWithNotifications();
+                        TriggerDialogue(dialogueTrigger, 0);
                     }
                 );
-                PlayerOutOfRange += dialogueTrigger.CancelDialogue;
                 InteractionOptions.Add(primaryAction);
+            }
+        }
+
+        //NOTE: trigger is assumed to be a component on the NPC, so they have the same lifetime
+        protected virtual void TriggerDialogue(DialogueTrigger trigger, int index)
+        {
+            trigger.TriggerDialogue(index);
+            trigger.DialogueBeganSuccessfully += DialogueBeganHandler;
+
+            void DialogueBeganHandler(bool success)
+            {
+                if (!success)
+                {
+                    trigger.DialogueBeganSuccessfully -= DialogueBeganHandler;
+                    return;
+                }
+
+                OnUpdate = SendNotificationIfPlayerOutOfRange;
+                PlayerOutOfRange += trigger.RequestCancelDialogue;
+                trigger.DialogueEnded += DialogueEndedHandler;
+                trigger.DialogueBeganSuccessfully -= DialogueBeganHandler;
+            }
+
+            void DialogueEndedHandler()
+            {
+                OnUpdate = null;
+                PlayerOutOfRange -= trigger.RequestCancelDialogue;
+                trigger.DialogueEnded -= DialogueEndedHandler;
             }
         }
 

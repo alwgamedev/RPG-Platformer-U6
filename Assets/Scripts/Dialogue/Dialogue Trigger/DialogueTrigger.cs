@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPGPlatformer.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,12 +10,15 @@ namespace RPGPlatformer.Dialogue
     {
         [SerializeField] List<DialogueTriggerData> dialogues;
 
-        public static event Action<DialogueTriggerData> DialogueTriggered;
-        public static event Action DialogueCancelled;
+        public event Action DialogueCancelRequested;
+        public event Action<bool> DialogueBeganSuccessfully;
+        public event Action DialogueEnded;
 
-        public void CancelDialogue()
+        public static event Action<DialogueTrigger, DialogueTriggerData> DialogueTriggered;
+
+        public void RequestCancelDialogue()
         {
-            DialogueCancelled?.Invoke();
+            DialogueCancelRequested?.Invoke();
         }
 
         public void TriggerDialogue(string dialogueName)
@@ -32,7 +36,40 @@ namespace RPGPlatformer.Dialogue
 
         public void TriggerDialogue(DialogueTriggerData data)
         {
-            DialogueTriggered?.Invoke(data);
+            DialogueUI.DialogueBeganSuccessfully += DialogueBeganHandler;
+            DialogueTriggered?.Invoke(this, data);
+
+            void DialogueBeganHandler(bool val)
+            {
+                DialogueBeganSuccessfully?.Invoke(val);
+                DialogueUI.DialogueBeganSuccessfully -= DialogueBeganHandler;
+
+                if (val)
+                {
+                    DialogueUI.DialogueEnded += DialogueEndedHandler;
+                }
+            }
+
+            void DialogueEndedHandler()
+            {
+                DialogueEnded?.Invoke();
+                DialogueUI.DialogueEnded -= DialogueEndedHandler;
+            }
+        }
+
+        //public void OnDialogueBeganSuccessfully(bool val)
+        //{
+        //    DialogueBeganSuccessfully?.Invoke(val);
+        //}
+
+        //public void OnDialogueEnded()
+        //{
+        //    DialogueEnded?.Invoke();
+        //}
+
+        private void OnDestroy()
+        {
+            DialogueCancelRequested = null;
         }
     }
 }
