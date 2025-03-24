@@ -67,9 +67,9 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 1.7200065, y: -1.6878102}
-  m_Size: {x: 3.4393961, y: 3.3184574}
-  m_Direction: 1
+  m_Offset: {x: 2.136383, y: -1.6441046}
+  m_Size: {x: 2.6085691, y: 3.231068}
+  m_Direction: 0
 --- !u!114 &7345384770179631332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,8 +149,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 6.9311604, y: -1.3790213}
-  m_Size: {x: 13.357715, y: 5.066191}
+  m_Offset: {x: 7.4806876, y: -1.7723281}
+  m_Size: {x: 14.45682, y: 5.852787}
   m_Direction: 1
 --- !u!114 &4389421961141597446
 MonoBehaviour:
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f1a444140069304e96f7f73457d801c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationTolerance: 1
+  destinationTolerance: 0.25
   boundedPatrolHangTime: 0
   pathPatrolHangTime: 0
   checkHorizontalDistanceOnly: 1
@@ -359,6 +359,7 @@ MonoBehaviour:
   deathForce: {x: 120, y: 120}
   deathTorque: 10
   treatContactCharacterAsGround: 0
+  adjustedHalfWidthFactor: 0.25
   runSpeed: 1.5
   walkSpeed: 0.4
   maxNumJumps: 0
@@ -396,7 +397,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 100
+    acceleration: 150
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 0
@@ -406,7 +407,7 @@ MonoBehaviour:
     minRotation: {x: 1, y: 0}
   - movementType: 1
     moveDirection: 2
-    acceleration: 80
+    acceleration: 120
     flipSprite: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
@@ -456,7 +457,7 @@ MonoBehaviour:
   displayName: Barry Bird
   examineText: You don't want to ruffle his feathers.
   cursorType: 1
-  maxInteractableDistance: 7
+  maxInteractableDistance: 5
 --- !u!114 &8052417114151022779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -484,9 +485,8 @@ MonoBehaviour:
       trigger:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 4320224733152289855}
-            m_TargetAssemblyTypeName: RPGPlatformer.AIControl.ShuttleHawkController,
-              Assembly-CSharp
+          - m_Target: {fileID: 5933316255835540705}
+            m_TargetAssemblyTypeName: RPGPlatformer.AIControl.ShuttleHawk, Assembly-CSharp
             m_MethodName: PrepareForDeparture
             m_Mode: 1
             m_Arguments:
@@ -603,7 +603,7 @@ Transform:
   m_GameObject: {fileID: 7853565079932381501}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7, y: -1, z: 0}
+  m_LocalPosition: {x: 0.57, y: -0.98, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

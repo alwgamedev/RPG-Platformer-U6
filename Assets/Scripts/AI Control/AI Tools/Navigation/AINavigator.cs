@@ -36,6 +36,8 @@ namespace RPGPlatformer.AIControl
 
         public void BeginPatrol(NavigationMode mode, object parameters, IMovementController m)
         {
+            hangTimer = 0;
+
             switch(mode)
             {
                 case NavigationMode.rest:

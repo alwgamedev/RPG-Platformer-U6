@@ -128,7 +128,7 @@ namespace RPGPlatformer.AIControl
         {
             if (!patroller.PatrolNavigator.GetNextDestination())
             {
-                patroller.BeginPatrol(NavigationMode.rest, null);
+                BeginPatrolRest();
             }
         }
 

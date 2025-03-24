@@ -44,7 +44,7 @@ namespace RPGPlatformer.AIControl
             Debug.Log("readying for departure");
             readyForDeparture = true;
             playerHasMounted = false;
-            waitingForDepartureEntryTime = 0;
+            waitingForDepartureEntryTime = Time.time;
         }
     }
 }

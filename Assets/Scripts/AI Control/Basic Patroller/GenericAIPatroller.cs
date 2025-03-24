@@ -41,7 +41,7 @@ namespace RPGPlatformer.AIControl
             BeginPatrol(mode, p?.Content);
         }
 
-        public virtual void BeginPatrol(NavigationMode mode, object p, bool triggerPatrolState = false)
+        public virtual void BeginPatrol(NavigationMode mode, object p)
         {
             PatrolNavigator.BeginPatrol(mode, p, MovementController);
         }
