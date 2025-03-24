@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using RPGPlatformer.Core;
 using RPGPlatformer.Dialogue;
 using RPGPlatformer.UI;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace RPGPlatformer.AIControl

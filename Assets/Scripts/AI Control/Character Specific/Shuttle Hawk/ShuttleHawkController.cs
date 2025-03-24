@@ -17,34 +17,9 @@ namespace RPGPlatformer.AIControl
     {
         [SerializeField] PatrolPath flightPath;
 
-        int boundedIterations;
-
-        //walk back and forth between bounds 3 times, then fly along flightPath
-        //protected override void OnPatrolDestinationReached()
-        //{
-        //    if (patroller.PatrolNavigator.CurrentMode == PatrolMode.bounded)
-        //    {
-        //        boundedIterations++;
-
-        //        if (boundedIterations > 5)
-        //        {
-        //            boundedIterations = 0;
-        //            patroller.BeginPatrol(PatrolMode.pathForwards, flightPath);
-        //            patroller.MovementController.SoftStop();
-        //            patroller.MovementController.BeginFlying();
-        //        }
-        //        else
-        //        {
-        //            patroller.PatrolNavigator.GetNextDestination();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (!patroller.PatrolNavigator.GetNextDestination())
-        //        {
-        //            patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParameters);
-        //        }
-        //    }
-        //}
+        public void PrepareForDeparture()
+        {
+            Debug.Log("preparing for departure");
+        }
     }
 }

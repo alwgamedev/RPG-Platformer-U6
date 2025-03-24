@@ -67,8 +67,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 2.444318, y: -1.6878086}
-  m_Size: {x: 4.8880215, y: 3.318462}
+  m_Offset: {x: 1.7200065, y: -1.6878102}
+  m_Size: {x: 3.4393961, y: 3.3184574}
   m_Direction: 1
 --- !u!114 &7345384770179631332
 MonoBehaviour:
@@ -182,7 +182,12 @@ GameObject:
   - component: {fileID: 1519639630161499023}
   - component: {fileID: 3471450331675356116}
   - component: {fileID: 80898664928263919}
-  m_Layer: 13
+  - component: {fileID: 2513113309571414144}
+  - component: {fileID: 5791648601987046333}
+  - component: {fileID: 8052417114151022779}
+  - component: {fileID: 1374627201273509011}
+  - component: {fileID: 2893810016071196569}
+  m_Layer: 10
   m_Name: Shuttle Hawk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,7 +253,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -303,7 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214c3e9d04c9fb7418d4c89ff3f40b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultPatrolMode: 1
+  defaultPatrolMode: 2
   defaultPatrolParameters: {fileID: 0}
   flightPath: {fileID: 0}
 --- !u!114 &5848020814946518481
@@ -321,6 +326,8 @@ MonoBehaviour:
   destinationTolerance: 1
   boundedPatrolHangTime: 0
   pathPatrolHangTime: 0
+  checkHorizontalDistanceOnly: 1
+  hangTimer: 0
 --- !u!114 &7943539273864743110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,6 +427,124 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eced6aae64cab404498af8eeda3fe365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2513113309571414144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257429934250872482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3a34615c6456bb469312e846abdd549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5791648601987046333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257429934250872482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6503d844a236c134a8695617866ba090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayName: Barry Bird
+  examineText: You don't want to ruffle his feathers.
+  cursorType: 1
+  maxInteractableDistance: 7
+--- !u!114 &8052417114151022779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257429934250872482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da055bd7aaff1a548a56cd49c652dc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogues:
+  - allowPlayerToEnterCombatDuringDialogue: 0
+    dialogueSO: {fileID: 11400000, guid: 6625fd1e95365ff4e9930479113bf2c3, type: 2}
+    actors:
+      actors:
+      - label: Player
+        labelledObject: {fileID: 0}
+      - label: Hawk
+        labelledObject: {fileID: 1374627201273509011}
+    entryActions:
+    - nodeID: fc3048d4-b9e6-40d4-a4a9-68eeabc7fb78
+      actionName: PrepareForDeparture
+      trigger:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 4320224733152289855}
+            m_TargetAssemblyTypeName: RPGPlatformer.AIControl.ShuttleHawkController,
+              Assembly-CSharp
+            m_MethodName: PrepareForDeparture
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    exitActions: []
+--- !u!114 &1374627201273509011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257429934250872482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d973716b47cc11945b9c39b6d5bc21e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actorName: Barry Bird
+--- !u!58 &2893810016071196569
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257429934250872482}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 1
 --- !u!1 &3421902268695511176
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,7 +570,7 @@ Transform:
   m_GameObject: {fileID: 3421902268695511176}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.07, y: 0.23, z: 0}
+  m_LocalPosition: {x: 3.5, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -476,7 +601,7 @@ Transform:
   m_GameObject: {fileID: 7853565079932381501}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.22, y: -1.2, z: 0}
+  m_LocalPosition: {x: 0.7, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -920,18 +1045,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 386791141387813222, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4018914529200880135}
-    - targetCorrespondingSourceObject: {fileID: 3297364353584691495, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3861111817114640007}
-    - targetCorrespondingSourceObject: {fileID: 4157741701538757237, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5290786962399419850}
     - targetCorrespondingSourceObject: {fileID: 4157741701538757237, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7442329090891739724}
-    - targetCorrespondingSourceObject: {fileID: 4157741701538757237, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6846574381635170711}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
 --- !u!4 &5284444162961595268 stripped
 Transform:
@@ -943,72 +1059,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4157741701538757237, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
   m_PrefabInstance: {fileID: 8233609919947455889}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &5290786962399419850
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5472133675264116708}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 6dbcdd6332f60884caab081234ccb744, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 32639
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.46402147, y: 0.7389054}
-      - {x: 0.19418949, y: 0.20295931}
-      - {x: -0.3577352, y: -1.0968597}
-      - {x: -0.09140922, y: -1.7565997}
-      - {x: 0.3030322, y: -2.042356}
-      - {x: 1.3567268, y: -2.5436466}
-      - {x: 2.460659, y: -2.2776322}
-      - {x: 3.0375617, y: -1.4192986}
-      - {x: 3.7599888, y: -0.6312133}
-      - {x: 4.2549524, y: -0.34270382}
-      - {x: 4.7687254, y: 0.09243429}
-      - {x: 5.113081, y: 0.6966591}
-      - {x: 5.2960644, y: 1.3022048}
-      - {x: 5.1417737, y: 1.3383555}
-      - {x: 4.631721, y: 0.8379854}
-      - {x: 3.252265, y: 0.5856308}
-      - {x: 2.0062902, y: 0.74601346}
-      - {x: 1.3396467, y: 1.0447674}
-      - {x: 0.9577399, y: 1.0659235}
-  m_UseDelaunayMesh: 0
 --- !u!114 &7442329090891739724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1025,102 +1075,7 @@ MonoBehaviour:
   mountPlatformMax: {fileID: 6974728677893949614}
   mountPlatformMin: {fileID: 5800931583846263568}
   mountTrigger: {fileID: 7345384770179631332}
-  localGravity: 60
---- !u!70 &6846574381635170711
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5472133675264116708}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 32639
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 2.444318, y: -1.6878086}
-  m_Size: {x: 4.8880215, y: 3.318462}
-  m_Direction: 1
---- !u!1 &6881852012333024438 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3297364353584691495, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
-  m_PrefabInstance: {fileID: 8233609919947455889}
-  m_PrefabAsset: {fileID: 0}
---- !u!60 &3861111817114640007
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6881852012333024438}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 6dbcdd6332f60884caab081234ccb744, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 32639
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.29802772, y: 2.3972254}
-      - {x: 0.052003324, y: 0.46232182}
-      - {x: 0.5647848, y: -1.911779}
-      - {x: 1.7260294, y: -1.5012988}
-      - {x: 3.2161658, y: -1.1271818}
-      - {x: 2.8425398, y: 1.199428}
-  m_UseDelaunayMesh: 0
+  localGravity: 75
 --- !u!4 &7308355462448825423 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}

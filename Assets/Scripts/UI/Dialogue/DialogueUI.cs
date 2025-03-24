@@ -43,9 +43,15 @@ namespace RPGPlatformer.UI
             CloseActiveWindow();
             Hide();
 
-            foreach (var actor in activeDialogue.Actors())
+            if (activeDialogue != null)
             {
-                actor.OnEndDialogue();
+                foreach (var actor in activeDialogue.Actors())
+                {
+                    if (actor)
+                    {
+                        actor.OnEndDialogue();
+                    }
+                }
             }
             DialogueEnded?.Invoke();
 

@@ -31,6 +31,7 @@ namespace RPGPlatformer.AIControl
         protected Dictionary<State, Action> StateBehavior = new();
 
         public bool Patrolling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.patrol;
+        public IMovementController MovementController => patroller.MovementController;
 
         protected virtual void Awake()
         {
