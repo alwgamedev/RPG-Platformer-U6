@@ -4,6 +4,7 @@ using RPGPlatformer.Core;
 using RPGPlatformer.Dialogue;
 using RPGPlatformer.UI;
 using UnityEngine.EventSystems;
+using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
@@ -17,6 +18,8 @@ namespace RPGPlatformer.AIControl
         public List<(string, Action)> InteractionOptions { get; protected set; } = new();
         //items are (rc menu text, action) exactly like inventory item
         //actions can be e.g. Talk To, View Shop, Pickpocket, etc.
+
+        //^^TO-DO: add RCM for IntNPC
 
         private void Start()
         {
@@ -46,7 +49,6 @@ namespace RPGPlatformer.AIControl
         //NOTE: trigger is assumed to be a component on the NPC, so they have the same lifetime
         protected virtual void TriggerDialogue(DialogueTrigger trigger, int index)
         {
-            trigger.TriggerDialogue(index);
             trigger.DialogueBeganSuccessfully += DialogueBeganHandler;
 
             void DialogueBeganHandler(bool success)
@@ -69,12 +71,13 @@ namespace RPGPlatformer.AIControl
                 PlayerOutOfRange -= trigger.RequestCancelDialogue;
                 trigger.DialogueEnded -= DialogueEndedHandler;
             }
+
+            trigger.TriggerDialogue(index);
         }
 
         protected override void OnPlayerOutOfRange()
         {
             GameLog.Log($"You are too far away to interact with {DisplayName}.");
-            OnUpdate = null;
         }
 
         public override void OnPointerClick(PointerEventData eventData)

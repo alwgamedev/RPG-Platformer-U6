@@ -31,14 +31,18 @@ namespace RPGPlatformer.AIControl
             OnUpdate?.Invoke();
         }
 
-        public virtual void BeginPatrol(NavigationMode mode, NavigationParameters p)
-        {
-            BeginPatrol(mode, p.Content);
-        }
-
-        public virtual void BeginPatrol(NavigationMode mode, object p)
+        public virtual void InitializeState()
         {
             TriggerPatrol();
+        }
+
+        public virtual void BeginPatrol(NavigationMode mode, NavigationParameters p)
+        {
+            BeginPatrol(mode, p?.Content);
+        }
+
+        public virtual void BeginPatrol(NavigationMode mode, object p, bool triggerPatrolState = false)
+        {
             PatrolNavigator.BeginPatrol(mode, p, MovementController);
         }
 

@@ -18,12 +18,14 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected Vector2 deathForce = 120 * Vector2.right + 120 * Vector2.up;
         [SerializeField] protected float deathTorque = 10;
         [SerializeField] protected bool treatContactCharacterAsGround;
+        [SerializeField] protected float adjustedHalfWidthFactor = 0.45f;
 
         protected int groundLayer;
         protected Collider2D myCollider;
         protected Rigidbody2D myRigidbody;
         protected float myHeight;
         protected float myWidth;
+        protected float adjustedHalfWidth;
         protected float defaultGravityScale;
         protected bool verifyingJump;
         protected bool verifyingFreefall;//TO-DO: could we just have one variable "verifyingAirborne"?
@@ -36,11 +38,11 @@ namespace RPGPlatformer.Movement
         public virtual float MaxSpeed { get; set; }
         public float Width => myWidth;
         public float Height => myHeight;
-        public Vector3 ColliderCenterRight => myCollider.bounds.center + 0.45f * myWidth * transform.right;
-        public Vector3 ColliderCenterLeft => myCollider.bounds.center - 0.45f * myWidth * transform.right;
-        public Vector3 ColliderCenterFront => myCollider.bounds.center + 0.45f * myWidth 
+        public Vector3 ColliderCenterRight => myCollider.bounds.center + adjustedHalfWidth * transform.right;
+        public Vector3 ColliderCenterLeft => myCollider.bounds.center - adjustedHalfWidth * transform.right;
+        public Vector3 ColliderCenterFront => myCollider.bounds.center + adjustedHalfWidth
             * (int)CurrentOrientation * transform.right;
-        public Vector3 ColliderCenterBack => myCollider.bounds.center - 0.45f * myWidth 
+        public Vector3 ColliderCenterBack => myCollider.bounds.center - adjustedHalfWidth 
             * (int)CurrentOrientation * transform.right;
         public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
         public HorizontalOrientation CurrentOrientation { get; protected set; }
@@ -59,6 +61,7 @@ namespace RPGPlatformer.Movement
 
             myHeight = myCollider.bounds.max.y - myCollider.bounds.min.y;
             myWidth = myCollider.bounds.max.x - myCollider.bounds.min.x;
+            adjustedHalfWidth = adjustedHalfWidthFactor * myWidth;
 
             groundLayer = LayerMask.GetMask("Ground");
             if (treatContactCharacterAsGround)

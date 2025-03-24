@@ -10,5 +10,19 @@ namespace RPGPlatformer.AIControl
     public class CombatPatroller : GenericCombatPatroller<AIMovementController, 
         AdvancedMover, AdvancedMovementStateGraph, AdvancedMovementStateMachine, AdvancedMovementStateManager,
         AICombatController>
-    { }
+    {
+        [SerializeField] bool playerEnemy = true;
+
+        public override void InitializeState()
+        {
+            if (playerEnemy)
+            {
+                SetCombatTarget(GameObject.Find("Player").GetComponent<IHealth>());
+            }
+            else
+            {
+                SetCombatTarget(null);
+            }
+        }
+    }
 }

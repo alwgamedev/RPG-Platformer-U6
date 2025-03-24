@@ -1,9 +1,50 @@
-﻿namespace RPGPlatformer.AIControl
+﻿using UnityEngine;
+
+namespace RPGPlatformer.AIControl
 {
     public class ShuttleHawk : HybridFlyerPatroller
     {
-        //can do things like accept payment and trigger into awaiting departure
-        //plus run the timer for awaiting departure
-        //(provide the methods to fill in the controller's state behavior dictionary)
+        [SerializeField] float departureWaitTime = 30;
+
+        float waitingForDepartureEntryTime;
+        bool readyForDeparture;
+        bool playerHasMounted;
+
+        public void PrepareForDeparture()
+        {
+            Trigger(typeof(AwaitingDeparture).Name);
+            playerHasMounted = false;
+            readyForDeparture = false;
+        }
+
+        public void HeadToDeparturePoint(Transform departurePoint)
+        {
+            BeginPatrol(NavigationMode.singleDestination, (Vector2)departurePoint.position);
+        }
+
+        public void AwaitingDepartureBehavior()
+        {
+            if (readyForDeparture && playerHasMounted)
+            {
+                Debug.Log("take off!");
+                //return;
+            }
+
+            if (readyForDeparture && Time.time - waitingForDepartureEntryTime > departureWaitTime)
+            {
+                TriggerPatrol();
+                return;
+            }
+
+            PatrolBehavior();
+        }
+
+        public void ReadyForDeparture()
+        {
+            Debug.Log("readying for departure");
+            readyForDeparture = true;
+            playerHasMounted = false;
+            waitingForDepartureEntryTime = 0;
+        }
     }
 }

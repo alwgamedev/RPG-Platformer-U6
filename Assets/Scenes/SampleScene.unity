@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &16442725 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4431716515061652100, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
+  m_PrefabInstance: {fileID: 8981993179643813145}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 646b03013cb1bcd48a4a1d3abb3c3900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &63536159 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2765709863372221830, guid: f5381072d815e164e84021737173a10a, type: 3}
@@ -4364,6 +4375,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+--- !u!114 &1080422296 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 369643323770825565, guid: 1067bb6d75a393d408ba3c6537b3a4f8, type: 3}
+  m_PrefabInstance: {fileID: 710041464}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf41558dad9b7a498723e33b83485b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1171178260
 GameObject:
   m_ObjectHideFlags: 0
@@ -10504,14 +10526,14 @@ PrefabInstance:
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].dialogueSO
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 6625fd1e95365ff4e9930479113bf2c3, type: 2}
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].conversants.Array.size
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].exitActions.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].entryActions.Array.size
@@ -10539,15 +10561,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].actors.actors.Array.data[0].label
-      value: Alice
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].actors.actors.Array.data[1].label
-      value: Bob
+      value: Hawk
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
+      propertyPath: dialogues.Array.data[0].actors.actors.Array.data[2].label
+      value: Carl
       objectReference: {fileID: 0}
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].entryActions.Array.data[0].nodeID
-      value: d9f93cd5-7c6c-493b-b682-9913870c3be3
+      value: fc3048d4-b9e6-40d4-a4a9-68eeabc7fb78
       objectReference: {fileID: 0}
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].exitActions.Array.data[0].actionName
@@ -10555,8 +10581,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].entryActions.Array.data[0].actionName
-      value: sampleEntryAction
+      value: PrepareForDeparture
       objectReference: {fileID: 0}
+    - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
+      propertyPath: dialogues.Array.data[0].actors.actors.Array.data[0].labelledObject
+      value: 
+      objectReference: {fileID: 1080422296}
+    - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
+      propertyPath: dialogues.Array.data[0].actors.actors.Array.data[1].labelledObject
+      value: 
+      objectReference: {fileID: 16442725}
     - target: {fileID: 8283074641201920516, guid: 6c7c6a2f50466e5419c7359f2afbb752, type: 3}
       propertyPath: dialogues.Array.data[0].entryActions.Array.data[0].trigger.m_PersistentCalls.m_Calls.Array.size
       value: 0

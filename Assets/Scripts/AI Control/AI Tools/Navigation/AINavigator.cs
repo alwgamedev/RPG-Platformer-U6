@@ -17,7 +17,7 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float boundedPatrolHangTime = 1;
         [SerializeField] float pathPatrolHangTime = 0;
 
-        public bool checkHorizontalDistanceOnly;
+        public bool checkHorizontalDistanceOnly = true;
         public float hangTimer;
 
         //for bounded patrol & singleTarget patrol

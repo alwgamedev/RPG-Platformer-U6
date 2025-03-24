@@ -177,11 +177,11 @@ GameObject:
   - component: {fileID: 7068206878052148347}
   - component: {fileID: 3117636087426147858}
   - component: {fileID: 4320224733152289855}
+  - component: {fileID: 5933316255835540705}
   - component: {fileID: 5848020814946518481}
   - component: {fileID: 7943539273864743110}
   - component: {fileID: 1519639630161499023}
   - component: {fileID: 3471450331675356116}
-  - component: {fileID: 80898664928263919}
   - component: {fileID: 2513113309571414144}
   - component: {fileID: 5791648601987046333}
   - component: {fileID: 8052417114151022779}
@@ -311,6 +311,20 @@ MonoBehaviour:
   defaultPatrolMode: 2
   defaultPatrolParameters: {fileID: 0}
   flightPath: {fileID: 0}
+  departurePoint: {fileID: 0}
+--- !u!114 &5933316255835540705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257429934250872482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ded0cd41c635da04eb5020375c2f454d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  departureWaitTime: 30
 --- !u!114 &5848020814946518481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,18 +429,6 @@ MonoBehaviour:
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 3
   dropOffStopDistance: 0.5
---- !u!114 &80898664928263919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3257429934250872482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eced6aae64cab404498af8eeda3fe365, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2513113309571414144
 MonoBehaviour:
   m_ObjectHideFlags: 0

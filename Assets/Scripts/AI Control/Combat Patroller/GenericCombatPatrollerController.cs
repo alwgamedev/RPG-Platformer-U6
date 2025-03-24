@@ -18,7 +18,7 @@ namespace RPGPlatformer.AIControl
         where T4 : CombatPatrollerStateMachine<T3>
         where T5 : CombatPatrollerStateManager<T3, T4, T0, T00, T01, T02, T03, T1, T2>
     {
-        [SerializeField] protected bool playerEnemy = true;
+        //[SerializeField] protected bool playerEnemy = true;
 
         protected override void ConfigureStateManager()
         {
@@ -35,17 +35,17 @@ namespace RPGPlatformer.AIControl
             StateBehavior[stateManager.StateGraph.attack] = patroller.AttackBehavior;
         }
 
-        protected override void InitializeState()
-        {
-            if (playerEnemy)
-            {
-                patroller.SetCombatTarget(GameObject.Find("Player").GetComponent<IHealth>());
-            }
-            else
-            {
-                patroller.SetCombatTarget(null);
-            }
-        }
+        //protected override void InitializeState()
+        //{
+        //    if (playerEnemy)
+        //    {
+        //        patroller.SetCombatTarget(GameObject.Find("Player").GetComponent<IHealth>());
+        //    }
+        //    else
+        //    {
+        //        patroller.SetCombatTarget(null);
+        //    }
+        //}
 
         protected virtual void OnSuspicionExit()
         {

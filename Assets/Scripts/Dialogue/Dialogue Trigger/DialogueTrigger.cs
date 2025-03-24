@@ -42,12 +42,11 @@ namespace RPGPlatformer.Dialogue
             void DialogueBeganHandler(bool val)
             {
                 DialogueBeganSuccessfully?.Invoke(val);
-                DialogueUI.DialogueBeganSuccessfully -= DialogueBeganHandler;
-
                 if (val)
                 {
                     DialogueUI.DialogueEnded += DialogueEndedHandler;
                 }
+                DialogueUI.DialogueBeganSuccessfully -= DialogueBeganHandler;
             }
 
             void DialogueEndedHandler()
@@ -57,19 +56,11 @@ namespace RPGPlatformer.Dialogue
             }
         }
 
-        //public void OnDialogueBeganSuccessfully(bool val)
-        //{
-        //    DialogueBeganSuccessfully?.Invoke(val);
-        //}
-
-        //public void OnDialogueEnded()
-        //{
-        //    DialogueEnded?.Invoke();
-        //}
-
         private void OnDestroy()
         {
             DialogueCancelRequested = null;
+            DialogueBeganSuccessfully = null;
+            DialogueEnded = null;
         }
     }
 }

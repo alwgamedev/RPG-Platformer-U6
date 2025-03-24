@@ -50,7 +50,8 @@ namespace RPGPlatformer.AIControl
 
             patroller.PatrolNavigator.DestinationReached += OnPatrolDestinationReached;
 
-            InitializeState();
+            patroller.InitializeState();
+            //InitializeState();
         }
 
         protected virtual void Update()
@@ -73,10 +74,10 @@ namespace RPGPlatformer.AIControl
             StateBehavior[stateManager.StateGraph.patrol] = patroller.PatrolBehavior;
         }
 
-        protected virtual void InitializeState()
-        {
-            BeginDefaultPatrol();
-        }
+        //protected virtual void InitializeState()
+        //{
+        //    BeginDefaultPatrol();
+        //}
 
         protected void PerformStateBehavior()
         {
@@ -105,7 +106,7 @@ namespace RPGPlatformer.AIControl
         protected virtual void OnPatrolEntry()
         {
             patroller.MovementController.SetRunning(false);
-            patroller.BeginPatrol(defaultPatrolMode, defaultPatrolParameters);
+            BeginDefaultPatrol();
         }
 
         public virtual void BeginDefaultPatrol()
@@ -123,9 +124,9 @@ namespace RPGPlatformer.AIControl
             patroller.BeginPatrol(mode, param);
         }
 
-        public virtual void OnPatrolDestinationReached()
+        protected virtual void OnPatrolDestinationReached()
         {
-            if (Patrolling && !patroller.PatrolNavigator.GetNextDestination())
+            if (!patroller.PatrolNavigator.GetNextDestination())
             {
                 patroller.BeginPatrol(NavigationMode.rest, null);
             }

@@ -21,7 +21,6 @@ namespace RPGPlatformer.UI
             base.Awake();
 
             DialogueTrigger.DialogueTriggered += HandleDialogueTrigger;
-            //DialogueTrigger.DialogueCancelled += EndDialogue;
         }
 
         public void StartDialogue(DialogueTriggerData data)
@@ -103,22 +102,22 @@ namespace RPGPlatformer.UI
                         DialogueEnded -= DialogueEndCombatantHandler;
                     }
                 }
+            }
 
-                trigger.DialogueCancelRequested += EndDialogue;
-                DialogueEnded += DialogueEndTriggerHandler;
+            trigger.DialogueCancelRequested += EndDialogue;
+            DialogueEnded += DialogueEndTriggerHandler;
 
-                void DialogueEndTriggerHandler()
+            void DialogueEndTriggerHandler()
+            {
+                if (trigger != null)
                 {
-                    if (trigger != null)
-                    {
-                        trigger.DialogueCancelRequested -= EndDialogue;
-                    }
-
-                    DialogueEnded -= DialogueEndTriggerHandler;
+                    trigger.DialogueCancelRequested -= EndDialogue;
                 }
 
-                StartDialogue(data);
+                DialogueEnded -= DialogueEndTriggerHandler;
             }
+
+            StartDialogue(data);
         }
 
         private void DisplayDialogueNode(DialogueNode dialogueNode)
