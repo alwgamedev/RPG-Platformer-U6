@@ -167,6 +167,7 @@ MonoBehaviour:
   deathForce: {x: 0, y: 0}
   deathTorque: 0
   treatContactCharacterAsGround: 0
+  adjustedHalfWidthFactor: 0.45
   runSpeed: 2.3
   walkSpeed: 1
   maxNumJumps: 0
@@ -191,21 +192,30 @@ MonoBehaviour:
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 1
+    rotationSpeed: 3.14
     maxRotationAngle: 1.57
     minRotationAngle: -1.57
-    maxRotation: {x: 0.0007962743, y: 0.9999997}
-    minRotation: {x: 0.0007962743, y: -0.9999997}
+    maxRotationRight: {x: 0.0007962743, y: 0.9999997}
+    minRotationRight: {x: 0.0007962743, y: -0.9999997}
+    maxRotationLeft: {x: -0.0007962743, y: 0.9999997}
+    minRotationLeft: {x: -0.0007962743, y: -0.9999997}
   - movementType: 1
     moveDirection: 2
     acceleration: 120
     flipSprite: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
+    rotationSpeed: 0
     maxRotationAngle: 1.57
     minRotationAngle: -1.57
-    maxRotation: {x: 0.0007962743, y: 0.9999997}
-    minRotation: {x: 0.0007962743, y: -0.9999997}
-  detectWalls: 0
+    maxRotationRight: {x: 0.0007962743, y: 0.9999997}
+    minRotationRight: {x: 0.0007962743, y: -0.9999997}
+    maxRotationLeft: {x: -0.0007962743, y: 0.9999997}
+    minRotationLeft: {x: -0.0007962743, y: -0.9999997}
+  wallDetectionOptions:
+    detectWalls: 0
+    numWallCastsPerThird: 0
+    wallCastDistanceFactor: 0
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 3
@@ -349,7 +359,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultPatrolMode: 1
   defaultPatrolParameters: {fileID: 0}
-  playerEnemy: 1
 --- !u!114 &4129447919136715259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,6 +413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pursuitRange: 5
   suspicionTime: 5
+  playerEnemy: 1
 --- !u!114 &7847680296851163206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,6 +430,7 @@ MonoBehaviour:
   boundedPatrolHangTime: 1
   pathPatrolHangTime: 0
   checkHorizontalDistanceOnly: 1
+  hangTimer: 0
 --- !u!1 &6277706183260746356
 GameObject:
   m_ObjectHideFlags: 0

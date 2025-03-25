@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
+    using static MovementTools;
+
     public enum MovementType
     {
         Grounded, Freefall, Jumping, Flying
@@ -16,14 +18,13 @@ namespace RPGPlatformer.Movement
     [Serializable]
     public struct MovementOptions : ISerializationCallbackReceiver
     {
-        const float PI2 = Mathf.PI / 2;
-
         [SerializeField] MovementType movementType;
         [SerializeField] MoveDirection moveDirection;
         [SerializeField] float acceleration;
         [SerializeField] bool flipSprite;
         [SerializeField] bool clampXVelocityOnly;
         [SerializeField] bool rotateToDirection;
+        [SerializeField] float rotationSpeed;
         [Range(-PI2, PI2)][SerializeField] float maxRotationAngle;
         [Range(-PI2, PI2)][SerializeField] float minRotationAngle;
         [SerializeField] Vector2 maxRotationRight;
@@ -37,36 +38,70 @@ namespace RPGPlatformer.Movement
         public bool FlipSprite => flipSprite;
         public bool ClampXVelocityOnly => clampXVelocityOnly;
         public bool RotateToDirection => rotateToDirection;
-        
-        //returns rotation q such that if transformation.rotation = q,
-        //then transform.right points in direction r
+        public float RotationSpeed => rotationSpeed;
 
-        public Quaternion RotateTransformLeftTo(Vector2 l)
+        //given desired transform.right r, this returns the nearest possible transform.up
+        //so that the transform.right is within the max/min rotation range
+        //(feeding in transf r or transf l is convenient for movement, where r/l
+        //will be the move direction we want to face)
+
+        //r,l do NOT have to be unit vectors! (although they usually will be already if come from move directions)
+        public Vector2 ClampedTrUpGivenGoalTrRight(Vector2 r)
         {
-            if (l.y > maxRotationLeft.y)
+            if (r.y * maxRotationRight.x > r.x * maxRotationRight.y)
             {
-                return Quaternion.LookRotation(Vector3.forward, - maxRotationLeft.CCWPerp());
+                return maxRotationRight.CCWPerp();
             }
-            else if (l.y < minRotationLeft.y)
+            else if (r.y * minRotationRight.x < r.x * minRotationRight.y)
             {
-                return Quaternion.LookRotation(Vector3.forward, - minRotationLeft.CCWPerp());
+                return minRotationRight.CCWPerp();
             }
 
-            return Quaternion.LookRotation(Vector3.forward, - l.CCWPerp());
+            return r.CCWPerp();
         }
 
-        public Quaternion RotateTransformRightTo(Vector2 r)
+        public Vector2 ClampedTrUpGivenGoalTrLeft(Vector2 l)
         {
-            if (r.y > maxRotationRight.y)
+            if (l.y * maxRotationLeft.x < l.x * maxRotationLeft.y)
             {
-                return Quaternion.LookRotation(Vector3.forward, maxRotationRight.CCWPerp());
+                return - maxRotationLeft.CCWPerp();
             }
-            else if (r.y < minRotationRight.y)
+            else if (l.y * minRotationLeft.x > l.x * minRotationLeft.y)
             {
-                return Quaternion.LookRotation(Vector3.forward, minRotationRight.CCWPerp());
+                return - minRotationLeft.CCWPerp();
             }
 
-            return Quaternion.LookRotation(Vector3.forward, r.CCWPerp());
+            return - l.CCWPerp();
+        }
+
+        public Quaternion ClampedRotationGivenGoalTrRight(Vector2 r)
+        {
+            return Quaternion.LookRotation(Vector3.forward, ClampedTrUpGivenGoalTrRight(r));
+            //if (r.y > maxRotationRight.y)
+            //{
+            //    return Quaternion.LookRotation(Vector3.forward, maxRotationRight.CCWPerp());
+            //}
+            //else if (r.y < minRotationRight.y)
+            //{
+            //    return Quaternion.LookRotation(Vector3.forward, minRotationRight.CCWPerp());
+            //}
+
+            //return Quaternion.LookRotation(Vector3.forward, r.CCWPerp());
+        }
+
+        public Quaternion ClampedRotationGivenGoalTrLeft(Vector2 l)
+        {
+            return Quaternion.LookRotation(Vector3.forward, ClampedTrUpGivenGoalTrLeft(l));
+            //if (l.y > maxRotationLeft.y)
+            //{
+            //    return Quaternion.LookRotation(Vector3.forward, - maxRotationLeft.CCWPerp());
+            //}
+            //else if (l.y < minRotationLeft.y)
+            //{
+            //    return Quaternion.LookRotation(Vector3.forward, - minRotationLeft.CCWPerp());
+            //}
+
+            //return Quaternion.LookRotation(Vector3.forward, - l.CCWPerp());
         }
 
         public void OnBeforeSerialize()

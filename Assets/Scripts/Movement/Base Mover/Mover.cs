@@ -158,7 +158,7 @@ namespace RPGPlatformer.Movement
 
             if (options.RotateToDirection)
             {
-                RotateToMovementDirection(direction, options);
+                RotateTowardsMovementDirection(direction, options);
             }
 
             var velocity = options.ClampXVelocityOnly ? 
@@ -176,22 +176,31 @@ namespace RPGPlatformer.Movement
 
             if (options.RotateToDirection)
             {
-                RotateToMovementDirection(direction, options);
+                RotateTowardsMovementDirection(direction, options);
             }
 
             myRigidbody.linearVelocity = maxSpeed * direction;
         }
 
-        public void RotateToMovementDirection(Vector2 direction, MovementOptions options)
+        public void RotateTowardsMovementDirection(Vector2 moveDirection, MovementOptions options)
         {
-            if (FacingRight)
-            {
-                transform.rotation = options.RotateTransformRightTo(direction);
-            }
-            else
-            {
-                transform.rotation = options.RotateTransformLeftTo(direction);
-            }
+            var tUp = FacingRight ? options.ClampedTrUpGivenGoalTrRight(moveDirection)
+                : options.ClampedTrUpGivenGoalTrLeft(moveDirection);
+            TweenTransformUpTowards(tUp.normalized, options.RotationSpeed);
+        }
+
+        public void RotateTransformUpTo(Vector2 transformUp)
+        {
+            if (transformUp == Vector2.zero) return;
+            transform.rotation = Quaternion.LookRotation(transform.forward, transformUp);
+        }
+
+        //goal transformUp should be normalized
+        public void TweenTransformUpTowards(Vector2 transformUp, float rotationalSpeed)
+        {
+            var tweened = MovementTools.CheapRotationalTween(transform.up, transformUp, 
+                rotationalSpeed, Time.deltaTime);
+            transform.rotation = Quaternion.LookRotation(transform.forward, tweened);
         }
 
         public virtual void Stop(bool maintainVerticalVelocity = true)
@@ -324,7 +333,8 @@ namespace RPGPlatformer.Movement
         {
             if (FacingWrongDirection())
             {
-                transform.localScale = new Vector3(- transform.localScale.x, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(- transform.localScale.x, 
+                    transform.localScale.y, transform.localScale.z);
                 DirectionChanged.Invoke(CurrentOrientation);
             }
         }
@@ -337,17 +347,6 @@ namespace RPGPlatformer.Movement
                 return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
             }
 
-            //var frontHit = FacingRight ? rightGroundHit : leftGroundHit;
-            //if (frontHit && midGroundHit)
-            //{
-            //    return (frontHit.point - midGroundHit.point).normalized;
-            //}
-
-            //var backHit = FacingRight ? leftGroundHit : rightGroundHit;
-            //if (backHit && midGroundHit)
-            //{
-            //    return (midGroundHit.point - backHit.point).normalized;
-            //}
             return (int)CurrentOrientation * transform.right;
         }
 

@@ -325,8 +325,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   departureWaitTime: 30
-  inFlightGravity: 175
-  defaultGravity: 75
+  inFlightMountGravity: 100
+  defaultMountGravity: 60
 --- !u!114 &5848020814946518481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,8 +367,8 @@ MonoBehaviour:
   maxNumJumps: 0
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
-  inFlightLinearDamping: 50
-  flightSpeed: 0.5
+  inFlightLinearDamping: 75
+  flightSpeed: 3
   takeOffForce: {x: 0, y: 1250}
 --- !u!114 &1519639630161499023
 MonoBehaviour:
@@ -403,31 +403,43 @@ MonoBehaviour:
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 0
+    rotationSpeed: 0
     maxRotationAngle: 0
     minRotationAngle: 0
-    maxRotation: {x: 1, y: 0}
-    minRotation: {x: 1, y: 0}
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
   - movementType: 1
     moveDirection: 2
     acceleration: 80
     flipSprite: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
+    rotationSpeed: 0
     maxRotationAngle: 0
     minRotationAngle: 0
-    maxRotation: {x: 1, y: 0}
-    minRotation: {x: 1, y: 0}
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
   - movementType: 3
     moveDirection: 1
     acceleration: 400
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 1
+    rotationSpeed: 0.79
     maxRotationAngle: 1.4
     minRotationAngle: -0.1
-    maxRotation: {x: 0.16996716, y: 0.98544973}
-    minRotation: {x: 0.9950042, y: -0.09983342}
-  detectWalls: 0
+    maxRotationRight: {x: 0.16996716, y: 0.98544973}
+    minRotationRight: {x: 0.9950042, y: -0.09983342}
+    maxRotationLeft: {x: -0.16996716, y: 0.98544973}
+    minRotationLeft: {x: -0.9950042, y: -0.09983342}
+  wallDetectionOptions:
+    detectWalls: 0
+    numWallCastsPerThird: 0
+    wallCastDistanceFactor: 0
   dropOffHandlingOption: 0
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 3

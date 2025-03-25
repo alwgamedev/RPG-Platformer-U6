@@ -138,6 +138,7 @@ namespace RPGPlatformer.Movement
 
         public void UpdateAdjacentWall(bool grounded, int n, float d)
         {
+
             var origin = ColliderCenterBack + 0.5f * myHeight * transform.up;
             var m = 3 * n;
             var spacing = myHeight / m;

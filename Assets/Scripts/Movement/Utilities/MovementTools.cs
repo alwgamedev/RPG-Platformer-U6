@@ -6,6 +6,7 @@ namespace RPGPlatformer.Movement
     {
         public const float tan60 = 1.73f;
         public const float tan75 = 3.73f;
+        public const float PI2 = Mathf.PI / 2;
 
         //this is the trajectory of the mover.ColliderCenterBottom point
         //assumes velocity will only be acted on by gravity (e.g. moveSpeed will not change during the trajectory)
@@ -26,6 +27,16 @@ namespace RPGPlatformer.Movement
         public static Vector2 CCWPerp(this Vector2 v)
         {
             return new Vector2(-v.y, v.x);
+        }
+
+        //approximately rotates from unit vector d1 towards d2 at given rotationalSpeed over time dt.
+        //We do take a magnitude but it's better than inverse trig fcts.
+        //d1 and d2 should be normalized, but return value will not be.
+        //Rotational speed in radians per second.
+        public static Vector2 CheapRotationalTween(Vector2 d1, Vector2 d2, float rotationalSpeed, float dt)
+        {
+            var d = d2 - d1;
+            return d1 + (rotationalSpeed / d.magnitude ) * dt * d;
         }
     }
 }
