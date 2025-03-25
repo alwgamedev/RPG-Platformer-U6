@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEditor;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -9,6 +11,9 @@ namespace RPGPlatformer.Movement
         where T3 : HybridFlyerStateManager<T1, T2, T0>
     {
         public bool Flying => movementManager.StateMachine.CurrentState == movementManager.StateGraph.flying;
+
+        public event Action OnFlightEntry;
+        public event Action OnFlightExit;
 
         protected override void ConfigureMovementManager()
         {
@@ -89,6 +94,7 @@ namespace RPGPlatformer.Movement
             UpdateMaxSpeed();
             mover.SetLinearDamping(true);
             movementManager.OnFlyingEntry();
+            OnFlightEntry?.Invoke();
         }
 
         protected virtual void OnFlyingExit()
@@ -96,15 +102,15 @@ namespace RPGPlatformer.Movement
             UpdateMaxSpeed();
             movementManager.OnFlyingExit();
             mover.SetLinearDamping(false);
+            OnFlightExit?.Invoke();
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
 
-        //MOVE ACTIONS
-
-        //protected virtual void FlyingMoveAction(Vector2 input)
-        //{
-        //    SetOrientation(input);
-        //    mover.MoveFlying(input, matchRotationWhileFlying);
-        //}
+            OnFlightEntry = null;
+            OnFlightExit = null;
+        }
     }
 }

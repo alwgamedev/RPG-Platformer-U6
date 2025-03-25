@@ -11,6 +11,11 @@ namespace RPGPlatformer.Movement
         public Vector2 Velocity { get; }
 
         public event Action<HorizontalOrientation> DirectionChanged;
+        public event Action<IMounter> Mounted;
+        public event Action<IMounter> MountStay;
+        public event Action<IMounter> Dismounted;
         public event Action Destroyed;
+
+        public void EnableTriggerStay(bool val);
     }
 }

@@ -48,7 +48,7 @@ namespace RPGPlatformer.AIControl
 
             if (CurrentTarget != null)
             {
-                TriggerSuspicion();
+                Trigger(typeof(Suspicion).Name);
             }
             else
             {
@@ -131,11 +131,11 @@ namespace RPGPlatformer.AIControl
         {
             if (!TryGetDistanceSqrd(CurrentTarget, out var d, out var t))
             {
-                TriggerSuspicion();
+                Trigger(typeof(Suspicion).Name);
             }
             else if (!CombatController.Combatant.CanAttack(d, t))
             {
-                TriggerPursuit();
+                Trigger(typeof(Pursuit).Name);
             }
             else
             {
@@ -214,14 +214,14 @@ namespace RPGPlatformer.AIControl
             return false;
         }
 
-        protected virtual void TriggerSuspicion()
-        {
-            Trigger(typeof(Suspicion).Name);
-        }
+        //protected virtual void TriggerSuspicion()
+        //{
+        //    Trigger(typeof(Suspicion).Name);
+        //}
 
-        protected virtual void TriggerPursuit()
-        {
-            Trigger(typeof(Pursuit).Name);
-        }
+        //protected virtual void TriggerPursuit()
+        //{
+        //    Trigger(typeof(Pursuit).Name);
+        //}
     }
 }

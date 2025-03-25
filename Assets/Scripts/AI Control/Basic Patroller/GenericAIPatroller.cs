@@ -33,7 +33,7 @@ namespace RPGPlatformer.AIControl
 
         public virtual void InitializeState()
         {
-            TriggerPatrol();
+            Trigger(typeof(Patrol).Name);
         }
 
         public virtual void BeginPatrol(NavigationMode mode, NavigationParameters p)
@@ -60,10 +60,10 @@ namespace RPGPlatformer.AIControl
         //    }
         //}
 
-        protected virtual void TriggerPatrol()
-        {
-            Trigger(typeof(Patrol).Name);
-        }
+        //protected virtual void TriggerPatrol()
+        //{
+        //    Trigger(typeof(Patrol).Name);
+        //}
 
         protected override void OnDestroy()
         {

@@ -7,5 +7,7 @@
         public void Mount(IMountableEntity entity);
 
         public void Dismount();
+
+        public bool CompareTag(string tag);
     }
 }

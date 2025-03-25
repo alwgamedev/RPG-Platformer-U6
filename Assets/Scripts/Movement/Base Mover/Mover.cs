@@ -38,6 +38,8 @@ namespace RPGPlatformer.Movement
         public virtual float MaxSpeed { get; set; }
         public float Width => myWidth;
         public float Height => myHeight;
+        public bool VerifyingFreefall => verifyingFreefall;
+        public bool VerifyingJump => verifyingJump;
         public Vector3 ColliderCenterRight => myCollider.bounds.center + adjustedHalfWidth * transform.right;
         public Vector3 ColliderCenterLeft => myCollider.bounds.center - adjustedHalfWidth * transform.right;
         public Vector3 ColliderCenterFront => myCollider.bounds.center + adjustedHalfWidth
@@ -250,7 +252,7 @@ namespace RPGPlatformer.Movement
             {
                 PrepareFreefallVerification(cts);
                 verifyingFreefall = true;
-                await Task.Delay(200, cts.Token);
+                await Task.Delay(100, cts.Token);
                 verifyingFreefall = false;
                 if (!leftGroundHit && !rightGroundHit)
                 {

@@ -30,6 +30,7 @@ namespace RPGPlatformer.AIControl
             returningToNest = CreateNewVertex<ReturningToNest>();
 
             AddEdgeBothWays((patrol, awaitingDeparture));//can return to patrol if departure times out
+            AddEdge((awaitingDeparture, shuttling));
             AddEdge((shuttling, returningToNest));
             AddEdge((returningToNest, patrol));
 

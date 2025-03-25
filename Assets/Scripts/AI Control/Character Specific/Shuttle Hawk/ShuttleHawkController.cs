@@ -38,6 +38,7 @@ namespace RPGPlatformer.AIControl
 
             stateManager.StateGraph.awaitingDeparture.OnEntry += OnAwaitingDepartureEntry;
             stateManager.StateGraph.patrol.OnExit += OnPatrolExit;
+            stateManager.StateGraph.shuttling.OnEntry += OnShuttlingEntry;
 
             StateBehavior[stateManager.StateGraph.awaitingDeparture] = patroller.AwaitingDepartureBehavior;
             StateBehavior[stateManager.StateGraph.shuttling] = patroller.PatrolBehavior;
@@ -55,6 +56,11 @@ namespace RPGPlatformer.AIControl
         private void OnPatrolExit()
         {
             npc.SetCursorTypeAndPrimaryAction(CursorType.Default);
+        }
+
+        private void OnShuttlingEntry()
+        {
+            patroller.ShuttleDeparture(flightPath);
         }
 
         private void OnAwaitingDepartureEntry()

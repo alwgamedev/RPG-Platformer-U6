@@ -65,7 +65,7 @@ namespace RPGPlatformer.Movement
 
             BuildMovementOptionsDictionary();
 
-            OnFixedUpdate += HandleMoveInput;
+            InitializeFixedUpdate();
         }
 
         protected virtual void Start()
@@ -88,8 +88,13 @@ namespace RPGPlatformer.Movement
 
             if (CurrentMount != null && Grounded)
             {
-                mover.Rigidbody.linearVelocity -= Time.deltaTime * CurrentMount.LocalGravity;
+                mover.Rigidbody.linearVelocity += Time.deltaTime * CurrentMount.LocalGravity;
             }
+        }
+
+        protected virtual void InitializeFixedUpdate()
+        {
+            OnFixedUpdate += HandleMoveInput;
         }
 
         protected virtual void BuildMovementOptionsDictionary()
@@ -212,7 +217,7 @@ namespace RPGPlatformer.Movement
 
         public virtual float SpeedFraction(float maxSpeed)
         {
-            return RelativeVelocity.magnitude / maxSpeed;
+            return RelativeVelocity.sqrMagnitude / (maxSpeed * maxSpeed);
         }
 
         //note: can return negative (which you may want if you want animator to clamp negative to 0)

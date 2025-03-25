@@ -1,14 +1,42 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Movement;
+using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
     public class ShuttleHawk : HybridFlyerPatroller
     {
         [SerializeField] float departureWaitTime = 30;
+        [SerializeField] float inFlightGravity = 100;
+        [SerializeField] float defaultGravity = 60;
 
         float waitingForDepartureEntryTime;
         bool readyForDeparture;
         bool playerHasMounted;
+
+        MountableEntity[] mounts;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            mounts = GetComponentsInChildren<MountableEntity>();
+        }
+
+        private void Start()
+        {
+            SetMountGravity(defaultGravity);
+
+            MovementController.OnFlightEntry += () => SetMountGravity(inFlightGravity);
+            MovementController.OnFlightExit += () => SetMountGravity(defaultGravity);
+        }
+
+        public void SetMountGravity(float gravity)
+        {
+            foreach (var mount in mounts)
+            {
+                mount.SetLocalGravity(gravity);
+            }
+        }
 
         public void PrepareForDeparture()
         {
@@ -26,13 +54,17 @@ namespace RPGPlatformer.AIControl
         {
             if (readyForDeparture && playerHasMounted)
             {
-                Debug.Log("take off!");
-                //return;
+                Trigger(typeof(Shuttling).Name);
+                return;
             }
 
             if (readyForDeparture && Time.time - waitingForDepartureEntryTime > departureWaitTime)
             {
-                TriggerPatrol();
+                Trigger(typeof(Patrol).Name);
+                if (!playerHasMounted)
+                {
+                    SubscribeMountedHandler(false);
+                };
                 return;
             }
 
@@ -41,10 +73,45 @@ namespace RPGPlatformer.AIControl
 
         public void ReadyForDeparture()
         {
-            Debug.Log("readying for departure");
             readyForDeparture = true;
             playerHasMounted = false;
             waitingForDepartureEntryTime = Time.time;
+
+            SubscribeMountedHandler(true);
+        }
+
+        public void ShuttleDeparture(PatrolPath flightPath)
+        {
+            BeginPatrol(NavigationMode.pathForwards, flightPath);
+            MovementController.BeginFlying();
+        }
+
+        private void MountedHandler(IMounter mounter)
+        {
+            if (mounter.CompareTag("Player"))
+            {
+                playerHasMounted = true;
+                SubscribeMountedHandler(false);
+            }
+        }
+
+        private void SubscribeMountedHandler(bool val)
+        {
+            foreach (var mount in mounts)
+            {
+                if (val)
+                {
+                    mount.EnableTriggerStay(true);
+                    mount.Mounted += MountedHandler;
+                    mount.MountStay += MountedHandler;
+                }
+                else
+                {
+                    mount.EnableTriggerStay(false);
+                    mount.Mounted -= MountedHandler;
+                    mount.MountStay -= MountedHandler;
+                }
+            }
         }
     }
 }

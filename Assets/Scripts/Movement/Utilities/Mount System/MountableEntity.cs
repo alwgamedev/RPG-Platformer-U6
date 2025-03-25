@@ -10,17 +10,21 @@ namespace RPGPlatformer.Movement
         [SerializeField] Transform mountPlatformMin;
         [SerializeField] TriggerColliderMessenger mountTrigger;
         [SerializeField] float localGravity;
+        [SerializeField] bool checkTriggerStay;
 
         HorizontalOrientation currentOrientation;
 
         public Vector3 VelocitySourceTransformRight => velocitySource.transform.right;
         public Vector2 LocalGravity
-            => (int)currentOrientation * localGravity 
+            => - (int)currentOrientation * localGravity 
             * ((Vector2)(mountPlatformMax.position - mountPlatformMin.position)).normalized.CCWPerp();
         public Vector3 Position => velocitySource.transform.position;
         public Vector2 Velocity => velocitySource.linearVelocity;
 
         public event Action<HorizontalOrientation> DirectionChanged;
+        public event Action<IMounter> Mounted;
+        public event Action<IMounter> MountStay;
+        public event Action<IMounter> Dismounted;
         public event Action Destroyed;
 
         private void Awake()
@@ -37,6 +41,27 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        public void SetLocalGravity(float localGravity)
+        {
+            this.localGravity = localGravity;
+        }
+
+        public void EnableTriggerStay(bool val)
+        {
+            if (val == checkTriggerStay) return;
+
+            checkTriggerStay = val;
+
+            if (val)
+            {
+                mountTrigger.TriggerStay += MountTriggerStay;
+            }
+            else
+            {
+                mountTrigger.TriggerStay -= MountTriggerStay;
+            }
+        }
+
         private void VelocitySourceDirectionChanged(HorizontalOrientation o)
         {
             currentOrientation = o;
@@ -45,9 +70,27 @@ namespace RPGPlatformer.Movement
 
         private void MountTriggerEnter(Collider2D collider)
         {
-            if (collider.gameObject.TryGetComponent(out IMounter mounter))
+            if (collider.gameObject.TryGetComponent(out IMounter mounter) 
+                && mounter.CurrentMount != (IMountableEntity)this)
             {
                 mounter.Mount(this);
+                Mounted?.Invoke(mounter);
+            }
+        }
+
+        private void MountTriggerStay(Collider2D collider)
+        {
+            if (collider.gameObject.TryGetComponent(out IMounter mounter))
+            {
+                if (mounter.CurrentMount != (IMountableEntity)this)
+                { 
+                    mounter.Mount(this);
+                    Mounted?.Invoke(mounter);
+                }
+                else
+                {
+                    MountStay?.Invoke(mounter);
+                }
             }
         }
 
@@ -57,6 +100,7 @@ namespace RPGPlatformer.Movement
                 && mounter.CurrentMount == (IMountableEntity)this)
             {
                 mounter.Dismount();
+                Dismounted?.Invoke(mounter);
             }
         }
 
@@ -65,6 +109,8 @@ namespace RPGPlatformer.Movement
             Destroyed?.Invoke();
 
             DirectionChanged = null;
+            Mounted = null;
+            MountStay = null;
             Destroyed = null;
 
         }

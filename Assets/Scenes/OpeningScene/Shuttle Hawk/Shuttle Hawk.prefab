@@ -222,7 +222,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1500
+  m_Mass: 2500
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
@@ -325,6 +325,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   departureWaitTime: 30
+  inFlightGravity: 125
+  defaultGravity: 90
 --- !u!114 &5848020814946518481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,7 +361,7 @@ MonoBehaviour:
   deathForce: {x: 120, y: 120}
   deathTorque: 10
   treatContactCharacterAsGround: 0
-  adjustedHalfWidthFactor: 0.15
+  adjustedHalfWidthFactor: 0.08
   runSpeed: 1.5
   walkSpeed: 0.4
   maxNumJumps: 0
@@ -367,7 +369,7 @@ MonoBehaviour:
   doubleJumpForceMultiplier: 1.18
   inFlightLinearDamping: 50
   flightSpeed: 0.5
-  takeOffForce: {x: 0, y: 750}
+  takeOffForce: {x: 0, y: 1300}
 --- !u!114 &1519639630161499023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,7 +399,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 100
+    acceleration: 160
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 0
@@ -417,7 +419,7 @@ MonoBehaviour:
     minRotation: {x: 1, y: 0}
   - movementType: 3
     moveDirection: 1
-    acceleration: 500
+    acceleration: 1500
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 1
@@ -634,7 +636,7 @@ Transform:
   m_GameObject: {fileID: 7862475031794593128}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.51, y: 1.13, z: 0}
+  m_LocalPosition: {x: -0.98, y: -2.64, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -665,7 +667,7 @@ Transform:
   m_GameObject: {fileID: 8669477947862795333}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.24, y: -0.55, z: 0}
+  m_LocalPosition: {x: 12.02, y: -0.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1078,6 +1080,7 @@ MonoBehaviour:
   mountPlatformMin: {fileID: 5800931583846263568}
   mountTrigger: {fileID: 7345384770179631332}
   localGravity: 75
+  checkTriggerStay: 0
 --- !u!4 &7308355462448825423 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
@@ -1139,14 +1142,16 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 13.392964, y: -0.71622145}
-      - {x: 13.895799, y: -0.07818117}
+    - - {x: 13.054876, y: -0.104630075}
+      - {x: 14.06554, y: 0.5829996}
       - {x: 14.158295, y: 1.5628643}
       - {x: 14.421762, y: 4.1468315}
       - {x: -0.06298804, y: 9.483545}
       - {x: -4.668584, y: 3.3680472}
       - {x: -3.156211, y: -2.2777803}
-      - {x: 10.880425, y: -0.8798788}
+      - {x: -0.9613796, y: -2.7335823}
+      - {x: 6.235895, y: -1.595015}
+      - {x: 12.241527, y: -0.59575593}
   m_UseDelaunayMesh: 0
 --- !u!114 &4018914529200880135
 MonoBehaviour:
@@ -1165,3 +1170,4 @@ MonoBehaviour:
   mountPlatformMin: {fileID: 7729783769299370431}
   mountTrigger: {fileID: 4389421961141597446}
   localGravity: 60
+  checkTriggerStay: 0

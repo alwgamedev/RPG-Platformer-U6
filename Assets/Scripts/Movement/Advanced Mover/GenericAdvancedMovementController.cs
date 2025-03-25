@@ -18,12 +18,17 @@ namespace RPGPlatformer.Movement
             base.Start();
 
             UpdateMaxSpeed();
-            OnUpdate += AnimateMovement;
 
             if (detectWalls)
             {
                 ConfigureWallDetection();
             }
+        }
+
+        protected override void InitializeFixedUpdate()
+        {
+            OnFixedUpdate += AnimateMovement;//do this first so that we animate based on actual resultant velocity
+            base.InitializeFixedUpdate();
         }
 
         protected virtual void ConfigureWallDetection()
@@ -66,7 +71,10 @@ namespace RPGPlatformer.Movement
 
         protected virtual void AnimateMovement()
         {
-            movementManager.AnimateMovement(SpeedFraction(mover.RunSpeed));
+            if (!mover.VerifyingFreefall)
+            {
+                movementManager.AnimateMovement(SpeedFraction(mover.RunSpeed));
+            }
         }
 
         protected virtual void SetDownSpeed()
