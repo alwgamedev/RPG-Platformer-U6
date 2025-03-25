@@ -311,7 +311,8 @@ namespace RPGPlatformer.Movement
             OnJump -= cts.Cancel;
         }
 
-        public virtual void SetOrientation(HorizontalOrientation orientation, bool updateDirectionFaced)
+        public virtual void SetOrientation(HorizontalOrientation orientation, bool updateDirectionFaced, 
+            bool flipWrtGlobalUp)
         {
             if (orientation != CurrentOrientation)
             {
@@ -319,7 +320,7 @@ namespace RPGPlatformer.Movement
 
                 if (updateDirectionFaced)
                 {
-                    UpdateDirectionFaced();
+                    UpdateDirectionFaced(flipWrtGlobalUp);
                 }
             }
         }
@@ -329,12 +330,16 @@ namespace RPGPlatformer.Movement
             return (int)CurrentOrientation * transform.localScale.x < 0;
         }
 
-        public virtual void UpdateDirectionFaced()
+        public virtual void UpdateDirectionFaced(bool flipWrtGlobalUp)
         {
             if (FacingWrongDirection())
             {
                 transform.localScale = new Vector3(- transform.localScale.x, 
                     transform.localScale.y, transform.localScale.z);
+                if (flipWrtGlobalUp)
+                {
+                    transform.up = MovementTools.ReflectAlongUnitVector(Vector3.right, transform.up);
+                }
                 DirectionChanged.Invoke(CurrentOrientation);
             }
         }

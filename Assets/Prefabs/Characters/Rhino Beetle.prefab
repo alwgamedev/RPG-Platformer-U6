@@ -188,11 +188,12 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 150
+    acceleration: 85
     flipSprite: 1
+    changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
     rotateToDirection: 1
-    rotationSpeed: 3.14
+    rotationSpeed: 1.58
     maxRotationAngle: 1.57
     minRotationAngle: -1.57
     maxRotationRight: {x: 0.0007962743, y: 0.9999997}
@@ -201,8 +202,9 @@ MonoBehaviour:
     minRotationLeft: {x: -0.0007962743, y: -0.9999997}
   - movementType: 1
     moveDirection: 2
-    acceleration: 120
+    acceleration: 60
     flipSprite: 0
+    changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
     rotationSpeed: 0
@@ -357,7 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3721482397e32784a9209dc64e5f4195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultPatrolMode: 1
+  defaultPatrolMode: 2
   defaultPatrolParameters: {fileID: 0}
 --- !u!114 &4129447919136715259
 MonoBehaviour:

@@ -29,14 +29,23 @@ namespace RPGPlatformer.Movement
             return new Vector2(-v.y, v.x);
         }
 
-        //approximately rotates from unit vector d1 towards d2 at given rotationalSpeed over time dt.
-        //We do take a magnitude but it's better than inverse trig fcts.
-        //d1 and d2 should be normalized, but return value will not be.
-        //Rotational speed in radians per second.
+        /// <summary>
+        /// Approximately rotates unit vector d1 towards unit vector d2 at given rotational speed (rad/sec)
+        /// for time ellapsed dt.
+        /// </summary>
         public static Vector2 CheapRotationalTween(Vector2 d1, Vector2 d2, float rotationalSpeed, float dt)
         {
             var d = d2 - d1;
             return d1 + (rotationalSpeed / d.magnitude ) * dt * d;
+        }
+
+        /// <summary>
+        /// Reflect v along axis u (u assumed to be unit vector). 
+        /// (I.e. reflect across hyperplane spanned by v and u x v).
+        /// </summary>
+        public static Vector3 ReflectAlongUnitVector(Vector3 u, Vector3 v)
+        {
+            return v - 2 * Vector3.Dot(u, v) * u;
         }
     }
 }

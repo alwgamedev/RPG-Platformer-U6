@@ -187,10 +187,15 @@ namespace RPGPlatformer.Movement
             SetOrientation(target - transform.position);
         }
 
-        public virtual void SetOrientation(Vector2 input, bool updateDirectionFaced = true)
+        public virtual void SetOrientation(Vector2 input)
+        {
+            SetOrientation(input, currentMovementOptions.FlipSprite, currentMovementOptions.ChangeDirectionWrtGlobalUp);
+        }
+
+        public virtual void SetOrientation(Vector2 input, bool updateDirectionFaced, bool flipWrtGlobalUp) 
         {
             if (input.x == 0) return;
-            mover.SetOrientation((HorizontalOrientation)Mathf.Sign(input.x), updateDirectionFaced);
+            mover.SetOrientation((HorizontalOrientation)Mathf.Sign(input.x), updateDirectionFaced, flipWrtGlobalUp);
         }
 
         public virtual void SoftStop()
@@ -267,7 +272,8 @@ namespace RPGPlatformer.Movement
         {
             //flip direction rather than just SetDirection(o)
             //bc e.g. we may have been facing backwards on the mount before
-            mover.SetOrientation((HorizontalOrientation)(-(int)CurrentOrientation), currentMovementOptions.FlipSprite);
+            mover.SetOrientation((HorizontalOrientation)(-(int)CurrentOrientation), currentMovementOptions.FlipSprite,
+                currentMovementOptions.ChangeDirectionWrtGlobalUp);
             var d = Vector2.Dot(transform.position - CurrentMount.Position, CurrentMount.VelocitySourceTransformRight);
             transform.position -= 2 * d * CurrentMount.VelocitySourceTransformRight;
         }
@@ -284,7 +290,7 @@ namespace RPGPlatformer.Movement
         {
             if (moveInput != Vector2.zero)
             {
-                SetOrientation(moveInput, currentMovementOptions.FlipSprite);
+                SetOrientation(moveInput);
                 if (!ignoreMoveInputThisFrame)
                 {
                     Move(moveInput);
@@ -311,7 +317,7 @@ namespace RPGPlatformer.Movement
 
         protected void OnFreefallExit()
         {
-            mover.UpdateDirectionFaced();
+            mover.UpdateDirectionFaced(currentMovementOptions.ChangeDirectionWrtGlobalUp);
         }
 
 

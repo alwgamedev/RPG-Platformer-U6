@@ -22,6 +22,7 @@ namespace RPGPlatformer.Movement
         [SerializeField] MoveDirection moveDirection;
         [SerializeField] float acceleration;
         [SerializeField] bool flipSprite;
+        [SerializeField] bool changeDirectionWrtGlobalUp;
         [SerializeField] bool clampXVelocityOnly;
         [SerializeField] bool rotateToDirection;
         [SerializeField] float rotationSpeed;
@@ -36,6 +37,7 @@ namespace RPGPlatformer.Movement
         public MoveDirection MoveDirection => moveDirection;
         public float Acceleration => acceleration;
         public bool FlipSprite => flipSprite;
+        public bool ChangeDirectionWrtGlobalUp => changeDirectionWrtGlobalUp;
         public bool ClampXVelocityOnly => clampXVelocityOnly;
         public bool RotateToDirection => rotateToDirection;
         public float RotationSpeed => rotationSpeed;
