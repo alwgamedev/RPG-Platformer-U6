@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
-using RPGPlatformer.SceneManagement;
+using UnityEditor;
 
 namespace RPGPlatformer.UI
 {
@@ -15,18 +15,21 @@ namespace RPGPlatformer.UI
     public class CursorManager : MonoBehaviour
     {
         [SerializeField] Texture2D defaultCursor;
+        [SerializeField] Texture2D defaultCursorClicked;
         [SerializeField] Texture2D dialogueCursor;
+        [SerializeField] Texture2D dialogueCursorClicked;
         [SerializeField] Texture2D lootCursor;
+        [SerializeField] Texture2D lootCursorClicked;
         [SerializeField] Texture2D enterDoorCursor;//maybe also for portals
-        //[SerializeField] Texture2D openShopCursor;
-        //[SerializeField] Texture2D openBank;
+        [SerializeField] Texture2D enterDoorCursorClicked;
         [SerializeField] AnimatedCursorSO focusingRedCrosshairs;
         [SerializeField] AnimatedCursorSO blinkingGreenCrosshairs;
         [SerializeField] AnimatedCursorSO blinkingYellowCrosshairs;
 
         Action OnUpdate;
-        Dictionary<CursorType, (Texture2D, Vector2)> CursorLookup = new();
+        Dictionary<CursorType, (Texture2D, Texture2D, Vector2)> CursorLookup = new();
         bool animatedCursorEquipped;
+        CursorType currentCursorType;
 
         private void Awake()
         {
@@ -41,7 +44,7 @@ namespace RPGPlatformer.UI
             {
                 if (animatedCursorEquipped)
                 {
-                    EquipCursor(CursorType.Default, true);
+                    EquipCursor(CursorType.Default, false, true);
                 }
             };
             playerCombatController.OnPowerUpStarted += () => EquipAnimatedCursor(blinkingYellowCrosshairs);
@@ -49,7 +52,7 @@ namespace RPGPlatformer.UI
 
             InteractableGameObject.HoveredIGOChanged += EquipIGOHoverCursor;
 
-            EquipCursor(CursorType.Default, true);
+            EquipCursor(CursorType.Default, false, true);
         }
 
         private void Update()
@@ -57,26 +60,41 @@ namespace RPGPlatformer.UI
             OnUpdate?.Invoke();
         }
 
+        private void OnGUI()
+        {
+            if (Event.current.type == EventType.MouseDown)
+            {
+                EquipCursor(currentCursorType, true);
+            }
+            else if (Event.current.type == EventType.MouseUp)
+            {
+                EquipCursor(currentCursorType);
+            }
+        }
+
         private void EquipIGOHoverCursor()
         {
             InteractableGameObject igo = InteractableGameObject.HoveredIGO;
             if (igo)
             {
-                EquipCursor(igo.CursorType, false);
+                EquipCursor(igo.CursorType);
             }
             else
             {
-                EquipCursor(CursorType.Default, false);
+                EquipCursor(CursorType.Default);
             }
         }
 
-        private void EquipCursor(CursorType cursorType, bool allowOverrideAnimatedCursor)
+        private void EquipCursor(CursorType cursorType, bool clicked = false, 
+            bool allowOverrideAnimatedCursor = false)
         {
             if (animatedCursorEquipped && !allowOverrideAnimatedCursor) return;
 
             if (CursorLookup.TryGetValue(cursorType, out var cursorData) && cursorData.Item1 != null)
             {
-                EquipStaticCursor(cursorData.Item1, cursorData.Item2);
+                currentCursorType = cursorType;
+                var texture = clicked && cursorData.Item2 != null ? cursorData.Item2 : cursorData.Item1;
+                EquipStaticCursor(texture, cursorData.Item3);
             }
         }
 
@@ -112,10 +130,10 @@ namespace RPGPlatformer.UI
         private void BuildCursorLookup()
         {
             CursorLookup.Clear();
-            CursorLookup.Add(CursorType.Default, (defaultCursor, default));
-            CursorLookup.Add(CursorType.Dialogue, (dialogueCursor, default));
-            CursorLookup.Add(CursorType.Loot, (lootCursor, default));
-            CursorLookup.Add(CursorType.EnterDoor, (enterDoorCursor, default));
+            CursorLookup.Add(CursorType.Default, (defaultCursor, defaultCursorClicked, default));
+            CursorLookup.Add(CursorType.Dialogue, (dialogueCursor, dialogueCursorClicked, default));
+            CursorLookup.Add(CursorType.Loot, (lootCursor, lootCursorClicked, default));
+            CursorLookup.Add(CursorType.EnterDoor, (enterDoorCursor, enterDoorCursorClicked, default));
         }
 
         private void OnDestroy()
