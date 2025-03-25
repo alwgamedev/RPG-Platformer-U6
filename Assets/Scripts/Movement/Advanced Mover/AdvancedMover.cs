@@ -80,60 +80,119 @@ namespace RPGPlatformer.Movement
             transform.rotation = Quaternion.identity;
         }
 
-        public void UpdateAdjacentWall(bool airborne)
+        //public void UpdateAdjacentWall(bool airborne)
+        //{
+        //    if (verifyingJump)
+        //    {
+        //        NoAdjacentWall();
+        //        return;
+        //    }
+
+        //    //TO-DO: add more hits
+
+        //    var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
+        //        (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
+        //    var midHit = Physics2D.Raycast(ColliderCenterBack + 0.1f * myHeight * Vector3.up, 
+        //        (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground")); 
+        //    var lowerHit = Physics2D.Raycast(ColliderCenterBack - 0.2f * myHeight * Vector3.up,
+        //        (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
+
+        //    //Debug.DrawLine(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
+        //    //    ColliderCenterBack + 0.4f * myHeight * Vector3.up + 1.75f * myWidth
+        //    //    * (int)CurrentOrientation * Vector3.right, Color.blue);
+        //    //Debug.DrawLine(ColliderCenterBack + 0.1f * myHeight * Vector3.up, ColliderCenterBack
+        //    //    + 0.1f * myHeight * Vector3.up + 1.75f * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
+        //    //Debug.DrawLine(ColliderCenterBack - 0.2f * myHeight * Vector3.up,
+        //    //    ColliderCenterBack - 0.2f * myHeight * Vector3.up + 1.75f * myWidth
+        //    //    * (int)CurrentOrientation * Vector3.right, Color.blue);
+
+        //    if (midHit && lowerHit)
+        //    {
+        //        facingWall = true;
+        //        adjacentWallDirection = midHit.point - lowerHit.point;
+        //        return;
+        //    }
+        //    else if (midHit && upperHit)
+        //    {
+        //        facingWall = true;
+        //        adjacentWallDirection = upperHit.point - midHit.point;
+        //        return;
+        //    }
+        //    else if (!midHit && upperHit)
+        //    {
+        //        facingWall = true;
+        //        adjacentWallDirection = Vector3.up;
+        //        return;
+        //    }
+        //    else if (midHit || lowerHit)
+        //    {
+        //        if (airborne)
+        //        {
+        //            TriggerLanding();
+        //            AwkwardWallMoment?.Invoke();
+        //        }
+        //    }
+
+        //    NoAdjacentWall();
+        //}
+
+        public void UpdateAdjacentWall(bool grounded, int n, float d)
         {
-            if (verifyingJump)
+            var origin = ColliderCenterBack + 0.5f * myHeight * transform.up;
+            var m = 3 * n;
+            var spacing = myHeight / m;
+            if (grounded)
             {
-                NoAdjacentWall();
-                return;
+                spacing *= 0.95f;//to avoid feet casts hitting against steep slopes while walking
             }
+            var delta = - spacing * transform.up;
+            var length = d * myWidth;
+            var lengthN = length / n;
+            var direction = (int)CurrentOrientation * transform.right;
 
-            //TO-DO: add more hits
+            var firstHit = Vector2.zero;
+            var firstHitIndex = -1;
+            int m2 = m / 2;
 
-            var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
-                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
-            var midHit = Physics2D.Raycast(ColliderCenterBack + 0.1f * myHeight * Vector3.up, 
-                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground")); 
-            var lowerHit = Physics2D.Raycast(ColliderCenterBack - 0.2f * myHeight * Vector3.up,
-                (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
-
-            //Debug.DrawLine(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
-            //    ColliderCenterBack + 0.4f * myHeight * Vector3.up + 1.75f * myWidth
-            //    * (int)CurrentOrientation * Vector3.right, Color.blue);
-            //Debug.DrawLine(ColliderCenterBack + 0.1f * myHeight * Vector3.up, ColliderCenterBack
-            //    + 0.1f * myHeight * Vector3.up + 1.75f * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
-            //Debug.DrawLine(ColliderCenterBack - 0.2f * myHeight * Vector3.up,
-            //    ColliderCenterBack - 0.2f * myHeight * Vector3.up + 1.75f * myWidth
-            //    * (int)CurrentOrientation * Vector3.right, Color.blue);
-
-            if (midHit && lowerHit)
+            //break height into thirds, each third having n pieces (total of 3n + 1 hits to check)
+            for(int i = 0; i < m + 1; i++)
             {
-                facingWall = true;
-                adjacentWallDirection = midHit.point - lowerHit.point;
-                return;
-            }
-            else if (midHit && upperHit)
-            {
-                facingWall = true;
-                adjacentWallDirection = upperHit.point - midHit.point;
-                return;
-            }
-            else if (!midHit && upperHit)
-            {
-                facingWall = true;
-                adjacentWallDirection = Vector3.up;
-                return;
-            }
-            else if (midHit || lowerHit)
-            {
-                if (airborne)
+                if (i > 2 * n && grounded)
                 {
-                    TriggerLanding();
-                    AwkwardWallMoment?.Invoke();
+                    length -= lengthN;//to avoid feet casts hitting against steep slopes while walking
+                }
+
+                var hit = Physics2D.Raycast(origin + i * delta, direction, length, groundLayer);
+                //Debug.DrawLine(origin + i * delta, origin + i * delta + direction * length, Color.red);
+
+                if (!hit)
+                {
+                    continue;
+                }
+                else if (firstHitIndex == -1)
+                {
+                    firstHit = hit.point;
+                    firstHitIndex = i;
+                    if (i > m2)
+                    {
+                        break;
+                    }
+                }
+                else if (firstHitIndex <= m2 && i - firstHitIndex >= n)
+                {
+                    facingWall = true;
+                    adjacentWallDirection = firstHit - hit.point;
+                    return;
                 }
             }
 
             NoAdjacentWall();
+
+            //in this case there may have been a second hit, but not in a way that counts as wall clinging
+            if (firstHitIndex != -1 && (!grounded || firstHitIndex < 0.75f * m))
+            {
+                AwkwardWallMoment?.Invoke();
+            }
         }
 
         protected virtual void NoAdjacentWall()
@@ -149,19 +208,21 @@ namespace RPGPlatformer.Movement
         {
             distanceInFront = Mathf.Infinity;
             float spacing = 0.08f;
-            maxHeight += 0.5f * myHeight;//shifting up higher to help detect step-ups
+            maxHeight += 0.5f * myHeight;
+            //shifting up higher to help detect step-ups
+            //TO-DO: get ride of this and just change the serialized field in prefabs (just increase by 0.5 in all)
             Vector2 origin = (direction == HorizontalOrientation.right ? ColliderCenterRight : ColliderCenterLeft)
-                + 0.5f * myHeight * Vector3.up;
+                + 0.5f * myHeight * transform.up;
 
             Vector2[] hits = new Vector2[16];
-            hits[0] = ColliderCenterFront - groundednessTolerance * Vector3.up;
+            hits[0] = ColliderCenterFront - groundednessTolerance * transform.up;
 
             //Debug.DrawLine(ColliderCenterFront, directlyBelowCharacter, Color.green);
 
             for (int i = 1; i <= 15; i++)
             {
-                var rcOrigin = origin + ((int)direction) * i * spacing * Vector2.right;
-                var rc = Physics2D.Raycast(rcOrigin, -Vector2.up, maxHeight, groundLayer);
+                var rcOrigin = origin + ((int)direction) * i * spacing * (Vector2)transform.up;
+                var rc = Physics2D.Raycast(rcOrigin, - transform.up, maxHeight, groundLayer);
 
                 //Debug.DrawLine(origin + ((int)CurrentOrientation) * i * spacing * Vector2.right,
                 //    origin + ((int)CurrentOrientation) * i * spacing * Vector2.right - maxHeight * Vector2.up,
@@ -202,7 +263,7 @@ namespace RPGPlatformer.Movement
             for (int i = 10; i <= 30; i++)
             {
                 var hitOrigin = jumpTrajectory.position(i * dt);
-                var hit = Physics2D.Raycast(hitOrigin, -Vector2.up, 0.5f * myHeight, groundLayer);
+                var hit = Physics2D.Raycast(hitOrigin, - Vector2.up, 0.5f * myHeight, groundLayer);
 
                 //Debug.DrawLine(hitOrigin, hitOrigin - 0.5f * myHeight * Vector2.up, Color.blue, 3);
 

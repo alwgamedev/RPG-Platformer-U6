@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using TMPro.EditorUtilities;
+using UnityEditor.Timeline;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -9,7 +11,8 @@ namespace RPGPlatformer.Movement
         where T2 : AdvancedMovementStateMachine<T1>
         where T3 : AdvancedMovementStateManager<T1, T2, T0>
     {
-        [SerializeField] protected bool detectWalls;
+        //[SerializeField] protected bool detectWalls;
+        [SerializeField] protected WallDetectionOptions wallDetectionOptions;
 
         public override bool Jumping => movementManager.StateMachine.CurrentState == movementManager.StateGraph.jumping;
 
@@ -17,25 +20,15 @@ namespace RPGPlatformer.Movement
         {
             base.Start();
 
+            //mover.AwkwardWallMoment += IgnoreMoveInputThisFrame;
+
             UpdateMaxSpeed();
-
-            //if (detectWalls)
-            //{
-            //    ConfigureWallDetection();
-            //}
         }
-
-        //protected override void InitializeFixedUpdate()
-        //{
-        //    //OnFixedUpdate += AnimateMovement;
-        //    base.InitializeFixedUpdate();
-        //}
-
         protected override void InitializeUpdate()
         {
             base.InitializeUpdate();
-            //OnUpdate += AnimateMovement;
-            if (detectWalls)
+
+            if (wallDetectionOptions.DetectWalls)
             {
                 ConfigureWallDetection();
             }
@@ -50,13 +43,8 @@ namespace RPGPlatformer.Movement
         protected virtual void ConfigureWallDetection()
         {
             OnUpdate += UpdateAndHandleWallInteraction;
+            mover.AwkwardWallMoment += IgnoreMoveInputThisFrame;
         }
-
-        //protected override void InitializeMover()
-        //{
-        //    base.InitializeMover();
-        //}
-
 
         //BASIC FUNCTIONS
 
@@ -100,7 +88,9 @@ namespace RPGPlatformer.Movement
 
         protected virtual void UpdateAndHandleWallInteraction()
         {
-            mover.UpdateAdjacentWall(!Grounded);
+            //mover.UpdateAdjacentWall(!Grounded);
+            mover.UpdateAdjacentWall(Grounded, wallDetectionOptions.NumWallCastsPerThird, 
+                wallDetectionOptions.WallCastDistanceFactor);
             SetDownSpeed();
             HandleAdjacentWallInteraction(!Grounded);
         }

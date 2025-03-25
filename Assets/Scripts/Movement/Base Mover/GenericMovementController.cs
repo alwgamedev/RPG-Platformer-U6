@@ -18,6 +18,8 @@ namespace RPGPlatformer.Movement
         protected T0 mover;
         protected T3 movementManager;
 
+        protected bool ignoreMoveInputThisFrame;
+
         protected Func<Vector2, Vector2> GetMoveDirection = (v) => default;
         protected Action OnFixedUpdate;
         protected Action TempFixedUpdate;
@@ -94,6 +96,8 @@ namespace RPGPlatformer.Movement
             {
                 mover.Rigidbody.linearVelocity += Time.deltaTime * CurrentMount.LocalGravity;
             }
+
+            ignoreMoveInputThisFrame = false;
         }
 
         protected virtual void InitializeUpdate()
@@ -162,18 +166,11 @@ namespace RPGPlatformer.Movement
 
         public virtual void MoveTowards(Vector2 point)
         {
-            //Vector2 inp = 
             MoveInput = new(point.x - transform.position.x, 0);
         }
 
         public virtual void MoveAwayFrom(Vector2 point)
         {
-            //if (transform.position.x == point.x)
-            //{
-            //    MoveInput = Vector2.right;
-            //    return;
-            //}
-            //Vector2 inp = new(transform.position.x - point.x, 0);
             MoveInput = new(transform.position.x - point.x, 0);
         }
 
@@ -288,16 +285,16 @@ namespace RPGPlatformer.Movement
             if (moveInput != Vector2.zero)
             {
                 SetOrientation(moveInput, currentMovementOptions.FlipSprite);
-                Move(moveInput);
+                if (!ignoreMoveInputThisFrame)
+                {
+                    Move(moveInput);
+                }
             }
         }
         protected virtual void Move(Vector2 moveInput)
         {
             mover.Move(GetMoveDirection(moveInput), currentMovementOptions);
         }
-
-        //protected virtual void OnFreefallEntry() { }
-
         protected virtual void OnFreefallVerified()
         {
             if (Freefalling)
@@ -305,6 +302,11 @@ namespace RPGPlatformer.Movement
                 UpdateMoveOptions(movementManager.StateGraph.freefall);
                 movementManager.AnimateFreefall();
             }
+        }
+
+        protected virtual void IgnoreMoveInputThisFrame()
+        {
+            ignoreMoveInputThisFrame = true;
         }
 
         protected void OnFreefallExit()

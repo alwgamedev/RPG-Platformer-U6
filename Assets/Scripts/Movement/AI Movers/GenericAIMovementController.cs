@@ -56,11 +56,11 @@ namespace RPGPlatformer.Movement
             mover.DirectionChanged += o => { stuckAtLedge = false; };
         }
 
-        protected override void ConfigureWallDetection()
-        {
-            base.ConfigureWallDetection();
-            mover.AwkwardWallMoment += SoftStop;
-        }
+        //protected override void ConfigureWallDetection()
+        //{
+        //    base.ConfigureWallDetection();
+        //    mover.AwkwardWallMoment += SoftStop;
+        //}
 
         protected virtual bool CanSetMoveInput()
         {

@@ -54,11 +54,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1361269890521539360, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -131.206
+      value: -34.2
       objectReference: {fileID: 0}
     - target: {fileID: 1361269890521539360, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -13.203
+      value: 27.1
       objectReference: {fileID: 0}
     - target: {fileID: 1361269890521539360, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -438,7 +438,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Mass
-      value: 85
+      value: 65
       objectReference: {fileID: 0}
     - target: {fileID: 7914369839194740457, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Layer
@@ -547,35 +547,44 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 60
+    acceleration: 80
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 1
     maxRotationAngle: 0
     minRotationAngle: 0
-    maxRotation: {x: 1, y: 0}
-    minRotation: {x: 1, y: 0}
-  - movementType: 1
-    moveDirection: 2
-    acceleration: 48
-    flipSprite: 0
-    clampXVelocityOnly: 1
-    rotateToDirection: 0
-    maxRotationAngle: 0
-    minRotationAngle: 0
-    maxRotation: {x: 1, y: 0}
-    minRotation: {x: 1, y: 0}
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
   - movementType: 2
     moveDirection: 2
-    acceleration: 48
+    acceleration: 64
     flipSprite: 1
     clampXVelocityOnly: 1
     rotateToDirection: 0
     maxRotationAngle: 0
     minRotationAngle: 0
-    maxRotation: {x: 1, y: 0}
-    minRotation: {x: 1, y: 0}
-  detectWalls: 1
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
+  - movementType: 1
+    moveDirection: 2
+    acceleration: 32
+    flipSprite: 0
+    clampXVelocityOnly: 1
+    rotateToDirection: 0
+    maxRotationAngle: 0
+    minRotationAngle: 0
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
+  wallDetectionOptions:
+    detectWalls: 1
+    numWallCastsPerThird: 2
+    wallCastDistanceFactor: 2
 --- !u!114 &489266092333141542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -661,16 +670,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68597781190fc664c9df98261ab08878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundednessToleranceFactor: 0.65
+  groundednessToleranceFactor: 0.72
   unfreezeRotationOnDeath: 1
-  deathForce: {x: -150, y: 120}
+  deathForce: {x: -100, y: 85}
   deathTorque: 10
   treatContactCharacterAsGround: 1
   adjustedHalfWidthFactor: 0.45
-  runSpeed: 3
-  walkSpeed: 1.2
+  runSpeed: 3.2
+  walkSpeed: 1.25
   maxNumJumps: 2
-  jumpForce: {x: 0, y: 375}
+  jumpForce: {x: 0, y: 265}
   doubleJumpForceMultiplier: 1.18
 --- !u!114 &253623311915411687
 MonoBehaviour:

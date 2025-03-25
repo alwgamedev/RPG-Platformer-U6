@@ -197,7 +197,19 @@ PrefabInstance:
       value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: wallDetectionOptions.detectWalls
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
       propertyPath: maxPermissibleDropOffHeightFactor
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: wallDetectionOptions.wallCastDistance
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: wallDetectionOptions.numWallCastsPerThird
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
@@ -219,6 +231,10 @@ PrefabInstance:
     - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
       propertyPath: movementOptions.Array.data[1].maxRotation.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
+      propertyPath: wallDetectionOptions.wallCastDistanceFactor
+      value: 1.75
       objectReference: {fileID: 0}
     - target: {fileID: 8914383755510078053, guid: 30f28f7bd0b0c8049a3d35e0849a5330, type: 3}
       propertyPath: movementOptions.Array.data[1].maxRotationAngle

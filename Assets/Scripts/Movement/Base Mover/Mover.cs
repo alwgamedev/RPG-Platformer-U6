@@ -164,7 +164,7 @@ namespace RPGPlatformer.Movement
             var velocity = options.ClampXVelocityOnly ? 
                 new Vector2(myRigidbody.linearVelocity.x, 0) : myRigidbody.linearVelocity;
             var dot = Vector2.Dot(velocity, direction);
-            if (dot <= 0 || velocity.magnitude < maxSpeed)
+            if (dot <= 0 || velocity.sqrMagnitude < maxSpeed * maxSpeed)
             {
                 myRigidbody.linearVelocity += options.Acceleration * Time.deltaTime * direction;
             }
