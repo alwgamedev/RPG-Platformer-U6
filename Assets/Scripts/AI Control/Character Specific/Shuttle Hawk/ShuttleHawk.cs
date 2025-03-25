@@ -6,8 +6,8 @@ namespace RPGPlatformer.AIControl
     public class ShuttleHawk : HybridFlyerPatroller
     {
         [SerializeField] float departureWaitTime = 30;
-        [SerializeField] float inFlightGravity = 100;
-        [SerializeField] float defaultGravity = 60;
+        [SerializeField] float inFlightMountGravity = 100;
+        [SerializeField] float defaultMountGravity = 60;
 
         float waitingForDepartureEntryTime;
         bool readyForDeparture;
@@ -24,10 +24,10 @@ namespace RPGPlatformer.AIControl
 
         private void Start()
         {
-            SetMountGravity(defaultGravity);
+            SetMountGravity(defaultMountGravity);
 
-            MovementController.OnFlightEntry += () => SetMountGravity(inFlightGravity);
-            MovementController.OnFlightExit += () => SetMountGravity(defaultGravity);
+            MovementController.OnFlightEntry += () => SetMountGravity(inFlightMountGravity);
+            MovementController.OnFlightExit += () => SetMountGravity(defaultMountGravity);
         }
 
         public void SetMountGravity(float gravity)

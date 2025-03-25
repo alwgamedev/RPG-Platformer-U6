@@ -31,6 +31,7 @@ namespace RPGPlatformer.Movement
         protected bool verifyingFreefall;//TO-DO: could we just have one variable "verifyingAirborne"?
         protected float groundednessTolerance;
         protected RaycastHit2D rightGroundHit;
+        //protected RaycastHit2D midGroundHit;
         protected RaycastHit2D leftGroundHit;
 
         public Transform Transform => transform;
@@ -47,6 +48,7 @@ namespace RPGPlatformer.Movement
         public Vector3 ColliderCenterBack => myCollider.bounds.center - adjustedHalfWidth 
             * (int)CurrentOrientation * transform.right;
         public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
+        public bool FacingRight => CurrentOrientation == HorizontalOrientation.right;
         public HorizontalOrientation CurrentOrientation { get; protected set; }
 
         public event Action<HorizontalOrientation> DirectionChanged;
@@ -80,6 +82,7 @@ namespace RPGPlatformer.Movement
         {
             rightGroundHit = Physics2D.Raycast(ColliderCenterRight, -transform.up, groundednessTolerance,
                 groundLayer);
+            //midGroundHit = Physics2D.Raycast(myCollider.bounds.center, -transform.up, groundednessTolerance);
             leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, -transform.up, groundednessTolerance,
                 groundLayer);
 
@@ -92,7 +95,7 @@ namespace RPGPlatformer.Movement
 
         public virtual void UpdateState(bool jumping, bool freefalling)
         {
-            if (rightGroundHit || leftGroundHit)
+            if (rightGroundHit || leftGroundHit /*|| midGroundHit*/)
             {
                 if ((jumping && !verifyingJump) || (freefalling && !verifyingFreefall))
                 {
@@ -155,7 +158,7 @@ namespace RPGPlatformer.Movement
 
             if (options.RotateToDirection)
             {
-                transform.rotation = options.RotateTransformRightTo((int)CurrentOrientation * direction);
+                RotateToMovementDirection(direction, options);
             }
 
             var velocity = options.ClampXVelocityOnly ? 
@@ -173,10 +176,22 @@ namespace RPGPlatformer.Movement
 
             if (options.RotateToDirection)
             {
-                transform.rotation = options.RotateTransformRightTo((int)CurrentOrientation * direction);
+                RotateToMovementDirection(direction, options);
             }
 
             myRigidbody.linearVelocity = maxSpeed * direction;
+        }
+
+        public void RotateToMovementDirection(Vector2 direction, MovementOptions options)
+        {
+            if (FacingRight)
+            {
+                transform.rotation = options.RotateTransformRightTo(direction);
+            }
+            else
+            {
+                transform.rotation = options.RotateTransformLeftTo(direction);
+            }
         }
 
         public virtual void Stop(bool maintainVerticalVelocity = true)
@@ -316,10 +331,23 @@ namespace RPGPlatformer.Movement
 
         public Vector2 GroundDirectionVector()
         {
+
             if (rightGroundHit && leftGroundHit)
             {
                 return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
             }
+
+            //var frontHit = FacingRight ? rightGroundHit : leftGroundHit;
+            //if (frontHit && midGroundHit)
+            //{
+            //    return (frontHit.point - midGroundHit.point).normalized;
+            //}
+
+            //var backHit = FacingRight ? leftGroundHit : rightGroundHit;
+            //if (backHit && midGroundHit)
+            //{
+            //    return (midGroundHit.point - backHit.point).normalized;
+            //}
             return (int)CurrentOrientation * transform.right;
         }
 

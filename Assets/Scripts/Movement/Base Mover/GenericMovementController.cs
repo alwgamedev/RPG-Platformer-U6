@@ -54,7 +54,6 @@ namespace RPGPlatformer.Movement
             }
         }
         public bool Moving => moveInput != Vector2.zero;
-
         public bool Grounded => movementManager.StateMachine.CurrentState == movementManager.StateGraph.grounded;
         public bool Freefalling => movementManager.StateMachine.CurrentState == movementManager.StateGraph.freefall;
         public virtual bool Jumping => false;
@@ -62,10 +61,7 @@ namespace RPGPlatformer.Movement
         protected virtual void Awake()
         {
             InitializeMover();
-
             BuildMovementOptionsDictionary();
-
-            InitializeFixedUpdate();
         }
 
         protected virtual void Start()
@@ -73,23 +69,36 @@ namespace RPGPlatformer.Movement
             InitializeMovementManager();
             ConfigureMovementManager();
 
+            //do these in start in case we want to subscribe functions from components
+            InitializeUpdate();
+            InitializeFixedUpdate();
+
             mover.FreefallVerified += OnFreefallVerified;
         }
 
         protected virtual void Update()
         {
-            UpdateMover();
+            //UpdateMover();
             OnUpdate?.Invoke();
         }
 
         protected virtual void FixedUpdate()
         {
+            //we've been doing update move in update, but would it make more sense to do it in fixed update
+            //so we have accurate data before moving?
+            //UpdateMover();
+
             OnFixedUpdate?.Invoke();
 
             if (CurrentMount != null && Grounded)
             {
                 mover.Rigidbody.linearVelocity += Time.deltaTime * CurrentMount.LocalGravity;
             }
+        }
+
+        protected virtual void InitializeUpdate()
+        {
+            OnUpdate += UpdateMover;
         }
 
         protected virtual void InitializeFixedUpdate()
@@ -217,7 +226,7 @@ namespace RPGPlatformer.Movement
 
         public virtual float SpeedFraction(float maxSpeed)
         {
-            return RelativeVelocity.sqrMagnitude / (maxSpeed * maxSpeed);
+            return RelativeVelocity.magnitude / maxSpeed;
         }
 
         //note: can return negative (which you may want if you want animator to clamp negative to 0)

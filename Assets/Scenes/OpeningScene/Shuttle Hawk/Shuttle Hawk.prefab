@@ -232,7 +232,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 24640
+    m_Bits: 25664
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -325,8 +325,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   departureWaitTime: 30
-  inFlightGravity: 125
-  defaultGravity: 90
+  inFlightGravity: 175
+  defaultGravity: 75
 --- !u!114 &5848020814946518481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,7 +369,7 @@ MonoBehaviour:
   doubleJumpForceMultiplier: 1.18
   inFlightLinearDamping: 50
   flightSpeed: 0.5
-  takeOffForce: {x: 0, y: 1300}
+  takeOffForce: {x: 0, y: 1250}
 --- !u!114 &1519639630161499023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,7 +399,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 160
+    acceleration: 90
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 0
@@ -419,7 +419,7 @@ MonoBehaviour:
     minRotation: {x: 1, y: 0}
   - movementType: 3
     moveDirection: 1
-    acceleration: 1500
+    acceleration: 400
     flipSprite: 1
     clampXVelocityOnly: 0
     rotateToDirection: 1

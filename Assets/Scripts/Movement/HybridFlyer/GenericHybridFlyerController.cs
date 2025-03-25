@@ -72,6 +72,7 @@ namespace RPGPlatformer.Movement
         {
             if (Flying)
             {
+
                 movementManager.AnimateMovement(Mathf.Max(VerticalSpeedFraction(mover.FlightSpeed), 0));
             }
             else

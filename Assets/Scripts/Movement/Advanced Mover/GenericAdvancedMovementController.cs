@@ -19,6 +19,22 @@ namespace RPGPlatformer.Movement
 
             UpdateMaxSpeed();
 
+            //if (detectWalls)
+            //{
+            //    ConfigureWallDetection();
+            //}
+        }
+
+        //protected override void InitializeFixedUpdate()
+        //{
+        //    //OnFixedUpdate += AnimateMovement;
+        //    base.InitializeFixedUpdate();
+        //}
+
+        protected override void InitializeUpdate()
+        {
+            base.InitializeUpdate();
+            //OnUpdate += AnimateMovement;
             if (detectWalls)
             {
                 ConfigureWallDetection();
@@ -27,7 +43,7 @@ namespace RPGPlatformer.Movement
 
         protected override void InitializeFixedUpdate()
         {
-            OnFixedUpdate += AnimateMovement;//do this first so that we animate based on actual resultant velocity
+            OnFixedUpdate += AnimateMovement;
             base.InitializeFixedUpdate();
         }
 
@@ -36,10 +52,10 @@ namespace RPGPlatformer.Movement
             OnUpdate += UpdateAndHandleWallInteraction;
         }
 
-        protected override void InitializeMover()
-        {
-            base.InitializeMover();
-        }
+        //protected override void InitializeMover()
+        //{
+        //    base.InitializeMover();
+        //}
 
 
         //BASIC FUNCTIONS
