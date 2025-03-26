@@ -189,11 +189,11 @@ namespace RPGPlatformer.Movement
             TweenTransformUpTowards(tUp.normalized, options.RotationSpeed);
         }
 
-        public void RotateTransformUpTo(Vector2 transformUp)
-        {
-            if (transformUp == Vector2.zero) return;
-            transform.rotation = Quaternion.LookRotation(transform.forward, transformUp);
-        }
+        //public void RotateTransformUpTo(Vector2 transformUp)
+        //{
+        //    if (transformUp == Vector2.zero) return;
+        //    transform.rotation = Quaternion.LookRotation(transform.forward, transformUp);
+        //}
 
         //goal transformUp should be normalized
         public void TweenTransformUpTowards(Vector2 transformUp, float rotationalSpeed)

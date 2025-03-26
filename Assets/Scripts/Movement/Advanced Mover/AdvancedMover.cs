@@ -70,71 +70,15 @@ namespace RPGPlatformer.Movement
             transform.rotation = Quaternion.LookRotation(Vector3.forward, adjacentWallDirection);
         }
 
-        public void MaintainWallCling()
+        public void MaintainWallCling(float rotationSpeed)
         {
-            transform.rotation = Quaternion.LookRotation(Vector3.forward, adjacentWallDirection);
+            TweenTransformUpTowards(adjacentWallDirection, rotationSpeed);
         }
 
         public void EndWallCling()
         {
             transform.rotation = Quaternion.identity;
         }
-
-        //public void UpdateAdjacentWall(bool airborne)
-        //{
-        //    if (verifyingJump)
-        //    {
-        //        NoAdjacentWall();
-        //        return;
-        //    }
-
-        //    //TO-DO: add more hits
-
-        //    var upperHit = Physics2D.Raycast(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
-        //        (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
-        //    var midHit = Physics2D.Raycast(ColliderCenterBack + 0.1f * myHeight * Vector3.up, 
-        //        (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground")); 
-        //    var lowerHit = Physics2D.Raycast(ColliderCenterBack - 0.2f * myHeight * Vector3.up,
-        //        (int)CurrentOrientation * Vector3.right, 1.75f * myWidth, LayerMask.GetMask("Ground"));
-
-        //    //Debug.DrawLine(ColliderCenterBack + 0.4f * myHeight * Vector3.up,
-        //    //    ColliderCenterBack + 0.4f * myHeight * Vector3.up + 1.75f * myWidth
-        //    //    * (int)CurrentOrientation * Vector3.right, Color.blue);
-        //    //Debug.DrawLine(ColliderCenterBack + 0.1f * myHeight * Vector3.up, ColliderCenterBack
-        //    //    + 0.1f * myHeight * Vector3.up + 1.75f * myWidth * (int)CurrentOrientation * Vector3.right, Color.blue);
-        //    //Debug.DrawLine(ColliderCenterBack - 0.2f * myHeight * Vector3.up,
-        //    //    ColliderCenterBack - 0.2f * myHeight * Vector3.up + 1.75f * myWidth
-        //    //    * (int)CurrentOrientation * Vector3.right, Color.blue);
-
-        //    if (midHit && lowerHit)
-        //    {
-        //        facingWall = true;
-        //        adjacentWallDirection = midHit.point - lowerHit.point;
-        //        return;
-        //    }
-        //    else if (midHit && upperHit)
-        //    {
-        //        facingWall = true;
-        //        adjacentWallDirection = upperHit.point - midHit.point;
-        //        return;
-        //    }
-        //    else if (!midHit && upperHit)
-        //    {
-        //        facingWall = true;
-        //        adjacentWallDirection = Vector3.up;
-        //        return;
-        //    }
-        //    else if (midHit || lowerHit)
-        //    {
-        //        if (airborne)
-        //        {
-        //            TriggerLanding();
-        //            AwkwardWallMoment?.Invoke();
-        //        }
-        //    }
-
-        //    NoAdjacentWall();
-        //}
 
         public void UpdateAdjacentWall(bool grounded, int n, float d)
         {

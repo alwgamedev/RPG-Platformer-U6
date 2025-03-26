@@ -146,7 +146,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void UpdateMoveOptions(State state)
         {
-            if (state == movementManager.StateGraph.freefall) return;
+            //if (state == movementManager.StateGraph.freefall) return;
 
             currentMovementOptions = GetMovementOptions[state.name];
             GetMoveDirection = MoveDirectionFunction(currentMovementOptions.MoveDirection);
@@ -305,7 +305,7 @@ namespace RPGPlatformer.Movement
         {
             if (Freefalling)
             {
-                UpdateMoveOptions(movementManager.StateGraph.freefall);
+                //UpdateMoveOptions(movementManager.StateGraph.freefall);
                 movementManager.AnimateFreefall();
             }
         }

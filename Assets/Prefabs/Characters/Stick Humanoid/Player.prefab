@@ -440,6 +440,10 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 65
       objectReference: {fileID: 0}
+    - target: {fileID: 7658579572532249331, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7914369839194740457, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -547,10 +551,12 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 80
+    acceleration: 65
     flipSprite: 1
+    changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
-    rotateToDirection: 1
+    rotateToDirection: 0
+    rotationSpeed: 0
     maxRotationAngle: 0
     minRotationAngle: 0
     maxRotationRight: {x: 1, y: 0}
@@ -559,10 +565,12 @@ MonoBehaviour:
     minRotationLeft: {x: -1, y: 0}
   - movementType: 2
     moveDirection: 2
-    acceleration: 64
+    acceleration: 55
     flipSprite: 1
+    changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
+    rotationSpeed: 0
     maxRotationAngle: 0
     minRotationAngle: 0
     maxRotationRight: {x: 1, y: 0}
@@ -571,10 +579,12 @@ MonoBehaviour:
     minRotationLeft: {x: -1, y: 0}
   - movementType: 1
     moveDirection: 2
-    acceleration: 32
+    acceleration: 30
     flipSprite: 0
+    changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
+    rotationSpeed: 0
     maxRotationAngle: 0
     minRotationAngle: 0
     maxRotationRight: {x: 1, y: 0}
@@ -583,8 +593,9 @@ MonoBehaviour:
     minRotationLeft: {x: -1, y: 0}
   wallDetectionOptions:
     detectWalls: 1
-    numWallCastsPerThird: 2
+    numWallCastsPerThird: 3
     wallCastDistanceFactor: 2
+    wallClingRotationSpeed: 0.79
 --- !u!114 &489266092333141542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,10 +687,10 @@ MonoBehaviour:
   deathTorque: 10
   treatContactCharacterAsGround: 1
   adjustedHalfWidthFactor: 0.45
-  runSpeed: 3.2
-  walkSpeed: 1.25
+  runSpeed: 3
+  walkSpeed: 1.2
   maxNumJumps: 2
-  jumpForce: {x: 0, y: 265}
+  jumpForce: {x: 0, y: 275}
   doubleJumpForceMultiplier: 1.18
 --- !u!114 &253623311915411687
 MonoBehaviour:

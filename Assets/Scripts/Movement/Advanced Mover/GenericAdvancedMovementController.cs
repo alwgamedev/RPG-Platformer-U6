@@ -1,6 +1,4 @@
-﻿using TMPro.EditorUtilities;
-using UnityEditor.Timeline;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -75,7 +73,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void AnimateMovement()
         {
-            if (!mover.VerifyingFreefall)
+            if (Grounded)
             {
                 movementManager.AnimateMovement(SpeedFraction(mover.RunSpeed));
             }
@@ -106,7 +104,7 @@ namespace RPGPlatformer.Movement
                 }
                 else
                 {
-                    mover.MaintainWallCling();
+                    mover.MaintainWallCling(wallDetectionOptions.WallClingRotationSpeed);
                 }
                 return;
             }
