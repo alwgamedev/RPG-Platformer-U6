@@ -9,7 +9,6 @@ namespace RPGPlatformer.Movement
     public class HybridFlyer : AdvancedMover
     {
         [SerializeField] float inFlightLinearDamping = 30;
-        //[SerializeField] float flightAcceleration = 100;
         [SerializeField] float flightSpeed = 3;
         [SerializeField] Vector2 takeOffForce = 400 * Vector2.up;
 
@@ -18,7 +17,7 @@ namespace RPGPlatformer.Movement
         protected bool verifyingFlight;
 
         public event Action OnBeginFlying;
-        //public event Action FlyingVerified;
+        public event Action FlyingVerified;
 
         public float FlightSpeed => flightSpeed;
 
@@ -26,11 +25,6 @@ namespace RPGPlatformer.Movement
         {
             defaultLinearDamping = myRigidbody.linearDamping;
         }
-
-        //public virtual void MoveFlying(Vector2 direction, bool matchRotationToDirection = false)
-        //{
-        //    Move(flightAcceleration, MaxSpeed, direction.normalized, matchRotationToDirection, false);
-        //}
 
         public virtual void UpdateState(bool flying, bool jumping, bool freefalling)
         {
@@ -80,9 +74,9 @@ namespace RPGPlatformer.Movement
             {
                 PrepareFlightVerification(cts);
                 verifyingFlight = true;
-                await Task.Delay(200, cts.Token);
+                await Task.Delay(150, cts.Token);
                 verifyingFlight = false;
-                //FlyingVerified?.Invoke();
+                FlyingVerified?.Invoke();
             }
             catch (TaskCanceledException)
             {
@@ -145,7 +139,7 @@ namespace RPGPlatformer.Movement
         {
             base.OnDestroy();
             OnBeginFlying = null;
-            //FlyingVerified = null;
+            FlyingVerified = null;
         }
     }
 }

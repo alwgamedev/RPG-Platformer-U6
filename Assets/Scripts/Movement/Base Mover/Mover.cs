@@ -31,7 +31,6 @@ namespace RPGPlatformer.Movement
         protected bool verifyingFreefall;//TO-DO: could we just have one variable "verifyingAirborne"?
         protected float groundednessTolerance;
         protected RaycastHit2D rightGroundHit;
-        //protected RaycastHit2D midGroundHit;
         protected RaycastHit2D leftGroundHit;
 
         public Transform Transform => transform;
@@ -82,7 +81,6 @@ namespace RPGPlatformer.Movement
         {
             rightGroundHit = Physics2D.Raycast(ColliderCenterRight, -transform.up, groundednessTolerance,
                 groundLayer);
-            //midGroundHit = Physics2D.Raycast(myCollider.bounds.center, -transform.up, groundednessTolerance);
             leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, -transform.up, groundednessTolerance,
                 groundLayer);
 
@@ -95,7 +93,7 @@ namespace RPGPlatformer.Movement
 
         public virtual void UpdateState(bool jumping, bool freefalling)
         {
-            if (rightGroundHit || leftGroundHit /*|| midGroundHit*/)
+            if (rightGroundHit || leftGroundHit)
             {
                 if ((jumping && !verifyingJump) || (freefalling && !verifyingFreefall))
                 {
@@ -132,7 +130,6 @@ namespace RPGPlatformer.Movement
 
         protected virtual void TriggerJumping()
         {
-            //jumping = true;
             OnJump?.Invoke();
             Trigger(typeof(Jumping).Name);
             VerifyJump();
@@ -189,12 +186,6 @@ namespace RPGPlatformer.Movement
             TweenTransformUpTowards(tUp.normalized, options.RotationSpeed);
         }
 
-        //public void RotateTransformUpTo(Vector2 transformUp)
-        //{
-        //    if (transformUp == Vector2.zero) return;
-        //    transform.rotation = Quaternion.LookRotation(transform.forward, transformUp);
-        //}
-
         //goal transformUp should be normalized
         public void TweenTransformUpTowards(Vector2 transformUp, float rotationalSpeed)
         {
@@ -228,7 +219,6 @@ namespace RPGPlatformer.Movement
         {
             force.x *= (int)CurrentOrientation;
             return force;
-            //return (int)CurrentOrientation * force.x * Vector2.right + force.y * Vector2.up;
         }
 
         protected async void VerifyJump()

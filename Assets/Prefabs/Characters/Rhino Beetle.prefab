@@ -218,6 +218,7 @@ MonoBehaviour:
     detectWalls: 0
     numWallCastsPerThird: 0
     wallCastDistanceFactor: 0
+    wallClingRotationSpeed: 0
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 3
@@ -359,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3721482397e32784a9209dc64e5f4195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultPatrolMode: 2
+  defaultPatrolMode: 3
   defaultPatrolParameters: {fileID: 0}
 --- !u!114 &4129447919136715259
 MonoBehaviour:
@@ -432,7 +433,6 @@ MonoBehaviour:
   boundedPatrolHangTime: 1
   pathPatrolHangTime: 0
   checkHorizontalDistanceOnly: 1
-  hangTimer: 0
 --- !u!1 &6277706183260746356
 GameObject:
   m_ObjectHideFlags: 0

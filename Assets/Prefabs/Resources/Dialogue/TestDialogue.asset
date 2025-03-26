@@ -24,7 +24,7 @@ MonoBehaviour:
     - 
     - 
   exitActions: []
-  continuationID: 
+  continuationID: e58ac750-7b48-40f1-b55d-3a0651bdb81b
 --- !u!114 &-7605647422853199661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,10 +71,40 @@ MonoBehaviour:
   - {fileID: -8693108834313099374}
   - {fileID: -7605647422853199661}
   - {fileID: 7757134261114511548}
+  - {fileID: 7578310810309646499}
   actorNames:
   - Alice
   - Bob
   - Carl
+--- !u!114 &7578310810309646499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df86de3ebe60cdb4cbb82d54b01052e3, type: 3}
+  m_Name: (ResponseChoicesDialogueNode) e58ac750-7b48-40f1-b55d-3a0651bdb81b
+  m_EditorClassIdentifier: 
+  speakerIndex: 0
+  textSegments:
+  - POO POO
+  uniqueID: e58ac750-7b48-40f1-b55d-3a0651bdb81b
+  position: {x: 779.5615, y: 194.18681}
+  entryActions: []
+  exitActions: []
+  responseChoices:
+  - choiceText: aasdf
+    continuationID: 
+    responseActions: []
+  - choiceText: HELLO
+    continuationID: 
+    responseActions: []
+  - choiceText: BYE
+    continuationID: 
+    responseActions: []
 --- !u!114 &7757134261114511548
 MonoBehaviour:
   m_ObjectHideFlags: 0

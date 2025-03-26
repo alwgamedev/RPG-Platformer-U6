@@ -15,6 +15,13 @@ namespace RPGPlatformer.Movement
         public event Action OnFlightEntry;
         public event Action OnFlightExit;
 
+        protected override void Start()
+        {
+            base.Start();
+
+            mover.FlyingVerified += OnFlyingVerified;
+        }
+
         protected override void ConfigureMovementManager()
         {
             base.ConfigureMovementManager();
@@ -40,6 +47,8 @@ namespace RPGPlatformer.Movement
 
         public virtual void BeginFlying()
         {
+            if (Flying) return;
+
             mover.BeginFlying();
         }
 
@@ -81,6 +90,15 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        protected virtual void OnFlyingEntry()
+        {
+            movementManager.AnimateMovement(0);
+            UpdateMaxSpeed();
+            //mover.SetLinearDamping(true);
+            movementManager.OnFlyingEntry();
+            OnFlightEntry?.Invoke();
+        }
+
         protected virtual void OnFlyingVerified()
         {
             if (Flying)
@@ -89,21 +107,13 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void OnFlyingEntry()
-        {
-            movementManager.AnimateMovement(0);
-            UpdateMaxSpeed();
-            mover.SetLinearDamping(true);
-            movementManager.OnFlyingEntry();
-            OnFlightEntry?.Invoke();
-        }
-
         protected virtual void OnFlyingExit()
         {
             UpdateMaxSpeed();
             movementManager.OnFlyingExit();
             mover.SetLinearDamping(false);
             OnFlightExit?.Invoke();
+            transform.rotation = Quaternion.identity;
         }
 
         protected override void OnDestroy()

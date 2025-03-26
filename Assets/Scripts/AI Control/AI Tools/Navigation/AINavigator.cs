@@ -8,7 +8,7 @@ namespace RPGPlatformer.AIControl
 
     public enum NavigationMode
     {
-        rest, singleDestination, bounded, pathForwards, pathBackwards
+        rest, timedRest, singleDestination, bounded, pathForwards, pathBackwards
     }
 
     public class AINavigator : MonoBehaviour, IPathPatroller
@@ -17,13 +17,14 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float boundedPatrolHangTime = 1;
         [SerializeField] float pathPatrolHangTime = 0;
 
-        public bool checkHorizontalDistanceOnly = true;
-        public float hangTimer;
+        float hangTimer;
 
         //for bounded patrol & singleTarget patrol
         Vector2 leftBound;
         Vector2 rightBound;
         Vector2 currentDestination;
+
+        public bool checkHorizontalDistanceOnly = true;
 
         public NavigationMode CurrentMode { get; private set; }
         public LinkedListNode<PatrolPathWayPoint> TargetPoint { get; private set; }
@@ -42,6 +43,9 @@ namespace RPGPlatformer.AIControl
             {
                 case NavigationMode.rest:
                     BeginRest(m);
+                    break;
+                case NavigationMode.timedRest:
+                    BeginTimedRest(m, (float)parameters);
                     break;
                 case NavigationMode.singleDestination:
                     BeginSingleDestinationPatrol((Vector3)parameters);
@@ -62,6 +66,13 @@ namespace RPGPlatformer.AIControl
         {
             CurrentMode = NavigationMode.rest;
             m.SoftStop();
+        }
+
+        private void BeginTimedRest(IMovementController m, float time)
+        {
+            CurrentMode = NavigationMode.timedRest;
+            m.SoftStop();
+            hangTimer = time;
         }
 
         private void BeginSingleDestinationPatrol(Vector2 targetPosition)
@@ -91,6 +102,9 @@ namespace RPGPlatformer.AIControl
         {
             switch (CurrentMode)
             {
+                case NavigationMode.timedRest:
+                    TimedRestBehavior();
+                    break;
                 case NavigationMode.bounded:
                     TargetedPatrolBehavior(m);
                     break;
@@ -105,6 +119,18 @@ namespace RPGPlatformer.AIControl
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void TimedRestBehavior()
+        {
+            if (hangTimer > 0)
+            {
+                hangTimer -= Time.deltaTime;
+            }
+            else
+            {
+                OnDestinationReached();
             }
         }
 
@@ -142,6 +168,9 @@ namespace RPGPlatformer.AIControl
         {
             switch(CurrentMode)
             {
+                case NavigationMode.timedRest:
+                    DestinationReached?.Invoke();
+                    break;
                 case NavigationMode.bounded:
                     OnBoundedDestinationReached();
                     break;
@@ -162,7 +191,6 @@ namespace RPGPlatformer.AIControl
             return CurrentMode switch
             {
                 NavigationMode.bounded => GetNextBoundedDestination(),
-                NavigationMode.singleDestination => false,
                 NavigationMode.pathForwards => GetNextPathDestination(true),
                 NavigationMode.pathBackwards => GetNextPathDestination(false),
                 _ => false

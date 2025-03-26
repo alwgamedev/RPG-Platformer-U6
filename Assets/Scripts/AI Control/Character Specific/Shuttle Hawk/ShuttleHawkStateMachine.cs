@@ -1,6 +1,4 @@
-﻿using RPGPlatformer.Core;
-
-namespace RPGPlatformer.AIControl
+﻿namespace RPGPlatformer.AIControl
 {
     public class ShuttleHawkStateMachine : AIPatrollerStateMachine<ShuttleHawkStateGraph>
     {
@@ -11,9 +9,6 @@ namespace RPGPlatformer.AIControl
     public class AwaitingDeparture : ShuttleHawkState { }
     public class Shuttling : ShuttleHawkState { }
     public class ReturningToNest : ShuttleHawkState { }
-    //public abstract class AIPatrollerState : State { }
-    //public class Inactive : AIPatrollerState { }
-    //public class Patrol : AIPatrollerState { }
 
     public class ShuttleHawkStateGraph : AIPatrollerStateGraph
     {

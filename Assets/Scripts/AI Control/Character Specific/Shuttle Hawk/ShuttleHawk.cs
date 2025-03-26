@@ -9,7 +9,6 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float inFlightMountGravity = 100;
         [SerializeField] float defaultMountGravity = 60;
 
-        float waitingForDepartureEntryTime;
         bool readyForDeparture;
         bool playerHasMounted;
 
@@ -58,16 +57,6 @@ namespace RPGPlatformer.AIControl
                 return;
             }
 
-            if (readyForDeparture && Time.time - waitingForDepartureEntryTime > departureWaitTime)
-            {
-                Trigger(typeof(Patrol).Name);
-                if (!playerHasMounted)
-                {
-                    SubscribeMountedHandler(false);
-                };
-                return;
-            }
-
             PatrolBehavior();
         }
 
@@ -75,15 +64,39 @@ namespace RPGPlatformer.AIControl
         {
             readyForDeparture = true;
             playerHasMounted = false;
-            waitingForDepartureEntryTime = Time.time;
 
+            BeginPatrol(NavigationMode.timedRest, departureWaitTime);
             SubscribeMountedHandler(true);
         }
 
-        public void ShuttleDeparture(PatrolPath flightPath)
+        public void DepartureTimeOut()
         {
-            BeginPatrol(NavigationMode.pathForwards, flightPath);
+            Trigger(typeof(Patrol).Name);
+            if (!playerHasMounted)
+            {
+                SubscribeMountedHandler(false);
+            }
+        }
+
+        public void BeginFlightPath(PatrolPath flightPath, bool forwards = true)
+        {
+            BeginPatrol(forwards ? NavigationMode.pathForwards : NavigationMode.pathBackwards, flightPath);
             MovementController.BeginFlying();
+        }
+
+        public void ShuttleDestionationReached()
+        {
+            BeginPatrol(NavigationMode.timedRest, departureWaitTime);
+        }
+
+        public void ReadyToReturnToNest()
+        {
+            Trigger(typeof(ReturningToNest).Name);
+        }
+
+        public void OnReturnedToNest()
+        {
+            Trigger(typeof(Patrol).Name);
         }
 
         private void MountedHandler(IMounter mounter)

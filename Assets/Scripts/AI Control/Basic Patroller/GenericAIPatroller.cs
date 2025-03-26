@@ -51,20 +51,6 @@ namespace RPGPlatformer.AIControl
             PatrolNavigator.PatrolBehavior(MovementController);
         }
 
-        //this gets called e.g. when you reach the end of a patrol path
-        //public virtual void OnPatrolDestinationReached()
-        //{
-        //    if (!PatrolNavigator.GetNextDestionation())
-        //    {
-        //        BeginPatrol(PatrolMode.rest, null);
-        //    }
-        //}
-
-        //protected virtual void TriggerPatrol()
-        //{
-        //    Trigger(typeof(Patrol).Name);
-        //}
-
         protected override void OnDestroy()
         {
             base.OnDestroy();
