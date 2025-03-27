@@ -74,8 +74,9 @@ namespace RPGPlatformer.UI
 
         private void EquipIGOHoverCursor()
         {
-            InteractableGameObject igo = InteractableGameObject.HoveredIGO;
-            if (igo)
+            var igo = InteractableGameObject.HoveredIGO;
+
+            if (igo != null)
             {
                 EquipCursor(igo.CursorType);
             }

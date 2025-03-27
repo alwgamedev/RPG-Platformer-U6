@@ -52,7 +52,7 @@ namespace RPGPlatformer.AIControl
         public virtual void SetCursorTypeAndPrimaryAction(CursorType cursorType, 
             bool removePrimaryActionFromDict = true)
         {
-            this.cursorType = cursorType;
+            this.defaultCursorType = cursorType;
             SetPrimaryAction(cursorType, removePrimaryActionFromDict);
         }
 
@@ -71,21 +71,26 @@ namespace RPGPlatformer.AIControl
                 }
 
                 SetPrimaryAction($"Talk to {displayName}", () => { TriggerDialogue(dialogueTrigger, 0); });
-                dialogueTrigger.TriggerEnabled += TriggerEnabledHandler;
 
-                //in the future we may generalize this (e.g. have an interface for
-                //"IntNPC Action Source" or something stupid) -- for now dialogue trigger is the only primary action
-                void TriggerEnabledHandler(bool val)
-                {
-                    if (val)
-                    {
-                        SetCursorTypeAndPrimaryAction(CursorType.Dialogue);
-                    }
-                    else
-                    {
-                        SetCursorTypeAndPrimaryAction(CursorType.Default);
-                    }
-                }
+                //ATM not using dialogue trigger enable/disable anywhere, so leaving this out
+                //because it can get confusing when something else changes the cursor type, and 
+                //you don't know whether you want to override the change or not.
+
+                //dialogueTrigger.TriggerEnabled += TriggerEnabledHandler;
+
+                ////in the future we may generalize this (e.g. have an interface for
+                ////"IntNPC Action Source" or something stupid) -- for now dialogue trigger is the only primary action
+                //void TriggerEnabledHandler(bool val)
+                //{
+                //    if (val && this.cursorType == CursorType.Dialogue)
+                //    {
+                //        SetCursorTypeAndPrimaryAction(CursorType.Dialogue);
+                //    }
+                //    else
+                //    {
+                //        SetCursorTypeAndPrimaryAction(CursorType.Default);
+                //    }
+                //}
             }
         }
 
@@ -122,7 +127,7 @@ namespace RPGPlatformer.AIControl
         {
             InteractionOptions = new();
 
-            SetPrimaryAction(cursorType);
+            SetPrimaryAction(defaultCursorType);
         }
 
         //NOTE: trigger is assumed to be a component on the NPC, so they have the same lifetime
@@ -159,18 +164,18 @@ namespace RPGPlatformer.AIControl
             GameLog.Log($"You are too far away to interact with {DisplayName}.");
         }
 
-        public override void OnPointerClick(PointerEventData eventData)
-        {
-            base.OnPointerClick(eventData);
+        //public override void OnPointerClick(PointerEventData eventData)
+        //{
+        //    base.OnPointerClick(eventData);
 
-            if (primaryActionKey == null) return;
-            if (!eventData.IsLeftMouseButtonEvent()) return;
-            if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
+        //    if (primaryActionKey == null) return;
+        //    if (!eventData.IsLeftMouseButtonEvent()) return;
+        //    if (GlobalGameTools.PlayerIsDead || !PlayerInRangeWithNotifications()) return;
 
-            if (InteractionOptions.TryGetValue(primaryActionKey, out var a))
-            {
-                a?.Invoke();
-            }
-        }
+        //    if (InteractionOptions.TryGetValue(primaryActionKey, out var a))
+        //    {
+        //        a?.Invoke();
+        //    }
+        //}
     }
 }

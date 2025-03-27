@@ -34,8 +34,6 @@ namespace RPGPlatformer.Loot
         protected override void Awake()
         {
             base.Awake();
-
-            playerLooter = playerTransform.gameObject.GetComponent<ILooter>();
             
             inventory = GetComponent<InventoryManager>();
         }
@@ -43,7 +41,7 @@ namespace RPGPlatformer.Loot
         private void Start()
         {
             lifeTimer = 0;
-
+            playerLooter = GlobalGameTools.PlayerTransform.GetComponent<ILooter>();
             inventory.OnInventoryChanged += HandleInventoryChanged;
         }
 

@@ -28,7 +28,7 @@ namespace RPGPlatformer.Dialogue
         public override void OnBeginDialogue()
         {
             patrollerController.BeginPatrolRest();
-            patrollerController.MovementController.FaceTarget(GlobalGameTools.Player.Combatant.Transform);
+            patrollerController.MovementController.FaceTarget(GlobalGameTools.PlayerTransform);
         }
 
         public override void OnEndDialogue()

@@ -13,6 +13,7 @@ namespace RPGPlatformer.Core
 
         public static GlobalGameTools Instance { get; private set; }
         public static string PlayerName { get; private set; } = "Player";
+        public static Transform PlayerTransform { get; private set; }
         public static ICombatController Player { get; private set; }
         public static bool PlayerIsDead => Player == null || Player.Combatant.Health.IsDead;
         public static bool PlayerIsInCombat => Player != null && Player.IsInCombat;
@@ -57,6 +58,7 @@ namespace RPGPlatformer.Core
 
             Player = FindAnyObjectByType<PlayerCombatController>();
             Player.OnDeath += () => OnPlayerDeath?.Invoke();
+            PlayerTransform = Player.Combatant.Transform;
             //player.OnDeath += () =>
             //{
             //    PlayerIsDead = true;
