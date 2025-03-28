@@ -54,7 +54,7 @@ namespace RPGPlatformer.Combat
                 PoolableEffect effect = GetCombatantExecuteEffect?.Invoke();
                 if(effect)
                 {
-                    effect.PlayAtPosition(controller.Combatant.Transform);
+                    effect.PlayAtPosition(controller.Combatant.transform);
                 }
 
                 UpdateCombatantStats(controller.Combatant);

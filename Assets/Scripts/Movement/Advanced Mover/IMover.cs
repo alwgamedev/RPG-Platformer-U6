@@ -5,7 +5,7 @@ namespace RPGPlatformer.Movement
 {
     public interface IMover
     {
-        public Transform Transform { get; }
+        public Transform transform { get; }
         public float Width { get; }
         public float Height { get; }
 

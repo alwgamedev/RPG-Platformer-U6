@@ -52,17 +52,10 @@ namespace RPGPlatformer.UI
 
         public void UpdateCharacter(IEquippableCharacter character)
         {
-            Debug.Log("Equipment inspector is updating character equipment");
-
             foreach(var entry in slots)
             {
-                Debug.Log($"Updating {entry.Key} slot");
-
                 var charSlot = character.EquipSlots[entry.Key];
                 var displayedItem = entry.Value.Item;
-
-                Debug.Log($"previous character item: {charSlot.EquipppedItem?.BaseData.DisplayName}");
-                Debug.Log($"item currently displayed in slot: {displayedItem?.BaseData.DisplayName}");
 
                 if (charSlot.EquipppedItem != displayedItem)
                 {

@@ -4,6 +4,7 @@ using RPGPlatformer.UI;
 using System;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using RPGPlatformer.Dialogue;
 
 
 namespace RPGPlatformer.Core
@@ -26,6 +27,7 @@ namespace RPGPlatformer.Core
 
         protected int homeLayer;
         protected RightClickMenuSpawner rcm;
+        protected Action OnUpdate;
         //protected Action leftClickAction;
 
         public string DisplayName => $"<b>{displayName}</b>";
@@ -50,13 +52,14 @@ namespace RPGPlatformer.Core
             CursorType = defaultCursorType;
         }
 
+        protected virtual void Update()
+        {
+            OnUpdate?.Invoke();
+        }
 
-        //INTERACTION
 
-        //maybe should be (string, Func<bool>, Action) where the func<bool> will determine if the action can be called
-        //e.g. you still want dialogue to show up in an RCM but the player is too far away to engage in dialogue
-            //^but in that case the dialogue window would close immediately (workable but not ideal)
-        //...for now we can just use the public "PlayerCanInteract" method for all interaction options
+        //INTERACTION FUNCTIONS
+
         public virtual IEnumerable<(string, Func<bool>, Action)> InteractionOptions()
         {
             if (!string.IsNullOrEmpty(ExamineText))
@@ -74,6 +77,37 @@ namespace RPGPlatformer.Core
                 //so that inheriting classes (like LootDrop) can override get to have a forced examine text
                 //(that ignore the examineText field)
             }
+        }
+
+        protected virtual void TriggerDialogue(IDialogueTrigger trigger, int index)
+        {
+            trigger.DialogueBeganSuccessfully += DialogueBeganHandler;
+
+            void DialogueBeganHandler(bool success)
+            {
+                if (!success)
+                {
+                    trigger.DialogueBeganSuccessfully -= DialogueBeganHandler;
+                    return;
+                }
+
+                OnUpdate = SendNotificationIfPlayerOutOfRange;
+                PlayerOutOfRange += trigger.RequestCancelDialogue;
+                trigger.DialogueEnded += DialogueEndedHandler;
+                trigger.DialogueBeganSuccessfully -= DialogueBeganHandler;
+            }
+
+            void DialogueEndedHandler()
+            {
+                //when we have an IGO that can trigger different spawns (e.g. a dialogue, a pop-up, and a shop)
+                //then we will need to be more careful about subbing/unsubbing...
+                //or probably the action just can't be executed if other spawn is already active
+                OnUpdate = null;
+                PlayerOutOfRange -= trigger.RequestCancelDialogue;
+                trigger.DialogueEnded -= DialogueEndedHandler;
+            }
+
+            trigger.TriggerDialogue(index);
         }
 
 
@@ -205,6 +239,7 @@ namespace RPGPlatformer.Core
                 SetHoveredIGOToNull();
             }
 
+            OnUpdate = null;
             PlayerOutOfRange = null;
         }
     }

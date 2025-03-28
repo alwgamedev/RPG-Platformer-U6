@@ -210,7 +210,7 @@ namespace RPGPlatformer.Combat
             StaminaFractionChange = -.25f,
             WrathFractionChange = -.25f,
             AoeRadius = 1.25f,
-            GetAoeCenter = (controller) => controller.Combatant.Transform.position,
+            GetAoeCenter = (controller) => controller.Combatant.transform.position,
             ExcludeInstigator = true,
             StunDuration = 2.5f
             //FreezeAnimationDuringStun = false
@@ -237,7 +237,7 @@ namespace RPGPlatformer.Combat
             StaminaFractionChange = .25f,
             WrathFractionChange = -.75f,
             AoeRadius = 1.25f,
-            GetAoeCenter = (controller) => controller.Combatant.Transform.position,
+            GetAoeCenter = (controller) => controller.Combatant.transform.position,
             ExcludeInstigator = true
         };
 

@@ -26,7 +26,7 @@ namespace RPGPlatformer.UI
         {
             if (cc == null) return;
 
-            parentMover = cc.Combatant.Transform.GetComponent<IMover>();
+            parentMover = cc.Combatant.transform.GetComponent<IMover>();
             parentMover.DirectionChanged += Unflip;
 
             cc.Combatant.Health.Stat.statBar = statBar;
@@ -118,7 +118,7 @@ namespace RPGPlatformer.UI
         {
             if (parentMover == null) return;
 
-            if (parentMover.Transform.localScale.x * transform.localScale.x < 0)
+            if (parentMover.transform.localScale.x * transform.localScale.x < 0)
             {
                 transform.localScale = new(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
             }

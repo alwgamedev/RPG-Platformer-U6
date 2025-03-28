@@ -16,7 +16,7 @@ namespace RPGPlatformer.Loot
         protected bool beingInspected;
         protected ILooter playerLooter;
         protected InventoryManager inventory;
-        protected Action OnUpdate;
+        //protected Action OnUpdate;
 
         public bool IsPlayer => false;//(part of IInventoryOwner interface)
         public override string ExamineText => "I should search this for loot.";
@@ -41,13 +41,14 @@ namespace RPGPlatformer.Loot
             inventory.OnInventoryChanged += HandleInventoryChanged;
         }
 
-        private void Update()
+        protected override void Update()
         {
             lifeTimer += Time.deltaTime;
             if (lifeTimer > maxLifeTime)
             {
                 DestroyDrop();
             }
+
             OnUpdate?.Invoke();
         }
 
@@ -55,7 +56,10 @@ namespace RPGPlatformer.Loot
         {
             yield return ("Take all", PlayerCanInteract, OnLeftClick);
             yield return ($"Search {DisplayName}", PlayerCanInteract, Search);
-            base.InteractionOptions();
+            foreach (var option in base.InteractionOptions())
+            {
+                yield return option;
+            }
         }
 
         private void HandleInventoryChanged()

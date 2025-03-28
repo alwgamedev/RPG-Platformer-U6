@@ -1,11 +1,19 @@
 ﻿using RPGPlatformer.Core;
-using System.Linq;
 using UnityEngine;
 
 namespace RPGPlatformer.UI
 {
     public class InteractableGameObjectRightClickMenuSpawner : RightClickMenuSpawner
     {
+        IInteractableGameObject igo;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            igo = GetComponent<IInteractableGameObject>();
+        }
+
         public override void ConfigureMenu(GameObject menu)
         {
             foreach (var option in igo.InteractionOptions())

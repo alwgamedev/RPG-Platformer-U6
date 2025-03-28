@@ -14,7 +14,7 @@ namespace RPGPlatformer.Combat
 
         public bool IsDead { get; private set; }
         public IDamageDealer Killer { get; private set; }
-        public Transform Transform => transform; 
+        //public Transform Transform => transform; 
         public float TargetingTolerance { get; private set; }
         public ReplenishableStat Stat => stat;
 

@@ -117,7 +117,7 @@ namespace RPGPlatformer.UI
                 if (TrySaveAllTabs())
                 {
                     Hide();
-                    //Note: hide closes the popup panel
+                    //Note: hide closes the popup panel (hence also destroys the popup)
                 }
                 else
                 {
@@ -131,9 +131,10 @@ namespace RPGPlatformer.UI
             //return the popup in case e.g. we want to add yes/no buttons to it
         {
             var popup = Instantiate(popupWindowPrefab, popupPanel.transform);
-            popup.ClearButtons();
-            popup.SetTitle(title);
-            popup.SetContent(message);
+            popup.Configure(title, message);
+            //popup.ClearButtons();
+            //popup.SetTitle(title);
+            //popup.SetContent(message);
             popup.CloseButton.onClick.AddListener(ClosePopupPanel);
             popupPanel.Show();
             return popup;
@@ -157,7 +158,10 @@ namespace RPGPlatformer.UI
         {
             foreach(var popup in popupPanel.GetComponentsInChildren<PopupWindow>(true))
             {
-                Destroy(popup.gameObject);
+                if (popup)
+                {
+                    Destroy(popup.gameObject);
+                }
             }
             popupPanel.Hide();
         }

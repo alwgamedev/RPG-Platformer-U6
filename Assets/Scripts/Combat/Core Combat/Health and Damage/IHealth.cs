@@ -6,7 +6,7 @@ namespace RPGPlatformer.Combat
     public interface IHealth
     {
         public bool IsDead { get; }
-        public Transform Transform { get; }
+        public Transform transform { get; }
         public float TargetingTolerance { get; }
         public ReplenishableStat Stat { get; }
 

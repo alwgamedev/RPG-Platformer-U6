@@ -78,7 +78,7 @@ namespace RPGPlatformer.Combat
             PoolableEffect effect = GetCombatantExecuteEffect?.Invoke();
             if (effect)
             {
-                effect.PlayAtPosition(controller.Combatant.Transform);
+                effect.PlayAtPosition(controller.Combatant.transform);
             }
 
             UpdateCombatantStats(controller.Combatant);
@@ -152,7 +152,7 @@ namespace RPGPlatformer.Combat
             PoolableEffect hitEffect = getHitEffect?.Invoke();
             if (hitEffect)
             {
-                hitEffect.PlayAtPosition(targetHealth.Transform);
+                hitEffect.PlayAtPosition(targetHealth.transform);
             }
         }
 

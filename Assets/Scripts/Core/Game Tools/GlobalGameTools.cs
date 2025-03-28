@@ -56,9 +56,10 @@ namespace RPGPlatformer.Core
 
             resourcesManager.InitializeResources();
 
-            Player = FindAnyObjectByType<PlayerCombatController>();
+            var player = FindAnyObjectByType<PlayerCombatController>();
+            Player = player;
+            PlayerTransform = player.transform;
             Player.OnDeath += () => OnPlayerDeath?.Invoke();
-            PlayerTransform = Player.Combatant.Transform;
             //player.OnDeath += () =>
             //{
             //    PlayerIsDead = true;

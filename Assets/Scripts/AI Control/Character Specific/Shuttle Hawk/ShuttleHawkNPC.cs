@@ -8,7 +8,7 @@ namespace RPGPlatformer.Core
     public class ShuttleHawkNPC : InteractableNPC
     {
         IDialogueTrigger dialogueTrigger;
-        bool dialogueEnabled;
+        bool canTriggerDialogue;
 
         protected override void Awake()
         {
@@ -25,18 +25,21 @@ namespace RPGPlatformer.Core
 
         public void EnableDialogue(bool val)
         {
-            dialogueEnabled = val;
+            canTriggerDialogue = val;
             CursorType = val ? UI.CursorType.Dialogue : UI.CursorType.Default;
         }
 
         public override IEnumerable<(string, Func<bool>, Action)> InteractionOptions()
         {
-            if (dialogueEnabled)
+            if (canTriggerDialogue)
             {
                 yield return ($"Talk to {DisplayName}", PlayerCanInteract, TriggerDialogue);
             }
 
-            base.InteractionOptions();
+            foreach (var option in base.InteractionOptions())
+            {
+                yield return option;
+            }
 
             //may add option "Pay {DisplayName}" that triggers a shorter dialogue 
             //that goes straight to the decision node "HasItem(worm)"
@@ -49,7 +52,7 @@ namespace RPGPlatformer.Core
 
         protected override void OnLeftClick()
         {
-            if (dialogueEnabled)
+            if (canTriggerDialogue)
             {
                 TriggerDialogue();
             }

@@ -198,7 +198,7 @@ namespace RPGPlatformer.Combat
             DamageMultiplier = 3.8f,
             StaminaFractionChange = -.25f,
             WrathFractionChange = -.25f,
-            GetAoeCenter = (controller) => controller.Combatant.Transform.position,
+            GetAoeCenter = (controller) => controller.Combatant.transform.position,
             AoeRadius = 1.5f,
         };
 

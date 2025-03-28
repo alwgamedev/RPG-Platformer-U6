@@ -193,7 +193,7 @@ namespace RPGPlatformer.Movement
 
         public virtual bool CanJumpGap(out Vector2 landingPoint)
         {
-            landingPoint = Transform.position;
+            landingPoint = transform.position;
 
             if (!CanJump())
             {

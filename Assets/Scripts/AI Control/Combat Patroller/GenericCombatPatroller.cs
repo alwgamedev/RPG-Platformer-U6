@@ -116,10 +116,10 @@ namespace RPGPlatformer.AIControl
             {
                 Trigger(typeof(Attack).Name);
             }
-            else if (Mathf.Abs(CurrentTarget.Transform.position.x - transform.position.x) > MinimumCombatDistance)
+            else if (Mathf.Abs(CurrentTarget.transform.position.x - transform.position.x) > MinimumCombatDistance)
             //to avoid ai stuttering back and forth when their target is directly above them
             {
-                MovementController.MoveTowards(CurrentTarget.Transform.position);
+                MovementController.MoveTowards(CurrentTarget.transform.position);
             }
             else
             {
@@ -171,7 +171,7 @@ namespace RPGPlatformer.AIControl
             if (currentDistSqrd < MinimumCombatDistance * MinimumCombatDistance)
             {
                 float direction =
-                    Mathf.Sign(transform.position.x - CurrentTarget.Transform.position.x);
+                    Mathf.Sign(transform.position.x - CurrentTarget.transform.position.x);
                 if (MovementController.DropOffAhead((HorizontalOrientation)direction, out var d)
                     && d < 1.5f * MinimumCombatDistance)
                 {
@@ -204,7 +204,7 @@ namespace RPGPlatformer.AIControl
         {
             if (target != null && !target.IsDead)
             {
-                distanceSqrd = Vector2.SqrMagnitude(transform.position - target.Transform.position);
+                distanceSqrd = Vector2.SqrMagnitude(transform.position - target.transform.position);
                 //- target.TargetingTolerance - TargetingTolerance;
                 tolerance = target.TargetingTolerance + TargetingTolerance;
                 return true;

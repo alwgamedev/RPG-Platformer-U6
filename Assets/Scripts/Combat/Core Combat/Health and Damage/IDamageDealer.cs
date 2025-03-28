@@ -4,7 +4,7 @@ namespace RPGPlatformer.Combat
 {
     public interface IDamageDealer 
     {
-        public Transform Transform { get; }
+        public Transform transform { get; }
 
         public CombatStyle CurrentCombatStyle { get; }
     }

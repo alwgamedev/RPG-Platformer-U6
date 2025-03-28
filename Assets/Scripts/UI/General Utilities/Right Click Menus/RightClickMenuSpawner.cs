@@ -9,10 +9,16 @@ using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.UI
 {
+    enum TargetCanvas
+    {
+        parent, gameUI, child
+    }
+
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
     //works both on UI and on game objects with colliders
     public abstract class RightClickMenuSpawner : MonoBehaviour, IPointerDownHandler, IPausable
     {
+        [SerializeField] TargetCanvas targetCanvasSource;
         [SerializeField] protected GameObject menuPrefab;
         [SerializeField] protected Button menuButtonPrefab;
         [SerializeField] protected bool disableWhenPlayerIsDead = true;
@@ -20,7 +26,7 @@ namespace RPGPlatformer.UI
         protected bool justSpawnedMenu;
         protected GameObject activeMenu;
         protected Canvas targetCanvas;
-        protected IInteractableGameObject igo;
+        //protected IInteractableGameObject igo;
 
         public GameObject ActiveMenu => activeMenu;
 
@@ -28,13 +34,15 @@ namespace RPGPlatformer.UI
 
         protected virtual void Awake()
         {
-            targetCanvas = GetComponentInParent<Canvas>();
-            if (!targetCanvas)
-            {
-                targetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
-            }
+            //targetCanvas = GetComponentInParent<Canvas>();
+            //if (!targetCanvas)
+            //{
+            //    targetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
+            //}
 
-            igo = GetComponent<IInteractableGameObject>();
+            FindTargetCanvas();
+
+            //igo = GetComponent<IInteractableGameObject>();
 
             if (disableWhenPlayerIsDead)
             {
@@ -48,6 +56,27 @@ namespace RPGPlatformer.UI
             SettingsManager.OnIAMConfigure += OnIAMConfigure;
             //subscribe in either case, so that we are linked up to the latest action map whenever it
             //gets rebuilt (e.g. due to input bindings change or something)
+        }
+
+        protected virtual void FindTargetCanvas()
+        {
+            switch(targetCanvasSource)
+            {
+                case TargetCanvas.parent:
+                    targetCanvas = GetComponentInParent<Canvas>(); 
+                    break;
+                case TargetCanvas.gameUI:
+                    targetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
+                    break;
+                case TargetCanvas.child:
+                    targetCanvas = GetComponentInChildren<Canvas>();
+                    break;
+            }
+            //targetCanvas = GetComponentInParent<Canvas>();
+            //if (!targetCanvas)
+            //{
+            //    targetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
+            //}
         }
 
         protected void OnIAMConfigure()
@@ -104,7 +133,7 @@ namespace RPGPlatformer.UI
             {
                 GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
                 if (currentSelected && currentSelected.transform.IsChildOf(activeMenu.transform)) return;
-                if (igo != null && igo.MouseOver) return;
+                //if (igo != null && igo.MouseOver) return;
                 //^this is a silly reason to store an IGO that may or may not be attached but oh well
                 ClearMenu();
             }

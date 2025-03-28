@@ -86,7 +86,7 @@ namespace RPGPlatformer.Combat
                 effect = GetCombatantPowerUpEffect?.Invoke();
                 if(effect)
                 {
-                    effect.PlayAtPosition(controller.Combatant.Transform);
+                    effect.PlayAtPosition(controller.Combatant.transform);
                 }
 
                 if (GetDataOnPowerUpStarted)

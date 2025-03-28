@@ -6,7 +6,7 @@ namespace RPGPlatformer.Combat
     public interface IProjectile
     {
         public float PowerMultiplier { get; }
-        public Transform Transform { get; }
+        public Transform transform { get; }
 
         public void Prepare(ICombatant combatant, Func<Vector2> getAimPos, float powerMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
 

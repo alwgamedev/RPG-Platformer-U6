@@ -52,7 +52,7 @@ namespace RPGPlatformer.Combat
             PoolableEffect effect = GetCombatantExecuteEffect?.Invoke();
             if (effect)
             {
-                effect.PlayAtPosition(controller.Combatant.Transform);
+                effect.PlayAtPosition(controller.Combatant.transform);
             }
 
             UpdateCombatantStats(controller.Combatant);
@@ -81,15 +81,15 @@ namespace RPGPlatformer.Combat
         public static IHealth TargetInFront(ICombatant combatant)//almost all melee abilities will use this
         {
             float radius = combatant.AttackRange / 2 + combatant.Health.TargetingTolerance;
-            Vector2 center = combatant.Transform.position 
-                + radius * Mathf.Sign(combatant.Transform.localScale.x) * combatant.Transform.right;
+            Vector2 center = combatant.transform.position 
+                + radius * Mathf.Sign(combatant.transform.localScale.x) * combatant.transform.right;
             return combatant.FindTarget(center, radius);
         }
 
         public static IHealth TargetCentered(ICombatant combatant)
         {
             float radius = combatant.AttackRange;
-            return combatant.FindTarget(combatant.Transform.position, radius);
+            return combatant.FindTarget(combatant.transform.position, radius);
         }
 
         public static IHealth TargetAimPosition(ICombatController controller)

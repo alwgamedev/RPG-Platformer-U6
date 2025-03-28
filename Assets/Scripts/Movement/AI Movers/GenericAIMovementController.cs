@@ -122,8 +122,8 @@ namespace RPGPlatformer.Movement
                 if (mover.CanJumpGap(out var landingPt))
                 {
                     if (currentTarget == null
-                        || Vector2.Distance(landingPt, currentTarget.Transform.position) <
-                        Vector2.Distance(mover.ColliderCenterBottom, currentTarget.Transform.position))
+                        || Vector2.Distance(landingPt, currentTarget.transform.position) <
+                        Vector2.Distance(mover.ColliderCenterBottom, currentTarget.transform.position))
                     {
                         mover.MoveWithoutAcceleration((int)CurrentOrientation * transform.right,
                             mover.RunSpeed, currentMovementOptions);//get up to run speed

@@ -47,7 +47,7 @@ namespace RPGPlatformer.Combat
         public string TargetTag => targetTag;
         public InventoryManager Inventory => inventory;
         public Dictionary<EquipmentSlot, ItemSlot> EquipSlots => equipSlots;
-        public Transform Transform => transform;
+        //public Transform transform => base.transform;
         public Transform MainhandElbow => mainhandElbow;
         public Transform ChestBone => chestBone;
         public float AttackRange { get; protected set; }
@@ -370,12 +370,12 @@ namespace RPGPlatformer.Combat
 
         public void DropLoot(IInventorySlotDataContainer loot)
         {
-            dropSpawner.SpawnDrop(transform.position, loot);
+            dropSpawner.SpawnDrop(base.transform.position, loot);
         }
 
         public void DropLoot(IInventorySlotDataContainer[] loot)
         {
-            dropSpawner.SpawnDrop(transform.position, loot);
+            dropSpawner.SpawnDrop(base.transform.position, loot);
         }
 
         public void TakeLoot(IInventorySlotDataContainer loot)
@@ -390,7 +390,7 @@ namespace RPGPlatformer.Combat
 
         public void ReleaseFromSlot(int i, int quantity = 1)
         {
-            dropSpawner.SpawnDrop(transform.position, inventory.RemoveFromSlot(i, quantity));
+            dropSpawner.SpawnDrop(base.transform.position, inventory.RemoveFromSlot(i, quantity));
         }
 
         public void HandleInventoryOverflow(IInventorySlotDataContainer data)
@@ -426,7 +426,7 @@ namespace RPGPlatformer.Combat
             {
                 return false;
             }
-            return CanAttack(Vector2.SqrMagnitude(health.Transform.position - transform.position),
+            return CanAttack(Vector2.SqrMagnitude(health.transform.position - base.transform.position),
                 health.TargetingTolerance + this.health.TargetingTolerance);
         }
 

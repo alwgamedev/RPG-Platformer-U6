@@ -63,7 +63,7 @@ namespace RPGPlatformer.Combat
         {
             if (currentTarget != null)
             {
-                return currentTarget.Transform.position;
+                return currentTarget.transform.position;
             }
             return base.GetAimPosition();
         }

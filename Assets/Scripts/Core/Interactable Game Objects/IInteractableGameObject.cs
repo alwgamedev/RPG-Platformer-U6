@@ -1,11 +1,13 @@
 ﻿using RPGPlatformer.UI;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
     public interface IInteractableGameObject : IExaminable
     {
+        public Transform transform { get; }
         public string DisplayName { get; }
         public bool MouseOver { get; }
         public CursorType CursorType { get; }

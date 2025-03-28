@@ -28,7 +28,7 @@ namespace RPGPlatformer.Combat
         {
             foreach (IHealth health in targets)
             {
-                if (health == null || (excludeInstigator && health.Transform == damageDealer.Transform))
+                if (health == null || (excludeInstigator && health.transform == damageDealer.transform))
                 {
                     continue;
                 }

@@ -23,6 +23,8 @@ namespace RPGPlatformer.SceneManagement
         {
             SettingsMenu sm = FindAnyObjectByType<SettingsMenu>(FindObjectsInactive.Include);
             if (sm)
+                //so you can't Esc to unpause once paused
+                //(so you don't suddenly unpause and have any unexpected consequences with the ui)
             {
                 sm.OnShow += DisableToggling;
                 sm.OnHide += EnableToggling;
