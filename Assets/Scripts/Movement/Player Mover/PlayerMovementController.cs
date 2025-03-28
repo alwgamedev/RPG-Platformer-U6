@@ -31,27 +31,27 @@ namespace RPGPlatformer.Movement
                 if (inputDisabled) return;
                 UpdateMoveInput();
             };
-            iam.MoveRightAction.canceled += (context) => 
-            { 
-                if (inputDisabled) return; 
-                UpdateMoveInput(); 
+            iam.MoveRightAction.canceled += (context) =>
+            {
+                if (inputDisabled) return;
+                UpdateMoveInput();
             };
-            iam.MoveLeftAction.started += (context) => 
-            { 
-                
-                if (inputDisabled) return; 
-                UpdateMoveInput(); 
+            iam.MoveLeftAction.started += (context) =>
+            {
+
+                if (inputDisabled) return;
+                UpdateMoveInput();
             };
-            iam.MoveLeftAction.canceled += (context) => 
-            { 
-                if (inputDisabled) return; 
-                UpdateMoveInput(); 
+            iam.MoveLeftAction.canceled += (context) =>
+            {
+                if (inputDisabled) return;
+                UpdateMoveInput();
             };
 
-            iam.SpacebarAction.started += (context) => 
-            { 
-                if (inputDisabled) return; 
-                mover.Jump(); 
+            iam.SpacebarAction.started += (context) =>
+            {
+                if (inputDisabled) return;
+                mover.Jump();
             };
         }
 

@@ -254,6 +254,7 @@ namespace RPGPlatformer.Movement
             CurrentMount = entity;
 
             entity.DirectionChanged += OnMountDirectionChanged;
+            //entity.ChangeInVelocity += OnMountAccelerated;
             entity.Destroyed += Dismount;
 
             mover.SetGravityScale(0);
@@ -263,88 +264,71 @@ namespace RPGPlatformer.Movement
         {
             if (CurrentMount == null) return;
 
+            //mover.Rigidbody.linearVelocity -= CurrentMount.Velocity;
+            mover.ReturnGravityScaleToDefault();
+
             CurrentMount.DirectionChanged -= OnMountDirectionChanged;
+            //CurrentMount.ChangeInVelocity -= OnMountAccelerated;
             CurrentMount.Destroyed -= Dismount;
             CurrentMount = null;
-
-            mover.ReturnGravityScaleToDefault();
         }
+
+        //protected virtual void OnMountAccelerated(Vector2 dv)
+        //{
+        //    Debug.Log($"mount velocity changed by {dv}");
+        //    mover.Rigidbody.linearVelocity += dv;
+        //}
 
         protected virtual void OnMountDirectionChanged(HorizontalOrientation o)
         {
-            //flip direction rather than just SetDirection(o)
-            //bc e.g. we may have been facing backwards on the mount before
             mover.SetOrientation((HorizontalOrientation)(-(int)CurrentOrientation), currentMovementOptions.FlipSprite,
                 currentMovementOptions.ChangeDirectionWrtGlobalUp);
-            //var d = Vector2.Dot(transform.position - CurrentMount.Position, CurrentMount.VelocitySourceTransformRight);
-            //transform.position -= 2 * d * CurrentMount.VelocitySourceTransformRight;
             var dp = transform.position - CurrentMount.Position;
             dp = ReflectAlongUnitVector(CurrentMount.VelocitySourceTransformRight, dp);
             transform.position = CurrentMount.Position + dp;
-            var dvX = Vector2.Dot(mover.Rigidbody.linearVelocity, CurrentMount.VelocitySourceTransformRight);
-            var dvY = Vector2.Dot(mover.Rigidbody.linearVelocity, CurrentMount.VelocitySourceTransformRight);
-            //mover.Rigidbody.linearVelocity = CurrentMount.Velocity + (Vector2)dv;
-            IgnoreMoveInputNextUpdate();
-            Debug.Log($"storing dv: ({dvX}, {dvY})");
-            Debug.Log(Time.fixedTime);
-
-            //int counter = 0;
-
-            OnFixedUpdate += VelocityCorrection;
-
-            //issue we're trying to solve: mount will change its direction, just before it updates its velocity
-            //so we may be using the old velocity still in this calculation
-            //so I'm adding another to the next fixed update
-            //also the hawk rotates just after changing direction
-            void VelocityCorrection()
-            {
-                if (CurrentMount == null)
-                {
-                    OnFixedUpdate -= VelocityCorrection;
-                    return;
-                }
-                //Debug.Log($"correcting velocity ({counter})");
-                //Debug.Log($"mount velocity: {CurrentMount.Velocity}");
-                //Debug.Log($"player velocity: {CurrentMount.Velocity + (Vector2)dv}");
-                Debug.Log("correcting velocity");
-                mover.Rigidbody.linearVelocity = CurrentMount.Velocity 
-                    - dvX * (Vector2)CurrentMount.VelocitySourceTransformRight
-                    + dvY * ((Vector2)CurrentMount.VelocitySourceTransformRight).CCWPerp();
-
-                OnFixedUpdate -= VelocityCorrection;
-                //if (counter > 3)
-                //{
-                //    OnFixedUpdate -= VelocityCorrection;
-                //}
-                //else
-                //{
-                //    IgnoreMoveInputNextUpdate();
-                //}
-            }
         }
 
         //STATE CHANGE HANDLERS
 
         protected virtual void HandleMoveInput()
         {
-            HandleMoveInput(MoveInput);
+            HandleMoveInput(MoveInput, Move);
         }
 
-        protected virtual void HandleMoveInput(Vector2 moveInput)
+        //protected virtual void HandleMoveInput(Vector2 moveInput)
+        //{
+        //    if (moveInput != Vector2.zero)
+        //    {
+        //        SetOrientation(moveInput);
+        //        if (!ignoreMoveInputNextUpdate)
+        //        {
+        //            Move(moveInput);
+        //        }
+        //    }
+        //}
+
+        protected virtual void HandleMoveInput(Vector2 moveInput, Action<Vector2> moveAction)
         {
             if (moveInput != Vector2.zero)
             {
                 SetOrientation(moveInput);
                 if (!ignoreMoveInputNextUpdate)
                 {
-                    Move(moveInput);
+                    moveAction(moveInput);
                 }
             }
         }
+
         protected virtual void Move(Vector2 moveInput)
         {
-            mover.Move(GetMoveDirection(moveInput), currentMovementOptions);
+            mover.Move(RelativeVelocity, GetMoveDirection(moveInput), currentMovementOptions);
         }
+
+        protected virtual void MoveWithoutAcceleration(Vector2 moveInput)
+        {
+            mover.MoveWithoutAcceleration(GetMoveDirection(moveInput), currentMovementOptions);
+        }
+
         protected virtual void OnFreefallVerified()
         {
             if (Freefalling)
@@ -392,6 +376,8 @@ namespace RPGPlatformer.Movement
             GetMoveDirection = null;
             OnUpdate = null;
             OnFixedUpdate = null;
+            TempFixedUpdate = null;
+            TempUpdate = null;
         }
     }
 }

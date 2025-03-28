@@ -13,6 +13,7 @@ namespace RPGPlatformer.Movement
         [SerializeField] bool checkTriggerStay;
 
         HorizontalOrientation currentOrientation;
+        Vector2 lastVelocity;
 
         public Vector3 VelocitySourceTransformRight => velocitySource.transform.right;
         public Vector2 LocalGravity
@@ -25,6 +26,7 @@ namespace RPGPlatformer.Movement
         public event Action<IMounter> Mounted;
         public event Action<IMounter> MountStay;
         public event Action<IMounter> Dismounted;
+        //public event Action<Vector2> ChangeInVelocity;
         public event Action Destroyed;
 
         private void Awake()
@@ -40,6 +42,14 @@ namespace RPGPlatformer.Movement
                 mountTrigger.TriggerExit += MountTriggerExit;
             }
         }
+
+        //private void FixedUpdate()
+        //{
+        //    Debug.Log($"lastVelocity before {lastVelocity}");
+        //    ChangeInVelocity?.Invoke(Velocity - lastVelocity);
+        //    lastVelocity = Velocity;
+        //    Debug.Log($"lastVelocity after {lastVelocity}");
+        //}
 
         public void SetLocalGravity(float localGravity)
         {
@@ -111,6 +121,8 @@ namespace RPGPlatformer.Movement
             DirectionChanged = null;
             Mounted = null;
             MountStay = null;
+            Dismounted = null;
+            //ChangeInVelocity = null;
             Destroyed = null;
 
         }
