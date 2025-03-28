@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5219990440080516446
 Transform:
   m_ObjectHideFlags: 0
@@ -108,13 +108,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495413124108160001}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.059993386, w: 0.99819887}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5284444162961595268}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 6.879}
 --- !u!70 &1217451148700201470
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -149,8 +149,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 7.17215, y: -0.6461378}
-  m_Size: {x: 13.839854, y: 3.6003542}
+  m_Offset: {x: 6.462977, y: -0.72400504}
+  m_Size: {x: 16.166891, y: 3.755991}
   m_Direction: 1
 --- !u!114 &4389421961141597446
 MonoBehaviour:
@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 1764130102502781184}
   - component: {fileID: 791843766491106202}
   - component: {fileID: 7068206878052148347}
+  - component: {fileID: 2893810016071196569}
   - component: {fileID: 3117636087426147858}
   - component: {fileID: 4320224733152289855}
   - component: {fileID: 5933316255835540705}
@@ -183,10 +184,10 @@ GameObject:
   - component: {fileID: 1519639630161499023}
   - component: {fileID: 3471450331675356116}
   - component: {fileID: 2513113309571414144}
-  - component: {fileID: 5791648601987046333}
+  - component: {fileID: 3372847588099144978}
   - component: {fileID: 8052417114151022779}
   - component: {fileID: 1374627201273509011}
-  - component: {fileID: 2893810016071196569}
+  - component: {fileID: 6912290268842868893}
   m_Layer: 10
   m_Name: Shuttle Hawk
   m_TagString: Untagged
@@ -274,6 +275,42 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.5, y: 2.3}
   m_Direction: 0
+--- !u!58 &2893810016071196569
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257429934250872482}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 1
 --- !u!95 &3117636087426147858
 Animator:
   serializedVersion: 7
@@ -326,8 +363,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   departureWaitTime: 30
-  inFlightMountGravity: 100
-  defaultMountGravity: 60
+  inFlightMountGravity: 150
+  defaultMountGravity: 85
 --- !u!114 &5848020814946518481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -460,7 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a34615c6456bb469312e846abdd549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5791648601987046333
+--- !u!114 &3372847588099144978
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -469,12 +506,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3257429934250872482}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6503d844a236c134a8695617866ba090, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b8888262f0d491498f2c92f91703c85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Barry Bird
-  examineText: You don't want to ruffle his feathers.
-  cursorType: 1
+  examineText: Don't ruffle his feathers...
+  defaultCursorType: 1
   maxInteractableDistance: 5
 --- !u!114 &8052417114151022779
 MonoBehaviour:
@@ -529,42 +566,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actorName: Barry Bird
---- !u!58 &2893810016071196569
-CircleCollider2D:
+--- !u!114 &6912290268842868893
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3257429934250872482}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c929d1d82ae3b6241ad7c6e7f95efe30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuPrefab: {fileID: 8243535585966996843, guid: c551c427647afd148b00f56340a43966, type: 3}
+  menuButtonPrefab: {fileID: 6071247106101167904, guid: 0460550107ed1174fab3368bcfe61d21, type: 3}
+  disableWhenPlayerIsDead: 1
 --- !u!1 &3421902268695511176
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,7 +596,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6974728677893949614
 Transform:
   m_ObjectHideFlags: 0
@@ -611,7 +627,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5800931583846263568
 Transform:
   m_ObjectHideFlags: 0
@@ -652,7 +668,7 @@ Transform:
   m_GameObject: {fileID: 7862475031794593128}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.98, y: -2.64, z: 0}
+  m_LocalPosition: {x: -2.96, y: -2.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -683,7 +699,7 @@ Transform:
   m_GameObject: {fileID: 8669477947862795333}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.02, y: -0.48, z: 0}
+  m_LocalPosition: {x: 11.89, y: -0.66, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -704,6 +720,10 @@ PrefabInstance:
     - target: {fileID: -8951793848127533619, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
       propertyPath: m_Layer
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: -8951793848127533619, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8653719598885068355, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
       propertyPath: m_Name
@@ -884,6 +904,10 @@ PrefabInstance:
     - target: {fileID: -1024815538560704356, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
       propertyPath: m_Layer
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: -1024815538560704356, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -825289701315894021, guid: 3d7a62f209812c447b1f719b7ec1b362, type: 3}
       propertyPath: m_SortingLayer
@@ -1086,7 +1110,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5472133675264116708}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f34195455f956774ea8136700545d338, type: 3}
   m_Name: 
@@ -1169,7 +1193,7 @@ PolygonCollider2D:
       - {x: -4.668584, y: 3.3680472}
       - {x: -4.0221577, y: -1.3001064}
       - {x: -2.973044, y: -2.3310552}
-      - {x: 6.235895, y: -1.595015}
+      - {x: 6.076485, y: -1.3828832}
       - {x: 12.241527, y: -0.59575593}
   m_UseDelaunayMesh: 0
 --- !u!114 &4018914529200880135

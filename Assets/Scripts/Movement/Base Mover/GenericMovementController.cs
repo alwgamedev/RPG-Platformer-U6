@@ -228,6 +228,11 @@ namespace RPGPlatformer.Movement
 
         public virtual float SpeedFraction(float maxSpeed)
         {
+            //return 0 if sliding backwards and no move input
+            if (MoveInput == Vector2.zero && RelativeVelocity.x * (int)CurrentOrientation < 0)
+            {
+                return 0;
+            }
             return RelativeVelocity.magnitude / maxSpeed;
         }
 

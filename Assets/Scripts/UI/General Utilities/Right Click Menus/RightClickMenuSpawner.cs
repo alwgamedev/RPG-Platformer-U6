@@ -2,10 +2,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using TMPro;
 using RPGPlatformer.Core;
 using RPGPlatformer.SceneManagement;
-using UnityEngine.InputSystem;
 
 namespace RPGPlatformer.UI
 {
@@ -14,6 +14,7 @@ namespace RPGPlatformer.UI
     public abstract class RightClickMenuSpawner : MonoBehaviour, IPointerDownHandler, IPausable
     {
         [SerializeField] protected GameObject menuPrefab;
+        [SerializeField] protected Button menuButtonPrefab;
         [SerializeField] protected bool disableWhenPlayerIsDead = true;
 
         protected bool justSpawnedMenu;
@@ -64,7 +65,10 @@ namespace RPGPlatformer.UI
 
         public void Unpause() { }
 
-        public abstract bool CanCreateMenu();
+        public virtual bool CanCreateMenu()
+        {
+            return menuPrefab && menuButtonPrefab;
+        }
 
         public abstract void ConfigureMenu(GameObject menu);
 
@@ -101,6 +105,7 @@ namespace RPGPlatformer.UI
                 GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
                 if (currentSelected && currentSelected.transform.IsChildOf(activeMenu.transform)) return;
                 if (igo != null && igo.MouseOver) return;
+                //^this is a silly reason to store an IGO that may or may not be attached but oh well
                 ClearMenu();
             }
         }

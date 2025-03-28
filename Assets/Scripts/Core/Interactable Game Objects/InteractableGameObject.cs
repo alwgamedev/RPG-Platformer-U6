@@ -26,7 +26,7 @@ namespace RPGPlatformer.Core
 
         protected int homeLayer;
         protected RightClickMenuSpawner rcm;
-        protected Action leftClickAction;
+        //protected Action leftClickAction;
 
         public string DisplayName => $"<b>{displayName}</b>";
         public virtual string ExamineText => examineText;
@@ -57,11 +57,11 @@ namespace RPGPlatformer.Core
         //e.g. you still want dialogue to show up in an RCM but the player is too far away to engage in dialogue
             //^but in that case the dialogue window would close immediately (workable but not ideal)
         //...for now we can just use the public "PlayerCanInteract" method for all interaction options
-        public virtual IEnumerable<(string, Action)> InteractionOptions()
+        public virtual IEnumerable<(string, Func<bool>, Action)> InteractionOptions()
         {
             if (!string.IsNullOrEmpty(ExamineText))
             {
-                yield return ($"Examine {DisplayName}", Examine);
+                yield return ($"Examine {DisplayName}", () => true,  Examine);
             }
         }
 
@@ -190,12 +190,13 @@ namespace RPGPlatformer.Core
         {
             IGOClicked.Invoke();
 
-            if (eventData.IsLeftMouseButtonEvent() && leftClickAction != null
-                && PlayerCanInteract())
+            if (eventData.IsLeftMouseButtonEvent() && PlayerCanInteract())
             {
-                leftClickAction();
+                OnLeftClick();
             }
         }
+
+        protected virtual void OnLeftClick() { }
 
         protected virtual void OnDestroy()
         {

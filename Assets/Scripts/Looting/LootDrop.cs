@@ -3,7 +3,7 @@ using UnityEngine;
 using RPGPlatformer.Core;
 using RPGPlatformer.Inventory;
 using RPGPlatformer.UI;
-using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 namespace RPGPlatformer.Loot
 {
@@ -11,12 +11,9 @@ namespace RPGPlatformer.Loot
     public class LootDrop : InteractableGameObject, ILootDrop
     {
         [SerializeField] protected float maxLifeTime = 150;
-        //[SerializeField] protected float maxSearchableDistance = 2.5f;
-        //[SerializeField] protected string displayName = "Loot Bag";
 
         protected float lifeTimer = 0;
         protected bool beingInspected;
-        //protected Transform playerTransform;
         protected ILooter playerLooter;
         protected InventoryManager inventory;
         protected Action OnUpdate;
@@ -27,7 +24,6 @@ namespace RPGPlatformer.Loot
         public InventoryManager Inventory => inventory;
 
         public event Action OnDropDestroyed;
-        //public event Action PlayerOutOfRange;
 
         public static event Action<ILootDrop> OnLootSearched;
 
@@ -48,11 +44,18 @@ namespace RPGPlatformer.Loot
         private void Update()
         {
             lifeTimer += Time.deltaTime;
-            if (lifeTimer >= maxLifeTime)
+            if (lifeTimer > maxLifeTime)
             {
                 DestroyDrop();
             }
             OnUpdate?.Invoke();
+        }
+
+        public override IEnumerable<(string, Func<bool>, Action)> InteractionOptions()
+        {
+            yield return ("Take all", PlayerCanInteract, OnLeftClick);
+            yield return ($"Search {DisplayName}", PlayerCanInteract, Search);
+            base.InteractionOptions();
         }
 
         private void HandleInventoryChanged()
@@ -63,13 +66,18 @@ namespace RPGPlatformer.Loot
             }
         }
 
-        public override void OnPointerClick(PointerEventData eventData)
+        //public override void OnPointerClick(PointerEventData eventData)
+        //{
+        //    base.OnPointerClick(eventData);
+
+        //    if (!eventData.IsLeftMouseButtonEvent()) return;
+        //    if (GlobalGameTools.PlayerIsInCombat|| !PlayerInRangeWithNotifications()) return;
+
+        //    TakeAll();
+        //}
+
+        protected override void OnLeftClick()
         {
-            base.OnPointerClick(eventData);
-
-            if (!eventData.IsLeftMouseButtonEvent()) return;
-            if (GlobalGameTools.PlayerIsInCombat|| !PlayerInRangeWithNotifications()) return;
-
             TakeAll();
         }
 
@@ -77,20 +85,24 @@ namespace RPGPlatformer.Loot
         {
             if (data == null)
             {
-                Debug.Log($"Loot drop {gameObject.name} detected an overflow in its loot inventory, but the overflow data was null.");
+                Debug.Log($"Loot drop {gameObject.name} detected an overflow in its loot inventory, " +
+                    $"but the overflow data was null.");
                 return;
             }
-            Debug.Log($"Loot drop {gameObject.name} was not able to fit all of the assigned items in its loot inventory.");
+            Debug.Log($"Loot drop {gameObject.name} was not able to fit " +
+                $"all of the assigned items in its loot inventory.");
         }
 
         public void HandleInventoryOverflow(IInventorySlotDataContainer[] data)
         {
             if(data == null)
             {
-                Debug.Log($"Loot drop {gameObject.name} detected an overflow in its loot inventory, but the overflow data was null.");
+                Debug.Log($"Loot drop {gameObject.name} detected an overflow in its loot inventory, " +
+                    $"but the overflow data was null.");
                 return;
             }
-            Debug.Log($"Loot drop {gameObject.name} was not able to fit all of the assigned items in its loot inventory.");
+            Debug.Log($"Loot drop {gameObject.name} was not able to fit all " +
+                $"of the assigned items in its loot inventory.");
             Debug.Log($"[{data.Length} items omitted.]");
         }
 

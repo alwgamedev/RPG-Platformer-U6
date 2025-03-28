@@ -5,31 +5,31 @@ using UnityEngine.UI;
 namespace RPGPlatformer.Loot
 {
     [RequireComponent(typeof(ILootDrop))]
-    public class LootDropRightClickMenuSpawner : RightClickMenuSpawner
+    public class LootDropRightClickMenuSpawner : InteractableGameObjectRightClickMenuSpawner
     {
-        [SerializeField] Button menuButtonPrefab;
+        //[SerializeField] Button menuButtonPrefab;
 
-        ILootDrop lootDrop;
+        //ILootDrop lootDrop;
 
-        protected override void Awake()
-        {
-            base.Awake();
+        //protected override void Awake()
+        //{
+        //    base.Awake();
 
-            lootDrop = GetComponent<ILootDrop>();
-        }
+        //    lootDrop = GetComponent<ILootDrop>();
+        //}
 
-        public override bool CanCreateMenu()
-        {
-            return menuPrefab && menuButtonPrefab;
-        }
+        ////public override bool CanCreateMenu()
+        ////{
+        ////    return menuPrefab && menuButtonPrefab;
+        ////}
 
-        public override void ConfigureMenu(GameObject menu)
-        {
-            CreateAndConfigureButton(menu, menuButtonPrefab, 
-                $"Search <b>{lootDrop.DisplayName}</b>", lootDrop.Search);
-            CreateAndConfigureButton(menu, menuButtonPrefab, 
-                $"Examine <b>{lootDrop.DisplayName}</b>", lootDrop.Examine);
-            CreateAndConfigureButton(menu, menuButtonPrefab, "Cancel", ClearMenu);
-        }
+        //public override void ConfigureMenu(GameObject menu)
+        //{
+        //    CreateAndConfigureButton(menu, menuButtonPrefab, 
+        //        $"Search <b>{lootDrop.DisplayName}</b>", lootDrop.Search);
+        //    CreateAndConfigureButton(menu, menuButtonPrefab, 
+        //        $"Examine <b>{lootDrop.DisplayName}</b>", lootDrop.Examine);
+        //    CreateAndConfigureButton(menu, menuButtonPrefab, "Cancel", ClearMenu);
+        //}
     }
 }

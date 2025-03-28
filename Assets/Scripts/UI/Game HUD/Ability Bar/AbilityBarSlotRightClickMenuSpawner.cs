@@ -7,7 +7,7 @@ namespace RPGPlatformer.UI
 {
     public class AbilityBarSlotRightClickMenuSpawner : RightClickMenuSpawner
     {
-        [SerializeField] Button menuButtonPrefab;
+        //[SerializeField] Button menuButtonPrefab;
 
         AbilityBarSlot slotComponent;
 

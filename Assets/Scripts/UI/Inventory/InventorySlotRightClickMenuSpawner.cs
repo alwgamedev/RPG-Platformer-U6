@@ -8,7 +8,7 @@ namespace RPGPlatformer.UI
     [RequireComponent(typeof(IInventoryItemHolder))]
     public class InventorySlotRightClickMenuSpawner : RightClickMenuSpawner
     {
-        [SerializeField] protected Button menuButtonPrefab;
+        //[SerializeField] protected Button menuButtonPrefab;
 
         protected IInventorySlotDataContainer slotComponent;
 

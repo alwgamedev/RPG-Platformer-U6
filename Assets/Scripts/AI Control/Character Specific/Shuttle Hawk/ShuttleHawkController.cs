@@ -34,6 +34,8 @@ namespace RPGPlatformer.AIControl
         public bool ReturningToNest
             => stateManager.StateMachine.CurrentState == stateManager.StateGraph.returningToNest;
 
+        public event Action<bool> DialogueEnabled;
+
         protected override void Awake()
         {
             base.Awake();
@@ -71,12 +73,14 @@ namespace RPGPlatformer.AIControl
         {
             base.OnPatrolEntry();
 
-            npc.SetCursorTypeAndPrimaryAction(CursorType.Dialogue);
+            //npc.SetCursorTypeAndPrimaryAction(CursorType.Dialogue);
+            DialogueEnabled?.Invoke(true);
         }
 
         private void OnPatrolExit()
         {
-            npc.SetCursorTypeAndPrimaryAction(CursorType.Default);
+            //npc.SetCursorTypeAndPrimaryAction(CursorType.Default);
+            DialogueEnabled?.Invoke(false);
         }
 
         private void OnAwaitingDepartureEntry()
@@ -135,6 +139,13 @@ namespace RPGPlatformer.AIControl
             {
                 patroller.OnReturnedToNest();
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            DialogueEnabled = null;
         }
     }
 }

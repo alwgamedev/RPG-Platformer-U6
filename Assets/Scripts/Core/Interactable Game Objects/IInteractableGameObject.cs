@@ -1,4 +1,6 @@
 ﻿using RPGPlatformer.UI;
+using System;
+using System.Collections.Generic;
 
 namespace RPGPlatformer.Core
 {
@@ -9,5 +11,8 @@ namespace RPGPlatformer.Core
         public CursorType CursorType { get; }
 
         public bool PlayerCanInteract();
+
+        //(description, condition to execute, action)
+        public IEnumerable<(string, Func<bool>, Action)> InteractionOptions();
     }
 }
