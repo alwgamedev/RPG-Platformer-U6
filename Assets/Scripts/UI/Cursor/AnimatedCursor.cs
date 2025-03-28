@@ -7,10 +7,13 @@ namespace RPGPlatformer.UI
     [Serializable]
     public class AnimatedCursor : Cycle<Texture2D>
     {
-        public float secondsPerFrame = 0.2f;
-        public Vector2 hotspot;
-        private float timer;
+        [SerializeField] float secondsPerFrame = 0.2f;
+        [SerializeField] Vector2 hotspot;
+        
+        float timer;
 
+        public float SecondsPerFrame => secondsPerFrame;
+        public Vector2 Hotspot => hotspot;
         public Texture2D CurrentTexture => Current as Texture2D;
 
         public override bool MoveNext()

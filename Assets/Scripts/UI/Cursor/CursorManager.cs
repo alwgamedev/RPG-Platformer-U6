@@ -14,20 +14,24 @@ namespace RPGPlatformer.UI
 
     public class CursorManager : MonoBehaviour
     {
-        [SerializeField] Texture2D defaultCursor;
-        [SerializeField] Texture2D defaultCursorClicked;
-        [SerializeField] Texture2D dialogueCursor;
-        [SerializeField] Texture2D dialogueCursorClicked;
-        [SerializeField] Texture2D lootCursor;
-        [SerializeField] Texture2D lootCursorClicked;
-        [SerializeField] Texture2D enterDoorCursor;//maybe also for portals
-        [SerializeField] Texture2D enterDoorCursorClicked;
+        //[SerializeField] Texture2D defaultCursor;
+        //[SerializeField] Texture2D defaultCursorClicked;
+        //[SerializeField] Texture2D dialogueCursor;
+        //[SerializeField] Texture2D dialogueCursorClicked;
+        //[SerializeField] Texture2D lootCursor;
+        //[SerializeField] Texture2D lootCursorClicked;
+        //[SerializeField] Texture2D enterDoorCursor;//maybe also for portals
+        //[SerializeField] Texture2D enterDoorCursorClicked;
+        [SerializeField] CursorData defaultCursor;
+        [SerializeField] CursorData dialogueCursor;
+        [SerializeField] CursorData lootCursor;
+        [SerializeField] CursorData enterDoorCursor;//maybe also for portals
         [SerializeField] AnimatedCursorSO focusingRedCrosshairs;
         [SerializeField] AnimatedCursorSO blinkingGreenCrosshairs;
         [SerializeField] AnimatedCursorSO blinkingYellowCrosshairs;
 
         Action OnUpdate;
-        Dictionary<CursorType, (Texture2D, Texture2D, Vector2)> CursorLookup = new();
+        Dictionary<CursorType, CursorData> CursorLookup = new();
         bool animatedCursorEquipped;
         CursorType currentCursorType;
 
@@ -68,7 +72,7 @@ namespace RPGPlatformer.UI
             }
             else if (Event.current.type == EventType.MouseUp)
             {
-                EquipCursor(currentCursorType);
+                EquipCursor(currentCursorType, false);
             }
         }
 
@@ -91,21 +95,18 @@ namespace RPGPlatformer.UI
         {
             if (animatedCursorEquipped && !allowOverrideAnimatedCursor) return;
 
-            if (CursorLookup.TryGetValue(cursorType, out var cursorData) && cursorData.Item1 != null)
+            if (CursorLookup.TryGetValue(cursorType, out var cursorData))
             {
                 currentCursorType = cursorType;
-                var texture = clicked && cursorData.Item2 != null ? cursorData.Item2 : cursorData.Item1;
-                EquipStaticCursor(texture, cursorData.Item3);
+                EquipStaticCursor(cursorData, clicked);
             }
         }
 
-        private void EquipStaticCursor(Texture2D cursorTexture, Vector2 hotspot = default)
+        private void EquipStaticCursor(CursorData data, bool clicked)
         {
-            if (cursorTexture == null) return;
-
             OnUpdate = null;
             animatedCursorEquipped = false;
-            Cursor.SetCursor(cursorTexture, hotspot, CursorMode.ForceSoftware);
+            Cursor.SetCursor(clicked ? data.Texture : data.ClickedTexture, data.Hotspot, CursorMode.ForceSoftware);
         }
 
         private void EquipAnimatedCursor(AnimatedCursor animatedCursor)
@@ -118,7 +119,7 @@ namespace RPGPlatformer.UI
             {
                 if (animatedCursor.MoveNext())
                 {
-                    Cursor.SetCursor(animatedCursor.CurrentTexture, animatedCursor.hotspot, CursorMode.ForceSoftware);
+                    Cursor.SetCursor(animatedCursor.CurrentTexture, animatedCursor.Hotspot, CursorMode.ForceSoftware);
                 }
             };
         }
@@ -131,10 +132,10 @@ namespace RPGPlatformer.UI
         private void BuildCursorLookup()
         {
             CursorLookup.Clear();
-            CursorLookup.Add(CursorType.Default, (defaultCursor, defaultCursorClicked, default));
-            CursorLookup.Add(CursorType.Dialogue, (dialogueCursor, dialogueCursorClicked, default));
-            CursorLookup.Add(CursorType.Loot, (lootCursor, lootCursorClicked, default));
-            CursorLookup.Add(CursorType.EnterDoor, (enterDoorCursor, enterDoorCursorClicked, default));
+            CursorLookup.Add(CursorType.Default, defaultCursor);
+            CursorLookup.Add(CursorType.Dialogue, dialogueCursor);
+            CursorLookup.Add(CursorType.Loot, lootCursor);
+            CursorLookup.Add(CursorType.EnterDoor, enterDoorCursor);
         }
 
         private void OnDestroy()
