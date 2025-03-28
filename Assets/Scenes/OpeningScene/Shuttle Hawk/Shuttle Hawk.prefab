@@ -149,8 +149,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 6.462977, y: -0.72400504}
-  m_Size: {x: 16.166891, y: 3.755991}
+  m_Offset: {x: 5.9223566, y: -1.9230919}
+  m_Size: {x: 15.08568, y: 3.153133}
   m_Direction: 1
 --- !u!114 &4389421961141597446
 MonoBehaviour:
@@ -363,8 +363,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   departureWaitTime: 30
-  inFlightMountGravity: 150
-  defaultMountGravity: 85
+  inFlightMountGravity: 60
+  defaultMountGravity: 40
 --- !u!114 &5848020814946518481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,8 +405,8 @@ MonoBehaviour:
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
   inFlightLinearDamping: 100
-  flightSpeed: 3
-  takeOffForce: {x: 0, y: 12000}
+  flightSpeed: 2.25
+  takeOffForce: {x: 0, y: 7000}
 --- !u!114 &1519639630161499023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,7 +436,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 90
+    acceleration: 100
     flipSprite: 1
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -464,7 +464,7 @@ MonoBehaviour:
     minRotationLeft: {x: -1, y: 0}
   - movementType: 3
     moveDirection: 1
-    acceleration: 400
+    acceleration: 280
     flipSprite: 1
     changeDirectionWrtGlobalUp: 1
     clampXVelocityOnly: 0
@@ -668,7 +668,7 @@ Transform:
   m_GameObject: {fileID: 7862475031794593128}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.96, y: -2.13, z: 0}
+  m_LocalPosition: {x: -0.6, y: -3.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -699,7 +699,7 @@ Transform:
   m_GameObject: {fileID: 8669477947862795333}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.89, y: -0.66, z: 0}
+  m_LocalPosition: {x: 12.03, y: -0.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1187,14 +1187,14 @@ PolygonCollider2D:
       - {x: 14.158295, y: 1.5628643}
       - {x: 14.421762, y: 4.1468315}
       - {x: 11.215775, y: 1.960272}
-      - {x: 5.2947445, y: 3.571555}
-      - {x: 3.1827743, y: 5.665593}
+      - {x: 5.54013, y: 4.825939}
+      - {x: 2.5499122, y: 6.6711903}
       - {x: -0.7669728, y: 8.4681015}
       - {x: -4.668584, y: 3.3680472}
       - {x: -4.0221577, y: -1.3001064}
       - {x: -2.973044, y: -2.3310552}
-      - {x: 6.076485, y: -1.3828832}
-      - {x: 12.241527, y: -0.59575593}
+      - {x: 5.575955, y: -1.4984745}
+      - {x: 12.622809, y: -0.8087133}
   m_UseDelaunayMesh: 0
 --- !u!114 &4018914529200880135
 MonoBehaviour:

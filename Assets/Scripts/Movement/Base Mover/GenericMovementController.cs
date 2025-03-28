@@ -6,6 +6,8 @@ using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Movement
 {
+    using static MovementTools;
+
     [RequireComponent(typeof(AnimationControl))]
     public abstract class GenericMovementController<T0, T1, T2, T3> : MonoBehaviour, IMovementController
         where T0 : Mover
@@ -18,7 +20,7 @@ namespace RPGPlatformer.Movement
         protected T0 mover;
         protected T3 movementManager;
 
-        protected bool ignoreMoveInputThisFrame;
+        protected bool ignoreMoveInputNextUpdate;
 
         protected Func<Vector2, Vector2> GetMoveDirection = (v) => default;
         protected Action OnFixedUpdate;
@@ -97,7 +99,7 @@ namespace RPGPlatformer.Movement
                 mover.Rigidbody.linearVelocity += Time.deltaTime * CurrentMount.LocalGravity;
             }
 
-            ignoreMoveInputThisFrame = false;
+            ignoreMoveInputNextUpdate = false;
         }
 
         protected virtual void InitializeUpdate()
@@ -228,11 +230,6 @@ namespace RPGPlatformer.Movement
 
         public virtual float SpeedFraction(float maxSpeed)
         {
-            //return 0 if sliding backwards and no move input
-            if (MoveInput == Vector2.zero && RelativeVelocity.x * (int)CurrentOrientation < 0)
-            {
-                return 0;
-            }
             return RelativeVelocity.magnitude / maxSpeed;
         }
 
@@ -279,10 +276,52 @@ namespace RPGPlatformer.Movement
             //bc e.g. we may have been facing backwards on the mount before
             mover.SetOrientation((HorizontalOrientation)(-(int)CurrentOrientation), currentMovementOptions.FlipSprite,
                 currentMovementOptions.ChangeDirectionWrtGlobalUp);
-            var d = Vector2.Dot(transform.position - CurrentMount.Position, CurrentMount.VelocitySourceTransformRight);
-            transform.position -= 2 * d * CurrentMount.VelocitySourceTransformRight;
-        }
+            //var d = Vector2.Dot(transform.position - CurrentMount.Position, CurrentMount.VelocitySourceTransformRight);
+            //transform.position -= 2 * d * CurrentMount.VelocitySourceTransformRight;
+            var dp = transform.position - CurrentMount.Position;
+            dp = ReflectAlongUnitVector(CurrentMount.VelocitySourceTransformRight, dp);
+            transform.position = CurrentMount.Position + dp;
+            var dvX = Vector2.Dot(mover.Rigidbody.linearVelocity, CurrentMount.VelocitySourceTransformRight);
+            var dvY = Vector2.Dot(mover.Rigidbody.linearVelocity, CurrentMount.VelocitySourceTransformRight);
+            //mover.Rigidbody.linearVelocity = CurrentMount.Velocity + (Vector2)dv;
+            IgnoreMoveInputNextUpdate();
+            Debug.Log($"storing dv: ({dvX}, {dvY})");
+            Debug.Log(Time.fixedTime);
 
+            //int counter = 0;
+
+            OnFixedUpdate += VelocityCorrection;
+
+            //issue we're trying to solve: mount will change its direction, just before it updates its velocity
+            //so we may be using the old velocity still in this calculation
+            //so I'm adding another to the next fixed update
+            //also the hawk rotates just after changing direction
+            void VelocityCorrection()
+            {
+                if (CurrentMount == null)
+                {
+                    OnFixedUpdate -= VelocityCorrection;
+                    return;
+                }
+                //Debug.Log($"correcting velocity ({counter})");
+                //Debug.Log($"mount velocity: {CurrentMount.Velocity}");
+                //Debug.Log($"player velocity: {CurrentMount.Velocity + (Vector2)dv}");
+                Debug.Log("correcting velocity");
+                mover.Rigidbody.linearVelocity = CurrentMount.Velocity 
+                    - dvX * (Vector2)CurrentMount.VelocitySourceTransformRight
+                    + dvY * ((Vector2)CurrentMount.VelocitySourceTransformRight).CCWPerp();
+
+                OnFixedUpdate -= VelocityCorrection;
+                //if (counter > 3)
+                //{
+                //    OnFixedUpdate -= VelocityCorrection;
+                //}
+                //else
+                //{
+                //    IgnoreMoveInputNextUpdate();
+                //}
+            }
+        }
 
         //STATE CHANGE HANDLERS
 
@@ -296,7 +335,7 @@ namespace RPGPlatformer.Movement
             if (moveInput != Vector2.zero)
             {
                 SetOrientation(moveInput);
-                if (!ignoreMoveInputThisFrame)
+                if (!ignoreMoveInputNextUpdate)
                 {
                     Move(moveInput);
                 }
@@ -315,9 +354,9 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void IgnoreMoveInputThisFrame()
+        protected virtual void IgnoreMoveInputNextUpdate()
         {
-            ignoreMoveInputThisFrame = true;
+            ignoreMoveInputNextUpdate = true;
         }
 
         protected void OnFreefallExit()
@@ -330,6 +369,7 @@ namespace RPGPlatformer.Movement
 
         public virtual void OnDeath()
         {
+            Dismount();
             TempFixedUpdate = OnFixedUpdate;
             TempUpdate = OnUpdate;
             OnFixedUpdate = null;

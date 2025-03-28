@@ -2194,7 +2194,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 586aa1d0b99ba7b4f88c666278f3186a, type: 2}
-    m_Threshold: 0.25
+    m_Threshold: 0.05
     m_Position: {x: 0, y: 0}
     m_TimeScale: 3.5
     m_CycleOffset: 0
@@ -2353,7 +2353,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: speedFraction
-    m_EventTreshold: 0.1
+    m_EventTreshold: 0.02
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7492377384464263596}
   m_Solo: 0

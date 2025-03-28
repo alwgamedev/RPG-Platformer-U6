@@ -41,7 +41,7 @@ namespace RPGPlatformer.Movement
         protected virtual void ConfigureWallDetection()
         {
             OnUpdate += UpdateAndHandleWallInteraction;
-            mover.AwkwardWallMoment += IgnoreMoveInputThisFrame;
+            mover.AwkwardWallMoment += IgnoreMoveInputNextUpdate;
         }
 
         //BASIC FUNCTIONS
@@ -75,6 +75,12 @@ namespace RPGPlatformer.Movement
         {
             if (Grounded)
             {
+                if (MoveInput == Vector2.zero)
+                {
+                    movementManager.AnimateMovement(0);
+                    return;
+                    //animator will transition to idle, but the transition is smooth!
+                }
                 movementManager.AnimateMovement(SpeedFraction(mover.RunSpeed));
             }
         }
