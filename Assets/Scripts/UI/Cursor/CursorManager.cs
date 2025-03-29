@@ -56,7 +56,7 @@ namespace RPGPlatformer.UI
 
             InteractableGameObject.HoveredIGOChanged += EquipIGOHoverCursor;
 
-            EquipCursor(CursorType.Default, false, true);
+            EquipCursor(CursorType.Default);
         }
 
         private void Update()
@@ -106,7 +106,8 @@ namespace RPGPlatformer.UI
         {
             OnUpdate = null;
             animatedCursorEquipped = false;
-            Cursor.SetCursor(clicked ? data.Texture : data.ClickedTexture, data.Hotspot, CursorMode.ForceSoftware);
+            var tex = clicked ? data.ClickedTexture : data.Texture;
+            Cursor.SetCursor(tex, data.Hotspot, CursorMode.ForceSoftware);
         }
 
         private void EquipAnimatedCursor(AnimatedCursor animatedCursor)
