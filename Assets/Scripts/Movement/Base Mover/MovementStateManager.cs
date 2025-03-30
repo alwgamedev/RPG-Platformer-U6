@@ -23,12 +23,12 @@ namespace RPGPlatformer.Movement
 
         public void AnimateFreefall()
         {
-            animationControl.animator.SetTrigger("freefall");
-            animationControl.animator.ResetTrigger("land");
+            animationControl.SetTrigger("freefall");
+            animationControl.ResetTrigger("land");
         }
         public void AnimateLanding()
         {
-            animationControl.animator.SetTrigger("land");
+            animationControl.SetTrigger("land");
         }
     }
 }

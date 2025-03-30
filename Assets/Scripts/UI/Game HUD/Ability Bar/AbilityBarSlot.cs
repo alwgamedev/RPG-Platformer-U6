@@ -31,7 +31,7 @@ namespace RPGPlatformer.UI
 
         protected virtual void Awake()
         {
-            SettingsManager.OnIAMConfigure += DisplayKeybind;
+            SettingsManager.IAMConfigured += DisplayKeybind;
         }
 
 
@@ -248,7 +248,7 @@ namespace RPGPlatformer.UI
 
         protected virtual void OnDestroy()
         {
-            SettingsManager.OnIAMConfigure -= DisplayKeybind;
+            SettingsManager.IAMConfigured -= DisplayKeybind;
             OnDragResolved = null;
             OnItemChanged = null;
         }

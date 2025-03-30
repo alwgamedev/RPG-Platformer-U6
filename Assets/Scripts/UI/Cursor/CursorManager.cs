@@ -38,6 +38,8 @@ namespace RPGPlatformer.UI
         private void Awake()
         {
             BuildCursorLookup();
+
+            SettingsManager.IAMConfigured += OnIAMConfigure;
         }
 
         private void Start()
@@ -57,6 +59,7 @@ namespace RPGPlatformer.UI
             InteractableGameObject.HoveredIGOChanged += EquipIGOHoverCursor;
 
             EquipCursor(CursorType.Default);
+
         }
 
         private void Update()
@@ -64,16 +67,42 @@ namespace RPGPlatformer.UI
             OnUpdate?.Invoke();
         }
 
-        private void OnGUI()
+        private void OnIAMConfigure()
         {
-            if (Event.current.type == EventType.MouseDown)
+            var iam = SettingsManager.Instance.IAM;
+            iam.LeftClickAction.started += ctx => HandleMouseClick(true);
+            iam.RightClickAction.started += ctx => HandleMouseClick(true);
+            iam.LeftClickAction.canceled += ctx =>
             {
-                EquipCursor(currentCursorType, true);
-            }
-            else if (Event.current.type == EventType.MouseUp)
+                if (!iam.RightClickDown)
+                {
+                    HandleMouseClick(false);
+                }
+            };
+            iam.RightClickAction.canceled += ctx =>
             {
-                EquipCursor(currentCursorType, false);
-            }
+                if (!iam.LeftClickDown)
+                {
+                    HandleMouseClick(false);
+                }
+            };
+        }
+
+        //private void OnGUI()
+        //{
+        //    if (Event.current.type == EventType.MouseDown)
+        //    {
+        //        EquipCursor(currentCursorType, true);
+        //    }
+        //    else if (Event.current.type == EventType.MouseUp)
+        //    {
+        //        EquipCursor(currentCursorType, false);
+        //    }
+        //}
+
+        private void HandleMouseClick(bool mouseDown)
+        {
+            EquipCursor(currentCursorType, mouseDown);
         }
 
         private void EquipIGOHoverCursor()

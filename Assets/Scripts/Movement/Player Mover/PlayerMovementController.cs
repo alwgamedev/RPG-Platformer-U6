@@ -12,7 +12,7 @@ namespace RPGPlatformer.Movement
         {
             base.Awake();
 
-            SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            SettingsManager.IAMConfigured += OnIAMConfigure;
         }
 
         void OnIAMConfigure()
@@ -97,7 +97,7 @@ namespace RPGPlatformer.Movement
         {
             base.OnDestroy();
 
-            SettingsManager.OnIAMConfigure -= OnIAMConfigure;
+            SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
     }
 }

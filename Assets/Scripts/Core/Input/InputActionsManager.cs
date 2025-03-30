@@ -34,7 +34,9 @@ namespace RPGPlatformer.Core
         public Dictionary<int, InputAction> AbilityBarActions = new();
 
 
-        ////BOOLS FOR KEY HELD DOWN
+        //BOOLS FOR KEY HELD DOWN
+        public bool LeftClickDown { get; private set; }
+        public bool RightClickDown { get; private set; }
         public bool MoveLeftHeldDown { get; private set; }
         public bool MoveRightHeldDown { get; private set; }
         public bool MouseOverUI {  get; private set; }
@@ -75,8 +77,13 @@ namespace RPGPlatformer.Core
 
             LeftClickAction = actionMap.AddAction(name: "Left Click", type: InputActionType.Value, 
                 binding: "<Mouse>/leftButton");
+            LeftClickAction.started += ctx => { LeftClickDown = true; };
+            LeftClickAction.canceled += ctx => { LeftClickDown = false; };
+
             RightClickAction = actionMap.AddAction(name: "Right Click", type: InputActionType.Value, 
                 binding: "<Mouse>/rightButton");
+            RightClickAction.started += ctx => { RightClickDown = true; };
+            RightClickAction.canceled += ctx => { RightClickDown = false; };
 
             MoveLeftAction = actionMap.AddAction(name: "Move Left", type: InputActionType.Value, 
                 binding: currentBindings.moveLeftBindingPath);

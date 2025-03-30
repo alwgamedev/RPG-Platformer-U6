@@ -16,7 +16,7 @@ namespace RPGPlatformer.SceneManagement
 
         private void Awake()
         {
-            SettingsManager.OnIAMConfigure += OnIAMConfigured;
+            SettingsManager.IAMConfigured += OnIAMConfigured;
         }
 
         private void Start()
@@ -83,7 +83,7 @@ namespace RPGPlatformer.SceneManagement
             OnPause = null;
             OnUnpause = null;
 
-            SettingsManager.OnIAMConfigure -= OnIAMConfigured;
+            SettingsManager.IAMConfigured -= OnIAMConfigured;
         }
     }
 }

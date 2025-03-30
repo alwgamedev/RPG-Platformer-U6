@@ -20,17 +20,13 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4484763385892930146, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: b16e1f6e491f6a8419c144984c41255f, type: 2}
     - target: {fileID: 4905799773255284827, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -131.05
+      value: -131.19
       objectReference: {fileID: 0}
     - target: {fileID: 4905799773255284827, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -13.52
+      value: -13.6
       objectReference: {fileID: 0}
     - target: {fileID: 4905799773255284827, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -72,33 +68,8 @@ PrefabInstance:
       propertyPath: examineText
       value: I wonder what it says...
       objectReference: {fileID: 0}
-    - target: {fileID: 8154726742773380898, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
-      propertyPath: targetCanvasSource
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 485279002436617384, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4815037413899938856}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
---- !u!1 &7263278522954037562 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 485279002436617384, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
-  m_PrefabInstance: {fileID: 7093266152756280722}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4815037413899938856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7263278522954037562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42c29f00fbab0264ba63ddbaff9b2bde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cloneMaterialOnStart: 1

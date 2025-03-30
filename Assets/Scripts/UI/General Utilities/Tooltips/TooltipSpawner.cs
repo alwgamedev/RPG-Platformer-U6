@@ -49,7 +49,7 @@ namespace RPGPlatformer.UI
             {
                 OnIAMConfigure();
             }
-            SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            SettingsManager.IAMConfigured += OnIAMConfigure;
             //still subscribe in case action map gets rebuilt due to input bindings change or something
         }
 

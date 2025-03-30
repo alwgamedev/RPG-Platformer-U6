@@ -10,12 +10,13 @@ namespace RPGPlatformer.Core
 
         Material material;
 
+        //if you end up not using these at all, then get rid of them (free up memory)
         Dictionary<string, int> FloatPropertyID = new();
         Dictionary<string, int> VectorPropertyID = new();//color properties also get stored here
 
         //can add other property types (e.g. texture property) but for now don't need it
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             InitializeMaterial();
         }
@@ -41,6 +42,26 @@ namespace RPGPlatformer.Core
             {
                 VectorPropertyID[prop] = Shader.PropertyToID(prop);
             }
+        }
+
+        public float GetFloat(string name)
+        {
+            return material.GetFloat(FloatPropertyID[name]);
+        }
+
+        public void SetFloat(string name, float val)
+        {
+            material.SetFloat(FloatPropertyID[name], val);
+        }
+
+        public void SetColor(string name, Color color)
+        {
+            material.SetColor(VectorPropertyID[name], color);
+        }
+
+        public Color GetColor(string name)
+        {
+            return material.GetColor(VectorPropertyID[name]);
         }
     }
 }

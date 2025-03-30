@@ -5,9 +5,7 @@ namespace RPGPlatformer.SceneManagement
 {
     public class MonoBehaviourPauseConfigurer : MonoBehaviour
     {
-        //List<IPausable> pauseable;
         Action OnDestroyed;
-        //bool subscribedToPauseManager;
 
         private void Start()
         {

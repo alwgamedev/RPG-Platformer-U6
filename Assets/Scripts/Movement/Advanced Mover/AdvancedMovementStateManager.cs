@@ -31,44 +31,44 @@ namespace RPGPlatformer.Movement
 
         public void AnimateMovement(float value)
         {
-            animationControl.animator.SetFloat("speedFraction", value, 0.1f, Time.deltaTime);
+            animationControl.SetFloat("speedFraction", value, 0.1f, Time.deltaTime);
             //animationControl.animator.SetFloat("moveMotionTime", Time.time);
         }
 
         public void AnimateJumping()
         {
-            animationControl.animator.SetTrigger("jump");
-            animationControl.animator.ResetTrigger("land");//just in case
+            animationControl.SetTrigger("jump");
+            animationControl.ResetTrigger("land");//just in case
         }
 
         public void AnimateDoubleJump()
         {
-            animationControl.animator.SetTrigger("doubleJump");
+            animationControl.SetTrigger("doubleJump");
         }
 
         public bool IsWallClinging()
         {
-            return animationControl.animator.GetBool("wallCling");
+            return animationControl.GetBool("wallCling");
         }
 
         public void AnimateWallCling(bool val)
         {
-            animationControl.animator.SetBool("wallCling", val);
+            animationControl.SetBool("wallCling", val);
         }
 
         public bool IsWallScrambling()
         {
-            return animationControl.animator.GetBool("wallScramble");
+            return animationControl.GetBool("wallScramble");
         }
 
         public void AnimateWallScramble(bool val)
         {
-            animationControl.animator.SetBool("wallScramble", val);
+            animationControl.SetBool("wallScramble", val);
         }
 
         public void SetDownSpeed(float yVelocity)
         {
-            animationControl.animator.SetFloat("downSpeed", Mathf.Clamp(-yVelocity / 2, 0, 1));
+            animationControl.SetFloat("downSpeed", Mathf.Clamp(-yVelocity / 2, 0, 1));
         }
     }
 }

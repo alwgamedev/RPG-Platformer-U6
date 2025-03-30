@@ -14,7 +14,7 @@ namespace RPGPlatformer.Saving
     {
         private void Awake()
         {
-            SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            SettingsManager.IAMConfigured += OnIAMConfigure;
         }
 
         private void OnIAMConfigure()
@@ -84,7 +84,7 @@ namespace RPGPlatformer.Saving
 
         private void OnDestroy()
         {
-            SettingsManager.OnIAMConfigure -= OnIAMConfigure;
+            SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
     }
 }

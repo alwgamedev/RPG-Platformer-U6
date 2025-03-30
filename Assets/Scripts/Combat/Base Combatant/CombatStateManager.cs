@@ -108,7 +108,7 @@ namespace RPGPlatformer.Combat
 
         public virtual void CeaseAttack()
         {
-            animationControl.animator.SetTrigger("ceaseAttack");
+            animationControl.SetTrigger("ceaseAttack");
         }
 
         protected virtual void OnNotInCombatEntry()

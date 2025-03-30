@@ -17,13 +17,13 @@ namespace RPGPlatformer.Movement
 
         public void OnFlyingEntry()
         {
-            animationControl.animator.SetTrigger("flightTakeOff");
-            animationControl.animator.ResetTrigger("land");
+            animationControl.SetTrigger("flightTakeOff");
+            animationControl.ResetTrigger("land");
         }
 
         public void OnFlyingExit()
         {
-            animationControl.animator.SetTrigger("land");
+            animationControl.SetTrigger("land");
         }
     }
 }

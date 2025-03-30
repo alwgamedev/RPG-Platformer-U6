@@ -53,7 +53,7 @@ namespace RPGPlatformer.UI
             {
                 OnIAMConfigure();
             }
-            SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            SettingsManager.IAMConfigured += OnIAMConfigure;
             //subscribe in either case, so that we are linked up to the latest action map whenever it
             //gets rebuilt (e.g. due to input bindings change or something)
         }
@@ -84,7 +84,7 @@ namespace RPGPlatformer.UI
             var iam = SettingsManager.Instance.IAM;
             iam.LeftClickAction.canceled += CancelOnMouseUp;
             iam.RightClickAction.canceled += CancelOnMouseUp;
-            SettingsManager.OnIAMConfigure -= OnIAMConfigure;
+            SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
 
         public void Pause()

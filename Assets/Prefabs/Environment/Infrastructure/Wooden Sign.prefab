@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 4413830779601700589}
   - component: {fileID: 6415810540769253202}
   - component: {fileID: 8154726742773380898}
+  - component: {fileID: 2351482636296147386}
+  - component: {fileID: 5172148425502274794}
   m_Layer: 10
   m_Name: Wooden Sign
   m_TagString: Untagged
@@ -59,7 +61,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: b16e1f6e491f6a8419c144984c41255f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,7 +131,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 12, y: 15}
+    oldSize: {x: 10.87, y: 13.12}
     newSize: {x: 12, y: 15}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -180,7 +182,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c929d1d82ae3b6241ad7c6e7f95efe30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetCanvasSource: 0
+  targetCanvasSource: 1
   menuPrefab: {fileID: 8243535585966996843, guid: c551c427647afd148b00f56340a43966, type: 3}
   menuButtonPrefab: {fileID: 6071247106101167904, guid: 0460550107ed1174fab3368bcfe61d21, type: 3}
   disableWhenPlayerIsDead: 1
+--- !u!114 &2351482636296147386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485279002436617384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42c29f00fbab0264ba63ddbaff9b2bde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cloneMaterialOnStart: 1
+--- !u!114 &5172148425502274794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485279002436617384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6229876dd86df6a40b597501629b370b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minHighlightIntensity: 0
+  maxHighlightIntensity: 6
+  tweenTime: 0.4

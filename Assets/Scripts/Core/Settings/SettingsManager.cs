@@ -16,7 +16,7 @@ namespace RPGPlatformer.Core
         //then we would have to serialize attack abilities and way too much information; this way we basically
         //just store the combat style and ability name)
 
-        public static event Action OnIAMConfigure;//also gets called when new InputSettings are set
+        public static event Action IAMConfigured;//also gets called when new InputSettings are set
         public static event Action<SerializableCharacterAbilityBarData> NewAbilityBarSettings;
 
         private void Awake()
@@ -62,7 +62,7 @@ namespace RPGPlatformer.Core
 
         private void IAMConfigureHandler()
         {
-            OnIAMConfigure?.Invoke();
+            IAMConfigured?.Invoke();
         }
 
 
@@ -79,7 +79,7 @@ namespace RPGPlatformer.Core
             if(Instance == this)
             {
                 IAM.OnConfigure -= IAMConfigureHandler;
-                OnIAMConfigure = null;
+                IAMConfigured = null;
                 Instance = null;
             }
         }

@@ -15,7 +15,7 @@ namespace RPGPlatformer.Combat
         {
             base.Awake();
 
-            SettingsManager.OnIAMConfigure += OnIAMConfigure;
+            SettingsManager.IAMConfigured += OnIAMConfigure;
             SettingsManager.NewAbilityBarSettings += UpdateAbilityBars;
 
             InteractableGameObject.IGOClicked += OnIGOClicked;
@@ -152,7 +152,7 @@ namespace RPGPlatformer.Combat
         {
             base.OnDestroy();
 
-            SettingsManager.OnIAMConfigure -= OnIAMConfigure;
+            SettingsManager.IAMConfigured -= OnIAMConfigure;
             SettingsManager.NewAbilityBarSettings -= UpdateAbilityBars;
             InteractableGameObject.IGOClicked -= OnIGOClicked;
         }
