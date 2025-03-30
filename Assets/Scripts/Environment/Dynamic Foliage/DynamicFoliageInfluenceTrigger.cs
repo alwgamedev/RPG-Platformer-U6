@@ -50,7 +50,7 @@ namespace RPGPlatformer.Environment
         private void Start()
         {
             foliageController = GetComponent<DynamicFoliageController>();
-            foliageMaterial = GetComponentInChildren<SpriteRenderer>().material;
+            foliageMaterial = GetComponentInChildren<Renderer>().material;
             defaultInfluence = foliageMaterial.GetVector(influenceVelocityProperty);
         }
 
@@ -59,7 +59,6 @@ namespace RPGPlatformer.Environment
             if (influencingCollider != null && !influencingCollider.gameObject.activeInHierarchy)
             {
                 OnInfluencingColliderDisabled?.Invoke();
-                //EndInfluence(influencingCollider);
             }
         }
 
@@ -185,35 +184,6 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        //IEnumerator EaseIn(Vector2 velocity, float orientation)
-        //{
-        //    easingIn = true;
-        //    easingOut = false;
-        //    foliageController.SetFoliageInfluenceOrientation(foliageMaterial, orientation);
-
-        //    velocity *= externalInfluenceStrength;
-        //    float timer = 0;
-
-        //    while (timer < foliageController.EaseInTime)
-        //    {
-        //        if (!easingIn)
-        //        {
-        //            yield break;
-        //        }
-        //        float progress = timer / foliageController.EaseInTime;
-        //        Vector2 newVelocity = (1 - progress) * defaultInfluence + progress * velocity;
-        //        foliageController.SetFoliageInfluenceVelocity(foliageMaterial, newVelocity);
-        //        timer += Time.deltaTime;
-        //        yield return null;
-        //    }
-
-        //    if (easingIn)
-        //    {
-        //        foliageController.SetFoliageInfluenceVelocity(foliageMaterial, velocity);
-        //        easingIn = false;
-        //    }
-        //}
-
         private async Task EaseOut(CancellationToken token)
         {
             easingOut = true;
@@ -250,41 +220,6 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        //IEnumerator EaseOut()
-        //{
-        //    easingOut = true;
-        //    easingIn = false;
-
-        //    Vector2 startingInfluence = foliageMaterial.GetVector(influenceVelocityProperty);
-        //    float timer = 0;
-
-        //    while (timer < foliageController.EaseOutTime)
-        //    {
-        //        if (!easingOut)
-        //        {
-        //            yield break;
-        //        }
-        //        float p = timer / foliageController.EaseOutTime;
-        //        p = Mathf.Pow(p, snapBackRate);
-        //        Vector2 newVelocity = (1 - p) * startingInfluence 
-        //            + p * defaultInfluence;
-        //        foliageController.SetFoliageInfluenceVelocity(foliageMaterial, newVelocity);
-        //        timer += Time.deltaTime;
-        //        yield return null;
-        //    }
-
-        //    if (easingOut)
-        //    {
-        //        foliageController.SetFoliageInfluenceVelocity(foliageMaterial, defaultInfluence);
-        //        easingOut = false;
-        //    }
-        //}
-
-        //private void OnDisable()
-        //{
-        //    StopAllCoroutines();
-        //}
-
         private void OnDisable()
         {
             if (!lifeCTS.IsCancellationRequested)
@@ -292,6 +227,7 @@ namespace RPGPlatformer.Environment
                 lifeCTS.Cancel();
                 lifeCTS.Dispose();
             }
+
             OnInfluencingColliderDisabled = null;
         }
     }

@@ -32,6 +32,7 @@ namespace RPGPlatformer.Movement
         public void AnimateMovement(float value)
         {
             animationControl.animator.SetFloat("speedFraction", value, 0.1f, Time.deltaTime);
+            //animationControl.animator.SetFloat("moveMotionTime", Time.time);
         }
 
         public void AnimateJumping()

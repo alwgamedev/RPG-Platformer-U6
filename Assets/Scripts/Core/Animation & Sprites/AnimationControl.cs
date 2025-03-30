@@ -26,11 +26,6 @@ namespace RPGPlatformer.Core
             animator.runtimeAnimatorController = defaultAnimatorController;
         }
 
-        public void PlayIdleAnimation()
-        {
-            PlayAnimationState("Idle", "Base Layer", 0);
-        }
-
         public void PlayAnimationState(string stateName, string layerName, float normalizedTime)
         {
             if (!animator) return;

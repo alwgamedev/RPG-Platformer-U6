@@ -20,14 +20,9 @@ namespace RPGPlatformer.Core
         {
             get
             {
-                if (TryGetComponent(out SpriteRenderer sr))
+                if (TryGetComponent(out Renderer renderer))
                 {
-                    return sr.sortingLayerID;
-                }
-
-                if (TryGetComponent(out SpriteShapeRenderer ssr))
-                {
-                    return ssr.sortingLayerID;
+                    return renderer.sortingLayerID;
                 }
 
                 return null;
@@ -38,14 +33,9 @@ namespace RPGPlatformer.Core
         {
             get
             {
-                if (TryGetComponent(out SpriteRenderer sr))
+                if (TryGetComponent(out Renderer renderer))
                 {
-                    return sr.sortingOrder;
-                }
-
-                if (TryGetComponent(out SpriteShapeRenderer ssr))
-                {
-                    return ssr.sortingOrder;
+                    return renderer.sortingOrder;
                 }
 
                 return null;
@@ -75,16 +65,10 @@ namespace RPGPlatformer.Core
 
             if (!layerID.HasValue || !layerOrder.HasValue) return;
 
-            if (TryGetComponent(out SpriteRenderer sr))
+            if (TryGetComponent(out Renderer renderer))
             {
-                sr.sortingLayerID = layerID.Value;
-                sr.sortingOrder = layerOrder.Value + orderDelta;
-            }
-
-            if (TryGetComponent(out SpriteShapeRenderer ssr))
-            {
-                ssr.sortingLayerID = layerID.Value;
-                ssr.sortingOrder = layerOrder.Value + orderDelta;
+                renderer.sortingLayerID = layerID.Value;
+                renderer.sortingOrder = layerOrder.Value + orderDelta;
             }
         }
 

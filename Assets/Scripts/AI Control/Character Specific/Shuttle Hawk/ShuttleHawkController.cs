@@ -1,7 +1,6 @@
 using UnityEngine;
 using RPGPlatformer.Movement;
 using RPGPlatformer.Core;
-using RPGPlatformer.UI;
 using System;
 using System.Collections.Generic;
 
@@ -73,13 +72,11 @@ namespace RPGPlatformer.AIControl
         {
             base.OnPatrolEntry();
 
-            //npc.SetCursorTypeAndPrimaryAction(CursorType.Dialogue);
             DialogueEnabled?.Invoke(true);
         }
 
         private void OnPatrolExit()
         {
-            //npc.SetCursorTypeAndPrimaryAction(CursorType.Default);
             DialogueEnabled?.Invoke(false);
         }
 

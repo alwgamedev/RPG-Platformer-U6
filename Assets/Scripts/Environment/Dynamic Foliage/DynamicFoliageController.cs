@@ -25,10 +25,5 @@ namespace RPGPlatformer.Environment
         {
             mat.SetFloat(influenceOrientationProperty, orientation);
         }
-
-        //public void LerpFoliageInfluence(Material mat, Vector2 influenceVelocity)
-        //{
-        //    mat.SetVector(externalInfluenceProperty, Mathf.Lerp())
-        //}
     }
 }
