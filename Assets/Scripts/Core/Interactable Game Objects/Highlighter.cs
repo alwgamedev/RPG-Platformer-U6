@@ -7,14 +7,20 @@ namespace RPGPlatformer.Core
     [RequireComponent(typeof(MaterialManager))]
     public class Highlighter : MonoBehaviour
     {
-        [SerializeField] float minHighlightIntensity;//almost always 0
-        [SerializeField] float maxHighlightIntensity = 5;
+        [SerializeField] float minThickness;
+        [SerializeField] float maxThickness = .02f;
+        [SerializeField] float minIntensity;//almost always 0
+        [SerializeField] float maxIntensity = 5;
         [SerializeField] float tweenTime = 1;//seconds to go from min to max highlight
+        [SerializeField] float easeInTimeScale = 1;
+        [SerializeField] float easeOutTimeScale = - 0.5f;
 
         MaterialManager materialManager;
+        float thicknessRange;
         float intensityRange;
-        float tweenRate;
-        int tweenTimeScale;
+        float tweenRate;//tween progress / second = dt * timeScale / tweenTime
+        //int tweenTimeScale;
+        float tweenProgress;//from 0-1
         bool tweening;
 
         bool testing;
@@ -22,7 +28,8 @@ namespace RPGPlatformer.Core
         private void Awake()
         {
             materialManager = GetComponent<MaterialManager>();
-            intensityRange = maxHighlightIntensity - minHighlightIntensity;
+            thicknessRange = maxThickness - minThickness;
+            intensityRange = maxIntensity - minIntensity;
             tweenRate = intensityRange / tweenTime;
         }
 
@@ -48,13 +55,15 @@ namespace RPGPlatformer.Core
         public void InstantMaxHighlight()
         {
             EndTween();
-            SetIntensity(maxHighlightIntensity);
+            SetIntensity(maxIntensity);
+            tweenProgress = 1;
         }
 
         public void InstantMinHighlight()
         {
             EndTween();
-            SetIntensity(minHighlightIntensity);
+            SetIntensity(minIntensity);
+            tweenProgress = 0;
         }
 
         public void EnableHighlight(bool val)
@@ -69,51 +78,73 @@ namespace RPGPlatformer.Core
             EnableHighlight(false);
         }
 
-        private bool CanBeginTween(int timeScale)
-        {
-            if (timeScale == 0)
-            {
-                return false;
-            }
+        //private bool CanBeginTween(float timeScale)
+        //{
+        //    if (timeScale == 0)
+        //    {
+        //        return false;
+        //    }
 
-            var val = materialManager.GetFloat("_BloomIntensityMultiplier");
-            if (timeScale > 0 && val >= maxHighlightIntensity)
-            {
-                return false;
-            }
-            if (timeScale < 0 && val <= minHighlightIntensity)
-            {
-                return false;
-            }
+        //    var val = materialManager.GetFloat("_BloomIntensityMultiplier");
+        //    if (timeScale > 0 && val >= maxIntensity)
+        //    {
+        //        return false;
+        //    }
+        //    if (timeScale < 0 && val <= minIntensity)
+        //    {
+        //        return false;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
-        //note that this automatically replaces any ongoing tween, which is a nice simple way to do it
-        //however if you start a new tween that replaces the "Up" half of a highlight flash,
-        //the "Down" half can come back in after a delay and replace your new tween,
+        //note that this automatically replaces any ongoing tween, which is nice
+        //however the "Down" half of a highlight flash could come in after a delay and override your new tween,
         //so you should give the highlight flash an appropriate cancellation token if you want to prevent this
-        private void BeginTween(int timeScale)
+        private void BeginTween(float timeScale)
         {
-            if (!CanBeginTween(timeScale)) return;
+            if (timeScale == 0) return;
 
-            tweenTimeScale = timeScale;
+            tweenRate = timeScale / tweenTime;
             tweening = true;
+            //and tweenProgress is assumed to already be accurate
         }
 
         private void UpdateTween()
         {
-            var val = GetIntensity();
-            val += tweenTimeScale * tweenRate * Time.deltaTime;
+            tweenProgress += tweenRate * Time.deltaTime;
 
-            if ((tweenTimeScale > 0 && val > maxHighlightIntensity)
-                || (tweenTimeScale < 0 && val < minHighlightIntensity))
+            if (tweenProgress > 1)
             {
-                val = Mathf.Clamp(val, minHighlightIntensity, maxHighlightIntensity);
+                tweenProgress = 1;
+                SetThickness(maxThickness);
+                SetIntensity(maxIntensity);
                 EndTween();
+                return;
             }
 
-            SetIntensity(val);
+            if (tweenProgress < 0)
+            {
+                tweenProgress = 0;
+                SetThickness(minThickness);
+                SetIntensity(minIntensity);
+                EndTween();
+                return;
+            }
+
+            SetThickness(Thickness(tweenProgress));
+            SetIntensity(Intensity(tweenProgress));
+
+            //var val = GetIntensity();
+            //val += tweenTimeScale * tweenRate * Time.deltaTime;
+
+            //if ((tweenTimeScale > 0 && val > maxHighlightIntensity)
+            //    || (tweenTimeScale < 0 && val < minHighlightIntensity))
+            //{
+            //    val = Mathf.Clamp(val, minHighlightIntensity, maxHighlightIntensity);
+            //    EndTween();
+            //}
+            //SetIntensity(val);
         }
 
         private void EndTween()
@@ -121,9 +152,20 @@ namespace RPGPlatformer.Core
             tweening = false;
         }
 
-        private float GetIntensity()
+        private float Thickness(float tweenProgress)
         {
-            return materialManager.GetFloat("_BloomIntensityMultiplier");
+            return minThickness + tweenProgress * thicknessRange;
+        }
+
+        private float Intensity(float tweenProgress)
+        {
+            return minIntensity + tweenProgress * intensityRange;
+            //return materialManager.GetFloat("_BloomIntensityMultiplier");
+        }
+
+        private void SetThickness(float val)
+        {
+            materialManager.SetFloat("_Thickness", val);
         }
 
         private void SetIntensity(float val)
