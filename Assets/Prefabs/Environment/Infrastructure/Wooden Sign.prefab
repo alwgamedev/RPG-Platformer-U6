@@ -137,7 +137,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 8.94, y: 11.94}
+  m_Size: {x: 12, y: 15}
   m_EdgeRadius: 0
 --- !u!114 &4413830779601700589
 MonoBehaviour:
@@ -212,9 +212,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minThickness: 0
-  maxThickness: 0.02
+  maxThickness: 0.05
   minIntensity: 0
-  maxIntensity: 5
-  tweenTime: 0.4
+  maxIntensity: 60
+  thicknessCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  intensityCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  tweenTime: 0.25
   easeInTimeScale: 1
   easeOutTimeScale: -0.5

@@ -11,6 +11,10 @@ namespace RPGPlatformer.Core
         [SerializeField] float maxThickness = .02f;
         [SerializeField] float minIntensity;//almost always 0
         [SerializeField] float maxIntensity = 5;
+        [SerializeField] AnimationCurve thicknessCurve
+            = new(new Keyframe[] { new(0, 0), new(1, 1) });
+        [SerializeField] AnimationCurve intensityCurve 
+            = new(new Keyframe[] { new(0, 0), new(1, 1)});
         [SerializeField] float tweenTime = 1;//seconds to go from min to max highlight
         [SerializeField] float easeInTimeScale = 1;
         [SerializeField] float easeOutTimeScale = - 0.5f;
@@ -18,8 +22,7 @@ namespace RPGPlatformer.Core
         MaterialManager materialManager;
         float thicknessRange;
         float intensityRange;
-        float tweenRate;//tween progress / second = dt * timeScale / tweenTime
-        //int tweenTimeScale;
+        float tweenRate;//tween progress per second = timeScale / tweenTime
         float tweenProgress;//from 0-1
         bool tweening;
 
@@ -68,7 +71,7 @@ namespace RPGPlatformer.Core
 
         public void EnableHighlight(bool val)
         {
-            BeginTween(val ? 1 : -1);
+            BeginTween(val ? easeInTimeScale : easeOutTimeScale);
         }
 
         public async Task HighlightFlash(float duration, CancellationToken token)
@@ -77,26 +80,6 @@ namespace RPGPlatformer.Core
             await MiscTools.DelayGameTime(duration, token);
             EnableHighlight(false);
         }
-
-        //private bool CanBeginTween(float timeScale)
-        //{
-        //    if (timeScale == 0)
-        //    {
-        //        return false;
-        //    }
-
-        //    var val = materialManager.GetFloat("_BloomIntensityMultiplier");
-        //    if (timeScale > 0 && val >= maxIntensity)
-        //    {
-        //        return false;
-        //    }
-        //    if (timeScale < 0 && val <= minIntensity)
-        //    {
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
 
         //note that this automatically replaces any ongoing tween, which is nice
         //however the "Down" half of a highlight flash could come in after a delay and override your new tween,
@@ -134,17 +117,6 @@ namespace RPGPlatformer.Core
 
             SetThickness(Thickness(tweenProgress));
             SetIntensity(Intensity(tweenProgress));
-
-            //var val = GetIntensity();
-            //val += tweenTimeScale * tweenRate * Time.deltaTime;
-
-            //if ((tweenTimeScale > 0 && val > maxHighlightIntensity)
-            //    || (tweenTimeScale < 0 && val < minHighlightIntensity))
-            //{
-            //    val = Mathf.Clamp(val, minHighlightIntensity, maxHighlightIntensity);
-            //    EndTween();
-            //}
-            //SetIntensity(val);
         }
 
         private void EndTween()
@@ -154,13 +126,12 @@ namespace RPGPlatformer.Core
 
         private float Thickness(float tweenProgress)
         {
-            return minThickness + tweenProgress * thicknessRange;
+            return minThickness + thicknessCurve.Evaluate(tweenProgress) * thicknessRange;
         }
 
         private float Intensity(float tweenProgress)
         {
-            return minIntensity + tweenProgress * intensityRange;
-            //return materialManager.GetFloat("_BloomIntensityMultiplier");
+            return minIntensity + intensityCurve.Evaluate(tweenProgress) * intensityRange;
         }
 
         private void SetThickness(float val)
@@ -172,32 +143,5 @@ namespace RPGPlatformer.Core
         {
             materialManager.SetFloat("_BloomIntensityMultiplier", val);
         }
-
-        //void Start()
-        //{
-        //    //ac = GetComponent<AnimationControl>();
-        //    //ResetHighlight();
-        //}
-
-        //public void EnableHighlight(bool val)
-        //{
-        //    ac.SetFloat("animSpeed", val ? 1 : -1);
-        //    var time = ac.CurrentStateInfo("Base Layer").normalizedTime;
-        //    time = Mathf.Clamp(time, 0.01f, .99f);
-        //    ac.PlayAnimationState("Highlight", "Base Layer", time);
-        //}
-
-        //public void ResetHighlight()
-        //{
-        //    ac.SetFloat("animSpeed", -1);
-        //    ac.PlayAnimationState("Highlight", "Base Layer", 0);
-        //}
-
-        //public async Task HighlightFlash(float duration)
-        //{
-        //    EnableHighlight(true);
-        //    await MiscTools.DelayGameTime(duration, GlobalGameTools.Instance.TokenSource.Token);
-        //    EnableHighlight(false);
-        //}
     }
 }

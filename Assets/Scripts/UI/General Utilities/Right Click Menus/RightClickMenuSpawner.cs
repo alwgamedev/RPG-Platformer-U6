@@ -26,7 +26,6 @@ namespace RPGPlatformer.UI
         protected bool justSpawnedMenu;
         protected GameObject activeMenu;
         protected Canvas targetCanvas;
-        //protected IInteractableGameObject igo;
 
         public GameObject ActiveMenu => activeMenu;
 
@@ -34,15 +33,7 @@ namespace RPGPlatformer.UI
 
         protected virtual void Awake()
         {
-            //targetCanvas = GetComponentInParent<Canvas>();
-            //if (!targetCanvas)
-            //{
-            //    targetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
-            //}
-
             FindTargetCanvas();
-
-            //igo = GetComponent<IInteractableGameObject>();
 
             if (disableWhenPlayerIsDead)
             {
@@ -66,17 +57,16 @@ namespace RPGPlatformer.UI
                     targetCanvas = GetComponentInParent<Canvas>(); 
                     break;
                 case TargetCanvas.gameUI:
-                    targetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
+                    var guc = GameObject.FindWithTag("Game UI Canvas");
+                    if (guc)
+                    {
+                        targetCanvas = guc.GetComponent<Canvas>();
+                    }
                     break;
                 case TargetCanvas.child:
                     targetCanvas = GetComponentInChildren<Canvas>();
                     break;
             }
-            //targetCanvas = GetComponentInParent<Canvas>();
-            //if (!targetCanvas)
-            //{
-            //    targetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
-            //}
         }
 
         protected void OnIAMConfigure()
@@ -133,8 +123,6 @@ namespace RPGPlatformer.UI
             {
                 GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
                 if (currentSelected && currentSelected.transform.IsChildOf(activeMenu.transform)) return;
-                //if (igo != null && igo.MouseOver) return;
-                //^this is a silly reason to store an IGO that may or may not be attached but oh well
                 ClearMenu();
             }
         }
