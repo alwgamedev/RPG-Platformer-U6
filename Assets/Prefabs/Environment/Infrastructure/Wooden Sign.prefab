@@ -166,7 +166,7 @@ MonoBehaviour:
   displayName: Crooked Sign
   examineText: I wonder what that sign says...
   defaultCursorType: 1
-  maxInteractableDistance: 1.5
+  maxInteractableDistance: 8
   popupPrefab: {fileID: 483826066915923978, guid: 49f70e84f06cf344d88841a84413df81, type: 3}
   title: CONTROLS
   content: A/D to move \nSpace to jump \nClick to punch
@@ -211,6 +211,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6229876dd86df6a40b597501629b370b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minHighlightIntensity: 0
-  maxHighlightIntensity: 6
+  minThickness: 0
+  maxThickness: 0.02
+  minIntensity: 0
+  maxIntensity: 5
   tweenTime: 0.4
+  easeInTimeScale: 1
+  easeOutTimeScale: -0.5
