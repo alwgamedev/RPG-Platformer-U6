@@ -55,6 +55,19 @@ namespace RPGPlatformer.Movement
             };
         }
 
+        //protected override void HandleMoveInput()
+        //{
+        //    if (CurrentMount == null)
+        //    {
+        //        base.HandleMoveInput();
+        //    }
+        //    else
+        //    {
+        //        HandleMoveInput(MoveInput, MoveWithoutAcceleration);
+        //        //mover.Rigidbody.linearVelocity += CurrentMount.Velocity;
+        //    }
+        //}
+
         private void UpdateMoveInput()
         {
             MoveInput = new Vector2((SettingsManager.Instance.IAM.MoveRightHeldDown ? 1 : 0)

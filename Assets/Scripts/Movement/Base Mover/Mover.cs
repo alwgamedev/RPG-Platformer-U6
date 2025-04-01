@@ -83,12 +83,6 @@ namespace RPGPlatformer.Movement
                 groundLayer);
             leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, -base.transform.up, groundednessTolerance,
                 groundLayer);
-
-            //if (rightGroundHit && leftGroundHit)
-            //{
-            //    Debug.DrawLine(ColliderCenterRight, rightGroundHit.point, Color.red);
-            //    Debug.DrawLine(ColliderCenterLeft, leftGroundHit.point, Color.red);
-            //}
         }
 
         public virtual void UpdateState(bool jumping, bool freefalling)
@@ -135,6 +129,11 @@ namespace RPGPlatformer.Movement
             VerifyJump();
         }
 
+        public virtual void Accelerate(Vector2 a)
+        {
+            myRigidbody.AddForce(myRigidbody.mass * a);
+        }
+
         public virtual void Move(Vector2 relV, Vector2 direction, MovementOptions options)
         {
             Move(relV, direction, MaxSpeed, options);
@@ -146,6 +145,8 @@ namespace RPGPlatformer.Movement
         }
 
         //direction assumed to be normalized
+        //current velocity (relV) is passed in in case your velocity is taken relative to a moving platform
+        //(o/w you'd just use the rigidbody's velocity for the clamp calculation)
         public virtual void Move(Vector2 relV, Vector2 direction, float maxSpeed, MovementOptions options)
         {
             if (direction == Vector2.zero)
@@ -164,7 +165,8 @@ namespace RPGPlatformer.Movement
 
             if (dot <= 0 || v.sqrMagnitude < maxSpeed * maxSpeed)//then we'll assume the angle between v and direction to be small (in fact, 0)
             {
-                myRigidbody.linearVelocity += options.Acceleration * Time.deltaTime * direction;
+                //myRigidbody.linearVelocity += options.Acceleration * Time.deltaTime * direction;
+                myRigidbody.AddForce(myRigidbody.mass * options.Acceleration * direction);
             }
         }
 

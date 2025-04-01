@@ -40,7 +40,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1047969077250574162}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1047969077250574162}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8d6b8fbaba57a24092a2b1195c1f1bd, type: 3}
   m_Name: 
@@ -149,8 +149,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 5.8082137, y: -1.923091}
-  m_Size: {x: 14.857401, y: 3.1531343}
+  m_Offset: {x: 5.9601474, y: -2.0013552}
+  m_Size: {x: 15.161328, y: 3.8134732}
   m_Direction: 1
 --- !u!114 &4389421961141597446
 MonoBehaviour:
@@ -406,7 +406,7 @@ MonoBehaviour:
   doubleJumpForceMultiplier: 1.18
   inFlightLinearDamping: 100
   flightSpeed: 2.25
-  takeOffForce: {x: 0, y: 7000}
+  takeOffForce: {x: 0, y: 7500}
 --- !u!114 &1519639630161499023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,8 +419,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fff2b6c0084a44aabe198745fbf067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultAnimatorController: {fileID: 9100000, guid: 23fd6a6bda1209e4dbd5e5c67e993a5d, type: 2}
-  animator: {fileID: 0}
 --- !u!114 &3471450331675356116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669,7 +667,7 @@ Transform:
   m_GameObject: {fileID: 7862475031794593128}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.0578923, y: -2.3465405, z: 0}
+  m_LocalPosition: {x: -3.03, y: -2.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -699,8 +697,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8669477947862795333}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.89407, w: 0.44792727}
-  m_LocalPosition: {x: 9.23, y: -1.06, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.16, y: -1.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1194,7 +1192,6 @@ PolygonCollider2D:
       - {x: -4.668584, y: 3.3680472}
       - {x: -4.0221577, y: -1.3001064}
       - {x: -2.973044, y: -2.3310552}
-      - {x: 5.4005427, y: -1.5189446}
       - {x: 12.622809, y: -0.8087133}
   m_UseDelaunayMesh: 0
 --- !u!114 &4018914529200880135

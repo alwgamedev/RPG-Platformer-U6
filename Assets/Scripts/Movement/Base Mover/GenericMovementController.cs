@@ -82,21 +82,19 @@ namespace RPGPlatformer.Movement
 
         protected virtual void Update()
         {
-            //UpdateMover();
             OnUpdate?.Invoke();
         }
 
         protected virtual void FixedUpdate()
         {
-            //we've been doing update move in update, but would it make more sense to do it in fixed update
-            //so we have accurate data before moving?
-            //UpdateMover();
-
             OnFixedUpdate?.Invoke();
 
+            //only apply when grounded b/c you want normal physics to apply when jumping
+            //(the tiny amount the mount gravity screws with you before your jump gets you far enough to trigger
+            //dismount is enough to completely ruin the jump or prevent dismount altogether)
             if (CurrentMount != null && Grounded)
             {
-                mover.Rigidbody.linearVelocity += Time.deltaTime * CurrentMount.LocalGravity;
+                mover.Accelerate(CurrentMount.LocalGravity);
             }
 
             ignoreMoveInputNextUpdate = false;
@@ -254,7 +252,6 @@ namespace RPGPlatformer.Movement
             CurrentMount = entity;
 
             entity.DirectionChanged += OnMountDirectionChanged;
-            //entity.ChangeInVelocity += OnMountAccelerated;
             entity.Destroyed += Dismount;
 
             mover.SetGravityScale(0);
@@ -264,20 +261,12 @@ namespace RPGPlatformer.Movement
         {
             if (CurrentMount == null) return;
 
-            //mover.Rigidbody.linearVelocity -= CurrentMount.Velocity;
             mover.ReturnGravityScaleToDefault();
 
             CurrentMount.DirectionChanged -= OnMountDirectionChanged;
-            //CurrentMount.ChangeInVelocity -= OnMountAccelerated;
             CurrentMount.Destroyed -= Dismount;
             CurrentMount = null;
         }
-
-        //protected virtual void OnMountAccelerated(Vector2 dv)
-        //{
-        //    Debug.Log($"mount velocity changed by {dv}");
-        //    mover.Rigidbody.linearVelocity += dv;
-        //}
 
         protected virtual void OnMountDirectionChanged(HorizontalOrientation o)
         {
@@ -294,18 +283,6 @@ namespace RPGPlatformer.Movement
         {
             HandleMoveInput(MoveInput, Move);
         }
-
-        //protected virtual void HandleMoveInput(Vector2 moveInput)
-        //{
-        //    if (moveInput != Vector2.zero)
-        //    {
-        //        SetOrientation(moveInput);
-        //        if (!ignoreMoveInputNextUpdate)
-        //        {
-        //            Move(moveInput);
-        //        }
-        //    }
-        //}
 
         protected virtual void HandleMoveInput(Vector2 moveInput, Action<Vector2> moveAction)
         {

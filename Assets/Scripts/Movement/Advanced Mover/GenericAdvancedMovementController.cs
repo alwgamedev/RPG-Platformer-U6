@@ -9,7 +9,6 @@ namespace RPGPlatformer.Movement
         where T2 : AdvancedMovementStateMachine<T1>
         where T3 : AdvancedMovementStateManager<T1, T2, T0>
     {
-        //[SerializeField] protected bool detectWalls;
         [SerializeField] protected WallDetectionOptions wallDetectionOptions;
 
         public override bool Jumping => movementManager.StateMachine.CurrentState == movementManager.StateGraph.jumping;
@@ -17,8 +16,6 @@ namespace RPGPlatformer.Movement
         protected override void Start()
         {
             base.Start();
-
-            //mover.AwkwardWallMoment += IgnoreMoveInputThisFrame;
 
             UpdateMaxSpeed();
         }
@@ -92,7 +89,6 @@ namespace RPGPlatformer.Movement
 
         protected virtual void UpdateAndHandleWallInteraction()
         {
-            //mover.UpdateAdjacentWall(!Grounded);
             mover.UpdateAdjacentWall(Grounded, wallDetectionOptions.NumWallCastsPerThird, 
                 wallDetectionOptions.WallCastDistanceFactor);
             SetDownSpeed();
