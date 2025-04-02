@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ExplosionParticle
+  m_Name: WormholeDustCloudMat
   m_Shader: {fileID: -6465566751694194690, guid: f6b96070f3145464cab46291d7525fad, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+        m_Texture: {fileID: 2800000, guid: f595b99be6aa73e4898443490256782e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -67,8 +67,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _AddToBaseColorInsteadOfMult: 1
-    - _AlphaBlendRate: 0.39
-    - _AlphaBlendScale: 0.1
+    - _AlphaBlendRate: 8
+    - _AlphaBlendScale: 1
     - _AlphaFadeBdry: 0
     - _AlphaFadeRate: 10
     - _AlphaFadeScale: 1.9
@@ -77,15 +77,15 @@ Material:
     - _BlendScale: 0.8
     - _BoundaryFadeRate: 25
     - _ColorBlendBdry: 0
-    - _ColorBlendRate: 0.81
-    - _ColorBlendScale: 3.92
+    - _ColorBlendRate: 10
+    - _ColorBlendScale: 1
     - _EnableExternalAlpha: 0
     - _FadeBdry: 0.01
     - _FadeScale: 0.88
     - _FeedUVToNoise: 1
-    - _FogDensity: 1.39
-    - _FogMin: 0.75
-    - _FogSize: 58.46
+    - _FogDensity: 1.5
+    - _FogMin: 2
+    - _FogSize: 5
     - _UseObjectPosition: 1
     - _UseUVForPosition: 0
     - _UseUVInsteadOfPosition: 1
@@ -94,9 +94,9 @@ Material:
     - _BoundaryFadeSizesLRTB: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _FogColor: {r: 1, g: 1, b: 1, a: 1}
-    - _FogSpeed: {r: 0, g: 0, b: 0, a: 0}
-    - _InnerColor: {r: 0.6377357, g: 0.5074382, b: 0.18169448, a: 1}
-    - _OuterColor: {r: 0.21509433, g: 0.13345951, b: 0.054788113, a: 0.9882353}
+    - _FogSpeed: {r: 0, g: -0.1, b: 0, a: 0}
+    - _InnerColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OuterColor: {r: 0.87169814, g: 0.7805536, b: 0.71545035, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _Stretch: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
