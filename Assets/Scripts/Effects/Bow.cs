@@ -4,21 +4,25 @@ using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.Effects
 {
-    using static MovementTools;
-
     public class Bow : MonoBehaviour
     {
-        [SerializeField] Transform topString;
-        [SerializeField] Transform bottomString;
-        [SerializeField] Transform topStringEndPt;
-        [SerializeField] Transform bottomStringEndPt;
+        //[SerializeField] Transform topString;
+        //[SerializeField] Transform bottomString;
+        //[SerializeField] Transform topStringEndPt;
+        //[SerializeField] Transform bottomStringEndPt;
+        //[SerializeField] Transform stringGrabPt;
+        [SerializeField] Transform bottomStringAnchor;
+        [SerializeField] Transform topStringAnchor;
         [SerializeField] Transform stringGrabPt;
         [SerializeField] Transform stringGrabPtOrigin;
         [SerializeField] Transform stringGrabPtParent;
+        [SerializeField] float bowStringWidth = 0.05f;
         [SerializeField] float stringFrequencyMult = 15;
         [SerializeField] float stringElasticity = 0.05f;//higher means string will return to rest faster
 
-        HorizontalOrientation parentOrientation;
+        //HorizontalOrientation parentOrientation;
+        LineRenderer lineRenderer;
+        Vector3[] bowstringPoints = new Vector3[3];
 
         Vector2 u; //displacement of stringGrabPt from origin at moment of release, normalized
         float d; //distance of stringGrabPt from origin at moment of release
@@ -28,15 +32,18 @@ namespace RPGPlatformer.Effects
 
         private void Start()
         {
+            lineRenderer = GetComponent<LineRenderer>();
+
             ReturnToOrigin();
+            RedrawBowstring();
 
-            IMovementController movementController = GetComponentInParent<IMovementController>();
+            //IMovementController movementController = GetComponentInParent<IMovementController>();
 
-            if (movementController != null)
-            {
-                parentOrientation = movementController.CurrentOrientation;
-                movementController.Mover.DirectionChanged += SetOrientation;
-            }
+            //if (movementController != null)
+            //{
+            //    parentOrientation = movementController.CurrentOrientation;
+            //    movementController.Mover.DirectionChanged += SetOrientation;
+            //}
         }
 
         private void Update()
@@ -45,14 +52,15 @@ namespace RPGPlatformer.Effects
 
             if (stringGrabPt.hasChanged)
             {
-                StretchStrings();
+                //StretchStrings();
+                RedrawBowstring();
             }
         }
 
-        public void SetOrientation(HorizontalOrientation orientation)
-        {
-            parentOrientation = orientation;
-        }
+        //public void SetOrientation(HorizontalOrientation orientation)
+        //{
+        //    parentOrientation = orientation;
+        //}
 
         public void BeginPull(Transform puller)
         {
@@ -98,48 +106,62 @@ namespace RPGPlatformer.Effects
 
             Vector3 delta = a * Mathf.Cos(stringFrequencyMult * t) * u;
             stringGrabPt.position = stringGrabPtOrigin.position + delta;
+            //should be done in appropriate local space?? take another look at this
+            //probably should use u' = u.x * transform.right + u.y * transorm.up;
+            //(and when u is originally set you should take its components in local coord system too)
         }
 
-        private void StretchStrings()
+        private void RedrawBowstring()
         {
-            Vector2 topGoal = TopStringGoalVector();
-            Vector2 bottomGoal = BottomStringGoalVector();
+            lineRenderer.widthMultiplier = bowStringWidth * Math.Abs(transform.lossyScale.x);
 
-            topString.rotation = Quaternion.LookRotation(Vector3.forward, 
-                (int) parentOrientation * topGoal.CCWPerp());
-            bottomString.rotation = Quaternion.LookRotation(Vector3.forward, 
-                (int) parentOrientation * bottomGoal.CCWPerp());
+            bowstringPoints[0] = bottomStringAnchor.position;
+            bowstringPoints[1] = stringGrabPt.position;
+            bowstringPoints[2] = topStringAnchor.position;
 
-            UpdateStringLengths(topGoal.magnitude, bottomGoal.magnitude);
+            lineRenderer.SetPositions(bowstringPoints);
         }
 
-        private void UpdateStringLengths(float topGoalLength, float bottomGoalLength)
-        {
-            float topStringLength = TopStringLength();
-            float bottomStringLength = BottomStringLength();
+        //private void StretchStrings()
+        //{
+        //    Vector2 topGoal = TopStringGoalVector();
+        //    Vector2 bottomGoal = BottomStringGoalVector();
 
-            if (topStringLength == 0 || bottomStringLength == 0) return;
+        //    topString.rotation = Quaternion.LookRotation(Vector3.forward, 
+        //        (int) parentOrientation * topGoal.CCWPerp());
+        //    bottomString.rotation = Quaternion.LookRotation(Vector3.forward, 
+        //        (int) parentOrientation * bottomGoal.CCWPerp());
 
-            float topScaleFactor = topGoalLength / topStringLength;
-            float bottomScaleFactor = bottomGoalLength / bottomStringLength;
+        //    UpdateStringLengths(topGoal.magnitude, bottomGoal.magnitude);
+        //}
 
-            Vector3 topScale = topString.localScale;
-            Vector3 bottomScale = bottomString.localScale;
+        //private void UpdateStringLengths(float topGoalLength, float bottomGoalLength)
+        //{
+        //    float topStringLength = TopStringLength();
+        //    float bottomStringLength = BottomStringLength();
 
-            topString.localScale = (topScaleFactor * topScale.x) * Vector3.right + topScale.y * Vector3.up
-                + topScale.z * Vector3.forward;
-            bottomString.localScale = (bottomScaleFactor * bottomScale.x) * Vector3.right + bottomScale.y * Vector3.up 
-                + bottomScale.z * Vector3.forward;
+        //    if (topStringLength == 0 || bottomStringLength == 0) return;
 
-        }
+        //    float topScaleFactor = topGoalLength / topStringLength;
+        //    float bottomScaleFactor = bottomGoalLength / bottomStringLength;
 
-        float TopStringLength() => Vector2.Distance(topString.position, topStringEndPt.position);
+        //    Vector3 topScale = topString.localScale;
+        //    Vector3 bottomScale = bottomString.localScale;
 
-        float BottomStringLength() => Vector2.Distance(bottomString.position, bottomStringEndPt.position);
+        //    topString.localScale = (topScaleFactor * topScale.x) * Vector3.right + topScale.y * Vector3.up
+        //        + topScale.z * Vector3.forward;
+        //    bottomString.localScale = (bottomScaleFactor * bottomScale.x) * Vector3.right + bottomScale.y * Vector3.up 
+        //        + bottomScale.z * Vector3.forward;
 
-        Vector2 TopStringGoalVector() => stringGrabPt.position - topString.position;
+        //}
 
-        Vector2 BottomStringGoalVector() => stringGrabPt.position - bottomString.position;
+        //float TopStringLength() => Vector2.Distance(topString.position, topStringEndPt.position);
+
+        //float BottomStringLength() => Vector2.Distance(bottomString.position, bottomStringEndPt.position);
+
+        //Vector2 TopStringGoalVector() => stringGrabPt.position - topString.position;
+
+        //Vector2 BottomStringGoalVector() => stringGrabPt.position - bottomString.position;
 
         private void OnDisable()
         {
