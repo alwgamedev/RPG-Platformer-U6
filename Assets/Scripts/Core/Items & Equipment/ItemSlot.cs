@@ -3,8 +3,6 @@ using UnityEngine;
 using RPGPlatformer.Inventory;
 using System.Collections.Generic;
 using UnityEngine.U2D.Animation;
-using static UnityEngine.EventSystems.EventTrigger;
-using static UnityEditor.Progress;
 
 namespace RPGPlatformer.Core
 {
@@ -17,11 +15,10 @@ namespace RPGPlatformer.Core
     {
         [SerializeField] string sortingLayer;
         [SerializeField] int sortingOrder;
-        //[SerializeField] bool equipOnStart;
         [SerializeField] EquippableItemSO defaultItemSO; 
         [SerializeField] List<SpriteResolver> dependentResolvers = new();
 
-        //IEquippableEntity parent;
+        OneSidedItem osi;
         EquippableItem defaultItem;
         EquippableItem equippedItem;
         Dictionary<string, SpriteResolver> SpriteResolverForCategory = new();
@@ -51,29 +48,6 @@ namespace RPGPlatformer.Core
             }
         }
 
-        //private void Start()
-        //{
-        //    //if (equipOnStart && defaultItemSO != null)
-        //    //{
-        //    //    var parent = GetComponentInParent<IEquippableEntity>();
-        //    //    var defaultItem = (EquippableItem)defaultItemSO.CreateInstanceOfItem();
-
-        //    //    if (parent == null || parent.CanEquip(defaultItem))
-        //    //    {
-        //    //        EquipItem(defaultItem);
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        parent?.HandleUnequippedItem(defaultItem);
-        //    //    }
-        //    //}
-        //}
-
-        //public void EquipDefaultItem()
-        //{
-
-        //}
-
         private void BuildDictionaries()
         {
             foreach (var resolver in dependentResolvers)
@@ -98,16 +72,33 @@ namespace RPGPlatformer.Core
 
             if (EquippedItemGO)
             {
-                SpriteRenderer sprite = EquippedItemGO.GetComponentInChildren<SpriteRenderer>();
-                if (sprite)
+                Renderer renderer = EquippedItemGO.GetComponentInChildren<Renderer>();
+                if (renderer)
                 {
-                    sprite.sortingLayerName = sortingLayer;
-                    sprite.sortingOrder = sortingOrder;
+                    renderer.sortingLayerName = sortingLayer;
+                    renderer.sortingOrder = sortingOrder;
 
-                    OneSidedItem osi = GetComponent<OneSidedItem>();
+                    if (renderer.gameObject.TryGetComponent(out SortingLayerControl slc))
+                    {
+                        slc.UpdateSortingData();
+                        //notiy all dependents of the renderer's new sorting data
+                    }
+                    else
+                    {
+                        var slds = renderer.gameObject.GetComponent<SortingLayerDataSource>();
+                        if (slds != null)
+                        {
+                            slds.UpdateSortingData();
+                        }
+                    }
+
+                    if (!osi)
+                    {
+                        osi = GetComponent<OneSidedItem>();
+                    }
                     if (osi)
                     {
-                        osi.itemSprite = sprite;
+                        osi.itemRenderer = renderer;
                     }
                 }
             }

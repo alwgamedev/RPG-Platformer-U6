@@ -6,7 +6,7 @@ namespace RPGPlatformer.Core
     public class OneSidedItem : MonoBehaviour
     {
         public HorizontalOrientation mySide;
-        public SpriteRenderer itemSprite;
+        public Renderer itemRenderer;
 
         private void Awake()
         {
@@ -19,9 +19,9 @@ namespace RPGPlatformer.Core
 
         public void FlipSides(HorizontalOrientation moverOrientation)
         {
-            if (itemSprite)
+            if (itemRenderer)
             {
-                itemSprite.sortingOrder = (int)mySide * (int)moverOrientation * Mathf.Abs(itemSprite.sortingOrder);
+                itemRenderer.sortingOrder = (int)mySide * (int)moverOrientation * Mathf.Abs(itemRenderer.sortingOrder);
             }
         }
     }

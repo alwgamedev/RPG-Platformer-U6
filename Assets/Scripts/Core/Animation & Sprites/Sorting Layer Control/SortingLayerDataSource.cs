@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace RPGPlatformer.Core
 {
@@ -10,5 +9,7 @@ namespace RPGPlatformer.Core
 
         public event Action DataUpdated;
         public event Action Destroyed;
+
+        public void UpdateSortingData();
     }
 }

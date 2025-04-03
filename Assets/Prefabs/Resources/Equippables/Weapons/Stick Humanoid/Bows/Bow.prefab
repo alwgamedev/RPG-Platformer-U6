@@ -511,7 +511,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 2589477999225594112, guid: 45690b297d6febd46b7dfaf0baaa889e, type: 3}
   m_Color: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
   m_FlipX: 0
@@ -536,8 +536,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ignoreParentSortingData: 0
-  orderDelta: 0
-  dataSource: {fileID: 0}
+  orderDelta: -1
+  dataSource: {fileID: 103325004839931464}
 --- !u!1 &6173016111076271459
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,7 +660,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8367477580387413033}
@@ -683,9 +683,9 @@ MonoBehaviour:
   stringGrabPt: {fileID: 7755741328123795413}
   stringGrabPtOrigin: {fileID: 3254300072542004876}
   stringGrabPtParent: {fileID: 8367477580387413033}
-  bowStringWidth: 0.25
-  stringFrequencyMult: 75
-  stringElasticity: 0.15
+  bowStringWidth: 0.4
+  stringFrequencyMult: 65
+  stringElasticity: 0.2
 --- !u!120 &7863225242239322170
 LineRenderer:
   serializedVersion: 2
@@ -730,7 +730,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Positions:
   - {x: -0.41666627, y: -1.7, z: 0}
   - {x: -0.41666627, y: -0.00000040454324, z: 0}
@@ -807,8 +807,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ignoreParentSortingData: 0
-  orderDelta: 1
-  dataSource: {fileID: 8367477580387413033}
+  orderDelta: 0
+  dataSource: {fileID: 0}
 --- !u!1 &8188560793512005280
 GameObject:
   m_ObjectHideFlags: 0

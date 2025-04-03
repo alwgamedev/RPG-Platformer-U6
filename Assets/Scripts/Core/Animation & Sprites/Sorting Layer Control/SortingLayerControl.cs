@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
-    [ExecuteInEditMode]
+    [ExecuteAlways]
     public class SortingLayerControl : MonoBehaviour, SortingLayerDataSource
     {
         [SerializeField] SerializableSortingLayer sortingLayer;
@@ -25,6 +25,11 @@ namespace RPGPlatformer.Core
         public int? SortingOrder => sortingOrder;
 
         private void OnValidate()
+        {
+            UpdateSortingData();
+        }
+
+        public void UpdateSortingData()
         {
             DataUpdated?.Invoke();
         }

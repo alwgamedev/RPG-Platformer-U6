@@ -1,10 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.U2D;
 
 namespace RPGPlatformer.Core
 {
-    [ExecuteInEditMode]
+    [ExecuteAlways]
     public class ChildSortingLayer : MonoBehaviour, SortingLayerDataSource
     {
         [SerializeField] bool ignoreParentSortingData;
@@ -42,11 +41,15 @@ namespace RPGPlatformer.Core
             }
         }
 
+        private void Awake()
+        {
+            UpdateSLDS();
+        }
+
         private void OnValidate()
         {
             UpdateSLDS();
             UpdateSortingData();
-            DataUpdated?.Invoke();
         }
 
         public void UpdateSortingData()

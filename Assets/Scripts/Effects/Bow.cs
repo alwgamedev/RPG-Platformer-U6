@@ -6,21 +6,15 @@ namespace RPGPlatformer.Effects
 {
     public class Bow : MonoBehaviour
     {
-        //[SerializeField] Transform topString;
-        //[SerializeField] Transform bottomString;
-        //[SerializeField] Transform topStringEndPt;
-        //[SerializeField] Transform bottomStringEndPt;
-        //[SerializeField] Transform stringGrabPt;
         [SerializeField] Transform bottomStringAnchor;
         [SerializeField] Transform topStringAnchor;
         [SerializeField] Transform stringGrabPt;
         [SerializeField] Transform stringGrabPtOrigin;
         [SerializeField] Transform stringGrabPtParent;
-        [SerializeField] float bowStringWidth = 0.05f;
+        [SerializeField] float bowStringWidth = 0.25f;
         [SerializeField] float stringFrequencyMult = 15;
         [SerializeField] float stringElasticity = 0.05f;//higher means string will return to rest faster
 
-        //HorizontalOrientation parentOrientation;
         LineRenderer lineRenderer;
         Vector3[] bowstringPoints = new Vector3[3];
 
@@ -33,6 +27,11 @@ namespace RPGPlatformer.Effects
         private void Start()
         {
             lineRenderer = GetComponent<LineRenderer>();
+            var width = bowStringWidth * Mathf.Abs(transform.lossyScale.x);
+            lineRenderer.startWidth = width;
+            lineRenderer.endWidth = width;
+            //the bow prefab is only instantiated when the bow weapon is equipped, so in Start it will already
+            //be childed to the bow weilder
 
             ReturnToOrigin();
             RedrawBowstring();
