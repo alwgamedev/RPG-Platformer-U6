@@ -91,25 +91,81 @@ namespace RPGPlatformer.Movement
             return v - 2 * Vector3.Dot(u, v) * u;
         }
 
-        public static Func<float, Vector3> BezierPath(Vector3[] pullPoints)
+        /// <summary>
+        /// Path through data points = (p[i], v[i]), where the curve will pass through 
+        /// each point p[i] with tangent direction v[i]. You can leave the last tangent direction zero
+        /// if you want it to be configured automatically.
+        /// </summary>
+        public static Func<float, Vector3> SmoothlyConcatenatedPath(SerializableTuple<Vector3>[] dataPoints)
         {
-            if (pullPoints == null || pullPoints.Length == 0) return null;
-
-            var n = pullPoints.Length - 1;
-            //the curve will have degree n
-
-            Vector3 B(float t)
+            if (dataPoints == null || dataPoints.Length < 2)
             {
-                Vector3 b = Vector3.zero;
-                for (int i = 0; i <= n; i++)
-                {
-                    b += Choose(n, i) * Mathf.Pow(1 - t, n - i) * Mathf.Pow(t, i) * pullPoints[i];
-                }
-
-                return b;
+                return null;
             }
 
-            return B;
+            var n = dataPoints.Length - 1;//number of curve segments
+            var dt = 1 / n;
+
+            Vector3 R(float t)
+            {
+                if (t >= 1)
+                {
+                    return dataPoints[n].item1;
+                }
+
+                var i = (int)(t / dt);
+                var s = t - i * dt;
+                return PathWithTangents(dataPoints[i].item1, dataPoints[i].item2,
+                    dataPoints[i + 1].item1, dataPoints[i + 1].item2)(s);
+            }
+
+            return R;
         }
+
+        /// <summary>
+        /// Returns the degree three curve from p to q with initial velocity v
+        /// and terminal velocity w (parametrized over [0,1]). If w = 0, it will use the first pulling point
+        /// r = p + v and set w = q - r.
+        /// </summary>
+        public static Func<float, Vector3> PathWithTangents(Vector3 p, Vector3 v, Vector3 q, Vector3 w = default)
+        {
+            var d = q - p;
+
+            if (w == Vector3.zero)
+            {
+                w = d - v;
+            }
+
+            Vector3 R(float t)
+            {
+                return p + t * v + t * t * (3 * d - 2 * v - w) + t * t * t * (- 2 * d + v + w);
+            }
+
+            return R;
+        }
+
+        ////returns a parametrization of the degree n = pullPoints.Length - 1 Bezier curve
+        ////defined by pullPoints.
+        ////NOTE: it is only guaranteed to pass through p0 and pn
+        //public static Func<float, Vector3> BezierPath(Vector3[] pullPoints)
+        //{
+        //    if (pullPoints == null || pullPoints.Length == 0) return null;
+
+        //    var n = pullPoints.Length - 1;
+        //    //the curve will have degree n
+
+        //    Vector3 B(float t)
+        //    {
+        //        Vector3 b = Vector3.zero;
+        //        for (int i = 0; i <= n; i++)
+        //        {
+        //            b += Choose(n, i) * Mathf.Pow(1 - t, n - i) * Mathf.Pow(t, i) * pullPoints[i];
+        //        }
+
+        //        return b;
+        //    }
+
+        //    return B;
+        //}
     }
 }

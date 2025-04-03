@@ -4,10 +4,10 @@ using UnityEngine;
 namespace RPGPlatformer.Core
 {
     [ExecuteAlways]
-    public class BezierCurveRenderer : MonoBehaviour
+    public class CurveRenderer : MonoBehaviour
     {
         [Min(0)] public int numPointsDrawn = 30;
-        public Vector3[] pullPoints;
+        public SerializableTuple<Vector3>[] pointData;
         //samplePoints.Length doesn't have to equal numPointsDrawn
         //samplePoints = points we want to pass through
         //numPointsDrawn = number of points drawn along the curve passing through those points
@@ -21,9 +21,9 @@ namespace RPGPlatformer.Core
 
         public void RedrawCurve()
         {
-            if (numPointsDrawn < 2 || pullPoints == null || pullPoints.Length == 0) return;
+            if (numPointsDrawn < 2 || pointData == null || pointData.Length == 0) return;
 
-            var path = PhysicsTools.BezierPath(pullPoints);
+            var path = PhysicsTools.SmoothlyConcatenatedPath(pointData);
             if (path == null) return;
 
             //allows us to run in edit mode where we don't know when components are being added/removed
@@ -37,6 +37,7 @@ namespace RPGPlatformer.Core
 
             for (int i = 0; i < numPointsDrawn; i++)
             {
+                
                 lineRenderer.SetPosition(i, path(i * dt));
             }
         }
