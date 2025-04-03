@@ -6,7 +6,7 @@ using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Movement
 {
-    using static MovementTools;
+    using static PhysicsTools;
 
     [RequireComponent(typeof(AnimationControl))]
     public abstract class GenericMovementController<T0, T1, T2, T3> : MonoBehaviour, IMovementController

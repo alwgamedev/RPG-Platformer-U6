@@ -45,12 +45,17 @@ namespace RPGPlatformer.UI
         private void Start()
         {
             ICombatController playerCombatController = GameObject.Find("Player").GetComponent<ICombatController>();
-            playerCombatController.OnChannelStarted += () => EquipAnimatedCursor(focusingRedCrosshairs);
+            playerCombatController.OnChannelStarted += () =>
+            {
+                EquipAnimatedCursor(focusingRedCrosshairs);
+            };
             playerCombatController.OnChannelEnded += () =>
             {
                 if (animatedCursorEquipped)
                 {
-                    EquipCursor(CursorType.Default, false, true);
+                    EquipIGOHoverCursor(true);
+                    //if no hovered igo this will equip default cursor.
+                    //properly accounts for mouse down
                 }
             };
             playerCombatController.OnPowerUpStarted += () => EquipAnimatedCursor(blinkingYellowCrosshairs);
@@ -88,18 +93,6 @@ namespace RPGPlatformer.UI
             };
         }
 
-        //private void OnGUI()
-        //{
-        //    if (Event.current.type == EventType.MouseDown)
-        //    {
-        //        EquipCursor(currentCursorType, true);
-        //    }
-        //    else if (Event.current.type == EventType.MouseUp)
-        //    {
-        //        EquipCursor(currentCursorType, false);
-        //    }
-        //}
-
         private void HandleMouseClick(bool mouseDown)
         {
             EquipCursor(currentCursorType, mouseDown);
@@ -107,15 +100,22 @@ namespace RPGPlatformer.UI
 
         private void EquipIGOHoverCursor()
         {
-            var igo = InteractableGameObject.HoveredIGO;
+            EquipIGOHoverCursor(false);
+        }
+
+        private void EquipIGOHoverCursor(bool overrideAnimatedCursor = false)
+        {
+            var igo = InteractableGameObject.HoveredIGO; 
+            var iam = SettingsManager.Instance.IAM;
+            bool clicked = iam != null && (iam.LeftClickDown || iam.RightClickDown);
 
             if (igo != null)
             {
-                EquipCursor(igo.CursorType);
+                EquipCursor(igo.CursorType, clicked, overrideAnimatedCursor);
             }
             else
             {
-                EquipCursor(CursorType.Default);
+                EquipCursor(CursorType.Default, clicked, overrideAnimatedCursor);
             }
         }
 

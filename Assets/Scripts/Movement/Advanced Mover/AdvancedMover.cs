@@ -179,7 +179,7 @@ namespace RPGPlatformer.Movement
                     return true;
                 }
 
-                if (Mathf.Abs(rc.point.y - hits[i - 1].y) > spacing * MovementTools.tan75)
+                if (Mathf.Abs(rc.point.y - hits[i - 1].y) > spacing * PhysicsTools.tan75)
                 //more than 75deg slope detected
                 {
                     distanceInFront = i * spacing;
@@ -201,7 +201,7 @@ namespace RPGPlatformer.Movement
             }
 
             Trajectory jumpTrajectory =
-                MovementTools.ImpulseForceTrajectory(this, JumpForce());
+                PhysicsTools.ImpulseForceTrajectory(this, JumpForce());
 
             float dt = jumpTrajectory.timeToReturnToLevel / 20;
 
@@ -230,7 +230,7 @@ namespace RPGPlatformer.Movement
 
                     var ground = hit1.point - hit.point;
 
-                    return ground.y < Mathf.Abs(ground.x) * MovementTools.tan60;
+                    return ground.y < Mathf.Abs(ground.x) * PhysicsTools.tan60;
                 }
             }
             return false;

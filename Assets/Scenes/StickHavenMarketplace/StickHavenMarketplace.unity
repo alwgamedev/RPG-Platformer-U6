@@ -504,6 +504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 380918711}
   - component: {fileID: 380918710}
+  - component: {fileID: 380918712}
   m_Layer: 0
   m_Name: Line
   m_TagString: Untagged
@@ -558,8 +559,35 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 3, y: 0, z: 0}
-  - {x: 5, y: 2, z: 0}
+  - {x: 0.103448264, y: -0.18977953, z: 0}
+  - {x: 0.20689669, y: -0.3474679, z: 0}
+  - {x: 0.310346, y: -0.4748764, z: 0}
+  - {x: 0.41379997, y: -0.5723573, z: 0}
+  - {x: 0.5172676, y: -0.63927597, z: 0}
+  - {x: 0.6207681, y: -0.6744334, z: 0}
+  - {x: 0.7243356, y: -0.6764393, z: 0}
+  - {x: 0.82802683, y: -0.6440351, z: 0}
+  - {x: 0.93192786, y: -0.5763676, z: 0}
+  - {x: 1.036164, y: -0.4732118, z: 0}
+  - {x: 1.1409091, y: -0.33514583, z: 0}
+  - {x: 1.2463993, y: -0.1636748, z: 0}
+  - {x: 1.3529422, y: 0.038696013, z: 0}
+  - {x: 1.4609342, y: 0.26843438, z: 0}
+  - {x: 1.5708737, y: 0.52100796, z: 0}
+  - {x: 1.6833779, y: 0.790959, z: 0}
+  - {x: 1.7992002, y: 1.0720277, z: 0}
+  - {x: 1.9192492, y: 1.3573273, z: 0}
+  - {x: 2.0446095, y: 1.6395699, z: 0}
+  - {x: 2.1765604, y: 1.9113376, z: 0}
+  - {x: 2.316601, y: 2.1654062, z: 0}
+  - {x: 2.466473, y: 2.3951225, z: 0}
+  - {x: 2.6281838, y: 2.5948217, z: 0}
+  - {x: 2.8040352, y: 2.760304, z: 0}
+  - {x: 2.9966488, y: 2.8893576, z: 0}
+  - {x: 3.2089953, y: 2.982328, z: 0}
+  - {x: 3.4444242, y: 3.0427425, z: 0}
+  - {x: 3.7066917, y: 3.0779812, z: 0}
+  - {x: 4, y: 3.1, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.5461133
@@ -616,7 +644,7 @@ LineRenderer:
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
-  m_UseWorldSpace: 0
+  m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
 --- !u!4 &380918711
@@ -634,6 +662,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &380918712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380918709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b55ba63ab7d2994699e4821ada179f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numPointsDrawn: 30
+  pullPoints:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0.5, y: -1, z: 0}
+  - {x: 1, y: -1, z: 0}
+  - {x: 1.5, y: -1, z: 0}
+  - {x: 2, y: 3, z: 0}
+  - {x: 2.5, y: 3, z: 0}
+  - {x: 4, y: 3.1, z: 0}
 --- !u!1 &404040880
 GameObject:
   m_ObjectHideFlags: 0

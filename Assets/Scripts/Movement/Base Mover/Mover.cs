@@ -198,7 +198,7 @@ namespace RPGPlatformer.Movement
         //goal transformUp should be normalized
         public void TweenTransformUpTowards(Vector2 transformUp, float rotationalSpeed)
         {
-            var tweened = MovementTools.CheapRotationalTween(base.transform.up, transformUp, 
+            var tweened = PhysicsTools.CheapRotationalTween(base.transform.up, transformUp, 
                 rotationalSpeed, Time.deltaTime);
             base.transform.rotation = Quaternion.LookRotation(base.transform.forward, tweened);
         }
@@ -337,7 +337,7 @@ namespace RPGPlatformer.Movement
                     base.transform.localScale.y, base.transform.localScale.z);
                 if (flipWrtGlobalUp)
                 {
-                    base.transform.up = MovementTools.ReflectAlongUnitVector(Vector3.right, base.transform.up);
+                    base.transform.up = PhysicsTools.ReflectAlongUnitVector(Vector3.right, base.transform.up);
                 }
                 DirectionChanged.Invoke(CurrentOrientation);
             }

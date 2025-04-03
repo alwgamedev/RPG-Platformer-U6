@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
-    using static MovementTools;
+    using static PhysicsTools;
 
     public enum MovementType
     {
