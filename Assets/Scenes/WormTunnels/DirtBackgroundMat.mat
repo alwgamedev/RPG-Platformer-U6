@@ -66,16 +66,26 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaBlendRate: 0
+    - _AlphaBlendScale: 0
     - _BoundaryFadeRate: 0
+    - _ColorBlendBdry: 0
+    - _ColorBlendRate: 3.46
+    - _ColorBlendScale: 3
     - _EnableExternalAlpha: 0
-    - _FogDensity: 1
-    - _FogSize: 25
+    - _FogDensity: 0.8
+    - _FogMin: 0
+    - _FogSize: 12
+    - _UseObjectPosition: 0
+    - _UseUVInsteadOfPosition: 0
     - _ZWrite: 0
     m_Colors:
     - _BoundaryFadeSizesLRTB: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _FogColor: {r: 0, g: 0, b: 0, a: 0.101960786}
+    - _FogColor: {r: 0.3283019, g: 0.2857377, b: 0.25954434, a: 1}
     - _FogSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _InnerColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OuterColor: {r: 1, g: 0, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _Stretch: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

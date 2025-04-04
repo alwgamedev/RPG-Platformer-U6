@@ -10,10 +10,32 @@ namespace RPGPlatformer
 
         CurveRenderer curveRenderer;
 
-        private void OnEnable()
+        private void Update()
         {
-            VisualCurvePoint.CurvePointMoved -= RedrawCurve;//just in case we are already subbed
-            VisualCurvePoint.CurvePointMoved += RedrawCurve;
+            if (guides == null) return;
+
+            foreach (var guide in guides)
+            {
+                if (guide.HasChanged())
+                {
+                    RedrawCurve();
+                    break;
+                }
+            }
+        }
+
+        private void RedrawCurve()
+        {
+            if (curveRenderer == null)
+            {
+                curveRenderer = GetComponent<CurveRenderer>();
+            }
+            if (curveRenderer != null)
+            {
+                curveRenderer.SetPoints(guides);
+                curveRenderer.RedrawCurve();
+            }
+            //let's see if this triggers curve renderer's validate, or we should call draw ourselves
         }
 
         private void OnDrawGizmos()
@@ -39,39 +61,6 @@ namespace RPGPlatformer
                     }
                 }
             }
-        }
-
-        private void OnValidate()
-        {
-            RedrawCurve();
-        }
-
-        private void RedrawCurve()
-        {
-            if (curveRenderer != null)
-            {
-                UpdateCurveRenderer();
-                curveRenderer.RedrawCurve();
-            }
-        }
-
-        private void UpdateCurveRenderer()
-        {
-            if (curveRenderer == null)
-            {
-                curveRenderer = GetComponent<CurveRenderer>();
-            }
-            if (curveRenderer != null)
-            {
-                curveRenderer.SetPoints(guides);
-                //curveRenderer.RedrawCurve();
-            }
-            //let's see if this triggers curve renderer's validate, or we should call draw ourselves
-        }
-
-        private void OnDisable()
-        {
-            VisualCurvePoint.CurvePointMoved -= RedrawCurve;
         }
     }
 }

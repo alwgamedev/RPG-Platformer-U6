@@ -11,21 +11,11 @@ namespace RPGPlatformer.Core
 
         public SerializableTuple<Transform> Data => data;
 
-        public static event Action CurvePointMoved;
-
-        private void Update()
+        public bool HasChanged()
         {
-            if (transform.hasChanged)
-            {
-                CurvePointMoved?.Invoke();
-            }
+            if (data?.Item1 == null || data.Item2 == null) return false;
 
-            if (data?.Item1 == null || data.Item2 == null) return;
-
-            if (data.Item1.hasChanged || data.Item2.hasChanged)
-            {
-                CurvePointMoved?.Invoke();
-            }
+            return transform.hasChanged || data.Item1.hasChanged || data.Item2.hasChanged;
         }
     }
 }

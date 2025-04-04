@@ -13,10 +13,10 @@ namespace RPGPlatformer.Core
 
         LineRenderer lineRenderer;
 
-        //private void Update()
-        //{
-        //    RedrawCurve();
-        //}
+        private void OnValidate()
+        {
+            RedrawCurve();
+        }
 
         public void SetPoints(VisualCurvePoint[] guides)
         {
@@ -61,11 +61,11 @@ namespace RPGPlatformer.Core
 
         public void RedrawCurve()
         {
-            if (numPointsDrawn < 2) return;
+            if (numPointsDrawn < 2 || pointData.Length < 2) return;
 
             //if pointData.Length < 2, then we will catch that here (no error)
-            var path = CurveTools.SmoothlyConcatenatedPath(pointData);
-            if (path == null) return;
+            //var path = CurveTools.SmoothlyConcatenatedPath(pointData);
+            //if (path == null) return;
 
             //allows us to run in edit mode where we don't know when components are being added/removed
             if (lineRenderer == null)
@@ -79,7 +79,7 @@ namespace RPGPlatformer.Core
             for (int i = 0; i < numPointsDrawn; i++)
             {
                 
-                lineRenderer.SetPosition(i, path(i * dt));
+                lineRenderer.SetPosition(i, CurveTools.SmoothlyConcatenatedPath(pointData, i * dt));
             }
         }
     }

@@ -131,7 +131,7 @@ namespace RPGPlatformer.Movement
         protected virtual void BeginWallCling(bool airborne)
         {
             movementManager.AnimateWallCling(true);
-            mover.BeginWallCling(airborne);
+            mover.BeginWallCling(airborne, wallDetectionOptions.WallClingRotationSpeed);
         }
 
         protected virtual void EndWallCling()

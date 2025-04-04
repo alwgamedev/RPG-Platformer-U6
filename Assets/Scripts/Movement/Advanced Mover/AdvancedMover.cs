@@ -61,13 +61,14 @@ namespace RPGPlatformer.Movement
             currentJumpNum = 0;
         }
 
-        public void BeginWallCling(bool airborne)
+        public void BeginWallCling(bool airborne, float rotationSpeed)
         {
             if (airborne)
             {
                 TriggerLanding();
             }
-            transform.rotation = Quaternion.LookRotation(Vector3.forward, adjacentWallDirection);
+            //transform.rotation = Quaternion.LookRotation(Vector3.forward, adjacentWallDirection);
+            TweenTransformUpTowards(adjacentWallDirection, rotationSpeed);
         }
 
         public void MaintainWallCling(float rotationSpeed)
