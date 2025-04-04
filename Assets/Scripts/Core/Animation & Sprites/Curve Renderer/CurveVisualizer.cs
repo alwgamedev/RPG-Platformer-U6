@@ -6,7 +6,8 @@ namespace RPGPlatformer
     [ExecuteAlways]
     public class CurveVisualizer : MonoBehaviour
     {
-        [SerializeField] VisualCurvePoint[] guides;
+        [SerializeField] bool drawGizmos;
+        [SerializeField] VisualCurveGuidePoint[] guides;
 
         CurveRenderer curveRenderer;
 
@@ -16,7 +17,7 @@ namespace RPGPlatformer
 
             foreach (var guide in guides)
             {
-                if (guide.HasChanged())
+                if (guide && guide.HasChanged())
                 {
                     RedrawCurve();
                     break;
@@ -32,34 +33,42 @@ namespace RPGPlatformer
             }
             if (curveRenderer != null)
             {
-                curveRenderer.SetPoints(guides);
-                curveRenderer.RedrawCurve();
+                curveRenderer.HandleGuidePointChanges(guides);
             }
             //let's see if this triggers curve renderer's validate, or we should call draw ourselves
         }
 
         private void OnDrawGizmos()
         {
-            if (guides == null) return;
+            if (!drawGizmos || guides == null) return;
 
-            for (int i = 0; i < guides.Length; i++)
+            int i = 0;
+            while (i < guides.Length)
             {
-                if (guides[i] == null || guides[i].Data == null) continue;
-                var guide = guides[i].Data;
-
-                //TO-DO: do this in OnDrawGizmos, or wherever you're supposed to do it
-                if (guide?.Item1 != null)
+                if (!guides[i] || !guides[i].Active())
                 {
-                    if (guide.Item2 != null)
+                    i++; 
+                    continue;
+                }
+
+                guides[i].DrawGizmo();
+
+                int j = i + 1;
+
+                //find the next active node
+                while (j < guides.Length)
+                {
+                    if (!guides[j] || !guides[j].Active())
                     {
-                        Debug.DrawLine(guide.Item1.position, guide.Item2.position, Color.yellow);
+                        j++;
+                        continue;
                     }
 
-                    if (i < guides.Length - 1 && guides[i + 1] != null && guides[i + 1].Data?.Item1 != null)
-                    {
-                        Debug.DrawLine(guide.Item1.position, guides[i + 1].Data.Item1.position, Color.green);
-                    }
+                    Debug.DrawLine(guides[i].Point(), guides[j].Point(), Color.green);
+                    break;
                 }
+
+                i = j;
             }
         }
     }

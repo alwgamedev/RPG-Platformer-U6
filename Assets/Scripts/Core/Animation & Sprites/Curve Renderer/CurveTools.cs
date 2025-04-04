@@ -1,52 +1,30 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
     public static class CurveTools
     {
+
         /// <summary>
-        /// Path through data points = (p[i], v[i]), where the curve will pass through 
-        /// each point p[i] with tangent direction v[i]. You can leave the last tangent direction zero
-        /// if you want it to be configured automatically.
+        /// C1 path through data points = (p[i], v[i]), where the curve will pass through 
+        /// each point p[i] with tangent direction v[i]. Each path segment is traversed in equal time
+        /// (so it ignores the CurvePoint.lengthUnits property), which would cause
+        /// the curve texture to stretch along each segment based on its length (when the line renderer is 
+        /// in distribute per segment mode).
         /// </summary>
-        public static Vector3 SmoothlyConcatenatedPath(CurvePoint[] dataPoints, float t)
+        public static Vector3 C1ConcatenatedPath(CurveGuidePoint[] dataPoints, float t)
         {
-            //if (dataPoints == null)
-            //{
-            //    return default;
-            //}
-
-            //if (dataPoints.Length < 2)
-            //{
-            //    return dataPoints[0].point;
-            //}
-
             var n = dataPoints.Length - 1;//number of curve segments
-            var dt = 1 / (float)n;
+            var dt = 1 / (float)n;//time per segment
             var i = (int)(t / dt);
             if (i >= n)
             {
                 return dataPoints[n].point;
             }
 
-            return PathWithTangents((t - i * dt) / dt, dataPoints[i].point, dataPoints[i].velocity,
+            var s =  (t - i * dt) / (dataPoints[i + 1].virtualSegments * dt);
+            return PathWithTangents(s, dataPoints[i].point, dataPoints[i].velocity,
                 dataPoints[i + 1].point, dataPoints[i + 1].velocity);
-
-            //Vector3 R(float t)
-            //{
-            //    var i = (int)(t / dt);
-            //    if (i >= n)
-            //    {
-            //        return dataPoints[n].point;
-            //    }
-
-            //    var s = (t - i * dt) / dt;
-            //    return PathWithTangents(dataPoints[i].point, dataPoints[i].velocity,
-            //        dataPoints[i + 1].point, dataPoints[i + 1].velocity)(s);
-            //}
-
-            //return R;
         }
 
         /// <summary>
@@ -57,19 +35,7 @@ namespace RPGPlatformer.Core
         {
             var d = q - p;
 
-            if (w == Vector3.zero)
-            {
-                w = d - v;
-            }
-
             return p + t * v + t * t * (3 * d - 2 * v - w) + t * t * t * (-2 * d + v + w);
-
-            //Vector3 R(float t)
-            //{
-            //    return p + t * v + t * t * (3 * d - 2 * v - w) + t * t * t * (-2 * d + v + w);
-            //}
-
-            //return R;
         }
     }
 }
