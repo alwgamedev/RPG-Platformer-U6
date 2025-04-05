@@ -12,9 +12,6 @@ namespace RPGPlatformer.Core
         protected T0 stateManager;
         protected T3 stateDriver;
 
-        public T0 StateManager => stateManager;
-        public T3 StateDriver => stateDriver;
-
         protected virtual void Awake()
         {
             InitializeDriver();

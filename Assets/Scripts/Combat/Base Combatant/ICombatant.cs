@@ -9,6 +9,7 @@ namespace RPGPlatformer.Combat
         public string DisplayName { get; }
         public int CombatLevel { get; }
         public float AttackRange { get; }
+        public float IdealMinimumCombatDistance { get; } //mainly for AI
         public IWeapon EquippedWeapon { get; }
         public IWeapon DefaultWeapon { get; }
         public IWeapon UnarmedWeapon { get; }

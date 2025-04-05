@@ -1,24 +1,29 @@
-﻿using RPGPlatformer.UI;
-using System;
+﻿using RPGPlatformer.Core;
+using RPGPlatformer.UI;
 using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
-    public class AICombatController : CombatController
+    using T1 = CombatStateGraph;
+    using T2 = CombatStateMachine;
+    using T3 = AICombatant;
+    using T4 = AnimationControl;
+
+    public class AICombatController : GenericCombatController<CombatStateManager<T1, T2, T3, T4>, T1, T2, T3, T4>
     {
         protected CombatantHealthBarCanvas healthBarCanvas;
 
         public IHealth currentTarget;
 
         //public CombatStateManager CombatManager => combatManager;
-        public AICombatant AICombatant { get; protected set; }
+        //public AICombatant AICombatant { get; protected set; }
 
         protected override void Awake()
         {
             base.Awake();
 
             //should make a generic combat controller so we don't have to do this
-            AICombatant = (AICombatant)stateDriver;
+            //AICombatant = (AICombatant)stateDriver;
         }
 
         protected override void Start()
@@ -54,9 +59,9 @@ namespace RPGPlatformer.Combat
         {
             base.OnCombatExit();
 
-            if (!AICombatant.Health.IsDead)
+            if (!stateDriver.Health.IsDead)
             {
-                AICombatant.damageTracker.ClearTracker();
+                stateDriver.damageTracker.ClearTracker();
             }
         }
 

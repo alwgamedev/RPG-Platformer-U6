@@ -51,6 +51,7 @@ namespace RPGPlatformer.Combat
         public Transform MainhandElbow => mainhandElbow;
         public Transform ChestBone => chestBone;
         public float AttackRange { get; protected set; }
+        public float IdealMinimumCombatDistance { get; protected set; }
         public IWeapon EquippedWeapon => equippedWeapon;
         public IWeapon DefaultWeapon => defaultWeapon;
         public IWeapon UnarmedWeapon => unarmedWeapon;
@@ -263,6 +264,8 @@ namespace RPGPlatformer.Combat
         {
             defaultWeapon = CreateWeaponFromSO(defaultWeaponSO);
             unarmedWeapon = CreateWeaponFromSO(unarmedWeaponSO);
+
+            IdealMinimumCombatDistance = unarmedWeapon?.WeaponStats.AttackRange / 3 ?? 0.25f;
         }
 
         public Weapon CreateWeaponFromSO(WeaponSO weaponSO)

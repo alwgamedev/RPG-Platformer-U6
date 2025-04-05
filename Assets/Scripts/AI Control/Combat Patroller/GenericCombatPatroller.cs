@@ -21,7 +21,7 @@ namespace RPGPlatformer.AIControl
         protected IHealth currentTarget;
 
         public float TargetingTolerance => CombatController.Combatant.Health.TargetingTolerance;
-        public float MinimumCombatDistance => CombatController.AICombatant.MinimumCombatDistance;
+        public float MinimumCombatDistance => CombatController.Combatant.IdealMinimumCombatDistance;
         public T1 CombatController { get; protected set; }
 
         public IHealth CurrentTarget
