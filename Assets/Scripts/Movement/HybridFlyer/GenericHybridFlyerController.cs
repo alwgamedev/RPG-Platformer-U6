@@ -10,7 +10,7 @@ namespace RPGPlatformer.Movement
         where T2 : HybridFlyerStateMachine<T1>
         where T3 : HybridFlyerStateManager<T1, T2, T0>
     {
-        public bool Flying => movementManager.StateMachine.CurrentState == movementManager.StateGraph.flying;
+        public bool Flying => stateManager.StateMachine.CurrentState == stateManager.StateGraph.flying;
 
         public event Action OnFlightEntry;
         public event Action OnFlightExit;
@@ -19,15 +19,15 @@ namespace RPGPlatformer.Movement
         {
             base.Start();
 
-            mover.FlyingVerified += OnFlyingVerified;
+            stateDriver.FlyingVerified += OnFlyingVerified;
         }
 
-        protected override void ConfigureMovementManager()
+        protected override void ConfigureStateManager()
         {
-            base.ConfigureMovementManager();
+            base.ConfigureStateManager();
 
-            movementManager.StateGraph.flying.OnEntry += OnFlyingEntry;
-            movementManager.StateGraph.flying.OnExit += OnFlyingExit;
+            stateManager.StateGraph.flying.OnEntry += OnFlyingEntry;
+            stateManager.StateGraph.flying.OnExit += OnFlyingExit;
         }
 
 
@@ -49,13 +49,13 @@ namespace RPGPlatformer.Movement
         {
             if (Flying) return;
 
-            mover.BeginFlying();
+            stateDriver.BeginFlying();
         }
 
         protected override void UpdateMover()
         {
-            mover.UpdateGroundHits();
-            mover.UpdateState(Flying, Jumping, Freefalling);
+            stateDriver.UpdateGroundHits();
+            stateDriver.UpdateState(Flying, Jumping, Freefalling);
         }
 
         protected override bool CanSetMoveInput()
@@ -69,7 +69,7 @@ namespace RPGPlatformer.Movement
         {
             if (Flying)
             {
-                mover.MaxSpeed = mover.FlightSpeed;
+                stateDriver.MaxSpeed = stateDriver.FlightSpeed;
             }
             else
             {
@@ -82,7 +82,7 @@ namespace RPGPlatformer.Movement
             if (Flying)
             {
 
-                movementManager.AnimateMovement(Mathf.Max(VerticalSpeedFraction(mover.FlightSpeed), 0));
+                stateManager.AnimateMovement(Mathf.Max(VerticalSpeedFraction(stateDriver.FlightSpeed), 0));
             }
             else
             {
@@ -92,10 +92,10 @@ namespace RPGPlatformer.Movement
 
         protected virtual void OnFlyingEntry()
         {
-            movementManager.AnimateMovement(0);
+            stateManager.AnimateMovement(0);
             UpdateMaxSpeed();
             //mover.SetLinearDamping(true);
-            movementManager.OnFlyingEntry();
+            stateManager.OnFlyingEntry();
             OnFlightEntry?.Invoke();
         }
 
@@ -103,15 +103,15 @@ namespace RPGPlatformer.Movement
         {
             if (Flying)
             {
-                mover.SetLinearDamping(true);
+                stateDriver.SetLinearDamping(true);
             }
         }
 
         protected virtual void OnFlyingExit()
         {
             UpdateMaxSpeed();
-            movementManager.OnFlyingExit();
-            mover.SetLinearDamping(false);
+            stateManager.OnFlyingExit();
+            stateDriver.SetLinearDamping(false);
             OnFlightExit?.Invoke();
             transform.rotation = Quaternion.identity;
         }

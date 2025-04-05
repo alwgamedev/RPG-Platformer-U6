@@ -25,7 +25,7 @@ namespace RPGPlatformer.Combat
         {
             base.Start();
 
-            combatant.OnInventoryOverflow += OnInventoryOverflow;
+            stateDriver.OnInventoryOverflow += OnInventoryOverflow;
 
             var spaghetti = InventoryItemSO.FindByName("Spaghetti");
             var staff = InventoryItemSO.FindByName("Basic Staff (SH)");
@@ -37,16 +37,16 @@ namespace RPGPlatformer.Combat
             var bwTop = InventoryItemSO.FindByName("Blue Wizard Top");
             var bwPants = InventoryItemSO.FindByName("Blue Wizard Pants");
 
-            combatant.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
-            combatant.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
-            combatant.TakeLoot(staff.CreateInstanceOfItem().ToSlotData(1));
-            combatant.TakeLoot(bow.CreateInstanceOfItem().ToSlotData(1));
-            combatant.TakeLoot(sword.CreateInstanceOfItem().ToSlotData(1));
-            combatant.TakeLoot(cookie.CreateInstanceOfItem().ToSlotData(8));
-            combatant.TakeLoot(gold.CreateInstanceOfItem().ToSlotData(773));
-            combatant.TakeLoot(redBody.CreateInstanceOfItem().ToSlotData(1));
-            combatant.TakeLoot(bwTop.CreateInstanceOfItem().ToSlotData(1));
-            combatant.TakeLoot(bwPants.CreateInstanceOfItem().ToSlotData(1));
+            stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
+            stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
+            stateDriver.TakeLoot(staff.CreateInstanceOfItem().ToSlotData(1));
+            stateDriver.TakeLoot(bow.CreateInstanceOfItem().ToSlotData(1));
+            stateDriver.TakeLoot(sword.CreateInstanceOfItem().ToSlotData(1));
+            stateDriver.TakeLoot(cookie.CreateInstanceOfItem().ToSlotData(8));
+            stateDriver.TakeLoot(gold.CreateInstanceOfItem().ToSlotData(773));
+            stateDriver.TakeLoot(redBody.CreateInstanceOfItem().ToSlotData(1));
+            stateDriver.TakeLoot(bwTop.CreateInstanceOfItem().ToSlotData(1));
+            stateDriver.TakeLoot(bwPants.CreateInstanceOfItem().ToSlotData(1));
         }
 
         void OnIAMConfigure()
@@ -102,13 +102,13 @@ namespace RPGPlatformer.Combat
 
         private void TogglePlayerAlive()//FOR TESTING PURPOSES
         {
-            if (!combatant.Health.IsDead)
+            if (!stateDriver.Health.IsDead)
             {
-                combatant.HandleHealthChange(Mathf.Infinity, null);
+                stateDriver.HandleHealthChange(Mathf.Infinity, null);
             }
             else
             {
-                combatant.Revive();
+                stateDriver.Revive();
             }
         }
 

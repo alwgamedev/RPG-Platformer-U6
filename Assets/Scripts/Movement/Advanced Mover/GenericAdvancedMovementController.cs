@@ -11,7 +11,7 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected WallDetectionOptions wallDetectionOptions;
 
-        public override bool Jumping => movementManager.StateMachine.CurrentState == movementManager.StateGraph.jumping;
+        public override bool Jumping => stateManager.StateMachine.CurrentState == stateManager.StateGraph.jumping;
 
         protected override void Start()
         {
@@ -38,25 +38,25 @@ namespace RPGPlatformer.Movement
         protected virtual void ConfigureWallDetection()
         {
             OnUpdate += UpdateAndHandleWallInteraction;
-            mover.AwkwardWallMoment += IgnoreMoveInputNextUpdate;
+            stateDriver.AwkwardWallMoment += IgnoreMoveInputNextUpdate;
         }
 
         //BASIC FUNCTIONS
 
         protected override void UpdateMover()
         {
-            mover.UpdateGroundHits();
-            mover.UpdateState(Jumping, Freefalling);
+            stateDriver.UpdateGroundHits();
+            stateDriver.UpdateState(Jumping, Freefalling);
         }
 
         public virtual void ToggleRunning()
         {
-            SetRunning(!mover.Running);
+            SetRunning(!stateDriver.Running);
         }
 
         public virtual void SetRunning(bool val)
         {
-            mover.Running = val;
+            stateDriver.Running = val;
             UpdateMaxSpeed();
         }
 
@@ -65,7 +65,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void UpdateMaxSpeed()
         {
-            mover.MaxSpeed = mover.Running ? mover.RunSpeed : mover.WalkSpeed;
+            stateDriver.MaxSpeed = stateDriver.Running ? stateDriver.RunSpeed : stateDriver.WalkSpeed;
         }
 
         protected virtual void AnimateMovement()
@@ -74,22 +74,22 @@ namespace RPGPlatformer.Movement
             {
                 if (MoveInput == Vector2.zero)
                 {
-                    movementManager.AnimateMovement(0);
+                    stateManager.AnimateMovement(0);
                     return;
                     //animator will transition to idle, but the transition is smooth!
                 }
-                movementManager.AnimateMovement(SpeedFraction(mover.RunSpeed));
+                stateManager.AnimateMovement(SpeedFraction(stateDriver.RunSpeed));
             }
         }
 
         protected virtual void SetDownSpeed()
         {
-            movementManager.SetDownSpeed(mover.Rigidbody.linearVelocityY);
+            stateManager.SetDownSpeed(stateDriver.Rigidbody.linearVelocityY);
         }
 
         protected virtual void UpdateAndHandleWallInteraction()
         {
-            mover.UpdateAdjacentWall(Grounded, wallDetectionOptions.NumWallCastsPerThird, 
+            stateDriver.UpdateAdjacentWall(Grounded, wallDetectionOptions.NumWallCastsPerThird, 
                 wallDetectionOptions.WallCastDistanceFactor);
             SetDownSpeed();
             HandleAdjacentWallInteraction(!Grounded);
@@ -97,47 +97,47 @@ namespace RPGPlatformer.Movement
 
         protected virtual void HandleAdjacentWallInteraction(bool airborne)
         {
-            if (moveInput != Vector2.zero && mover.FacingWall)
+            if (moveInput != Vector2.zero && stateDriver.FacingWall)
             {
-                movementManager.AnimateWallScramble(false);
-                if (!movementManager.IsWallClinging())
+                stateManager.AnimateWallScramble(false);
+                if (!stateManager.IsWallClinging())
                 {
                     BeginWallCling(airborne);
                 }
                 else
                 {
-                    mover.MaintainWallCling(wallDetectionOptions.WallClingRotationSpeed);
+                    stateDriver.MaintainWallCling(wallDetectionOptions.WallClingRotationSpeed);
                 }
                 return;
             }
 
-            if (movementManager.IsWallClinging())
+            if (stateManager.IsWallClinging())
             {
                 EndWallCling();
                 return;
             }
 
-            if (!movementManager.StateMachine.HasState(typeof(Jumping))
-                && mover.FacingWall)
+            if (!stateManager.StateMachine.HasState(typeof(Jumping))
+                && stateDriver.FacingWall)
             {
-                movementManager.AnimateWallScramble(true);
+                stateManager.AnimateWallScramble(true);
             }
             else
             {
-                movementManager.AnimateWallScramble(false);
+                stateManager.AnimateWallScramble(false);
             }
         }
 
         protected virtual void BeginWallCling(bool airborne)
         {
-            movementManager.AnimateWallCling(true);
-            mover.BeginWallCling(airborne, wallDetectionOptions.WallClingRotationSpeed);
+            stateManager.AnimateWallCling(true);
+            stateDriver.BeginWallCling(airborne, wallDetectionOptions.WallClingRotationSpeed);
         }
 
         protected virtual void EndWallCling()
         {
-            movementManager.AnimateWallCling(false);
-            mover.EndWallCling();
+            stateManager.AnimateWallCling(false);
+            stateDriver.EndWallCling();
         }
     }
 }

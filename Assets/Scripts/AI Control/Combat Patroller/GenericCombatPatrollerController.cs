@@ -18,8 +18,6 @@ namespace RPGPlatformer.AIControl
         where T4 : CombatPatrollerStateMachine<T3>
         where T5 : CombatPatrollerStateManager<T3, T4, T0, T00, T01, T02, T03, T1, T2>
     {
-        //[SerializeField] protected bool playerEnemy = true;
-
         protected override void ConfigureStateManager()
         {
             base.ConfigureStateManager();
@@ -29,10 +27,15 @@ namespace RPGPlatformer.AIControl
             stateManager.StateGraph.pursuit.OnExit += OnPursuitExit;
             stateManager.StateGraph.attack.OnEntry += OnAttackEntry;
             stateManager.StateGraph.attack.OnExit += OnAttackExit;
+        }
 
-            StateBehavior[stateManager.StateGraph.suspicion] = patroller.SuspicionBehavior;
-            StateBehavior[stateManager.StateGraph.pursuit] = patroller.PursuitBehavior;
-            StateBehavior[stateManager.StateGraph.attack] = patroller.AttackBehavior;
+        protected override void BuildStateBehaviorDict()
+        {
+            base.BuildStateBehaviorDict();
+
+            StateBehavior[stateManager.StateGraph.suspicion] = stateDriver.SuspicionBehavior;
+            StateBehavior[stateManager.StateGraph.pursuit] = stateDriver.PursuitBehavior;
+            StateBehavior[stateManager.StateGraph.attack] = stateDriver.AttackBehavior;
         }
 
         //protected override void InitializeState()
@@ -49,28 +52,28 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void OnSuspicionExit()
         {
-            patroller.ResetSuspicionTimer();
+            stateDriver.ResetSuspicionTimer();
         }
 
         protected virtual void OnPursuitEntry()
         {
-            patroller.MovementController.SetRunning(true);
+            stateDriver.MovementController.SetRunning(true);
         }
 
         protected virtual void OnPursuitExit()
         {
-            patroller.MovementController.SetRunning(false);
-            patroller.MovementController.SoftStop();
+            stateDriver.MovementController.SetRunning(false);
+            stateDriver.MovementController.SoftStop();
         }
 
         protected virtual void OnAttackEntry()
         {
-            patroller.StartAttacking();
+            stateDriver.StartAttacking();
         }
 
         protected virtual void OnAttackExit()
         {
-            patroller.StopAttacking();
+            stateDriver.StopAttacking();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace RPGPlatformer.Movement
             iam.SpacebarAction.started += (context) =>
             {
                 if (inputDisabled) return;
-                mover.Jump();
+                stateDriver.Jump();
             };
         }
 

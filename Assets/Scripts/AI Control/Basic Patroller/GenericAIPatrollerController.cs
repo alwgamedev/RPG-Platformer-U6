@@ -6,8 +6,8 @@ using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.AIControl
 {
-    public class GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3, T4> : MonoBehaviour, 
-        IInputSource, IAIPatrollerController
+    public class GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3, T4> 
+        : StateDrivenController<T4, T2, T3, T1>, IInputSource, IAIPatrollerController
         where T0 : GenericAdvancedMovementController<T00, T01, T02, T03>
         where T00 : AdvancedMover
         where T01 : AdvancedMovementStateGraph
@@ -21,8 +21,8 @@ namespace RPGPlatformer.AIControl
         [SerializeField] protected NavigationMode defaultPatrolMode;
         [SerializeField] protected MbNavigationParameters defaultPatrolParameters;
 
-        protected T1 patroller;
-        protected T4 stateManager;
+        //protected T1 patroller;
+        //protected T4 stateManager;
 
         protected Action OnUpdate;
         protected bool stateBehaviorSubscribed;
@@ -31,26 +31,31 @@ namespace RPGPlatformer.AIControl
         protected Dictionary<State, Action> StateBehavior = new();
 
         public bool Patrolling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.patrol;
-        public IMovementController MovementController => patroller.MovementController;
+        public IMovementController MovementController => stateDriver.MovementController;
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
-            patroller = GetComponent<T1>();
+            //patroller = GetComponent<T1>();
+            base.Awake();
+
             if (defaultPatrolParameters)
             {
                 defaultPatrolParams = defaultPatrolParameters.Content;
             }
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
-            InitializeStateManager();
-            ConfigureStateManager();
+            //InitializeStateManager();
+            //ConfigureStateManager();
+            base.Start();
+
+            BuildStateBehaviorDict();
             SubscribeStateBehaviorToUpdate(true);
 
-            patroller.PatrolNavigator.DestinationReached += OnDestinationReached;
+            stateDriver.PatrolNavigator.DestinationReached += OnDestinationReached;
 
-            patroller.InitializeState();
+            stateDriver.InitializeState();
         }
 
         protected virtual void Update()
@@ -58,19 +63,25 @@ namespace RPGPlatformer.AIControl
             OnUpdate?.Invoke();
         }
 
-        protected virtual void InitializeStateManager()
-        {
-            stateManager = (T4)Activator.CreateInstance(typeof(T4), null, patroller);
-        }
+        //protected virtual void InitializeStateManager()
+        //{
+        //    stateManager = (T4)Activator.CreateInstance(typeof(T4), null, patroller);
+        //}
 
-        protected virtual void ConfigureStateManager()
+        protected override void ConfigureStateManager()
         {
-            stateManager.Configure();
+            //stateManager.Configure();
+            base.ConfigureStateManager();
 
             stateManager.StateGraph.patrol.OnEntry += OnPatrolEntry;
 
+            //BuildStateBehaviorDict();
+        }
+
+        protected virtual void BuildStateBehaviorDict()
+        {
             StateBehavior[stateManager.StateGraph.inactive] = null;
-            StateBehavior[stateManager.StateGraph.patrol] = patroller.PatrolBehavior;
+            StateBehavior[stateManager.StateGraph.patrol] = stateDriver.PatrolBehavior;
         }
 
         protected void PerformStateBehavior()
@@ -99,7 +110,7 @@ namespace RPGPlatformer.AIControl
 
         protected virtual void OnPatrolEntry()
         {
-            patroller.MovementController.SetRunning(false);
+            stateDriver.MovementController.SetRunning(false);
             BeginDefaultPatrol();
         }
 
@@ -120,12 +131,12 @@ namespace RPGPlatformer.AIControl
 
         public virtual void BeginPatrol(NavigationMode mode, object param)
         {
-            patroller.BeginPatrol(mode, param);
+            stateDriver.BeginPatrol(mode, param);
         }
 
         protected virtual void OnDestinationReached()
         {
-            if (!patroller.PatrolNavigator.GetNextDestination())
+            if (!stateDriver.PatrolNavigator.GetNextDestination())
             {
                 BeginPatrolRest();
             }

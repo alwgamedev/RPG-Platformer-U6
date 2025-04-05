@@ -12,7 +12,8 @@ namespace RPGPlatformer.Core
         public StateGraph() : base() { }
         public StateGraph(ICollection<State> vertices = null, ICollection<(State, State)> edges = null) 
             : base(vertices, edges) { }
-        //note that, because constructor adds the vertices one by one through "AddVertex", the dictionary gets populated automatically.
+        //note that, because constructor adds the vertices one by one through "AddVertex",
+        //the dictionary gets populated automatically.
 
         public override State AddVertex(State state)
         {

@@ -9,7 +9,8 @@ namespace RPGPlatformer.Movement
     using static PhysicsTools;
 
     [RequireComponent(typeof(AnimationControl))]
-    public abstract class GenericMovementController<T0, T1, T2, T3> : MonoBehaviour, IMovementController
+    public abstract class GenericMovementController<T0, T1, T2, T3> : 
+        StateDrivenController<T3, T1, T2, T0>, IMovementController
         where T0 : Mover
         where T1 : MovementStateGraph
         where T2 : MovementStateMachine<T1>
@@ -17,8 +18,8 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] MovementOptions[] movementOptions;
 
-        protected T0 mover;
-        protected T3 movementManager;
+        //protected T0 mover;
+        //protected T3 movementManager;
 
         protected bool ignoreMoveInputNextUpdate;
 
@@ -39,13 +40,13 @@ namespace RPGPlatformer.Movement
             {
                 if (CurrentMount != null)
                 {
-                    return mover.Rigidbody.linearVelocity - CurrentMount.Velocity;
+                    return stateDriver.Rigidbody.linearVelocity - CurrentMount.Velocity;
                 }
-                return mover.Rigidbody.linearVelocity;
+                return stateDriver.Rigidbody.linearVelocity;
             }
         }
-        public HorizontalOrientation CurrentOrientation => mover.CurrentOrientation;
-        public IMover Mover => mover;
+        public HorizontalOrientation CurrentOrientation => stateDriver.CurrentOrientation;
+        public IMover Mover => stateDriver;
         public IMountableEntity CurrentMount { get; protected set; }
         //can be any "ambient velocity source" (e.g. we are on a moving platform)
         public virtual Vector2 MoveInput
@@ -58,26 +59,29 @@ namespace RPGPlatformer.Movement
             }
         }
         public bool Moving => moveInput != Vector2.zero;
-        public bool Grounded => movementManager.StateMachine.CurrentState == movementManager.StateGraph.grounded;
-        public bool Freefalling => movementManager.StateMachine.CurrentState == movementManager.StateGraph.freefall;
+        public bool Grounded => stateManager.StateMachine.CurrentState == stateManager.StateGraph.grounded;
+        public bool Freefalling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.freefall;
         public virtual bool Jumping => false;
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
-            InitializeMover();
+            //InitializeMover();
+            base.Awake();
+
             BuildMovementOptionsDictionary();
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
-            InitializeMovementManager();
-            ConfigureMovementManager();
+            base.Start();
+            //InitializeMovementManager();
+            //ConfigureMovementManager();
 
             //do these in start in case we want to subscribe functions from components
             InitializeUpdate();
             InitializeFixedUpdate();
 
-            mover.FreefallVerified += OnFreefallVerified;
+            stateDriver.FreefallVerified += OnFreefallVerified;
         }
 
         protected virtual void Update()
@@ -94,7 +98,7 @@ namespace RPGPlatformer.Movement
             //dismount is enough to completely ruin the jump or prevent dismount altogether)
             if (CurrentMount != null && Grounded)
             {
-                mover.Accelerate(CurrentMount.LocalGravity);
+                stateDriver.Accelerate(CurrentMount.LocalGravity);
             }
 
             ignoreMoveInputNextUpdate = false;
@@ -119,25 +123,26 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void InitializeMovementManager()
+        protected override void InitializeStateManager()
         {
-            movementManager = (T3)Activator.CreateInstance(typeof(T3), mover, GetComponent<AnimationControl>());
+            stateManager = (T3)Activator.CreateInstance(typeof(T3), stateDriver, GetComponent<AnimationControl>());
         }
 
-        protected virtual void ConfigureMovementManager()
+        protected override void ConfigureStateManager()
         {
-            movementManager.Configure();
+            //movementManager.Configure();
+            base.ConfigureStateManager();
 
             //movementManager.StateGraph.freefall.OnEntry += OnFreefallEntry;
-            movementManager.StateGraph.freefall.OnExit += OnFreefallExit;
+            stateManager.StateGraph.freefall.OnExit += OnFreefallExit;
 
-            movementManager.StateMachine.StateChange += UpdateMoveOptions;
+            stateManager.StateMachine.StateChange += UpdateMoveOptions;
         }
 
-        protected virtual void InitializeMover()
-        {
-            mover = GetComponent<T0>();
-        }
+        //protected virtual void InitializeMover()
+        //{
+        //    mover = GetComponent<T0>();
+        //}
 
 
         //BASIC FUNCTIONS
@@ -156,7 +161,7 @@ namespace RPGPlatformer.Movement
         {
             return d switch
             {
-                MoveDirection.Ground => v => mover.GroundDirectionVector(),
+                MoveDirection.Ground => v => stateDriver.GroundDirectionVector(),
                 MoveDirection.Input => MoveInputDirection,
                 MoveDirection.Horizontal => v => OrientationDirection(),
                 MoveDirection.Vertical => v => VerticalOrientationDirection(),
@@ -195,7 +200,7 @@ namespace RPGPlatformer.Movement
         public virtual void SetOrientation(Vector2 input, bool updateDirectionFaced, bool flipWrtGlobalUp) 
         {
             if (input.x == 0) return;
-            mover.SetOrientation((HorizontalOrientation)Mathf.Sign(input.x), updateDirectionFaced, flipWrtGlobalUp);
+            stateDriver.SetOrientation((HorizontalOrientation)Mathf.Sign(input.x), updateDirectionFaced, flipWrtGlobalUp);
         }
 
         public virtual void SoftStop()
@@ -207,7 +212,7 @@ namespace RPGPlatformer.Movement
 
         public virtual void HardStop(bool maintainVerticalVelocity = true)
         {
-            mover.Stop(maintainVerticalVelocity);
+            stateDriver.Stop(maintainVerticalVelocity);
             SoftStop();
         }
 
@@ -254,14 +259,14 @@ namespace RPGPlatformer.Movement
             entity.DirectionChanged += OnMountDirectionChanged;
             entity.Destroyed += Dismount;
 
-            mover.SetGravityScale(0);
+            stateDriver.SetGravityScale(0);
         }
 
         public virtual void Dismount()
         {
             if (CurrentMount == null) return;
 
-            mover.ReturnGravityScaleToDefault();
+            stateDriver.ReturnGravityScaleToDefault();
 
             CurrentMount.DirectionChanged -= OnMountDirectionChanged;
             CurrentMount.Destroyed -= Dismount;
@@ -270,7 +275,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void OnMountDirectionChanged(HorizontalOrientation o)
         {
-            mover.SetOrientation((HorizontalOrientation)(-(int)CurrentOrientation), currentMovementOptions.FlipSprite,
+            stateDriver.SetOrientation((HorizontalOrientation)(-(int)CurrentOrientation), currentMovementOptions.FlipSprite,
                 currentMovementOptions.ChangeDirectionWrtGlobalUp);
             var dp = transform.position - CurrentMount.Position;
             dp = ReflectAlongUnitVector(CurrentMount.VelocitySourceTransformRight, dp);
@@ -298,12 +303,12 @@ namespace RPGPlatformer.Movement
 
         protected virtual void Move(Vector2 moveInput)
         {
-            mover.Move(RelativeVelocity, GetMoveDirection(moveInput), currentMovementOptions);
+            stateDriver.Move(RelativeVelocity, GetMoveDirection(moveInput), currentMovementOptions);
         }
 
         protected virtual void MoveWithoutAcceleration(Vector2 moveInput)
         {
-            mover.MoveWithoutAcceleration(GetMoveDirection(moveInput), currentMovementOptions);
+            stateDriver.MoveWithoutAcceleration(GetMoveDirection(moveInput), currentMovementOptions);
         }
 
         protected virtual void OnFreefallVerified()
@@ -311,7 +316,7 @@ namespace RPGPlatformer.Movement
             if (Freefalling)
             {
                 //UpdateMoveOptions(movementManager.StateGraph.freefall);
-                movementManager.AnimateFreefall();
+                stateManager.AnimateFreefall();
             }
         }
 
@@ -322,7 +327,7 @@ namespace RPGPlatformer.Movement
 
         protected void OnFreefallExit()
         {
-            mover.UpdateDirectionFaced(currentMovementOptions.ChangeDirectionWrtGlobalUp);
+            stateDriver.UpdateDirectionFaced(currentMovementOptions.ChangeDirectionWrtGlobalUp);
         }
 
 
@@ -336,14 +341,14 @@ namespace RPGPlatformer.Movement
             OnFixedUpdate = null;
             OnUpdate = null;
             moveInput = Vector2.zero;
-            movementManager.Freeze();
-            mover.OnDeath();
+            stateManager.Freeze();
+            stateDriver.OnDeath();
         }
 
         public virtual void OnRevival()
         {
-            movementManager.Unfreeze();
-            mover.OnRevival();
+            stateManager.Unfreeze();
+            stateDriver.OnRevival();
             OnFixedUpdate = TempFixedUpdate;
             OnUpdate = TempUpdate;
         }

@@ -10,14 +10,15 @@ namespace RPGPlatformer.Combat
 
         public IHealth currentTarget;
 
-        public CombatStateManager CombatManager => combatManager;
+        //public CombatStateManager CombatManager => combatManager;
         public AICombatant AICombatant { get; protected set; }
 
         protected override void Awake()
         {
             base.Awake();
 
-            AICombatant = (AICombatant)combatant;
+            //should make a generic combat controller so we don't have to do this
+            AICombatant = (AICombatant)stateDriver;
         }
 
         protected override void Start()
@@ -40,22 +41,22 @@ namespace RPGPlatformer.Combat
         public void StartAttacking()
         {
             FireOneShot();
-            CombatManager.OnWeaponTick += FireOneShot;
-            combatant.Attack();
+            stateManager.OnWeaponTick += FireOneShot;
+            stateDriver.Attack();
         }
 
         public void StopAttacking()
         {
-            CombatManager.OnWeaponTick -= FireOneShot;
+            stateManager.OnWeaponTick -= FireOneShot;
         }
 
         public override void OnCombatExit()
         {
             base.OnCombatExit();
 
-            if (combatant is AICombatant aic && !combatant.Health.IsDead)
+            if (!AICombatant.Health.IsDead)
             {
-                aic.damageTracker.ClearTracker();
+                AICombatant.damageTracker.ClearTracker();
             }
         }
 

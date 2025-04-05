@@ -52,10 +52,15 @@ namespace RPGPlatformer.AIControl
             stateManager.StateGraph.awaitingDeparture.OnEntry += OnAwaitingDepartureEntry;
             stateManager.StateGraph.shuttling.OnEntry += OnShuttlingEntry;
             stateManager.StateGraph.returningToNest.OnEntry += OnReturningToNestEntry;
+        }
 
-            StateBehavior[stateManager.StateGraph.awaitingDeparture] = patroller.AwaitingDepartureBehavior;
-            StateBehavior[stateManager.StateGraph.shuttling] = patroller.PatrolBehavior;
-            StateBehavior[stateManager.StateGraph.returningToNest] = patroller.PatrolBehavior;
+        protected override void BuildStateBehaviorDict()
+        {
+            base.BuildStateBehaviorDict();
+
+            StateBehavior[stateManager.StateGraph.awaitingDeparture] = stateDriver.AwaitingDepartureBehavior;
+            StateBehavior[stateManager.StateGraph.shuttling] = stateDriver.PatrolBehavior;
+            StateBehavior[stateManager.StateGraph.returningToNest] = stateDriver.PatrolBehavior;
         }
 
         private void BuildPatrolDestinationReachedHandlerDict()
@@ -82,18 +87,18 @@ namespace RPGPlatformer.AIControl
 
         private void OnAwaitingDepartureEntry()
         {
-            patroller.HeadToDeparturePoint(departurePoint);
+            stateDriver.HeadToDeparturePoint(departurePoint);
         }
 
 
         private void OnShuttlingEntry()
         {
-            patroller.BeginFlightPath(shuttlePath);
+            stateDriver.BeginFlightPath(shuttlePath);
         }
 
         private void OnReturningToNestEntry()
         {
-            patroller.BeginFlightPath(returnPath);
+            stateDriver.BeginFlightPath(returnPath);
         }
 
         protected override void OnDestinationReached()
@@ -108,33 +113,33 @@ namespace RPGPlatformer.AIControl
         private void AwaitingDepartureDestinationReached()
         {
             //the hawk has been waiting at the departure point and the timer has run out
-            if (patroller.PatrolNavigator.CurrentMode == NavigationMode.timedRest)
+            if (stateDriver.PatrolNavigator.CurrentMode == NavigationMode.timedRest)
             {
-                patroller.DepartureTimeOut();
+                stateDriver.DepartureTimeOut();
             }
             else//when the hawk has first reached the departure point
             {
-                patroller.ReadyForDeparture();
+                stateDriver.ReadyForDeparture();
             }
         }
 
         private void ShuttlingDestinationReached()
         {
-            if (patroller.PatrolNavigator.CurrentMode == NavigationMode.timedRest)
+            if (stateDriver.PatrolNavigator.CurrentMode == NavigationMode.timedRest)
             {
-                patroller.ReadyToReturnToNest();
+                stateDriver.ReadyToReturnToNest();
             }
-            else if (!patroller.PatrolNavigator.GetNextDestination())
+            else if (!stateDriver.PatrolNavigator.GetNextDestination())
             {
-                patroller.ShuttleDestionationReached();
+                stateDriver.ShuttleDestionationReached();
             }
         }
 
         private void ReturningToNestDestinationReached()
         {
-            if (!patroller.PatrolNavigator.GetNextDestination())
+            if (!stateDriver.PatrolNavigator.GetNextDestination())
             {
-                patroller.OnReturnedToNest();
+                stateDriver.OnReturnedToNest();
             }
         }
 

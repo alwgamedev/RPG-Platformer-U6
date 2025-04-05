@@ -3,7 +3,6 @@ using RPGPlatformer.Effects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Timeline.Actions;
 
 namespace RPGPlatformer.Combat
 {
@@ -89,7 +88,7 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = 0.08f
         };
 
-        public static CloseRangeAbility Slash = new()//basic
+        public static CloseRangeAbility Slash = new(true)//basic
         {
             Description = "A quick close range attack that deals a heavy chunk of damage.",
             AbilityTags = new() 
@@ -204,7 +203,8 @@ namespace RPGPlatformer.Combat
             ObeyGCD = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slam",
-            GetCombatantExecuteEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Dust Cloud Effect"),
+            GetCombatantExecuteEffect = () => 
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Dust Cloud Effect"),
             Cooldown = 12,
             DamageMultiplier = 4.2f,
             StaminaFractionChange = -.25f,

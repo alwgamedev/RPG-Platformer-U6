@@ -35,7 +35,7 @@ namespace RPGPlatformer.Movement
                 {
                     base.MoveInput = value;
                 }
-                else if (mover.FacingWall)
+                else if (stateDriver.FacingWall)
                 {
                     SoftStop();
                 }
@@ -46,14 +46,14 @@ namespace RPGPlatformer.Movement
         {
             base.Start();
 
-            MaxPermissibleDropOffHeight = maxPermissibleDropOffHeightFactor * mover.Height;
+            MaxPermissibleDropOffHeight = maxPermissibleDropOffHeightFactor * stateDriver.Height;
         }
 
-        protected override void InitializeMover()
+        protected override void InitializeDriver()
         {
-            base.InitializeMover();
+            base.InitializeDriver();
 
-            mover.DirectionChanged += o => { stuckAtLedge = false; };
+            stateDriver.DirectionChanged += o => { stuckAtLedge = false; };
         }
 
         //protected override void ConfigureWallDetection()
@@ -84,7 +84,7 @@ namespace RPGPlatformer.Movement
                 distance = Mathf.Infinity;
                 return false;
             }
-            return mover.DropOffAhead(MaxPermissibleDropOffHeight, direction, out distance);
+            return stateDriver.DropOffAhead(MaxPermissibleDropOffHeight, direction, out distance);
         }
 
         //protected override void HandleMoveInput()
@@ -119,15 +119,15 @@ namespace RPGPlatformer.Movement
             else if (dropOffHandlingOption == DropOffHandlingOption.tryToJump)
             {
                 //CanJumpGap assumes you are moving at runSpeed in direction +/- transform.right 
-                if (mover.CanJumpGap(out var landingPt))
+                if (stateDriver.CanJumpGap(out var landingPt))
                 {
                     if (currentTarget == null
                         || Vector2.Distance(landingPt, currentTarget.transform.position) <
-                        Vector2.Distance(mover.ColliderCenterBottom, currentTarget.transform.position))
+                        Vector2.Distance(stateDriver.ColliderCenterBottom, currentTarget.transform.position))
                     {
-                        mover.MoveWithoutAcceleration((int)CurrentOrientation * transform.right,
-                            mover.RunSpeed, currentMovementOptions);//get up to run speed
-                        mover.Jump();
+                        stateDriver.MoveWithoutAcceleration((int)CurrentOrientation * transform.right,
+                            stateDriver.RunSpeed, currentMovementOptions);//get up to run speed
+                        stateDriver.Jump();
                         stuckAtLedge = false;
                         return true;
                     }
@@ -153,7 +153,7 @@ namespace RPGPlatformer.Movement
 
         protected override void HandleAdjacentWallInteraction(bool airborne)
         {
-            if (mover.FacingWall)
+            if (stateDriver.FacingWall)
             {
                 SoftStop();
             }

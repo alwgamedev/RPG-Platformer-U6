@@ -58,8 +58,8 @@ namespace RPGPlatformer.Core
             if (guides == null) return;
 
             //point of transfer queue?
-            //I'm trying to use only the active guide points while creating a new
-            //array as rarely as possible
+            //because we don't know how many guide points are actually active yet
+            //and we want to resize the array as rarely as possible
             transferQueue.Clear();//transferQueue should already be empty, but just in case
 
             numVirtualSegments = guides.Length - 1;

@@ -11,11 +11,13 @@ namespace RPGPlatformer.Core
 
     //(*) StateManager ("the transmission")
     //- holds the StateGraph information and the actual StateMachine, which is responsible for setting the current state
-    //- serves as a reference point for State entry/exit functions (so any callbacks can be registered through the StateManager)
+    //- serves as a reference point for State entry/exit functions (so any callbacks can be registered through
+    //  the StateManager)
 
     //(*) StateDriver ("the engine")
     //- the lowest level script in the system
-    //- the "man on the ground" that is responsible for carrying out all the tasks relevant to the state system (like move, attack, etc.)
+    //- the "man on the ground" that is responsible for carrying out all the tasks relevant to the state system
+    //  (like move, attack, etc.)
     //- its interactions with the game environment drive the state machine,
     //  and it will fire a Trigger event when something has happened that necessitates a state change
     //- the StateDriver should do nothing on its own; it needs to be told what to do by the Controller

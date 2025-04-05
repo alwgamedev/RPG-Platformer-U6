@@ -11,15 +11,16 @@ namespace RPGPlatformer.Combat
     [RequireComponent(typeof(TickTimer))]
     [RequireComponent(typeof(AnimationControl))]
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
-    public class CombatController : MonoBehaviour, ICombatController, IAbilityBarOwner, IPausable
+    public class CombatController : StateDrivenController<CombatStateManager, CombatStateGraph, CombatStateMachine,
+        Combatant>, ICombatController, IAbilityBarOwner, IPausable
     {
         [SerializeField] protected float timeToLeaveCombat = 200;
         [SerializeField] protected SerializableCharacterAbilityBarData abilityBarData = new();
         [SerializeField] protected bool useDefaultAbilityBars;
         [SerializeField] protected bool immuneToStuns = false;
 
-        protected Combatant combatant;
-        protected CombatStateManager combatManager;
+        //protected Combatant combatant;
+        //protected CombatStateManager combatManager;
         protected CharacterAbilityBarManager abilityBarManager;
 
         protected TickTimer tickTimer;
@@ -40,14 +41,14 @@ namespace RPGPlatformer.Combat
         protected int activeStuns;
         protected int activeStunsThatFreezeAnimation;
 
-        public bool IsInCombat => combatManager.StateMachine.CurrentState is InCombat;
+        public bool IsInCombat => stateManager.StateMachine.CurrentState is InCombat;
         public AbilityBar CurrentAbilityBar => abilityBarManager.CurrentAbilityBar;
         public TickTimer TickTimer => tickTimer;
         public bool GlobalCooldown { get; protected set; }
         public bool ChannelingAbility { get; protected set; }
         public bool PoweringUp { get; protected set; }
         public bool FireButtonIsDown { get; protected set; }
-        public ICombatant Combatant => combatant;
+        public ICombatant Combatant => stateDriver;
         public IMovementController MovementController { get; protected set; }
         public virtual IInputSource InputSource { get; protected set; }
 
@@ -70,32 +71,36 @@ namespace RPGPlatformer.Combat
             //^parameter represents damage (so positive is damage taken, and negative is health gained)
 
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
-            combatant = GetComponent<Combatant>(); 
+            //combatant = GetComponent<Combatant>(); 
+            base.Awake();
+
             MovementController = GetComponent<IMovementController>();
             InputSource = GetComponent<IInputSource>();
 
             OnDisabled += () => EndChannel();
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
-            InitializeCombatManager();//doing both of these here because they depend on the combatant
+            base.Start();
+            //InitializeCombatManager();//doing both of these here because they depend on the combatant
+
             InitializeAbilityBarManager();
 
             tickTimer = GetComponent<TickTimer>();
             tickTimer.randomizeStartValue = true;
-            tickTimer.NewTick += combatManager.OnNewTick;
+            tickTimer.NewTick += stateManager.OnNewTick;
 
-            combatant.OnTargetingFailed += OnTargetingFailed;
-            combatant.OnWeaponEquip += OnWeaponEquip;
-            combatant.Health.OnStunned += async (duration, freezeAnimation) => 
+            stateDriver.OnTargetingFailed += OnTargetingFailed;
+            stateDriver.OnWeaponEquip += OnWeaponEquip;
+            stateDriver.Health.OnStunned += async (duration, freezeAnimation) => 
                 await GetStunned(duration, freezeAnimation, GlobalGameTools.Instance.TokenSource);
-            combatant.Health.HealthChanged += OnHealthChanged;
+            stateDriver.Health.HealthChanged += OnHealthChanged;
 
-            combatant.EquipDefaultArmour();
-            combatant.EquipDefaultWeapon();
+            stateDriver.EquipDefaultArmour();
+            stateDriver.EquipDefaultWeapon();
         }
 
         protected virtual void Update()
@@ -114,18 +119,22 @@ namespace RPGPlatformer.Combat
 
         //SET-UP
 
-        protected virtual void InitializeCombatManager()
+        protected override void InitializeStateManager()
         {
-            combatManager = new(null, combatant, GetComponent<AnimationControl>(), timeToLeaveCombat);
-            combatManager.Configure();
+            stateManager = new(null, stateDriver, GetComponent<AnimationControl>(), timeToLeaveCombat);
+        }
 
-            //OnChannelEnded += combatManager.CeaseAttack;
+        protected override void ConfigureStateManager()
+        {
+            base.ConfigureStateManager(); 
+            
+            //combatManager.Configure();
 
-            combatManager.StateGraph.inCombat.OnEntry += OnCombatEntry;
-            combatManager.StateGraph.inCombat.OnExit += OnCombatExit;
-            combatManager.StateGraph.dead.OnEntry += Death;
-            combatManager.StateGraph.dead.OnExit += Revival;
-            combatManager.OnWeaponTick += OnWeaponTick;
+            stateManager.StateGraph.inCombat.OnEntry += OnCombatEntry;
+            stateManager.StateGraph.inCombat.OnExit += OnCombatExit;
+            stateManager.StateGraph.dead.OnEntry += Death;
+            stateManager.StateGraph.dead.OnExit += Revival;
+            stateManager.OnWeaponTick += OnWeaponTick;
 
             CombatManagerConfigured?.Invoke();
         }
@@ -151,7 +160,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void UpdateEquippedAbilityBar()
         {
-            abilityBarManager.EquipAbilityBar(combatant.CurrentCombatStyle);
+            abilityBarManager.EquipAbilityBar(stateDriver.CurrentCombatStyle);
             AbilityBarResetEvent?.Invoke();
         }
 
@@ -176,7 +185,7 @@ namespace RPGPlatformer.Combat
         {
             return !CurrentAbilityBar.IsOnCooldown(ability) 
                 && (!ability.ObeyGCD || !GlobalCooldown)
-                && (combatant.EquippedWeapon?.CombatStyle == ability.CombatStyle 
+                && (stateDriver.EquippedWeapon?.CombatStyle == ability.CombatStyle 
                 || ability.CombatStyle == CombatStyle.Any);
         }
 
@@ -202,8 +211,8 @@ namespace RPGPlatformer.Combat
         protected virtual void CancelAbilityInProgress(bool delayedReleaseOfChannel = false)
         {
             EndChannel(delayedReleaseOfChannel);
-            combatManager.CeaseAttack();
-            combatant.CombatantReset();
+            stateManager.CeaseAttack();
+            stateDriver.CombatantReset();
         }
 
         protected virtual void FireButtonDown()
@@ -226,14 +235,14 @@ namespace RPGPlatformer.Combat
             {
                 FaceAimPosition();
             }
-            combatant.Stamina.autoReplenish = false;
+            stateDriver.Stamina.autoReplenish = false;
             RunAutoAbilityCycle(true);
         }
 
         protected virtual void BaseOnFireButtonUp()
         {
             FireButtonIsDown = false;
-            combatant.Stamina.autoReplenish = true;
+            stateDriver.Stamina.autoReplenish = true;
         }
 
         protected virtual void AttemptedToExecuteAbilityOnCooldown() { }
@@ -354,12 +363,12 @@ namespace RPGPlatformer.Combat
         public virtual void OnWeaponEquip()
         {
             EndChannel();
-            combatant.ReturnQueuedProjectileToPool();
+            stateDriver.ReturnQueuedProjectileToPool();
             UpdateEquippedAbilityBar();
 
-            if (combatManager.StateMachine.HasState(typeof(InCombat).Name))
+            if (stateManager.StateMachine.HasState(typeof(InCombat).Name))
             {
-                combatManager.InstallWeaponAnimOverride();
+                stateManager.InstallWeaponAnimOverride();
             }
         }
 
@@ -383,7 +392,7 @@ namespace RPGPlatformer.Combat
 
         public virtual void PlayAnimation(string stateName, CombatStyle combatStyle)
         {
-            combatManager.animationControl.PlayAnimationState(stateName, combatStyle.ToString(), 0);
+            stateManager.animationControl.PlayAnimationState(stateName, combatStyle.ToString(), 0);
         }
 
         public virtual void PlayPowerUpAnimation(string stateName, CombatStyle combatStyle)
@@ -444,10 +453,10 @@ namespace RPGPlatformer.Combat
                 }
             }
 
-            var mainHand = combatant.EquipSlots[EquipmentSlot.Mainhand].transform;
+            var mainHand = stateDriver.EquipSlots[EquipmentSlot.Mainhand].transform;
             var aimVector = aimPos - (Vector2)mainHand.position;
             var forearmVector = mainHand.position 
-                - combatant.MainhandElbow.transform.position;
+                - stateDriver.MainhandElbow.transform.position;
 
             return Vector2.SignedAngle(forearmVector, aimVector);
             //NOTE: animations should set mainhand slot angle to 0 (in case something like
@@ -456,7 +465,7 @@ namespace RPGPlatformer.Combat
 
         protected void RotateChest(float angle)
         {
-            combatant.ChestBone.Rotate(Vector3.forward, angle);
+            stateDriver.ChestBone.Rotate(Vector3.forward, angle);
         }
 
         protected void ActiveAiming()
@@ -493,19 +502,19 @@ namespace RPGPlatformer.Combat
 
         public virtual void OnHealthChanged(float damage, IDamageDealer damageDealer)
         {
-            if (combatManager.StateMachine.CurrentState is not InCombat && damage > 0)
+            if (stateManager.StateMachine.CurrentState is not InCombat && damage > 0)
             {
-                combatant.Attack();
+                stateDriver.Attack();
             }
-            float effectiveDamage = combatant.HandleHealthChange(damage, damageDealer);
-            combatManager.HandleHealthChange(effectiveDamage);
+            float effectiveDamage = stateDriver.HandleHealthChange(damage, damageDealer);
+            stateManager.HandleHealthChange(effectiveDamage);
             HealthChangeEffected?.Invoke(effectiveDamage);
         }
 
         protected async Task GetStunned(float stunDuration, bool freezeAnimation, 
             CancellationTokenSource tokenSource)
         {
-            if (combatant.Health.IsDead || immuneToStuns) return;
+            if (stateDriver.Health.IsDead || immuneToStuns) return;
 
             //var stunData = (stunDuration, freezeAnimation);
             //activeStuns.Add(stunData);
@@ -514,7 +523,7 @@ namespace RPGPlatformer.Combat
             if (freezeAnimation)
             {
                 activeStunsThatFreezeAnimation++;
-                combatManager.Freeze();
+                stateManager.Freeze();
             }
 
             TaskCompletionSource<object> tcs = new();
@@ -530,7 +539,7 @@ namespace RPGPlatformer.Combat
 
             try
             {
-                combatManager.StateGraph.dead.OnEntry += CompleteEarly;
+                stateManager.StateGraph.dead.OnEntry += CompleteEarly;
                 OnDisabled += CompleteEarly;
                 Task result = await Task.WhenAny(MiscTools.DelayGameTime(stunDuration, tokenSource.Token), tcs.Task);
                 if (tokenSource.IsCancellationRequested) return;
@@ -541,20 +550,20 @@ namespace RPGPlatformer.Combat
                 if (freezeAnimation /*&& activeStuns.Where(x => x.Item2 = true).Count() == 0*/)
                 {
                     activeStunsThatFreezeAnimation--;
-                    if (activeStunsThatFreezeAnimation == 0 && !combatant.Health.IsDead)
+                    if (activeStunsThatFreezeAnimation == 0 && !stateDriver.Health.IsDead)
                     {
                         //note if died while stunned, state machine will have already unfrozen
-                        combatManager.Unfreeze();
+                        stateManager.Unfreeze();
                     }
                 }
-                if (activeStuns == 0 && !combatant.Health.IsDead)
+                if (activeStuns == 0 && !stateDriver.Health.IsDead)
                 {
                     InputSource.EnableInput();
                 }
             }
             finally
             {
-                combatManager.StateGraph.dead.OnEntry -= CompleteEarly;
+                stateManager.StateGraph.dead.OnEntry -= CompleteEarly;
                 OnDisabled -= CompleteEarly;
             }
         }
@@ -576,14 +585,14 @@ namespace RPGPlatformer.Combat
         {
             DisableInput();
             //combatManager.animationControl.Freeze(false);//UNFREEZE, in case animation was frozen due to a stun
-            combatant.OnDeath();
+            stateDriver.OnDeath();
             MovementController?.OnDeath();
             OnDeath?.Invoke();
         }
 
         protected virtual void Revival()
         {
-            combatant.EquipSlots[EquipmentSlot.Mainhand].gameObject.SetActive(true);
+            stateDriver.EquipSlots[EquipmentSlot.Mainhand].gameObject.SetActive(true);
             MovementController?.OnRevival();
             EnableInput();
             OnRevive?.Invoke();
