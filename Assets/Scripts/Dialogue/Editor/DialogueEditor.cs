@@ -36,7 +36,12 @@ namespace RPGPlatformer.Dialogue.Editor
         {
             DialogueSO dialogue = Selection.activeObject as DialogueSO;
             selectedDialogue = dialogue;
-            dialogueGraphView.DisplayDialogue(selectedDialogue);
+
+            if (selectedDialogue != null)
+            {
+                dialogueGraphView.DisplayDialogue(selectedDialogue);
+                titleContent.text = $"{selectedDialogue.name}";
+            }
         }
 
         private DialogueEditorGraphView AddGraphView()

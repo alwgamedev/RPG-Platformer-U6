@@ -47,17 +47,18 @@ namespace RPGPlatformer.Dialogue.Editor
                 {
                     vNode.rootNodeToggle.value = true;
                 }
+
                 FindVisualNode[node] = vNode;
             }
-            foreach(var entry in FindVisualNode)//do this after all nodes have been added to the dictionary
+
+            foreach (var entry in FindVisualNode)//do this after all nodes have been added to the dictionary
                 //so that we don't get an early complete when only one node is in there
             {
                 var vNode = entry.Value;
-                vNode.rootNodeToggle.RegisterValueChangedCallback(((valueChangeEvent) =>
+                vNode.rootNodeToggle.RegisterValueChangedCallback((valueChangeEvent) =>
                 {
                     OnRootNodeToggleChanged(vNode);
-                }));
-                //entry.Value.OutputPortsReady += OutputPortsReadyHandler;
+                });
             }
 
             float startTime = Time.realtimeSinceStartup;
@@ -70,10 +71,11 @@ namespace RPGPlatformer.Dialogue.Editor
                     return true;
                 }
 
-                if (FindVisualNode.Count != dialogue.Nodes().Count())
-                {
-                    return false;
-                }
+                //Was there a reason for this? When would this happen?
+                //if (FindVisualNode.Count != dialogue.Nodes().Count())
+                //{
+                //    return false;
+                //}
 
                 foreach (var entry in FindVisualNode)
                 {
@@ -84,6 +86,13 @@ namespace RPGPlatformer.Dialogue.Editor
                 }
 
                 DrawEdges(dialogue, FindVisualNode);
+
+                //MAGIC!
+                var rectToFit = CalculateRectToFitAll(contentViewContainer);
+                CalculateFrameTransform(rectToFit, layout, 30, out var frameTranslation, out var frameScaling);
+                Matrix4x4.TRS(frameTranslation, Quaternion.identity, frameScaling);
+                UpdateViewTransform(frameTranslation, frameScaling);
+
                 return true;
             }
         }
@@ -133,7 +142,6 @@ namespace RPGPlatformer.Dialogue.Editor
             node.SetPosition(dialogueNode.Rect());
             AddElement(node);
             node.Redraw();
-            //node.OutputPortsRemoved += CleanDanglingEdges;
             return node;
         }
 

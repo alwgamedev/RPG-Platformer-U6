@@ -125,6 +125,8 @@ namespace RPGPlatformer.Dialogue.Editor
 
         private void RedrawDecisionOutputContainer(DecisionDialogueNode decisionNode)
         {
+            outputContainer.Clear();
+
             var lv = new ListView()
             {
                 reorderable = true,
@@ -133,13 +135,6 @@ namespace RPGPlatformer.Dialogue.Editor
                 showFoldoutHeader = true,
                 virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
             };
-            //lv.makeItem = () =>
-            //{
-            //    var p = CreateContinuationPort();
-            //    p.Q<Label>().style.width = 0;
-            //    //we need the label because it stores the continuation id, but want to hide it bc looks ugly
-            //    return p;
-            //};
 
             VisualElement MakeItem()
             {
@@ -174,10 +169,6 @@ namespace RPGPlatformer.Dialogue.Editor
                 lv.makeItem = MakeItem;
                 return true;
             }
-
-            //have to do this bc if you set bindItem before BindProperty is all set up,
-            //then it doesn't give you the good bindItem that does everything magically.
-            //looks like stupid hackery, and it is
         }
 
         private void RedrawChoicesOutputContainer(ResponseChoicesDialogueNode choicesNode)

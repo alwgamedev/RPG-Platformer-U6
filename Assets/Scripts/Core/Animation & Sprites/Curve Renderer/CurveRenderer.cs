@@ -35,11 +35,6 @@ namespace RPGPlatformer.Core
             RedrawCurve();
         }
 
-        //private void OnValidate()
-        //{
-        //    RedrawCurve();
-        //}
-
         private void Update()
         {
             if (lerpMode)

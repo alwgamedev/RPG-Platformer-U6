@@ -8,6 +8,7 @@ namespace RPGPlatformer.Dialogue
     {
         [SerializeField] List<ResponseChoiceData> responseChoices = new();
 
+        //why not just make the fucker public then?
         public List<ResponseChoiceData> ResponseChoices()
         {
             return responseChoices;
