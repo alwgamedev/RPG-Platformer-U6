@@ -39,6 +39,7 @@ namespace RPGPlatformer.Combat
         protected Weapon defaultWeapon;
         protected Weapon unarmedWeapon;
         protected Health health;
+        protected int targetLayerMask;
 
         public string DisplayName => $"<b>{displayName}</b>";
         public int CombatLevel => progressionManager.CombatLevel;
@@ -72,6 +73,8 @@ namespace RPGPlatformer.Combat
             progressionManager = GetComponent<CharacterProgressionManager>();
             inventory = GetComponent<InventoryManager>();
             dropSpawner = GetComponent<DropSpawner>();
+
+            targetLayerMask = LayerMask.GetMask(targetLayer);
 
             equipSlots = new();
             
@@ -451,7 +454,7 @@ namespace RPGPlatformer.Combat
 
         public virtual IHealth FindTarget(Vector2 position, float searchRadius)
         {
-            Collider2D enemyCollider = Physics2D.OverlapCircle(position, searchRadius, LayerMask.GetMask(targetLayer));
+            Collider2D enemyCollider = Physics2D.OverlapCircle(position, searchRadius, targetLayerMask);
 
             if (enemyCollider)
             {

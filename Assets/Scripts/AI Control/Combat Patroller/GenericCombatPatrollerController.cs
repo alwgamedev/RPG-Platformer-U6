@@ -6,7 +6,7 @@ using RPGPlatformer.Core;
 namespace RPGPlatformer.AIControl
 {
     public class GenericCombatPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3, T4, T5> 
-        : GenericAIPatrollerController<T0, T00, T01, T02, T03, T2, T3, T4, T5>, IInputSource
+        : GenericAIPatrollerController<T0, T00, T01, T02, T03, T2, T3, T4, T5>
         where T0 : GenericAIMovementController<T00, T01, T02, T03>
         where T00 : AdvancedMover
         where T01 : AdvancedMovementStateGraph
@@ -37,18 +37,6 @@ namespace RPGPlatformer.AIControl
             StateBehavior[stateManager.StateGraph.pursuit] = stateDriver.PursuitBehavior;
             StateBehavior[stateManager.StateGraph.attack] = stateDriver.AttackBehavior;
         }
-
-        //protected override void InitializeState()
-        //{
-        //    if (playerEnemy)
-        //    {
-        //        patroller.SetCombatTarget(GameObject.Find("Player").GetComponent<IHealth>());
-        //    }
-        //    else
-        //    {
-        //        patroller.SetCombatTarget(null);
-        //    }
-        //}
 
         protected virtual void OnSuspicionExit()
         {

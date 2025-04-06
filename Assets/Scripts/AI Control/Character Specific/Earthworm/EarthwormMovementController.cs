@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using RPGPlatformer.Movement;
 using UnityEngine;
 
@@ -78,12 +77,7 @@ namespace RPGPlatformer.AIControl
             Stop();   
         }
 
-        public void OnRevival()
-        {
-            
-        }
-
-
+        public void OnRevival() { }
 
         private void OnDestroy()
         {

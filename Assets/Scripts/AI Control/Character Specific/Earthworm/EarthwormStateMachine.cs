@@ -19,15 +19,24 @@ namespace RPGPlatformer.AIControl
 
     public class EarthwormStateGraph : StateGraph
     {
+        public readonly Inactive inactive;
         public readonly EarthwormDormant dormant;
         public readonly EarthwormAboveGround aboveGround;
         public readonly EarthwormPursuit pursuit;
 
         public EarthwormStateGraph() : base()
         {
+            inactive = CreateNewVertex<Inactive>();//for when input disabled (e.g. dead)
             dormant = CreateNewVertex<EarthwormDormant>();
             aboveGround = CreateNewVertex<EarthwormAboveGround>();
             pursuit = CreateNewVertex<EarthwormPursuit>();
+
+            AddEdgeBothWaysForAll(inactive);
+            AddEdgeBothWays((dormant, aboveGround));
+            AddEdgeBothWays((dormant, pursuit));
+            AddEdgeBothWays((aboveGround, pursuit));
         }
+
+
     }
 }

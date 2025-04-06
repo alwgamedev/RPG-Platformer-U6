@@ -207,7 +207,6 @@ namespace RPGPlatformer.AIControl
             if (target != null && !target.IsDead)
             {
                 distanceSqrd = Vector2.SqrMagnitude(transform.position - target.transform.position);
-                //- target.TargetingTolerance - TargetingTolerance;
                 tolerance = target.TargetingTolerance + TargetingTolerance;
                 return true;
             }
@@ -215,15 +214,5 @@ namespace RPGPlatformer.AIControl
             tolerance = Mathf.Infinity;
             return false;
         }
-
-        //protected virtual void TriggerSuspicion()
-        //{
-        //    Trigger(typeof(Suspicion).Name);
-        //}
-
-        //protected virtual void TriggerPursuit()
-        //{
-        //    Trigger(typeof(Pursuit).Name);
-        //}
     }
 }
