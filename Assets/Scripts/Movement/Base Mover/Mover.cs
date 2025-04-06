@@ -40,13 +40,13 @@ namespace RPGPlatformer.Movement
         public float Height => myHeight;
         public bool VerifyingFreefall => verifyingFreefall;
         public bool VerifyingJump => verifyingJump;
-        public Vector3 ColliderCenterRight => myCollider.bounds.center + adjustedHalfWidth * base.transform.right;
-        public Vector3 ColliderCenterLeft => myCollider.bounds.center - adjustedHalfWidth * base.transform.right;
+        public Vector3 ColliderCenterRight => myCollider.bounds.center + adjustedHalfWidth * transform.right;
+        public Vector3 ColliderCenterLeft => myCollider.bounds.center - adjustedHalfWidth * transform.right;
         public Vector3 ColliderCenterFront => myCollider.bounds.center + adjustedHalfWidth
-            * (int)CurrentOrientation * base.transform.right;
+            * (int)CurrentOrientation * transform.right;
         public Vector3 ColliderCenterBack => myCollider.bounds.center - adjustedHalfWidth
-            * (int)CurrentOrientation * base.transform.right;
-        public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * base.transform.up;
+            * (int)CurrentOrientation * transform.right;
+        public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
         public bool FacingRight => CurrentOrientation == HorizontalOrientation.right;
         public HorizontalOrientation CurrentOrientation { get; protected set; }
 
@@ -79,9 +79,9 @@ namespace RPGPlatformer.Movement
 
         public virtual void UpdateGroundHits()
         {
-            rightGroundHit = Physics2D.Raycast(ColliderCenterRight, -base.transform.up, groundednessTolerance,
+            rightGroundHit = Physics2D.Raycast(ColliderCenterRight, - transform.up, groundednessTolerance,
                 groundLayer);
-            leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, -base.transform.up, groundednessTolerance,
+            leftGroundHit = Physics2D.Raycast(ColliderCenterLeft, - transform.up, groundednessTolerance,
                 groundLayer);
         }
 
@@ -198,9 +198,9 @@ namespace RPGPlatformer.Movement
         //goal transformUp should be normalized
         public void TweenTransformUpTowards(Vector2 transformUp, float rotationalSpeed)
         {
-            var tweened = PhysicsTools.CheapRotationalTween(base.transform.up, transformUp, 
+            var tweened = PhysicsTools.CheapRotationalTween(transform.up, transformUp, 
                 rotationalSpeed, Time.deltaTime);
-            base.transform.rotation = Quaternion.LookRotation(base.transform.forward, tweened);
+            transform.rotation = Quaternion.LookRotation(transform.forward, tweened);
         }
 
         public virtual void Stop(bool maintainVerticalVelocity = true)
@@ -326,18 +326,20 @@ namespace RPGPlatformer.Movement
 
         public virtual bool FacingWrongDirection()
         {
-            return (int)CurrentOrientation * base.transform.localScale.x < 0;
+            return (int)CurrentOrientation * transform.localScale.x < 0;
         }
 
         public virtual void UpdateDirectionFaced(bool flipWrtGlobalUp)
         {
             if (FacingWrongDirection())
             {
-                base.transform.localScale = new Vector3(- base.transform.localScale.x, 
-                    base.transform.localScale.y, base.transform.localScale.z);
+                var s = transform.localScale;
+                s.x = -s.x;
+                transform.localScale = s;
+
                 if (flipWrtGlobalUp)
                 {
-                    base.transform.up = PhysicsTools.ReflectAlongUnitVector(Vector3.right, base.transform.up);
+                    transform.up = PhysicsTools.ReflectAlongUnitVector(Vector3.right, transform.up);
                 }
                 DirectionChanged.Invoke(CurrentOrientation);
             }
@@ -351,7 +353,7 @@ namespace RPGPlatformer.Movement
                 return (int)CurrentOrientation * (rightGroundHit.point - leftGroundHit.point).normalized;
             }
 
-            return (int)CurrentOrientation * base.transform.right;
+            return (int)CurrentOrientation * transform.right;
         }
 
         //could hook this up to an animation event
@@ -366,7 +368,7 @@ namespace RPGPlatformer.Movement
         {
             myRigidbody.freezeRotation = true;
             myRigidbody.rotation = 0;
-            base.transform.position += myHeight / 8 * Vector3.up;
+            transform.position += myHeight / 8 * Vector3.up;
         }
 
         protected override void OnDestroy()

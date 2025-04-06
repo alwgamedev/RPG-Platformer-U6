@@ -373,12 +373,12 @@ namespace RPGPlatformer.Combat
 
         public void DropLoot(IInventorySlotDataContainer loot)
         {
-            dropSpawner.SpawnDrop(base.transform.position, loot);
+            dropSpawner.SpawnDrop(transform.position, loot);
         }
 
         public void DropLoot(IInventorySlotDataContainer[] loot)
         {
-            dropSpawner.SpawnDrop(base.transform.position, loot);
+            dropSpawner.SpawnDrop(transform.position, loot);
         }
 
         public void TakeLoot(IInventorySlotDataContainer loot)
@@ -393,7 +393,7 @@ namespace RPGPlatformer.Combat
 
         public void ReleaseFromSlot(int i, int quantity = 1)
         {
-            dropSpawner.SpawnDrop(base.transform.position, inventory.RemoveFromSlot(i, quantity));
+            dropSpawner.SpawnDrop(transform.position, inventory.RemoveFromSlot(i, quantity));
         }
 
         public void HandleInventoryOverflow(IInventorySlotDataContainer data)
@@ -429,7 +429,7 @@ namespace RPGPlatformer.Combat
             {
                 return false;
             }
-            return CanAttack(Vector2.SqrMagnitude(health.transform.position - base.transform.position),
+            return CanAttack(Vector2.SqrMagnitude(health.transform.position - transform.position),
                 health.TargetingTolerance + this.health.TargetingTolerance);
         }
 

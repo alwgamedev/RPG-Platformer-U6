@@ -54,7 +54,7 @@ namespace RPGPlatformer.Combat
         public bool PoweringUp { get; protected set; }
         public bool FireButtonIsDown { get; protected set; }
         public ICombatant Combatant => stateDriver;
-        public IMovementController MovementController { get; protected set; }
+        public ICombatMovementController MovementController { get; protected set; }
         public virtual IInputSource InputSource { get; protected set; }
 
         public event Action OnDisabled;
@@ -237,7 +237,7 @@ namespace RPGPlatformer.Combat
         {
             queuedAbility = null;
             FireButtonIsDown = true;
-            if (!MovementController.Moving)
+            if (MovementController != null && !MovementController.Moving)
             {
                 FaceAimPosition();
             }
@@ -416,7 +416,12 @@ namespace RPGPlatformer.Combat
 
         public virtual Vector2 GetAimPosition()
         {
-            return transform.position + (int)MovementController.CurrentOrientation * transform.right;
+            if (MovementController != null)
+            {
+                return transform.position + (int)MovementController.CurrentOrientation * transform.right;
+            }
+
+            return transform.position;
         }
 
         public virtual void FaceAimPosition()
@@ -441,7 +446,8 @@ namespace RPGPlatformer.Combat
 
         public virtual float ComputeAimAngleChange()//rotate chest so that mainhand forearm points toward aim position
         {
-            var moving = MovementController.RelativeVelocity.magnitude > Mathf.Epsilon;
+            //var moving = MovementController.RelativeVelocity.magnitude > Mathf.Epsilon;
+            var moving = MovementController.Moving;
             var aimPos = GetAimPosition();
             var facingRight = MovementController.CurrentOrientation == HorizontalOrientation.right;
 
@@ -522,8 +528,6 @@ namespace RPGPlatformer.Combat
         {
             if (stateDriver.Health.IsDead || immuneToStuns) return;
 
-            //var stunData = (stunDuration, freezeAnimation);
-            //activeStuns.Add(stunData);
             activeStuns++;
             DisableInput();
             if (freezeAnimation)
@@ -550,7 +554,6 @@ namespace RPGPlatformer.Combat
                 Task result = await Task.WhenAny(MiscTools.DelayGameTime(stunDuration, tokenSource.Token), tcs.Task);
                 if (tokenSource.IsCancellationRequested) return;
 
-                //activeStuns.Remove(stunData);
                 activeStuns--;
 
                 if (freezeAnimation /*&& activeStuns.Where(x => x.Item2 = true).Count() == 0*/)

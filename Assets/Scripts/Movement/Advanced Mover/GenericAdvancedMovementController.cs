@@ -54,7 +54,7 @@ namespace RPGPlatformer.Movement
             SetRunning(!stateDriver.Running);
         }
 
-        public virtual void SetRunning(bool val)
+        public override void SetRunning(bool val)
         {
             stateDriver.Running = val;
             UpdateMaxSpeed();

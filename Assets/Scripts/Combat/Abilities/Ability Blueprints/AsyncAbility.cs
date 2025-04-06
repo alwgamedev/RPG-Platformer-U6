@@ -44,8 +44,8 @@ namespace RPGPlatformer.Combat
                 {
                     throw new TaskCanceledException();
                 }
-                //Prepare should be a function that throws TaskCanceledExc when cts is cancelled,
-                //but I'm still checking cts.IsCancellatioRequested here just to be extra safe
+                //NOTE: Prepare function is responsible for throwing TaskCanceledException when cts is cancelled,
+                //(but I'm still checking cts.IsCancellatioRequested after just to be safe)
 
                 controller.Combatant.Attack();
                 OnExecute?.Invoke(controller, args);
@@ -100,7 +100,7 @@ namespace RPGPlatformer.Combat
             if (controller.FireButtonIsDown) return this.GetData(controller);
 
             TaskCompletionSource<T> tcs = new();
-            CancellationTokenRegistration registration = tokenSource.Token.Register(Cancel);
+            using var registration = tokenSource.Token.Register(Cancel);
 
             void GetData()
             {
@@ -121,7 +121,6 @@ namespace RPGPlatformer.Combat
             {
                 controller.OnFireButtonDown -= GetData;
                 controller.OnChannelEnded -= Cancel;
-                registration.Dispose();
             }
         }
     }

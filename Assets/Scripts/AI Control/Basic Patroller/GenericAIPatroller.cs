@@ -14,16 +14,18 @@ namespace RPGPlatformer.AIControl
         where T3 : AdvancedMovementStateManager<T1, T2, T0>
     {
         protected Action OnUpdate;
+        protected T movementController;
 
         public AINavigator PatrolNavigator { get; protected set; }
-        public T MovementController { get; protected set; }
+        public IMovementController MovementController => movementController;
+        //public T MovementController { get; protected set; }
 
         protected virtual void Awake()
         {
-            MovementController = GetComponent<T>();
+            movementController = GetComponent<T>();
             PatrolNavigator = GetComponent<AINavigator>();
 
-            PatrolNavigator.BeginHangTime += MovementController.SoftStop;
+            PatrolNavigator.BeginHangTime += movementController.SoftStop;
         }
 
         protected virtual void Update()
@@ -43,12 +45,12 @@ namespace RPGPlatformer.AIControl
 
         public virtual void BeginPatrol(NavigationMode mode, object p)
         {
-            PatrolNavigator.BeginPatrol(mode, p, MovementController);
+            PatrolNavigator.BeginPatrol(mode, p, movementController);
         }
 
         public virtual void PatrolBehavior()
         {
-            PatrolNavigator.PatrolBehavior(MovementController);
+            PatrolNavigator.PatrolBehavior(movementController);
         }
 
         protected override void OnDestroy()

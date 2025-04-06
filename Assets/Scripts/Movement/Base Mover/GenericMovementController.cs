@@ -169,6 +169,8 @@ namespace RPGPlatformer.Movement
             };
         }
 
+        public abstract void SetRunning(bool val);
+
         public virtual void MoveTowards(Vector2 point)
         {
             MoveInput = new(point.x - transform.position.x, 0);

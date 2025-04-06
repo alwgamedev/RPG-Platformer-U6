@@ -17,7 +17,7 @@ namespace RPGPlatformer.Core
 
         private void Awake()
         {
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             defaultAnimatorController = animator.runtimeAnimatorController;
         }
 

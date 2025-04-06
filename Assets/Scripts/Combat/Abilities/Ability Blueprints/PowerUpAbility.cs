@@ -40,7 +40,7 @@ namespace RPGPlatformer.Combat
         public async Task<(T, int)> PowerUp(ICombatController controller, CancellationTokenSource tokenSource)
         {
             TaskCompletionSource<(T, int)> tcs = new();
-            CancellationTokenRegistration registration = tokenSource.Token.Register(Cancel);
+            using var registration = tokenSource.Token.Register(Cancel);
 
             int ticks = 0;
             T data = default;
@@ -123,9 +123,6 @@ namespace RPGPlatformer.Combat
                 controller.OnChannelEnded -= Cancel;
                 controller.OnMaximumPowerAchieved -= StopGainingPower;
                 controller.TickTimer.NewTick -= GainPower;
-
-                registration.Dispose();
-
 
                 if (controller != null && controller.PoweringUp)
                 {

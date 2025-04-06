@@ -120,7 +120,9 @@ namespace RPGPlatformer.UI
 
             if (parentMover.transform.localScale.x * transform.localScale.x < 0)
             {
-                transform.localScale = new(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+                var s = transform.localScale;
+                s.x = - s.x;
+                transform.localScale = s;
             }
         }
 

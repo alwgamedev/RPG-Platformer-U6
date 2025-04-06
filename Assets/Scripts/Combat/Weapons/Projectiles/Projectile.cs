@@ -54,7 +54,7 @@ namespace RPGPlatformer.Combat
         {
             if (updateRotationWhileFlying)
             {
-                base.transform.up = myRigidbody.linearVelocity;
+                transform.up = myRigidbody.linearVelocity;
             }
         }
 
@@ -65,8 +65,8 @@ namespace RPGPlatformer.Combat
         {
             EnableHead(false);
             triggerCollider.enabled = false;
-            base.transform.SetParent(combatant.EquipSlots[EquipmentSlot.Mainhand].transform);
-            base.transform.localPosition = Vector3.zero;
+            transform.SetParent(combatant.EquipSlots[EquipmentSlot.Mainhand].transform);
+            transform.localPosition = Vector3.zero;
             this.powerMultiplier = powerMultiplier;
             this.maxHits = maxHits;
             GetAimPos = getAimPos;
@@ -75,7 +75,7 @@ namespace RPGPlatformer.Combat
         }
         private void LookAtTarget(Vector2 aimPos)
         {
-            base.transform.up = aimPos - (Vector2)base.transform.position;//transform.up is automatically normalized
+            transform.up = aimPos - (Vector2)transform.position;//transform.up is automatically normalized
         }
 
         public virtual void Shoot()
@@ -88,13 +88,13 @@ namespace RPGPlatformer.Combat
 
             EnableHead(true);
             triggerCollider.enabled = true;
-            base.transform.SetParent(null, true);
+            transform.SetParent(null, true);
             if (trailEffect)
             {
                 trailEffect.Play();
             }
             LookAtTarget(GetAimPos());
-            myRigidbody.AddForce(powerMultiplier * shootForce * forceMultiplierScale * base.transform.up, ForceMode2D.Impulse);
+            myRigidbody.AddForce(powerMultiplier * shootForce * forceMultiplierScale * transform.up, ForceMode2D.Impulse);
         }
 
 
@@ -119,7 +119,7 @@ namespace RPGPlatformer.Combat
                 if(hits >= maxHits && freezePositionOnFinalImpact)
                 {
                     myRigidbody.linearVelocity = Vector2.zero;
-                    base.transform.rotation = Quaternion.identity;
+                    transform.rotation = Quaternion.identity;
                 }
                 OnHit(collider);
             }

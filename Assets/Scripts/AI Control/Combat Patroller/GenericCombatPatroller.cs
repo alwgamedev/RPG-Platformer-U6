@@ -19,10 +19,12 @@ namespace RPGPlatformer.AIControl
         protected bool correctingCombatDistance;
         protected float suspicionTimer;
         protected IHealth currentTarget;
+        protected T1 combatController;
 
-        public float TargetingTolerance => CombatController.Combatant.Health.TargetingTolerance;
-        public float MinimumCombatDistance => CombatController.Combatant.IdealMinimumCombatDistance;
-        public T1 CombatController { get; protected set; }
+        public float TargetingTolerance => combatController.Combatant.Health.TargetingTolerance;
+        public float MinimumCombatDistance => combatController.Combatant.IdealMinimumCombatDistance;
+        //public T1 CombatController { get; protected set; }
+        public ICombatController CombatController => combatController;
 
         public IHealth CurrentTarget
         {
@@ -30,8 +32,8 @@ namespace RPGPlatformer.AIControl
             protected set
             {
                 currentTarget = value;
-                CombatController.currentTarget = value;
-                MovementController.currentTarget = value;
+                combatController.currentTarget = value;
+                movementController.currentTarget = value;
             }
         }
 
@@ -39,7 +41,7 @@ namespace RPGPlatformer.AIControl
         {
             base.Awake();
 
-            CombatController = GetComponent<T1>();
+            combatController = GetComponent<T1>();
         }
 
         public virtual void SetCombatTarget(IHealth targetHealth)
@@ -65,7 +67,7 @@ namespace RPGPlatformer.AIControl
                 return false;
             }
 
-            if (CombatController.Combatant.CanAttack(d2, t))
+            if (combatController.Combatant.CanAttack(d2, t))
             {
                 Trigger(typeof(Attack).Name);
                 return true;
@@ -112,18 +114,18 @@ namespace RPGPlatformer.AIControl
                 Trigger(typeof(Suspicion).Name);
                 return;
             }
-            else if (CombatController.Combatant.CanAttack(d2, t))
+            else if (combatController.Combatant.CanAttack(d2, t))
             {
                 Trigger(typeof(Attack).Name);
             }
             else if (Mathf.Abs(CurrentTarget.transform.position.x - transform.position.x) > MinimumCombatDistance)
             //to avoid ai stuttering back and forth when their target is directly above them
             {
-                MovementController.MoveTowards(CurrentTarget.transform.position);
+                movementController.MoveTowards(CurrentTarget.transform.position);
             }
             else
             {
-                MovementController.SoftStop();
+                movementController.SoftStop();
             }
         }
 
@@ -133,7 +135,7 @@ namespace RPGPlatformer.AIControl
             {
                 Trigger(typeof(Suspicion).Name);
             }
-            else if (!CombatController.Combatant.CanAttack(d, t))
+            else if (!combatController.Combatant.CanAttack(d, t))
             {
                 Trigger(typeof(Pursuit).Name);
             }
@@ -145,17 +147,17 @@ namespace RPGPlatformer.AIControl
 
         public void StartAttacking()
         {
-            CombatController.StartAttacking();
+            combatController.StartAttacking();
 
-            if (!MovementController.Jumping)
+            if (!movementController.Jumping)
             {
-                MovementController.SoftStop();
+                movementController.SoftStop();
             }
         }
 
         public void StopAttacking()
         {
-            CombatController.StopAttacking();
+            combatController.StopAttacking();
             correctingCombatDistance = false;
         }
 
@@ -172,12 +174,12 @@ namespace RPGPlatformer.AIControl
             {
                 float direction =
                     Mathf.Sign(transform.position.x - CurrentTarget.transform.position.x);
-                if (MovementController.DropOffAhead((HorizontalOrientation)direction, out var d)
+                if (movementController.DropOffAhead((HorizontalOrientation)direction, out var d)
                     && d < 1.5f * MinimumCombatDistance)
                 {
                     direction = -direction;
 
-                    if (MovementController.DropOffAhead((HorizontalOrientation)direction, out d)
+                    if (movementController.DropOffAhead((HorizontalOrientation)direction, out d)
                         && d < 1.5f * MinimumCombatDistance)
                     {
                         return;
@@ -185,12 +187,12 @@ namespace RPGPlatformer.AIControl
                 }
 
                 correctingCombatDistance = true;
-                MovementController.MoveInput = new(direction, 0);
+                movementController.MoveInput = new(direction, 0);
             }
             else if (correctingCombatDistance)
             {
                 correctingCombatDistance = false;
-                MovementController.SoftStop();
+                movementController.SoftStop();
             }
         }
 
