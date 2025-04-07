@@ -83,12 +83,18 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnMouseEnter()
         {
-            healthBarCanvas.OnMouseEnter();
+            if (healthBarCanvas)
+            {
+                healthBarCanvas.OnMouseEnter();
+            }
         }
 
         protected virtual void OnMouseExit()
         {
-            healthBarCanvas.OnMouseExit();
+            if (healthBarCanvas)
+            {
+                healthBarCanvas.OnMouseExit();
+            }
         }
     }
 }

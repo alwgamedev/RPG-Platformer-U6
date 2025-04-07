@@ -1,8 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using RPGPlatformer.Core;
 
-namespace RPGPlatformer.Core
+namespace RPGPlatformer.Effects
 {
     [RequireComponent(typeof(MaterialManager))]
     public class Highlighter : MonoBehaviour
@@ -26,7 +27,7 @@ namespace RPGPlatformer.Core
         float tweenProgress;//from 0-1
         bool tweening;
 
-        bool testing;
+        //bool testing;
 
         private void Awake()
         {
@@ -43,11 +44,11 @@ namespace RPGPlatformer.Core
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                testing = !testing;
-                EnableHighlight(testing);
-            }
+            //if (Input.GetKeyDown(KeyCode.K))
+            //{
+            //    testing = !testing;
+            //    EnableHighlight(testing);
+            //}
 
             if (tweening)
             {

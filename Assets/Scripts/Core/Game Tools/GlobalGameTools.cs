@@ -17,8 +17,6 @@ namespace RPGPlatformer.Core
         public static ICombatController Player { get; private set; }
         public static bool PlayerIsDead => Player == null || Player.Combatant.Health.IsDead;
         public static bool PlayerIsInCombat => Player != null && Player.IsInCombat;
-
-        //public Camera MainCamera { get; private set; }//because we are using the perspective camera
         public CancellationTokenSource TokenSource {  get; private set; }
         public TickTimer TickTimer { get; private set; }
         public ResourcesManager ResourcesManager => resourcesManager;
@@ -56,18 +54,10 @@ namespace RPGPlatformer.Core
 
             resourcesManager.InitializeResources();
 
-            var player = FindAnyObjectByType<PlayerCombatController>();
-            Player = player;
+            var player = GameObject.FindWithTag("Player");
+            Player = player.GetComponent<PlayerCombatController>();
             PlayerTransform = player.transform;
             Player.OnDeath += () => OnPlayerDeath?.Invoke();
-            //player.OnDeath += () =>
-            //{
-            //    PlayerIsDead = true;
-            //    OnPlayerDeath?.Invoke();
-            //};
-            //player.OnRevive += () => PlayerIsDead = false;
-            //player.CombatEntered += () => PlayerInCombat = true;
-            //player.CombatExited += () => PlayerInCombat = false;
         }
 
 

@@ -6,11 +6,12 @@ namespace RPGPlatformer.AIControl
 {
     public class EarthwormMovementController : MonoBehaviour, ICombatantMovementController
     {
-        [SerializeField] float moveSpeed = 0.5f;
+        //[SerializeField] float moveSpeed = 0.5f;
         [SerializeField] float destinationTolerance = 0.1f;
 
         Vector3 currentDestination;
-        Action OnUpdate;
+        float currentSpeed;
+        Action MoveAction;
 
         public bool Moving => false;
 
@@ -20,7 +21,7 @@ namespace RPGPlatformer.AIControl
 
         private void Update()
         {
-            OnUpdate?.Invoke();
+            MoveAction?.Invoke();
         }
 
         public void GoTo(Vector3 point)
@@ -28,16 +29,29 @@ namespace RPGPlatformer.AIControl
             transform.position = point;
         }
 
-        public void BeginMoveTowards(Vector3 destination)
+        //public void BeginEmerge(Vector3 destination)
+        //{
+        //    currentDestination = destination;
+        //    MoveAction = EmergeMoveAction;
+        //}
+
+        //public void BeginRetreat(Vector3 destination)
+        //{
+        //    currentDestination = destination;
+        //    MoveAction = RetreatMoveAction;
+        //}
+
+        public void BeginMoveTowards(Vector3 destination, float moveSpeed)
         {
             currentDestination = destination;
-            OnUpdate = MoveTowardsDestination;
+            currentSpeed = moveSpeed;
+            MoveAction = MoveTowardsDestination;
         }
 
         public void MoveTowardsDestination()
         {
             var d = currentDestination - transform.position;
-            var l = d.magnitude;
+            var l = Vector3.SqrMagnitude(d);
 
             if (l < destinationTolerance)
             {
@@ -46,13 +60,13 @@ namespace RPGPlatformer.AIControl
             }
             else
             {
-                transform.position += moveSpeed * (d / l);
+                transform.position += currentSpeed * Time.deltaTime * (d / l);
             }
         }
 
         public void Stop()
         {
-            OnUpdate = null;
+            MoveAction = null;
         }
 
         public void FaceTarget(Transform target)
@@ -81,7 +95,7 @@ namespace RPGPlatformer.AIControl
 
         private void OnDestroy()
         {
-            OnUpdate = null;
+            MoveAction = null;
             DestinationReached = null;
         }
     }

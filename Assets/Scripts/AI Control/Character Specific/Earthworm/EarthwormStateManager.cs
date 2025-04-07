@@ -1,18 +1,24 @@
-﻿using JetBrains.Annotations;
-using RPGPlatformer.Core;
+﻿using RPGPlatformer.Core;
 using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
+
     public class EarthwormStateManager : StateManager<EarthwormStateGraph, EarthwormStateMachine, EarthwormDriver>
     {
         AnimationControl animationControl;
 
-        public EarthwormStateManager(EarthwormStateMachine stateMachine, EarthwormDriver stateDriver,
-            AnimationControl animationControl) : base(stateMachine, stateDriver) { }
+        public EarthwormStateManager(EarthwormStateMachine stateMachine,
+            EarthwormDriver stateDriver, AnimationControl animationControl)
+            : base(stateMachine, stateDriver)
+        {
+            this.animationControl = animationControl;
+        }
 
         public override void Configure()
         {
+            base.Configure();
+
             StateGraph.aboveGround.OnEntry += OnAboveGroundEntry;
             StateGraph.aboveGround.OnExit += OnAboveGroundExit;
         }
@@ -26,7 +32,7 @@ namespace RPGPlatformer.AIControl
         private void OnAboveGroundExit()
         {
             animationControl.SetTrigger("goDormant");
-            animationControl.ResetTrigger("aboveGround");
+            animationControl.ResetTrigger("emerge");
         }
     }
 }

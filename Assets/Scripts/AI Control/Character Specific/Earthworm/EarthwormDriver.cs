@@ -2,7 +2,6 @@
 using RPGPlatformer.Core;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
 using UnityEngine;
 
 namespace RPGPlatformer.AIControl
@@ -11,18 +10,21 @@ namespace RPGPlatformer.AIControl
     [RequireComponent(typeof(EarthwormMovementController))]
     public class EarthwormDriver : StateDriver
     {
-        [SerializeField] Transform underGroundAnchor;
-        [SerializeField] Transform aboveGroundAnchor;
-        [SerializeField] Transform testWormhole;
-        [SerializeField] Transform wormholeAnchor;//idea: not childed to worm, but he can move it wherever he needs it
+        [SerializeField] float emergeMoveSpeed = .5f;
+        [SerializeField] float retreatMoveSpeed = 2;
+        [SerializeField] Transform underGroundBodyAnchor;
+        [SerializeField] Transform aboveGroundBodyAnchor;
+        [SerializeField] Transform wormholeAnchor;
 
         AICombatController combatController;
         EarthwormMovementController movementController;
         VisualCurveGuide curveGuide;
-        Transform currentBodyAnchorPoint;
+        Transform currentBodyAnchor;
+
+        bool testAboveGround;
 
         //body anchors should have fixed local positions (i.e. not attached to guide points)
-        Vector3 BodyAnchorOffset => currentBodyAnchorPoint.position - transform.position;
+        Vector3 BodyAnchorOffset => currentBodyAnchor.position - transform.position;
         //AnchoredPosition: set transform.position equal to this to line up with wormhole correctly
         Vector3 AnchoredPosition => wormholeAnchor.position - BodyAnchorOffset;
 
@@ -30,7 +32,7 @@ namespace RPGPlatformer.AIControl
         {
             combatController = GetComponent<AICombatController>();
             movementController = GetComponent<EarthwormMovementController>();
-            curveGuide = GetComponent<VisualCurveGuide>();
+            curveGuide = GetComponentInChildren<VisualCurveGuide>();
         }
 
         private void Start()
@@ -39,6 +41,24 @@ namespace RPGPlatformer.AIControl
             curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
             curveGuide.ikEnabled = false;
             //so that combat controller will GetAimPosition & FaceAimPosition correctly during combat
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                testAboveGround = !testAboveGround;
+                if (testAboveGround)
+                {
+                    Debug.Log("triggering above ground");
+                    Trigger(typeof(EarthwormAboveGround).Name);
+                }
+                else
+                {
+                    Debug.Log("triggering dormant");
+                    Trigger(typeof(EarthwormDormant).Name);
+                }
+            }
         }
 
 
@@ -79,7 +99,7 @@ namespace RPGPlatformer.AIControl
 
         public void DormantBehavior()
         {
-            //if not dead, wait for player to trigger 
+            //if not dead, wait for player to trigger wormhole
         }
 
         public void PursuitBehavior()
@@ -115,14 +135,16 @@ namespace RPGPlatformer.AIControl
 
         public async Task Retreat(CancellationToken token)
         {
+            Debug.Log("driver retreating");
             SetBodyAnchor(false);
-            await MoveToAnchorPosition(token);
+            await MoveToAnchorPosition(retreatMoveSpeed, token);
         }
 
         public async Task Emerge(CancellationToken token)
         {
+            Debug.Log("driver emerging");
             SetBodyAnchor(true);
-            await MoveToAnchorPosition(token);
+            await MoveToAnchorPosition(emergeMoveSpeed, token);
         }
 
 
@@ -140,10 +162,10 @@ namespace RPGPlatformer.AIControl
 
         public void SetBodyAnchor(bool aboveGround)
         {
-            currentBodyAnchorPoint = aboveGround ? aboveGroundAnchor : underGroundAnchor;
+            currentBodyAnchor = aboveGround ? aboveGroundBodyAnchor : underGroundBodyAnchor;
         }
 
-        public async Task MoveToAnchorPosition(CancellationToken token)
+        public async Task MoveToAnchorPosition(float moveSpeed, CancellationToken token)
         {
             TaskCompletionSource<object> tcs = new();
             using var reg = token.Register(Cancel);
@@ -162,7 +184,7 @@ namespace RPGPlatformer.AIControl
             {
                 movementController.DestinationReached += Complete;
                 combatController.OnDeath += Cancel;
-                movementController.BeginMoveTowards(AnchoredPosition);
+                movementController.BeginMoveTowards(AnchoredPosition, moveSpeed);
                 await tcs.Task;
             }
             catch

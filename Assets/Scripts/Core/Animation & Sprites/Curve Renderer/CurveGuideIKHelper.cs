@@ -59,6 +59,8 @@ namespace RPGPlatformer.Core
                         guides[i - 1].TangentDir(), true));
                     unitRays[i - 1] = v;
 
+                    //the last tangent doesn't get rotated? maybe rethink this
+
                 }
             }
 

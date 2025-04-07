@@ -127,7 +127,7 @@ namespace RPGPlatformer.Combat
         protected override void InitializeStateManager()
         {
             stateManager = (T0)Activator.CreateInstance(typeof(T0), null, stateDriver, 
-                GetComponent<AnimationControl>(), timeToLeaveCombat);
+                GetComponentInChildren<AnimationControl>(), timeToLeaveCombat);
         }
 
         protected override void ConfigureStateManager()

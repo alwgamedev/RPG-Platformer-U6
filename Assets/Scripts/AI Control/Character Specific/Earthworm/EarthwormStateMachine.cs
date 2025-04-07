@@ -4,12 +4,7 @@ namespace RPGPlatformer.AIControl
 {
     public class EarthwormStateMachine : StateMachine<EarthwormStateGraph>
     {
-        AnimationControl animationControl;
-
-        public EarthwormStateMachine(AnimationControl animationControl) : base()
-        {
-            this.animationControl = animationControl;
-        }
+        public EarthwormStateMachine() : base() { }
     }
 
     public abstract class EarthwormState : State { }
@@ -36,7 +31,5 @@ namespace RPGPlatformer.AIControl
             AddEdgeBothWays((dormant, pursuit));
             AddEdgeBothWays((aboveGround, pursuit));
         }
-
-
     }
 }
