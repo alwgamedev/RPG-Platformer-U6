@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5429966929650702226}
   - component: {fileID: 1575890875473671495}
   - component: {fileID: 4905946196719184656}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Guide (5)
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 8390086469625642259}
   - component: {fileID: 346302038216586973}
   - component: {fileID: 7562036771554940151}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Guide (1)
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -270,6 +270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8848104348067717170}
   - component: {fileID: 6785787688279827258}
+  - component: {fileID: 4609341849784267803}
   m_Layer: 6
   m_Name: Earthworm
   m_TagString: Untagged
@@ -309,7 +310,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 669064d4943a48a49975a56a82e2d96e, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -320,6 +321,52 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!61 &4609341849784267803
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3694819894051617520}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.844151}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 2.0958395}
+  m_EdgeRadius: 0
 --- !u!1 &4197122059605495264
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,7 +378,7 @@ GameObject:
   - component: {fileID: 9004736739139803202}
   - component: {fileID: 3118747221149158998}
   - component: {fileID: 8522988478250472561}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Guide (2)
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -476,7 +523,7 @@ GameObject:
   - component: {fileID: 6360243804841400735}
   - component: {fileID: 4216333155788050412}
   - component: {fileID: 8694114623595016064}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Guide (7)
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -559,7 +606,7 @@ GameObject:
   - component: {fileID: 6669010231008610307}
   - component: {fileID: 4786633743375696552}
   - component: {fileID: 6343276614775552054}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Guide (6)
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -673,7 +720,7 @@ GameObject:
   - component: {fileID: 4243699417737296919}
   - component: {fileID: 6041488077158855871}
   - component: {fileID: 6361863382911899672}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Guide (3)
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -818,7 +865,7 @@ GameObject:
   - component: {fileID: 7178732150006810644}
   - component: {fileID: 2066384736793860254}
   - component: {fileID: 6781930196694217936}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Guide (0)
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -901,7 +948,7 @@ GameObject:
   - component: {fileID: 2239227680411223933}
   - component: {fileID: 7306732667695985980}
   - component: {fileID: 283063297815840449}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Guide (4)
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -1091,6 +1138,10 @@ MonoBehaviour:
   - {fileID: 1575890875473671495}
   - {fileID: 4786633743375696552}
   - {fileID: 4216333155788050412}
+  ikIterations: 0
+  ikStrength: 0
+  ikToleranceSqrd: 0.1
+  ikTarget: {fileID: 0}
 --- !u!114 &7323158423895243465
 MonoBehaviour:
   m_ObjectHideFlags: 0

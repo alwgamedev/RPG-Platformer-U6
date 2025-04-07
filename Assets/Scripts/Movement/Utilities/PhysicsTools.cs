@@ -50,5 +50,37 @@ namespace RPGPlatformer.Movement
         {
             return v - 2 * Vector3.Dot(u, v) * u;
         }
+
+        /// <summary>
+        /// Rotates w around the axis perpendicular to plane spanned by a & b, by the angle that takes a to b.
+        /// If a, b, or a x b is zero, returns w.
+        /// </summary>
+        public static Vector3 FromToRotation(Vector3 a, Vector3 b, Vector3 w, bool alreadyNormalized = false)
+        {
+            if (a == Vector3.zero || b == Vector3.zero)
+            {
+                return w;
+            }
+
+            if (!alreadyNormalized)
+            {
+                var A = a.magnitude;
+                var B = b.magnitude; 
+                a = a / A;
+                b = b / B;
+            }
+
+            var c = Vector3.Cross(a, b);
+
+            if (c == Vector3.zero)
+            {
+                return w;
+            }
+
+            var C = c.magnitude;
+            var u = c / C;
+
+            return Vector3.Dot(a, b) * w + Vector3.Cross(c, w) + Vector3.Dot(u, w) * u;
+        }
     }
 }

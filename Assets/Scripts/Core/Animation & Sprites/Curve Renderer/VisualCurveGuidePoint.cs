@@ -19,6 +19,16 @@ namespace RPGPlatformer.Core
 
         public Vector3 TangentDir() => tangentPuller.position - transform.position;
 
+        public void SetPoint(Vector3 p)
+        {
+            transform.position = p;
+        }
+
+        public void SetTangentDir(Vector3 v)
+        {
+            tangentPuller.position = Point() + v;
+        }
+
         public bool HasChanged()
         {
             if (wasActive != Active())

@@ -4,29 +4,57 @@ using UnityEngine;
 namespace RPGPlatformer
 {
     [ExecuteAlways]
-    public class CurveVisualizer : MonoBehaviour
+    public class VisualCurveGuide : MonoBehaviour
     {
         [SerializeField] bool drawGizmos;
         [SerializeField] VisualCurveGuidePoint[] guides;
+        [SerializeField] int ikIterations;
+        [SerializeField] float ikStrength = 0;
+        [SerializeField] float ikToleranceSqrd = 0.01f;
+
+        public Transform ikTarget;
 
         CurveRenderer curveRenderer;
+        Vector3[] unitRays;
+        float[] lengths;//storage for lengths in the IK algorithm
 
         private void Update()
         {
             if (guides == null) return;
 
+            if (ikTarget && ikTarget.hasChanged)
+            {
+                UpdateRendererGuidePoints();
+                return;
+            }
+
             foreach (var guide in guides)
             {
                 if (guide && guide.HasChanged())
                 {
-                    RedrawCurve();
+                    UpdateRendererGuidePoints();
                     break;
                 }
             }
         }
 
-        private void RedrawCurve()
+        private void UpdateRendererGuidePoints()
         {
+            if (ikStrength != 0 && ikTarget)
+            {
+                if (unitRays == null || unitRays.Length != guides.Length - 1)
+                {
+                    unitRays = new Vector3[guides.Length - 1];
+                }
+                if (lengths == null || lengths.Length != guides.Length - 1)
+                {
+                    lengths = new float[guides.Length - 1];
+                }
+
+                CurveGuideIKHelper.FABRIK(guides, unitRays, lengths, ikTarget.position, 
+                    ikIterations, ikStrength, ikToleranceSqrd);
+            }
+
             if (curveRenderer == null)
             {
                 curveRenderer = GetComponent<CurveRenderer>();
