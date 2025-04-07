@@ -54,7 +54,7 @@ namespace RPGPlatformer.Combat
         public bool PoweringUp { get; protected set; }
         public bool FireButtonIsDown { get; protected set; }
         public ICombatant Combatant => stateDriver;
-        public ICombatMovementController MovementController { get; protected set; }
+        public ICombatantMovementController MovementController { get; protected set; }
         public virtual IInputSource InputSource { get; protected set; }
 
         public event Action OnDisabled;

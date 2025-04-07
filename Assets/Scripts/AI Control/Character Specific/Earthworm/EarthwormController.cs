@@ -24,22 +24,22 @@ namespace RPGPlatformer.AIControl
         private async void OnDormantEntry()
         {
             stateDriver.SetBodyAnchor(false);
-            //+set anim trigger (& reset other)
             await stateDriver.MoveToAnchorPosition(GlobalGameTools.Instance.TokenSource.Token);
         }
 
         private async void OnAboveGroundEntry()
         {
-            //+set anim trigger (& reset other)
             await stateDriver.Emerge(GlobalGameTools.Instance.TokenSource.Token);
             //then maybe wait 1 or 2 secs and start attacking
+            //(OR TRIGGER START ATTACKING IN *ANIM. EVENT*)
             //(+ turn off invincibility)
             //I think we DO  want invincibility, because it's really anticlimactic if it just dies while undergound
             //or emerging/retreating
+            //-- add BLOCKED damage popups (so it doesn't feel like combat is glitching and not registering hits)
             stateDriver.FacePlayer();
         }
 
-        //maybe triggered in animation event
+        //trigger in ANIM EVENT
         private void OnEmerged()
         {
             if (AboveGround)
@@ -51,6 +51,7 @@ namespace RPGPlatformer.AIControl
 
         private void OnAboveGroundExit()
         {
+            stateDriver.DisableIK();
             stateDriver.StopAttacking();
             //+turn on invincibility
             //INVINCIBILITY: just worm takes no damage

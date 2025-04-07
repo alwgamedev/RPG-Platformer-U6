@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
-    public class EarthwormMovementController : MonoBehaviour, ICombatMovementController
+    public class EarthwormMovementController : MonoBehaviour, ICombatantMovementController
     {
         [SerializeField] float moveSpeed = 0.5f;
         [SerializeField] float destinationTolerance = 0.1f;

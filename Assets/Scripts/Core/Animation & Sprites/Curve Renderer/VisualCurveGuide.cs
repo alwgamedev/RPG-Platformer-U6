@@ -8,10 +8,11 @@ namespace RPGPlatformer
     {
         [SerializeField] bool drawGizmos;
         [SerializeField] VisualCurveGuidePoint[] guides;
-        [SerializeField] int ikIterations;
-        [SerializeField] float ikStrength = 0;
-        [SerializeField] float ikToleranceSqrd = 0.01f;
 
+        public bool ikEnabled;
+        public int ikIterations;
+        public float ikStrength = 0;
+        public float ikToleranceSqrd = 0.01f;
         public Transform ikTarget;
 
         CurveRenderer curveRenderer;
@@ -40,7 +41,7 @@ namespace RPGPlatformer
 
         private void UpdateRendererGuidePoints()
         {
-            if (ikTarget)
+            if (ikEnabled && ikTarget)
             {
                 if (unitRays == null || unitRays.Length != guides.Length - 1)
                 {

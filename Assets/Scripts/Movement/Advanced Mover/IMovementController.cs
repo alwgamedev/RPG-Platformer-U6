@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
-    public interface IMovementController : IMounter, ICombatMovementController
+    public interface IMovementController : IMounter, ICombatantMovementController
     {
         //public bool Moving { get; }
         public bool Jumping { get; }

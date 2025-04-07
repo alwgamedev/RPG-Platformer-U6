@@ -2,7 +2,7 @@
 
 namespace RPGPlatformer.Movement
 {
-    public interface ICombatMovementController
+    public interface ICombatantMovementController
     {
         public bool Moving { get; }
         public HorizontalOrientation CurrentOrientation { get; }

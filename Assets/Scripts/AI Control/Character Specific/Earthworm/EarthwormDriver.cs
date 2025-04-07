@@ -18,6 +18,7 @@ namespace RPGPlatformer.AIControl
 
         AICombatController combatController;
         EarthwormMovementController movementController;
+        VisualCurveGuide curveGuide;
         Transform currentBodyAnchorPoint;
 
         //body anchors should have fixed local positions (i.e. not attached to guide points)
@@ -29,12 +30,29 @@ namespace RPGPlatformer.AIControl
         {
             combatController = GetComponent<AICombatController>();
             movementController = GetComponent<EarthwormMovementController>();
+            curveGuide = GetComponent<VisualCurveGuide>();
         }
 
         private void Start()
         {
             combatController.currentTarget = GlobalGameTools.Player.Combatant.Health;
+            curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
+            curveGuide.ikEnabled = false;
             //so that combat controller will GetAimPosition & FaceAimPosition correctly during combat
+        }
+
+
+        //SETTINGS
+
+        //think I will hook these up to animation events
+        public void EnableIK()
+        {
+            curveGuide.ikEnabled = true;
+        }
+
+        public void DisableIK()
+        {
+            curveGuide.ikEnabled = false;
         }
 
 
@@ -42,12 +60,40 @@ namespace RPGPlatformer.AIControl
 
         public void AboveGroundBehavior()
         {
-            //scan for target and trigger pursuit if out of range
-            //(pursuit = retreat underground and move to new wormhole closer to player)
+            //A. scan for target and trigger pursuit(*) if out of range
+            //B. run above ground timer and escape after certain time (or if health falls too low
+                //and having completed certain number of "phases" (emergences) yet
+            //then player has to go find the new wormhole location...
+            //so there should be some indication at least of which direction the worm is going;
+            //would be awesome if we can make a shader to produce a rumble on the surface of the ground
+            //that indicates the worm's tunneling direction
+                //a) create a shader thate creates semi-random, scalable bumps and ridges along (UV) edge of a sprite
+                //b) add settings to apply the shader only over a certain world position area (which we can "animate"
+                //to indicate tunneling)
+
+            //(*) pursuit = retreat underground and move to new wormhole closer to player
+            //maybe only pursue if player is out of a range for say 1.5sec
+            //(and/or if player is a certain threshold outside attack range)
+            //(don't want to trigger it while player is running away from an attack)
+        }
+
+        public void DormantBehavior()
+        {
+            //if not dead, wait for player to trigger 
+        }
+
+        public void PursuitBehavior()
+        {
+            //pick wormhole location closer to player
+            //emerge at new wormhole
         }
 
 
         //COMBAT
+
+        //TO-DO: randomize attack speed & give it custom (possibly randomized) ability cycle
+        //+ figure out what to do with collision during slam attack
+        //(ideally disable collider but apply force to player (sending them up and backwards) and briely stun them
 
         public void StartAttacking()
         {
