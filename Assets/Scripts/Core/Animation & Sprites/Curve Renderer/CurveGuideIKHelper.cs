@@ -8,6 +8,8 @@ namespace RPGPlatformer.Core
         public static void FABRIK(VisualCurveGuidePoint[] guides, Vector3[] unitRays, float[] lengths, Vector3 target, 
             int iterations, float strength, float toleranceSqrd)
         {
+            if (iterations == 0 || strength == 0) return;
+
             var m = guides.Length - 1;
             var first = guides[0];
             var last = guides[m];
@@ -52,10 +54,10 @@ namespace RPGPlatformer.Core
                     a = (guides[i - 1].Point() - guides[i].Point()).normalized;
                     guides[i - 1].SetPoint(guides[i].Point() + lengths[i - 1] * a);
 
-                    //v = (guides[i].Point() - guides[i - 1].Point()).normalized;
-                    //guides[i - 1].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v,
-                    //    guides[i - 1].TangentDir(), true));
-                    //unitRays[i - 1] = v;
+                    v = (guides[i].Point() - guides[i - 1].Point()).normalized;
+                    guides[i - 1].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v,
+                        guides[i - 1].TangentDir(), true));
+                    unitRays[i - 1] = v;
 
                 }
             }
@@ -69,10 +71,10 @@ namespace RPGPlatformer.Core
                     a = (guides[i + 1].Point() - guides[i].Point()).normalized;
                     guides[i + 1].SetPoint(guides[i].Point() + lengths[i] * a);
 
-                    //v = (guides[i + 1].Point() - guides[i].Point()).normalized;
-                    //guides[i + 1].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i], v,
-                    //    guides[i + 1].TangentDir(), true));
-                    //unitRays[i] = v;
+                    v = (guides[i + 1].Point() - guides[i].Point()).normalized;
+                    guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i], v,
+                        guides[i].TangentDir(), true));
+                    unitRays[i] = v;
                 }
             }
         }

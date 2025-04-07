@@ -40,7 +40,7 @@ namespace RPGPlatformer
 
         private void UpdateRendererGuidePoints()
         {
-            if (ikStrength != 0 && ikTarget)
+            if (ikTarget)
             {
                 if (unitRays == null || unitRays.Length != guides.Length - 1)
                 {

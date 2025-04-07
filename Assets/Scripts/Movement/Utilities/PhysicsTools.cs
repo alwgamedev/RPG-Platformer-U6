@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -57,28 +55,24 @@ namespace RPGPlatformer.Movement
         /// </summary>
         public static Vector3 FromToRotation(Vector3 a, Vector3 b, Vector3 w, bool alreadyNormalized = false)
         {
+            if (!alreadyNormalized)
+            {
+                a = a.normalized;
+                b = b.normalized;
+            }
+
             if (a == Vector3.zero || b == Vector3.zero)
             {
                 return w;
             }
 
-            if (!alreadyNormalized)
-            {
-                var A = a.magnitude;
-                var B = b.magnitude; 
-                a = a / A;
-                b = b / B;
-            }
-
             var c = Vector3.Cross(a, b);
+            var u = c.normalized;
 
-            if (c == Vector3.zero)
+            if (u == Vector3.zero)
             {
                 return w;
             }
-
-            var C = c.magnitude;
-            var u = c / C;
 
             return Vector3.Dot(a, b) * w + Vector3.Cross(c, w) + Vector3.Dot(u, w) * u;
         }
