@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25028d2c3b735f47b896257a176ae54, type: 3}
+  m_Name: Melee (Earthworm)
+  m_EditorClassIdentifier: 
+  baseData:
+    lookupName: Melee (Earthworm)
+    displayName: Melee
+    description: 
+    icon: {fileID: 0}
+    maxStack: 1
+  equippableItemData:
+    slot: 3
+    damageBonus: 0
+    defenseBonus: 0
+    levelReqs: []
+    prefab: {fileID: 0}
+    spriteSwapData: []
+  weaponStats:
+    baseDamage: 195
+    attackRange: 2
+    baseAttackRate: 25
+  animatorOverrideController: {fileID: 0}

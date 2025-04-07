@@ -25,8 +25,6 @@ namespace RPGPlatformer.AIControl
         {
             base.ConfigureStateManager();
 
-            stateManager.StateGraph.dormant.OnEntry += () => Debug.Log("controller received dormant entry");
-            stateManager.StateGraph.aboveGround.OnEntry += () => Debug.Log("controller received above ground entry");
             stateManager.StateGraph.dormant.OnEntry += async () =>  await OnDormantEntry();
             stateManager.StateGraph.aboveGround.OnEntry += async () => await OnAboveGroundEntry();
             stateManager.StateGraph.aboveGround.OnExit += OnAboveGroundExit;
@@ -38,13 +36,20 @@ namespace RPGPlatformer.AIControl
             using var cts = CancellationTokenSource
                 .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
 
-            Debug.Log("going dormant");
-            
-            stateManager.StateGraph.dormant.OnExit += EarlyExitHandler;
-            await stateDriver.Retreat(cts.Token);
-            stateManager.StateGraph.dormant.OnExit -= EarlyExitHandler;
-
-            Debug.Log("dormant");
+            try
+            {
+                stateManager.StateGraph.dormant.OnExit += EarlyExitHandler;
+                await stateDriver.Retreat(cts.Token);
+                stateManager.StateGraph.dormant.OnExit -= EarlyExitHandler;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                stateManager.StateGraph.dormant.OnExit -= EarlyExitHandler;
+            }
 
             void EarlyExitHandler()
             {
@@ -58,17 +63,24 @@ namespace RPGPlatformer.AIControl
             using var cts = CancellationTokenSource
                 .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
 
-            Debug.Log("emerging");
-
-            stateManager.StateGraph.aboveGround.OnExit += EarlyExitHandler;
-            await stateDriver.Emerge(cts.Token);
-            stateManager.StateGraph.aboveGround.OnExit -= EarlyExitHandler;
-
-            Debug.Log("emerged");            
-            //then OnEmerged will be triggered in anim. event in the emerge animation
-            //I think we DO  want invincibility, because it's really anticlimactic if it just dies while undergound
-            //or emerging/retreating
-            //-- add BLOCKED damage popups (so it doesn't feel like combat is glitching and not registering hits)
+            try
+            {
+                stateManager.StateGraph.aboveGround.OnExit += EarlyExitHandler;
+                await stateDriver.Emerge(cts.Token);
+                stateManager.StateGraph.aboveGround.OnExit -= EarlyExitHandler;
+                //OnEmerged will be triggered in anim. event in the emerge animation
+                //I think we DO  want invincibility, because it's really anticlimactic if it just dies while undergound
+                //or emerging/retreating
+                //-- add BLOCKED damage popups (so it doesn't feel like combat is glitching and not registering hits)
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                stateManager.StateGraph.aboveGround.OnExit -= EarlyExitHandler;
+            }
 
             void EarlyExitHandler()
             {
@@ -83,7 +95,7 @@ namespace RPGPlatformer.AIControl
         }
 
         //trigger in ANIM EVENT
-        private void OnEmerged()
+        public void OnEmerged()
         {
             if (AboveGround)
             {
@@ -108,14 +120,20 @@ namespace RPGPlatformer.AIControl
             using var cts = CancellationTokenSource
                 .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
 
-            Debug.Log("retreating to pursue");
-
-            stateManager.StateGraph.pursuit.OnExit += EarlyExitHandler;
-            await stateDriver.Retreat(cts.Token);
-            stateManager.StateGraph.pursuit.OnExit -= EarlyExitHandler;
-
-            Debug.Log("ready to pursue");
-            //then move to a new wormhole, and re-emerge
+            try
+            {
+                stateManager.StateGraph.pursuit.OnExit += EarlyExitHandler;
+                await stateDriver.Retreat(cts.Token);
+                stateManager.StateGraph.pursuit.OnExit -= EarlyExitHandler;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                stateManager.StateGraph.pursuit.OnExit -= EarlyExitHandler;
+            }
 
             void EarlyExitHandler()
             {

@@ -15,6 +15,7 @@ namespace RPGPlatformer.Skills
         [SerializeField] SkillProgressionData melee = new();
         [SerializeField] SkillProgressionData ranged = new();
 
+        //properties for save system
         public SkillProgressionData Fitness
         {
             get => fitness;

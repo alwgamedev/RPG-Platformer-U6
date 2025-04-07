@@ -458,7 +458,6 @@ namespace RPGPlatformer.Combat
 
             if (enemyCollider)
             {
-                Debug.Log(enemyCollider.name);
                 if (enemyCollider.TryGetComponent(out IHealth health))
                 {
                     return health;

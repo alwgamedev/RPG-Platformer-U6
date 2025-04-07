@@ -2,6 +2,7 @@
 using RPGPlatformer.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace RPGPlatformer.AIControl
@@ -50,12 +51,10 @@ namespace RPGPlatformer.AIControl
                 testAboveGround = !testAboveGround;
                 if (testAboveGround)
                 {
-                    Debug.Log("triggering above ground");
                     Trigger(typeof(EarthwormAboveGround).Name);
                 }
                 else
                 {
-                    Debug.Log("triggering dormant");
                     Trigger(typeof(EarthwormDormant).Name);
                 }
             }
@@ -117,12 +116,12 @@ namespace RPGPlatformer.AIControl
 
         public void StartAttacking()
         {
-
+            combatController.StartAttacking();
         }
 
         public void StopAttacking()
         {
-
+            combatController.StopAttacking();
         }
 
         public void FacePlayer()
@@ -135,14 +134,12 @@ namespace RPGPlatformer.AIControl
 
         public async Task Retreat(CancellationToken token)
         {
-            Debug.Log("driver retreating");
             SetBodyAnchor(false);
             await MoveToAnchorPosition(retreatMoveSpeed, token);
         }
 
         public async Task Emerge(CancellationToken token)
         {
-            Debug.Log("driver emerging");
             SetBodyAnchor(true);
             await MoveToAnchorPosition(emergeMoveSpeed, token);
         }
@@ -165,6 +162,7 @@ namespace RPGPlatformer.AIControl
             currentBodyAnchor = aboveGround ? aboveGroundBodyAnchor : underGroundBodyAnchor;
         }
 
+        //top level caller needs to handle cancellation
         public async Task MoveToAnchorPosition(float moveSpeed, CancellationToken token)
         {
             TaskCompletionSource<object> tcs = new();
@@ -186,10 +184,6 @@ namespace RPGPlatformer.AIControl
                 combatController.OnDeath += Cancel;
                 movementController.BeginMoveTowards(AnchoredPosition, moveSpeed);
                 await tcs.Task;
-            }
-            catch
-            {
-                return;
             }
             finally
             {

@@ -82,7 +82,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 0.5
 --- !u!1 &571937161597167014
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +92,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2171538264120847835}
-  - component: {fileID: 4174433664763717315}
   m_Layer: 0
   m_Name: Earthworm Container
   m_TagString: Untagged
@@ -124,28 +123,6 @@ Transform:
   - {fileID: 6360243804841400735}
   m_Father: {fileID: 8848104348067717170}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &4174433664763717315
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 571937161597167014}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f75a7e5e89d57244090ea8c65724bee8, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2456100068353604521
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +205,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 0.5
 --- !u!1 &3619821579998668821
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,10 +279,10 @@ GameObject:
   - component: {fileID: 8848104348067717170}
   - component: {fileID: 6785787688279827258}
   - component: {fileID: 4609341849784267803}
+  - component: {fileID: 7405243554796035400}
   - component: {fileID: 8808086443595260739}
   - component: {fileID: 3021025127566032016}
   - component: {fileID: 7811487076972133160}
-  - component: {fileID: 5326407789167667384}
   - component: {fileID: 4166631166757328849}
   - component: {fileID: 8953815317992739599}
   - component: {fileID: 743808907830779398}
@@ -313,6 +290,7 @@ GameObject:
   - component: {fileID: 4201161255345355605}
   - component: {fileID: 8636128378473371375}
   - component: {fileID: 6856599071111275749}
+  - component: {fileID: 5326407789167667384}
   - component: {fileID: 4194975810890797505}
   m_Layer: 6
   m_Name: Earthworm
@@ -337,6 +315,7 @@ Transform:
   - {fileID: 2171538264120847835}
   - {fileID: 1194695686574530751}
   - {fileID: 8248864435369701058}
+  - {fileID: 127492342957330644}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &6785787688279827258
@@ -412,6 +391,28 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 2.0958395}
   m_EdgeRadius: 0
+--- !u!95 &7405243554796035400
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3694819894051617520}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f75a7e5e89d57244090ea8c65724bee8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &8808086443595260739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -450,26 +451,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a34615c6456bb469312e846abdd549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5326407789167667384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3694819894051617520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b94a4cfa0b960342a1797cce63819c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeToLeaveCombat: 200
-  abilityBarData:
-    unarmedAbilityBarItems: []
-    mageAbilityBarItems: []
-    meleeAbilityBarItems: []
-    rangedAbilityBarItems: []
-  useDefaultAbilityBars: 0
-  immuneToStuns: 0
 --- !u!114 &4166631166757328849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,7 +463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f2daae357df4a41b27f2966616557b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationTolerance: 0.1
+  destinationTolerance: 0.025
 --- !u!114 &8953815317992739599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,8 +476,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa209ddddc084e6468a5c4b5c26cc2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emergeMoveSpeed: 0.5
-  retreatMoveSpeed: 1.25
+  emergeMoveSpeed: 0.75
+  retreatMoveSpeed: 2
   underGroundBodyAnchor: {fileID: 1194695686574530751}
   aboveGroundBodyAnchor: {fileID: 8248864435369701058}
   wormholeAnchor: {fileID: 0}
@@ -580,15 +561,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   takeDamageAutomatically: 0
-  takeDefaultValueOnStart: 0
+  takeDefaultValueOnStart: 1
   findStatBarInChildren: 0
   stat:
     minValue: 0
-    maxValue: 0
-    defaultValue: 0
-    replenishRate: 0
-    autoReplenish: 0
+    maxValue: 5000
+    defaultValue: 5000
+    replenishRate: 0.01
+    autoReplenish: 1
     statBar: {fileID: 0}
+--- !u!114 &5326407789167667384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3694819894051617520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b94a4cfa0b960342a1797cce63819c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToLeaveCombat: 100
+  abilityBarData:
+    unarmedAbilityBarItems: []
+    mageAbilityBarItems: []
+    meleeAbilityBarItems:
+    - includeInAutoCastCycle: 1
+      ability: 4
+    rangedAbilityBarItems: []
+  useDefaultAbilityBars: 0
+  immuneToStuns: 0
 --- !u!114 &4194975810890797505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -601,34 +604,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0951bec2fd809e841941820c0e074e77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: 
-  targetLayer: 
-  targetTag: 
+  displayName: Giant Worm
+  targetLayer: Player
+  targetTag: Player
   headSlot: {fileID: 0}
   torsoSlot: {fileID: 0}
   legsSlot: {fileID: 0}
-  mainhandSlot: {fileID: 0}
+  mainhandSlot: {fileID: 6100517885452288932}
   offhandSlot: {fileID: 0}
   mainhandElbow: {fileID: 0}
   chestBone: {fileID: 0}
-  defaultWeaponSO: {fileID: 0}
-  unarmedWeaponSO: {fileID: 0}
+  defaultWeaponSO: {fileID: 11400000, guid: 01c9b511bde78514baff424cc17ea9da, type: 2}
+  unarmedWeaponSO: {fileID: 11400000, guid: 728b1afebc2139c4b9d73ae6b30380b3, type: 2}
   stamina:
     minValue: 0
-    maxValue: 0
-    defaultValue: 0
-    replenishRate: 0
+    maxValue: 100
+    defaultValue: 100
+    replenishRate: 0.1
     autoReplenish: 0
     statBar: {fileID: 0}
   wrath:
     minValue: 0
-    maxValue: 0
+    maxValue: 100
     defaultValue: 0
-    replenishRate: 0
+    replenishRate: -0.1
     autoReplenish: 0
     statBar: {fileID: 0}
   useAutoCalculatedHealthPoints: 0
-  combatXPReward: 50
+  combatXPReward: 350
 --- !u!1 &4197122059605495264
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,7 +714,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 0.5
 --- !u!1 &4328742817581164969
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,6 +746,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 9004736739139803202}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4557173175486457664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 127492342957330644}
+  - component: {fileID: 6100517885452288932}
+  m_Layer: 6
+  m_Name: Mainhand Slot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &127492342957330644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4557173175486457664}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8848104348067717170}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6100517885452288932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4557173175486457664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aef215ff67f76874f90a3e49c9a406d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingLayer: 
+  sortingOrder: 0
+  defaultItemSO: {fileID: 0}
+  dependentResolvers: []
 --- !u!1 &4782132548422289897
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,7 +907,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 0.5
 --- !u!1 &5166603509125457508
 GameObject:
   m_ObjectHideFlags: 0
@@ -939,7 +990,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 0.5
 --- !u!1 &5355771109634287492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,7 +1104,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 0.5
 --- !u!1 &5682033007519445732
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,7 +1249,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 0.5
 --- !u!1 &6968037973826868402
 GameObject:
   m_ObjectHideFlags: 0
@@ -1281,7 +1332,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 0.5
 --- !u!1 &7823781928875592439
 GameObject:
   m_ObjectHideFlags: 0
@@ -1369,7 +1420,7 @@ Transform:
   m_GameObject: {fileID: 8899985959524284879}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0.18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -70,7 +70,7 @@ namespace RPGPlatformer.UI
 
             float animXP = startingXP;
             int animLevel = startingLevel;
-            int nextAnimLevelXP = skill.XPTable.XPAtLevel[animLevel + 1];
+            int nextAnimLevelXP = skill.XPTable.XPAtLevel(animLevel + 1);
             float animXPPerSecond = skill.XPTable.LevelXPDelta(animLevel) * fillAmountPerSecond;
 
             DisplaySkillAndLevel(eventData.skill, animLevel);
@@ -93,7 +93,7 @@ namespace RPGPlatformer.UI
                     OnLevelUpHit();
 
                     animLevel = skill.XPTable.LevelAtXP((int)animXP);//recompute rather than ++ just in case of massive lag spike
-                    nextAnimLevelXP = skill.XPTable.XPAtLevel[animLevel + 1];
+                    nextAnimLevelXP = skill.XPTable.XPAtLevel(animLevel + 1);
                     animXPPerSecond = skill.XPTable.LevelXPDelta(animLevel) * fillAmountPerSecond;
 
                     DisplaySkillAndLevel(eventData.skill, animLevel);
@@ -123,7 +123,7 @@ namespace RPGPlatformer.UI
 
         private void SetProgressBarFillAmount(XPTable xpTable, int currentLevel, float currentXP)
         {
-            progressBar.fillAmount = (currentXP - xpTable.XPAtLevel[currentLevel]) / xpTable.LevelXPDelta(currentLevel);
+            progressBar.fillAmount = (currentXP - xpTable.XPAtLevel(currentLevel)) / xpTable.LevelXPDelta(currentLevel);
         }
 
         private void OnLevelUpHit()

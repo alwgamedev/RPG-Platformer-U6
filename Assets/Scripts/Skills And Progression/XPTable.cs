@@ -6,29 +6,52 @@ namespace RPGPlatformer.Skills
     {
         public readonly int MaxLevel;
 
-        public readonly Dictionary<int, int> XPAtLevel = new();//key: level, value: xp at beginning of level
+        readonly Dictionary<int, int> LevelToXPDict = new();//key: level, value: xp at beginning of level
 
         public XPTable(int MaxLevel)
         {
             this.MaxLevel = MaxLevel;
-            InitializeXPTable();
         }
 
         public int MaxXP()
         {
-            return XPAtLevel[MaxLevel];
+            return XPAtLevel(MaxLevel);
         }
 
         public int LevelAtXP(int xp)
         {
-            for (int i = 1; i < MaxLevel; i ++)
+            for (int i = 1; i < MaxLevel; i++)
             {
-                if(xp < XPAtLevel[i + 1])
+                if (xp < XPAtLevel(i + 1))
                 {
                     return i;
                 }
             }
             return MaxLevel;
+        }
+
+        public int XPAtLevel(int lvl)
+        {
+            if (LevelToXPDict.TryGetValue(lvl, out var xp))
+            {
+                return xp;
+            }
+
+            if (lvl <= 1)
+            {
+                xp = 0;
+            }
+            else if (lvl == 2)
+            {
+                xp = 100;
+            }
+            else
+            {
+                xp = (int)(0.4f * XPAtLevel(lvl - 1) + XPAtLevel(lvl - 2) + 200);
+            }
+
+            LevelToXPDict[lvl] = xp;
+            return xp;
         }
 
         public int LevelXPDelta(int level)
@@ -38,7 +61,7 @@ namespace RPGPlatformer.Skills
                 return 0;
             }
 
-            return XPAtLevel[level + 1] - XPAtLevel[level];
+            return XPAtLevel(level + 1) - XPAtLevel(level);
         }
 
         public float PercentProgressTowardNextLevel(int currentXP, int? currentLevel = null)
@@ -50,31 +73,10 @@ namespace RPGPlatformer.Skills
                 return 0;
             }
 
-            float delta = XPAtLevel[level + 1] - XPAtLevel[level];
-            float progress = currentXP - XPAtLevel[level];
+            float delta = XPAtLevel(level + 1) - XPAtLevel(level);
+            float progress = currentXP - XPAtLevel(level);
 
             return progress / delta;
-        }
-
-        private void InitializeXPTable()
-        {
-            XPAtLevel.Clear();
-
-            for (int i = 1; i <= MaxLevel; i++)
-            {
-                if (i == 1)
-                {
-                    XPAtLevel[i] = 0;
-                }
-                else if (i == 2)
-                {
-                    XPAtLevel[i] = 100;
-                }
-                else
-                {
-                    XPAtLevel[i] = (int)(0.4f * XPAtLevel[i - 1] + XPAtLevel[i - 2] + 200);
-                }
-            }
         }
     }
 }
