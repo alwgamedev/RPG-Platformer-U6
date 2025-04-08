@@ -6,6 +6,7 @@ using RPGPlatformer.Effects;
 using RPGPlatformer.Inventory;
 using RPGPlatformer.Loot;
 using RPGPlatformer.Skills;
+using System.Threading.Tasks;
 
 namespace RPGPlatformer.Combat
 {
@@ -30,6 +31,12 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected ReplenishableStat stamina = new();
         [SerializeField] protected ReplenishableStat wrath = new();
         [SerializeField] protected bool useAutoCalculatedHealthPoints;
+        [SerializeField] protected bool dropLootOnFinalizeDeath = true;
+        [SerializeField] protected bool destroyOnFinalizeDeath = true;
+        [SerializeField] protected bool delayBeforeFinalizeDeath = true;
+        [SerializeField] protected float timeToDelayBeforeFinalizeDeath = 1.5f;
+
+
 
         protected CharacterProgressionManager progressionManager;
         protected InventoryManager inventory;
@@ -214,8 +221,33 @@ namespace RPGPlatformer.Combat
         public virtual void OnDeath()
         {
             wrath.CurrentValue = 0;
-            mainhandSlot.gameObject.SetActive(false);
-            DropLoot();
+            if (mainhandSlot)
+            {
+                mainhandSlot.gameObject.SetActive(false);
+            }
+            if (offhandSlot)
+            {
+                offhandSlot.gameObject.SetActive(false);
+            }
+            //DropLoot();
+        }
+
+        public virtual async Task FinalizeDeath()
+        {
+            if (delayBeforeFinalizeDeath)
+            {
+                await MiscTools.DelayGameTime(timeToDelayBeforeFinalizeDeath, 
+                    GlobalGameTools.Instance.TokenSource.Token);
+            }
+
+            if (dropLootOnFinalizeDeath)
+            {
+                DropLoot();
+            }
+            if (destroyOnFinalizeDeath)
+            {
+                Destroy(gameObject);
+            }
         }
 
 

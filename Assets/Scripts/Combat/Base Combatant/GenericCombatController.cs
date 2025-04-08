@@ -591,13 +591,15 @@ namespace RPGPlatformer.Combat
             EnableInput();
         }
 
-        protected virtual void Death()
+        protected virtual async void Death()
         {
             DisableInput();
             //combatManager.animationControl.Freeze(false);//UNFREEZE, in case animation was frozen due to a stun
             stateDriver.OnDeath();
             MovementController?.OnDeath();
             OnDeath?.Invoke();
+
+            await stateDriver.FinalizeDeath();
         }
 
         protected virtual void Revival()

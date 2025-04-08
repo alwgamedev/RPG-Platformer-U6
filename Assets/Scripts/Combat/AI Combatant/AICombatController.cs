@@ -75,12 +75,16 @@ namespace RPGPlatformer.Combat
             return base.GetAimPosition();
         }
 
-        protected override void Death()
-        {
-            base.Death();
+        //protected override Task Death()
+        //{
+        //    base.Death();
 
-            Destroy(gameObject, 1.5f);
-        }
+        //    if (timedDestroyAfterDeath)
+        //    {
+        //        //Destroy(gameObject, timeToDestroyAfterDeath);
+                
+        //    }
+        //}
 
         protected virtual void OnMouseEnter()
         {

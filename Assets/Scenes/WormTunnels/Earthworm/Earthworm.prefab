@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   emergeMoveSpeed: 0.75
-  retreatMoveSpeed: 2
+  retreatMoveSpeed: 1.5
   underGroundBodyAnchor: {fileID: 1194695686574530751}
   aboveGroundBodyAnchor: {fileID: 8248864435369701058}
   wormholeAnchor: {fileID: 0}
@@ -722,6 +722,10 @@ MonoBehaviour:
     autoReplenish: 0
     statBar: {fileID: 0}
   useAutoCalculatedHealthPoints: 0
+  dropLootOnFinalizeDeath: 1
+  destroyOnFinalizeDeath: 1
+  delayBeforeFinalizeDeath: 1
+  timeToDelayBeforeFinalizeDeath: 3.5
   combatXPReward: 350
 --- !u!1 &4172146738656197371
 GameObject:
@@ -2031,7 +2035,7 @@ MonoBehaviour:
     point: {x: 0, y: -2.3375, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   lerpMode: 1
-  lerpRate: 25
+  lerpRate: 12
 --- !u!120 &7510194389748565361
 LineRenderer:
   serializedVersion: 2
