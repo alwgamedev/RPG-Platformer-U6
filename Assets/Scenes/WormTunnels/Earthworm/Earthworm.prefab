@@ -82,7 +82,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.85
+  m_Radius: 0.8
 --- !u!1 &571937161597167014
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2171538264120847835}
+  - component: {fileID: 377288945933441539}
   m_Layer: 0
   m_Name: Earthworm Container
   m_TagString: Untagged
@@ -109,7 +110,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.4, y: 0.4, z: 1}
+  m_LocalScale: {x: -0.25, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4328414536707297878}
@@ -123,6 +124,52 @@ Transform:
   - {fileID: 6360243804841400735}
   m_Father: {fileID: 8848104348067717170}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &377288945933441539
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571937161597167014}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 4}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 6, y: 8}
+  m_EdgeRadius: 0
 --- !u!1 &2456100068353604521
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,7 +252,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.85
+  m_Radius: 1
 --- !u!1 &3619821579998668821
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,7 +325,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8848104348067717170}
   - component: {fileID: 6785787688279827258}
-  - component: {fileID: 4609341849784267803}
   - component: {fileID: 7405243554796035400}
   - component: {fileID: 8808086443595260739}
   - component: {fileID: 3021025127566032016}
@@ -345,52 +391,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!61 &4609341849784267803
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3694819894051617520}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 1.5}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 2, y: 3}
-  m_EdgeRadius: 0
 --- !u!95 &7405243554796035400
 Animator:
   serializedVersion: 7
@@ -714,7 +714,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.85
+  m_Radius: 1
 --- !u!1 &4328742817581164969
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,7 +907,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.85
+  m_Radius: 0.2
 --- !u!1 &5166603509125457508
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,7 +990,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.85
+  m_Radius: 0.4
 --- !u!1 &5355771109634287492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1104,7 +1104,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.85
+  m_Radius: 1
 --- !u!1 &5682033007519445732
 GameObject:
   m_ObjectHideFlags: 0
@@ -1249,7 +1249,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.85
+  m_Radius: 1
 --- !u!1 &6968037973826868402
 GameObject:
   m_ObjectHideFlags: 0
@@ -1332,7 +1332,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.85
+  m_Radius: 0.9
 --- !u!1 &7823781928875592439
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,31 +1502,31 @@ MonoBehaviour:
   lineRendererPositionCount: 85
   guidePoints:
   - virtualSegments: 0
-    point: {x: -0.32, y: -3.02, z: 0}
-    velocity: {x: 0, y: 0.4000001, z: 0}
+    point: {x: 0, y: -3, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.32, y: -2.72, z: 0}
-    velocity: {x: 0, y: 0.4000001, z: 0}
+    point: {x: 0, y: -2.8125, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.32, y: -2.42, z: 0}
-    velocity: {x: 0, y: 0.4000001, z: 0}
+    point: {x: 0, y: -2.625, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.32, y: -2.12, z: 0}
-    velocity: {x: 0, y: 0.39999998, z: 0}
+    point: {x: 0, y: -2.4375, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.32, y: -1.8199999, z: 0}
-    velocity: {x: 0, y: 0.39999998, z: 0}
+    point: {x: 0, y: -2.25, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.32, y: -1.52, z: 0}
-    velocity: {x: 0, y: 0.39999998, z: 0}
+    point: {x: 0, y: -2.0625, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.32, y: -1.2199999, z: 0}
-    velocity: {x: 0, y: 0.39999998, z: 0}
+    point: {x: 0, y: -1.875, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.32, y: -0.91999984, z: 0}
-    velocity: {x: 0, y: 0.39999986, z: 0}
+    point: {x: 0, y: -1.6875, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
   lerpMode: 1
-  lerpRate: 25
+  lerpRate: 18
 --- !u!120 &7510194389748565361
 LineRenderer:
   serializedVersion: 2
@@ -1573,94 +1573,94 @@ LineRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Positions:
-  - {x: -0.32, y: -3.02, z: 0}
-  - {x: -0.32, y: -2.9886343, z: 0}
-  - {x: -0.32, y: -2.9607408, z: 0}
-  - {x: -0.32, y: -2.935625, z: 0}
-  - {x: -0.32, y: -2.9125924, z: 0}
-  - {x: -0.32, y: -2.890949, z: 0}
-  - {x: -0.32, y: -2.87, z: 0}
-  - {x: -0.32, y: -2.849051, z: 0}
-  - {x: -0.32, y: -2.8274074, z: 0}
-  - {x: -0.32, y: -2.804375, z: 0}
-  - {x: -0.32, y: -2.7792592, z: 0}
-  - {x: -0.32, y: -2.751366, z: 0}
-  - {x: -0.32, y: -2.72, z: 0}
-  - {x: -0.32, y: -2.6886344, z: 0}
-  - {x: -0.32, y: -2.6607409, z: 0}
-  - {x: -0.32, y: -2.6356251, z: 0}
-  - {x: -0.32, y: -2.6125925, z: 0}
-  - {x: -0.32, y: -2.590949, z: 0}
-  - {x: -0.32, y: -2.57, z: 0}
-  - {x: -0.32, y: -2.549051, z: 0}
-  - {x: -0.32, y: -2.5274074, z: 0}
-  - {x: -0.32, y: -2.5043752, z: 0}
-  - {x: -0.32, y: -2.4792595, z: 0}
-  - {x: -0.32, y: -2.451366, z: 0}
-  - {x: -0.32, y: -2.42, z: 0}
-  - {x: -0.32, y: -2.3886344, z: 0}
-  - {x: -0.32, y: -2.3607407, z: 0}
-  - {x: -0.32, y: -2.3356252, z: 0}
-  - {x: -0.32, y: -2.3125925, z: 0}
-  - {x: -0.32, y: -2.290949, z: 0}
-  - {x: -0.32, y: -2.27, z: 0}
-  - {x: -0.32, y: -2.2490509, z: 0}
-  - {x: -0.32, y: -2.2274075, z: 0}
-  - {x: -0.32, y: -2.204375, z: 0}
-  - {x: -0.32, y: -2.179259, z: 0}
-  - {x: -0.32, y: -2.1513655, z: 0}
-  - {x: -0.32, y: -2.12, z: 0}
-  - {x: -0.32, y: -2.0886343, z: 0}
-  - {x: -0.32, y: -2.0607405, z: 0}
-  - {x: -0.32, y: -2.035625, z: 0}
-  - {x: -0.32, y: -2.0125926, z: 0}
-  - {x: -0.32, y: -1.990949, z: 0}
-  - {x: -0.32, y: -1.9699999, z: 0}
-  - {x: -0.32, y: -1.9490509, z: 0}
-  - {x: -0.32, y: -1.9274075, z: 0}
-  - {x: -0.32, y: -1.904375, z: 0}
-  - {x: -0.32, y: -1.8792592, z: 0}
-  - {x: -0.32, y: -1.8513658, z: 0}
-  - {x: -0.32, y: -1.82, z: 0}
-  - {x: -0.32, y: -1.7886342, z: 0}
-  - {x: -0.32, y: -1.7607408, z: 0}
-  - {x: -0.32, y: -1.735625, z: 0}
-  - {x: -0.32, y: -1.7125925, z: 0}
-  - {x: -0.32, y: -1.6909491, z: 0}
-  - {x: -0.32, y: -1.67, z: 0}
-  - {x: -0.32, y: -1.649051, z: 0}
-  - {x: -0.32, y: -1.6274073, z: 0}
-  - {x: -0.32, y: -1.604375, z: 0}
-  - {x: -0.32, y: -1.5792594, z: 0}
-  - {x: -0.32, y: -1.5513657, z: 0}
-  - {x: -0.32, y: -1.5200001, z: 0}
-  - {x: -0.32, y: -1.4886342, z: 0}
-  - {x: -0.32, y: -1.4607408, z: 0}
-  - {x: -0.32, y: -1.435625, z: 0}
-  - {x: -0.32, y: -1.4125925, z: 0}
-  - {x: -0.32, y: -1.390949, z: 0}
-  - {x: -0.32, y: -1.37, z: 0}
-  - {x: -0.32, y: -1.3490508, z: 0}
-  - {x: -0.32, y: -1.3274074, z: 0}
-  - {x: -0.32, y: -1.3043749, z: 0}
-  - {x: -0.32, y: -1.2792592, z: 0}
-  - {x: -0.32, y: -1.2513657, z: 0}
-  - {x: -0.32, y: -1.2199999, z: 0}
-  - {x: -0.32, y: -1.1886342, z: 0}
-  - {x: -0.32, y: -1.1607406, z: 0}
-  - {x: -0.32, y: -1.1356249, z: 0}
-  - {x: -0.32, y: -1.1125925, z: 0}
-  - {x: -0.32, y: -1.0909489, z: 0}
-  - {x: -0.32, y: -1.0699998, z: 0}
-  - {x: -0.32, y: -1.0490507, z: 0}
-  - {x: -0.32, y: -1.0274073, z: 0}
-  - {x: -0.32, y: -1.0043747, z: 0}
-  - {x: -0.32, y: -0.97925895, z: 0}
-  - {x: -0.32, y: -0.9513656, z: 0}
-  - {x: -0.32, y: -0.91999984, z: 0}
+  - {x: 0, y: -3, z: 0}
+  - {x: 0, y: -2.9803965, z: 0}
+  - {x: 0, y: -2.9629629, z: 0}
+  - {x: 0, y: -2.9472656, z: 0}
+  - {x: 0, y: -2.9328704, z: 0}
+  - {x: 0, y: -2.919343, z: 0}
+  - {x: 0, y: -2.90625, z: 0}
+  - {x: 0, y: -2.8931568, z: 0}
+  - {x: 0, y: -2.8796294, z: 0}
+  - {x: 0, y: -2.8652344, z: 0}
+  - {x: 0, y: -2.8495371, z: 0}
+  - {x: 0, y: -2.8321035, z: 0}
+  - {x: 0, y: -2.8125, z: 0}
+  - {x: 0, y: -2.7928965, z: 0}
+  - {x: 0, y: -2.7754629, z: 0}
+  - {x: 0, y: -2.7597656, z: 0}
+  - {x: 0, y: -2.7453704, z: 0}
+  - {x: 0, y: -2.731843, z: 0}
+  - {x: 0, y: -2.71875, z: 0}
+  - {x: 0, y: -2.7056568, z: 0}
+  - {x: 0, y: -2.6921294, z: 0}
+  - {x: 0, y: -2.6777344, z: 0}
+  - {x: 0, y: -2.6620371, z: 0}
+  - {x: 0, y: -2.6446035, z: 0}
+  - {x: 0, y: -2.625, z: 0}
+  - {x: 0, y: -2.6053965, z: 0}
+  - {x: 0, y: -2.5879629, z: 0}
+  - {x: 0, y: -2.5722656, z: 0}
+  - {x: 0, y: -2.5578704, z: 0}
+  - {x: 0, y: -2.544343, z: 0}
+  - {x: 0, y: -2.53125, z: 0}
+  - {x: 0, y: -2.5181568, z: 0}
+  - {x: 0, y: -2.5046294, z: 0}
+  - {x: 0, y: -2.4902344, z: 0}
+  - {x: 0, y: -2.4745371, z: 0}
+  - {x: 0, y: -2.4571035, z: 0}
+  - {x: 0, y: -2.4375, z: 0}
+  - {x: 0, y: -2.4178965, z: 0}
+  - {x: 0, y: -2.400463, z: 0}
+  - {x: 0, y: -2.3847656, z: 0}
+  - {x: 0, y: -2.3703704, z: 0}
+  - {x: 0, y: -2.3568432, z: 0}
+  - {x: 0, y: -2.34375, z: 0}
+  - {x: 0, y: -2.3306568, z: 0}
+  - {x: 0, y: -2.3171299, z: 0}
+  - {x: 0, y: -2.3027344, z: 0}
+  - {x: 0, y: -2.2870371, z: 0}
+  - {x: 0, y: -2.2696037, z: 0}
+  - {x: 0, y: -2.25, z: 0}
+  - {x: 0, y: -2.2303965, z: 0}
+  - {x: 0, y: -2.2129629, z: 0}
+  - {x: 0, y: -2.1972656, z: 0}
+  - {x: 0, y: -2.1828704, z: 0}
+  - {x: 0, y: -2.169343, z: 0}
+  - {x: 0, y: -2.15625, z: 0}
+  - {x: 0, y: -2.1431568, z: 0}
+  - {x: 0, y: -2.1296294, z: 0}
+  - {x: 0, y: -2.1152344, z: 0}
+  - {x: 0, y: -2.0995371, z: 0}
+  - {x: 0, y: -2.0821035, z: 0}
+  - {x: 0, y: -2.0625, z: 0}
+  - {x: 0, y: -2.0428965, z: 0}
+  - {x: 0, y: -2.0254629, z: 0}
+  - {x: 0, y: -2.0097656, z: 0}
+  - {x: 0, y: -1.9953704, z: 0}
+  - {x: 0, y: -1.9818432, z: 0}
+  - {x: 0, y: -1.96875, z: 0}
+  - {x: 0, y: -1.9556569, z: 0}
+  - {x: 0, y: -1.9421297, z: 0}
+  - {x: 0, y: -1.9277344, z: 0}
+  - {x: 0, y: -1.912037, z: 0}
+  - {x: 0, y: -1.8946037, z: 0}
+  - {x: 0, y: -1.875, z: 0}
+  - {x: 0, y: -1.8553964, z: 0}
+  - {x: 0, y: -1.837963, z: 0}
+  - {x: 0, y: -1.8222656, z: 0}
+  - {x: 0, y: -1.8078704, z: 0}
+  - {x: 0, y: -1.7943432, z: 0}
+  - {x: 0, y: -1.78125, z: 0}
+  - {x: 0, y: -1.7681568, z: 0}
+  - {x: 0, y: -1.7546297, z: 0}
+  - {x: 0, y: -1.7402344, z: 0}
+  - {x: 0, y: -1.724537, z: 0}
+  - {x: 0, y: -1.7071036, z: 0}
+  - {x: 0, y: -1.6875, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.31119034
+    widthMultiplier: 0.23943482
     widthCurve:
       serializedVersion: 2
       m_Curve:
