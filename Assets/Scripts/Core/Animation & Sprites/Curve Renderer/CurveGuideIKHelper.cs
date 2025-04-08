@@ -55,12 +55,9 @@ namespace RPGPlatformer.Core
                     guides[i - 1].SetPoint(guides[i].Point() + lengths[i - 1] * a);
 
                     v = (guides[i].Point() - guides[i - 1].Point()).normalized;
-                    guides[i - 1].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v,
-                        guides[i - 1].TangentDir(), true));
+                    guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v,
+                        guides[i].TangentDir(), true));
                     unitRays[i - 1] = v;
-
-                    //the last tangent doesn't get rotated? maybe rethink this
-
                 }
             }
 
@@ -74,8 +71,8 @@ namespace RPGPlatformer.Core
                     guides[i + 1].SetPoint(guides[i].Point() + lengths[i] * a);
 
                     v = (guides[i + 1].Point() - guides[i].Point()).normalized;
-                    guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i], v,
-                        guides[i].TangentDir(), true));
+                    guides[i + 1].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i], v,
+                        guides[i + 1].TangentDir(), true));
                     unitRays[i] = v;
                 }
             }
