@@ -78,10 +78,9 @@ namespace RPGPlatformer.Combat
 
         protected override void Awake()
         {
-            //combatant = GetComponent<Combatant>(); 
             base.Awake();
 
-            MovementController = GetComponent<IMovementController>();
+            MovementController = GetComponent<ICombatantMovementController>();
             InputSource = GetComponent<IInputSource>();
 
             OnDisabled += () => EndChannel();
@@ -90,7 +89,6 @@ namespace RPGPlatformer.Combat
         protected override void Start()
         {
             base.Start();
-            //InitializeCombatManager();//doing both of these here because they depend on the combatant
 
             InitializeAbilityBarManager();
 
@@ -108,13 +106,13 @@ namespace RPGPlatformer.Combat
             stateDriver.EquipDefaultWeapon();
         }
 
-        protected virtual void Update()
-        {
-            if (FireButtonIsDown)
-            {
-                RunAutoAbilityCycle(false);
-            }
-        }
+        //protected virtual void Update()
+        //{
+        //    if (FireButtonIsDown)
+        //    {
+        //        RunAutoAbilityCycle(false);
+        //    }
+        //}
 
         protected virtual void LateUpdate()
         {
@@ -180,6 +178,8 @@ namespace RPGPlatformer.Combat
 
         public virtual void RunAutoAbilityCycle(bool runOffGCD)
         {
+            Debug.Log("running auto ability cycle");
+
             if (!postCancellationLock && !ChannelingAbility
                 && ((queuedAbility == null && !GlobalCooldown) || runOffGCD))
             {

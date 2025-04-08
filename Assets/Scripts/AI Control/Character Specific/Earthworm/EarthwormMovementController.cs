@@ -71,7 +71,10 @@ namespace RPGPlatformer.AIControl
 
         public void FaceTarget(Transform target)
         {
-            FaceTarget(target.position);
+            if (target)
+            {
+                FaceTarget(target.position);
+            }
         }
 
         public void FaceTarget(Vector3 target)
@@ -81,7 +84,7 @@ namespace RPGPlatformer.AIControl
             if (d != 0)
             {
                 var s = transform.localScale;
-                s.x = Mathf.Sign(d) * Mathf.Abs(d);
+                s.x = Mathf.Sign(d) * Mathf.Abs(s.x);
                 transform.localScale = s;
             }
         }

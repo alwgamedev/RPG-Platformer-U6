@@ -13,7 +13,14 @@ namespace RPGPlatformer.AIControl
         //will add an update method at some point once I figure things out more
         //(i.e. who does the timer)
 
+        Action OnUpdate;
+
         bool AboveGround => stateManager.StateMachine.CurrentState == stateManager.StateGraph.aboveGround;
+
+        private void Update()
+        {
+            OnUpdate?.Invoke();
+        }
 
         protected override void InitializeStateManager()
         {
@@ -65,6 +72,8 @@ namespace RPGPlatformer.AIControl
 
             try
             {
+                stateDriver.FacePlayer();
+
                 stateManager.StateGraph.aboveGround.OnExit += EarlyExitHandler;
                 await stateDriver.Emerge(cts.Token);
                 stateManager.StateGraph.aboveGround.OnExit -= EarlyExitHandler;
@@ -99,9 +108,18 @@ namespace RPGPlatformer.AIControl
         {
             if (AboveGround)
             {
+                Debug.Log("on emerged");
                 //+ turn off invincibility
-                stateDriver.FacePlayer();
-                stateDriver.StartAttacking();
+                //stateDriver.FacePlayer();
+                //stateDriver.StartAttacking();
+
+                OnUpdate += NextUpdate;
+
+                void NextUpdate()
+                {
+                    stateDriver.StartAttacking();
+                    OnUpdate -= NextUpdate;
+                }
             }
         }
 

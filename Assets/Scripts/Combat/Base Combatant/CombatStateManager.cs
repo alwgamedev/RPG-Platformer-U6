@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Combat
@@ -107,6 +108,7 @@ namespace RPGPlatformer.Combat
 
         public virtual void CeaseAttack()
         {
+            Debug.Log("cease attack");
             animationControl.SetTrigger("ceaseAttack");
         }
 

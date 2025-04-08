@@ -18,13 +18,13 @@ namespace RPGPlatformer.Combat
         //public CombatStateManager CombatManager => combatManager;
         //public AICombatant AICombatant { get; protected set; }
 
-        protected override void Awake()
-        {
-            base.Awake();
+        //protected override void Awake()
+        //{
+        //    base.Awake();
 
-            //should make a generic combat controller so we don't have to do this
-            //AICombatant = (AICombatant)stateDriver;
-        }
+        //    //should make a generic combat controller so we don't have to do this
+        //    //AICombatant = (AICombatant)stateDriver;
+        //}
 
         protected override void Start()
         {
@@ -39,6 +39,7 @@ namespace RPGPlatformer.Combat
 
         public void FireOneShot()
         {
+            Debug.Log("fire one shot");
             FaceAimPosition();
             RunAutoAbilityCycle(false);
         }
@@ -47,7 +48,7 @@ namespace RPGPlatformer.Combat
         {
             FireOneShot();
             stateManager.OnWeaponTick += FireOneShot;
-            stateDriver.Attack();
+            //stateDriver.Attack();//do we need this?
         }
 
         public void StopAttacking()

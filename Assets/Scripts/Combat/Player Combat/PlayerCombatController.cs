@@ -79,9 +79,12 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        protected override void Update()
+        private void Update()
         {
-            base.Update();
+            if (FireButtonIsDown)
+            {
+                RunAutoAbilityCycle(false);
+            }
 
             //FOR TESTING PURPOSES
             if (Input.GetKeyDown(KeyCode.Tab))
