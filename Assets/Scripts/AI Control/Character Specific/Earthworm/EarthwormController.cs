@@ -3,6 +3,7 @@ using RPGPlatformer.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 
 namespace RPGPlatformer.AIControl
 {
@@ -14,6 +15,7 @@ namespace RPGPlatformer.AIControl
         //(i.e. who does the timer)
 
         Action OnUpdate;
+        Dictionary<State, Action> StateBehavior = new();
 
         bool AboveGround => stateManager.StateMachine.CurrentState == stateManager.StateGraph.aboveGround;
 
@@ -37,6 +39,12 @@ namespace RPGPlatformer.AIControl
             stateManager.StateGraph.aboveGround.OnExit += OnAboveGroundExit;
             stateManager.StateGraph.pursuit.OnEntry += async () => await OnPursuitEntry();
         }
+
+
+        //STATE BEHAVIOR
+
+
+        //STATE TRANSITION HANDLERS
 
         private async Task OnDormantEntry()
         {
@@ -73,7 +81,6 @@ namespace RPGPlatformer.AIControl
             try
             {
                 stateDriver.FacePlayer();
-
                 stateManager.StateGraph.aboveGround.OnExit += EarlyExitHandler;
                 await stateDriver.Emerge(cts.Token);
                 stateManager.StateGraph.aboveGround.OnExit -= EarlyExitHandler;
@@ -103,23 +110,12 @@ namespace RPGPlatformer.AIControl
             //Debug.Log("emerged");
         }
 
-        //trigger in ANIM EVENT
+        //triggered in anim event
         public void OnEmerged()
         {
             if (AboveGround)
             {
-                Debug.Log("on emerged");
-                //+ turn off invincibility
-                //stateDriver.FacePlayer();
-                //stateDriver.StartAttacking();
-
-                OnUpdate += NextUpdate;
-
-                void NextUpdate()
-                {
-                    stateDriver.StartAttacking();
-                    OnUpdate -= NextUpdate;
-                }
+                stateDriver.StartAttacking();
             }
         }
 
@@ -160,8 +156,9 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        //These will get called OnDeath/OnRevival from CombatController,
-        //so think if there is anything else you should put here
+
+        //DISABLE/ENABLE INPUT
+
         public void EnableInput()
         {
             stateManager.Unfreeze();

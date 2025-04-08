@@ -454,14 +454,17 @@ namespace RPGPlatformer.Combat
 
         public virtual IHealth FindTarget(Vector2 position, float searchRadius)
         {
-            Collider2D enemyCollider = Physics2D.OverlapCircle(position, searchRadius, targetLayerMask);
+            Collider2D enemyCollider = Physics2D.OverlapCircle(position, searchRadius, 
+                targetLayerMask);
 
             if (enemyCollider)
             {
-                if (enemyCollider.TryGetComponent(out IHealth health))
+                var health = enemyCollider.GetComponentInParent<IHealth>();
+                if (health == null)
                 {
-                    return health;
+                    OnTargetingFailed?.Invoke();
                 }
+                return health;
             }
             return null;
         }
@@ -496,7 +499,7 @@ namespace RPGPlatformer.Combat
         //FUNCTIONS FOR PROJECTILES AND RANGED WEAPONS
 
         public void PrepareProjectile(IProjectile projectile, Func<Vector2> getAimPos, float powerMultiplier,
-            Action<Collider2D> hitAction, int maxHits = 1)
+            Func<Collider2D, IHealth> hitAction, int maxHits = 1)
         {
             ReturnQueuedProjectileToPool();
             if (projectile == null)
@@ -517,7 +520,7 @@ namespace RPGPlatformer.Combat
 
         //If you want to shoot the projectile immediately (currently not in use)
         public void PrepareAndShootProjectile(IProjectile projectile, Func<Vector2> getAimPos, 
-            float powerMultiplier, Action<Collider2D> hitAction, int maxHits = 1)
+            float powerMultiplier, Func<Collider2D, IHealth> hitAction, int maxHits = 1)
         {
             if (projectile == null)
             {

@@ -178,8 +178,6 @@ namespace RPGPlatformer.Combat
 
         public virtual void RunAutoAbilityCycle(bool runOffGCD)
         {
-            Debug.Log("running auto ability cycle");
-
             if (!postCancellationLock && !ChannelingAbility
                 && ((queuedAbility == null && !GlobalCooldown) || runOffGCD))
             {
@@ -201,7 +199,10 @@ namespace RPGPlatformer.Combat
 
             if (CanExecute(ability))
             {
-                CancelAbilityInProgress(false);
+                if (ChannelingAbility)
+                {
+                    CancelAbilityInProgress(false);
+                }
                 ability.Execute(this);
             }
             else if (!CurrentAbilityBar.IsOnCooldown(ability))

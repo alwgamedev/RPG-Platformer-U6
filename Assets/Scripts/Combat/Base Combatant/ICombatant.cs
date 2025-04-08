@@ -25,9 +25,9 @@ namespace RPGPlatformer.Combat
         public bool CanAttack(float distance, float tolerance);
         public bool TargetInRange(IHealth target);
         public void PrepareProjectile(IProjectile projectile, Func<Vector2> getAimPos, 
-            float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
+            float forceMultiplier, Func<Collider2D, IHealth> hitAction, int maxHits = 1);
         public void PrepareAndShootProjectile(IProjectile projectile, Func<Vector2> getAimPos, 
-            float forceMultiplier, Action<Collider2D> hitAction, int maxHits = 1);
+            float forceMultiplier, Func<Collider2D, IHealth> hitAction, int maxHits = 1);
         public void Attack();
     }
 }

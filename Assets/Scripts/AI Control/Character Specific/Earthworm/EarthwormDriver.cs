@@ -116,13 +116,11 @@ namespace RPGPlatformer.AIControl
 
         public void StartAttacking()
         {
-            Debug.Log("worm start attacking");
             combatController.StartAttacking();
         }
 
         public void StopAttacking()
         {
-            Debug.Log("worm stop attacking");
             combatController.StopAttacking();
         }
 

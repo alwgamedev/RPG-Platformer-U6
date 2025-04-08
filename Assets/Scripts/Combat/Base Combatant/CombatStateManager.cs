@@ -108,7 +108,6 @@ namespace RPGPlatformer.Combat
 
         public virtual void CeaseAttack()
         {
-            Debug.Log("cease attack");
             animationControl.SetTrigger("ceaseAttack");
         }
 

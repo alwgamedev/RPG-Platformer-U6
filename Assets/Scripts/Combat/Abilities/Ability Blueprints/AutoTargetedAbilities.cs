@@ -35,15 +35,22 @@ namespace RPGPlatformer.Combat
             if (!CanBeExecuted(controller)) return;
 
             IHealth target = AutoTarget(controller);
-            if (!controller.Combatant.TargetInRange(target))
-            {
-                if (!AllowExecuteWithoutTarget)
-                {
-                    return;
-                }
 
-                target = null;
+            if (target == null && !AllowExecuteWithoutTarget)
+            {
+                return;
             }
+            
+            //but AutoTarget usually uses combatant.FindTarget which already checks in a specific range?
+            //if (!controller.Combatant.TargetInRange(target))
+            //{
+            //    if (!AllowExecuteWithoutTarget)
+            //    {
+            //        return;
+            //    }
+
+            //    target = null;
+            //}
 
             controller.Combatant.Attack();
             OnExecute?.Invoke(controller, target);

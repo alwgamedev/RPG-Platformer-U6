@@ -25,7 +25,7 @@ namespace RPGPlatformer.Combat
         protected int maxHits = 1;
         protected Transform shooter;
         protected Func<Vector2> GetAimPos;
-        protected Action<Collider2D> HitAction;
+        protected Func<Collider2D, IHealth> HitAction;
 
         protected float lifeTimer;
         protected float hits;
@@ -61,7 +61,8 @@ namespace RPGPlatformer.Combat
 
         //PREPARE AND SHOOT
 
-        public void Prepare(ICombatant combatant, Func<Vector2> getAimPos, float powerMultiplier, Action<Collider2D> hitAction, int maxHits = 1)
+        public void Prepare(ICombatant combatant, Func<Vector2> getAimPos, float powerMultiplier, 
+            Func<Collider2D, IHealth> hitAction, int maxHits = 1)
         {
             EnableHead(false);
             triggerCollider.enabled = false;
@@ -127,8 +128,8 @@ namespace RPGPlatformer.Combat
 
         protected virtual async void OnHit(Collider2D collider)
         {
-            HitAction?.Invoke(collider);
-            if (hits >= maxHits || !collider.TryGetComponent<Health>(out _))
+            var colliderHealth = HitAction?.Invoke(collider);
+            if (hits >= maxHits || colliderHealth == null)
             {
                 OnLastHit();
                 if (dynamicCollider)

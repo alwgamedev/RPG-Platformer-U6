@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace RPGPlatformer.Combat
@@ -13,18 +14,22 @@ namespace RPGPlatformer.Combat
         public Func<IProjectile> GetProjectile { get; }
         public Func<AttackAbility, GetHitActionDelegate> GetHitAction { get; }
 
-        public delegate Action<Collider2D> GetHitActionDelegate(ICombatController controller, IProjectile projectile);
+        public delegate Func<Collider2D, IHealth> GetHitActionDelegate(ICombatController controller, 
+            IProjectile projectile);
 
         public static GetHitActionDelegate GetHitActionSingleDamage(AttackAbility ability)
         {
             return (controller, projectile) => (collider) =>
             {
-                if(collider.gameObject.TryGetComponent(out IHealth colliderHealth))
+                var colliderHealth = collider.gameObject.GetComponentInParent<IHealth>();
+                if(colliderHealth != null)
                 {
                     DealDamage(controller.Combatant, colliderHealth, 
                         ability.ComputeDamage(controller.Combatant) * projectile.PowerMultiplier, 
                         ability.StunDuration, ability.FreezeAnimationDuringStun, ability.GetHitEffect);
                 }
+
+                return colliderHealth;
                 //NOTE: power multiplier is passed on to the projectile, because it needs a place to be stored between end of PowerUp and
                 //time that animation triggers projectile.Shoot
             };
@@ -41,21 +46,32 @@ namespace RPGPlatformer.Combat
                     ability.StunDuration, ability.FreezeAnimationDuringStun, ability.GetHitEffect);
                 //NOTE: power multiplier is passed on to the projectile, because it needs a place to be stored between end of PowerUp and
                 //time that animation triggers projectile.Shoot
+
+                return null;
             };
         }
 
         public static GetHitActionDelegate GetHitActionBleedDamage(AttackAbility ability, 
             bool useHitEffectOnlyOnFirstHit = false)
         {
-            return (controller, projectile) => async (collider) =>
+            return (controller, projectile) => (collider) =>
             {
-                if (collider.gameObject.TryGetComponent(out Health colliderHealth))
+                var colliderHealth = collider.gameObject.GetComponentInParent<IHealth>();
+
+                if (colliderHealth != null)
                 {
-                    await Bleed(controller.Combatant, colliderHealth, 
+                    async void AVBleed()
+                    {
+                        await Bleed(controller.Combatant, colliderHealth,
                         ability.ComputeDamage(controller.Combatant) * projectile.PowerMultiplier,
-                        ability.BleedCount, ability.BleedRate, ability.DamagePerBleedIteration, 
+                        ability.BleedCount, ability.BleedRate, ability.DamagePerBleedIteration,
                         ability.GetHitEffect, useHitEffectOnlyOnFirstHit);
+                    }
+
+                    AVBleed();
                 }
+
+                return colliderHealth;
             };
         }
     }

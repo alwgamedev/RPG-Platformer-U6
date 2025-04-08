@@ -19,7 +19,7 @@ namespace RPGPlatformer.Combat
         public static IEnumerable FindTargetsAtPosition(Vector2 position, float radius)
         {
             Collider2D[] hitColliders = Physics2D.OverlapBoxAll(position, 2 * radius * Vector2.right + 2 * radius * Vector2.up, 0);
-            return hitColliders.Select(x => x.GetComponent<IHealth>()).Distinct().Where(x => x != null);
+            return hitColliders.Select(x => x.GetComponentInParent<IHealth>()).Distinct();
         }
 
         //NOTE: the base DealDamage method already checks for null

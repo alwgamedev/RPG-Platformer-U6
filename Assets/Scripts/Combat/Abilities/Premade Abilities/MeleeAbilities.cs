@@ -13,7 +13,7 @@ namespace RPGPlatformer.Combat
 
         public enum MeleeAbilitiesEnum
         {
-            Jab, Slice, Swipe, Uppercut, Slash, Thrust, Slam, Ravage
+            Jab, Slice, Swipe, Uppercut, Slash, SlashWithTargetOnly, Thrust, Slam, Ravage
         }
 
         public static AttackAbility GetAbility(string abilityName)
@@ -30,6 +30,7 @@ namespace RPGPlatformer.Combat
                 MeleeAbilitiesEnum.Swipe => Swipe,
                 MeleeAbilitiesEnum.Uppercut => Uppercut,
                 MeleeAbilitiesEnum.Slash => Slash,
+                MeleeAbilitiesEnum.SlashWithTargetOnly => SlashWithTargetOnly,
                 MeleeAbilitiesEnum.Thrust => Thrust,
                 MeleeAbilitiesEnum.Slam => Slam,
                 MeleeAbilitiesEnum.Ravage => Ravage,
@@ -98,6 +99,25 @@ namespace RPGPlatformer.Combat
             CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             AllowExecuteWithoutTarget = true,
+            CombatStyle = CombatStyle.Melee,
+            AnimationState = "Slash",
+            Cooldown = 1.44f,
+            StaminaFractionChange = -.03f,
+            WrathFractionChange = 0.05f,
+            DamageMultiplier = 1.35f,
+        };
+
+        //exactly the same as slash but can't be executed without a target
+        public static CloseRangeAbility SlashWithTargetOnly = new(true)
+        {
+            Description = "A quick close range attack that deals a heavy chunk of damage.",
+            AbilityTags = new()
+            {
+                AbilityTag.AutoCastable
+            },
+            CanBeIncludedInAutoCastCycle = true,
+            ObeyGCD = true,
+            //AllowExecuteWithoutTarget = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slash",
             Cooldown = 1.44f,
@@ -244,7 +264,7 @@ namespace RPGPlatformer.Combat
 
         public static IEnumerable<AttackAbility> AllAbilities = new List<AttackAbility>()
         {
-            Jab, Slice, Swipe, Uppercut, Slash, Thrust, Slam, Ravage
+            Jab, Slice, Swipe, Uppercut, Slash, SlashWithTargetOnly, Thrust, Slam, Ravage
         };
     }
 }

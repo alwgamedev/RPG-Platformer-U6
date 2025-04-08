@@ -39,7 +39,6 @@ namespace RPGPlatformer.Combat
 
         public void FireOneShot()
         {
-            Debug.Log("fire one shot");
             FaceAimPosition();
             RunAutoAbilityCycle(false);
         }
@@ -54,6 +53,7 @@ namespace RPGPlatformer.Combat
         public void StopAttacking()
         {
             stateManager.OnWeaponTick -= FireOneShot;
+            CancelAbilityInProgress(false);
         }
 
         public override void OnCombatExit()
