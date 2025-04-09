@@ -3,9 +3,7 @@ using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.U2D;
 
 namespace RPGPlatformer.AIControl
 {
@@ -15,27 +13,34 @@ namespace RPGPlatformer.AIControl
     {
         [SerializeField] float emergeMoveSpeed = .5f;
         [SerializeField] float retreatMoveSpeed = 2;
+        [SerializeField] float pursuitSpeed = 8;
+        [SerializeField] float maxTimeAboveGround = 10;
         [SerializeField] Transform underGroundBodyAnchor;
         [SerializeField] Transform aboveGroundBodyAnchor;
         [SerializeField] PolygonCollider2D groundCollider;
+        [SerializeField] TriggerColliderMessenger wormholeAnchor;
 
         AICombatController combatController;
         EarthwormMovementController movementController;
         VisualCurveGuide curveGuide;
         Transform currentBodyAnchor;
-        Vector3 wormholeAnchorPosition;
-
-        bool testAboveGround;
+        bool wormholeTriggerEnabled;
 
         //body anchors should have fixed local positions (i.e. not attached to guide points)
         Vector3 BodyAnchorOffset => currentBodyAnchor.position - transform.position;
         float GroundLeftBound => groundCollider.bounds.min.x + 0.5f;//giving a little padding for safety
         float GroundRightBound => groundCollider.bounds.max.x - 0.5f;
         float GroundTopBound => groundCollider.bounds.center.y + groundCollider.bounds.size.y;
-        //^a height that's higher than any point on the groundCollider (so if we take ClosestPoint
+        //^higher than any point on the groundCollider (so if we take ClosestPoint
         //from a point at this height, we will always get something on the top side of the ground)
-        Vector3 AnchoredPosition => wormholeAnchorPosition - BodyAnchorOffset;
+        Vector3 AnchoredPosition => wormholeAnchor.transform.position - BodyAnchorOffset;
         //^where transform.position should be when body anchor is connected to wormhole anchor
+        public TriggerColliderMessenger WormholeAnchor => wormholeAnchor;
+        public IHealth CurrentTarget
+        {
+            get => combatController.currentTarget;
+            set => combatController.currentTarget = value;
+        }
         public ICombatController CombatController => combatController;
 
         private void Awake()
@@ -45,30 +50,32 @@ namespace RPGPlatformer.AIControl
             curveGuide = GetComponentInChildren<VisualCurveGuide>();
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                testAboveGround = !testAboveGround;
-                if (testAboveGround)
-                {
-                    Trigger(typeof(EarthwormAboveGround).Name);
-                }
-                else
-                {
-                    Trigger(typeof(EarthwormDormant).Name);
-                }
-            }
-        }
+        //private void Update()
+        //{
+        //    if (Input.GetKeyDown(KeyCode.P))
+        //    {
+        //        testAboveGround = !testAboveGround;
+        //        if (testAboveGround)
+        //        {
+        //            Trigger(typeof(EarthwormAboveGround).Name);
+        //        }
+        //        else
+        //        {
+        //            Trigger(typeof(EarthwormDormant).Name);
+        //        }
+        //    }
+        //}
 
         public void InitializeState()
         {
-            combatController.currentTarget = GlobalGameTools.Player.Combatant.Health;
+            CurrentTarget = GlobalGameTools.Player.Combatant.Health;
 
             curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
             curveGuide.ikEnabled = false;
 
-            SetRandomWormholePosition();
+            currentBodyAnchor = underGroundBodyAnchor;
+            ChooseRandomWormholePosition();
+            GoToWormhole();
             SetAutoRetaliate(false);
             SetInvincible(true);
             Trigger(typeof(EarthwormDormant).Name);
@@ -98,37 +105,75 @@ namespace RPGPlatformer.AIControl
             combatController.Combatant.SetInvincible(val);
         }
 
+        //only enabled in dormant and retreat states,
+        //and he can only leave those states via the wormhole trigger.
+        //wormhole being triggered automatically disables the trigger,
+        //so we should never have to directly disable the trigger
+        public void EnableWormholeTrigger(bool val)
+        {
+            if (val == wormholeTriggerEnabled) return;
+
+            if (val)
+            {
+                wormholeTriggerEnabled = true;
+                wormholeAnchor.TriggerEnter += OnWormholeTriggered;
+                wormholeAnchor.TriggerStay += OnWormholeTriggered;
+            }
+            else
+            {
+                wormholeTriggerEnabled = false;
+                wormholeAnchor.TriggerEnter -= OnWormholeTriggered;
+                wormholeAnchor.TriggerStay -= OnWormholeTriggered;
+            }
+        }
+
+        private void OnWormholeTriggered(Collider2D collider)
+        {
+            if (collider.transform == CurrentTarget.transform)
+            {
+                EnableWormholeTrigger(false);
+                Trigger(typeof(EarthwormAboveGround).Name);
+            }
+        }
+
 
         //STATE BEHAVIORS
 
         public void AboveGroundBehavior()
         {
-            //A. scan for target and trigger pursuit(*) if out of range
-            //B. run above ground timer and escape after certain time (or if health falls too low
-                //and having completed certain number of "phases" (emergences) yet
-            //then player has to go find the new wormhole location...
-            //so there should be some indication at least of which direction the worm is going;
-            //would be awesome if we can make a shader to produce a rumble on the surface of the ground
-            //that indicates the worm's tunneling direction
-                //a) create a shader thate creates semi-random, scalable bumps and ridges along (UV) edge of a sprite
-                //b) add settings to apply the shader only over a certain world position area (which we can "animate"
-                //to indicate tunneling)
-
-            //(*) pursuit = retreat underground and move to new wormhole closer to player
-            //maybe only pursue if player is out of a range for say 1.5sec
-            //(and/or if player is a certain threshold outside attack range)
-            //(don't want to trigger it while player is running away from an attack)
+            if (CurrentTarget != null && !combatController.Combatant.CanAttack(CurrentTarget))
+            {
+                Trigger(typeof(EarthwormPursuit).Name);
+                //if this triggers while worm is still emerging, will we have issues?
+                //(maybe due to slow finally calls)
+            }
         }
 
-        public void DormantBehavior()
+        public async Task AboveGroundTimer(CancellationToken token)
         {
-            //if not dead, wait for player to trigger wormhole
+            await MiscTools.DelayGameTime(maxTimeAboveGround, token);
         }
 
-        public void PursuitBehavior()
+        public void AboveGroundTimerComplete()
         {
-            //pick wormhole location closer to player
-            //emerge at new wormhole
+            Trigger(typeof(EarthwormRetreat).Name);
+        }
+
+        public async Task PursueTarget(CancellationToken token)
+        {
+            var p = new Vector2(CurrentTarget.transform.position.x, GroundTopBound);
+            var q = groundCollider.ClosestPoint(p);
+            var d = Mathf.Abs(q.x - transform.position.x);
+            SetWormholePosition(q);
+            GoToWormhole();
+            await MiscTools.DelayGameTime(d / pursuitSpeed, token);
+        }
+
+        //making this separate so that handler of the pursuit -> aboveground transition 
+        //doesn't get wrapped up in the previous x -> pursuit transition
+        public void PursuitComplete()
+        {
+            Trigger(typeof(EarthwormAboveGround).Name);
         }
 
 
@@ -148,7 +193,7 @@ namespace RPGPlatformer.AIControl
             combatController.StopAttacking();
         }
 
-        public void FacePlayer()
+        public void FaceTarget()
         {
             combatController.FaceAimPosition();
         }
@@ -156,7 +201,7 @@ namespace RPGPlatformer.AIControl
 
         //EMERGE & RETREAT
 
-        public async Task Retreat(CancellationToken token)
+        public async Task Submerge(CancellationToken token)
         {
             SetBodyAnchor(false);
             await MoveToAnchorPosition(retreatMoveSpeed, token);
@@ -171,12 +216,12 @@ namespace RPGPlatformer.AIControl
 
         //POSITIONING
 
-        public void SetRandomWormholePosition()
+        public void ChooseRandomWormholePosition()
         {
-            SetRandomWormholePosition(GroundLeftBound + 0.5f, GroundRightBound - 0.5f);
+            ChooseRandomWormholePosition(GroundLeftBound + 0.5f, GroundRightBound - 0.5f);
         }
 
-        public void SetRandomWormholePosition(float leftXBd, float rightXBd)
+        public void ChooseRandomWormholePosition(float leftXBd, float rightXBd)
         {
             var x = Random.Range(leftXBd, rightXBd);
             var p = groundCollider.ClosestPoint(new Vector2(x, GroundTopBound));
@@ -185,12 +230,12 @@ namespace RPGPlatformer.AIControl
 
         public void SetWormholePosition(Vector3 position)
         {
-            wormholeAnchorPosition = position;
+            wormholeAnchor.transform.position = position;
         }
 
         public void GoToWormhole()
         {
-            movementController.GoTo(wormholeAnchorPosition - BodyAnchorOffset);
+            movementController.GoTo(wormholeAnchor.transform.position - BodyAnchorOffset);
         }
 
         public void SetBodyAnchor(bool aboveGround)

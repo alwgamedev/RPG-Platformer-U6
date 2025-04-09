@@ -3,7 +3,6 @@ using RPGPlatformer.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
-using System.Collections.Generic;
 
 namespace RPGPlatformer.AIControl
 {
@@ -15,7 +14,6 @@ namespace RPGPlatformer.AIControl
         //(i.e. who does the timer)
 
         Action OnUpdate;
-        Dictionary<State, Action> StateBehavior = new();
 
         bool AboveGround => stateManager.StateMachine.CurrentState == stateManager.StateGraph.aboveGround;
 
@@ -33,8 +31,8 @@ namespace RPGPlatformer.AIControl
 
         protected override void InitializeStateManager()
         {
-            stateManager = (EarthwormStateManager)Activator.CreateInstance(typeof(EarthwormStateManager),
-                null, stateDriver, GetComponentInChildren<AnimationControl>());
+            stateManager = new EarthwormStateManager(null, stateDriver, 
+                GetComponentInChildren<AnimationControl>());
         }
 
         protected override void ConfigureStateManager()
@@ -45,6 +43,7 @@ namespace RPGPlatformer.AIControl
             stateManager.StateGraph.aboveGround.OnEntry += async () => await OnAboveGroundEntry();
             stateManager.StateGraph.aboveGround.OnExit += OnAboveGroundExit;
             stateManager.StateGraph.pursuit.OnEntry += async () => await OnPursuitEntry();
+            stateManager.StateGraph.retreat.OnEntry += async () => await OnRetreatEntry();
         }
 
 
@@ -61,8 +60,8 @@ namespace RPGPlatformer.AIControl
             try
             {
                 stateManager.StateGraph.dormant.OnExit += EarlyExitHandler;
-                await stateDriver.Retreat(cts.Token);
-                stateManager.StateGraph.dormant.OnExit -= EarlyExitHandler;
+                await stateDriver.Submerge(cts.Token);
+                stateDriver.EnableWormholeTrigger(true);
             }
             catch (TaskCanceledException)
             {
@@ -87,14 +86,13 @@ namespace RPGPlatformer.AIControl
 
             try
             {
-                stateDriver.FacePlayer();
+                stateDriver.FaceTarget();
                 stateManager.StateGraph.aboveGround.OnExit += EarlyExitHandler;
                 await stateDriver.Emerge(cts.Token);
+                await stateDriver.AboveGroundTimer(cts.Token);
                 stateManager.StateGraph.aboveGround.OnExit -= EarlyExitHandler;
-                //OnEmerged will be triggered in anim. event in the emerge animation
-                //I think we DO  want invincibility, because it's really anticlimactic if it just dies while undergound
-                //or emerging/retreating
-                //-- add BLOCKED damage popups (so it doesn't feel like combat is glitching and not registering hits)
+
+                stateDriver.AboveGroundTimerComplete();
             }
             catch (TaskCanceledException)
             {
@@ -110,11 +108,6 @@ namespace RPGPlatformer.AIControl
                 cts.Cancel();
                 stateManager.StateGraph.aboveGround.OnExit -= EarlyExitHandler;
             }
-
-            //Debug.Log("emerging");
-            //await stateDriver.Emerge(GlobalGameTools.Instance.TokenSource.Token);
-
-            //Debug.Log("emerged");
         }
 
         //triggered in anim event
@@ -122,6 +115,8 @@ namespace RPGPlatformer.AIControl
         {
             if (AboveGround)
             {
+                Debug.Log("on emerged");
+                OnUpdate = stateDriver.AboveGroundBehavior;
                 stateDriver.SetAutoRetaliate(true);
                 stateDriver.SetInvincible(false);
                 stateDriver.StartAttacking();
@@ -130,6 +125,7 @@ namespace RPGPlatformer.AIControl
 
         private void OnAboveGroundExit()
         {
+            OnUpdate = null;
             stateDriver.DisableIK();
             stateDriver.SetAutoRetaliate(false);
             stateDriver.SetInvincible(true);
@@ -148,8 +144,11 @@ namespace RPGPlatformer.AIControl
             try
             {
                 stateManager.StateGraph.pursuit.OnExit += EarlyExitHandler;
-                await stateDriver.Retreat(cts.Token);
+                await stateDriver.Submerge(cts.Token);
+                await stateDriver.PursueTarget(cts.Token);
                 stateManager.StateGraph.pursuit.OnExit -= EarlyExitHandler;
+
+                stateDriver.PursuitComplete();
             }
             catch (TaskCanceledException)
             {
@@ -164,6 +163,35 @@ namespace RPGPlatformer.AIControl
             {
                 cts.Cancel();
                 stateManager.StateGraph.pursuit.OnExit -= EarlyExitHandler;
+            }
+        }
+
+        private async Task OnRetreatEntry()
+        {
+            using var cts = CancellationTokenSource
+                .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
+
+            try
+            {
+                stateManager.StateGraph.retreat.OnExit += EarlyExitHandler;
+                await stateDriver.Submerge(cts.Token);
+                stateDriver.ChooseRandomWormholePosition();
+                stateDriver.GoToWormhole();
+                stateDriver.EnableWormholeTrigger(true);
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                stateManager.StateGraph.retreat.OnExit -= EarlyExitHandler;
+            }
+
+            void EarlyExitHandler()
+            {
+                cts.Cancel();
+                stateManager.StateGraph.retreat.OnExit -= EarlyExitHandler;
             }
         }
 

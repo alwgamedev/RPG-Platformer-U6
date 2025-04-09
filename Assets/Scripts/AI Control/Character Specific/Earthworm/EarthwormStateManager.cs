@@ -1,5 +1,4 @@
 ﻿using RPGPlatformer.Core;
-using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
@@ -23,8 +22,8 @@ namespace RPGPlatformer.AIControl
 
             StateGraph.aboveGround.OnEntry += OnAboveGroundEntry;
             StateGraph.dormant.OnEntry += OnDormantEntry;
-
-            firstEmerge = true;
+            StateGraph.pursuit.OnEntry += OnPursuitEntry;
+            StateGraph.retreat.OnEntry += OnRetreatEntry;
         }
 
         private void OnAboveGroundEntry()
@@ -45,6 +44,21 @@ namespace RPGPlatformer.AIControl
         private void OnDormantEntry()
         {
             firstEmerge = true;
+            AnimateSubmerge();
+        }
+
+        private void OnPursuitEntry()
+        {
+            AnimateSubmerge();
+        }
+
+        private void OnRetreatEntry()
+        {
+            AnimateSubmerge();
+        }
+
+        private void AnimateSubmerge()
+        {
             animationControl.SetTrigger("goDormant");
             animationControl.ResetTrigger("emerge");
             animationControl.ResetTrigger("quickEmerge");

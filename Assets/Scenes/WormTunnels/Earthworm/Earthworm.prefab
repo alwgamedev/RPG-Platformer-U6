@@ -564,11 +564,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa209ddddc084e6468a5c4b5c26cc2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emergeMoveSpeed: 1
+  emergeMoveSpeed: 1.75
   retreatMoveSpeed: 1.5
+  pursuitSpeed: 8
+  maxTimeAboveGround: 13
   underGroundBodyAnchor: {fileID: 1194695686574530751}
   aboveGroundBodyAnchor: {fileID: 8248864435369701058}
   groundCollider: {fileID: 0}
+  wormholeAnchor: {fileID: 0}
 --- !u!114 &743808907830779398
 MonoBehaviour:
   m_ObjectHideFlags: 0

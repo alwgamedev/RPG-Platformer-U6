@@ -11,6 +11,7 @@ namespace RPGPlatformer.AIControl
     public class EarthwormDormant : EarthwormState { }
     public class EarthwormAboveGround : EarthwormState { }
     public class EarthwormPursuit : EarthwormState { }
+    public class EarthwormRetreat : EarthwormState { }
 
     public class EarthwormStateGraph : StateGraph
     {
@@ -18,6 +19,7 @@ namespace RPGPlatformer.AIControl
         public readonly EarthwormDormant dormant;
         public readonly EarthwormAboveGround aboveGround;
         public readonly EarthwormPursuit pursuit;
+        public readonly EarthwormRetreat retreat;
 
         public EarthwormStateGraph() : base()
         {
@@ -25,11 +27,13 @@ namespace RPGPlatformer.AIControl
             dormant = CreateNewVertex<EarthwormDormant>();
             aboveGround = CreateNewVertex<EarthwormAboveGround>();
             pursuit = CreateNewVertex<EarthwormPursuit>();
+            retreat = CreateNewVertex<EarthwormRetreat>();
 
             AddEdgeBothWaysForAll(inactive);
             AddEdgeBothWays((dormant, aboveGround));
             AddEdgeBothWays((dormant, pursuit));
             AddEdgeBothWays((aboveGround, pursuit));
+            AddEdgeBothWays((aboveGround, retreat));
         }
     }
 }
