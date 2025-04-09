@@ -20,14 +20,17 @@ namespace RPGPlatformer.UI
 
         bool inCombat;
         bool dead;
-        IMover parentMover;
+        IEntityOrienter parentOrienter;
 
         public void Configure(ICombatController cc)
         {
             if (cc == null) return;
 
-            parentMover = cc.Combatant.transform.GetComponent<IMover>();
-            parentMover.DirectionChanged += Unflip;
+            parentOrienter = cc.Combatant.transform.GetComponent<IEntityOrienter>();
+            if (parentOrienter != null)
+            {
+                parentOrienter.DirectionChanged += Unflip;
+            }
 
             cc.Combatant.Health.Stat.statBar = statBar;
             tmp.text = $"{cc.Combatant.DisplayName} (Level {cc.Combatant.CombatLevel})";
@@ -106,19 +109,20 @@ namespace RPGPlatformer.UI
 
         private void SpawnDamagePopup(float damage)
         {
-            if (damage > 0 && CanSpawnDamagePopup())
-            {
-                var popup = Instantiate(damagePopupPrefab, damagePopupSpawnPoint.transform);
-                popup.PlayDamageEffect(damage);
-                //and I think we can destroy the popup in Animation Event? (or here)
-            }
+            if (damage < 0 || !CanSpawnDamagePopup()) return;
+            var popup = Instantiate(damagePopupPrefab, damagePopupSpawnPoint.transform);
+            popup.PlayDamageEffect(damage);
+            //popup is destroyed in animation event
         }
 
         private void Unflip(HorizontalOrientation orientation)
         {
-            if (parentMover == null) return;
+            if (parentOrienter == null) return;
 
-            if (parentMover.transform.localScale.x * transform.localScale.x < 0)
+            //using the parent local scale rather than the given orientation I guess bc it's more reliable
+            //to determine if we actually need to flip? (e.g. if parent is doing front-facing anim like freefall, then
+            //they won't have actually flipped their scale)
+            if (transform.lossyScale.x < 0/*parentOrienter.transform.localScale.x * transform.localScale.x < 0*/)
             {
                 var s = transform.localScale;
                 s.x = - s.x;
@@ -128,9 +132,9 @@ namespace RPGPlatformer.UI
 
         protected override void OnDestroy()
         {
-            if (parentMover != null)
+            if (parentOrienter != null)
             {
-                parentMover.DirectionChanged -= Unflip;
+                parentOrienter.DirectionChanged -= Unflip;
             }
 
             base.OnDestroy();

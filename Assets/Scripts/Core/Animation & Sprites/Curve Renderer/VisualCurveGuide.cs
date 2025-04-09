@@ -19,7 +19,23 @@ namespace RPGPlatformer
         Vector3[] unitRays;
         float[] lengths;//storage for lengths in the IK algorithm
 
+#if UNITY_EDITOR
         private void Update()
+        {
+            if (!Application.isPlaying)
+            {
+                CheckForUpdates();
+            }
+        }
+#endif
+
+        //doing this in fixed update fixes the issue with tearing (I think caused by colliders)
+        private void FixedUpdate()
+        {
+            CheckForUpdates();
+        }
+
+        private void CheckForUpdates()
         {
             if (guides == null) return;
 

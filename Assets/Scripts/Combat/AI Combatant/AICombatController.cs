@@ -11,20 +11,12 @@ namespace RPGPlatformer.Combat
 
     public class AICombatController : GenericCombatController<CombatStateManager<T1, T2, T3, T4>, T1, T2, T3, T4>
     {
+        [SerializeField] bool autoRetaliate = true;
+
         protected CombatantHealthBarCanvas healthBarCanvas;
+        protected bool attacking;
 
         public IHealth currentTarget;
-
-        //public CombatStateManager CombatManager => combatManager;
-        //public AICombatant AICombatant { get; protected set; }
-
-        //protected override void Awake()
-        //{
-        //    base.Awake();
-
-        //    //should make a generic combat controller so we don't have to do this
-        //    //AICombatant = (AICombatant)stateDriver;
-        //}
 
         protected override void Start()
         {
@@ -37,6 +29,11 @@ namespace RPGPlatformer.Combat
             base.Start();
         }
 
+        protected override void ConfigureStateManager()
+        {
+            base.ConfigureStateManager();
+        }
+
         public void FireOneShot()
         {
             FaceAimPosition();
@@ -45,20 +42,45 @@ namespace RPGPlatformer.Combat
 
         public void StartAttacking()
         {
+            if (attacking) return;
+
             FireOneShot();
             stateManager.OnWeaponTick += FireOneShot;
-            //stateDriver.Attack();//do we need this?
+            attacking = true;
         }
 
         public void StopAttacking()
         {
+            if (!attacking) return;
+
             stateManager.OnWeaponTick -= FireOneShot;
-            CancelAbilityInProgress(false);
+            if (ChannelingAbility)
+            {
+                CancelAbilityInProgress(false);
+            }
+
+            attacking = false;
+        }
+
+        public override void OnCombatEntry()
+        {
+            base.OnCombatEntry();
+
+            if (autoRetaliate)
+            {
+                StartAttacking();
+                //start attacking if not already
+            }
         }
 
         public override void OnCombatExit()
         {
             base.OnCombatExit();
+
+            StopAttacking();
+            //a) so that we get the immediate FireOneShot next time you enter combat (if auto-retaliate is on)
+            //b) more importantly so we don't have dangling subscribers to OnWeaponTick that could accidentally
+                //get doubly subscribed next time we enter combat
 
             if (!stateDriver.Health.IsDead)
             {
@@ -74,17 +96,6 @@ namespace RPGPlatformer.Combat
             }
             return base.GetAimPosition();
         }
-
-        //protected override Task Death()
-        //{
-        //    base.Death();
-
-        //    if (timedDestroyAfterDeath)
-        //    {
-        //        //Destroy(gameObject, timeToDestroyAfterDeath);
-                
-        //    }
-        //}
 
         protected virtual void OnMouseEnter()
         {

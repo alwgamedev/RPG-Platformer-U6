@@ -10,7 +10,7 @@ namespace RPGPlatformer.Combat
         public float TargetingTolerance { get; }
         public ReplenishableStat Stat { get; }
 
-        public event Action<float, IDamageDealer> HealthChanged;
+        public event Action<float, IDamageDealer> HealthChangeTrigger;
         public event Action<float, bool> OnStunned;
         public event Action<IDamageDealer> OnDeath;
 

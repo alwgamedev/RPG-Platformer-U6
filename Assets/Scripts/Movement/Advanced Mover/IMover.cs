@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
-    public interface IMover
+    public interface IMover : IEntityOrienter
     {
-        public Transform transform { get; }
+        //public Transform transform { get; }
         public float Width { get; }
         public float Height { get; }
 
-        public event Action<HorizontalOrientation> DirectionChanged;
+        //public event Action<HorizontalOrientation> DirectionChanged;
     }
 }

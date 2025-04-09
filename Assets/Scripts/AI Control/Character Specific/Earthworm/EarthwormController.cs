@@ -19,6 +19,13 @@ namespace RPGPlatformer.AIControl
 
         bool AboveGround => stateManager.StateMachine.CurrentState == stateManager.StateGraph.aboveGround;
 
+        protected override void Start()
+        {
+            base.Start();
+
+            stateDriver.SetInvincible(true);
+        }
+
         private void Update()
         {
             OnUpdate?.Invoke();
@@ -68,7 +75,7 @@ namespace RPGPlatformer.AIControl
 
             void EarlyExitHandler()
             {
-                cts.Cancel();//rn the innermost task will catch the exception
+                cts.Cancel();
                 stateManager.StateGraph.dormant.OnExit -= EarlyExitHandler;
             }
         }
@@ -115,12 +122,14 @@ namespace RPGPlatformer.AIControl
         {
             if (AboveGround)
             {
+                stateDriver.SetInvincible(false);
                 stateDriver.StartAttacking();
             }
         }
 
         private void OnAboveGroundExit()
         {
+            stateDriver.SetInvincible(true);
             stateDriver.DisableIK();
             stateDriver.StopAttacking();
             //+turn on invincibility

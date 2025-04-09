@@ -100,7 +100,7 @@ namespace RPGPlatformer.Combat
             stateDriver.OnWeaponEquip += OnWeaponEquip;
             stateDriver.Health.OnStunned += async (duration, freezeAnimation) =>
                 await GetStunned(duration, freezeAnimation, GlobalGameTools.Instance.TokenSource);
-            stateDriver.Health.HealthChanged += OnHealthChanged;
+            stateDriver.Health.HealthChangeTrigger += OnHealthChanged;
 
             stateDriver.EquipDefaultArmour();
             stateDriver.EquipDefaultWeapon();

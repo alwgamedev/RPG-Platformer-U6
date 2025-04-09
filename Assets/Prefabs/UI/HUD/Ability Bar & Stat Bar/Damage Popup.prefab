@@ -36,8 +36,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0.095, y: -0.125}
-  m_SizeDelta: {x: 0.22, y: 0.25}
+  m_AnchoredPosition: {x: 0.155, y: -0.125}
+  m_SizeDelta: {x: 0.31, y: 0.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7653508679769850947
 CanvasRenderer:
@@ -94,8 +94,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.12
-  m_fontSizeBase: 0.12
+  m_fontSize: 0.18
+  m_fontSizeBase: 0.18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -5
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -231,6 +231,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tmp: {fileID: 4747289483927995855}
+  blockedColor: {r: 0.85660374, g: 0.69901454, b: 0.36042002, a: 1}
+  healthGainedColor: {r: 0.23798506, g: 0.6603774, b: 0.26980913, a: 1}
   anim: {fileID: 8438927801543689580}
 --- !u!111 &8438927801543689580
 Animation:

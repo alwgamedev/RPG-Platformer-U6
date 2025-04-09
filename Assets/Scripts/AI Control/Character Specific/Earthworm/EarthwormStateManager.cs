@@ -20,7 +20,7 @@ namespace RPGPlatformer.AIControl
             base.Configure();
 
             StateGraph.aboveGround.OnEntry += OnAboveGroundEntry;
-            StateGraph.aboveGround.OnExit += OnAboveGroundExit;
+            StateGraph.dormant.OnEntry += OnDormantEntry;
         }
 
         private void OnAboveGroundEntry()
@@ -29,7 +29,7 @@ namespace RPGPlatformer.AIControl
             animationControl.ResetTrigger("goDormant");
         }
 
-        private void OnAboveGroundExit()
+        private void OnDormantEntry()
         {
             animationControl.SetTrigger("goDormant");
             animationControl.ResetTrigger("emerge");

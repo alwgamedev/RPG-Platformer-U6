@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
-    public class EarthwormMovementController : MonoBehaviour, ICombatantMovementController
+    public class EarthwormMovementController : MonoBehaviour, ICombatantMovementController, IEntityOrienter
     {
         //[SerializeField] float moveSpeed = 0.5f;
         [SerializeField] float destinationTolerance = 0.1f;
@@ -18,8 +18,9 @@ namespace RPGPlatformer.AIControl
         public HorizontalOrientation CurrentOrientation => (HorizontalOrientation)Mathf.Sign(transform.localScale.x);
 
         public event Action DestinationReached;
+        public event Action<HorizontalOrientation> DirectionChanged;
 
-        private void Update()
+        private void FixedUpdate()
         {
             MoveAction?.Invoke();
         }
@@ -86,6 +87,7 @@ namespace RPGPlatformer.AIControl
                 var s = transform.localScale;
                 s.x = Mathf.Sign(d) * Mathf.Abs(s.x);
                 transform.localScale = s;
+                DirectionChanged?.Invoke(CurrentOrientation);
             }
         }
 
@@ -100,6 +102,7 @@ namespace RPGPlatformer.AIControl
         {
             MoveAction = null;
             DestinationReached = null;
+            DirectionChanged = null;
         }
     }
 }

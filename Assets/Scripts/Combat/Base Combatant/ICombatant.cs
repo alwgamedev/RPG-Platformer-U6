@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Core;
+using RPGPlatformer.Skills;
 using System;
 using UnityEngine;
 
@@ -19,7 +20,10 @@ namespace RPGPlatformer.Combat
 
         public event Action OnTargetingFailed;
 
+        public int GetLevel(CharacterSkill skill);
         public float AdditiveDamageBonus();
+        public void BeginDebuff(/*debuff data*/);
+        public void SetInvincible(bool val);
         public IHealth FindTarget(Vector2 position, float searchRadius);
         public bool CanAttack(IHealth target);
         public bool CanAttack(float distance, float tolerance);

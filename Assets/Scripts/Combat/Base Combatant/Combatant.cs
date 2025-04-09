@@ -36,9 +36,8 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected bool delayBeforeFinalizeDeath = true;
         [SerializeField] protected float timeToDelayBeforeFinalizeDeath = 1.5f;
 
-
-
         protected CharacterProgressionManager progressionManager;
+        protected CombatBonusesManager combatBonusesManager;
         protected InventoryManager inventory;
         protected Dictionary<EquipmentSlot, ItemSlot> equipSlots = new();
         protected DropSpawner dropSpawner;
@@ -55,7 +54,8 @@ namespace RPGPlatformer.Combat
         public string TargetTag => targetTag;
         public InventoryManager Inventory => inventory;
         public Dictionary<EquipmentSlot, ItemSlot> EquipSlots => equipSlots;
-        //public Transform transform => base.transform;
+            //was there a reason not to use auto backing field? probably not
+            //(check next time we come back to this)
         public Transform MainhandElbow => mainhandElbow;
         public Transform ChestBone => chestBone;
         public float AttackRange { get; protected set; }
@@ -76,11 +76,11 @@ namespace RPGPlatformer.Combat
         protected virtual void Awake()
         {
             health = GetComponent<Health>();
-
             progressionManager = GetComponent<CharacterProgressionManager>();
             inventory = GetComponent<InventoryManager>();
-            dropSpawner = GetComponent<DropSpawner>();
-
+            dropSpawner = GetComponent<DropSpawner>(); 
+            
+            combatBonusesManager = new(this);
             targetLayerMask = LayerMask.GetMask(targetLayer);
 
             equipSlots = new();
@@ -124,57 +124,29 @@ namespace RPGPlatformer.Combat
         }
 
 
-        //DAMAGE MODIFIERS
+        //STATS
+
+        public int GetLevel(CharacterSkill skill)
+        {
+            return progressionManager.GetLevel(skill);
+        }
 
         public float AdditiveDamageBonus()
         {
-            float total = 0;
-            foreach (var entry in equipSlots)
-            {
-                if (entry.Value != null)
-                {
-                    total += entry.Value.EquipppedItem?.EquippableItemData.DamageBonus ?? 0;
-                }
-            }
-
-            if (equippedWeapon != null)
-            {
-                total += LevelBasedDamageBonus(equippedWeapon.CombatStyle);
-            }
-            return total;
-        }
-
-        public float LevelBasedDamageBonus(CombatStyle combatStyle)
-        {
-            if(CharacterSkillBook.GetCombatSkill(combatStyle) == null) return 0;
-            return 4.5f * progressionManager.GetLevel(CharacterSkillBook.GetCombatSkill(combatStyle));
-            //at max level 40 this gives +180 damage (then times ability's damage multiplier)
+            return combatBonusesManager.AdditiveDamageBonus();
         }
 
         public float DamageTakenMultiplier()
         {
-            return Mathf.Max(1 - LevelBasedDamageReduction() - (DefenseBonus() / 500), 0);
+            return combatBonusesManager.DamageTakenMultiplier();
         }
 
-        public float LevelBasedDamageReduction()
-        {
-            float defenseProgress = progressionManager.GetLevel(CharacterSkillBook.Defense)
-                / CharacterSkillBook.Defense.XPTable.MaxLevel;
-            return 0.1f * defenseProgress;
-            //hence at max defense you get 10% universal damage reduction
-        }
+        public void BeginDebuff(/*debuff data*/) { }
 
-        public float DefenseBonus()
+        //temporary until we implement the debuff system
+        public void SetInvincible(bool val)
         {
-            float total = 0;
-            foreach (var entry in equipSlots)
-            {
-                if (entry.Value != null)
-                {
-                    total += entry.Value.EquipppedItem?.EquippableItemData.DefenseBonus ?? 0;
-                }
-            }
-            return total;
+            combatBonusesManager.invincible = val;
         }
 
 
@@ -204,6 +176,7 @@ namespace RPGPlatformer.Combat
 
         //BASIC FUNCTIONS
 
+        //note this is not subscribed to any events. cc calls it directly
         public virtual float HandleHealthChange(float damage, IDamageDealer damageDealer)
         {
             if (damage > 0)

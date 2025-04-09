@@ -46,7 +46,7 @@ namespace RPGPlatformer.AIControl
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.K))
+            if (Input.GetKeyDown(KeyCode.P))
             {
                 testAboveGround = !testAboveGround;
                 if (testAboveGround)
@@ -72,6 +72,11 @@ namespace RPGPlatformer.AIControl
         public void DisableIK()
         {
             curveGuide.ikEnabled = false;
+        }
+
+        public void SetInvincible(bool val)
+        {
+            combatController.Combatant.SetInvincible(val);
         }
 
 

@@ -18,7 +18,7 @@ namespace RPGPlatformer.Combat
         public float TargetingTolerance { get; private set; }
         public ReplenishableStat Stat => stat;
 
-        public event Action<float, IDamageDealer> HealthChanged;
+        public event Action<float, IDamageDealer> HealthChangeTrigger;
         public event Action<float, bool> OnStunned;//signature is (duration, freezeAnimation)
         public event Action<IDamageDealer> OnDeath;
 
@@ -26,7 +26,7 @@ namespace RPGPlatformer.Combat
         {
             if (takeDamageAutomatically)//mainly for combat dummy
             {
-                HealthChanged += (damage, damageDealer) => GainHealth(-damage, true);
+                HealthChangeTrigger += (damage, damageDealer) => GainHealth(-damage, true);
             }
 
             if (findStatBarInChildren)//this is just so the combat dummy's health displays
@@ -55,7 +55,10 @@ namespace RPGPlatformer.Combat
         //to decide how to take damage (e.g. combatant may have bonuses or effects to take into account)
         public void ReceiveDamage(float damage, IDamageDealer damageDealer)
         {
-            HealthChanged?.Invoke(damage, damageDealer);
+            HealthChangeTrigger?.Invoke(damage, damageDealer);
+
+            //combat controller will receive this and ask combatant to compute the effective damage
+            //which is passed into gain health, and then cc broadcasts via an event the effective health change
         }
 
         public void GainHealth(float amount, bool clamped)
@@ -68,6 +71,8 @@ namespace RPGPlatformer.Combat
             {
                 stat.CurrentValue += amount;
             }
+
+
         }
 
         public void ReceiveStun(float duration, bool freezeAnimation)
@@ -91,7 +96,7 @@ namespace RPGPlatformer.Combat
 
         private void OnDestroy()
         {
-            HealthChanged = null;
+            HealthChangeTrigger = null;
             OnStunned = null;
             OnDeath = null;
         }

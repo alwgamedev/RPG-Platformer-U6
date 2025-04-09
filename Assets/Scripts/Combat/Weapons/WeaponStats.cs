@@ -8,7 +8,7 @@ namespace RPGPlatformer.Combat
     {
         [SerializeField] float baseDamage;
         [SerializeField] float attackRange;
-        [SerializeField][Range(1, 50)] int baseAttackRate;//in ticks
+        [SerializeField][Range(1, 200)] int baseAttackRate;//in ticks
 
         public float BaseDamage => baseDamage;
         public float AttackRange => attackRange;
