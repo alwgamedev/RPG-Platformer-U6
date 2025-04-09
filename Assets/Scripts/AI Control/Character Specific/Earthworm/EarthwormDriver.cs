@@ -1,9 +1,11 @@
 ﻿using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
+using RPGPlatformer.Movement;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.U2D;
 
 namespace RPGPlatformer.AIControl
 {
@@ -15,33 +17,32 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float retreatMoveSpeed = 2;
         [SerializeField] Transform underGroundBodyAnchor;
         [SerializeField] Transform aboveGroundBodyAnchor;
-        [SerializeField] Transform wormholeAnchor;
+        [SerializeField] PolygonCollider2D groundCollider;
 
         AICombatController combatController;
         EarthwormMovementController movementController;
         VisualCurveGuide curveGuide;
         Transform currentBodyAnchor;
+        Vector3 wormholeAnchorPosition;
 
         bool testAboveGround;
 
         //body anchors should have fixed local positions (i.e. not attached to guide points)
         Vector3 BodyAnchorOffset => currentBodyAnchor.position - transform.position;
-        //AnchoredPosition: set transform.position equal to this to line up with wormhole correctly
-        Vector3 AnchoredPosition => wormholeAnchor.position - BodyAnchorOffset;
+        float GroundLeftBound => groundCollider.bounds.min.x + 0.5f;//giving a little padding for safety
+        float GroundRightBound => groundCollider.bounds.max.x - 0.5f;
+        float GroundTopBound => groundCollider.bounds.center.y + groundCollider.bounds.size.y;
+        //^a height that's higher than any point on the groundCollider (so if we take ClosestPoint
+        //from a point at this height, we will always get something on the top side of the ground)
+        Vector3 AnchoredPosition => wormholeAnchorPosition - BodyAnchorOffset;
+        //^where transform.position should be when body anchor is connected to wormhole anchor
+        public ICombatController CombatController => combatController;
 
         private void Awake()
         {
             combatController = GetComponent<AICombatController>();
             movementController = GetComponent<EarthwormMovementController>();
             curveGuide = GetComponentInChildren<VisualCurveGuide>();
-        }
-
-        private void Start()
-        {
-            combatController.currentTarget = GlobalGameTools.Player.Combatant.Health;
-            curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
-            curveGuide.ikEnabled = false;
-            //so that combat controller will GetAimPosition & FaceAimPosition correctly during combat
         }
 
         private void Update()
@@ -60,6 +61,19 @@ namespace RPGPlatformer.AIControl
             }
         }
 
+        public void InitializeState()
+        {
+            combatController.currentTarget = GlobalGameTools.Player.Combatant.Health;
+
+            curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
+            curveGuide.ikEnabled = false;
+
+            SetRandomWormholePosition();
+            SetAutoRetaliate(false);
+            SetInvincible(true);
+            Trigger(typeof(EarthwormDormant).Name);
+        }
+
 
         //SETTINGS
 
@@ -72,6 +86,11 @@ namespace RPGPlatformer.AIControl
         public void DisableIK()
         {
             curveGuide.ikEnabled = false;
+        }
+
+        public void SetAutoRetaliate(bool val)
+        {
+            combatController.autoRetaliate = val;
         }
 
         public void SetInvincible(bool val)
@@ -152,14 +171,26 @@ namespace RPGPlatformer.AIControl
 
         //POSITIONING
 
+        public void SetRandomWormholePosition()
+        {
+            SetRandomWormholePosition(GroundLeftBound + 0.5f, GroundRightBound - 0.5f);
+        }
+
+        public void SetRandomWormholePosition(float leftXBd, float rightXBd)
+        {
+            var x = Random.Range(leftXBd, rightXBd);
+            var p = groundCollider.ClosestPoint(new Vector2(x, GroundTopBound));
+            SetWormholePosition(p);
+        }
+
         public void SetWormholePosition(Vector3 position)
         {
-            wormholeAnchor.position = position;
+            wormholeAnchorPosition = position;
         }
 
         public void GoToWormhole()
         {
-            movementController.GoTo(wormholeAnchor.position - BodyAnchorOffset);
+            movementController.GoTo(wormholeAnchorPosition - BodyAnchorOffset);
         }
 
         public void SetBodyAnchor(bool aboveGround)

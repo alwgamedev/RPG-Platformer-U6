@@ -11,7 +11,7 @@ namespace RPGPlatformer.Combat
 
     public class AICombatController : GenericCombatController<CombatStateManager<T1, T2, T3, T4>, T1, T2, T3, T4>
     {
-        [SerializeField] bool autoRetaliate = true;
+        public bool autoRetaliate = true;
 
         protected CombatantHealthBarCanvas healthBarCanvas;
         protected bool attacking;
@@ -29,10 +29,10 @@ namespace RPGPlatformer.Combat
             base.Start();
         }
 
-        protected override void ConfigureStateManager()
-        {
-            base.ConfigureStateManager();
-        }
+        //protected override void ConfigureStateManager()
+        //{
+        //    base.ConfigureStateManager();
+        //}
 
         public void FireOneShot()
         {
@@ -44,15 +44,13 @@ namespace RPGPlatformer.Combat
         {
             if (attacking) return;
 
+            attacking = true;
             FireOneShot();
             stateManager.OnWeaponTick += FireOneShot;
-            attacking = true;
         }
 
         public void StopAttacking()
         {
-            if (!attacking) return;
-
             stateManager.OnWeaponTick -= FireOneShot;
             if (ChannelingAbility)
             {

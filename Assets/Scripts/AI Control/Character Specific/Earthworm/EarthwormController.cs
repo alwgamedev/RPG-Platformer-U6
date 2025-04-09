@@ -23,7 +23,7 @@ namespace RPGPlatformer.AIControl
         {
             base.Start();
 
-            stateDriver.SetInvincible(true);
+            stateDriver.InitializeState();
         }
 
         private void Update()
@@ -122,6 +122,7 @@ namespace RPGPlatformer.AIControl
         {
             if (AboveGround)
             {
+                stateDriver.SetAutoRetaliate(true);
                 stateDriver.SetInvincible(false);
                 stateDriver.StartAttacking();
             }
@@ -129,8 +130,9 @@ namespace RPGPlatformer.AIControl
 
         private void OnAboveGroundExit()
         {
-            stateDriver.SetInvincible(true);
             stateDriver.DisableIK();
+            stateDriver.SetAutoRetaliate(false);
+            stateDriver.SetInvincible(true);
             stateDriver.StopAttacking();
             //+turn on invincibility
             //INVINCIBILITY: just worm takes no damage

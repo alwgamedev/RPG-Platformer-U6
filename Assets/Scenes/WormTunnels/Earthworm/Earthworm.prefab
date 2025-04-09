@@ -564,11 +564,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa209ddddc084e6468a5c4b5c26cc2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emergeMoveSpeed: 0.75
+  emergeMoveSpeed: 1
   retreatMoveSpeed: 1.5
   underGroundBodyAnchor: {fileID: 1194695686574530751}
   aboveGroundBodyAnchor: {fileID: 8248864435369701058}
-  wormholeAnchor: {fileID: 0}
+  groundCollider: {fileID: 0}
 --- !u!114 &743808907830779398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,7 +670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b94a4cfa0b960342a1797cce63819c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToLeaveCombat: 100
+  timeToLeaveCombat: 75
   abilityBarData:
     unarmedAbilityBarItems: []
     mageAbilityBarItems: []
@@ -680,6 +680,7 @@ MonoBehaviour:
     rangedAbilityBarItems: []
   useDefaultAbilityBars: 0
   immuneToStuns: 0
+  autoRetaliate: 1
 --- !u!114 &4194975810890797505
 MonoBehaviour:
   m_ObjectHideFlags: 0
