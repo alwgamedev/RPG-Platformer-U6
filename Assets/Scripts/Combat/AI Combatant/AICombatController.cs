@@ -14,9 +14,10 @@ namespace RPGPlatformer.Combat
         public bool autoRetaliate = true;
 
         protected CombatantHealthBarCanvas healthBarCanvas;
-        protected bool attacking;
 
         public IHealth currentTarget;
+
+        public bool Attacking { get; protected set; }
 
         protected override void Start()
         {
@@ -42,9 +43,9 @@ namespace RPGPlatformer.Combat
 
         public void StartAttacking()
         {
-            if (attacking) return;
+            if (Attacking) return;
 
-            attacking = true;
+            Attacking = true;
             FireOneShot();
             stateManager.OnWeaponTick += FireOneShot;
         }
@@ -57,7 +58,7 @@ namespace RPGPlatformer.Combat
                 CancelAbilityInProgress(false);
             }
 
-            attacking = false;
+            Attacking = false;
         }
 
         public override void OnCombatEntry()

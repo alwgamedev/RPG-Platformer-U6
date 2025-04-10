@@ -10,9 +10,6 @@ namespace RPGPlatformer.AIControl
     public class EarthwormController : StateDrivenController<EarthwormStateManager,
         EarthwormStateGraph, EarthwormStateMachine, EarthwormDriver>, IInputSource
     {
-        //will add an update method at some point once I figure things out more
-        //(i.e. who does the timer)
-
         Action OnUpdate;
 
         bool AboveGround => stateManager.StateMachine.CurrentState == stateManager.StateGraph.aboveGround;
@@ -45,9 +42,6 @@ namespace RPGPlatformer.AIControl
             stateManager.StateGraph.pursuit.OnEntry += async () => await OnPursuitEntry();
             stateManager.StateGraph.retreat.OnEntry += async () => await OnRetreatEntry();
         }
-
-
-        //STATE BEHAVIOR
 
 
         //STATE TRANSITION HANDLERS
@@ -129,10 +123,6 @@ namespace RPGPlatformer.AIControl
             stateDriver.SetAutoRetaliate(false);
             stateDriver.SetInvincible(true);
             stateDriver.StopAttacking();
-            //+turn on invincibility
-            //INVINCIBILITY: just worm takes no damage
-            //(to make life easy, bleeds will continue to hit, but deal 0 damage)
-            //Let's also make sure the worm is immune to stuns
         }
 
         private async Task OnPursuitEntry()
@@ -205,7 +195,9 @@ namespace RPGPlatformer.AIControl
         public void DisableInput()
         {
             stateManager.Freeze();
-            stateManager.StateMachine.ForceCurrentState(stateManager.StateGraph.inactive);
+            //stateManager.StateMachine.ForceCurrentState(stateManager.StateGraph.inactive);
+            //^commented out so that we don't go through state re-entry when we unfreeze
+            //(this was causing it to re-enter above ground and play particles when pause/unpause)
         }
     }
 }

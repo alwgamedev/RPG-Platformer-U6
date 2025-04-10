@@ -569,7 +569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   emergeMoveSpeed: 1.75
-  retreatMoveSpeed: 1.5
+  retreatMoveSpeed: 3
   tunnelMoveSpeed: 4
   maxTimeAboveGround: 13
   underGroundBodyAnchor: {fileID: 1194695686574530751}
@@ -676,7 +676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b94a4cfa0b960342a1797cce63819c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToLeaveCombat: 65
+  timeToLeaveCombat: 100
   abilityBarData:
     unarmedAbilityBarItems: []
     mageAbilityBarItems: []
@@ -2189,7 +2189,7 @@ MonoBehaviour:
   ikEnabled: 0
   ikIterations: 1
   ikStrength: 1
-  ikToleranceSqrd: 0.1
+  ikToleranceSqrd: 0.04
   ikTarget: {fileID: 0}
 --- !u!114 &7323158423895243465
 MonoBehaviour:
@@ -2410,7 +2410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1872693702536553689, guid: 338fe81cd7b2cb84f8d74dd4fa5257a2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.4
+      value: 1.45
       objectReference: {fileID: 0}
     - target: {fileID: 1872693702536553689, guid: 338fe81cd7b2cb84f8d74dd4fa5257a2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2590,6 +2590,10 @@ PrefabInstance:
     - target: {fileID: 3919878985061365727, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597062589672823393, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5114048950063824794, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
       propertyPath: m_Name

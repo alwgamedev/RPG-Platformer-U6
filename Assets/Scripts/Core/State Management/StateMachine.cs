@@ -37,12 +37,14 @@ namespace RPGPlatformer.Core
             }
         }
 
-        public virtual void SetCurrentState(string stateName)//we should do away with this now that manager has a public reference to the state machine
+        public virtual void SetCurrentState(string stateName)
+            //we should do away with this now that manager has a public reference to the state machine
         {
             SetCurrentState(stateGraph.LookupState[stateName]);
         }
 
-        public virtual void ForceCurrentState(State newState)//note: does not affect stored state, so you can do this after freezing to move to an "inactive" state
+        public virtual void ForceCurrentState(State newState)
+            //note: does not affect stored state, so you can do this after freezing to move to an "inactive" state
         {
             if (stateGraph.ContainsVertex(newState))
             {
@@ -56,7 +58,6 @@ namespace RPGPlatformer.Core
         {
             State previousState = CurrentState;
             CurrentState = newState;
-            //bool transitioningToSameState = previousState.Equals(CurrentState);
 
             if (previousState.Equals(CurrentState))
             {

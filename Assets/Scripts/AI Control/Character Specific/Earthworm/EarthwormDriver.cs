@@ -21,11 +21,7 @@ namespace RPGPlatformer.AIControl
         AICombatController combatController;
         EarthwormMovementController movementController;
         VisualCurveGuide curveGuide;
-        //Transform currentBodyAnchor;
         bool wormholeTriggerEnabled;
-
-        //body anchors should have fixed local positions (i.e. not attached to guide points)
-        //Transform BodyAnchor => movementController.bodyAnchor;
 
         PolygonCollider2D GroundCollider => movementController.GroundCollider;
         float GroundLeftBound => movementController.GroundLeftBound;//giving a little padding for safety
@@ -34,9 +30,7 @@ namespace RPGPlatformer.AIControl
         //^higher than any point on the groundCollider (so if we take ClosestPoint
         //from a point at this height, we will always get something on the top side of the ground)
         Vector3 BodyAnchorOffset => movementController.BodyAnchorOffset;
-        //Vector3 AnchoredPosition => wormholeAnchor.transform.position - BodyAnchorOffset;
-        //^where transform.position should be when body anchor is connected to wormhole anchor
-        //public TriggerColliderMessenger WormholeAnchor => wormhole.Trigger;
+
         public IHealth CurrentTarget
         {
             get => combatController.currentTarget;
@@ -51,25 +45,10 @@ namespace RPGPlatformer.AIControl
             curveGuide = GetComponentInChildren<VisualCurveGuide>();
         }
 
-        //private void Update()
-        //{
-        //    if (Input.GetKeyDown(KeyCode.P))
-        //    {
-        //        testAboveGround = !testAboveGround;
-        //        if (testAboveGround)
-        //        {
-        //            Trigger(typeof(EarthwormAboveGround).Name);
-        //        }
-        //        else
-        //        {
-        //            Trigger(typeof(EarthwormDormant).Name);
-        //        }
-        //    }
-        //}
-
         public void InitializeState()
         {
             CurrentTarget = GlobalGameTools.Player.Combatant.Health;
+            GlobalGameTools.Player.OnDeath += () => Trigger(typeof(EarthwormDormant).Name);
 
             curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
             curveGuide.ikEnabled = false;
@@ -85,7 +64,6 @@ namespace RPGPlatformer.AIControl
 
         //SETTINGS
 
-        //think I will hook these up to animation events
         public void EnableIK()
         {
             curveGuide.ikEnabled = true;
@@ -108,7 +86,7 @@ namespace RPGPlatformer.AIControl
 
         //only enabled in dormant and retreat states,
         //and he can only leave those states via the wormhole trigger.
-        //wormhole being triggered automatically disables the trigger,
+        //wormhole being triggered will automatically disable the trigger,
         //so we should never have to directly disable the trigger
         public void EnableWormholeTrigger(bool val)
         {
@@ -144,9 +122,18 @@ namespace RPGPlatformer.AIControl
         {
             if (CurrentTarget != null && !combatController.Combatant.CanAttack(CurrentTarget))
             {
-                Trigger(typeof(EarthwormPursuit).Name);
-                //if this triggers while worm is still emerging, will we have issues?
-                //(maybe due to slow finally calls)
+                if (CanPursue())
+                {
+                    Trigger(typeof(EarthwormPursuit).Name);
+                }
+                else
+                {
+                    Trigger(typeof(EarthwormDormant).Name);
+                }
+            }
+            else if (CurrentTarget != null && !CurrentTarget.IsDead && !combatController.Attacking)
+            {
+                StartAttacking();
             }
         }
 
@@ -158,6 +145,13 @@ namespace RPGPlatformer.AIControl
         public void AboveGroundTimerComplete()
         {
             Trigger(typeof(EarthwormRetreat).Name);
+        }
+
+        public bool CanPursue()
+        {
+            return CurrentTarget != null && !CurrentTarget.IsDead
+                && CurrentTarget.transform.position.x > GroundLeftBound
+                && CurrentTarget.transform.position.x < GroundRightBound;
         }
 
         public async Task PursueTarget(CancellationToken token)
@@ -177,10 +171,6 @@ namespace RPGPlatformer.AIControl
 
 
         //COMBAT
-
-        //TO-DO: randomize attack speed & give it custom (possibly randomized) ability cycle
-        //+ figure out what to do with collision during slam attack
-        //(ideally disable collider but apply force to player (sending them up and backwards) and briely stun them
 
         public void StartAttacking()
         {
@@ -243,7 +233,7 @@ namespace RPGPlatformer.AIControl
             movementController.bodyAnchor = aboveGround ? aboveGroundBodyAnchor : underGroundBodyAnchor;
         }
 
-        //top level caller needs to handle cancellation
+        //cancellation needs to be handled higher up
         public async Task MoveToAnchorPosition(float moveSpeed, CancellationToken token)
         {
             TaskCompletionSource<object> tcs = new();
