@@ -1,6 +1,5 @@
 ﻿using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
-using RPGPlatformer.Movement;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -13,29 +12,31 @@ namespace RPGPlatformer.AIControl
     {
         [SerializeField] float emergeMoveSpeed = .5f;
         [SerializeField] float retreatMoveSpeed = 2;
-        [SerializeField] float pursuitSpeed = 8;
-        [SerializeField] float maxTimeAboveGround = 10;
+        [SerializeField] float tunnelMoveSpeed = 8;
+        [SerializeField] float maxTimeAboveGround = 10; 
         [SerializeField] Transform underGroundBodyAnchor;
         [SerializeField] Transform aboveGroundBodyAnchor;
-        [SerializeField] PolygonCollider2D groundCollider;
-        [SerializeField] TriggerColliderMessenger wormholeAnchor;
+        [SerializeField] EarthwormWormhole wormhole;
 
         AICombatController combatController;
         EarthwormMovementController movementController;
         VisualCurveGuide curveGuide;
-        Transform currentBodyAnchor;
+        //Transform currentBodyAnchor;
         bool wormholeTriggerEnabled;
 
         //body anchors should have fixed local positions (i.e. not attached to guide points)
-        Vector3 BodyAnchorOffset => currentBodyAnchor.position - transform.position;
-        float GroundLeftBound => groundCollider.bounds.min.x + 0.5f;//giving a little padding for safety
-        float GroundRightBound => groundCollider.bounds.max.x - 0.5f;
-        float GroundTopBound => groundCollider.bounds.center.y + groundCollider.bounds.size.y;
+        //Transform BodyAnchor => movementController.bodyAnchor;
+
+        PolygonCollider2D GroundCollider => movementController.GroundCollider;
+        float GroundLeftBound => movementController.GroundLeftBound;//giving a little padding for safety
+        float GroundRightBound => movementController.GroundRightBound;
+        float GroundTopBound => movementController.GroundTopBound;
         //^higher than any point on the groundCollider (so if we take ClosestPoint
         //from a point at this height, we will always get something on the top side of the ground)
-        Vector3 AnchoredPosition => wormholeAnchor.transform.position - BodyAnchorOffset;
+        Vector3 BodyAnchorOffset => movementController.BodyAnchorOffset;
+        //Vector3 AnchoredPosition => wormholeAnchor.transform.position - BodyAnchorOffset;
         //^where transform.position should be when body anchor is connected to wormhole anchor
-        public TriggerColliderMessenger WormholeAnchor => wormholeAnchor;
+        //public TriggerColliderMessenger WormholeAnchor => wormhole.Trigger;
         public IHealth CurrentTarget
         {
             get => combatController.currentTarget;
@@ -73,7 +74,7 @@ namespace RPGPlatformer.AIControl
             curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
             curveGuide.ikEnabled = false;
 
-            currentBodyAnchor = underGroundBodyAnchor;
+            SetBodyAnchor(false);
             ChooseRandomWormholePosition();
             GoToWormhole();
             SetAutoRetaliate(false);
@@ -116,14 +117,14 @@ namespace RPGPlatformer.AIControl
             if (val)
             {
                 wormholeTriggerEnabled = true;
-                wormholeAnchor.TriggerEnter += OnWormholeTriggered;
-                wormholeAnchor.TriggerStay += OnWormholeTriggered;
+                wormhole.Trigger.TriggerEnter += OnWormholeTriggered;
+                wormhole.Trigger.TriggerStay += OnWormholeTriggered;
             }
             else
             {
                 wormholeTriggerEnabled = false;
-                wormholeAnchor.TriggerEnter -= OnWormholeTriggered;
-                wormholeAnchor.TriggerStay -= OnWormholeTriggered;
+                wormhole.Trigger.TriggerEnter -= OnWormholeTriggered;
+                wormhole.Trigger.TriggerStay -= OnWormholeTriggered;
             }
         }
 
@@ -162,11 +163,9 @@ namespace RPGPlatformer.AIControl
         public async Task PursueTarget(CancellationToken token)
         {
             var p = new Vector2(CurrentTarget.transform.position.x, GroundTopBound);
-            var q = groundCollider.ClosestPoint(p);
-            var d = Mathf.Abs(q.x - transform.position.x);
+            var q = GroundCollider.ClosestPoint(p);
             SetWormholePosition(q);
-            GoToWormhole();
-            await MiscTools.DelayGameTime(d / pursuitSpeed, token);
+            await TunnelTowardsAnchor(token);
         }
 
         //making this separate so that handler of the pursuit -> aboveground transition 
@@ -210,6 +209,7 @@ namespace RPGPlatformer.AIControl
         public async Task Emerge(CancellationToken token)
         {
             SetBodyAnchor(true);
+            wormhole.PlayEmergeEffect();
             await MoveToAnchorPosition(emergeMoveSpeed, token);
         }
 
@@ -224,23 +224,23 @@ namespace RPGPlatformer.AIControl
         public void ChooseRandomWormholePosition(float leftXBd, float rightXBd)
         {
             var x = Random.Range(leftXBd, rightXBd);
-            var p = groundCollider.ClosestPoint(new Vector2(x, GroundTopBound));
+            var p = GroundCollider.ClosestPoint(new Vector2(x, GroundTopBound));
             SetWormholePosition(p);
         }
 
         public void SetWormholePosition(Vector3 position)
         {
-            wormholeAnchor.transform.position = position;
+            wormhole.SetPosition(position);
         }
 
         public void GoToWormhole()
         {
-            movementController.GoTo(wormholeAnchor.transform.position - BodyAnchorOffset);
+            movementController.GoTo(wormhole.transform.position - BodyAnchorOffset);
         }
 
         public void SetBodyAnchor(bool aboveGround)
         {
-            currentBodyAnchor = aboveGround ? aboveGroundBodyAnchor : underGroundBodyAnchor;
+            movementController.bodyAnchor = aboveGround ? aboveGroundBodyAnchor : underGroundBodyAnchor;
         }
 
         //top level caller needs to handle cancellation
@@ -263,7 +263,37 @@ namespace RPGPlatformer.AIControl
             {
                 movementController.DestinationReached += Complete;
                 combatController.OnDeath += Cancel;
-                movementController.BeginMoveTowards(AnchoredPosition, moveSpeed);
+                movementController.BeginMoveTowards(wormhole.transform.position - BodyAnchorOffset, moveSpeed);
+                await tcs.Task;
+            }
+            finally
+            {
+                movementController.DestinationReached -= Complete;
+                combatController.OnDeath -= Cancel;
+            }
+        }
+
+        public async Task TunnelTowardsAnchor(CancellationToken token)
+        {
+            TaskCompletionSource<object> tcs = new();
+            using var reg = token.Register(Cancel);
+
+            void Complete()
+            {
+                tcs.TrySetResult(null);
+            }
+
+            void Cancel()
+            {
+                tcs.TrySetCanceled();
+            }
+
+            try
+            {
+                movementController.DestinationReached += Complete;
+                combatController.OnDeath += Cancel;
+                movementController.PlayTunnelingParticles();
+                movementController.BeginMoveAnchored(wormhole.transform.position, tunnelMoveSpeed);
                 await tcs.Task;
             }
             finally

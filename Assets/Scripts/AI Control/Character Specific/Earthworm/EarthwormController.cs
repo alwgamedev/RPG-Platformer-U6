@@ -115,7 +115,6 @@ namespace RPGPlatformer.AIControl
         {
             if (AboveGround)
             {
-                Debug.Log("on emerged");
                 OnUpdate = stateDriver.AboveGroundBehavior;
                 stateDriver.SetAutoRetaliate(true);
                 stateDriver.SetInvincible(false);
@@ -176,7 +175,7 @@ namespace RPGPlatformer.AIControl
                 stateManager.StateGraph.retreat.OnExit += EarlyExitHandler;
                 await stateDriver.Submerge(cts.Token);
                 stateDriver.ChooseRandomWormholePosition();
-                stateDriver.GoToWormhole();
+                await stateDriver.TunnelTowardsAnchor(cts.Token);
                 stateDriver.EnableWormholeTrigger(true);
             }
             catch (TaskCanceledException)
