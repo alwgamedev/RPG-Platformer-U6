@@ -26,7 +26,7 @@ namespace RPGPlatformer.Combat
 
         //protected Combatant combatant;
         //protected CombatStateManager combatManager;
-        protected CharacterAbilityBarManager abilityBarManager;
+        protected CombatantAbilityBarManager abilityBarManager;
 
         protected TickTimer tickTimer;
         protected AttackAbility queuedAbility;
@@ -145,7 +145,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void InitializeAbilityBarManager()
         {
-            abilityBarManager = new CharacterAbilityBarManager(this);
+            abilityBarManager = new CombatantAbilityBarManager(this);
             if (useDefaultAbilityBars)
             {
                 abilityBarData = SerializableCharacterAbilityBarData.DefaultAbilityBarData();

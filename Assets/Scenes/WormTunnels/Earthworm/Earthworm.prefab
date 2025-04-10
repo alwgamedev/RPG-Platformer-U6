@@ -575,6 +575,24 @@ MonoBehaviour:
   underGroundBodyAnchor: {fileID: 1194695686574530751}
   aboveGroundBodyAnchor: {fileID: 8248864435369701058}
   wormhole: {fileID: 0}
+  defaultIKSettings:
+    mode: 0
+    iterations: 1
+    strength: 0
+    toleranceSqrd: 0.04
+    startPoint: {fileID: 2066384736793860254}
+    endPoint: {fileID: 4216333155788050412}
+    ikTarget: {fileID: 0}
+    ikTargetPoint: {x: 0, y: 0, z: 0}
+  slamIKSettings:
+    mode: 1
+    iterations: 1
+    strength: 0
+    toleranceSqrd: 0.04
+    startPoint: {fileID: 3118747221149158998}
+    endPoint: {fileID: 7306732667695985980}
+    ikTarget: {fileID: 0}
+    ikTargetPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &743808907830779398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,11 +694,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b94a4cfa0b960342a1797cce63819c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToLeaveCombat: 100
+  timeToLeaveCombat: 200
   abilityBarData:
     unarmedAbilityBarItems: []
     mageAbilityBarItems: []
     meleeAbilityBarItems:
+    - includeInAutoCastCycle: 1
+      ability: 7
     - includeInAutoCastCycle: 1
       ability: 5
     rangedAbilityBarItems: []
@@ -2186,11 +2206,16 @@ MonoBehaviour:
   - {fileID: 1575890875473671495}
   - {fileID: 4786633743375696552}
   - {fileID: 4216333155788050412}
+  ikSettings:
+    mode: 0
+    iterations: 0
+    strength: 0
+    toleranceSqrd: 0
+    startPoint: {fileID: 0}
+    endPoint: {fileID: 0}
+    ikTarget: {fileID: 0}
+    ikTargetPoint: {x: 0, y: 0, z: 0}
   ikEnabled: 0
-  ikIterations: 1
-  ikStrength: 1
-  ikToleranceSqrd: 0.04
-  ikTarget: {fileID: 0}
 --- !u!114 &7323158423895243465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2230,7 +2255,7 @@ MonoBehaviour:
     point: {x: 0, y: -2.3375, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   lerpMode: 1
-  lerpRate: 12
+  lerpRate: 25
 --- !u!120 &7510194389748565361
 LineRenderer:
   serializedVersion: 2

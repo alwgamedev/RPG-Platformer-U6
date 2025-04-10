@@ -63,7 +63,8 @@ namespace RPGPlatformer.Combat
             if (StateMachine.HasState(typeof(InCombat)))
             {
                 combatTimer++;
-                if (driver.EquippedWeapon != null && combatTimer % driver.EquippedWeapon.WeaponStats.BaseAttackRate == 0)
+                if (stateDriver.EquippedWeapon != null 
+                    && combatTimer % stateDriver.EquippedWeapon.WeaponStats.BaseAttackRate == 0)
                 {
                     OnWeaponTick?.Invoke();
                 }
@@ -76,9 +77,9 @@ namespace RPGPlatformer.Combat
 
         public void InstallWeaponAnimOverride()
         {
-            if (driver.EquippedWeapon != null)
+            if (stateDriver.EquippedWeapon != null)
             {
-                animationControl.SetAnimatorOverride(((Weapon)driver.EquippedWeapon).AnimatorOverrideController);
+                animationControl.SetAnimatorOverride(((Weapon)stateDriver.EquippedWeapon).AnimatorOverrideController);
             }
         }
 
@@ -90,8 +91,8 @@ namespace RPGPlatformer.Combat
         protected virtual void OnInitialCombatEntry()
         {
             InstallWeaponAnimOverride();
-            driver.Health.Stat.autoReplenish = false;
-            driver.Wrath.autoReplenish = false;
+            stateDriver.Health.Stat.autoReplenish = false;
+            stateDriver.Wrath.autoReplenish = false;
             OnCombatEntry();
         }
 
@@ -113,13 +114,13 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnNotInCombatEntry()
         {
-            driver.Health.Stat.autoReplenish = true;
-            driver.Wrath.autoReplenish = true;
+            stateDriver.Health.Stat.autoReplenish = true;
+            stateDriver.Wrath.autoReplenish = true;
         }
 
         protected virtual void OnDeath()
         {
-            driver.Health.Stat.autoReplenish = false;
+            stateDriver.Health.Stat.autoReplenish = false;
             animationControl.PlayAnimationState("Die", "Base Layer", 0);
         }
 

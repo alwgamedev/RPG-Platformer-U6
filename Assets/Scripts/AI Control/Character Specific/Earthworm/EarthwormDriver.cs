@@ -13,10 +13,12 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float emergeMoveSpeed = .5f;
         [SerializeField] float retreatMoveSpeed = 2;
         [SerializeField] float tunnelMoveSpeed = 8;
-        [SerializeField] float maxTimeAboveGround = 10; 
+        [SerializeField] float maxTimeAboveGround = 10;
         [SerializeField] Transform underGroundBodyAnchor;
         [SerializeField] Transform aboveGroundBodyAnchor;
         [SerializeField] EarthwormWormhole wormhole;
+        [SerializeField] CurveGuideIKSettings defaultIKSettings;
+        [SerializeField] CurveGuideIKSettings slamIKSettings;
 
         AICombatController combatController;
         EarthwormMovementController movementController;
@@ -50,8 +52,9 @@ namespace RPGPlatformer.AIControl
             CurrentTarget = GlobalGameTools.Player.Combatant.Health;
             GlobalGameTools.Player.OnDeath += () => Trigger(typeof(EarthwormDormant).Name);
 
-            curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
+            //curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
             curveGuide.ikEnabled = false;
+            UseDefaultIKSettings();
 
             SetBodyAnchor(false);
             ChooseRandomWormholePosition();
@@ -64,14 +67,22 @@ namespace RPGPlatformer.AIControl
 
         //SETTINGS
 
-        public void EnableIK()
+        public void EnableIK(bool val)
         {
-            curveGuide.ikEnabled = true;
+            curveGuide.ikEnabled = val;
         }
 
-        public void DisableIK()
+        public void UseDefaultIKSettings()
         {
-            curveGuide.ikEnabled = false;
+            curveGuide.IKSettings = defaultIKSettings;
+        }
+
+        public void UseSlamIKSettings()
+        {
+            curveGuide.IKSettings = slamIKSettings;
+            //you will also need to configure the ik target (the points along the ground that you slam into)
+            //im hoping also to get the desired slam movement using 2 ik runs
+
         }
 
         public void SetAutoRetaliate(bool val)
@@ -120,7 +131,8 @@ namespace RPGPlatformer.AIControl
 
         public void AboveGroundBehavior()
         {
-            if (CurrentTarget != null && !combatController.Combatant.CanAttack(CurrentTarget))
+            if (CurrentTarget != null && !combatController.Combatant.CanAttack(CurrentTarget)
+                && !combatController.ChannelingAbility)
             {
                 if (CanPursue())
                 {

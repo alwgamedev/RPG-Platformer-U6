@@ -39,7 +39,7 @@ namespace RPGPlatformer.Core
         public T0 StateGraph => StateMachine.stateGraph;
         public T1 StateMachine { get; protected set; }
 
-        protected T2 driver;
+        protected T2 stateDriver;
 
         public StateManager(T1 stateMachine = null, T2 driver = null)
         {
@@ -51,12 +51,12 @@ namespace RPGPlatformer.Core
             {
                 StateMachine = (T1)Activator.CreateInstance(typeof(T1));
             }
-            this.driver = driver;
+            this.stateDriver = driver;
         }
 
         public virtual void Configure()
         {
-            driver.TriggerEvent += StateMachine.SetCurrentState;
+            stateDriver.TriggerEvent += StateMachine.SetCurrentState;
         }
 
         public State GetState(string stateName)

@@ -209,7 +209,8 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = -.35f
         };
 
-        public static AoeAbilityThatExecutesImmediately Slam = new(true)//thresh AoE Stun (should be comparable to Desecrate, with slightly higher damage + stun)
+        public static AoeAbilityThatExecutesImmediately Slam = new(true)
+        //thresh AoE Stun (should be comparable to Desecrate, with slightly higher damage + stun)
         {
             Description = "Send a shockwave through the earth that deals heavy damage" +
             " and stuns all nearby opponents.",

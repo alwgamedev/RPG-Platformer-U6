@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
-    public class CharacterAbilityBarManager
+    public class CombatantAbilityBarManager
     {
         ICombatController cc;
 
@@ -18,7 +18,7 @@ namespace RPGPlatformer.Combat
 
         public AbilityBar CurrentAbilityBar => currentAbilityBar;
 
-        public CharacterAbilityBarManager(ICombatController cc)
+        public CombatantAbilityBarManager(ICombatController cc)
         {
             this.cc = cc;
         }
