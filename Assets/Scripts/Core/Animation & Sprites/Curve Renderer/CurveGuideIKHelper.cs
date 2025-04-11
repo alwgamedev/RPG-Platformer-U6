@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using RPGPlatformer.Movement;
-using System.Net;
 
 namespace RPGPlatformer.Core
 {
     public static class CurveGuideIKHelper
     {
         public static void FABRIK(VisualCurveGuidePoint[] guides, int startIndex, int endIndex, 
-            Vector3[] unitRays, float[] lengths, Vector3 target, 
+            Vector3[] unitRays, float[] lengths, float totalLength, Vector3 target, 
             int iterations, float strength, float toleranceSqrd)
         {
             if (iterations == 0 || strength == 0 || startIndex >= endIndex) return;
@@ -15,28 +14,25 @@ namespace RPGPlatformer.Core
             //var m = guides.Length - 1;
             var first = guides[startIndex];
             var last = guides[endIndex];
+            var anchor = first.Point();
+            Vector3 v;
 
             target = Vector3.LerpUnclamped(last.Point(), target, strength);
-            var a = target - first.Point();
-            var dist = a.magnitude;
+            var d = target - first.Point();
+            var dist = d.magnitude;
 
-            var anchor = first.Point();
-            float length = 0;
-            Vector3 v;
-            float l;
+            //for (int i = startIndex; i < endIndex; i++)
+            //{
+            //    v = guides[i + 1].Point() - guides[i].Point();
+            //    l = v.magnitude;
+            //    length += l;
+            //    unitRays[i] = v / l;
+            //    lengths[i] = l;
+            //}
 
-            for (int i = startIndex; i < endIndex; i++)
+            if (dist > totalLength)
             {
-                v = guides[i + 1].Point() - guides[i].Point();
-                l = v.magnitude;
-                length += l;
-                unitRays[i] = v / l;
-                lengths[i] = l;
-            }
-
-            if (dist > length)
-            {
-                target = first.Point() + length * (a / dist);
+                target = first.Point() + totalLength * (d / dist);
             }
 
             for (int i = 0; i < iterations; i++)
@@ -53,13 +49,13 @@ namespace RPGPlatformer.Core
 
                 for (int i = endIndex + 1; i < guides.Length; i++)
                 {
-                    guides[i].SetPoint(guides[i - 1].Point() + unitRays[i - 1]);
+                    guides[i].SetPoint(guides[i - 1].Point() + lengths[i - 1] * unitRays[i - 1]);
                 }
 
                 for (int i = endIndex; i > startIndex; i--)
                 {
-                    a = (guides[i - 1].Point() - guides[i].Point()).normalized;
-                    guides[i - 1].SetPoint(guides[i].Point() + lengths[i - 1] * a);
+                    d = (guides[i - 1].Point() - guides[i].Point()).normalized;
+                    guides[i - 1].SetPoint(guides[i].Point() + lengths[i - 1] * d);
 
                     v = (guides[i].Point() - guides[i - 1].Point()).normalized;
                     guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v,
@@ -67,12 +63,8 @@ namespace RPGPlatformer.Core
                     unitRays[i - 1] = v;
                 }
 
-                //we never have to set the ones before first, because first position will be the same at the end
+                //we never have to set the ones before first pos, because first position will be the same at the end
                 //of the algorithm
-                //for (int i = startIndex - 1; i >= 0; i--)
-                //{
-                //    guides[i].SetPoint(guides[i + 1].Point() - unitRays[i]);
-                //}
             }
 
             void Backward()
@@ -81,8 +73,8 @@ namespace RPGPlatformer.Core
 
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    a = (guides[i + 1].Point() - guides[i].Point()).normalized;
-                    guides[i + 1].SetPoint(guides[i].Point() + lengths[i] * a);
+                    d = (guides[i + 1].Point() - guides[i].Point()).normalized;
+                    guides[i + 1].SetPoint(guides[i].Point() + lengths[i] * d);
 
                     v = (guides[i + 1].Point() - guides[i].Point()).normalized;
                     guides[i + 1].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i], v,
@@ -92,7 +84,7 @@ namespace RPGPlatformer.Core
 
                 for (int i = endIndex + 1; i < guides.Length; i++)
                 {
-                    guides[i].SetPoint(guides[i - 1].Point() + unitRays[i - 1]);
+                    guides[i].SetPoint(guides[i - 1].Point() + lengths[i - 1] * unitRays[i - 1]);
                 }
             }
         }

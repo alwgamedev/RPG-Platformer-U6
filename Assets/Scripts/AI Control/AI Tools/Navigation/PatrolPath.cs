@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
-    public class PatrolPath : MbNavigationParameters
+    public class PatrolPath : MBNavigationParameters
     {
         [SerializeField] PatrolPathWayPoint[] pathWayPoints;
 

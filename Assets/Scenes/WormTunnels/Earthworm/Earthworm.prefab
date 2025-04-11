@@ -574,25 +574,10 @@ MonoBehaviour:
   maxTimeAboveGround: 13
   underGroundBodyAnchor: {fileID: 1194695686574530751}
   aboveGroundBodyAnchor: {fileID: 8248864435369701058}
+  noseContactColliders:
+  - {fileID: 7346773191040272774}
+  - {fileID: 1730005298992380380}
   wormhole: {fileID: 0}
-  defaultIKSettings:
-    mode: 0
-    iterations: 1
-    strength: 0
-    toleranceSqrd: 0.04
-    startPoint: {fileID: 2066384736793860254}
-    endPoint: {fileID: 4216333155788050412}
-    ikTarget: {fileID: 0}
-    ikTargetPoint: {x: 0, y: 0, z: 0}
-  slamIKSettings:
-    mode: 1
-    iterations: 1
-    strength: 0
-    toleranceSqrd: 0.04
-    startPoint: {fileID: 3118747221149158998}
-    endPoint: {fileID: 7306732667695985980}
-    ikTarget: {fileID: 0}
-    ikTargetPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &743808907830779398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2162,6 +2147,7 @@ GameObject:
   - component: {fileID: 8835800219631276127}
   - component: {fileID: 7323158423895243465}
   - component: {fileID: 7510194389748565361}
+  - component: {fileID: 3272142817664393271}
   m_Layer: 0
   m_Name: Line Renderer
   m_TagString: Untagged
@@ -2206,16 +2192,11 @@ MonoBehaviour:
   - {fileID: 1575890875473671495}
   - {fileID: 4786633743375696552}
   - {fileID: 4216333155788050412}
-  ikSettings:
-    mode: 0
-    iterations: 0
-    strength: 0
-    toleranceSqrd: 0
-    startPoint: {fileID: 0}
-    endPoint: {fileID: 0}
-    ikTarget: {fileID: 0}
-    ikTargetPoint: {x: 0, y: 0, z: 0}
   ikEnabled: 0
+  ikEffects:
+  - {fileID: 3272142817664393271}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &7323158423895243465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2421,6 +2402,27 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &3272142817664393271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9003366606586769134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75a08ab9332c10449adec7297d5759f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: Slash IK
+  targetSource: 0
+  ikIterations: 1
+  ikStrength: 1
+  ikToleranceSqrd: 0.04
+  startPoint: {fileID: 0}
+  endPoint: {fileID: 0}
+  ikTargetTransform: {fileID: 0}
+  ikTargetPoint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1082064909378496163
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ namespace RPGPlatformer.AIControl
         where T4 : AIPatrollerStateManager<T2, T3, T0, T00, T01, T02, T03, T1>
     {
         [SerializeField] protected NavigationMode defaultPatrolMode;
-        [SerializeField] protected MbNavigationParameters defaultPatrolParameters;
+        [SerializeField] protected MBNavigationParameters defaultPatrolParameters;
 
         protected Action OnUpdate;
         protected bool stateBehaviorSubscribed;

@@ -1,6 +1,6 @@
 ﻿namespace RPGPlatformer.AIControl
 {
-    public class PatrolDestination : MbNavigationParameters
+    public class PatrolDestination : MBNavigationParameters
     {
         public override object Content => transform.position;
     }

@@ -42,7 +42,8 @@ namespace RPGPlatformer.Combat
                 {
                     return currentValue / maxValue;
                 }
-                Debug.LogWarning($"Tried to retrieve fractional value from a replenishable stat, but its max value is zero.");
+                Debug.LogWarning($"Tried to retrieve fractional value from a replenishable stat, " +
+                    $"but its max value is zero.");
                 return 0;
             }
         }
@@ -75,7 +76,7 @@ namespace RPGPlatformer.Combat
 
         public void AddValueClamped(float value)
         {
-            CurrentValue += Mathf.Clamp(value, minValue - currentValue, maxValue - currentValue);
+            SetValueClamped(CurrentValue + value);
         }
 
         public void AutoReplenish()

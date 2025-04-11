@@ -119,8 +119,7 @@ namespace RPGPlatformer.AIControl
         private void OnAboveGroundExit()
         {
             OnUpdate = null;
-            stateDriver.UseDefaultIKSettings();
-            stateDriver.EnableIK(false);
+            stateDriver.DisableAllIK();
             stateDriver.SetAutoRetaliate(false);
             stateDriver.SetInvincible(true);
             stateDriver.StopAttacking();

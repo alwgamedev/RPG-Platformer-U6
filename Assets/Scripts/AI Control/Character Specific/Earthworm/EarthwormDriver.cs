@@ -16,14 +16,17 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float maxTimeAboveGround = 10;
         [SerializeField] Transform underGroundBodyAnchor;
         [SerializeField] Transform aboveGroundBodyAnchor;
+        [SerializeField] Collider2D[] noseContactColliders;
         [SerializeField] EarthwormWormhole wormhole;
-        [SerializeField] CurveGuideIKSettings defaultIKSettings;
-        [SerializeField] CurveGuideIKSettings slamIKSettings;
 
         AICombatController combatController;
         EarthwormMovementController movementController;
         VisualCurveGuide curveGuide;
         bool wormholeTriggerEnabled;
+
+        //CurveIKEffect stabIKEffect => curveGuide.ikEffects[0];
+        //CurveIKEffect slamIKEffectBody => curveGuide.ikEffects[1];
+        //CurveIKEffect slamIKEffectNose => curveGuide.ikEffects[2];
 
         PolygonCollider2D GroundCollider => movementController.GroundCollider;
         float GroundLeftBound => movementController.GroundLeftBound;//giving a little padding for safety
@@ -52,9 +55,10 @@ namespace RPGPlatformer.AIControl
             CurrentTarget = GlobalGameTools.Player.Combatant.Health;
             GlobalGameTools.Player.OnDeath += () => Trigger(typeof(EarthwormDormant).Name);
 
-            //curveGuide.ikTarget = GlobalGameTools.PlayerTransform;
-            curveGuide.ikEnabled = false;
-            UseDefaultIKSettings();
+            var slashIK = curveGuide.ikEffects[0];
+            slashIK.SetTarget(CurrentTarget.transform);
+            curveGuide.ReconfigureIKEffects();
+            DisableAllIK();
 
             SetBodyAnchor(false);
             ChooseRandomWormholePosition();
@@ -67,22 +71,30 @@ namespace RPGPlatformer.AIControl
 
         //SETTINGS
 
-        public void EnableIK(bool val)
+        //ik effects will activated in animation (by directly modifying their fields)
+
+        public void EnableStabIKEffect()
         {
-            curveGuide.ikEnabled = val;
+            //stabIKEffect.enabled = true;
+            //curveGuide.ikEffects[0] = stabIKEffect;
         }
 
-        public void UseDefaultIKSettings()
+        public void ConfigureSlamIKEffects()
         {
-            curveGuide.IKSettings = defaultIKSettings;
+            //to do
+            //just need to set target for body and nose effects (i.e. locate appropriate points along the ground)
+            //but also need to adjust *nose collider exclude layers*, which I haven't gotten to work correctly yet
         }
 
-        public void UseSlamIKSettings()
+        public void EnableSlamIKEffects()
         {
-            curveGuide.IKSettings = slamIKSettings;
-            //you will also need to configure the ik target (the points along the ground that you slam into)
-            //im hoping also to get the desired slam movement using 2 ik runs
+            //slamIKEffectBody.enabled = true;
+            //slamIKEffectNose.enabled = true;
+        }
 
+        public void DisableAllIK()
+        {
+            curveGuide.DisableAllIK();
         }
 
         public void SetAutoRetaliate(bool val)

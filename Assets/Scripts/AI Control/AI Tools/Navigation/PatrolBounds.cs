@@ -2,7 +2,7 @@
 
 namespace RPGPlatformer.AIControl
 {
-    public class PatrolBounds : MbNavigationParameters
+    public class PatrolBounds : MBNavigationParameters
     {
         [SerializeField] Transform[] bounds;
 

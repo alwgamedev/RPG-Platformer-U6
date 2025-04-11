@@ -1,5 +1,8 @@
 ﻿using RPGPlatformer.Core;
 using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 namespace RPGPlatformer
 {
@@ -8,30 +11,18 @@ namespace RPGPlatformer
     {
         [SerializeField] bool drawGizmos;
         [SerializeField] VisualCurveGuidePoint[] guides;
-        [SerializeField] CurveGuideIKSettings ikSettings;
 
         public bool ikEnabled;
-
-        int ikStartIndex;
-        int ikEndIndex;
+        public CurveIKEffect[] ikEffects;
 
         CurveRenderer curveRenderer;
         Vector3[] unitRays;
         float[] lengths;//storage for lengths in the IK algorithm
-
-        public CurveGuideIKSettings IKSettings
-        {
-            get => ikSettings;
-            set
-            {
-                ikSettings = value;
-                RecomputeIKEndpts();
-            }
-        }
+        float totalLength;
 
         private void Awake()
         {
-            RecomputeIKEndpts();
+            ReconfigureIKEffects();
         }
 
 #if UNITY_EDITOR
@@ -52,31 +43,33 @@ namespace RPGPlatformer
 
         private void OnValidate()
         {
-            RecomputeIKEndpts();
+            ReconfigureIKEffects();
         }
 
-        private void RecomputeIKEndpts()
+        public void DisableAllIK()
         {
-            if (guides == null)
+            if (ikEffects != null)
             {
-                ikStartIndex = 0;
-                ikEndIndex = -1;
-                return;
+                foreach (var e in ikEffects)
+                {
+                    if (e != null)
+                    {
+                        e.enabled = false;
+                    }
+                }
+
+                ikEnabled = false;
             }
+        }
 
-            ikStartIndex = 0;
-            ikEndIndex = guides.Length - 1;
+        //should call this whenever you add new ik effects
+        public void ReconfigureIKEffects()
+        {
+            if (ikEffects == null || guides == null) return;
 
-            for (int i = 0; i < guides.Length; i++)
+            foreach (var effect in ikEffects)
             {
-                if (guides[i] == ikSettings.startPoint)
-                {
-                    ikStartIndex = i;
-                }
-                if (guides[i] == ikSettings.endPoint)
-                {
-                    ikEndIndex = i;
-                }
+                effect?.RecomputeEndptIndices(guides);
             }
         }
 
@@ -84,10 +77,16 @@ namespace RPGPlatformer
         {
             if (guides == null) return;
 
-            if (ikSettings.TargetHasChanged())
+            if (ikEffects != null)
             {
-                UpdateRendererGuidePoints();
-                return;
+                foreach (var effect in ikEffects)
+                {
+                    if (effect != null && effect.TargetHasChanged())
+                    {
+                        UpdateRendererGuidePoints();
+                        return;
+                    }
+                }
             }
 
             foreach (var guide in guides)
@@ -95,26 +94,25 @@ namespace RPGPlatformer
                 if (guide && guide.HasChanged())
                 {
                     UpdateRendererGuidePoints();
-                    break;
+                    return;
                 }
             }
         }
 
         private void UpdateRendererGuidePoints()
         {
-            if (unitRays == null || unitRays.Length != guides.Length - 1)
+            if (ikEnabled && ikEffects != null)
             {
-                unitRays = new Vector3[guides.Length - 1];
-            }
-            if (lengths == null || lengths.Length != guides.Length - 1)
-            {
-                lengths = new float[guides.Length - 1];
-            }
+                RecomputeRaysAndLengths();
 
-            if (ikEnabled && ikSettings.CanRunIK())
-            {
-                CurveGuideIKHelper.FABRIK(guides, ikStartIndex, ikEndIndex, unitRays, lengths,
-                ikSettings.TargetPosition(), ikSettings.iterations, ikSettings.strength, ikSettings.toleranceSqrd);
+                foreach (var e in ikEffects)
+                {
+                    if (e != null && e.enabled && e.CanRunIK())
+                    {
+                        CurveGuideIKHelper.FABRIK(guides, e.StartIndex(), e.EndIndex(), unitRays, lengths, totalLength,
+                        e.TargetPosition(), e.ikIterations, e.ikStrength, e.ikToleranceSqrd);
+                    }
+                }
             }
 
             if (curveRenderer == null)
@@ -126,6 +124,32 @@ namespace RPGPlatformer
                 curveRenderer.HandleGuidePointChanges(guides);
             }
             //let's see if this triggers curve renderer's validate, or we should call draw ourselves
+        }
+
+        private void RecomputeRaysAndLengths()
+        {
+            if (lengths == null || lengths.Length != guides.Length - 1)
+            {
+                lengths = new float[guides.Length - 1];
+            }
+            if (unitRays == null || unitRays.Length != guides.Length - 1)
+            {
+                unitRays = new Vector3[guides.Length - 1];
+            }
+
+            Vector3 v;
+            float l;
+
+            totalLength = 0;
+
+            for (int i = 0; i < guides.Length - 1; i++)
+            {
+                v = guides[i + 1].Point() - guides[i].Point();
+                l = v.magnitude;
+                totalLength += l;
+                unitRays[i] = v / l;
+                lengths[i] = l;
+            }
         }
 
         private void OnDrawGizmos()
