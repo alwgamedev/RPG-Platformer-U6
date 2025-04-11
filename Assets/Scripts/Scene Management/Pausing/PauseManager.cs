@@ -33,7 +33,8 @@ namespace RPGPlatformer.SceneManagement
 
         private void OnIAMConfigured()
         {
-            SettingsManager.Instance.IAM.EscAction.started += (context) => TogglePause();
+            SettingsManager.Instance.IAM.InputAction(InputActionsManager.escActionName).started 
+                += (context) => TogglePause();
 
             //SettingsManager.OnIAMConfigure -= OnIAMConfigured;
         }

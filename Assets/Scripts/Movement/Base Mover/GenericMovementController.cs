@@ -9,8 +9,9 @@ namespace RPGPlatformer.Movement
     using static PhysicsTools;
 
     [RequireComponent(typeof(AnimationControl))]
+    //[RequireComponent(typeof(MonoBehaviorInputConfigurer))]
     public abstract class GenericMovementController<T0, T1, T2, T3> : 
-        StateDrivenController<T3, T1, T2, T0>, IMovementController
+        StateDrivenController<T3, T1, T2, T0>, IMovementController, IInputDependent
         where T0 : Mover
         where T1 : MovementStateGraph
         where T2 : MovementStateMachine<T1>
@@ -34,21 +35,9 @@ namespace RPGPlatformer.Movement
         protected MovementOptions currentMovementOptions;
         protected Dictionary<string, MovementOptions> GetMovementOptions = new();
 
-        public Vector2 RelativeVelocity
-        {
-            get
-            {
-                if (CurrentMount != null)
-                {
-                    return stateDriver.Rigidbody.linearVelocity - CurrentMount.Velocity;
-                }
-                return stateDriver.Rigidbody.linearVelocity;
-            }
-        }
+        public IInputSource InputSource { get; protected set; }
         public HorizontalOrientation CurrentOrientation => stateDriver.CurrentOrientation;
         public IMover Mover => stateDriver;
-        public IMountableEntity CurrentMount { get; protected set; }
-        //can be any "ambient velocity source" (e.g. we are on a moving platform)
         public virtual Vector2 MoveInput
         //child classes will override get/set
         {
@@ -62,22 +51,32 @@ namespace RPGPlatformer.Movement
         public bool Grounded => stateManager.StateMachine.CurrentState == stateManager.StateGraph.grounded;
         public bool Freefalling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.freefall;
         public virtual bool Jumping => false;
+        public IMountableEntity CurrentMount { get; protected set; }
+        //can be any "ambient velocity source" (e.g. we are on a moving platform)
+        public Vector2 RelativeVelocity
+        {
+            get
+            {
+                if (CurrentMount != null)
+                {
+                    return stateDriver.Rigidbody.linearVelocity - CurrentMount.Velocity;
+                }
+                return stateDriver.Rigidbody.linearVelocity;
+            }
+        }
 
         protected override void Awake()
         {
-            //InitializeMover();
             base.Awake();
 
+            InitializeInputSource();
             BuildMovementOptionsDictionary();
         }
 
         protected override void Start()
         {
             base.Start();
-            //InitializeMovementManager();
-            //ConfigureMovementManager();
 
-            //do these in start in case we want to subscribe functions from components
             InitializeUpdate();
             InitializeFixedUpdate();
 
@@ -330,6 +329,21 @@ namespace RPGPlatformer.Movement
         protected void OnFreefallExit()
         {
             stateDriver.UpdateDirectionFaced(currentMovementOptions.ChangeDirectionWrtGlobalUp);
+        }
+
+
+        //INPUT SYSTEM
+
+        public void InitializeInputSource()
+        {
+            InputSource = GetComponent<IInputSource>();
+        }
+
+        public void OnInputEnabled() { }
+
+        public void OnInputDisabled()
+        {
+            SoftStop();
         }
 
 

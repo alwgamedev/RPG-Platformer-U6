@@ -23,6 +23,7 @@ namespace RPGPlatformer.UI
             {
                 Instance = this;
                 content.text = "";
+                SettingsManager.IAMConfigured += OnIAMConfigure;
             }
             else
             {
@@ -43,20 +44,14 @@ namespace RPGPlatformer.UI
             inputField = GetComponentInChildren<GameLogInputField>(true);
             inputField.InputSubmitted += (input) => EnableInputField(false);
             EnableInputField(false);
-
-            if (SettingsManager.Instance && SettingsManager.Instance.IAM.actionMap != null)
-            {
-                OnIAMConfigure();
-            }
-            SettingsManager.IAMConfigured += OnIAMConfigure;
             //still subscribe in case action map gets rebuilt due to input bindings change or something
         }
 
         private void OnIAMConfigure()
         {
             var iam = SettingsManager.Instance.IAM;
-            iam.LeftClickAction.started += DisableInputFieldOnMouseDown;
-            iam.RightClickAction.started += DisableInputFieldOnMouseDown;
+            iam.InputAction(InputActionsManager.leftClickActionName).started += DisableInputFieldOnMouseDown;
+            iam.InputAction(InputActionsManager.rightClickActionName).started += DisableInputFieldOnMouseDown;
         }
 
         public static void Log(string text)

@@ -40,10 +40,6 @@ namespace RPGPlatformer.UI
                 GlobalGameTools.OnPlayerDeath += ClearMenu;
             }
 
-            if (SettingsManager.Instance && SettingsManager.Instance.IAM.actionMap != null)
-            {
-                OnIAMConfigure();
-            }
             SettingsManager.IAMConfigured += OnIAMConfigure;
             //subscribe in either case, so that we are linked up to the latest action map whenever it
             //gets rebuilt (e.g. due to input bindings change or something)
@@ -72,8 +68,8 @@ namespace RPGPlatformer.UI
         protected void OnIAMConfigure()
         {
             var iam = SettingsManager.Instance.IAM;
-            iam.LeftClickAction.canceled += CancelOnMouseUp;
-            iam.RightClickAction.canceled += CancelOnMouseUp;
+            iam.InputAction(InputActionsManager.leftClickActionName).canceled += CancelOnMouseUp;
+            iam.InputAction(InputActionsManager.rightClickActionName).canceled += CancelOnMouseUp;
             SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
 

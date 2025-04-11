@@ -45,10 +45,6 @@ namespace RPGPlatformer.UI
                 async () => await ClearTooltipDelayed(GlobalGameTools.Instance.TokenSource.Token) 
                 : ClearTooltipImmediate;
 
-            if (SettingsManager.Instance && SettingsManager.Instance.IAM.actionMap != null)
-            {
-                OnIAMConfigure();
-            }
             SettingsManager.IAMConfigured += OnIAMConfigure;
             //still subscribe in case action map gets rebuilt due to input bindings change or something
         }
@@ -64,8 +60,8 @@ namespace RPGPlatformer.UI
         protected void OnIAMConfigure()
         {
             var iam = SettingsManager.Instance.IAM;
-            iam.LeftClickAction.started += ClearOnMouseDown;
-            iam.RightClickAction.started += ClearOnMouseDown;
+            iam.InputAction(InputActionsManager.leftClickActionName).started += ClearOnMouseDown;
+            iam.InputAction(InputActionsManager.rightClickActionName).started += ClearOnMouseDown;
         }
 
         public void Pause()

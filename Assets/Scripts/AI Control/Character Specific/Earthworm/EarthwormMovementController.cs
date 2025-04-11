@@ -1,10 +1,12 @@
 ﻿using System;
+using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
-    public class EarthwormMovementController : MonoBehaviour, ICombatantMovementController, IEntityOrienter
+    public class EarthwormMovementController : MonoBehaviour, ICombatantMovementController, IEntityOrienter, 
+        IInputDependent
     {
         //[SerializeField] float moveSpeed = 0.5f;
         [SerializeField] float destinationTolerance = 0.1f;
@@ -18,6 +20,7 @@ namespace RPGPlatformer.AIControl
 
         public Transform bodyAnchor;
 
+        public IInputSource InputSource { get; private set; }
         public bool Moving => false;
         public HorizontalOrientation CurrentOrientation => (HorizontalOrientation)Mathf.Sign(transform.localScale.x);
         public Vector3 BodyAnchorOffset => bodyAnchor.position - transform.position;
@@ -38,6 +41,11 @@ namespace RPGPlatformer.AIControl
         private void FixedUpdate()
         {
             MoveAction?.Invoke();
+        }
+
+        public void InitializeInputSource()
+        {
+            InputSource = GetComponent<IInputSource>();
         }
 
         public void GoTo(Vector3 point)
@@ -130,6 +138,10 @@ namespace RPGPlatformer.AIControl
                 DirectionChanged?.Invoke(CurrentOrientation);
             }
         }
+
+        public void OnInputEnabled() { }
+
+        public void OnInputDisabled() { }
 
         public void OnDeath()
         {

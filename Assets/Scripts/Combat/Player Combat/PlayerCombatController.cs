@@ -7,10 +7,6 @@ namespace RPGPlatformer.Combat
 {
     public class PlayerCombatController : CombatController
     {
-        bool inputDisabled;
-
-        public override IInputSource InputSource => SettingsManager.Instance.IAM;
-
         protected override void Awake()
         {
             base.Awake();
@@ -53,19 +49,20 @@ namespace RPGPlatformer.Combat
         {
             InputActionsManager iam = SettingsManager.Instance.IAM;
 
-            iam.LeftClickAction.started += (context) =>
+            iam.InputAction(InputActionsManager.leftClickActionName).started += (context) =>
             {
-                if(inputDisabled || iam.MouseOverUI || InteractableGameObject.MouseOverAnyIGO) return;
+                if(InputSource.IsInputDisabled || iam.MouseOverUI || InteractableGameObject.MouseOverAnyIGO) 
+                    return;
                 FireButtonDown();
             };
-            iam.LeftClickAction.canceled += (context) =>
+            iam.InputAction(InputActionsManager.leftClickActionName).canceled += (context) =>
             {
-                if (inputDisabled) return;
+                //if (inputDisabled) return;
                 FireButtonUp();
             };
-            iam.RightClickAction.started += (context) =>
+            iam.InputAction(InputActionsManager.rightClickActionName).started += (context) =>
             {
-                if (inputDisabled) return;
+                //if (inputDisabled) return;
                 CancelAbilityInProgress(true);
             };
 
@@ -73,7 +70,7 @@ namespace RPGPlatformer.Combat
             {
                 iam.AbilityBarActions[entry.Key].started += (context) =>
                 {
-                    if (inputDisabled) return;
+                    if (InputSource.IsInputDisabled) return;
                     HandleAbilityInput(entry.Key);
                 };
             }
@@ -140,15 +137,27 @@ namespace RPGPlatformer.Combat
             return Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
 
-        protected override void DisableInput()
-        {
-            CancelAbilityInProgress(false);
-            inputDisabled = true;
-        }
+        //protected override void DisableInput()
+        //{
+        //    CancelAbilityInProgress(false);
+        //    //inputDisabled = true;
+        //}
 
-        protected override void EnableInput()
+        //protected override void EnableInput()
+        //{
+        //    inputDisabled = false;
+        //}
+
+        protected override void OnStunned(bool frozen)
         {
-            inputDisabled = false;
+            if (frozen)
+            {
+                GameLog.Log("You've been frozen!");
+            }
+            else
+            {
+                GameLog.Log("You've been stunned and can't move!");
+            }
         }
 
         protected override void OnDestroy()

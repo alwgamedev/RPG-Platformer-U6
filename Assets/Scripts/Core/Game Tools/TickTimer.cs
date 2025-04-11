@@ -6,8 +6,7 @@ namespace RPGPlatformer.Core
     public class TickTimer : MonoBehaviour//will be part of persistent objects
     {
         [SerializeField] protected float tickLength = 0.06f;
-
-        public bool randomizeStartValue;//just public because CombatController sets it to true
+        [SerializeField] bool randomizeStartValue;//just public because CombatController sets it to true
 
         protected float tickTime;
 
@@ -19,7 +18,7 @@ namespace RPGPlatformer.Core
         {
             if (randomizeStartValue)
             {
-                tickTime = UnityEngine.Random.Range(0, tickLength);
+                AddRandomizedOffset();
             }
         }
 
@@ -30,6 +29,21 @@ namespace RPGPlatformer.Core
             {
                 tickTime -= tickLength;
                 NewTick?.Invoke();
+            }
+        }
+
+        public void AddRandomizedOffset()
+        {
+            tickTime += UnityEngine.Random.Range(0, tickLength);
+
+            while (tickTime >= tickLength)
+            {
+                tickTime -= tickLength;
+            }
+
+            while(tickTime < 0)
+            {
+                tickTime += tickLength;
             }
         }
 

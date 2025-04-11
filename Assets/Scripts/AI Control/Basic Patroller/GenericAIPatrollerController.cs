@@ -3,11 +3,14 @@ using RPGPlatformer.Core;
 using System.Collections.Generic;
 using UnityEngine;
 using RPGPlatformer.Movement;
+using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.AIControl
 {
+    [RequireComponent(typeof(MonoBehaviorInputConfigurer))]
+    [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
     public class GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3, T4> 
-        : StateDrivenController<T4, T2, T3, T1>, IInputSource, IAIPatrollerController
+        : StateDrivenController<T4, T2, T3, T1>, IInputSource, IAIPatrollerController, IPausable
         where T0 : GenericAdvancedMovementController<T00, T01, T02, T03>
         where T00 : AdvancedMover
         where T01 : AdvancedMovementStateGraph
@@ -28,8 +31,12 @@ namespace RPGPlatformer.AIControl
 
         protected Dictionary<State, Action> StateBehavior = new();
 
+        public bool IsInputDisabled { get; protected set; }
         public bool Patrolling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.patrol;
         public IMovementController MovementController => stateDriver.MovementController;
+
+        public event Action InputEnabled;
+        public event Action InputDisabled;
 
         protected override void Awake()
         {
@@ -129,10 +136,21 @@ namespace RPGPlatformer.AIControl
             }
         }
 
+        public void Pause()
+        {
+            DisableInput();
+        }
+
+        public void Unpause()
+        {
+            EnableInput();
+        }
+
         public virtual void EnableInput()
         {
             stateManager.Unfreeze();
             SubscribeStateBehaviorToUpdate(true);
+            InputEnabled?.Invoke();
         }
 
         public virtual void DisableInput()
@@ -140,11 +158,14 @@ namespace RPGPlatformer.AIControl
             SubscribeStateBehaviorToUpdate(false);
             stateManager.Freeze();
             stateManager.StateMachine.ForceCurrentState(stateManager.StateGraph.inactive);
+            InputDisabled?.Invoke();
         }
 
         protected virtual void OnDestroy()
         {
             OnUpdate = null;
+            InputEnabled = null;
+            InputDisabled = null;
         }
     }
 }

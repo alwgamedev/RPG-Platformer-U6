@@ -6,45 +6,60 @@ using UnityEngine.InputSystem;
 
 namespace RPGPlatformer.Core
 {
-    public class InputActionsManager : MonoBehaviour, IInputSource
+    public class InputActionsManager : MonoBehaviour
     {
-        public InputActionMap actionMap = new();
+        InputActionMap actionMap = new();
 
-        public static readonly string saveBindingPath = "<Keyboard>/n";
-        public static readonly string loadBindingPath = "<Keyboard>/m";
+        public const string saveBindingPath = "<Keyboard>/n";
+        public const string loadBindingPath = "<Keyboard>/m";
+        public const string leftClickBindingPath = "<Mouse>/leftButton";
+        public const string rightClickBindingPath = "<Mouse>/rightButton";
+        public const string jumpBindingPath = "<Keyboard>/space";
+        public const string climbBindingPath = "<Keyboard>/shift";
+        public const string toggleRunBindingPath = "<Keyboard>/leftCtrl";
+        public const string escBindingPath = "<Keyboard>/escape";
+        public const string backspaceBindingPath = "<Keyboard>/backspace";
 
-        public static readonly string jumpBindingPath = "<Keyboard>/space";
-        public static readonly string climbBindingPath = "<Keyboard>/shift";
-        public static readonly string toggleRunBindingPath = "<Keyboard>/leftCtrl";
-
+        public const string saveActionName = "Save Button";
+        public const string loadActionName = "Load Button";
+        public const string leftClickActionName = "Left Click";
+        public const string rightClickActionName = "Right Click";
+        public const string moveLeftActionName = "Left Arrow";
+        public const string moveRightActionName = "Right Arrow";
+        public const string climbActionName = "Climb";//this will be like climb rope or ladder (not in use yet)
+        public const string toggleRunActionName = "ToggleRun";
+        public const string jumpActionName = "Spacebar";
+        public const string escActionName = "Esc";
+        public const string backspaceActionName = "Backspace";
 
         //INPUT ACTIONS
 
-        public InputAction SaveAction;
-        public InputAction LoadAction;
-        public InputAction LeftClickAction;
-        public InputAction RightClickAction;
-        public InputAction MoveLeftAction;
-        public InputAction MoveRightAction;
-        public InputAction ClimbAction;
-        public InputAction ToggleRunAction;
-        public InputAction SpacebarAction;
-        public InputAction EscAction;
-        public InputAction BackspaceAction;
+        //public InputAction SaveAction;
+        //public InputAction LoadAction;
+        //public InputAction LeftClickAction;
+        //public InputAction RightClickAction;
+        //public InputAction MoveLeftAction;
+        //public InputAction MoveRightAction;
+        //public InputAction ClimbAction;
+        //public InputAction ToggleRunAction;
+        //public InputAction SpacebarAction;
+        //public InputAction EscAction;
+        //public InputAction BackspaceAction;
         public Dictionary<int, InputAction> AbilityBarActions = new();
 
+        //public bool IsInputEnabled => actionMap.enabled;
 
         //BOOLS FOR KEY HELD DOWN
-        public bool LeftClickDown { get; private set; }
-        public bool RightClickDown { get; private set; }
-        public bool MoveLeftHeldDown { get; private set; }
-        public bool MoveRightHeldDown { get; private set; }
+        //public bool LeftClickDown { get; private set; }
+        //public bool RightClickDown { get; private set; }
+        //public bool MoveLeftHeldDown { get; private set; }
+        //public bool MoveRightHeldDown { get; private set; }
         public bool MouseOverUI {  get; private set; }
 
 
         //ALERT CONTROLLER SYSTEMS WHEN CONFIGURED
 
-        public event Action OnConfigure;
+        public event Action Configured;
 
         private void Update()
         {
@@ -52,7 +67,23 @@ namespace RPGPlatformer.Core
             //because it doesn't like when you check IsPointerOverGameObject() within event callbacks
         }
 
-        public virtual void Configure()
+        public InputAction InputAction(string name)
+        {
+            return actionMap[name];
+        }
+
+        //public InputAction AbilityBarInputAction(int i)
+        //{
+        //    return actionMap[$"Ability Bar {i}"];
+        //}
+
+        public bool HeldDown(string actionName)
+        {
+            return actionMap[actionName].inProgress;
+            //^we'll see if this is the right thing
+        }
+
+        public void Configure()
         {
             if (SettingsManager.Instance == null)
             {
@@ -70,53 +101,36 @@ namespace RPGPlatformer.Core
 
             actionMap = new();
 
-            SaveAction = actionMap.AddAction(name: "Save Button", type: InputActionType.Value, 
+            actionMap.AddAction(name: saveActionName, type: InputActionType.Value, 
                 binding: saveBindingPath);
-            LoadAction = actionMap.AddAction(name: "Load Button", type: InputActionType.Value,
+            actionMap.AddAction(name: loadActionName, type: InputActionType.Value,
                 binding: loadBindingPath);
-
-            LeftClickAction = actionMap.AddAction(name: "Left Click", type: InputActionType.Value, 
-                binding: "<Mouse>/leftButton");
-            LeftClickAction.started += ctx => { LeftClickDown = true; };
-            LeftClickAction.canceled += ctx => { LeftClickDown = false; };
-
-            RightClickAction = actionMap.AddAction(name: "Right Click", type: InputActionType.Value, 
-                binding: "<Mouse>/rightButton");
-            RightClickAction.started += ctx => { RightClickDown = true; };
-            RightClickAction.canceled += ctx => { RightClickDown = false; };
-
-            MoveLeftAction = actionMap.AddAction(name: "Move Left", type: InputActionType.Value, 
+            actionMap.AddAction(name: leftClickActionName, type: InputActionType.Value, 
+                binding: leftClickBindingPath);
+            actionMap.AddAction(name: rightClickActionName, type: InputActionType.Value, 
+                binding: rightClickBindingPath);
+            actionMap.AddAction(name: moveLeftActionName, type: InputActionType.Value, 
                 binding: currentBindings.moveLeftBindingPath);
-            MoveLeftAction.started += (context) => { MoveLeftHeldDown = true; };
-            MoveLeftAction.canceled += (context) => { MoveLeftHeldDown = false; };
-
-            MoveRightAction = actionMap.AddAction(name: "Move Right", type: InputActionType.Value, 
+            actionMap.AddAction(name: moveRightActionName, type: InputActionType.Value, 
                 binding: currentBindings.moveRightBindingPath);
-            MoveRightAction.started += (context) => { MoveRightHeldDown = true; };
-            MoveRightAction.canceled += (context) => { MoveRightHeldDown = false; };
-
-            ClimbAction = actionMap.AddAction(name: "Climb", type: InputActionType.Value, binding: climbBindingPath);
-
-            ToggleRunAction = actionMap.AddAction(name: "Toggle Run", type: InputActionType.Value, 
+            actionMap.AddAction(name: climbActionName, type: InputActionType.Value, binding: climbBindingPath);
+            actionMap.AddAction(name: toggleRunActionName, type: InputActionType.Value, 
                 binding: toggleRunBindingPath);
-
-            SpacebarAction = actionMap.AddAction(name: "Spacebar", type: InputActionType.Value, 
+            actionMap.AddAction(name: jumpActionName, type: InputActionType.Value, 
                 binding: jumpBindingPath);
+            actionMap.AddAction(name: escActionName, type: InputActionType.Value, binding: escBindingPath);
+            actionMap.AddAction(name: backspaceActionName, type: InputActionType.Value, 
+                binding: backspaceBindingPath);
 
-            EscAction = actionMap.AddAction(name: "Esc", type: InputActionType.Value, binding: "<Keyboard>/escape");
-
-            BackspaceAction = actionMap.AddAction(name: "Backspace", type: InputActionType.Value, 
-                binding: "<Keyboard>/backspace");
-
+            AbilityBarActions.Clear();
             foreach (var entry in currentBindings.abilityBarBindingPaths)
             {
-                AbilityBarActions[entry.Key] = actionMap.AddAction(name: $"Ability bar {entry.Key}", 
+                AbilityBarActions[entry.Key] = actionMap.AddAction(name: $"Ability Bar {entry.Key}", 
                     type: InputActionType.Value, binding: entry.Value);
             }
 
             actionMap.Enable();
-
-            OnConfigure?.Invoke();
+            Configured?.Invoke();
         }
 
         public void EnableInput()
@@ -131,7 +145,7 @@ namespace RPGPlatformer.Core
 
         private void OnDestroy()
         {
-            OnConfigure = null;
+            Configured = null;
 
             actionMap.Dispose();
         }

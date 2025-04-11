@@ -18,7 +18,6 @@ namespace RPGPlatformer.AIControl
 
         public AINavigator PatrolNavigator { get; protected set; }
         public IMovementController MovementController => movementController;
-        //public T MovementController { get; protected set; }
 
         protected virtual void Awake()
         {

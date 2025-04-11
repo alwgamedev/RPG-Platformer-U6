@@ -3,16 +3,24 @@ using RPGPlatformer.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
+using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.AIControl
 {
     [RequireComponent(typeof(EarthwormDriver))]
+    [RequireComponent(typeof(MonoBehaviorInputConfigurer))]
+    [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
     public class EarthwormController : StateDrivenController<EarthwormStateManager,
-        EarthwormStateGraph, EarthwormStateMachine, EarthwormDriver>, IInputSource
+        EarthwormStateGraph, EarthwormStateMachine, EarthwormDriver>, IInputSource, IPausable
     {
         Action OnUpdate;
 
         bool AboveGround => stateManager.StateMachine.CurrentState == stateManager.StateGraph.aboveGround;
+
+        public bool IsInputDisabled { get; private set; }
+
+        public event Action InputEnabled;
+        public event Action InputDisabled;
 
         protected override void Start()
         {
@@ -187,17 +195,32 @@ namespace RPGPlatformer.AIControl
 
         //DISABLE/ENABLE INPUT
 
+        public void Pause()
+        {
+            DisableInput();
+        }
+
+        public void Unpause()
+        {
+            EnableInput();
+        }
+
         public void EnableInput()
         {
             stateManager.Unfreeze();
+            InputEnabled?.Invoke();
         }
 
         public void DisableInput()
         {
             stateManager.Freeze();
-            //stateManager.StateMachine.ForceCurrentState(stateManager.StateGraph.inactive);
-            //^commented out so that we don't go through state re-entry when we unfreeze
-            //(this was causing it to re-enter above ground and play particles when pause/unpause)
+            InputDisabled?.Invoke();
+        }
+
+        private void OnDestroy()
+        {
+            InputEnabled = null;
+            InputDisabled = null;
         }
     }
 }

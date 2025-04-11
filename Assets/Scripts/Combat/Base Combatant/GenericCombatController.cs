@@ -10,9 +10,10 @@ namespace RPGPlatformer.Combat
 {
     [RequireComponent(typeof(TickTimer))]
     [RequireComponent(typeof(AnimationControl))]
-    [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
+    //[RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
+    //[RequireComponent(typeof(MonoBehaviorInputConfigurer))]
     public class GenericCombatController<T0, T1, T2, T3, T4> : StateDrivenController<T0, T1, T2, T3>,
-        ICombatController, IAbilityBarOwner, IPausable
+        ICombatController, IAbilityBarOwner,/* IPausable,*/ IInputDependent
         where T0 : CombatStateManager<T1, T2, T3, T4>
         where T1 : CombatStateGraph
         where T2 : CombatStateMachine<T1>
@@ -81,7 +82,7 @@ namespace RPGPlatformer.Combat
             base.Awake();
 
             MovementController = GetComponent<ICombatantMovementController>();
-            InputSource = GetComponent<IInputSource>();
+            InitializeInputSource();
 
             OnDisabled += () => EndChannel();
         }
@@ -93,7 +94,7 @@ namespace RPGPlatformer.Combat
             InitializeAbilityBarManager();
 
             tickTimer = GetComponent<TickTimer>();
-            tickTimer.randomizeStartValue = true;
+            tickTimer.AddRandomizedOffset();
             tickTimer.NewTick += stateManager.OnNewTick;
 
             stateDriver.OnTargetingFailed += OnTargetingFailed;
@@ -121,6 +122,11 @@ namespace RPGPlatformer.Combat
 
 
         //SET-UP
+
+        public void InitializeInputSource()
+        {
+            InputSource = GetComponent<IInputSource>();
+        }
 
         protected override void InitializeStateManager()
         {
@@ -201,7 +207,7 @@ namespace RPGPlatformer.Combat
             {
                 if (ChannelingAbility)
                 {
-                    CancelAbilityInProgress(false);
+                    CancelAbilityInProgress();
                 }
                 ability.Execute(this);
             }
@@ -254,15 +260,22 @@ namespace RPGPlatformer.Combat
 
         protected virtual void AttemptedToExecuteAbilityOnCooldown() { }
 
-        protected virtual void DisableInput()
-        {
-            CancelAbilityInProgress(false);
-            InputSource?.DisableInput();
-        }
+        //protected virtual void DisableInput()
+        //{
+        //    CancelAbilityInProgress(false);
+        //    InputSource?.DisableInput();
+        //}
 
-        protected virtual void EnableInput()
+        //protected virtual void EnableInput()
+        //{
+        //    InputSource?.EnableInput();
+        //}
+
+        public virtual void OnInputEnabled() { }
+
+        public virtual void OnInputDisabled()
         {
-            InputSource?.EnableInput();
+            CancelAbilityInProgress();
         }
 
 
@@ -530,7 +543,7 @@ namespace RPGPlatformer.Combat
             if (stateDriver.Health.IsDead || immuneToStuns) return;
 
             activeStuns++;
-            DisableInput();
+            InputSource?.DisableInput();
             if (freezeAnimation)
             {
                 activeStunsThatFreezeAnimation++;
@@ -550,9 +563,10 @@ namespace RPGPlatformer.Combat
 
             try
             {
+                OnStunned(freezeAnimation);
                 stateManager.StateGraph.dead.OnEntry += CompleteEarly;
                 OnDisabled += CompleteEarly;
-                Task result = await Task.WhenAny(MiscTools.DelayGameTime(stunDuration, tokenSource.Token), tcs.Task);
+                await Task.WhenAny(MiscTools.DelayGameTime(stunDuration, tokenSource.Token), tcs.Task);
                 if (tokenSource.IsCancellationRequested) return;
 
                 activeStuns--;
@@ -568,7 +582,7 @@ namespace RPGPlatformer.Combat
                 }
                 if (activeStuns == 0 && !stateDriver.Health.IsDead)
                 {
-                    InputSource.EnableInput();
+                    InputSource?.EnableInput();
                 }
             }
             finally
@@ -578,22 +592,24 @@ namespace RPGPlatformer.Combat
             }
         }
 
+        protected virtual void OnStunned(bool frozen) { }
+
 
         //PAUSE, DEATH, AND DESTROY HANDLERS
 
-        public void Pause()
-        {
-            DisableInput();
-        }
+        //public void Pause()
+        //{
+        //    InputSource?.DisableInput();
+        //}
 
-        public void Unpause()
-        {
-            EnableInput();
-        }
+        //public void Unpause()
+        //{
+        //    InputSource?.EnableInput();
+        //}
 
         protected virtual async void Death()
         {
-            DisableInput();
+            InputSource?.DisableInput();
             //combatManager.animationControl.Freeze(false);//UNFREEZE, in case animation was frozen due to a stun
             stateDriver.OnDeath();
             MovementController?.OnDeath();
@@ -606,7 +622,7 @@ namespace RPGPlatformer.Combat
         {
             stateDriver.EquipSlots[EquipmentSlot.Mainhand].gameObject.SetActive(true);
             MovementController?.OnRevival();
-            EnableInput();
+            InputSource?.EnableInput();
             OnRevive?.Invoke();
         }
 

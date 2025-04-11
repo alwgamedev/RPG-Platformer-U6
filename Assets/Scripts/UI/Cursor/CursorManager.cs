@@ -75,18 +75,18 @@ namespace RPGPlatformer.UI
         private void OnIAMConfigure()
         {
             var iam = SettingsManager.Instance.IAM;
-            iam.LeftClickAction.started += ctx => HandleMouseClick(true);
-            iam.RightClickAction.started += ctx => HandleMouseClick(true);
-            iam.LeftClickAction.canceled += ctx =>
+            iam.InputAction(InputActionsManager.leftClickActionName).started += ctx => HandleMouseClick(true);
+            iam.InputAction(InputActionsManager.rightClickActionName).started += ctx => HandleMouseClick(true);
+            iam.InputAction(InputActionsManager.leftClickActionName).canceled += ctx =>
             {
-                if (!iam.RightClickDown)
+                if (!iam.HeldDown(InputActionsManager.rightClickActionName))
                 {
                     HandleMouseClick(false);
                 }
             };
-            iam.RightClickAction.canceled += ctx =>
+            iam.InputAction(InputActionsManager.rightClickActionName).canceled += ctx =>
             {
-                if (!iam.LeftClickDown)
+                if (!iam.HeldDown(InputActionsManager.leftClickActionName))
                 {
                     HandleMouseClick(false);
                 }
@@ -107,7 +107,8 @@ namespace RPGPlatformer.UI
         {
             var igo = InteractableGameObject.HoveredIGO; 
             var iam = SettingsManager.Instance.IAM;
-            bool clicked = iam != null && (iam.LeftClickDown || iam.RightClickDown);
+            bool clicked = iam != null && (iam.HeldDown(InputActionsManager.leftClickActionName) 
+                || iam.HeldDown(InputActionsManager.rightClickActionName));
 
             if (igo != null)
             {

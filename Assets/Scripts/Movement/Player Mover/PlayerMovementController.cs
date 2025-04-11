@@ -4,9 +4,12 @@ using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.Movement
 {
-    public class PlayerMovementController : AdvancedMovementController, IPausable
+    public class PlayerMovementController : AdvancedMovementController/*, IPausable*/
     {
-        bool inputDisabled;
+        //bool inputDisabled;
+
+        bool moveLeftHeldDown;
+        bool moveRightHeldDown;
 
         protected override void Awake()
         {
@@ -19,38 +22,40 @@ namespace RPGPlatformer.Movement
         {
             var iam = SettingsManager.Instance.IAM;
 
-            iam.ToggleRunAction.started += (context) =>
+            iam.InputAction(InputActionsManager.toggleRunActionName).started += (context) =>
             {
-                if (inputDisabled) return;
+                if (InputSource.IsInputDisabled) return;
                 ToggleRunning();
 
             };
+            iam.InputAction(InputActionsManager.moveRightActionName).started += (context) =>
+            {
+                if (InputSource.IsInputDisabled) return;
+                moveRightHeldDown = true;
+                UpdateMoveInput();
+            };
+            iam.InputAction(InputActionsManager.moveRightActionName).canceled += (context) =>
+            {
+                //if (!InputSource.IsInputEnabled) return;
+                moveRightHeldDown = false;
+                UpdateMoveInput();
+            };
+            iam.InputAction(InputActionsManager.moveLeftActionName).started += (context) =>
+            {
+                if (InputSource.IsInputDisabled) return;
+                moveLeftHeldDown = true;
+                UpdateMoveInput();
+            };
+            iam.InputAction(InputActionsManager.moveLeftActionName).canceled += (context) =>
+            {
+                //if (inputDisabled) return;
+                moveLeftHeldDown = false;
+                UpdateMoveInput();
+            };
 
-            iam.MoveRightAction.started += (context) =>
+            iam.InputAction(InputActionsManager.jumpActionName).started += (context) =>
             {
-                if (inputDisabled) return;
-                UpdateMoveInput();
-            };
-            iam.MoveRightAction.canceled += (context) =>
-            {
-                if (inputDisabled) return;
-                UpdateMoveInput();
-            };
-            iam.MoveLeftAction.started += (context) =>
-            {
-
-                if (inputDisabled) return;
-                UpdateMoveInput();
-            };
-            iam.MoveLeftAction.canceled += (context) =>
-            {
-                if (inputDisabled) return;
-                UpdateMoveInput();
-            };
-
-            iam.SpacebarAction.started += (context) =>
-            {
-                if (inputDisabled) return;
+                if (InputSource.IsInputDisabled) return;
                 stateDriver.Jump();
             };
         }
@@ -70,41 +75,41 @@ namespace RPGPlatformer.Movement
 
         private void UpdateMoveInput()
         {
-            MoveInput = new Vector2((SettingsManager.Instance.IAM.MoveRightHeldDown ? 1 : 0)
-               - (SettingsManager.Instance.IAM.MoveLeftHeldDown ? 1 : 0), 0);
+            MoveInput = new Vector2((moveLeftHeldDown ? -1 : 0) + (moveRightHeldDown ? 1 : 0), 0);
         }
 
-        public void Pause()
-        {
-            DisableInput();
-        }
+        //public void Pause()
+        //{
+        //    DisableInput();
+        //}
 
-        public void Unpause()
-        {
-            EnableInput();
-        }
+        //public void Unpause()
+        //{
+        //    EnableInput();
+        //}
 
-        private void DisableInput()
-        {
-            inputDisabled = true;
-        }
+        //private void DisableInput()
+        //{
+        //    SoftStop();
+        //    inputDisabled = true;
+        //}
 
-        private void EnableInput()
-        {
-            inputDisabled = false;
-        }
+        //private void EnableInput()
+        //{
+        //    inputDisabled = false;
+        //}
 
-        public override void OnDeath()
-        {
-            DisableInput();
-            base.OnDeath();
-        }
+        //public override void OnDeath()
+        //{
+        //    DisableInput();
+        //    base.OnDeath();
+        //}
 
-        public override void OnRevival()
-        {
-            base.OnRevival();
-            EnableInput();
-        }
+        //public override void OnRevival()
+        //{
+        //    base.OnRevival();
+        //    EnableInput();
+        //}
 
         protected override void OnDestroy()
         {

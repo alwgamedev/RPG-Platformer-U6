@@ -19,8 +19,11 @@ namespace RPGPlatformer.Saving
 
         private void OnIAMConfigure()
         {
-            SettingsManager.Instance.IAM.SaveAction.canceled += async (context) => await Save(DefaultFilePath());
-            SettingsManager.Instance.IAM.LoadAction.canceled += async (context) => await Load(DefaultFilePath());
+            //ONLY FOR TESTING
+            //SettingsManager.Instance.IAM.InputAction(InputActionsManager.saveActionName).canceled 
+            //    += async (context) => await Save(DefaultFilePath());
+            //SettingsManager.Instance.IAM.InputAction(InputActionsManager.loadActionName).canceled 
+            //    += async (context) => await Load(DefaultFilePath());
 
             //SettingsManager.OnIAMConfigure -= OnIAMConfigure;
         }

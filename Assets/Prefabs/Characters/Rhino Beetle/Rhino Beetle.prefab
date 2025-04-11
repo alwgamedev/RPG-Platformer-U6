@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 4129447919136715259}
   - component: {fileID: 8244550270408134216}
   - component: {fileID: 7847680296851163206}
+  - component: {fileID: 2082181269679480034}
   m_Layer: 6
   m_Name: Rhino Beetle
   m_TagString: Enemy
@@ -148,8 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fff2b6c0084a44aabe198745fbf067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultAnimatorController: {fileID: 9100000, guid: fe571b0b7cfc30743906ac0998cc5556, type: 2}
-  animator: {fileID: 0}
 --- !u!114 &8820363439467063438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,6 +347,7 @@ MonoBehaviour:
     rangedAbilityBarItems: []
   useDefaultAbilityBars: 0
   immuneToStuns: 0
+  autoRetaliate: 1
 --- !u!114 &2525433368886563850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,6 +401,10 @@ MonoBehaviour:
     autoReplenish: 0
     statBar: {fileID: 0}
   useAutoCalculatedHealthPoints: 0
+  dropLootOnFinalizeDeath: 1
+  destroyOnFinalizeDeath: 1
+  delayBeforeFinalizeDeath: 1
+  timeToDelayBeforeFinalizeDeath: 1.5
   combatXPReward: 5
 --- !u!114 &8244550270408134216
 MonoBehaviour:
@@ -433,6 +437,18 @@ MonoBehaviour:
   boundedPatrolHangTime: 1
   pathPatrolHangTime: 0
   checkHorizontalDistanceOnly: 1
+--- !u!114 &2082181269679480034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4640224479810571276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4df54fd93182014ca715844d31d17ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6277706183260746356
 GameObject:
   m_ObjectHideFlags: 0

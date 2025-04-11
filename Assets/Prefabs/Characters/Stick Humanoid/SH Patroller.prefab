@@ -432,6 +432,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4242305447085296150}
+    - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7083093071468336016}
   m_SourcePrefab: {fileID: 100100000, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
 --- !u!4 &408011811868376633 stripped
 Transform:
@@ -520,8 +523,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fff2b6c0084a44aabe198745fbf067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultAnimatorController: {fileID: 9100000, guid: f90d3ed9ffdfe574f9306cbb60489f9e, type: 2}
-  animator: {fileID: 0}
 --- !u!114 &5255926580514553323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,6 +540,7 @@ MonoBehaviour:
   deathForce: {x: -150, y: 120}
   deathTorque: 0
   treatContactCharacterAsGround: 0
+  adjustedHalfWidthFactor: 0.45
   runSpeed: 2.4
   walkSpeed: 0.8
   maxNumJumps: 1
@@ -561,33 +563,49 @@ MonoBehaviour:
     moveDirection: 0
     acceleration: 100
     flipSprite: 1
+    changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
     rotateToDirection: 0
+    rotationSpeed: 0
     maxRotationAngle: 0
     minRotationAngle: 0
-    maxRotation: {x: 1, y: 0}
-    minRotation: {x: 1, y: 0}
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
   - movementType: 1
     moveDirection: 2
     acceleration: 80
     flipSprite: 0
+    changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
+    rotationSpeed: 0
     maxRotationAngle: 0
     minRotationAngle: 0
-    maxRotation: {x: 1, y: 0}
-    minRotation: {x: 1, y: 0}
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
   - movementType: 2
     moveDirection: 2
     acceleration: 80
     flipSprite: 1
+    changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
+    rotationSpeed: 0
     maxRotationAngle: 0
     minRotationAngle: 0
-    maxRotation: {x: 1, y: 0}
-    minRotation: {x: 1, y: 0}
-  detectWalls: 0
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
+  wallDetectionOptions:
+    detectWalls: 0
+    numWallCastsPerThird: 0
+    wallCastDistanceFactor: 0
+    wallClingRotationSpeed: 0
   dropOffHandlingOption: 1
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 2.5
@@ -606,6 +624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pursuitRange: 8
   suspicionTime: 5
+  playerEnemy: 1
 --- !u!114 &2807143126115891349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -620,7 +639,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultPatrolMode: 0
   defaultPatrolParameters: {fileID: 0}
-  playerEnemy: 1
 --- !u!114 &2192792491754854024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -651,6 +669,7 @@ MonoBehaviour:
       ability: 0
   useDefaultAbilityBars: 0
   immuneToStuns: 0
+  autoRetaliate: 1
 --- !u!114 &3663846158437281456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,6 +770,10 @@ MonoBehaviour:
     autoReplenish: 0
     statBar: {fileID: 0}
   useAutoCalculatedHealthPoints: 1
+  dropLootOnFinalizeDeath: 1
+  destroyOnFinalizeDeath: 1
+  delayBeforeFinalizeDeath: 1
+  timeToDelayBeforeFinalizeDeath: 1.5
   combatXPReward: 24
 --- !u!114 &8912017489112769141
 MonoBehaviour:
@@ -810,3 +833,15 @@ MonoBehaviour:
   boundedPatrolHangTime: 1
   pathPatrolHangTime: 0
   checkHorizontalDistanceOnly: 1
+--- !u!114 &7083093071468336016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296160008381991138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4df54fd93182014ca715844d31d17ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
