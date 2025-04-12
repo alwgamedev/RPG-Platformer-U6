@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3378546638542584965}
-  - component: {fileID: 1643519799678218092}
   - component: {fileID: 7486080094306755011}
   - component: {fileID: 3228243602582934473}
+  - component: {fileID: 1047017365671917538}
   m_Layer: 0
   m_Name: Test Wormhole
   m_TagString: Untagged
@@ -35,8 +35,33 @@ Transform:
   - {fileID: 440399086338828222}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1643519799678218092
-CircleCollider2D:
+--- !u!114 &7486080094306755011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8706358469064625245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d6b8fbaba57a24092a2b1195c1f1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3228243602582934473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8706358469064625245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 711b88a0df10a7747b86ff32e9a17316, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emergeParticles: {fileID: 3395309495239292950}
+--- !u!70 &1047017365671917538
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -70,32 +95,8 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.75
---- !u!114 &7486080094306755011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8706358469064625245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d6b8fbaba57a24092a2b1195c1f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3228243602582934473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8706358469064625245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 711b88a0df10a7747b86ff32e9a17316, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  emergeParticles: {fileID: 3395309495239292950}
+  m_Size: {x: 2, y: 6}
+  m_Direction: 0
 --- !u!1001 &8802819099726258398
 PrefabInstance:
   m_ObjectHideFlags: 0

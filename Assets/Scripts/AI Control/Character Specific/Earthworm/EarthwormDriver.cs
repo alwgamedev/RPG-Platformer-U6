@@ -16,7 +16,8 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float maxTimeAboveGround = 10;
         [SerializeField] Transform underGroundBodyAnchor;
         [SerializeField] Transform aboveGroundBodyAnchor;
-        [SerializeField] Collider2D[] noseContactColliders;
+        //[SerializeField] Collider2D[] contactColliders;
+        //[SerializeField] Collider2D[] slamColliders;
         [SerializeField] EarthwormWormhole wormhole;
 
         AICombatController combatController;
@@ -24,9 +25,7 @@ namespace RPGPlatformer.AIControl
         VisualCurveGuide curveGuide;
         bool wormholeTriggerEnabled;
 
-        //CurveIKEffect stabIKEffect => curveGuide.ikEffects[0];
-        //CurveIKEffect slamIKEffectBody => curveGuide.ikEffects[1];
-        //CurveIKEffect slamIKEffectNose => curveGuide.ikEffects[2];
+        CurveIKEffect slashIKEffect => curveGuide.ikEffects[0];
 
         PolygonCollider2D GroundCollider => movementController.GroundCollider;
         float GroundLeftBound => movementController.GroundLeftBound;//giving a little padding for safety
@@ -55,10 +54,11 @@ namespace RPGPlatformer.AIControl
             CurrentTarget = GlobalGameTools.Player.Combatant.Health;
             GlobalGameTools.Player.OnDeath += () => Trigger(typeof(EarthwormDormant).Name);
 
-            var slashIK = curveGuide.ikEffects[0];
-            slashIK.SetTarget(CurrentTarget.transform);
+            slashIKEffect.SetTarget(CurrentTarget.transform);
             curveGuide.ReconfigureIKEffects();
             DisableAllIK();
+
+            //EndSlamEffect();
 
             SetBodyAnchor(false);
             ChooseRandomWormholePosition();
@@ -71,26 +71,46 @@ namespace RPGPlatformer.AIControl
 
         //SETTINGS
 
-        //ik effects will activated in animation (by directly modifying their fields)
+        //public void EnableStabIKEffect()
+        //{
+        //    //stabIKEffect.enabled = true;
+        //    //curveGuide.ikEffects[0] = stabIKEffect;
+        //}
 
-        public void EnableStabIKEffect()
-        {
-            //stabIKEffect.enabled = true;
-            //curveGuide.ikEffects[0] = stabIKEffect;
-        }
+        //public void ConfigureSlamIKEffects()
+        //{
+        //    //to do
+        //    //just need to set target for body and nose effects (i.e. locate appropriate points along the ground)
+        //    //but also need to adjust *nose collider exclude layers*, which I haven't gotten to work correctly yet
+        //}
 
-        public void ConfigureSlamIKEffects()
-        {
-            //to do
-            //just need to set target for body and nose effects (i.e. locate appropriate points along the ground)
-            //but also need to adjust *nose collider exclude layers*, which I haven't gotten to work correctly yet
-        }
+        //public void BeginSlamEffect()
+        //{
+        //    EnableContactColliders(false);
+        //    EnableSlamColliders(true);
+        //}
 
-        public void EnableSlamIKEffects()
-        {
-            //slamIKEffectBody.enabled = true;
-            //slamIKEffectNose.enabled = true;
-        }
+        //public void EndSlamEffect()
+        //{
+        //    EnableSlamColliders(false);
+        //    EnableContactColliders(true);
+        //}
+
+        //public void EnableContactColliders(bool val)
+        //{
+        //    foreach (var c in contactColliders)
+        //    {
+        //        c.enabled = val;
+        //    }
+        //}
+
+        //public void EnableSlamColliders(bool val)
+        //{
+        //    foreach (var c in slamColliders)
+        //    {
+        //        c.enabled = val;
+        //    }
+        //}
 
         public void DisableAllIK()
         {

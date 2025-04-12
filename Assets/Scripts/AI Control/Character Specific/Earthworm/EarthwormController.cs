@@ -91,6 +91,7 @@ namespace RPGPlatformer.AIControl
                 stateDriver.FaceTarget();
                 stateManager.StateGraph.aboveGround.OnExit += EarlyExitHandler;
                 await stateDriver.Emerge(cts.Token);
+                stateDriver.FaceTarget();
                 await stateDriver.AboveGroundTimer(cts.Token);
                 stateManager.StateGraph.aboveGround.OnExit -= EarlyExitHandler;
 
@@ -208,12 +209,14 @@ namespace RPGPlatformer.AIControl
         public void EnableInput()
         {
             stateManager.Unfreeze();
+            IsInputDisabled = false;
             InputEnabled?.Invoke();
         }
 
         public void DisableInput()
         {
             stateManager.Freeze();
+            IsInputDisabled = true;
             InputDisabled?.Invoke();
         }
 

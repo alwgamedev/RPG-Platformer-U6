@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 4166043204953211113}
   - component: {fileID: 3687036649613949729}
   m_Layer: 6
-  m_Name: Combat Collider
+  m_Name: Combat Collider (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 7467768007904869462}
   - component: {fileID: 4246224547885450734}
   m_Layer: 6
-  m_Name: Combat Collider
+  m_Name: Combat Collider (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 4718184101696744379}
   - component: {fileID: 2362228283277474844}
   m_Layer: 14
-  m_Name: Contact Collider
+  m_Name: Contact Collider (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -411,7 +411,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8848104348067717170}
-  - component: {fileID: 6785787688279827258}
   - component: {fileID: 7405243554796035400}
   - component: {fileID: 8808086443595260739}
   - component: {fileID: 3021025127566032016}
@@ -454,33 +453,6 @@ Transform:
   - {fileID: 8029862581280041187}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &6785787688279827258
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3694819894051617520}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 1
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 0
 --- !u!95 &7405243554796035400
 Animator:
   serializedVersion: 7
@@ -493,7 +465,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: f75a7e5e89d57244090ea8c65724bee8, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 1
+  m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -569,15 +541,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa209ddddc084e6468a5c4b5c26cc2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emergeMoveSpeed: 1.75
+  emergeMoveSpeed: 1.4
   retreatMoveSpeed: 3
   tunnelMoveSpeed: 4
   maxTimeAboveGround: 13
   underGroundBodyAnchor: {fileID: 1194695686574530751}
   aboveGroundBodyAnchor: {fileID: 8248864435369701058}
-  noseContactColliders:
-  - {fileID: 7346773191040272774}
-  - {fileID: 1730005298992380380}
   wormhole: {fileID: 0}
 --- !u!114 &743808907830779398
 MonoBehaviour:
@@ -760,7 +729,7 @@ GameObject:
   - component: {fileID: 4807324015725757557}
   - component: {fileID: 861713276761922927}
   m_Layer: 14
-  m_Name: Contact Collider
+  m_Name: Contact Collider (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -828,7 +797,7 @@ GameObject:
   - component: {fileID: 5221591054694002309}
   - component: {fileID: 2558720042668142395}
   m_Layer: 6
-  m_Name: Combat Collider
+  m_Name: Combat Collider (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1101,7 +1070,7 @@ GameObject:
   - component: {fileID: 8579253823656801768}
   - component: {fileID: 1990241473852557884}
   m_Layer: 6
-  m_Name: Combat Collider
+  m_Name: Combat Collider (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1169,7 +1138,7 @@ GameObject:
   - component: {fileID: 6645116009548877728}
   - component: {fileID: 5792057481903100525}
   m_Layer: 6
-  m_Name: Combat Collider
+  m_Name: Combat Collider (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1206,7 +1175,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 523775
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1395,7 +1364,7 @@ GameObject:
   - component: {fileID: 3525660646094974841}
   - component: {fileID: 1730005298992380380}
   m_Layer: 14
-  m_Name: Contact Collider
+  m_Name: Contact Collider (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1463,7 +1432,7 @@ GameObject:
   - component: {fileID: 5812914072218315432}
   - component: {fileID: 8179556018905412617}
   m_Layer: 14
-  m_Name: Contact Collider
+  m_Name: Contact Collider (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1610,7 +1579,7 @@ GameObject:
   - component: {fileID: 334035653383110857}
   - component: {fileID: 5275559811285257610}
   m_Layer: 6
-  m_Name: Combat Collider
+  m_Name: Combat Collider (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1678,7 +1647,7 @@ GameObject:
   - component: {fileID: 4039521530119611103}
   - component: {fileID: 8408827726596977077}
   m_Layer: 6
-  m_Name: Combat Collider
+  m_Name: Combat Collider (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1746,7 +1715,7 @@ GameObject:
   - component: {fileID: 7572914710753665478}
   - component: {fileID: 7346773191040272774}
   m_Layer: 14
-  m_Name: Contact Collider
+  m_Name: Contact Collider (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1862,7 +1831,7 @@ GameObject:
   - component: {fileID: 1004403560465596939}
   - component: {fileID: 688862211927184131}
   m_Layer: 6
-  m_Name: Combat Collider
+  m_Name: Combat Collider (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1961,7 +1930,7 @@ GameObject:
   - component: {fileID: 7799913676520186919}
   - component: {fileID: 9005540539685162948}
   m_Layer: 14
-  m_Name: Contact Collider
+  m_Name: Contact Collider (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2060,7 +2029,7 @@ GameObject:
   - component: {fileID: 8485663737210778641}
   - component: {fileID: 6061992366235534680}
   m_Layer: 14
-  m_Name: Contact Collider
+  m_Name: Contact Collider (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2208,8 +2177,6 @@ MonoBehaviour:
   ikEnabled: 0
   ikEffects:
   - {fileID: 3272142817664393271}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &7323158423895243465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2225,28 +2192,28 @@ MonoBehaviour:
   lineRendererPositionCount: 60
   guidePoints:
   - virtualSegments: 0
-    point: {x: 0, y: -3.65, z: 0}
+    point: {x: 0.31, y: -2.7800002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0, y: -3.4625, z: 0}
+    point: {x: 0.31, y: -2.5925002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0, y: -3.275, z: 0}
+    point: {x: 0.31, y: -2.4050002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0, y: -3.0875, z: 0}
+    point: {x: 0.31, y: -2.2175002, z: 0}
+    velocity: {x: 0, y: 0.25000012, z: 0}
+  - virtualSegments: 1
+    point: {x: 0.31, y: -2.0300002, z: 0}
+    velocity: {x: 0, y: 0.25000012, z: 0}
+  - virtualSegments: 1
+    point: {x: 0.31, y: -1.8425001, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0, y: -2.9, z: 0}
+    point: {x: 0.31, y: -1.6550001, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0, y: -2.7125, z: 0}
-    velocity: {x: 0, y: 0.25, z: 0}
-  - virtualSegments: 1
-    point: {x: 0, y: -2.525, z: 0}
-    velocity: {x: 0, y: 0.25, z: 0}
-  - virtualSegments: 1
-    point: {x: 0, y: -2.3375, z: 0}
+    point: {x: 0.31, y: -1.4675001, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   lerpMode: 1
   lerpRate: 25
@@ -2296,66 +2263,66 @@ LineRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: -3.65, z: 0}
-  - {x: 0, y: -3.6227696, z: 0}
-  - {x: 0, y: -3.5995653, z: 0}
-  - {x: 0, y: -3.5791345, z: 0}
-  - {x: 0, y: -3.5602245, z: 0}
-  - {x: 0, y: -3.541583, z: 0}
-  - {x: 0, y: -3.5219574, z: 0}
-  - {x: 0, y: -3.5000954, z: 0}
-  - {x: 0, y: -3.4747434, z: 0}
-  - {x: 0, y: -3.446374, z: 0}
-  - {x: 0, y: -3.4215972, z: 0}
-  - {x: 0, y: -3.4001312, z: 0}
-  - {x: 0, y: -3.380723, z: 0}
-  - {x: 0, y: -3.3621197, z: 0}
-  - {x: 0, y: -3.3430696, z: 0}
-  - {x: 0, y: -3.3223188, z: 0}
-  - {x: 0, y: -3.2986162, z: 0}
-  - {x: 0, y: -3.270816, z: 0}
-  - {x: 0, y: -3.2442374, z: 0}
-  - {x: 0, y: -3.2215059, z: 0}
-  - {x: 0, y: -3.2013693, z: 0}
-  - {x: 0, y: -3.1825743, z: 0}
-  - {x: 0, y: -3.163869, z: 0}
-  - {x: 0, y: -3.1440005, z: 0}
-  - {x: 0, y: -3.1217163, z: 0}
-  - {x: 0, y: -3.0957642, z: 0}
-  - {x: 0, y: -3.0675843, z: 0}
-  - {x: 0, y: -3.0433576, z: 0}
-  - {x: 0, y: -3.0222619, z: 0}
-  - {x: 0, y: -3.0030453, z: 0}
-  - {x: 0, y: -2.984455, z: 0}
-  - {x: 0, y: -2.9652383, z: 0}
-  - {x: 0, y: -2.944143, z: 0}
-  - {x: 0, y: -2.9199162, z: 0}
-  - {x: 0, y: -2.8917363, z: 0}
-  - {x: 0, y: -2.865784, z: 0}
-  - {x: 0, y: -2.8435, z: 0}
-  - {x: 0, y: -2.823631, z: 0}
-  - {x: 0, y: -2.804926, z: 0}
-  - {x: 0, y: -2.7861311, z: 0}
-  - {x: 0, y: -2.765994, z: 0}
-  - {x: 0, y: -2.7432628, z: 0}
-  - {x: 0, y: -2.7166843, z: 0}
-  - {x: 0, y: -2.688884, z: 0}
-  - {x: 0, y: -2.6651814, z: 0}
-  - {x: 0, y: -2.6444309, z: 0}
-  - {x: 0, y: -2.6253805, z: 0}
-  - {x: 0, y: -2.6067772, z: 0}
-  - {x: 0, y: -2.5873692, z: 0}
-  - {x: 0, y: -2.5659027, z: 0}
-  - {x: 0, y: -2.5411265, z: 0}
-  - {x: 0, y: -2.5127566, z: 0}
-  - {x: 0, y: -2.4874048, z: 0}
-  - {x: 0, y: -2.4655426, z: 0}
-  - {x: 0, y: -2.4459171, z: 0}
-  - {x: 0, y: -2.4272754, z: 0}
-  - {x: 0, y: -2.4083657, z: 0}
-  - {x: 0, y: -2.3879352, z: 0}
-  - {x: 0, y: -2.3647304, z: 0}
-  - {x: 0, y: -2.3375, z: 0}
+  - {x: 0.31, y: -2.7800002, z: 0}
+  - {x: 0.31, y: -2.7527697, z: 0}
+  - {x: 0.31, y: -2.7295654, z: 0}
+  - {x: 0.31, y: -2.7091346, z: 0}
+  - {x: 0.31, y: -2.6902246, z: 0}
+  - {x: 0.31, y: -2.6715832, z: 0}
+  - {x: 0.31, y: -2.6519575, z: 0}
+  - {x: 0.31, y: -2.6300955, z: 0}
+  - {x: 0.31, y: -2.6047435, z: 0}
+  - {x: 0.31, y: -2.576374, z: 0}
+  - {x: 0.31, y: -2.5515974, z: 0}
+  - {x: 0.31, y: -2.5301313, z: 0}
+  - {x: 0.31, y: -2.510723, z: 0}
+  - {x: 0.31, y: -2.4921198, z: 0}
+  - {x: 0.31, y: -2.4730697, z: 0}
+  - {x: 0.31, y: -2.452319, z: 0}
+  - {x: 0.31, y: -2.4286163, z: 0}
+  - {x: 0.31, y: -2.4008162, z: 0}
+  - {x: 0.31, y: -2.3742375, z: 0}
+  - {x: 0.31, y: -2.351506, z: 0}
+  - {x: 0.31, y: -2.3313694, z: 0}
+  - {x: 0.31, y: -2.3125744, z: 0}
+  - {x: 0.31, y: -2.293869, z: 0}
+  - {x: 0.31, y: -2.274001, z: 0}
+  - {x: 0.31, y: -2.2517164, z: 0}
+  - {x: 0.31, y: -2.2257643, z: 0}
+  - {x: 0.31, y: -2.1975844, z: 0}
+  - {x: 0.31, y: -2.1733575, z: 0}
+  - {x: 0.31, y: -2.152262, z: 0}
+  - {x: 0.31, y: -2.1330454, z: 0}
+  - {x: 0.31, y: -2.114455, z: 0}
+  - {x: 0.31, y: -2.0952384, z: 0}
+  - {x: 0.31, y: -2.0741432, z: 0}
+  - {x: 0.31, y: -2.049916, z: 0}
+  - {x: 0.31, y: -2.0217364, z: 0}
+  - {x: 0.31, y: -1.9957839, z: 0}
+  - {x: 0.31, y: -1.9734998, z: 0}
+  - {x: 0.31, y: -1.9536313, z: 0}
+  - {x: 0.31, y: -1.9349259, z: 0}
+  - {x: 0.31, y: -1.9161311, z: 0}
+  - {x: 0.31, y: -1.8959942, z: 0}
+  - {x: 0.31, y: -1.8732628, z: 0}
+  - {x: 0.31, y: -1.8466841, z: 0}
+  - {x: 0.31, y: -1.818884, z: 0}
+  - {x: 0.31, y: -1.7951812, z: 0}
+  - {x: 0.31, y: -1.7744309, z: 0}
+  - {x: 0.31, y: -1.7553804, z: 0}
+  - {x: 0.31, y: -1.7367773, z: 0}
+  - {x: 0.31, y: -1.7173688, z: 0}
+  - {x: 0.31, y: -1.695903, z: 0}
+  - {x: 0.31, y: -1.6711264, z: 0}
+  - {x: 0.31, y: -1.6427566, z: 0}
+  - {x: 0.31, y: -1.6174049, z: 0}
+  - {x: 0.31, y: -1.5955426, z: 0}
+  - {x: 0.31, y: -1.575917, z: 0}
+  - {x: 0.31, y: -1.5572757, z: 0}
+  - {x: 0.31, y: -1.5383658, z: 0}
+  - {x: 0.31, y: -1.5179348, z: 0}
+  - {x: 0.31, y: -1.4947306, z: 0}
+  - {x: 0.31, y: -1.4675001, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.23943482

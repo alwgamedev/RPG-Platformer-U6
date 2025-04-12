@@ -10,8 +10,6 @@ namespace RPGPlatformer.Combat
 {
     [RequireComponent(typeof(TickTimer))]
     [RequireComponent(typeof(AnimationControl))]
-    //[RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
-    //[RequireComponent(typeof(MonoBehaviorInputConfigurer))]
     public class GenericCombatController<T0, T1, T2, T3, T4> : StateDrivenController<T0, T1, T2, T3>,
         ICombatController, IAbilityBarOwner,/* IPausable,*/ IInputDependent
         where T0 : CombatStateManager<T1, T2, T3, T4>
@@ -533,7 +531,10 @@ namespace RPGPlatformer.Combat
                 stateDriver.Attack();
             }
             float effectiveDamage = stateDriver.HandleHealthChange(damage, damageDealer);
-            stateManager.HandleHealthChange(effectiveDamage);
+            if (!ChannelingAbility)//so that take dmg animation doesn't mess up any drawn out combat animations
+            {
+                stateManager.AnimateHealthChange(effectiveDamage);
+            }
             HealthChangeEffected?.Invoke(effectiveDamage);
         }
 

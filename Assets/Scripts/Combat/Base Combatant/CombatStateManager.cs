@@ -129,7 +129,7 @@ namespace RPGPlatformer.Combat
             animationControl.PlayAnimationState("Idle", "Base Layer", 0);
         }
 
-        public virtual void HandleHealthChange(float damage)
+        public virtual void AnimateHealthChange(float damage)
         {
             if (damage > 0)
             {
