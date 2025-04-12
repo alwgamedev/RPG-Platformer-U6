@@ -16,8 +16,6 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float maxTimeAboveGround = 10;
         [SerializeField] Transform underGroundBodyAnchor;
         [SerializeField] Transform aboveGroundBodyAnchor;
-        //[SerializeField] Collider2D[] contactColliders;
-        //[SerializeField] Collider2D[] slamColliders;
         [SerializeField] EarthwormWormhole wormhole;
 
         AICombatController combatController;
@@ -26,7 +24,8 @@ namespace RPGPlatformer.AIControl
         bool wormholeTriggerEnabled;
 
         CurveIKEffect slashIKEffect => curveGuide.ikEffects[0];
-
+        CurveIKEffect slamBodyIKEffect => curveGuide.ikEffects[1];
+        CurveIKEffect slamNoseIKEffect => curveGuide.ikEffects[2];
         PolygonCollider2D GroundCollider => movementController.GroundCollider;
         float GroundLeftBound => movementController.GroundLeftBound;//giving a little padding for safety
         float GroundRightBound => movementController.GroundRightBound;
@@ -58,8 +57,6 @@ namespace RPGPlatformer.AIControl
             curveGuide.ReconfigureIKEffects();
             DisableAllIK();
 
-            //EndSlamEffect();
-
             SetBodyAnchor(false);
             ChooseRandomWormholePosition();
             GoToWormhole();
@@ -71,50 +68,36 @@ namespace RPGPlatformer.AIControl
 
         //SETTINGS
 
-        //public void EnableStabIKEffect()
-        //{
-        //    //stabIKEffect.enabled = true;
-        //    //curveGuide.ikEffects[0] = stabIKEffect;
-        //}
-
-        //public void ConfigureSlamIKEffects()
-        //{
-        //    //to do
-        //    //just need to set target for body and nose effects (i.e. locate appropriate points along the ground)
-        //    //but also need to adjust *nose collider exclude layers*, which I haven't gotten to work correctly yet
-        //}
-
-        //public void BeginSlamEffect()
-        //{
-        //    EnableContactColliders(false);
-        //    EnableSlamColliders(true);
-        //}
-
-        //public void EndSlamEffect()
-        //{
-        //    EnableSlamColliders(false);
-        //    EnableContactColliders(true);
-        //}
-
-        //public void EnableContactColliders(bool val)
-        //{
-        //    foreach (var c in contactColliders)
-        //    {
-        //        c.enabled = val;
-        //    }
-        //}
-
-        //public void EnableSlamColliders(bool val)
-        //{
-        //    foreach (var c in slamColliders)
-        //    {
-        //        c.enabled = val;
-        //    }
-        //}
-
         public void DisableAllIK()
         {
             curveGuide.DisableAllIK();
+        }
+
+        public void ConfigureSlamIK()
+        {
+            var right = ((int)movementController.CurrentOrientation) * Vector3.right;
+            var bodyTarget = transform.position + 0.75f * right - 0.5f * Vector3.up;
+            //(even though y-value will be changed, we should have a reliable one in there in case raycast fails)
+
+            var noseTarget = transform.position + 1.75f * right - 0.5f * Vector3.up;
+
+            var oB = new Vector2(bodyTarget.x, GroundTopBound);
+            var oN = new Vector2(noseTarget.x, GroundTopBound);
+
+            var hitB = Physics2D.Raycast(oB, - Vector2.up, Mathf.Infinity, movementController.GroundLayer);
+            var hitN = Physics2D.Raycast(oN, -Vector2.up, Mathf.Infinity, movementController.GroundLayer);
+
+            if (hitB && hitN)
+            {
+                slamBodyIKEffect.SetTarget(hitB.point + 0.4f * Vector2.up);
+                slamNoseIKEffect.SetTarget(hitN.point + 0.4f * Vector2.up);
+                Debug.DrawLine(hitB.point, hitN.point, Color.red, 5);
+            }
+            else
+            {
+                slamBodyIKEffect.SetTarget(bodyTarget);
+                slamNoseIKEffect.SetTarget(noseTarget);
+            }
         }
 
         public void SetAutoRetaliate(bool val)

@@ -86,8 +86,64 @@ Transform:
   - {fileID: 5429966929650702226}
   - {fileID: 6669010231008610307}
   - {fileID: 6360243804841400735}
+  - {fileID: 593009156630435580}
+  - {fileID: 8787427752074707470}
+  - {fileID: 2261522891938516856}
   m_Father: {fileID: 8848104348067717170}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &654267299607244011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 593009156630435580}
+  - component: {fileID: 5845238348918447950}
+  m_Layer: 6
+  m_Name: Slash IK Effect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &593009156630435580
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654267299607244011}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2171538264120847835}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5845238348918447950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654267299607244011}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75a08ab9332c10449adec7297d5759f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: Slash IK
+  targetSource: 0
+  ikIterations: 1
+  ikStrength: 1
+  ikToleranceSqrd: 0.04
+  startPoint: {fileID: 0}
+  endPoint: {fileID: 0}
+  ikTargetTransform: {fileID: 0}
+  ikTargetPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &953388549965093707
 GameObject:
   m_ObjectHideFlags: 0
@@ -1353,6 +1409,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7178732150006810644}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5767964216765590259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2261522891938516856}
+  - component: {fileID: 2164953188684200436}
+  m_Layer: 6
+  m_Name: Slam IK Effect Nose
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2261522891938516856
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5767964216765590259}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2171538264120847835}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2164953188684200436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5767964216765590259}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75a08ab9332c10449adec7297d5759f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: Slam IK Nose
+  targetSource: 1
+  ikIterations: 1
+  ikStrength: 1
+  ikToleranceSqrd: 0.04
+  startPoint: {fileID: 1575890875473671495}
+  endPoint: {fileID: 4216333155788050412}
+  ikTargetTransform: {fileID: 0}
+  ikTargetPoint: {x: 1.25, y: -3.5, z: 0}
 --- !u!1 &5807448308730072207
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,6 +1530,59 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!1 &5936448804257355457
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8787427752074707470}
+  - component: {fileID: 6193460663096928393}
+  m_Layer: 6
+  m_Name: Slam IK Effect Body
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8787427752074707470
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5936448804257355457}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2171538264120847835}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6193460663096928393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5936448804257355457}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75a08ab9332c10449adec7297d5759f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: Slam IK Body
+  targetSource: 1
+  ikIterations: 1
+  ikStrength: 1
+  ikToleranceSqrd: 0.04
+  startPoint: {fileID: 2066384736793860254}
+  endPoint: {fileID: 1575890875473671495}
+  ikTargetTransform: {fileID: 0}
+  ikTargetPoint: {x: 0.5, y: -3.5, z: 0}
 --- !u!1 &6051220668610941455
 GameObject:
   m_ObjectHideFlags: 0
@@ -2129,7 +2291,6 @@ GameObject:
   - component: {fileID: 8835800219631276127}
   - component: {fileID: 7323158423895243465}
   - component: {fileID: 7510194389748565361}
-  - component: {fileID: 3272142817664393271}
   m_Layer: 0
   m_Name: Line Renderer
   m_TagString: Untagged
@@ -2176,7 +2337,9 @@ MonoBehaviour:
   - {fileID: 4216333155788050412}
   ikEnabled: 0
   ikEffects:
-  - {fileID: 3272142817664393271}
+  - {fileID: 5845238348918447950}
+  - {fileID: 6193460663096928393}
+  - {fileID: 2164953188684200436}
 --- !u!114 &7323158423895243465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2192,28 +2355,28 @@ MonoBehaviour:
   lineRendererPositionCount: 60
   guidePoints:
   - virtualSegments: 0
-    point: {x: 0.31, y: -2.7800002, z: 0}
+    point: {x: 0, y: -3.65, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0.31, y: -2.5925002, z: 0}
+    point: {x: 0, y: -3.4625, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0.31, y: -2.4050002, z: 0}
+    point: {x: 0, y: -3.275, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0.31, y: -2.2175002, z: 0}
-    velocity: {x: 0, y: 0.25000012, z: 0}
-  - virtualSegments: 1
-    point: {x: 0.31, y: -2.0300002, z: 0}
-    velocity: {x: 0, y: 0.25000012, z: 0}
-  - virtualSegments: 1
-    point: {x: 0.31, y: -1.8425001, z: 0}
+    point: {x: 0, y: -3.0875, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0.31, y: -1.6550001, z: 0}
+    point: {x: 0, y: -2.9, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: 0.31, y: -1.4675001, z: 0}
+    point: {x: 0, y: -2.7125, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
+  - virtualSegments: 1
+    point: {x: 0, y: -2.525, z: 0}
+    velocity: {x: 0, y: 0.25, z: 0}
+  - virtualSegments: 1
+    point: {x: 0, y: -2.3375, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   lerpMode: 1
   lerpRate: 25
@@ -2263,66 +2426,66 @@ LineRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0.31, y: -2.7800002, z: 0}
-  - {x: 0.31, y: -2.7527697, z: 0}
-  - {x: 0.31, y: -2.7295654, z: 0}
-  - {x: 0.31, y: -2.7091346, z: 0}
-  - {x: 0.31, y: -2.6902246, z: 0}
-  - {x: 0.31, y: -2.6715832, z: 0}
-  - {x: 0.31, y: -2.6519575, z: 0}
-  - {x: 0.31, y: -2.6300955, z: 0}
-  - {x: 0.31, y: -2.6047435, z: 0}
-  - {x: 0.31, y: -2.576374, z: 0}
-  - {x: 0.31, y: -2.5515974, z: 0}
-  - {x: 0.31, y: -2.5301313, z: 0}
-  - {x: 0.31, y: -2.510723, z: 0}
-  - {x: 0.31, y: -2.4921198, z: 0}
-  - {x: 0.31, y: -2.4730697, z: 0}
-  - {x: 0.31, y: -2.452319, z: 0}
-  - {x: 0.31, y: -2.4286163, z: 0}
-  - {x: 0.31, y: -2.4008162, z: 0}
-  - {x: 0.31, y: -2.3742375, z: 0}
-  - {x: 0.31, y: -2.351506, z: 0}
-  - {x: 0.31, y: -2.3313694, z: 0}
-  - {x: 0.31, y: -2.3125744, z: 0}
-  - {x: 0.31, y: -2.293869, z: 0}
-  - {x: 0.31, y: -2.274001, z: 0}
-  - {x: 0.31, y: -2.2517164, z: 0}
-  - {x: 0.31, y: -2.2257643, z: 0}
-  - {x: 0.31, y: -2.1975844, z: 0}
-  - {x: 0.31, y: -2.1733575, z: 0}
-  - {x: 0.31, y: -2.152262, z: 0}
-  - {x: 0.31, y: -2.1330454, z: 0}
-  - {x: 0.31, y: -2.114455, z: 0}
-  - {x: 0.31, y: -2.0952384, z: 0}
-  - {x: 0.31, y: -2.0741432, z: 0}
-  - {x: 0.31, y: -2.049916, z: 0}
-  - {x: 0.31, y: -2.0217364, z: 0}
-  - {x: 0.31, y: -1.9957839, z: 0}
-  - {x: 0.31, y: -1.9734998, z: 0}
-  - {x: 0.31, y: -1.9536313, z: 0}
-  - {x: 0.31, y: -1.9349259, z: 0}
-  - {x: 0.31, y: -1.9161311, z: 0}
-  - {x: 0.31, y: -1.8959942, z: 0}
-  - {x: 0.31, y: -1.8732628, z: 0}
-  - {x: 0.31, y: -1.8466841, z: 0}
-  - {x: 0.31, y: -1.818884, z: 0}
-  - {x: 0.31, y: -1.7951812, z: 0}
-  - {x: 0.31, y: -1.7744309, z: 0}
-  - {x: 0.31, y: -1.7553804, z: 0}
-  - {x: 0.31, y: -1.7367773, z: 0}
-  - {x: 0.31, y: -1.7173688, z: 0}
-  - {x: 0.31, y: -1.695903, z: 0}
-  - {x: 0.31, y: -1.6711264, z: 0}
-  - {x: 0.31, y: -1.6427566, z: 0}
-  - {x: 0.31, y: -1.6174049, z: 0}
-  - {x: 0.31, y: -1.5955426, z: 0}
-  - {x: 0.31, y: -1.575917, z: 0}
-  - {x: 0.31, y: -1.5572757, z: 0}
-  - {x: 0.31, y: -1.5383658, z: 0}
-  - {x: 0.31, y: -1.5179348, z: 0}
-  - {x: 0.31, y: -1.4947306, z: 0}
-  - {x: 0.31, y: -1.4675001, z: 0}
+  - {x: 0, y: -3.65, z: 0}
+  - {x: 0, y: -3.6227696, z: 0}
+  - {x: 0, y: -3.5995653, z: 0}
+  - {x: 0, y: -3.5791345, z: 0}
+  - {x: 0, y: -3.5602245, z: 0}
+  - {x: 0, y: -3.541583, z: 0}
+  - {x: 0, y: -3.5219574, z: 0}
+  - {x: 0, y: -3.5000954, z: 0}
+  - {x: 0, y: -3.4747434, z: 0}
+  - {x: 0, y: -3.446374, z: 0}
+  - {x: 0, y: -3.4215972, z: 0}
+  - {x: 0, y: -3.4001312, z: 0}
+  - {x: 0, y: -3.380723, z: 0}
+  - {x: 0, y: -3.3621197, z: 0}
+  - {x: 0, y: -3.3430696, z: 0}
+  - {x: 0, y: -3.3223188, z: 0}
+  - {x: 0, y: -3.2986162, z: 0}
+  - {x: 0, y: -3.270816, z: 0}
+  - {x: 0, y: -3.2442374, z: 0}
+  - {x: 0, y: -3.2215059, z: 0}
+  - {x: 0, y: -3.2013693, z: 0}
+  - {x: 0, y: -3.1825743, z: 0}
+  - {x: 0, y: -3.163869, z: 0}
+  - {x: 0, y: -3.1440005, z: 0}
+  - {x: 0, y: -3.1217163, z: 0}
+  - {x: 0, y: -3.0957642, z: 0}
+  - {x: 0, y: -3.0675843, z: 0}
+  - {x: 0, y: -3.0433576, z: 0}
+  - {x: 0, y: -3.0222619, z: 0}
+  - {x: 0, y: -3.0030453, z: 0}
+  - {x: 0, y: -2.984455, z: 0}
+  - {x: 0, y: -2.9652383, z: 0}
+  - {x: 0, y: -2.944143, z: 0}
+  - {x: 0, y: -2.9199162, z: 0}
+  - {x: 0, y: -2.8917363, z: 0}
+  - {x: 0, y: -2.865784, z: 0}
+  - {x: 0, y: -2.8435, z: 0}
+  - {x: 0, y: -2.823631, z: 0}
+  - {x: 0, y: -2.804926, z: 0}
+  - {x: 0, y: -2.7861311, z: 0}
+  - {x: 0, y: -2.765994, z: 0}
+  - {x: 0, y: -2.7432628, z: 0}
+  - {x: 0, y: -2.7166843, z: 0}
+  - {x: 0, y: -2.688884, z: 0}
+  - {x: 0, y: -2.6651814, z: 0}
+  - {x: 0, y: -2.6444309, z: 0}
+  - {x: 0, y: -2.6253805, z: 0}
+  - {x: 0, y: -2.6067772, z: 0}
+  - {x: 0, y: -2.5873692, z: 0}
+  - {x: 0, y: -2.5659027, z: 0}
+  - {x: 0, y: -2.5411265, z: 0}
+  - {x: 0, y: -2.5127566, z: 0}
+  - {x: 0, y: -2.4874048, z: 0}
+  - {x: 0, y: -2.4655426, z: 0}
+  - {x: 0, y: -2.4459171, z: 0}
+  - {x: 0, y: -2.4272754, z: 0}
+  - {x: 0, y: -2.4083657, z: 0}
+  - {x: 0, y: -2.3879352, z: 0}
+  - {x: 0, y: -2.3647304, z: 0}
+  - {x: 0, y: -2.3375, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.23943482
@@ -2382,27 +2545,6 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &3272142817664393271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9003366606586769134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75a08ab9332c10449adec7297d5759f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  description: Slash IK
-  targetSource: 0
-  ikIterations: 1
-  ikStrength: 1
-  ikToleranceSqrd: 0.04
-  startPoint: {fileID: 0}
-  endPoint: {fileID: 0}
-  ikTargetTransform: {fileID: 0}
-  ikTargetPoint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1082064909378496163
 PrefabInstance:
   m_ObjectHideFlags: 0
