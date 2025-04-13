@@ -16,6 +16,8 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float maxTimeAboveGround = 10;
         [SerializeField] Transform underGroundBodyAnchor;
         [SerializeField] Transform aboveGroundBodyAnchor;
+        [SerializeField] ParticleSystem slamDustParticles;
+        [SerializeField] ParticleSystem slamRockParticles;
         [SerializeField] EarthwormWormhole wormhole;
 
         AICombatController combatController;
@@ -73,7 +75,8 @@ namespace RPGPlatformer.AIControl
             curveGuide.DisableAllIK();
         }
 
-        public void ConfigureSlamIK()
+        //call from anim event
+        public void PrepareSlamEffects()
         {
             var right = ((int)movementController.CurrentOrientation) * Vector3.right;
             var bodyTarget = transform.position + 0.75f * right - 0.5f * Vector3.up;
@@ -89,15 +92,23 @@ namespace RPGPlatformer.AIControl
 
             if (hitB && hitN)
             {
-                slamBodyIKEffect.SetTarget(hitB.point + 0.25f * Vector2.up);
-                slamNoseIKEffect.SetTarget(hitN.point + 0.25f * Vector2.up);
-                Debug.DrawLine(hitB.point, hitN.point, Color.red, 5);
+                bodyTarget = hitB.point + 0.25f * Vector2.up;
+                noseTarget = hitN.point + 0.25f * Vector2.up;
             }
-            else
-            {
-                slamBodyIKEffect.SetTarget(bodyTarget);
-                slamNoseIKEffect.SetTarget(noseTarget);
-            }
+
+            slamBodyIKEffect.SetTarget(hitB.point + 0.25f * Vector2.up);
+            slamNoseIKEffect.SetTarget(hitN.point + 0.25f * Vector2.up);
+            //Debug.DrawLine(hitB.point, hitN.point, Color.red, 5);
+
+            slamDustParticles.transform.position = bodyTarget;
+            slamRockParticles.transform.position = noseTarget;
+        }
+
+        //call from anim event
+        public void PlaySlamParticles()
+        {
+            slamDustParticles.Play();
+            slamRockParticles.Play();
         }
 
         public void SetAutoRetaliate(bool val)
