@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 593009156630435580}
   - component: {fileID: 5845238348918447950}
   m_Layer: 6
-  m_Name: Slash IK Effect
+  m_Name: Stab IK Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75a08ab9332c10449adec7297d5759f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Slash IK
+  description: Stab IK
   targetSource: 0
   ikIterations: 1
   ikStrength: 1
@@ -478,7 +478,7 @@ GameObject:
   - component: {fileID: 4201161255345355605}
   - component: {fileID: 8636128378473371375}
   - component: {fileID: 6856599071111275749}
-  - component: {fileID: 5326407789167667384}
+  - component: {fileID: 6388221137094567040}
   - component: {fileID: 4194975810890797505}
   - component: {fileID: 5621162454144449062}
   m_Layer: 6
@@ -693,7 +693,7 @@ MonoBehaviour:
     replenishRate: 0.01
     autoReplenish: 1
     statBar: {fileID: 0}
---- !u!114 &5326407789167667384
+--- !u!114 &6388221137094567040
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -702,22 +702,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3694819894051617520}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b94a4cfa0b960342a1797cce63819c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a28c616a8d70394081fb54e01a54d48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeToLeaveCombat: 200
   abilityBarData:
     unarmedAbilityBarItems: []
     mageAbilityBarItems: []
-    meleeAbilityBarItems:
-    - includeInAutoCastCycle: 1
-      ability: 7
-    - includeInAutoCastCycle: 1
-      ability: 5
+    meleeAbilityBarItems: []
     rangedAbilityBarItems: []
   useDefaultAbilityBars: 0
   immuneToStuns: 0
   autoRetaliate: 1
+  nose: {fileID: 6669010231008610307}
 --- !u!114 &4194975810890797505
 MonoBehaviour:
   m_ObjectHideFlags: 0

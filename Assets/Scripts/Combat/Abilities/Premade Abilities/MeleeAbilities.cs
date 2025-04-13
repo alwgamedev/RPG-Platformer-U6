@@ -30,7 +30,7 @@ namespace RPGPlatformer.Combat
                 MeleeAbilitiesEnum.Swipe => Swipe,
                 MeleeAbilitiesEnum.Uppercut => Uppercut,
                 MeleeAbilitiesEnum.Slash => Slash,
-                MeleeAbilitiesEnum.SlashWithTargetOnly => SlashWithTargetOnly,
+                //MeleeAbilitiesEnum.SlashWithTargetOnly => SlashWithTargetOnly,
                 MeleeAbilitiesEnum.Thrust => Thrust,
                 MeleeAbilitiesEnum.Slam => Slam,
                 MeleeAbilitiesEnum.Ravage => Ravage,
@@ -89,7 +89,8 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = 0.08f
         };
 
-        public static CloseRangeAbility Slash = new(true)//basic
+        public static CloseRangeAbility Slash 
+            = new (DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//basic
         {
             Description = "A quick close range attack that deals a heavy chunk of damage.",
             AbilityTags = new() 
@@ -108,23 +109,26 @@ namespace RPGPlatformer.Combat
         };
 
         //exactly the same as slash but can't be executed without a target
-        public static CloseRangeAbility SlashWithTargetOnly = new(true)
-        {
-            Description = "A quick close range attack that deals a heavy chunk of damage.",
-            AbilityTags = new()
-            {
-                AbilityTag.AutoCastable
-            },
-            CanBeIncludedInAutoCastCycle = true,
-            ObeyGCD = true,
-            //AllowExecuteWithoutTarget = true,
-            CombatStyle = CombatStyle.Melee,
-            AnimationState = "Slash",
-            Cooldown = 1.44f,
-            StaminaFractionChange = -.03f,
-            WrathFractionChange = 0.05f,
-            DamageMultiplier = 1.35f,
-        };
+        //can get ride of this if we get custom earthworm abilities working
+        //IN FACT MAKE SURE YOU GET RID OF IT SO IT DOESN'T SHOW UP IN SETTINGS MENU
+        //public static CloseRangeAbility SlashWithTargetOnly 
+        //    = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)
+        //{
+        //    Description = "A quick close range attack that deals a heavy chunk of damage.",
+        //    AbilityTags = new()
+        //    {
+        //        AbilityTag.AutoCastable
+        //    },
+        //    CanBeIncludedInAutoCastCycle = true,
+        //    ObeyGCD = true,
+        //    //AllowExecuteWithoutTarget = true,
+        //    CombatStyle = CombatStyle.Melee,
+        //    AnimationState = "Slash",
+        //    Cooldown = 1.44f,
+        //    StaminaFractionChange = -.03f,
+        //    WrathFractionChange = 0.05f,
+        //    DamageMultiplier = 1.35f,
+        //};
 
         public static CloseRangeAbility Uppercut = new()//basic
         {
@@ -209,7 +213,8 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = -.35f
         };
 
-        public static AoeAbilityThatExecutesImmediately Slam = new(true)
+        public static AoeAbilityThatExecutesImmediately Slam
+            = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)
         //thresh AoE Stun (should be comparable to Desecrate, with slightly higher damage + stun)
         {
             Description = "Send a shockwave through the earth that deals heavy damage" +
@@ -265,7 +270,7 @@ namespace RPGPlatformer.Combat
 
         public static IEnumerable<AttackAbility> AllAbilities = new List<AttackAbility>()
         {
-            Jab, Slice, Swipe, Uppercut, Slash, SlashWithTargetOnly, Thrust, Slam, Ravage
+            Jab, Slice, Swipe, Uppercut, Slash, /*SlashWithTargetOnly,*/ Thrust, Slam, Ravage
         };
     }
 }

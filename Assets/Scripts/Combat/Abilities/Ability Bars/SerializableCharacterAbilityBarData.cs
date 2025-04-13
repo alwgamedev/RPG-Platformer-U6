@@ -47,7 +47,17 @@ namespace RPGPlatformer.Combat
             set => rangedAbilityBarItems = value;
         }
 
-        public SerializableCharacterAbilityBarData() { }
+        public SerializableCharacterAbilityBarData(
+            List<SerializableUnarmedAbilityBarItem> unarmedAbilityBarItems = null,
+            List<SerializableMageAbilityBarItem> mageAbilityBarItems = null,
+            List<SerializableMeleeAbilityBarItem> meleeAbilityBarItems = null,
+            List<SerializableRangedAbilityBarItem> rangedAbilityBarItems = null) 
+        {
+            this.unarmedAbilityBarItems = unarmedAbilityBarItems ?? new();
+            this.mageAbilityBarItems = mageAbilityBarItems ?? new();
+            this.meleeAbilityBarItems = meleeAbilityBarItems ?? new();
+            this.rangedAbilityBarItems = rangedAbilityBarItems ?? new();
+        }
 
         public SerializableCharacterAbilityBarData(Dictionary<CombatStyle, List<AbilityBarItem>> itemsLookup)
         {

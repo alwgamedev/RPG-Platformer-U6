@@ -14,14 +14,14 @@ namespace RPGPlatformer.Combat
 
         public bool AllowExecuteWithoutTarget { get; init; }
 
-        public AutoTargetedAbility(bool executeTriggeredInAnimation = false, bool channelWhileStored = true)
+        public AutoTargetedAbility(DelayedAbilityExecutionOptions delayOptions = default)
         {
-            if (executeTriggeredInAnimation)
+            if (delayOptions.delayExecute)
             {
                 OnExecute = (controller, target) => controller.StoreAction(() =>
                     DealDamage(controller.Combatant, target,
                         ComputeDamage(controller.Combatant), StunDuration, FreezeAnimationDuringStun, GetHitEffect),
-                        channelWhileStored);
+                        delayOptions.channelDuringDelay, delayOptions.endChannelOnExecute);
             }
             else
             {
@@ -40,17 +40,6 @@ namespace RPGPlatformer.Combat
             {
                 return;
             }
-            
-            //but AutoTarget usually uses combatant.FindTarget which already checks in a specific range?
-            //if (!controller.Combatant.TargetInRange(target))
-            //{
-            //    if (!AllowExecuteWithoutTarget)
-            //    {
-            //        return;
-            //    }
-
-            //    target = null;
-            //}
 
             controller.Combatant.Attack();
             OnExecute?.Invoke(controller, target);
@@ -110,8 +99,7 @@ namespace RPGPlatformer.Combat
     //(*) base AttackAbility stats
     public class CloseRangeAbility : AutoTargetedAbility
     {
-        public CloseRangeAbility(bool executeTriggeredInAnimation = false, bool channelWhileStored = true) 
-            : base(executeTriggeredInAnimation, channelWhileStored)
+        public CloseRangeAbility(DelayedAbilityExecutionOptions delayOptions = default) : base(delayOptions)
         {
             AutoTarget = (controller) => TargetInFront(controller.Combatant);
         }

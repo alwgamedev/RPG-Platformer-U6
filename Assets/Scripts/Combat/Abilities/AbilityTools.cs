@@ -63,13 +63,13 @@ namespace RPGPlatformer.Combat
             return false;
         }
 
-        public static bool TryGetResources(AttackAbility ability, out AbilityResourceData abilityData)
+        public static bool TryGetResources(AttackAbility ability, out AbilityResourceData resources)
         {
-            abilityData = null;
+            resources = null;
             if (GlobalGameTools.Instance == null) return false;
 
             return GlobalGameTools.Instance.ResourcesManager
-                .AbilityResources.TryGetResources(ability, out abilityData);
+                .AbilityResources.TryGetResources(ability, out resources);
         }
     }
 }

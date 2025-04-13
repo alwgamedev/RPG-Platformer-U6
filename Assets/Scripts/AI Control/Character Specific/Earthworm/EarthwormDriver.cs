@@ -23,7 +23,7 @@ namespace RPGPlatformer.AIControl
         VisualCurveGuide curveGuide;
         bool wormholeTriggerEnabled;
 
-        CurveIKEffect slashIKEffect => curveGuide.ikEffects[0];
+        CurveIKEffect stabIKEffect => curveGuide.ikEffects[0];
         CurveIKEffect slamBodyIKEffect => curveGuide.ikEffects[1];
         CurveIKEffect slamNoseIKEffect => curveGuide.ikEffects[2];
         PolygonCollider2D GroundCollider => movementController.GroundCollider;
@@ -53,7 +53,7 @@ namespace RPGPlatformer.AIControl
             CurrentTarget = GlobalGameTools.Player.Combatant.Health;
             GlobalGameTools.Player.OnDeath += () => Trigger(typeof(EarthwormDormant).Name);
 
-            slashIKEffect.SetTarget(CurrentTarget.transform);
+            stabIKEffect.SetTarget(CurrentTarget.transform);
             curveGuide.ReconfigureIKEffects();
             DisableAllIK();
 
@@ -89,8 +89,8 @@ namespace RPGPlatformer.AIControl
 
             if (hitB && hitN)
             {
-                slamBodyIKEffect.SetTarget(hitB.point + 0.4f * Vector2.up);
-                slamNoseIKEffect.SetTarget(hitN.point + 0.4f * Vector2.up);
+                slamBodyIKEffect.SetTarget(hitB.point + 0.25f * Vector2.up);
+                slamNoseIKEffect.SetTarget(hitN.point + 0.25f * Vector2.up);
                 Debug.DrawLine(hitB.point, hitN.point, Color.red, 5);
             }
             else

@@ -150,11 +150,23 @@ namespace RPGPlatformer.Combat
         protected virtual void InitializeAbilityBarManager()
         {
             abilityBarManager = new CombatantAbilityBarManager(this);
+            InitializeAbilityBarData();
+            InitializeAbilityBars();
+            UpdateEquippedAbilityBar();
+        }
+
+        //this gives you the option to get data from somewhere different then the SF
+        protected virtual void InitializeAbilityBarData()
+        {
             if (useDefaultAbilityBars)
             {
                 abilityBarData = SerializableCharacterAbilityBarData.DefaultAbilityBarData();
             }
-            UpdateAbilityBars(abilityBarData);
+        }
+
+        protected virtual void InitializeAbilityBars()
+        {
+            abilityBarManager.UpdateAbilityBars(abilityBarData);
         }
 
 
@@ -285,6 +297,12 @@ namespace RPGPlatformer.Combat
             OnChannelStarted?.Invoke();
         }
 
+        //so that we can call in anim event
+        public void EndChannel()
+        {
+            EndChannel(false);
+        }
+
         public virtual void EndChannel(bool delayReleaseUntilFireButtonUp = false)
         {
             if (!postCancellationLock)
@@ -359,14 +377,19 @@ namespace RPGPlatformer.Combat
 
         public virtual void OnInsufficientWrath() { }
 
-        public void StoreAction(Action action, bool channelWhileStored = true)
+        public void StoreAction(Action action, bool channelWhileStored = true, bool endChannelOnExecute = true)
         //these functions would be better in the animation control class?
         {
             StoredAction = action;
             if (channelWhileStored)
             {
                 StartChannel();//so that auto-cast cycle will not interrupt the animation
-                StoredAction += () => EndChannel();
+                if (endChannelOnExecute)
+                {
+                    StoredAction += () => EndChannel();
+                }
+                //if don't end channel on execute, then you need to make sure you end channel in the animation
+                //(making sure the anim event won't get cut off by a transition)
             }
         }
 

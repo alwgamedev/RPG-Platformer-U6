@@ -35,6 +35,12 @@ namespace RPGPlatformer.Combat
             }
         }
 
+        public void SetAbilityBar(CombatStyle combatStyle, AbilityBar abilityBar)
+        {
+            GetAbilityBar[combatStyle] = abilityBar;
+            abilityBar?.Configure();
+        }
+
         public void UpdateAbilityBars(SerializableCharacterAbilityBarData data)
         {
             foreach(var combatStyle in CombatStyles.CoreCombatStyles)

@@ -59,9 +59,9 @@ namespace RPGPlatformer.Combat
 
         public Func<ICombatController, Vector2> GetAoeCenter { get; init; }
 
-        public AoeAbilityThatExecutesImmediately(bool executeTriggeredInAnimation = false) : base()
+        public AoeAbilityThatExecutesImmediately(DelayedAbilityExecutionOptions delayOptions = default) : base()
         {
-            if (executeTriggeredInAnimation)
+            if (delayOptions.delayExecute)
             {
                 OnExecute = (controller) => controller.StoreAction(() =>
                 {
@@ -69,7 +69,7 @@ namespace RPGPlatformer.Combat
                     ExecuteAoeAbility(controller, GetAoeCenter, AoeRadius,
                         ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
                         StunDuration, FreezeAnimationDuringStun, GetHitEffect);
-                });
+                }, delayOptions.channelDuringDelay, delayOptions.endChannelOnExecute);
             }
             else
             {
