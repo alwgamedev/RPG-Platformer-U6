@@ -279,6 +279,8 @@ namespace RPGPlatformer.Combat
 
         public virtual void OnInputDisabled()
         {
+            FireButtonUp();
+            //^so that auto ability cycle stops running if you have fire button down
             CancelAbilityInProgress();
         }
 
@@ -617,21 +619,10 @@ namespace RPGPlatformer.Combat
 
         //PAUSE, DEATH, AND DESTROY HANDLERS
 
-        //public void Pause()
-        //{
-        //    InputSource?.DisableInput();
-        //}
-
-        //public void Unpause()
-        //{
-        //    InputSource?.EnableInput();
-        //}
-
         protected virtual async void Death()
         {
             InputSource?.DisableInput();
             CancelAbilityInProgress();
-            //combatManager.animationControl.Freeze(false);//UNFREEZE, in case animation was frozen due to a stun
             stateDriver.OnDeath();
             MovementController?.OnDeath();
             OnDeath?.Invoke();

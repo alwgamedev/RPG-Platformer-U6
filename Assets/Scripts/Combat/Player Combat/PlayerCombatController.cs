@@ -17,13 +17,6 @@ namespace RPGPlatformer.Combat
             InteractableGameObject.IGOClicked += OnIGOClicked;
         }
 
-        //protected override void Start()
-        //{
-        //    base.Start();
-
-        //    stateDriver.OnInventoryOverflow += OnInventoryOverflow;
-        //}
-
         private void OnIAMConfigure()
         {
             InputActionsManager iam = SettingsManager.Instance.IAM;
