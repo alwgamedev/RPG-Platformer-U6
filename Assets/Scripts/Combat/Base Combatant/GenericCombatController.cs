@@ -103,6 +103,9 @@ namespace RPGPlatformer.Combat
 
             stateDriver.EquipDefaultArmour();
             stateDriver.EquipDefaultWeapon();
+
+            stateDriver.OnInventoryOverflow += OnInventoryOverflow;
+            InitializeInventoryItems();
         }
 
         //protected virtual void Update()
@@ -168,6 +171,8 @@ namespace RPGPlatformer.Combat
         {
             abilityBarManager.UpdateAbilityBars(abilityBarData);
         }
+
+        protected virtual void InitializeInventoryItems() { }
 
 
         //ABILITY BARS
@@ -269,17 +274,6 @@ namespace RPGPlatformer.Combat
         }
 
         protected virtual void AttemptedToExecuteAbilityOnCooldown() { }
-
-        //protected virtual void DisableInput()
-        //{
-        //    CancelAbilityInProgress(false);
-        //    InputSource?.DisableInput();
-        //}
-
-        //protected virtual void EnableInput()
-        //{
-        //    InputSource?.EnableInput();
-        //}
 
         public virtual void OnInputEnabled() { }
 
@@ -399,7 +393,7 @@ namespace RPGPlatformer.Combat
             StoredAction = null;
         }
 
-        //STATE TRANSITIONS
+        //HANDLE COMBATANT STATE
 
         public virtual void OnWeaponEquip()
         {
@@ -445,6 +439,8 @@ namespace RPGPlatformer.Combat
         {
             PlayAnimation(stateName + " Channel", combatStyle);
         }
+
+        protected virtual void OnInventoryOverflow() { }
 
 
         //AIMING FUNCTIONS
@@ -634,12 +630,13 @@ namespace RPGPlatformer.Combat
         protected virtual async void Death()
         {
             InputSource?.DisableInput();
+            CancelAbilityInProgress();
             //combatManager.animationControl.Freeze(false);//UNFREEZE, in case animation was frozen due to a stun
             stateDriver.OnDeath();
             MovementController?.OnDeath();
             OnDeath?.Invoke();
 
-            await stateDriver.FinalizeDeath();
+            await stateDriver.FinalizeDeath(GlobalGameTools.Instance.TokenSource.Token);
         }
 
         protected virtual void Revival()

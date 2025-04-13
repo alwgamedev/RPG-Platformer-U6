@@ -39,7 +39,7 @@ namespace RPGPlatformer.UI
 
         public IInventorySlotDataContainer Contents()
         {
-            return item?.ItemCopy().ToSlotData(quantity);
+            return item?.ItemCopy().ToInventorySlotData(quantity);
             //"return this" causes bigly issues
         }
 

@@ -7,6 +7,7 @@ using RPGPlatformer.Inventory;
 using RPGPlatformer.Loot;
 using RPGPlatformer.Skills;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace RPGPlatformer.Combat
 {
@@ -34,6 +35,7 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected bool dropLootOnFinalizeDeath = true;
         [SerializeField] protected bool destroyOnFinalizeDeath = true;
         [SerializeField] protected bool delayBeforeFinalizeDeath = true;
+        [SerializeField] protected bool finalizeDeathViaTrigger = false;
         [SerializeField] protected float timeToDelayBeforeFinalizeDeath = 1.5f;
 
         protected CharacterProgressionManager progressionManager;
@@ -45,6 +47,7 @@ namespace RPGPlatformer.Combat
         protected Weapon defaultWeapon;
         protected Weapon unarmedWeapon;
         protected Health health;
+        protected Action FinalizeDeathTrigger;
         protected int targetLayerMask;
 
         public string DisplayName => $"<b>{displayName}</b>";
@@ -205,12 +208,45 @@ namespace RPGPlatformer.Combat
             //DropLoot();
         }
 
-        public virtual async Task FinalizeDeath()
+        //in case you want to finalize death via animation event
+        public virtual void TriggerFinalizeDeath()
+        {
+            FinalizeDeathTrigger?.Invoke();
+        }
+
+        public virtual async Task FinalizeDeath(CancellationToken token)
         {
             if (delayBeforeFinalizeDeath)
             {
-                await MiscTools.DelayGameTime(timeToDelayBeforeFinalizeDeath, 
-                    GlobalGameTools.Instance.TokenSource.Token);
+                await MiscTools.DelayGameTime(timeToDelayBeforeFinalizeDeath, token);
+            }
+            if (finalizeDeathViaTrigger)
+            {
+                var tcs = new TaskCompletionSource<object>();
+                using var reg = token.Register(Cancel);
+
+                void Cancel()
+                {
+                    tcs.TrySetCanceled();
+                }
+                void Complete()
+                {
+                    tcs.TrySetResult(null);
+                }
+
+                try
+                {
+                    FinalizeDeathTrigger += Complete;
+                    await tcs.Task;
+                }
+                catch
+                {
+                    return;
+                }
+                finally
+                {
+                    FinalizeDeathTrigger -= Complete;
+                }
             }
 
             if (dropLootOnFinalizeDeath)
@@ -368,7 +404,7 @@ namespace RPGPlatformer.Combat
         public void HandleUnequippedItem(EquippableItem item)
         {
             if (item == null) return;
-            inventory.DistributeToFirstAvailableSlots(item.ToSlotData());
+            inventory.DistributeToFirstAvailableSlots(item.ToInventorySlotData());
         }
 
         
@@ -389,14 +425,22 @@ namespace RPGPlatformer.Combat
             dropSpawner.SpawnDrop(transform.position, loot);
         }
 
-        public void TakeLoot(IInventorySlotDataContainer loot)
+        public void TakeLoot(IInventorySlotDataContainer loot, bool handleOverflow = true)
         {
-            HandleInventoryOverflow(inventory.DistributeToFirstAvailableSlots(loot));
+            var leftOvers = inventory.DistributeToFirstAvailableSlots(loot);
+            if (handleOverflow)
+            {
+                HandleInventoryOverflow(leftOvers);
+            }
         }
 
-        public void TakeLoot(IInventorySlotDataContainer[] loot)
+        public void TakeLoot(IInventorySlotDataContainer[] loot, bool handleOverflow = true)
         {
-            HandleInventoryOverflow(inventory.DistributeToFirstAvailableSlots(loot));
+            var leftOvers = inventory.DistributeToFirstAvailableSlots(loot);
+            if (handleOverflow)
+            {
+                HandleInventoryOverflow(leftOvers);
+            }
         }
 
         public void ReleaseFromSlot(int i, int quantity = 1)
@@ -566,6 +610,7 @@ namespace RPGPlatformer.Combat
             OnTargetingFailed = null;
             OnWeaponEquip = null;
             OnInventoryOverflow = null;
+            FinalizeDeathTrigger = null;
         }
     }
 }

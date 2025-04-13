@@ -603,6 +603,8 @@ MonoBehaviour:
   maxTimeAboveGround: 13
   underGroundBodyAnchor: {fileID: 1194695686574530751}
   aboveGroundBodyAnchor: {fileID: 8248864435369701058}
+  slamDustParticles: {fileID: 0}
+  slamRockParticles: {fileID: 0}
   wormhole: {fileID: 0}
 --- !u!114 &743808907830779398
 MonoBehaviour:
@@ -670,7 +672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9ddd33a1735ac47995886d4af7684a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropPrefab: {fileID: 0}
+  dropPrefab: {fileID: 6284128859392026527, guid: 46707d3bb305f474a930c60eb8bad290, type: 3}
 --- !u!114 &6856599071111275749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -756,9 +758,12 @@ MonoBehaviour:
   useAutoCalculatedHealthPoints: 0
   dropLootOnFinalizeDeath: 1
   destroyOnFinalizeDeath: 1
-  delayBeforeFinalizeDeath: 1
-  timeToDelayBeforeFinalizeDeath: 3.5
+  delayBeforeFinalizeDeath: 0
+  finalizeDeathViaTrigger: 1
+  timeToDelayBeforeFinalizeDeath: 0
   combatXPReward: 350
+  dropSize: 1
+  dropTable: {fileID: 11400000, guid: 24fd6ec42274d43498ad9fd9a852adcb, type: 2}
 --- !u!114 &5621162454144449062
 MonoBehaviour:
   m_ObjectHideFlags: 0

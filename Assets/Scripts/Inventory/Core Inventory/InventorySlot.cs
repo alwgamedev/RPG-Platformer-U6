@@ -33,12 +33,12 @@ namespace RPGPlatformer.Inventory
             {
                 int addable = Math.Min(MaxAddition(), data.Quantity);
                 quantity += addable;
-                return data.Item.ToSlotData(data.Quantity - addable);
+                return data.Item.ToInventorySlotData(data.Quantity - addable);
             }
 
             item = data.Item;
             quantity = Math.Min(data.Quantity, data.Item.BaseData.MaxStack);
-            return data.Item.ItemCopy().ToSlotData(data.Quantity - Quantity);
+            return data.Item.ItemCopy().ToInventorySlotData(data.Quantity - Quantity);
         }
 
         public IInventorySlotDataContainer Remove(int quantity = 1)//NOTE: needs to be paired with EmptySlot() if Quantity == 0 after removing items
@@ -46,7 +46,7 @@ namespace RPGPlatformer.Inventory
             var copy = Item?.ItemCopy();
             int available = Math.Max(0, Math.Min(quantity, this.quantity));
             this.quantity -= available;
-            return copy?.ToSlotData(available);
+            return copy?.ToInventorySlotData(available);
         }
                 
         public void EmptySlot()

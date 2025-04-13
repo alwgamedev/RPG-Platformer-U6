@@ -25,11 +25,11 @@ namespace RPGPlatformer.Inventory
 
                 for(int j = 0; j < stacks; j++)
                 {
-                    result.Add(data[i].Item.ItemCopy().ToSlotData(maxStack));
+                    result.Add(data[i].Item.ItemCopy().ToInventorySlotData(maxStack));
                 }
                 if (remainder != 0)
                 {
-                    result.Add(data[i].Item.ToSlotData(remainder));
+                    result.Add(data[i].Item.ToInventorySlotData(remainder));
                 }
             }
 

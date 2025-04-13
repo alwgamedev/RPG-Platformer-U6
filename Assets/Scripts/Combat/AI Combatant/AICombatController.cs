@@ -1,5 +1,6 @@
 ﻿using RPGPlatformer.Core;
 using RPGPlatformer.UI;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RPGPlatformer.Combat
@@ -30,10 +31,22 @@ namespace RPGPlatformer.Combat
             base.Start();
         }
 
-        //protected override void ConfigureStateManager()
-        //{
-        //    base.ConfigureStateManager();
-        //}
+        //NOTE: it returns the drop items in the order they are listed in the table...
+        //so if table is bigger than inventory, you will never see items at the end of the table...
+        //this may be something to work on
+        //(I was originally going to choose random entries from the table for each inventory slot,
+        //but if you "randomly" choose all rare drop table entries you could end up with no loot.
+        //Maybe should use a more complicated system where rare items have a fallback common item
+        //they can give if their drop fails)
+        protected override void InitializeInventoryItems()
+        {
+            if (stateDriver.DropTable != null)
+            {
+                stateDriver.TakeLoot(stateDriver.DropTable.GenerateDrop(stateDriver.DropSize), false);
+                //note that drop items beyond the inventory size will be ignored
+                //(so set inventory size accordingly)
+            }
+        }
 
         public void FireOneShot()
         {
@@ -83,7 +96,7 @@ namespace RPGPlatformer.Combat
 
             if (!stateDriver.Health.IsDead)
             {
-                stateDriver.damageTracker.ClearTracker();
+                stateDriver.DamageTracker.ClearTracker();
             }
         }
 

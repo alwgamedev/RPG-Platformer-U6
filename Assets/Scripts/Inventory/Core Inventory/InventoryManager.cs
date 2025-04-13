@@ -181,7 +181,7 @@ namespace RPGPlatformer.Inventory
             if (so == null) return null;
 
             var item = so.CreateInstanceOfItem();
-            return DistributeToFirstAvailableSlots(item?.ToSlotData(quantity));
+            return DistributeToFirstAvailableSlots(item?.ToInventorySlotData(quantity));
         }
 
         public IInventorySlotDataContainer RemoveFromSlot(int i, int quantity = 1)

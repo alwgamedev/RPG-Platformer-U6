@@ -17,35 +17,14 @@ namespace RPGPlatformer.Combat
             InteractableGameObject.IGOClicked += OnIGOClicked;
         }
 
-        protected override void Start()
-        {
-            base.Start();
+        //protected override void Start()
+        //{
+        //    base.Start();
 
-            stateDriver.OnInventoryOverflow += OnInventoryOverflow;
+        //    stateDriver.OnInventoryOverflow += OnInventoryOverflow;
+        //}
 
-            var spaghetti = InventoryItemSO.FindByName("Spaghetti");
-            var staff = InventoryItemSO.FindByName("Basic Staff (SH)");
-            var bow = InventoryItemSO.FindByName("Basic Bow (SH)");
-            var sword = InventoryItemSO.FindByName("Basic Sword (SH)");
-            var gold = InventoryItemSO.FindByName("Gold Coins");
-            var cookie = InventoryItemSO.FindByName("Cookie");
-            var redBody = InventoryItemSO.FindByName("Red Body");
-            var bwTop = InventoryItemSO.FindByName("Blue Wizard Top");
-            var bwPants = InventoryItemSO.FindByName("Blue Wizard Pants");
-
-            stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
-            stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToSlotData(1));
-            stateDriver.TakeLoot(staff.CreateInstanceOfItem().ToSlotData(1));
-            stateDriver.TakeLoot(bow.CreateInstanceOfItem().ToSlotData(1));
-            stateDriver.TakeLoot(sword.CreateInstanceOfItem().ToSlotData(1));
-            stateDriver.TakeLoot(cookie.CreateInstanceOfItem().ToSlotData(8));
-            stateDriver.TakeLoot(gold.CreateInstanceOfItem().ToSlotData(773));
-            stateDriver.TakeLoot(redBody.CreateInstanceOfItem().ToSlotData(1));
-            stateDriver.TakeLoot(bwTop.CreateInstanceOfItem().ToSlotData(1));
-            stateDriver.TakeLoot(bwPants.CreateInstanceOfItem().ToSlotData(1));
-        }
-
-        void OnIAMConfigure()
+        private void OnIAMConfigure()
         {
             InputActionsManager iam = SettingsManager.Instance.IAM;
 
@@ -83,11 +62,36 @@ namespace RPGPlatformer.Combat
                 RunAutoAbilityCycle(false);
             }
 
-            //FOR TESTING PURPOSES
+            //JUST FOR TESTING
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 TogglePlayerAlive();
             }
+        }
+
+        protected override void InitializeInventoryItems()
+        {
+            //JUST FOR TESTING
+            var spaghetti = InventoryItemSO.FindByName("Spaghetti");
+            var staff = InventoryItemSO.FindByName("Basic Staff (SH)");
+            var bow = InventoryItemSO.FindByName("Basic Bow (SH)");
+            var sword = InventoryItemSO.FindByName("Basic Sword (SH)");
+            var gold = InventoryItemSO.FindByName("Gold Coins");
+            var cookie = InventoryItemSO.FindByName("Cookie");
+            var redBody = InventoryItemSO.FindByName("Red Body");
+            var bwTop = InventoryItemSO.FindByName("Blue Wizard Top");
+            var bwPants = InventoryItemSO.FindByName("Blue Wizard Pants");
+
+            stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(staff.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(bow.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(sword.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(cookie.CreateInstanceOfItem().ToInventorySlotData(8));
+            stateDriver.TakeLoot(gold.CreateInstanceOfItem().ToInventorySlotData(773));
+            stateDriver.TakeLoot(redBody.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(bwTop.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(bwPants.CreateInstanceOfItem().ToInventorySlotData(1));
         }
 
         private void OnIGOClicked()
@@ -112,7 +116,7 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        private void OnInventoryOverflow()
+        protected override void OnInventoryOverflow()
         {
             GameLog.Log("Your inventory is too full to hold any more items.");
         }

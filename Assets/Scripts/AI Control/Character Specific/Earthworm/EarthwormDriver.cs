@@ -80,7 +80,7 @@ namespace RPGPlatformer.AIControl
         {
             var right = ((int)movementController.CurrentOrientation) * Vector3.right;
             var bodyTarget = transform.position + 0.75f * right - 0.5f * Vector3.up;
-            //(even though y-value will be changed, we should have a reliable one in there in case raycast fails)
+            //(even though this y-value will be changed, we should have a reliable one in there in case raycast fails)
 
             var noseTarget = transform.position + 1.75f * right - 0.5f * Vector3.up;
 

@@ -74,7 +74,7 @@ namespace RPGPlatformer.UI
         public void UpdateUI(IEquippableCharacter character, EquipmentSlot equipSlot)
         {
             EquippableItem equippedItem = character.EquipSlots[equipSlot].EquipppedItem;
-            slots[equipSlot].PlaceItem(equippedItem?.ToSlotData(1));
+            slots[equipSlot].PlaceItem(equippedItem?.ToInventorySlotData(1));
             slots[equipSlot].DisplayItem();
         }
     }

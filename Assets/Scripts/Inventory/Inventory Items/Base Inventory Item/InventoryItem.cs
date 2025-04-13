@@ -52,7 +52,7 @@ namespace RPGPlatformer.Inventory
             return new(baseData);
         }
 
-        public InventorySlotDataContainer ToSlotData(int quantity = 1)
+        public InventorySlotDataContainer ToInventorySlotData(int quantity = 1)
         {
             return new(this, quantity);
         }

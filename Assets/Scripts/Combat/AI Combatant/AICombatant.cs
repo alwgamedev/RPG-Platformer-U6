@@ -1,14 +1,20 @@
-﻿using RPGPlatformer.Skills;
+﻿using RPGPlatformer.Loot;
+using RPGPlatformer.Skills;
 using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
     public class AICombatant : Combatant
     {
-        [SerializeField] protected int combatXPReward = 50;
+        [SerializeField] protected int combatXPReward = 50; 
+        [SerializeField] protected int dropSize;//(max) number of items in generated drop
+        [SerializeField] protected DropTable dropTable;
 
-        public DamageTakenTracker damageTracker;
-        //public float MinimumCombatDistance { get; protected set; }
+        protected DamageTakenTracker damageTracker;
+
+        public DamageTakenTracker DamageTracker => damageTracker;
+        public int DropSize => dropSize;
+        public DropTable DropTable => dropTable;
 
         protected override void Awake()
         {
