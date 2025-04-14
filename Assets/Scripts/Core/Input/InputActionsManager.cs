@@ -133,15 +133,15 @@ namespace RPGPlatformer.Core
             Configured?.Invoke();
         }
 
-        public void EnableInput()
-        {
-            actionMap.Enable();
-        }
+        //public void EnableInput()
+        //{
+        //    actionMap.Enable();
+        //}
 
-        public void DisableInput()
-        {
-            actionMap.Disable();
-        }
+        //public void DisableInput()
+        //{
+        //    actionMap.Disable();
+        //}
 
         private void OnDestroy()
         {

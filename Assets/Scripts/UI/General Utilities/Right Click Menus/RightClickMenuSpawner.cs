@@ -41,8 +41,6 @@ namespace RPGPlatformer.UI
             }
 
             SettingsManager.IAMConfigured += OnIAMConfigure;
-            //subscribe in either case, so that we are linked up to the latest action map whenever it
-            //gets rebuilt (e.g. due to input bindings change or something)
         }
 
         protected virtual void FindTargetCanvas()
@@ -68,9 +66,14 @@ namespace RPGPlatformer.UI
         protected void OnIAMConfigure()
         {
             var iam = SettingsManager.Instance.IAM;
-            iam.InputAction(InputActionsManager.leftClickActionName).canceled += CancelOnMouseUp;
-            iam.InputAction(InputActionsManager.rightClickActionName).canceled += CancelOnMouseUp;
-            SettingsManager.IAMConfigured -= OnIAMConfigure;
+            //just in case we are already subscribed, unsubscribe first
+            //(IAM will reconfigure every time input settings change
+            //-- the input actions will be brand new ones, but just being safe here)
+            iam.InputAction(InputActionsManager.leftClickActionName).canceled -= ClearOnMouseUp;
+            iam.InputAction(InputActionsManager.rightClickActionName).canceled -= ClearOnMouseUp;
+            iam.InputAction(InputActionsManager.leftClickActionName).canceled += ClearOnMouseUp;
+            iam.InputAction(InputActionsManager.rightClickActionName).canceled += ClearOnMouseUp;
+            //SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
 
         public void Pause()
@@ -89,7 +92,7 @@ namespace RPGPlatformer.UI
 
         public virtual void ClearMenu()
         {
-            if (activeMenu != null)
+            if (ActiveMenu != null)
             {
                 Destroy(activeMenu);
                 activeMenu = null;
@@ -98,7 +101,7 @@ namespace RPGPlatformer.UI
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (activeMenu != null)
+            if (activeMenu != null)//note that this only registers when you click inside the spawner area
             {
                 ClearMenu();
             }
@@ -108,17 +111,20 @@ namespace RPGPlatformer.UI
             }
         }
 
-        protected void CancelOnMouseUp(InputAction.CallbackContext ctx)
+        protected void ClearOnMouseUp(InputAction.CallbackContext ctx)
         {
-            if (justSpawnedMenu)
+            if (justSpawnedMenu)//this allows you to mouse up without closing the menu immediately after you open it
             {
                 justSpawnedMenu = false;
                 return;
             }
-            else if (activeMenu)
+            else if (activeMenu != null)
             {
+                //don't close if you're interacting with the menu
                 GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
-                if (currentSelected && currentSelected.transform.IsChildOf(activeMenu.transform)) return;
+                if (activeMenu && currentSelected && currentSelected.transform.IsChildOf(activeMenu.transform))
+                    return;
+
                 ClearMenu();
             }
         }

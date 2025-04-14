@@ -28,7 +28,7 @@ namespace RPGPlatformer.Core
                 InputSettings = InputBindingData.DefaultBindings;
 
                 IAM = GetComponent<InputActionsManager>();
-                IAM.Configured += IAMConfigureHandler;
+                IAM.Configured += BroadcastIAMConfigure;
 
                 PlayerAbilityBars = SerializableCharacterAbilityBarData.DefaultAbilityBarData(); 
             }
@@ -60,7 +60,7 @@ namespace RPGPlatformer.Core
             return result;
         }
 
-        private void IAMConfigureHandler()
+        private void BroadcastIAMConfigure()
         {
             IAMConfigured?.Invoke();
         }
@@ -78,7 +78,7 @@ namespace RPGPlatformer.Core
         {
             if(Instance == this)
             {
-                IAM.Configured -= IAMConfigureHandler;
+                IAM.Configured -= BroadcastIAMConfigure;
                 IAMConfigured = null;
                 Instance = null;
             }

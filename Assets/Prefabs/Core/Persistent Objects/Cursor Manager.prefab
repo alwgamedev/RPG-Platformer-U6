@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 310750370601645611}
-  - component: {fileID: 1442414516661388065}
+  - component: {fileID: 7030864954213614209}
   m_Layer: 0
   m_Name: Cursor Manager
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1442414516661388065
+--- !u!114 &7030864954213614209
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -53,12 +53,16 @@ MonoBehaviour:
     clickedTexture: {fileID: 2800000, guid: 450fd537beca0964483ec4fbe1517713, type: 3}
     hotspot: {x: 15, y: 15}
   lootCursor:
-    texture: {fileID: 2800000, guid: 8d6f5db438ceb5c49b1691e79c9b274d, type: 3}
+    texture: {fileID: 2800000, guid: efecab085d1aad2488dd1a5f4a1812e6, type: 3}
     clickedTexture: {fileID: 2800000, guid: 5f5c19d95f552f243a531b7eceb48bef, type: 3}
     hotspot: {x: 15, y: 15}
   enterDoorCursor:
     texture: {fileID: 2800000, guid: 6b3ede78793938041ab73ced9bee0a11, type: 3}
     clickedTexture: {fileID: 2800000, guid: 06e154bd1edb13a4c96c2c0096a14039, type: 3}
+    hotspot: {x: 15, y: 15}
+  inspectCursor:
+    texture: {fileID: 2800000, guid: 619225147f7ad584db967ae9a286a4ce, type: 3}
+    clickedTexture: {fileID: 2800000, guid: 674d913c183469949a5d8cb6535b569f, type: 3}
     hotspot: {x: 15, y: 15}
   focusingRedCrosshairs: {fileID: 11400000, guid: 3fda17cb1e8139043921d35a09e38ccd, type: 2}
   blinkingGreenCrosshairs: {fileID: 11400000, guid: de20f63dae1a0c647bffd4c566339d91, type: 2}

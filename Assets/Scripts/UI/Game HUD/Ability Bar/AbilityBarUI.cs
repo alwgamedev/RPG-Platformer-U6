@@ -151,6 +151,10 @@ namespace RPGPlatformer.UI
                     return c1 || c2;
                 };
             }
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform.parent.GetComponent<RectTransform>());
+            //^because all of a sudden we started having issues with the stat bar layout group not acknowledging
+            //the ability bar's new height
         }
 
         public virtual void Clear() { }
