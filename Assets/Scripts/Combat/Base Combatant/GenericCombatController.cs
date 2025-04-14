@@ -622,7 +622,6 @@ namespace RPGPlatformer.Combat
         protected virtual async void Death()
         {
             InputSource?.DisableInput();
-            CancelAbilityInProgress();
             stateDriver.OnDeath();
             MovementController?.OnDeath();
             OnDeath?.Invoke();

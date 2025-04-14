@@ -68,7 +68,7 @@ namespace RPGPlatformer.Combat
             stateManager.OnWeaponTick -= FireOneShot;
             if (ChannelingAbility)
             {
-                CancelAbilityInProgress(false);
+                CancelAbilityInProgress();
             }
 
             Attacking = false;
@@ -108,6 +108,13 @@ namespace RPGPlatformer.Combat
             }
             return base.GetAimPosition();
         }
+
+        //public override void OnInputDisabled()
+        //{
+        //    StopAttacking();
+
+        //    base.OnInputDisabled();
+        //}
 
         protected virtual void OnMouseEnter()
         {

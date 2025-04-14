@@ -2,23 +2,24 @@
 using System.Collections.Generic;
 using RPGPlatformer.UI;
 using RPGPlatformer.Core;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 namespace RPGPlatformer.Inventory
 {
     public class InventoryItem : IExaminable
     {
         protected InventoryItemData baseData;
-        protected Action OnUse;
-        protected Action<int> OnRelease;
+        protected Action Use;
+        protected Action<int> ReleaseItem;
 
-        public List<(string, Action)> RightClickActions { get; protected set; } = new();
+        //public List<(string, Action)> RightClickActions { get; protected set; } = new();
 
         public InventoryItemData BaseData { get => baseData; set => baseData = value; }
 
         public InventoryItem(InventoryItemData data)
         {
             baseData = data;
-            InitializeRightClickActions();
+            //InitializeRightClickActions();
         }
 
         public SerializableInventoryItem ConvertToSerializable()
@@ -59,7 +60,7 @@ namespace RPGPlatformer.Inventory
 
         public virtual void OnPlacedInInventorySlot(IInventoryOwner owner, int slotIndex)
         {
-            OnRelease = (k) =>
+            ReleaseItem = (k) =>
             {
                 owner.ReleaseFromSlot(slotIndex, k);
             };
@@ -67,18 +68,18 @@ namespace RPGPlatformer.Inventory
 
         public virtual void OnRemovedFromInventorySlot()
         {
-            OnUse = null;
-            OnRelease = null;
+            Use = null;
+            ReleaseItem = null;
         }
 
-        public virtual void Use()
+        public void UseItem()
         {
-            OnUse?.Invoke();
+            Use?.Invoke();
         }
 
-        public virtual void Release(int k = 0)
+        public virtual void ReleaseFromInventory(int k = 0)
         {
-            OnRelease?.Invoke(k);
+            ReleaseItem?.Invoke(k);
         }
 
         public virtual void Examine()
@@ -91,14 +92,20 @@ namespace RPGPlatformer.Inventory
             return "";
         }
 
-        protected virtual void InitializeRightClickActions()
+        public virtual IEnumerable<(string, Action)> RightClickActions()
         {
-            RightClickActions = new()
+            if (Use != null)
             {
-                ($"Use {baseData.DisplayName}", Use),
-            };
+                yield return ($"Use {baseData.DisplayName}", Use);
+            }
         }
 
-
+        //protected virtual void InitializeRightClickActions()
+        //{
+        //    RightClickActions = new()
+        //    {
+        //        ($"Use {baseData.DisplayName}", Use),
+        //    };
+        //}
     }
 }

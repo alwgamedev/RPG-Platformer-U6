@@ -28,12 +28,12 @@ namespace RPGPlatformer.UI
         public override void ConfigureMenu(GameObject menu)
         {
             InventoryItem item = slotComponent.Item;
-            foreach (var entry in item.RightClickActions)
+            foreach (var entry in item.RightClickActions())
             {
                 CreateAndConfigureButton(menu, menuButtonPrefab, entry.Item1, entry.Item2);
             }
-            CreateAndConfigureDropButtons(menu, menuButtonPrefab, slotComponent);
             CreateAndConfigureButton(menu, menuButtonPrefab, $"Examine {item.BaseData.DisplayName}", item.Examine);
+            CreateAndConfigureDropButtons(menu, menuButtonPrefab, slotComponent);
             CreateAndConfigureButton(menu, menuButtonPrefab, "Cancel", ClearMenu);
         }
 
@@ -43,7 +43,7 @@ namespace RPGPlatformer.UI
             if(data.Quantity == 1)
             {
                 CreateAndConfigureButton(menu, menuButtonPrefab, 
-                    $"{dropVerb} {data.Item.BaseData.DisplayName}", () => data.Item.Release(1));
+                    $"{dropVerb} {data.Item.BaseData.DisplayName}", () => data.Item.ReleaseFromInventory(1));
             }
             else if(data.Quantity > 1)
             {
@@ -58,7 +58,7 @@ namespace RPGPlatformer.UI
                 {
                     if (input != null && input is int val)
                     {
-                        data?.Item?.Release(val);
+                        data?.Item?.ReleaseFromInventory(val);
                     }
                     Complete();
                 }
@@ -69,12 +69,12 @@ namespace RPGPlatformer.UI
                     GameLog.InputField.OnReset -= Complete;
                 }
 
-                CreateAndConfigureButton(menu, menuButtonPrefab, $"{dropVerb} 1", () => data.Item.Release(1));
-                CreateAndConfigureButton(menu, menuButtonPrefab, $"{dropVerb} 5", () => data.Item.Release(5));
-                CreateAndConfigureButton(menu, menuButtonPrefab, $"{dropVerb} 10", () => data.Item.Release(10));
+                CreateAndConfigureButton(menu, menuButtonPrefab, $"{dropVerb} 1", () => data.Item.ReleaseFromInventory(1));
+                CreateAndConfigureButton(menu, menuButtonPrefab, $"{dropVerb} 5", () => data.Item.ReleaseFromInventory(5));
+                CreateAndConfigureButton(menu, menuButtonPrefab, $"{dropVerb} 10", () => data.Item.ReleaseFromInventory(10));
                 CreateAndConfigureButton(menu, menuButtonPrefab, $"{dropVerb} X", DropX);
                 CreateAndConfigureButton(menu, menuButtonPrefab, $"{dropVerb} All", 
-                    () => data.Item.Release(data.Quantity));
+                    () => data.Item.ReleaseFromInventory(data.Quantity));
             }
         }
     }

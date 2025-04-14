@@ -6,7 +6,7 @@ using RPGPlatformer.Movement;
 namespace RPGPlatformer.AIControl
 {
     [RequireComponent(typeof(AINavigator))]
-    public class GenericAIPatroller<T, T0, T1, T2, T3> : StateDriver
+    public class GenericAIPatroller<T, T0, T1, T2, T3> : StateDriver, IInputDependent
         where T : GenericAdvancedMovementController<T0, T1, T2, T3>
         where T0 : AdvancedMover
         where T1 : AdvancedMovementStateGraph
@@ -18,6 +18,7 @@ namespace RPGPlatformer.AIControl
 
         public AINavigator PatrolNavigator { get; protected set; }
         public IMovementController MovementController => movementController;
+        public IInputSource InputSource { get; protected set; }
 
         protected virtual void Awake()
         {
@@ -30,6 +31,10 @@ namespace RPGPlatformer.AIControl
         protected virtual void Update()
         {
             OnUpdate?.Invoke();
+        }
+        public virtual void InitializeInputSource()
+        {
+            InputSource = GetComponent<IInputSource>();
         }
 
         public virtual void InitializeState()
@@ -51,6 +56,10 @@ namespace RPGPlatformer.AIControl
         {
             PatrolNavigator.PatrolBehavior(movementController);
         }
+
+        public virtual void OnInputEnabled() { }
+
+        public virtual void OnInputDisabled() { }
 
         protected override void OnDestroy()
         {

@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 using RPGPlatformer.Core;
 using RPGPlatformer.UI;
-using Unity.VisualScripting;
-
+using System;
+using System.Collections.Generic;
 namespace RPGPlatformer.Inventory
 {
     public class EquippableItem : InventoryItem
@@ -26,7 +26,7 @@ namespace RPGPlatformer.Inventory
             base.OnPlacedInInventorySlot(owner, slotIndex);
 
             if (owner is not IEquippableCharacter character) return;
-            OnUse = () =>
+            Use = () =>
             {
                 if (character.CanEquip(this))
                 {
@@ -61,12 +61,20 @@ namespace RPGPlatformer.Inventory
             return result;
         }
 
-        protected override void InitializeRightClickActions()
+        public override IEnumerable<(string, Action)> RightClickActions()
         {
-            RightClickActions = new()
+            if (Use != null)
             {
-                ($"Equip {baseData.DisplayName}", Use)
-            };
+                yield return ($"Equip {baseData.DisplayName}", Use);
+            }
         }
+
+        //protected override void InitializeRightClickActions()
+        //{
+        //    RightClickActions = new()
+        //    {
+        //        ($"Equip {baseData.DisplayName}", Use)
+        //    };
+        //}
     }
 }

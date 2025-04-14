@@ -239,7 +239,7 @@ namespace RPGPlatformer.Combat
                     FinalizeDeathTrigger += Complete;
                     await tcs.Task;
                 }
-                catch
+                catch (TaskCanceledException)
                 {
                     return;
                 }

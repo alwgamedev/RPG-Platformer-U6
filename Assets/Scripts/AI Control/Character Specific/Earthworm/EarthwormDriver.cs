@@ -8,7 +8,7 @@ namespace RPGPlatformer.AIControl
 {
     [RequireComponent(typeof(AICombatController))]
     [RequireComponent(typeof(EarthwormMovementController))]
-    public class EarthwormDriver : StateDriver
+    public class EarthwormDriver : StateDriver, IInputDependent
     {
         [SerializeField] float emergeMoveSpeed = .5f;
         [SerializeField] float retreatMoveSpeed = 2;
@@ -35,6 +35,7 @@ namespace RPGPlatformer.AIControl
         //^higher than any point on the groundCollider (so if we take ClosestPoint
         //from a point at this height, we will always get something on the top side of the ground)
         Vector3 BodyAnchorOffset => movementController.BodyAnchorOffset;
+        public IInputSource InputSource { get; private set; }
 
         public IHealth CurrentTarget
         {
@@ -67,49 +68,20 @@ namespace RPGPlatformer.AIControl
             Trigger(typeof(EarthwormDormant).Name);
         }
 
+        public void InitializeInputSource()
+        {
+            InputSource = GetComponent<IInputSource>();
+        }
+
+        public void OnInputEnabled() { }
+
+        public void OnInputDisabled()
+        {
+            DisableAllIK();
+        }
+
 
         //SETTINGS
-
-        public void DisableAllIK()
-        {
-            curveGuide.DisableAllIK();
-        }
-
-        //call from anim event
-        public void PrepareSlamEffects()
-        {
-            var right = ((int)movementController.CurrentOrientation) * Vector3.right;
-            var bodyTarget = transform.position + 0.75f * right - 0.5f * Vector3.up;
-            //(even though this y-value will be changed, we should have a reliable one in there in case raycast fails)
-
-            var noseTarget = transform.position + 1.75f * right - 0.5f * Vector3.up;
-
-            var oB = new Vector2(bodyTarget.x, GroundTopBound);
-            var oN = new Vector2(noseTarget.x, GroundTopBound);
-
-            var hitB = Physics2D.Raycast(oB, - Vector2.up, Mathf.Infinity, movementController.GroundLayer);
-            var hitN = Physics2D.Raycast(oN, -Vector2.up, Mathf.Infinity, movementController.GroundLayer);
-
-            if (hitB && hitN)
-            {
-                bodyTarget = hitB.point + 0.25f * Vector2.up;
-                noseTarget = hitN.point + 0.25f * Vector2.up;
-            }
-
-            slamBodyIKEffect.SetTarget(hitB.point + 0.25f * Vector2.up);
-            slamNoseIKEffect.SetTarget(hitN.point + 0.25f * Vector2.up);
-            //Debug.DrawLine(hitB.point, hitN.point, Color.red, 5);
-
-            slamDustParticles.transform.position = bodyTarget;
-            slamRockParticles.transform.position = noseTarget;
-        }
-
-        //call from anim event
-        public void PlaySlamParticles()
-        {
-            slamDustParticles.Play();
-            slamRockParticles.Play();
-        }
 
         public void SetAutoRetaliate(bool val)
         {
@@ -150,6 +122,60 @@ namespace RPGPlatformer.AIControl
                 EnableWormholeTrigger(false);
                 Trigger(typeof(EarthwormAboveGround).Name);
             }
+        }
+
+
+        //EFFECTS
+
+        public void DisableAllIK()
+        {
+            curveGuide.DisableAllIK();
+        }
+
+        //call from anim event
+        public void PrepareSlamEffects()
+        {
+            var right = ((int)movementController.CurrentOrientation) * Vector3.right;
+            var bodyTarget = transform.position + 0.75f * right - 0.5f * Vector3.up;
+            //(even though this y-value will be changed, we should have a reliable one in there in case raycast fails)
+
+            var noseTarget = transform.position + 1.75f * right - 0.5f * Vector3.up;
+
+            var oB = new Vector2(bodyTarget.x, GroundTopBound);
+            var oN = new Vector2(noseTarget.x, GroundTopBound);
+
+            var hitB = Physics2D.Raycast(oB, -Vector2.up, Mathf.Infinity, movementController.GroundLayer);
+            var hitN = Physics2D.Raycast(oN, -Vector2.up, Mathf.Infinity, movementController.GroundLayer);
+
+            if (hitB && hitN)
+            {
+                bodyTarget = hitB.point + 0.25f * Vector2.up;
+                noseTarget = hitN.point + 0.25f * Vector2.up;
+            }
+
+            slamBodyIKEffect.SetTarget(bodyTarget);
+            slamNoseIKEffect.SetTarget(noseTarget);
+            //Debug.DrawLine(hitB.point, hitN.point, Color.red, 5);
+
+            slamDustParticles.transform.position = bodyTarget;
+            slamRockParticles.transform.position = noseTarget;
+        }
+
+        //call from anim event
+        public void PlaySlamParticles()
+        {
+            slamDustParticles.Play();
+            slamRockParticles.Play();
+        }
+
+        public void PlayDeathParticles()
+        {
+            slamDustParticles.Stop();
+            //slamRockParticles.Stop();
+            slamDustParticles.transform.position = aboveGroundBodyAnchor.position + 0.1f * Vector3.up;
+            //slamRockParticles.transform.position = aboveGroundBodyAnchor.position + 0.1f * Vector3.up;
+            slamDustParticles.Play();
+            //slamRockParticles.Play();
         }
 
 
@@ -328,6 +354,24 @@ namespace RPGPlatformer.AIControl
             {
                 movementController.DestinationReached -= Complete;
                 combatController.OnDeath -= Cancel;
+            }
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if (wormhole && wormhole.gameObject)
+            {
+                Destroy(wormhole.gameObject);
+            }
+            if (slamDustParticles && slamDustParticles.gameObject)
+            {
+                Destroy(slamDustParticles.gameObject);
+            }
+            if (slamRockParticles && slamRockParticles.gameObject)
+            {
+                Destroy(slamRockParticles.gameObject);
             }
         }
     }

@@ -21,26 +21,29 @@ namespace RPGPlatformer.UI
 
         private async Task HandleXPGainEvent(XPGainEventData eventData)
         {
-            if (!activeXPAlerts.ContainsKey(eventData.skill) || !activeXPAlerts[eventData.skill])
+            if (!activeXPAlerts.ContainsKey(eventData.skill) || !activeXPAlerts[eventData.skill].gameObject)
             {
                 InstantiateNewAlert(eventData.skill);
             }
 
-            XPAlert alert = activeXPAlerts[eventData.skill];
-            await alert.HandleXPGainEvent(eventData, GlobalGameTools.Instance.TokenSource.Token);
+            await activeXPAlerts[eventData.skill]
+                .HandleXPGainEvent(eventData, GlobalGameTools.Instance.TokenSource.Token);
         }
 
         private void InstantiateNewAlert(CharacterSkill skill)
         {
-            XPAlert newAlert = Instantiate(alertPrefab, transform);
-            newAlert.QueueEmptied += () => HandleChildDeath(skill, newAlert);
+            var newAlert = Instantiate(alertPrefab, transform);
+            newAlert.QueueEmptied += () => DestroyCompletedAlert(skill, newAlert);
             activeXPAlerts[skill] = newAlert;
         }
 
-        private void HandleChildDeath(CharacterSkill key, XPAlert alert)
+        private void DestroyCompletedAlert(CharacterSkill key, XPAlert alert)
         {
             activeXPAlerts[key] = null;
-            Destroy(alert.gameObject, 0.1f);
+            if (alert.gameObject)
+            {
+                Destroy(alert.gameObject);
+            }
         }
     }
 }

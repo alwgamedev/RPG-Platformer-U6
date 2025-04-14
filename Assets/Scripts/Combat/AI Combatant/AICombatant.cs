@@ -10,6 +10,9 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected int dropSize;//(max) number of items in generated drop
         [SerializeField] protected DropTable dropTable;
 
+        //^in the future to make things more balanced you may want to have separate common and rare drop table,
+        //and draw a specific number from each
+
         protected DamageTakenTracker damageTracker;
 
         public DamageTakenTracker DamageTracker => damageTracker;

@@ -150,6 +150,7 @@ namespace RPGPlatformer.AIControl
         {
             stateManager.Unfreeze();
             SubscribeStateBehaviorToUpdate(true);
+            IsInputDisabled = false;
             InputEnabled?.Invoke();
         }
 
@@ -158,6 +159,7 @@ namespace RPGPlatformer.AIControl
             SubscribeStateBehaviorToUpdate(false);
             stateManager.Freeze();
             stateManager.StateMachine.ForceCurrentState(stateManager.StateGraph.inactive);
+            IsInputDisabled = true;
             InputDisabled?.Invoke();
         }
 

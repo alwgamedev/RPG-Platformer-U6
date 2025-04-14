@@ -18,7 +18,8 @@ namespace RPGPlatformer.Inventory
         public int Doses => stats.Doses;
         public int DosesRemaining => dosesRemaining;
 
-        public ConsumableInventoryItem(InventoryItemData data, ConsumableStats stats, int dosesRemaining = -1) : base(data)
+        public ConsumableInventoryItem(InventoryItemData data, ConsumableStats stats, int dosesRemaining = -1) 
+            : base(data)
         {
             this.stats = stats;
             if (dosesRemaining >= 0)
@@ -50,7 +51,7 @@ namespace RPGPlatformer.Inventory
 
             if (owner is not ICombatant combatant) return;
 
-            OnUse = () =>
+            Use = () =>
             {
                 if (dosesRemaining > 0)
                 {
@@ -94,12 +95,20 @@ namespace RPGPlatformer.Inventory
             return FormatLinesOfText(lines);
         }
 
-        protected override void InitializeRightClickActions()
+        public override IEnumerable<(string, Action)> RightClickActions()
         {
-            RightClickActions = new()
+            if (Use != null)
             {
-                ($"Consume {baseData.DisplayName}", Use)
-            };
+                yield return ($"Consume {baseData.DisplayName}", Use);
+            }
         }
+
+        //protected override void InitializeRightClickActions()
+        //{
+        //    RightClickActions = new()
+        //    {
+        //        ($"Consume {baseData.DisplayName}", Use)
+        //    };
+        //}
     }
 }

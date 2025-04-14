@@ -4,7 +4,7 @@
     {
         public override void UseItem()
         {
-            item?.Release(quantity);
+            item?.ReleaseFromInventory(quantity);
         }
     }
 }

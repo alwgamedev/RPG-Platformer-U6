@@ -74,7 +74,7 @@ namespace RPGPlatformer.UI
         {
             if(item != null)
             {
-                item.Use();
+                item.UseItem();
             }
         }
 

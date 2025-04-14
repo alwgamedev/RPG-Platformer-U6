@@ -92,7 +92,7 @@ namespace RPGPlatformer.UI
                 {
                     OnLevelUpHit();
 
-                    animLevel = skill.XPTable.LevelAtXP((int)animXP);//recompute rather than ++ just in case of massive lag spike
+                    animLevel = skill.XPTable.LevelAtXP((int)animXP);
                     nextAnimLevelXP = skill.XPTable.XPAtLevel(animLevel + 1);
                     animXPPerSecond = skill.XPTable.LevelXPDelta(animLevel) * fillAmountPerSecond;
 
@@ -142,6 +142,8 @@ namespace RPGPlatformer.UI
                     Destroyed += cts.Cancel;
                     NewXPGainEventReceived += cts.Cancel;
                     await MiscTools.DelayGameTime(timeToWaitBeforeDestroy, cts.Token);
+                    Destroyed -= cts.Cancel;
+                    NewXPGainEventReceived -= cts.Cancel;
                     QueueEmptied?.Invoke();
                 }
                 catch (TaskCanceledException)
