@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3546454833209032369}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.10033799, w: 0.99495345}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.05, y: 0, z: 0}
   m_LocalScale: {x: -0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -99,7 +99,10 @@ GameObject:
   - component: {fileID: 3772325267767235185}
   - component: {fileID: 8165410478717557011}
   - component: {fileID: 1079418400079653476}
-  m_Layer: 0
+  - component: {fileID: 8945518329907913833}
+  - component: {fileID: 3755324276021580122}
+  - component: {fileID: 736617973307103334}
+  m_Layer: 10
   m_Name: Luminescent Tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +141,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -153,7 +156,7 @@ CapsuleCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
@@ -184,10 +187,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6229876dd86df6a40b597501629b370b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matHasThicknessParameter: 0
   minThickness: 0
   maxThickness: 0.02
   minIntensity: 0
-  maxIntensity: 5
+  maxIntensity: 200
   thicknessCurve:
     serializedVersion: 2
     m_Curve:
@@ -236,6 +240,51 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  tweenTime: 1
+  tweenTime: 4
   easeInTimeScale: 1
-  easeOutTimeScale: -0.5
+  easeOutTimeScale: -1
+--- !u!114 &8945518329907913833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226224267868922548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3a34615c6456bb469312e846abdd549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3755324276021580122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226224267868922548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a2ceb7b5b5c9be49b32731016b778e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayName: Luminescent Tree
+  examineText: Strange place for a tree...
+  defaultCursorType: 4
+  maxInteractableDistance: 2
+  glowingBranchSO: {fileID: 11400000, guid: d7aac800d06678949a7f8c89bc7060cb, type: 2}
+--- !u!114 &736617973307103334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226224267868922548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c929d1d82ae3b6241ad7c6e7f95efe30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCanvasSource: 1
+  menuPrefab: {fileID: 8243535585966996843, guid: c551c427647afd148b00f56340a43966, type: 3}
+  menuButtonPrefab: {fileID: 6071247106101167904, guid: 0460550107ed1174fab3368bcfe61d21, type: 3}
+  disableWhenPlayerIsDead: 1

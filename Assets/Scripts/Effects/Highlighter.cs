@@ -9,6 +9,7 @@ namespace RPGPlatformer.Effects
     [RequireComponent(typeof(MaterialManager))]
     public class Highlighter : MonoBehaviour
     {
+        [SerializeField] bool matHasThicknessParameter = true;
         [SerializeField] float minThickness;
         [SerializeField] float maxThickness = .02f;
         [SerializeField] float minIntensity;//almost always 0
@@ -141,6 +142,7 @@ namespace RPGPlatformer.Effects
 
         private void SetThickness(float val)
         {
+            if (!matHasThicknessParameter) return;
             materialManager.SetFloat("_Thickness", val);
         }
 

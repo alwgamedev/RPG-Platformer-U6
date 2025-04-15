@@ -1,6 +1,5 @@
 using RPGPlatformer.Loot;
 using RPGPlatformer.Effects;
-using RPGPlatformer.Combat;
 using RPGPlatformer.UI;
 using System;
 using System.Collections.Generic;
@@ -12,11 +11,13 @@ namespace RPGPlatformer.Core
 {
     public class LuminescentTreeIGO : InteractableGameObject
     {
-        [SerializeField] InventoryItemSO glowingBranchWeapon;
+        [SerializeField] InventoryItemSO glowingBranchSO;
 
         Highlighter highlighter;
         bool playerHasInteracted;
-        ILooter player;
+        InventoryItem glowingBranch;
+        ILooter playerLooter;
+        IInventoryOwner playerInventoryOwner;
 
         protected override void Awake()
         {
@@ -27,12 +28,16 @@ namespace RPGPlatformer.Core
 
         private void Start()
         {
-            player = (ILooter)GlobalGameTools.Player.Combatant;
+            var player = GlobalGameTools.Player.Combatant;
+            playerLooter = (ILooter)player;
+            playerInventoryOwner = (IInventoryOwner)player;
+
+            glowingBranch = glowingBranchSO.CreateInstanceOfItem();
         }
 
         public override IEnumerable<(string, Func<bool>, Action)> InteractionOptions()
         {
-            yield return ($"Search {DisplayName}", PlayerCanInteract, async () => await Search());
+            yield return ($"Search {DisplayName}", PlayerCanInteract, Search);
 
             foreach (var option in base.InteractionOptions())
             {
@@ -40,13 +45,24 @@ namespace RPGPlatformer.Core
             }
         }
 
-        public async Task Search()
+        public async void Search()
         {
             if (playerHasInteracted)
             {
-                //if player has a branch, GameLog.Log("u don't need dat")
-                //else give another branch
+                if (playerInventoryOwner.HasItem(glowingBranch))
+                {
+                    GameLog.Log("You already have a tree branch.");
+                }
+                else
+                {
+                    GiveTreeBranchToPlayer();
+                }
+
+                return;
             }
+
+
+            SetInteractable(false);
 
             var tcs = new TaskCompletionSource<object>();
 
@@ -71,9 +87,8 @@ namespace RPGPlatformer.Core
                 highlighter.EnableHighlight(true);
                 await tcs.Task;
 
-                player.TakeLoot(glowingBranchWeapon.CreateInstanceOfItem().ToInventorySlotData(1));
-                GameLog.Log("You take one of the branches for closer inspection.");
-                GameLog.Log($"({glowingBranchWeapon.BaseData.DisplayName} has been placed in your inventory.)");
+                GiveTreeBranchToPlayer();
+                SetInteractable(true);
             }
             catch (TaskCanceledException)
             {
@@ -83,6 +98,18 @@ namespace RPGPlatformer.Core
             {
                 highlighter.HighlightTweenComplete -= Complete;
             }
+        }
+
+        protected override void OnLeftClick()
+        {
+            Search();
+        }
+
+        private void GiveTreeBranchToPlayer()
+        {
+            playerLooter.TakeLoot(glowingBranch.ItemCopy().ToInventorySlotData(1));
+            GameLog.Log("You take one of the branches for closer inspection...");
+            GameLog.Log($"({glowingBranchSO.BaseData.DisplayName} has been placed in your inventory.)");
         }
     }
 }

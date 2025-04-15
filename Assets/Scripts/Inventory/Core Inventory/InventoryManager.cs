@@ -11,7 +11,7 @@ namespace RPGPlatformer.Inventory
     {
         [SerializeField] protected int numSlots = 20;
 
-        protected IInventoryOwner owner;//for most characters this will be their Combatant component (hence owner can equip weapons, consume food, etc.)
+        protected IInventoryOwner owner;
         protected InventorySlot[] slots;
 
         public int NumSlots => numSlots;
@@ -66,16 +66,28 @@ namespace RPGPlatformer.Inventory
             return false;
         }
 
-        public bool IsFull()
+        //public bool IsFull()
+        //{
+        //   for(int i = 0; i < slots.Length; i++)
+        //   {
+        //        if (slots[i].HasSpaceForMore())
+        //        {
+        //            return false;
+        //        }
+        //   }
+        //   return true;
+        //}
+
+        public bool ContainsItem(InventoryItem item)
         {
-           for(int i = 0; i < slots.Length; i++)
-           {
-                if (slots[i].HasSpaceForMore())
-                {
-                    return false;
-                }
-           }
-           return true;
+            if (item == null) return false;
+
+            foreach (var slot in slots)
+            {
+                if (item.Equals(slot.Item) && slot.Quantity > 0) return true;
+            }
+
+            return false;
         }
 
         public bool IsEmpty()
@@ -105,10 +117,10 @@ namespace RPGPlatformer.Inventory
             return slots[i];
         }
 
-        public IInventorySlotDataContainer[] GetInventory()
-        {
-            return slots;
-        }
+        //public IInventorySlotDataContainer[] GetInventory()
+        //{
+        //    return slots;
+        //}
 
         public void MatchItems(IInventorySlotDataContainer[] data, bool matchSize = false)//needs to allow for quantities
         {
@@ -116,7 +128,7 @@ namespace RPGPlatformer.Inventory
             if (matchSize)
             {
                 numSlots = data.Length;
-                slots = new InventorySlot[numSlots];
+                InitializeSlots();
                 for (int i = 0; i < slots.Length; i++)
                 {
                     slots[i] = new InventorySlot();
@@ -149,7 +161,6 @@ namespace RPGPlatformer.Inventory
             {
                 DistributeToFirstAvailableSlots(data);
             }
-            //OnInventoryChanged?.Invoke();
         }
 
         //returns remaining items
@@ -192,7 +203,7 @@ namespace RPGPlatformer.Inventory
                     //in an infinite loop
                     Debug.LogWarning($"placing item {data.Item.BaseData.DisplayName} failed");
                     Debug.LogWarning($"attempted to distribute {remaining} quantity to inventory slots " +
-                        $"and after distributing there is still {leftOver.Quantity} remaining");
+                        $"and after distributing there is {leftOver.Quantity} quantity remaining");
                     return leftOver;
                 }
                 return DistributeToFirstAvailableSlots(leftOver);
@@ -210,23 +221,14 @@ namespace RPGPlatformer.Inventory
                 if (leftOver.Quantity >= remaining)
                 {
                     Debug.LogWarning($"placing item {data.Item.BaseData.DisplayName} failed");
-                    Debug.LogWarning($"attempted to distribute {remaining} to inventory slots " +
-                        $"and after distributing there is still {leftOver.Quantity} remaining");
+                    Debug.LogWarning($"attempted to distribute {remaining} quantity to inventory slots " +
+                        $"and after distributing there is {leftOver.Quantity} quantity remaining");
                     return leftOver;
                 }
 
                 return DistributeToFirstAvailableSlots(leftOver);
-                //return DistributeToFirstAvailableSlots(CorePlaceItem(j, data));
             }
         }
-
-        //public IInventorySlotDataContainer DistributeToFirstAvailableSlots(InventoryItemSO so, int quantity = 1)
-        //{
-        //    if (so == null) return null;
-
-        //    var item = so.CreateInstanceOfItem();
-        //    return DistributeToFirstAvailableSlots(item?.ToInventorySlotData(quantity));
-        //}
 
         public IInventorySlotDataContainer RemoveFromSlot(int i, int quantity = 1)
         {
@@ -273,6 +275,7 @@ namespace RPGPlatformer.Inventory
             return -1;
         }
 
+        //NOTE: this will replace existing item if not of same type as current item (even if new item is null)
         private IInventorySlotDataContainer CorePlaceItem(int i, IInventorySlotDataContainer data)
         {
             var leftOver = slots[i].PlaceItem(data);

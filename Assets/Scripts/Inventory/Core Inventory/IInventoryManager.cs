@@ -6,6 +6,8 @@
 
         //public void PlaceInSlot(int i, IInventorySlotDataContainer data);
 
+        public bool ContainsItem(InventoryItem item);
+
         public IInventorySlotDataContainer RemoveFromSlot(int i, int quantity);
 
         public IInventorySlotDataContainer RemoveAllFromSlot(int i);

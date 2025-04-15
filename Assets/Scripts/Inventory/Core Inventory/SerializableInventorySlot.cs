@@ -8,11 +8,8 @@ namespace RPGPlatformer.Inventory
         public SerializableInventoryItem Item { get; set; }
         public int Quantity { get; set; }
 
-        //public InventorySlot CreateSlot()
-        //{
-        //    return new(Item?.CreateItem(), Quantity);
-        //}
-        //^bad bc the inventory manager needs to do some additional configuration when the item is place in slot
-        //so have the inventory manager place the items
+        //NOTE: inventory manager needs to do some additional configuration when an item is placed in slot
+        //so it's best to have the inventory manager create a new InventorySlot()
+        //and place the item itself
     }
 }
