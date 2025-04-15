@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using RPGPlatformer.Core;
+using System;
 
 namespace RPGPlatformer.Effects
 {
@@ -28,6 +29,8 @@ namespace RPGPlatformer.Effects
         bool tweening;
 
         //bool testing;
+
+        public event Action HighlightTweenComplete;
 
         private void Awake()
         {
@@ -123,6 +126,7 @@ namespace RPGPlatformer.Effects
         private void EndTween()
         {
             tweening = false;
+            HighlightTweenComplete?.Invoke();
         }
 
         private float Thickness(float tweenProgress)
@@ -143,6 +147,11 @@ namespace RPGPlatformer.Effects
         private void SetIntensity(float val)
         {
             materialManager.SetFloat("_BloomIntensityMultiplier", val);
+        }
+
+        private void OnDestroy()
+        {
+            HighlightTweenComplete = null;
         }
     }
 }

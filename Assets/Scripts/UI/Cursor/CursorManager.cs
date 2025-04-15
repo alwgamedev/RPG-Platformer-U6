@@ -8,7 +8,7 @@ namespace RPGPlatformer.UI
 {
     public enum CursorType
     {
-        Default, Dialogue, Loot, EnterDoor, Inspect//OpenShop, Bank
+        Default, Dialogue, Loot, EnterDoor, Search//OpenShop, Bank
     }
 
     public class CursorManager : MonoBehaviour
@@ -25,7 +25,7 @@ namespace RPGPlatformer.UI
         [SerializeField] CursorData dialogueCursor;
         [SerializeField] CursorData lootCursor;
         [SerializeField] CursorData enterDoorCursor;//maybe also for portals
-        [SerializeField] CursorData inspectCursor;
+        [SerializeField] CursorData searchCursor;
         [SerializeField] AnimatedCursorSO focusingRedCrosshairs;
         [SerializeField] AnimatedCursorSO blinkingGreenCrosshairs;
         [SerializeField] AnimatedCursorSO blinkingYellowCrosshairs;
@@ -167,7 +167,7 @@ namespace RPGPlatformer.UI
             CursorLookup.Add(CursorType.Dialogue, dialogueCursor);
             CursorLookup.Add(CursorType.Loot, lootCursor);
             CursorLookup.Add(CursorType.EnterDoor, enterDoorCursor);
-            CursorLookup.Add(CursorType.Inspect, inspectCursor);
+            CursorLookup.Add(CursorType.Search, searchCursor);
         }
 
         private void OnDestroy()

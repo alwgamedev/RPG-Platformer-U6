@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPGPlatformer.Combat;
 using RPGPlatformer.UI;
+using UnityEditor;
 
 namespace RPGPlatformer.Inventory
 {
@@ -30,6 +31,29 @@ namespace RPGPlatformer.Inventory
             {
                 this.dosesRemaining = stats.Doses;
             }
+        }
+
+        public override SerializableInventoryItem ConvertToSerializable()
+        {
+            var ser = new SerializableConsumableInventoryItem()
+            {
+                LookupName = baseData.LookupName,
+                DosesRemaining = dosesRemaining
+            };
+
+            return ser;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj)
+                && obj is ConsumableInventoryItem item 
+                && item.dosesRemaining == dosesRemaining;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ dosesRemaining;
         }
 
         public override InventoryItem ItemCopy()
@@ -70,13 +94,23 @@ namespace RPGPlatformer.Inventory
                         if (owner.IsPlayer)
                         {
                             GameLog.Log($"{dosesRemaining - 1} dose(s) remaining.");
+                            //dosesRemaining - 1 because the remaining doses will be in a new inventory
+                            //item that got redistributed to inventory
+                            //(e.g. you take a bite of a cookie from a stack of 3 - dose cookies
+                            //it produces a new cookie with 2 doses remaining and places it in first available slot)
                         }
                     }
                 }
             };
 
         }
-        //and the base class already sets OnUsed = null when removed from inventory
+
+        public override void Examine()
+        {
+            base.Examine();
+
+            GameLog.Log($"{dosesRemaining} dose(s) remaining.");
+        }
 
         public override string TooltipText()
         {

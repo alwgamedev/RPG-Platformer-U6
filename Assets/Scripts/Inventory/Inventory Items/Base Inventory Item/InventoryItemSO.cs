@@ -8,28 +8,30 @@ namespace RPGPlatformer.Inventory
     {
         [SerializeField] protected InventoryItemData baseData;
 
-        public static Dictionary<InventoryItemSO, string> InventoryItemLookup = new();
+        public InventoryItemData BaseData => baseData;
+
+        public static Dictionary<string, InventoryItemSO> FindItemSO = new();
 
         public virtual InventoryItem CreateInstanceOfItem()
         {
             return new(baseData);
         }
 
-        public static InventoryItemSO FindByName(string name)
-        {
-            foreach (var entry in InventoryItemLookup)
-            {
-                if (entry.Value == name)
-                {
-                    return entry.Key;
-                }
-            }
-            return null;
-        }
+        //public static InventoryItemSO FindByName(string name)
+        //{
+        //    foreach (var entry in InventoryItemLookup)
+        //    {
+        //        if (entry.Value == name)
+        //        {
+        //            return entry.Key;
+        //        }
+        //    }
+        //    return null;
+        //}
 
         public void UpdateLookup()
         {
-            InventoryItemLookup[this] = baseData.LookupName;
+            FindItemSO[baseData.LookupName] = this;
         }
 
         private void OnValidate()

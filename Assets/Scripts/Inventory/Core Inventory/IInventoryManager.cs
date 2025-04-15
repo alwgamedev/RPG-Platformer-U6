@@ -4,7 +4,7 @@
     {
         public int NumSlots { get; }
 
-        public void PlaceInSlot(int i, IInventorySlotDataContainer data);
+        //public void PlaceInSlot(int i, IInventorySlotDataContainer data);
 
         public IInventorySlotDataContainer RemoveFromSlot(int i, int quantity);
 

@@ -65,15 +65,15 @@ namespace RPGPlatformer.Combat
         protected override void InitializeInventoryItems()
         {
             //JUST FOR TESTING
-            var spaghetti = InventoryItemSO.FindByName("Spaghetti");
-            var staff = InventoryItemSO.FindByName("Basic Staff (SH)");
-            var bow = InventoryItemSO.FindByName("Basic Bow (SH)");
-            var sword = InventoryItemSO.FindByName("Basic Sword (SH)");
-            var gold = InventoryItemSO.FindByName("Gold Coins");
-            var cookie = InventoryItemSO.FindByName("Cookie");
-            var redBody = InventoryItemSO.FindByName("Red Body");
-            var bwTop = InventoryItemSO.FindByName("Blue Wizard Top");
-            var bwPants = InventoryItemSO.FindByName("Blue Wizard Pants");
+            var spaghetti = InventoryItemSO.FindItemSO["Spaghetti"];
+            var staff = InventoryItemSO.FindItemSO["Basic Staff (SH)"];
+            var bow = InventoryItemSO.FindItemSO["Basic Bow (SH)"];
+            var sword = InventoryItemSO.FindItemSO["Basic Sword (SH)"];
+            var gold = InventoryItemSO.FindItemSO["Gold Coins"];
+            var cookie = InventoryItemSO.FindItemSO["Cookie"];
+            var redBody = InventoryItemSO.FindItemSO["Red Body"];
+            var bwTop = InventoryItemSO.FindItemSO["Blue Wizard Top"];
+            var bwPants = InventoryItemSO.FindItemSO["Blue Wizard Pants"];
 
             stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToInventorySlotData(1));

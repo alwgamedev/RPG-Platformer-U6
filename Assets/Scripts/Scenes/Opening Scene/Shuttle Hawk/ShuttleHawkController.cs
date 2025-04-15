@@ -22,7 +22,7 @@ namespace RPGPlatformer.AIControl
         [SerializeField] PatrolPath returnPath;
         [SerializeField] Transform departurePoint;
 
-        IInteractableNPC npc;
+        //IInteractableNPC npc;
 
         Dictionary<string, Action> PatrolDestinationReachedHandler = new();
 
@@ -38,8 +38,6 @@ namespace RPGPlatformer.AIControl
         protected override void Awake()
         {
             base.Awake();
-
-            npc = GetComponent<IInteractableNPC>();
 
             BuildPatrolDestinationReachedHandlerDict();
         }

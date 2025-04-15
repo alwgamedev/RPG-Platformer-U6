@@ -60,6 +60,7 @@ namespace RPGPlatformer.Core
 
         //INTERACTION FUNCTIONS
 
+        //data is (Description, CanBeExecuted, Action)
         public virtual IEnumerable<(string, Func<bool>, Action)> InteractionOptions()
         {
             if (!string.IsNullOrEmpty(ExamineText))

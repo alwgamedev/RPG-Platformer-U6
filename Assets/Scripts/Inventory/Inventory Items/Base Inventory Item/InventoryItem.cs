@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using RPGPlatformer.UI;
 using RPGPlatformer.Core;
-using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 namespace RPGPlatformer.Inventory
 {
@@ -12,17 +11,14 @@ namespace RPGPlatformer.Inventory
         protected Action Use;
         protected Action<int> ReleaseItem;
 
-        //public List<(string, Action)> RightClickActions { get; protected set; } = new();
-
-        public InventoryItemData BaseData { get => baseData; set => baseData = value; }
+        public InventoryItemData BaseData => baseData;
 
         public InventoryItem(InventoryItemData data)
         {
             baseData = data;
-            //InitializeRightClickActions();
         }
 
-        public SerializableInventoryItem ConvertToSerializable()
+        public virtual SerializableInventoryItem ConvertToSerializable()
         {
             var ser = new SerializableInventoryItem()
             {
@@ -32,21 +28,39 @@ namespace RPGPlatformer.Inventory
             return ser;
         }
 
-        public static bool ItemsAreOfSameType(InventoryItem item1, InventoryItem item2)
+        public override bool Equals(object obj)
         {
-            if(item1 == null || item2 == null)
+            var item = obj as InventoryItem;
+
+            if (item == null)
             {
                 return false;
             }
-            if(item1 is IDosedItem dosed1 && item2 is IDosedItem dosed2)
-            {
-                if(dosed1.Doses != dosed2.Doses || dosed1.DosesRemaining != dosed2.DosesRemaining)
-                {
-                    return false;
-                }
-            }
-            return item1.BaseData.DisplayName == item2.BaseData.DisplayName;
+
+            return !string.IsNullOrEmpty(baseData.LookupName)
+                && baseData.LookupName == item.BaseData.LookupName;
         }
+
+        public override int GetHashCode()
+        {
+            return baseData.LookupName?.GetHashCode() ?? base.GetHashCode();
+        }
+
+        //public static bool ItemsAreOfSameType(InventoryItem item1, InventoryItem item2)
+        //{
+        //    if(item1 == null || item2 == null)
+        //    {
+        //        return false;
+        //    }
+        //    if(item1 is IDosedItem dosed1 && item2 is IDosedItem dosed2)
+        //    {
+        //        if(dosed1.Doses != dosed2.Doses || dosed1.DosesRemaining != dosed2.DosesRemaining)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return item1.BaseData.DisplayName == item2.BaseData.DisplayName;
+        //}
 
         public virtual InventoryItem ItemCopy()
         {

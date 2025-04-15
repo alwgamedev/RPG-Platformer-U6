@@ -22,8 +22,13 @@ namespace RPGPlatformer.Inventory
         {
             owner = GetComponent<IInventoryOwner>();
 
+            InitializeSlots();
+        }
+
+        private void InitializeSlots()
+        {
             slots = new InventorySlot[numSlots];
-            for(int i = 0; i < slots.Length; i++)
+            for (int i = 0; i < slots.Length; i++)
             {
                 slots[i] = new InventorySlot();
             }
@@ -37,7 +42,22 @@ namespace RPGPlatformer.Inventory
         public void RestoreState(JsonNode jNode)
         {
             var ser = jNode.Deserialize<SerializableInventorySlot[]>();
-            slots = ser.Select(x => x?.CreateSlot()).ToArray();
+            if (ser != null)
+            {
+                numSlots = ser.Length;
+            }
+
+            InitializeSlots();
+
+            if (ser != null)
+            {
+                for (int i = 0; i < ser.Length; i++)
+                {
+                    var item = ser[i].Item?.CreateItem();
+                    PlaceInSlotOrDistributeToFirstAvailable(i, item?.ToInventorySlotData(ser[i].Quantity));
+                }
+            }
+
             OnInventoryChanged?.Invoke();
         }
 
@@ -116,16 +136,20 @@ namespace RPGPlatformer.Inventory
         }
 
         //if slot is filled, it will place in first available
-        public void PlaceInSlot(int i, IInventorySlotDataContainer data)
+        public void PlaceInSlotOrDistributeToFirstAvailable(int i, IInventorySlotDataContainer data)
         {
-            if (slots[i].Item != null && !InventoryItem.ItemsAreOfSameType(data.Item, slots[i].Item))
+            if (data?.Item == null || data.Quantity == 0) return;
+
+            if (slots[i].Item == null || data.Item.Equals(slots[i].Item))
             {
-                DistributeToFirstAvailableSlots(data);
+                DistributeToFirstAvailableSlots(CorePlaceItem(i, data));
                 return;
             }
-
-            DistributeToFirstAvailableSlots(CorePlaceItem(i, data));
-            OnInventoryChanged?.Invoke();
+            else
+            {
+                DistributeToFirstAvailableSlots(data);
+            }
+            //OnInventoryChanged?.Invoke();
         }
 
         //returns remaining items
@@ -146,7 +170,7 @@ namespace RPGPlatformer.Inventory
 
         public IInventorySlotDataContainer DistributeToFirstAvailableSlots(IInventorySlotDataContainer data)
         {
-            if(data == null || data.Item == null)
+            if(data?.Item == null || data.Item.BaseData.MaxStack == 0)
             {
                 return null;
             }
@@ -154,14 +178,24 @@ namespace RPGPlatformer.Inventory
             int remaining = data.Quantity;
             if (remaining <= 0)
             {
-                OnInventoryChanged?.Invoke();
+                OnInventoryChanged?.Invoke();//Why? because this method is recursive! Don't delete!
                 return null;
             }
 
             int i = FindFirstVacantSlotOfType(data.Item);
             if(i >= 0)
             {
-                return DistributeToFirstAvailableSlots(CorePlaceItem(i, data));
+                var leftOver = CorePlaceItem(i, data);
+                if (leftOver.Quantity >= remaining)
+                {
+                    //juuust in case anything goes wrong, this will make sure we don't get caught
+                    //in an infinite loop
+                    Debug.LogWarning($"placing item {data.Item.BaseData.DisplayName} failed");
+                    Debug.LogWarning($"attempted to distribute {remaining} quantity to inventory slots " +
+                        $"and after distributing there is still {leftOver.Quantity} remaining");
+                    return leftOver;
+                }
+                return DistributeToFirstAvailableSlots(leftOver);
             }
             else
             {
@@ -172,17 +206,27 @@ namespace RPGPlatformer.Inventory
                     return data;
                 }
 
-                return DistributeToFirstAvailableSlots(CorePlaceItem(j, data));
+                var leftOver = CorePlaceItem(j, data);
+                if (leftOver.Quantity >= remaining)
+                {
+                    Debug.LogWarning($"placing item {data.Item.BaseData.DisplayName} failed");
+                    Debug.LogWarning($"attempted to distribute {remaining} to inventory slots " +
+                        $"and after distributing there is still {leftOver.Quantity} remaining");
+                    return leftOver;
+                }
+
+                return DistributeToFirstAvailableSlots(leftOver);
+                //return DistributeToFirstAvailableSlots(CorePlaceItem(j, data));
             }
         }
 
-        public IInventorySlotDataContainer DistributeToFirstAvailableSlots(InventoryItemSO so, int quantity = 1)
-        {
-            if (so == null) return null;
+        //public IInventorySlotDataContainer DistributeToFirstAvailableSlots(InventoryItemSO so, int quantity = 1)
+        //{
+        //    if (so == null) return null;
 
-            var item = so.CreateInstanceOfItem();
-            return DistributeToFirstAvailableSlots(item?.ToInventorySlotData(quantity));
-        }
+        //    var item = so.CreateInstanceOfItem();
+        //    return DistributeToFirstAvailableSlots(item?.ToInventorySlotData(quantity));
+        //}
 
         public IInventorySlotDataContainer RemoveFromSlot(int i, int quantity = 1)
         {
@@ -221,7 +265,7 @@ namespace RPGPlatformer.Inventory
         {
             for (int i = 0; i < slots.Length; i++)
             {
-                if (slots[i].HasSpaceForMore() && InventoryItem.ItemsAreOfSameType(item, slots[i].Item))
+                if (slots[i].HasSpaceForMore() && item.Equals(slots[i].Item))
                 {
                     return i;
                 }

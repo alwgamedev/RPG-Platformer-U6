@@ -1,20 +1,24 @@
-﻿using RPGPlatformer.Core;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace RPGPlatformer.Inventory
 {
     [Serializable]
+    [JsonDerivedType(typeof(SerializableInventoryItem), typeDiscriminator: "base")]
+    [JsonDerivedType(typeof(SerializableConsumableInventoryItem), typeDiscriminator: "consumable")]
     public class SerializableInventoryItem
     {
         public string LookupName { get; set; }
 
-        public InventoryItem CreateItem()
+        public virtual InventoryItem CreateItem()
         {
-            var itemSO = InventoryItemSO.FindByName(LookupName);
+            var itemSO = InventoryItemSO.FindItemSO[LookupName];
+
             if (itemSO != null)
             {
                 return itemSO.CreateInstanceOfItem();
             }
+
             return null;
         }
     }
