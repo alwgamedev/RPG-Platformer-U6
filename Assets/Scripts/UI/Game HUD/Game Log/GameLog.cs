@@ -138,6 +138,8 @@ namespace RPGPlatformer.UI
             {
                 Instance = null;
             }
+
+            SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
     }
 }

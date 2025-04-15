@@ -14,13 +14,25 @@ namespace RPGPlatformer.SceneManagement
         public event Action OnPause;
         public event Action OnUnpause;
 
+        public static PauseManager Instance;
+
         private void Awake()
         {
-            SettingsManager.IAMConfigured += OnIAMConfigured;
+            if (Instance == null)
+            {
+                Instance = this;
+                SettingsManager.IAMConfigured += OnIAMConfigured;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void Start()
         {
+            if (Instance != this) return;
+
             SettingsMenu sm = FindAnyObjectByType<SettingsMenu>(FindObjectsInactive.Include);
             if (sm)
                 //so you can't Esc to unpause once paused
@@ -81,6 +93,11 @@ namespace RPGPlatformer.SceneManagement
 
         private void OnDestroy()
         {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
+
             OnPause = null;
             OnUnpause = null;
 

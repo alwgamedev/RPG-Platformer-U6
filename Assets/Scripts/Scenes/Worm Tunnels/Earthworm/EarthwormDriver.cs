@@ -53,8 +53,8 @@ namespace RPGPlatformer.AIControl
 
         public void InitializeState()
         {
-            CurrentTarget = GlobalGameTools.Player.Combatant.Health;
-            GlobalGameTools.Player.OnDeath += () => Trigger(typeof(EarthwormDormant).Name);
+            CurrentTarget = GlobalGameTools.Instance.Player.Combatant.Health;
+            GlobalGameTools.Instance.Player.OnDeath += () => Trigger(typeof(EarthwormDormant).Name);
 
             stabIKEffect.SetTarget(CurrentTarget.transform);
             curveGuide.ReconfigureIKEffects();

@@ -28,7 +28,7 @@ namespace RPGPlatformer.Core
 
         private void Start()
         {
-            var player = GlobalGameTools.Player.Combatant;
+            var player = GlobalGameTools.Instance.Player.Combatant;
             playerLooter = (ILooter)player;
             playerInventoryOwner = (IInventoryOwner)player;
 

@@ -37,7 +37,7 @@ namespace RPGPlatformer.Loot
         private void Start()
         {
             lifeTimer = 0;
-            playerLooter = GlobalGameTools.PlayerTransform.GetComponent<ILooter>();
+            playerLooter = (ILooter)GlobalGameTools.Instance.Player.Combatant;
             inventory.OnInventoryChanged += HandleInventoryChanged;
         }
 

@@ -10,22 +10,51 @@ namespace RPGPlatformer.Core
     public class GlobalGameTools : MonoBehaviour
     {
         [SerializeField] ResourcesManager resourcesManager = new();
+        [SerializeField] ObjectPoolCollection projectilePooler;//should be children of the GGT
+        [SerializeField] ObjectPoolCollection effectPooler;
+
+        Transform playerTransform;
+        ICombatController playerCC;
 
         public static GlobalGameTools Instance { get; private set; }
         public static string PlayerName { get; private set; } = "Player";
-        public static Transform PlayerTransform { get; private set; }
-        public static ICombatController Player { get; private set; }
-        public static bool PlayerIsDead => Player == null || Player.Combatant.Health.IsDead;
-        public static bool PlayerIsInCombat => Player != null && Player.IsInCombat;
+        public Transform PlayerTransform
+        {
+            get
+            {
+                if (playerTransform == null)
+                {
+                    FindPlayer();
+                }
+
+                return playerTransform;
+            }
+        }
+        public ICombatController Player
+        {
+            get
+            {
+                if (playerCC == null)
+                {
+                    FindPlayer();
+                }
+
+                return playerCC;
+            }
+        }
+        public bool PlayerIsDead => Player == null || Player.Combatant.Health.IsDead;
+        //public static bool PlayerIsInCombat => Player != null && Player.IsInCombat;
         public CancellationTokenSource TokenSource {  get; private set; }
         public TickTimer TickTimer { get; private set; }
         public ResourcesManager ResourcesManager => resourcesManager;
-        public ObjectPoolCollection ProjectilePooler {  get; private set; }
-        public ObjectPoolCollection EffectPooler { get; private set; }
+        public ObjectPoolCollection ProjectilePooler => projectilePooler;
+        public ObjectPoolCollection EffectPooler => effectPooler;
 
         public static event Action OnPlayerDeath;
         //useful to have this go through global game tools,
-        //so that subscribers don't have to worry about whether player exists yet
+        //so that subscribers don't have to worry about whether player exists when subscribing
+        //(i.e. compared to directly subscribing to player)
+
         public static event Action InstanceReady;
 
         private void Awake()
@@ -49,23 +78,38 @@ namespace RPGPlatformer.Core
 
             TickTimer = GetComponent<TickTimer>();
 
-            ProjectilePooler = GameObject.Find("Projectile Pooler").GetComponent<ObjectPoolCollection>();
-            EffectPooler = GameObject.Find("Effect Pooler").GetComponent<ObjectPoolCollection>();
+            //ProjectilePooler = GameObject.Find("Projectile Pooler").GetComponent<ObjectPoolCollection>();
+            //EffectPooler = GameObject.Find("Effect Pooler").GetComponent<ObjectPoolCollection>();
 
             resourcesManager.InitializeResources();
 
-            var player = GameObject.FindWithTag("Player");
-            Player = player.GetComponent<PlayerCombatController>();
-            PlayerTransform = player.transform;
-            Player.OnDeath += () => OnPlayerDeath?.Invoke();
+            FindPlayer();
+        }
+
+        private void FindPlayer()
+        {
+            var playerGO = GameObject.FindWithTag("Player");
+
+            if (playerGO)
+            {
+                playerCC = playerGO.GetComponent<PlayerCombatController>();
+                playerTransform = playerGO.transform;
+                if (playerCC != null)
+                {
+                    playerCC.OnDeath += () => OnPlayerDeath?.Invoke();
+                }
+            }
         }
 
 
         private void OnDestroy()
         {
-            if (!TokenSource.IsCancellationRequested)
+            if (TokenSource != null)
             {
-                TokenSource.Cancel();
+                if (!TokenSource.IsCancellationRequested)
+                {
+                    TokenSource.Cancel();
+                }
                 TokenSource.Dispose();
             }
 

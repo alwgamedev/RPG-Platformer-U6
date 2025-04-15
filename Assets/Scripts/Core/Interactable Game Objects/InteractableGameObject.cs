@@ -116,7 +116,7 @@ namespace RPGPlatformer.Core
 
         public virtual bool PlayerCanInteract()
         {
-            return !GlobalGameTools.PlayerIsDead && PlayerInRangeWithNotifications();
+            return !GlobalGameTools.Instance.PlayerIsDead && PlayerInRangeWithNotifications();
         }
 
         protected virtual bool PlayerInRangeWithNotifications()
@@ -137,7 +137,7 @@ namespace RPGPlatformer.Core
 
         protected virtual bool PlayerInRange()
         {
-            var playerTransform = GlobalGameTools.PlayerTransform;
+            var playerTransform = GlobalGameTools.Instance.PlayerTransform;
 
             if (playerTransform == null)
             {

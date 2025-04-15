@@ -13,14 +13,6 @@ namespace RPGPlatformer.UI
 
     public class CursorManager : MonoBehaviour
     {
-        //[SerializeField] Texture2D defaultCursor;
-        //[SerializeField] Texture2D defaultCursorClicked;
-        //[SerializeField] Texture2D dialogueCursor;
-        //[SerializeField] Texture2D dialogueCursorClicked;
-        //[SerializeField] Texture2D lootCursor;
-        //[SerializeField] Texture2D lootCursorClicked;
-        //[SerializeField] Texture2D enterDoorCursor;//maybe also for portals
-        //[SerializeField] Texture2D enterDoorCursorClicked;
         [SerializeField] CursorData defaultCursor;
         [SerializeField] CursorData dialogueCursor;
         [SerializeField] CursorData lootCursor;
@@ -35,21 +27,32 @@ namespace RPGPlatformer.UI
         bool animatedCursorEquipped;
         CursorType currentCursorType;
 
+        public CursorManager Instance { get; private set; }
+
         private void Awake()
         {
-            BuildCursorLookup();
-
-            SettingsManager.IAMConfigured += OnIAMConfigure;
+            if (Instance == null)
+            {
+                Instance = this;
+                BuildCursorLookup();
+                SettingsManager.IAMConfigured += OnIAMConfigure;
+            }
+            else 
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void Start()
         {
-            ICombatController playerCombatController = GameObject.Find("Player").GetComponent<ICombatController>();
-            playerCombatController.OnChannelStarted += () =>
+            if (Instance != this) return;
+
+            var player = GlobalGameTools.Instance.Player;
+            player.OnChannelStarted += () =>
             {
                 EquipAnimatedCursor(focusingRedCrosshairs);
             };
-            playerCombatController.OnChannelEnded += () =>
+            player.OnChannelEnded += () =>
             {
                 if (animatedCursorEquipped)
                 {
@@ -58,8 +61,8 @@ namespace RPGPlatformer.UI
                     //properly accounts for mouse down
                 }
             };
-            playerCombatController.OnPowerUpStarted += () => EquipAnimatedCursor(blinkingYellowCrosshairs);
-            playerCombatController.OnMaximumPowerAchieved += () => EquipAnimatedCursor(blinkingGreenCrosshairs);
+            player.OnPowerUpStarted += () => EquipAnimatedCursor(blinkingYellowCrosshairs);
+            player.OnMaximumPowerAchieved += () => EquipAnimatedCursor(blinkingGreenCrosshairs);
 
             InteractableGameObject.HoveredIGOChanged += EquipIGOHoverCursor;
 
@@ -172,7 +175,13 @@ namespace RPGPlatformer.UI
 
         private void OnDestroy()
         {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
+
             InteractableGameObject.HoveredIGOChanged -= EquipIGOHoverCursor;
+            SettingsManager.IAMConfigured -= OnIAMConfigure;
             OnUpdate = null;
         }
     }

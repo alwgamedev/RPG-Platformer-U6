@@ -208,6 +208,7 @@ namespace RPGPlatformer.UI
             TooltipClear = null;
             TooltipSpawned = null;
             Destroyed = null;
+            SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
     }
 }

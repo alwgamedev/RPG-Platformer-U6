@@ -179,6 +179,7 @@ namespace RPGPlatformer.UI
         protected virtual void OnDestroy()
         {
             MenuSpawned = null;
+            SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
     }
 }

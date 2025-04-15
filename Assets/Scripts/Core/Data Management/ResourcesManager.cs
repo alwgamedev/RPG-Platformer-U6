@@ -23,7 +23,7 @@ namespace RPGPlatformer.Core
             LoadCircularSkillIcons();
         }
 
-        public void UpdateInventoryItemSOLookup()
+        private void UpdateInventoryItemSOLookup()
         {
             InventoryItemSO[] invItems = Resources.LoadAll<InventoryItemSO>("");
             foreach (InventoryItemSO invItem in invItems)
@@ -32,7 +32,7 @@ namespace RPGPlatformer.Core
             }
         }
 
-        public void LoadCircularSkillIcons()
+        private void LoadCircularSkillIcons()
         {
             CircularSkillIcons = new()
             {

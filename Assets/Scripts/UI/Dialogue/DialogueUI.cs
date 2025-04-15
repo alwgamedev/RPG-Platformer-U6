@@ -73,7 +73,7 @@ namespace RPGPlatformer.UI
 
             if (!data.AllowPlayerToEnterCombatDuringDialogue)
             {
-                var player = GlobalGameTools.Player;
+                var player = GlobalGameTools.Instance.Player;
 
                 if (player != null)
                 {

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-//using System.Json;
 using System.Text.Json.Nodes;
 using System.IO;
 using System.Threading.Tasks;
@@ -12,9 +10,20 @@ namespace RPGPlatformer.Saving
 
     public class SavingSystem : MonoBehaviour
     {
+        public static SavingSystem Instance;
+
         private void Awake()
         {
-            SettingsManager.IAMConfigured += OnIAMConfigure;
+            if (Instance == null)
+            {
+                Instance = this;
+                SettingsManager.IAMConfigured += OnIAMConfigure;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            //in case we have a saving system that persisted from the start menu or something
         }
 
         private void OnIAMConfigure()
@@ -53,7 +62,8 @@ namespace RPGPlatformer.Saving
                 return;
             }
 
-            foreach(var savable in FindObjectsByType<SavableMonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach(var savable in 
+                FindObjectsByType<SavableMonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
                 if(savable == null)
                 {
@@ -87,6 +97,11 @@ namespace RPGPlatformer.Saving
 
         private void OnDestroy()
         {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
+
             SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
     }
