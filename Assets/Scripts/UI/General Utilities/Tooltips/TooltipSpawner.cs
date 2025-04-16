@@ -33,7 +33,7 @@ namespace RPGPlatformer.UI
             targetCanvas = GetComponentInParent<Canvas>();
             if (!targetCanvas)
             {
-                targetCanvas = GameObject.Find("Game UI Canvas").GetComponent<Canvas>();
+                targetCanvas = GameObject.FindWithTag("Game UI Canvas").GetComponent<Canvas>();
             }
 
             if (spawnDelay > 0)

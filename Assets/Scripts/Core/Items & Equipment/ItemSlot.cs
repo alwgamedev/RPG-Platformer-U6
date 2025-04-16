@@ -11,26 +11,27 @@ namespace RPGPlatformer.Core
         Head, Torso, Legs, Mainhand, Offhand
     }
 
-    public class ItemSlot : MonoBehaviour
+    public class ItemSlot : MonoBehaviour //ISavable
     {
         [SerializeField] string sortingLayer;
         [SerializeField] int sortingOrder;
-        [SerializeField] EquippableItemSO defaultItemSO; 
+        [SerializeField] EquippableItemSO defaultItemSO;
         [SerializeField] List<SpriteResolver> dependentResolvers = new();
 
         OneSidedItem osi;
-        EquippableItem defaultItem;
         EquippableItem equippedItem;
         Dictionary<string, SpriteResolver> SpriteResolverForCategory = new();
         Dictionary<string, string> DefaultLabelForCategory = new();
 
-        public EquippableItem DefaultItem => defaultItem;
-        public EquippableItem EquipppedItem => equippedItem;
+        public EquippableItem defaultItem;
+
+        //public EquippableItem DefaultItem => defaultItem;
+        public EquippableItem EquippedItem => equippedItem;
         public GameObject EquippedItemGO { get; protected set; }
 
-        public string SortingLayer => sortingLayer;
-        public int SortingOrder => sortingOrder;
-        public static int NumEquipmentSlots => Enum.GetNames(typeof(EquipmentSlot)).Length;
+        //public string SortingLayer => sortingLayer;
+        //public int SortingOrder => sortingOrder;
+        //public static int NumEquipmentSlots => Enum.GetNames(typeof(EquipmentSlot)).Length;
 
         public event Action OnItemEquipped;
 
@@ -38,15 +39,31 @@ namespace RPGPlatformer.Core
         {
             BuildDictionaries();
 
-            if (defaultItemSO != null)
-            {
-                defaultItem = (EquippableItem)defaultItemSO.CreateInstanceOfItem();
-            }
-            else
-            {
-                defaultItem = null;
-            }
+            //if (defaultItemSO != null)
+            //{
+            //    defaultItem = (EquippableItem)defaultItemSO.CreateInstanceOfItem();
+            //}
+            //else
+            //{
+            //    defaultItem = null;
+            //}
         }
+
+        public void InitializeDefaultItemFromSO(bool overrideCurrentDefault = false)
+        {
+            if (defaultItem != null && !overrideCurrentDefault) return;
+            if (defaultItemSO == null) return;
+
+            defaultItem = (EquippableItem)defaultItemSO.CreateInstanceOfItem();
+        }
+
+        //private void Start()
+        //{
+        //    if (DefaultItem == null && defaultItemSO != null)
+        //    {
+        //        DefaultItem = (EquippableItem)defaultItemSO.CreateInstanceOfItem();
+        //    }
+        //}
 
         private void BuildDictionaries()
         {
@@ -146,5 +163,15 @@ namespace RPGPlatformer.Core
         {
             OnItemEquipped = null;
         }
+
+        //public JsonNode CaptureState()
+        //{
+        //    return JsonSerializer.SerializeToNode(equippedItem?.ConvertToSerializable());
+        //}
+
+        //public void RestoreState(JsonNode jNode)
+        //{
+        //    defaultItem = (EquippableItem)(jNode.Deserialize<SerializableInventoryItem>()?.CreateItem());
+        //}
     }
 }

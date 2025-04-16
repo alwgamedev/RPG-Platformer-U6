@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading;
 using RPGPlatformer.Core;
+using System;
 
 namespace RPGPlatformer.Saving
 {

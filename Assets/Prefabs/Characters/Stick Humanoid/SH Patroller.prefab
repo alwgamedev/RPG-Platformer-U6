@@ -302,6 +302,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4360630051120203035, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      propertyPath: defaultItemSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 12413a0d5120f0b49b76b93f929f25d6, type: 2}
     - target: {fileID: 4421856058200572310, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -753,7 +757,6 @@ MonoBehaviour:
   offhandSlot: {fileID: 2277802274543843807}
   mainhandElbow: {fileID: 408011811868376633}
   chestBone: {fileID: 1054953398681727986}
-  defaultWeaponSO: {fileID: 0}
   unarmedWeaponSO: {fileID: 11400000, guid: 4139e115d9f5ac74f91fbb9f83f3303b, type: 2}
   stamina:
     minValue: 0
@@ -773,8 +776,11 @@ MonoBehaviour:
   dropLootOnFinalizeDeath: 1
   destroyOnFinalizeDeath: 1
   delayBeforeFinalizeDeath: 1
+  finalizeDeathViaTrigger: 0
   timeToDelayBeforeFinalizeDeath: 1.5
   combatXPReward: 24
+  dropSize: 0
+  dropTable: {fileID: 0}
 --- !u!114 &8912017489112769141
 MonoBehaviour:
   m_ObjectHideFlags: 0

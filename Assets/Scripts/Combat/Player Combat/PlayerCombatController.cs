@@ -17,6 +17,20 @@ namespace RPGPlatformer.Combat
             InteractableGameObject.IGOClicked += OnIGOClicked;
         }
 
+        private void Update()
+        {
+            if (FireButtonIsDown)
+            {
+                RunAutoAbilityCycle(false);
+            }
+
+            //JUST FOR TESTING
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                TogglePlayerAlive();
+            }
+        }
+
         private void OnIAMConfigure()
         {
             InputActionsManager iam = SettingsManager.Instance.IAM;
@@ -48,20 +62,6 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        private void Update()
-        {
-            if (FireButtonIsDown)
-            {
-                RunAutoAbilityCycle(false);
-            }
-
-            //JUST FOR TESTING
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                TogglePlayerAlive();
-            }
-        }
-
         protected override void InitializeInventoryItems()
         {
             //JUST FOR TESTING
@@ -72,6 +72,7 @@ namespace RPGPlatformer.Combat
             var gold = InventoryItemSO.FindItemSO["Gold Coins"];
             var cookie = InventoryItemSO.FindItemSO["Cookie"];
             var redBody = InventoryItemSO.FindItemSO["Red Body"];
+            var bwHat = InventoryItemSO.FindItemSO["Blue Wizard Hat"];
             var bwTop = InventoryItemSO.FindItemSO["Blue Wizard Top"];
             var bwPants = InventoryItemSO.FindItemSO["Blue Wizard Pants"];
 
@@ -83,9 +84,15 @@ namespace RPGPlatformer.Combat
             stateDriver.TakeLoot(cookie.CreateInstanceOfItem().ToInventorySlotData(8));
             stateDriver.TakeLoot(gold.CreateInstanceOfItem().ToInventorySlotData(773));
             stateDriver.TakeLoot(redBody.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(bwHat.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(bwTop.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(bwPants.CreateInstanceOfItem().ToInventorySlotData(1));
         }
+
+        //protected override void InitializeCombatantEquipment()
+        //{
+        //    base.InitializeCombatantEquipment();
+        //}
 
         private void OnIGOClicked()
         {

@@ -39,7 +39,7 @@ namespace RPGPlatformer.Combat
             {
                 if (entry.Value != null)
                 {
-                    total += entry.Value.EquipppedItem?.EquippableItemData.DamageBonus ?? 0;
+                    total += entry.Value.EquippedItem?.EquippableItemData.DamageBonus ?? 0;
                 }
             }
 
@@ -81,7 +81,7 @@ namespace RPGPlatformer.Combat
             {
                 if (entry.Value != null)
                 {
-                    total += entry.Value.EquipppedItem?.EquippableItemData.DefenseBonus ?? 0;
+                    total += entry.Value.EquippedItem?.EquippableItemData.DefenseBonus ?? 0;
                 }
             }
             return total;

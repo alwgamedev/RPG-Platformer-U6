@@ -46,7 +46,7 @@ namespace RPGPlatformer.Combat
         protected int activeStunsThatFreezeAnimation;
 
         public bool IsInCombat => stateManager.StateMachine.CurrentState is InCombat;
-        public AbilityBar CurrentAbilityBar => abilityBarManager.CurrentAbilityBar;
+        public AbilityBar CurrentAbilityBar => abilityBarManager?.CurrentAbilityBar;
         public TickTimer TickTimer => tickTimer;
         public bool GlobalCooldown { get; protected set; }
         public bool ChannelingAbility { get; protected set; }
@@ -101,8 +101,7 @@ namespace RPGPlatformer.Combat
                 await GetStunned(duration, freezeAnimation, GlobalGameTools.Instance.TokenSource);
             stateDriver.Health.HealthChangeTrigger += OnHealthChanged;
 
-            stateDriver.EquipDefaultArmour();
-            stateDriver.EquipDefaultWeapon();
+            InitializeCombatantEquipment();
 
             stateDriver.OnInventoryOverflow += OnInventoryOverflow;
             InitializeInventoryItems();
@@ -173,6 +172,11 @@ namespace RPGPlatformer.Combat
         }
 
         protected virtual void InitializeInventoryItems() { }
+
+        protected virtual void InitializeCombatantEquipment()
+        {
+            stateDriver.EquipDefaultItems();
+        }
 
 
         //ABILITY BARS

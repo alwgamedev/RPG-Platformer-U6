@@ -27,8 +27,11 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected ItemSlot offhandSlot;
         [SerializeField] protected Transform mainhandElbow;
         [SerializeField] protected Transform chestBone;
-        [SerializeField] protected WeaponSO defaultWeaponSO;
+        //[SerializeField] protected WeaponSO defaultWeaponSO;
         [SerializeField] protected WeaponSO unarmedWeaponSO;
+        //[SerializeField] protected EquippableItemSO defaultHeadItem;
+        //[SerializeField] protected EquippableItemSO defaultTorsoItem;
+        //[SerializeField] protected EquippableItemSO defaultLegsItem;
         [SerializeField] protected ReplenishableStat stamina = new();
         [SerializeField] protected ReplenishableStat wrath = new();
         [SerializeField] protected bool useAutoCalculatedHealthPoints;
@@ -44,7 +47,7 @@ namespace RPGPlatformer.Combat
         protected Dictionary<EquipmentSlot, ItemSlot> equipSlots = new();
         protected DropSpawner dropSpawner;
         protected Weapon equippedWeapon;
-        protected Weapon defaultWeapon;
+        //protected Weapon defaultWeapon;
         protected Weapon unarmedWeapon;
         protected Health health;
         protected Action FinalizeDeathTrigger;
@@ -57,14 +60,12 @@ namespace RPGPlatformer.Combat
         public string TargetTag => targetTag;
         public InventoryManager Inventory => inventory;
         public Dictionary<EquipmentSlot, ItemSlot> EquipSlots => equipSlots;
-            //was there a reason not to use auto backing field? probably not
-            //(check next time we come back to this)
         public Transform MainhandElbow => mainhandElbow;
         public Transform ChestBone => chestBone;
         public float AttackRange { get; protected set; }
         public float IdealMinimumCombatDistance { get; protected set; }
         public IWeapon EquippedWeapon => equippedWeapon;
-        public IWeapon DefaultWeapon => defaultWeapon;
+        //public IWeapon DefaultWeapon => defaultWeapon;
         public IWeapon UnarmedWeapon => unarmedWeapon;
         public CombatStyle CurrentCombatStyle => equippedWeapon?.CombatStyle ?? CombatStyle.Unarmed;
         public IProjectile QueuedProjectile { get; set; }
@@ -112,7 +113,7 @@ namespace RPGPlatformer.Combat
 
             OnWeaponEquip += UpdateAttackRange;
 
-            InitializeWeaponSOs();
+            InitializeUnarmedWeapon();
         }
 
         private void Start()
@@ -267,64 +268,98 @@ namespace RPGPlatformer.Combat
 
         //EQUIPMENT
 
-        public void EquipDefaultWeapon()
-        //caution these should really only be used in start because
-        //they add the item to your inventory
-        //(which runs the risk of creating duplicates of the item in your inventory)
-        {
-            if (!CanEquip(defaultWeapon))
-            {
-                EquipItem(unarmedWeapon);
-                HandleUnequippedItem(defaultWeapon);
-            }
-            else
-            {
-                EquipItem(defaultWeapon);
-            }
-        }
-
-        public void EquipDefaultArmour()
-        //caution these should really only be used in start because
-        //they add the item to your inventory
-        //(which runs the risk of creating duplicates of the item in your inventory)
+        //if item slot has a SavableMonobehavior equipped, then this will execute after
+        //the item slot has restored state, so it will only use the item slot's defaultItemSO (SO!)
+        //if no item was saved to that slot
+        public void EquipDefaultItems()
         {
             foreach (var entry in equipSlots)
             {
-                if (entry.Value == null 
-                    || entry.Key == EquipmentSlot.Mainhand 
-                    || entry.Key == EquipmentSlot.Offhand)
-                {
+                var slot = entry.Value;
+                if (!slot)
+                {  
                     continue;
                 }
-
-                var item = entry.Value.DefaultItem;
-                if (!CanEquip(item))
-                { 
-                    HandleUnequippedItem(item);
-                }
-                else
+                if (slot.defaultItem == null)
                 {
-                    EquipItem(item);
+                    slot.InitializeDefaultItemFromSO();
+
+                    if (entry.Key == EquipmentSlot.Mainhand && slot.defaultItem == null)
+                    {
+                        slot.defaultItem = unarmedWeapon;
+                    }
+                }
+                if (slot.defaultItem != null)
+                {
+                    if (CanEquip(slot.defaultItem))
+                    {
+                        EquipItem(slot.defaultItem);
+                    }
+                    else
+                    {
+                        HandleUnequippedItem(slot.defaultItem);
+                    }
                 }
             }
         }
 
-        public virtual void InitializeWeaponSOs()
+        //public void EquipDefaultWeapon()
+        ////caution these should really only be used in start because
+        ////they add the item to your inventory
+        ////(which runs the risk of creating duplicates of the item in your inventory)
+        //{
+        //    if (!CanEquip(defaultWeapon))
+        //    {
+        //        EquipItem(unarmedWeapon);
+        //        HandleUnequippedItem(defaultWeapon);
+        //    }
+        //    else
+        //    {
+        //        EquipItem(defaultWeapon);
+        //    }
+        //}
+
+        //public void EquipDefaultArmour()
+        ////caution these should really only be used in start because
+        ////they add the item to your inventory
+        ////(which runs the risk of creating duplicates of the item in your inventory)
+        //{
+        //    foreach (var entry in equipSlots)
+        //    {
+        //        if (entry.Value == null 
+        //            || entry.Key == EquipmentSlot.Mainhand 
+        //            || entry.Key == EquipmentSlot.Offhand)
+        //        {
+        //            continue;
+        //        }
+
+        //        var item = entry.Value.DefaultItem;
+        //        if (!CanEquip(item))
+        //        { 
+        //            HandleUnequippedItem(item);
+        //        }
+        //        else
+        //        {
+        //            EquipItem(item);
+        //        }
+        //    }
+        //}
+
+        public virtual void InitializeUnarmedWeapon()
         {
-            defaultWeapon = CreateWeaponFromSO(defaultWeaponSO);
-            unarmedWeapon = CreateWeaponFromSO(unarmedWeaponSO);
+            unarmedWeapon = (Weapon)unarmedWeaponSO.CreateInstanceOfItem();
 
             IdealMinimumCombatDistance = unarmedWeapon?.WeaponStats.AttackRange / 3 ?? 0.25f;
         }
 
-        public Weapon CreateWeaponFromSO(WeaponSO weaponSO)
-        {
-            if(weaponSO)
-            {
-                return (Weapon)weaponSO.CreateInstanceOfItem();
-            }
-            return null;
-        }
+        //public Weapon CreateWeaponFromSO(WeaponSO weaponSO)
+        //{
+        //    if (weaponSO)
+        //    {
+        //        return (Weapon)weaponSO.CreateInstanceOfItem();
+        //    }
+        //    return null;
+        //}
 
         public bool CanEquip(EquippableItem item)
         {
@@ -357,7 +392,7 @@ namespace RPGPlatformer.Combat
             EquipmentSlot slot = item.EquippableItemData.Slot;
 
             ItemSlot equipSlot = equipSlots[slot];
-            EquippableItem oldItem = equipSlot.EquipppedItem;
+            EquippableItem oldItem = equipSlot.EquippedItem;
             if (item != unarmedWeapon)
             {
                 equipSlot.EquipItem(item);
@@ -385,7 +420,7 @@ namespace RPGPlatformer.Combat
             equipSlots.TryGetValue(slot, out var equipSlot);
             if (equipSlot == null) return;
 
-            var oldItem = equipSlot.EquipppedItem;
+            var oldItem = equipSlot.EquippedItem;
             var newItem = slot == EquipmentSlot.Mainhand ? unarmedWeapon : null;
             equipSlot.EquipItem(newItem);
 

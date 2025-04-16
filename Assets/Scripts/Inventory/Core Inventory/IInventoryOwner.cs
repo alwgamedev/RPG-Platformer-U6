@@ -16,7 +16,7 @@ namespace RPGPlatformer.Inventory
             {
                 foreach (var slot in ec.EquipSlots)
                 {
-                    if (item.Equals(slot.Value.EquipppedItem))
+                    if (item.Equals(slot.Value.EquippedItem))
                     {
                         return true;
                     }

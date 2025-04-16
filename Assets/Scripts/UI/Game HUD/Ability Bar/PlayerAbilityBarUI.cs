@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using RPGPlatformer.Combat;
+using RPGPlatformer.Core;
 
 namespace RPGPlatformer.UI
 {
@@ -7,11 +8,25 @@ namespace RPGPlatformer.UI
     {
         IAbilityBarOwner player;
 
-        protected override void Awake()
-        {
-            base.Awake();
+        //protected override void Awake()
+        //{
+        //    base.Awake();
 
-            player = FindAnyObjectByType<PlayerCombatController>();
+        //    player = FindAnyObjectByType<PlayerCombatController>();
+        //    player.AbilityBarResetEvent += DisplayPlayerAbilityBar;
+        //    player.OnCooldownStarted += OnCooldownStart;
+        //}
+
+        private void Start()
+        {
+            SubscribeToPlayer();
+            DisplayPlayerAbilityBar();
+            //^do an initial display in case we do Start after player and missed the first ability bar reset event
+        }
+
+        private void SubscribeToPlayer()
+        {
+            player = (IAbilityBarOwner)GlobalGameTools.Instance.Player;
             player.AbilityBarResetEvent += DisplayPlayerAbilityBar;
             player.OnCooldownStarted += OnCooldownStart;
         }
@@ -19,6 +34,14 @@ namespace RPGPlatformer.UI
         private void DisplayPlayerAbilityBar()
         {
             ConnectAbilityBar(player?.CurrentAbilityBar, new List<CombatStyle>());
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            player.AbilityBarResetEvent -= DisplayPlayerAbilityBar;
+            player.OnCooldownStarted -= OnCooldownStart;
         }
     }
 }

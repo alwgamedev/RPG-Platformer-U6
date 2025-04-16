@@ -11,18 +11,23 @@ namespace RPGPlatformer.UI
         protected IInventoryOwner owner;
         protected InventorySlotUI[] slots;
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
+        //protected override void Awake()
+        //{
+        //    base.Awake();
+        //}
 
         protected virtual void Start()
         {
+            FindOwner();
+
             if (owner != null && owner.Inventory != null)
             {
                 ConnectOwner(owner);
+                UpdateInventoryUI();
             }
         }
+
+        protected virtual void FindOwner() { }
 
         public abstract void InitializeSlots(IInventoryOwner owner);
 
@@ -56,12 +61,25 @@ namespace RPGPlatformer.UI
             {
                 foreach (var slot in slots)
                 {
-                    Destroy(slot.gameObject);
+                    if (slot && slot.gameObject)
+                    {
+                        Destroy(slot.gameObject);
+                    }
                 }
             }
 
             owner = null;
             slots = null;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if (owner != null && owner.Inventory != null)
+            {
+                owner.Inventory.OnInventoryChanged -= UpdateInventoryUI;
+            }
         }
     }
 }

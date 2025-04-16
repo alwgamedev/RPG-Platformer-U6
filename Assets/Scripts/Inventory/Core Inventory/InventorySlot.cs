@@ -16,8 +16,7 @@ namespace RPGPlatformer.Inventory
         {
             if(data?.Item == null || data.Quantity == 0)
             {
-                item = null;
-                quantity = 0;
+                EmptySlot();
                 return null;
             }
 

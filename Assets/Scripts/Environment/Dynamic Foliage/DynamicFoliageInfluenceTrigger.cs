@@ -43,12 +43,15 @@ namespace RPGPlatformer.Environment
 
         private void OnEnable()
         {
-            InitializeCTSAsap();
-            OnInfluencingColliderDisabled = async () => await EndCurrentInfluence();
+            //InitializeCTSAsap();
+            //OnInfluencingColliderDisabled = async () => await EndCurrentInfluence();
         }
 
         private void Start()
         {
+            lifeCTS = CancellationTokenSource.CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
+            OnInfluencingColliderDisabled = async () => await EndCurrentInfluence();
+
             foliageController = GetComponent<DynamicFoliageController>();
             foliageMaterial = GetComponentInChildren<Renderer>().material;
             defaultInfluence = foliageMaterial.GetVector(influenceVelocityProperty);
@@ -62,23 +65,23 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        private void InitializeCTSAsap()
-        {
-            if (GlobalGameTools.Instance)
-            {
-                InitializeCTS();
-            }
-            else
-            {
-                GlobalGameTools.InstanceReady += InitializeCTS;
-            }
-        }
+        //private void InitializeCTSAsap()
+        //{
+        //    if (GlobalGameTools.Instance)
+        //    {
+        //        InitializeCTS();
+        //    }
+        //    else
+        //    {
+        //        GlobalGameTools.InstanceReady += InitializeCTS;
+        //    }
+        //}
 
-        private void InitializeCTS()
-        {
-            lifeCTS = CancellationTokenSource.CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
-            GlobalGameTools.InstanceReady -= InitializeCTS;
-        }
+        //private void InitializeCTS()
+        //{
+        //    lifeCTS = CancellationTokenSource.CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
+        //    GlobalGameTools.InstanceReady -= InitializeCTS;
+        //}
 
         private bool CanTriggerInfluence(Collider2D collider)
         {
@@ -225,8 +228,9 @@ namespace RPGPlatformer.Environment
             if (!lifeCTS.IsCancellationRequested)
             {
                 lifeCTS.Cancel();
-                lifeCTS.Dispose();
             }
+
+            lifeCTS.Dispose();
 
             OnInfluencingColliderDisabled = null;
         }

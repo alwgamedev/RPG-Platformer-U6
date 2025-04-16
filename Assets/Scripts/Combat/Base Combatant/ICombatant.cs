@@ -12,7 +12,7 @@ namespace RPGPlatformer.Combat
         public float AttackRange { get; }
         public float IdealMinimumCombatDistance { get; } //mainly for AI
         public IWeapon EquippedWeapon { get; }
-        public IWeapon DefaultWeapon { get; }
+        //public IWeapon DefaultWeapon { get; }
         public IWeapon UnarmedWeapon { get; }
         public ReplenishableStat Stamina { get; }
         public ReplenishableStat Wrath { get; }

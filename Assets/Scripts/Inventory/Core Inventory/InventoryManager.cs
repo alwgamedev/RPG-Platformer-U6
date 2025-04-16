@@ -36,7 +36,7 @@ namespace RPGPlatformer.Inventory
 
         public JsonNode CaptureState()
         {
-            return JsonSerializer.SerializeToNode(slots.Select(x => x.ConvertToSerializable()));
+            return JsonSerializer.SerializeToNode(slots.Select(x => x?.ConvertToSerializable()));
         }
 
         public void RestoreState(JsonNode jNode)
@@ -255,7 +255,7 @@ namespace RPGPlatformer.Inventory
         {
             for (int i = 0; i < slots.Length; i++)
             {
-                if (slots[i].Item == null)
+                if (slots[i].Item == null || slots[i].Quantity == 0)
                 {
                     return i;
                 }

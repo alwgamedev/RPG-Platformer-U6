@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 2040291634912316042}
   - component: {fileID: 6207296813432544571}
   - component: {fileID: 8821168936837964176}
+  - component: {fileID: 4990382780553915500}
   m_Layer: 5
   m_Name: Game UI Canvas
   m_TagString: Game UI Canvas
@@ -328,6 +329,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3a34615c6456bb469312e846abdd549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4990382780553915500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5735343732509976411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 626e6c36111fe47459758ac883f084ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7743048563990209321
@@ -732,11 +745,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8314234414211203388, guid: de15d5f852b34194eba1e5f04323d4c0, type: 3}
       propertyPath: m_Size
-      value: 0.10906993
+      value: 0.10906992
       objectReference: {fileID: 0}
     - target: {fileID: 8314234414211203388, guid: de15d5f852b34194eba1e5f04323d4c0, type: 3}
       propertyPath: m_Value
-      value: -0.000000091964054
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8601084911740398652, guid: de15d5f852b34194eba1e5f04323d4c0, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7540,7 +7553,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7632946536595931659, guid: 41ad7759c4470f9419f174950c575403, type: 3}
       propertyPath: m_Size
-      value: 0.92698467
+      value: 0.9269845
       objectReference: {fileID: 0}
     - target: {fileID: 7632946536595931659, guid: 41ad7759c4470f9419f174950c575403, type: 3}
       propertyPath: m_Value

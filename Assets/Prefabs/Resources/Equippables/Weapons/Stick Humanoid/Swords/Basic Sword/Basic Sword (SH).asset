@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25028d2c3b735f47b896257a176ae54, type: 3}
+  m_Name: Basic Sword (SH)
+  m_EditorClassIdentifier: 
+  baseData:
+    lookupName: Basic Sword (SH)
+    displayName: Basic Sword
+    description: A basic sword
+    icon: {fileID: -3753825769889500098, guid: 84dba6aba0447314892495a8ce8c0d7d, type: 3}
+    maxStack: 1
+  equippableItemData:
+    slot: 3
+    damageBonus: 0
+    defenseBonus: 0
+    levelReqs:
+    - skill: 3
+      level: 1
+    prefab: {fileID: 3480197254703272104, guid: 50732d69f71cf2d4a9233e582c731f32, type: 3}
+    spriteSwapData: []
+  weaponStats:
+    baseDamage: 325
+    attackRange: 0.5
+    baseAttackRate: 12
+  animatorOverrideController: {fileID: 22100000, guid: 878581dc1900c55489253a28ad1711dd, type: 2}

@@ -66,6 +66,7 @@ namespace RPGPlatformer.SceneManagement
             {
                 LastGameLevelPlayed = data.SceneToLoad;
             }
+            //and in the future we can destroy/instantiate game ui canvas when we transition to/from start menu
 
             await SavingSystem.Instance.Save();
             await SceneManager.LoadSceneAsync(data.SceneToLoad);

@@ -2,6 +2,8 @@
 using UnityEngine;
 using RPGPlatformer.Inventory;
 using RPGPlatformer.Core;
+using Unity.VisualScripting;
+using UnityEngine.TextCore.Text;
 
 namespace RPGPlatformer.UI
 {
@@ -21,8 +23,6 @@ namespace RPGPlatformer.UI
         {
             base.Awake();
 
-            player = GameObject.FindWithTag("Player").GetComponent<IEquippableCharacter>();
-
             slots = new()
             {
                 [EquipmentSlot.Head] = headSlot,
@@ -35,7 +35,10 @@ namespace RPGPlatformer.UI
 
         private void Start()
         {
+            player = GlobalGameTools.Instance.Player.Combatant;
             Configure(player);
+            //this does an initial display (see ** below), so we are okay if this Start executes after player
+            //(and misses the first equip event)
         }
 
         public void Configure(IEquippableCharacter character)
@@ -43,11 +46,16 @@ namespace RPGPlatformer.UI
             foreach(var entry in slots)
             {
                 entry.Value.Configure(character, entry.Key);
-                character.EquipSlots[entry.Key].OnItemEquipped += () => UpdateUI(character, entry.Key);
-                entry.Value.OnDragResolved += () => UpdateCharacter(character);
+                character.EquipSlots[entry.Key].OnItemEquipped += UpdateUI;
+                entry.Value.OnDragResolved += UpdateCharacter;
 
-                UpdateUI(character, entry.Key);
+                UpdateUI(character, entry.Key);//**initial display
             }
+        }
+
+        public void UpdateCharacter()
+        {
+            UpdateCharacter(player);
         }
 
         public void UpdateCharacter(IEquippableCharacter character)
@@ -57,7 +65,7 @@ namespace RPGPlatformer.UI
                 var charSlot = character.EquipSlots[entry.Key];
                 var displayedItem = entry.Value.Item;
 
-                if (charSlot.EquipppedItem != displayedItem)
+                if (charSlot.EquippedItem != displayedItem)
                 {
                     if (displayedItem != null)
                     {
@@ -71,11 +79,42 @@ namespace RPGPlatformer.UI
             }
         }
 
+        //update all slots at once (mainly so we can match an Action delegate, but also
+        //in case equip event in one slot has affected other slots -- in that case we would get
+        //an event for each slot, but oh well we have to match Action delegate...)
+        public void UpdateUI()
+        {
+            foreach (var entry in slots)
+            {
+                UpdateUI(player, entry.Key);
+            }
+        }
+
         public void UpdateUI(IEquippableCharacter character, EquipmentSlot equipSlot)
         {
-            EquippableItem equippedItem = character.EquipSlots[equipSlot].EquipppedItem;
+            EquippableItem equippedItem = character.EquipSlots[equipSlot].EquippedItem;
             slots[equipSlot].PlaceItem(equippedItem?.ToInventorySlotData(1));
             slots[equipSlot].DisplayItem();
+        }
+
+        protected override void OnDestroy()
+        {
+            if (player != null)
+            {
+                foreach (var entry in slots)
+                {
+                    var key = player.EquipSlots[entry.Key];
+                    var val = entry.Value;
+                    if (key != null)
+                    {
+                        key.OnItemEquipped -= UpdateUI;
+                    }
+                    if (val != null)
+                    {
+                        val.OnDragResolved -= UpdateCharacter;
+                    }
+                }
+            }
         }
     }
 }

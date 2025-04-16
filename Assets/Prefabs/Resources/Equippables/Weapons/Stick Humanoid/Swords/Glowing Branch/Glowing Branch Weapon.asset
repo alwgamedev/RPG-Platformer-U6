@@ -10,25 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d25028d2c3b735f47b896257a176ae54, type: 3}
-  m_Name: Basic Sword (SH)
+  m_Name: Glowing Branch Weapon
   m_EditorClassIdentifier: 
   baseData:
-    lookupName: Basic Sword (SH)
-    displayName: Basic Sword
-    description: A basic sword
-    icon: {fileID: -3753825769889500098, guid: 84dba6aba0447314892495a8ce8c0d7d, type: 3}
+    lookupName: Glowing Branch
+    displayName: Glowing Branch
+    description: Maybe this will help keep the creepy-crawlies away...
+    icon: {fileID: 21300000, guid: 69b9dbc7aabe7bc4d84c48938819ae55, type: 3}
     maxStack: 1
   equippableItemData:
     slot: 3
     damageBonus: 0
     defenseBonus: 0
-    levelReqs:
-    - skill: 3
-      level: 1
-    prefab: {fileID: 5569887202535814591, guid: 766091662efaa7a4cbd02bb6e1c8ed7a, type: 3}
+    levelReqs: []
+    prefab: {fileID: 7950783993460594440, guid: 081f74e9cae123244b6ace8ac04dc7fb, type: 3}
     spriteSwapData: []
   weaponStats:
-    baseDamage: 325
+    baseDamage: 35
     attackRange: 0.5
-    baseAttackRate: 12
+    baseAttackRate: 16
   animatorOverrideController: {fileID: 22100000, guid: 878581dc1900c55489253a28ad1711dd, type: 2}
