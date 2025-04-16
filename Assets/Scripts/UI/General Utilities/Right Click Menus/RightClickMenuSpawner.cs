@@ -37,7 +37,7 @@ namespace RPGPlatformer.UI
 
             if (disableWhenPlayerIsDead)
             {
-                GlobalGameTools.OnPlayerDeath += ClearMenu;
+                GlobalGameTools.PlayerDeath += ClearMenu;
             }
 
             SettingsManager.IAMConfigured += OnIAMConfigure;

@@ -17,7 +17,7 @@ namespace RPGPlatformer.UI
             
             LootDrop.OnLootSearched += DisplayLootDrop;//(lootDrop) => DisplayLootDrop(lootDrop);
 
-            GlobalGameTools.OnPlayerDeath += CloseInspector;
+            GlobalGameTools.PlayerDeath += CloseInspector;
         }
 
         protected override void Start()

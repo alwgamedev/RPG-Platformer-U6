@@ -19,6 +19,7 @@ namespace RPGPlatformer.Combat
         public IHealth Health { get; }
 
         public event Action OnTargetingFailed;
+        public event Action DeathFinalized;
 
         public int GetLevel(CharacterSkill skill);
         public float AdditiveDamageBonus();
@@ -33,5 +34,7 @@ namespace RPGPlatformer.Combat
         public void PrepareAndShootProjectile(IProjectile projectile, Func<Vector2> getAimPos, 
             float forceMultiplier, Func<Collider2D, IHealth> hitAction, int maxHits = 1);
         public void Attack();
+        public void Instakill();
+        public void Revive();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,11 +20,6 @@ namespace RPGPlatformer.Saving
 
         public static Dictionary<string, SavableMonoBehaviour> GlobalLookup = new();
 
-        //private void Awake()
-        //{
-        //    UpdateComponentLookup();
-        //}
-
 #if UNITY_EDITOR
         private void Update()
         {
@@ -39,13 +35,6 @@ namespace RPGPlatformer.Saving
                 GlobalLookup[serProperty.stringValue] = this;
             }
         }
-
-        //private void OnValidate()
-        //{
-        //    if (Application.IsPlaying(gameObject) || string.IsNullOrEmpty(gameObject.scene.path)) return;
-
-        //    UpdateComponentLookup();
-        //}
 #endif
 
         public JsonObject CaptureState()
@@ -57,7 +46,8 @@ namespace RPGPlatformer.Saving
                 //ISavable savable = entry.Value;
                 componentStates[savable.GetType().Name] = savable.CaptureState();
 
-                Debug.Log($"{GetType().Name} captured state of component of type {savable.GetType().Name}");
+                Debug.Log($"{GetType().Name} on {gameObject.name} " +
+                    $"captured state of component of type {savable.GetType().Name}");
             }
             return componentStates;
         }
@@ -78,7 +68,8 @@ namespace RPGPlatformer.Saving
                     JsonNode jNode = stateDict[savable.GetType().Name];
                     savable.RestoreState(jNode);
 
-                    Debug.Log($"{GetType().Name} restored state of component of type {savable.GetType().Name}");
+                    Debug.Log($"{GetType().Name} on {gameObject.name} " +
+                        $"restored state of component of type {savable.GetType().Name}");
                 }
             }
         }

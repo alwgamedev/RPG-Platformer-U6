@@ -50,10 +50,11 @@ namespace RPGPlatformer.Core
         public ObjectPoolCollection ProjectilePooler => projectilePooler;
         public ObjectPoolCollection EffectPooler => effectPooler;
 
-        public static event Action OnPlayerDeath;
-        //useful to have this go through global game tools,
-        //so that subscribers don't have to worry about whether player exists when subscribing
-        //(i.e. compared to directly subscribing to player)
+        public static event Action PlayerDeath;//executes at the instant death state is entered
+        public static event Action PlayerDeathFinalized;//executes after any death animation and delay time
+        //useful to have these go through global game tools,
+        //so that subscribers don't have to worry about finding player
+        //or whether player even exists when subscribing
 
         public static event Action InstanceReady;
 
@@ -96,9 +97,20 @@ namespace RPGPlatformer.Core
                 playerTransform = playerGO.transform;
                 if (playerCC != null)
                 {
-                    playerCC.OnDeath += () => OnPlayerDeath?.Invoke();
+                    playerCC.OnDeath += BroadcastPlayerDeath;
+                    playerCC.Combatant.DeathFinalized += BroadcastPlayerDeathFinalized;
                 }
             }
+        }
+
+        private void BroadcastPlayerDeath()
+        {
+            PlayerDeath?.Invoke();
+        }
+
+        private void BroadcastPlayerDeathFinalized()
+        {
+            PlayerDeathFinalized?.Invoke();
         }
 
 
@@ -117,7 +129,15 @@ namespace RPGPlatformer.Core
             {
                 Instance = null;
                 InstanceReady = null;
-                OnPlayerDeath = null;
+
+                if (playerCC != null)
+                {
+                    playerCC.OnDeath -= BroadcastPlayerDeath;
+                    playerCC.Combatant.DeathFinalized -= BroadcastPlayerDeathFinalized;
+                }
+
+                PlayerDeath = null;
+                PlayerDeathFinalized = null;
             }
         }
     }

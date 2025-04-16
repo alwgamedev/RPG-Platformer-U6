@@ -1,11 +1,18 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Saving;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace RPGPlatformer.SceneManagement
 {
-    public class SceneTransitionHelper : MonoBehaviour
+    public class SceneTransitionHelper : MonoBehaviour, ISavable
     {
-        bool configured;
+        public string LastGameLevelPlayed { get; set; }
+        //the savable state
+        //separate from "LastSceneTransition" which will be reset every time the game is opened
+        //and includes all scene transitions (including to/from start menu)
 
         public static SceneTransitionData? LastSceneTransition { get; private set; } = null;
 
@@ -16,7 +23,7 @@ namespace RPGPlatformer.SceneManagement
             if (Instance == null)
             {
                 Instance = this;
-                Configure();
+                ISceneTransitionTrigger.SceneTransitionTriggered += LoadScene;
             }
             else
             {
@@ -24,27 +31,51 @@ namespace RPGPlatformer.SceneManagement
             }
         }
 
-        //for now just doing async so we don't block and have a smoother transition
+        public JsonNode CaptureState()
+        {
+            return JsonSerializer.SerializeToNode(LastGameLevelPlayed);
+        }
+
+        public void RestoreState(JsonNode jNode)
+        {
+            LastGameLevelPlayed = jNode.Deserialize<string>();
+        }
+
+        public async void LoadLastGameLevelPlayed()
+        {
+            if (LastGameLevelPlayed == null) return;
+
+            await LoadSceneTask(new SceneTransitionTriggerData(LastGameLevelPlayed, null));
+            //the player spawn manager in that level will then automatically send you to the last checkpoint
+            //(or to default spawn point)
+        }
+
+        //for now just doing async so we have a smoother transition
         //(but we don't need to do anything at end of await; we'll just store whatever args we need
         //and classes that need them can get them from the Instance)
         //(we can also use the (built in) unity events SceneManager.sceneLoaded and sceneUnloaded)
         public async void LoadScene(SceneTransitionTriggerData data)
         {
-            LastSceneTransition = new SceneTransitionData(SceneManager.GetActiveScene().name,
-                data.SceneToLoad, data.SceneStarterData);
-            await SceneManager.LoadSceneAsync(data.SceneToLoad);
+            await LoadSceneTask(data);
         }
-        //BTW this is a nice way of doing it, because from start menu we could have saving system load 
-        //the last player checkpoint data (or w/e) and load scene with the appropriate args;
-        //we could even load the checkpoint data into a scene trigger component attached to a "Play Game" button
-        //or something like that
 
-        private void Configure()
+        private async Task LoadSceneTask(SceneTransitionTriggerData data)
         {
-            if (configured) return;
+            LastSceneTransition = new SceneTransitionData(SceneManager.GetActiveScene().name, data);
+            if (data.SceneToLoad != "StartMenu")//placeholder for now
+            {
+                LastGameLevelPlayed = data.SceneToLoad;
+            }
 
-            configured = true;
-            ISceneTransitionTrigger.SceneTransitionTriggered += LoadScene;
+            await SavingSystem.Instance.Save();
+            await SceneManager.LoadSceneAsync(data.SceneToLoad);
+
+            //saving system will then restore state in response to "SceneManager.sceneLoaded" event
+            //(do it that way, because not every scene loading may go through the SceneTransitionHelper,
+            //e.g. the first scene load upon opening the game;
+            //it's also more reliable -- Unity order of execution guarantees that sceneLoaded fires
+            //after OnEnable for all objects but BEFORE START, so we can be sure to have restored state
+            //before any Starts)
         }
 
         private void OnDestroy()
@@ -53,9 +84,8 @@ namespace RPGPlatformer.SceneManagement
             {
                 Instance = null;
                 LastSceneTransition = null;
+                ISceneTransitionTrigger.SceneTransitionTriggered -= LoadScene;
             }
-
-            ISceneTransitionTrigger.SceneTransitionTriggered -= LoadScene;
         }
     }
 }

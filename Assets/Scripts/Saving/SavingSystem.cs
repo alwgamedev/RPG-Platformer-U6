@@ -2,7 +2,7 @@ using System.Text.Json.Nodes;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
-using RPGPlatformer.Core;
+using UnityEngine.SceneManagement;
 
 namespace RPGPlatformer.Saving
 {
@@ -17,7 +17,8 @@ namespace RPGPlatformer.Saving
             if (Instance == null)
             {
                 Instance = this;
-                SettingsManager.IAMConfigured += OnIAMConfigure;
+                SceneManager.sceneLoaded += OnSceneLoaded;
+                //SettingsManager.IAMConfigured += OnIAMConfigure;
             }
             else
             {
@@ -26,15 +27,19 @@ namespace RPGPlatformer.Saving
             //in case we have a saving system that persisted from the start menu or something
         }
 
-        private void OnIAMConfigure()
+        private async void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            //ONLY FOR TESTING
-            SettingsManager.Instance.IAM.InputAction(InputActionsManager.saveActionName).canceled
-                += async (context) => await Save(DefaultFilePath());
-            SettingsManager.Instance.IAM.InputAction(InputActionsManager.loadActionName).canceled
-                += async (context) => await Load(DefaultFilePath());
+            await Load();
+        }
 
-            //SettingsManager.OnIAMConfigure -= OnIAMConfigure;
+        public async Task Save()
+        {
+            await Save(DefaultFilePath());
+        }
+
+        public async Task Load()
+        {
+            await Load(DefaultFilePath());
         }
 
         public async Task Save(string filePath)
@@ -92,7 +97,7 @@ namespace RPGPlatformer.Saving
 
         private string DefaultFilePath()
         {
-            return Path.Combine(Application.persistentDataPath, "RPGPlatformerTestSave.json");
+            return Path.Combine(Application.persistentDataPath, "LunchtimeRPGSave.json");
         }
 
         private void OnDestroy()
@@ -100,9 +105,10 @@ namespace RPGPlatformer.Saving
             if (Instance == this)
             {
                 Instance = null;
+                SceneManager.sceneLoaded -= OnSceneLoaded;
             }
 
-            SettingsManager.IAMConfigured -= OnIAMConfigure;
+            //SettingsManager.IAMConfigured -= OnIAMConfigure;
         }
     }
 }

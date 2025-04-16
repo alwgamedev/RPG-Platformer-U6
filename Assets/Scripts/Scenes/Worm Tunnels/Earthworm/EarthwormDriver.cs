@@ -54,7 +54,7 @@ namespace RPGPlatformer.AIControl
         public void InitializeState()
         {
             CurrentTarget = GlobalGameTools.Instance.Player.Combatant.Health;
-            GlobalGameTools.Instance.Player.OnDeath += () => Trigger(typeof(EarthwormDormant).Name);
+            GlobalGameTools.PlayerDeath += TriggerDormant;
 
             stabIKEffect.SetTarget(CurrentTarget.transform);
             curveGuide.ReconfigureIKEffects();
@@ -122,6 +122,11 @@ namespace RPGPlatformer.AIControl
                 EnableWormholeTrigger(false);
                 Trigger(typeof(EarthwormAboveGround).Name);
             }
+        }
+
+        private void TriggerDormant()
+        {
+            Trigger(typeof(EarthwormDormant).Name);
         }
 
 
@@ -373,6 +378,8 @@ namespace RPGPlatformer.AIControl
             {
                 Destroy(slamRockParticles.gameObject);
             }
+
+            GlobalGameTools.PlayerDeath -= TriggerDormant;
         }
     }
 }

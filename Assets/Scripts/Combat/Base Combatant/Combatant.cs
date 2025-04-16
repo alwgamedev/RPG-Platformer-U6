@@ -75,6 +75,7 @@ namespace RPGPlatformer.Combat
         public event Action OnTargetingFailed;
         public event Action OnWeaponEquip;
         public event Action OnInventoryOverflow;
+        public event Action DeathFinalized;
 
         protected virtual void Awake()
         {
@@ -180,6 +181,7 @@ namespace RPGPlatformer.Combat
         //BASIC FUNCTIONS
 
         //note this is not subscribed to any events. cc calls it directly
+        //also "health change" is damage, so > 0 means health lost
         public virtual float HandleHealthChange(float damage, IDamageDealer damageDealer)
         {
             if (damage > 0)
@@ -253,6 +255,9 @@ namespace RPGPlatformer.Combat
             {
                 DropLoot();
             }
+
+            DeathFinalized?.Invoke();
+
             if (destroyOnFinalizeDeath)
             {
                 Destroy(gameObject);
@@ -532,6 +537,11 @@ namespace RPGPlatformer.Combat
             Trigger(typeof(Dead).Name);
         }
 
+        public void Instakill()
+        {
+            HandleHealthChange(Mathf.Infinity, null);
+        }
+
         public void Revive()
         {
             Trigger(typeof(NotInCombat).Name);
@@ -611,6 +621,7 @@ namespace RPGPlatformer.Combat
             OnWeaponEquip = null;
             OnInventoryOverflow = null;
             FinalizeDeathTrigger = null;
+            DeathFinalized = null;
         }
     }
 }
