@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Threading;
+using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Saving
 {
@@ -34,28 +36,28 @@ namespace RPGPlatformer.Saving
 
         public async Task Save()
         {
-            await Save(DefaultFilePath());
+            await Save(DefaultFilePath(), GlobalGameTools.Instance.TokenSource.Token);
         }
 
         public async Task Load()
         {
-            await Load(DefaultFilePath());
+            await Load(DefaultFilePath(), GlobalGameTools.Instance.TokenSource.Token);
         }
 
-        public async Task Save(string filePath)
+        public async Task Save(string filePath, CancellationToken token)
         {
             Debug.Log($"Saving to {filePath}");
 
-            JsonObject save = await LoadJObjectFromFile(filePath);
+            JsonObject save = await LoadJObjectFromFile(filePath, token);
             CaptureSceneToJObject(save);
-            await SaveJObjectToFile(save, filePath);
+            await SaveJObjectToFile(save, filePath, token);
         }
 
-        public async Task Load(string filePath)
+        public async Task Load(string filePath, CancellationToken token)
         {
             Debug.Log($"Loading from {filePath}");
 
-            JsonObject save = await LoadJObjectFromFile(filePath);
+            JsonObject save = await LoadJObjectFromFile(filePath, token);
             RestoreSceneFromJObject(save);
         }
 

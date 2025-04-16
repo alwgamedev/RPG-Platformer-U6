@@ -188,6 +188,7 @@ GameObject:
   - component: {fileID: 8052417114151022779}
   - component: {fileID: 1374627201273509011}
   - component: {fileID: 6912290268842868893}
+  - component: {fileID: 678795936339789338}
   m_Layer: 10
   m_Name: Shuttle Hawk
   m_TagString: Untagged
@@ -291,7 +292,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -580,6 +581,18 @@ MonoBehaviour:
   menuPrefab: {fileID: 8243535585966996843, guid: c551c427647afd148b00f56340a43966, type: 3}
   menuButtonPrefab: {fileID: 6071247106101167904, guid: 0460550107ed1174fab3368bcfe61d21, type: 3}
   disableWhenPlayerIsDead: 1
+--- !u!114 &678795936339789338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257429934250872482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4df54fd93182014ca715844d31d17ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3421902268695511176
 GameObject:
   m_ObjectHideFlags: 0

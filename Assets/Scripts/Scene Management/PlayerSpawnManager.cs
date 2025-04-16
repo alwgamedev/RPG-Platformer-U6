@@ -1,5 +1,6 @@
 ﻿using RPGPlatformer.Core;
 using RPGPlatformer.Saving;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -26,11 +27,21 @@ namespace RPGPlatformer.SceneManagement
             {
                 GlobalGameTools.PlayerDeathFinalized += RespawnPlayerOnDeath;
             }
+
+            SaveCheckpoint.CheckpointReached += OnSaveCheckpointReached;
         }
 
         private void Start()
         {
             InitialPlayerSpawn();
+        }
+
+        private async void OnSaveCheckpointReached(SaveCheckpoint checkpoint)
+        {
+            var id = checkpoint.gameObject.name;
+            SpawnPointLookup[id] = checkpoint;
+            LastPlayerCheckpoint = id;
+            await SavingSystem.Instance.Save();
         }
 
         private void RespawnPlayerOnDeath()
@@ -57,7 +68,7 @@ namespace RPGPlatformer.SceneManagement
         private void SpawnPlayer(PlayerSpawnPoint playerSpawnPoint)
         {
             GlobalGameTools.Instance.PlayerTransform.position = playerSpawnPoint.transform.position;
-            LastPlayerCheckpoint = playerSpawnPoint.ID;
+            LastPlayerCheckpoint = playerSpawnPoint.gameObject.name;
         }
 
         private void SpawnPlayerToLastCheckpointOrDefault()
@@ -92,7 +103,7 @@ namespace RPGPlatformer.SceneManagement
             {
                 foreach (var s in sceneSpawnPoints)
                 {
-                    SpawnPointLookup[s.ID] = s;
+                    SpawnPointLookup[s.gameObject.name] = s;
                 }
             }
         }
@@ -110,6 +121,7 @@ namespace RPGPlatformer.SceneManagement
         private void OnDestroy()
         {
             GlobalGameTools.PlayerDeathFinalized -= RespawnPlayerOnDeath;
+            SaveCheckpoint.CheckpointReached -= OnSaveCheckpointReached;
         }
     }
 }
