@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Core;
+using UnityEngine;
 
 namespace RPGPlatformer.Inventory
 {
@@ -12,14 +13,12 @@ namespace RPGPlatformer.Inventory
         {
             if (item == null) return false;
 
-            if (item is EquippableItem && this is IEquippableCharacter ec)
+            if (item is EquippableItem ei && this is IEquippableCharacter ec)
             {
-                foreach (var slot in ec.EquipSlots)
+                if (ec.EquipSlots.TryGetValue(ei.EquippableItemData.Slot, out var slot) && slot
+                    && ei.Equals(slot.EquippedItem))
                 {
-                    if (item.Equals(slot.Value.EquippedItem))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using RPGPlatformer.Core;
+using System.Linq;
 
 namespace RPGPlatformer.Dialogue
 {
@@ -16,10 +17,21 @@ namespace RPGPlatformer.Dialogue
 
         Dictionary<int, LabelledUnityObject<DialogueActor>> Actors;
 
-        public LabelledUnityObject<DialogueActor> this[int i]
+        //to be called in Start by a relevant monobehavior
+        public void FindPlayer()
         {
-            get => actors[i];
+            for (int i = 0; i < actors.Length; i++)
+            {
+                if (actors[i].label == "Player")
+                {
+                    var a = actors[i];
+                    a.labelledObject = GlobalGameTools.Instance.PlayerTransform.GetComponent<DialogueActor>();
+                    actors[i] = a;
+                }
+            }
         }
+
+        public LabelledUnityObject<DialogueActor> this[int i] => actors[i];
 
         public IEnumerable<DialogueActor> GetActors()
         {

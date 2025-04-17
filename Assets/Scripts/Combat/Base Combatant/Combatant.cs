@@ -27,11 +27,7 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected ItemSlot offhandSlot;
         [SerializeField] protected Transform mainhandElbow;
         [SerializeField] protected Transform chestBone;
-        //[SerializeField] protected WeaponSO defaultWeaponSO;
         [SerializeField] protected WeaponSO unarmedWeaponSO;
-        //[SerializeField] protected EquippableItemSO defaultHeadItem;
-        //[SerializeField] protected EquippableItemSO defaultTorsoItem;
-        //[SerializeField] protected EquippableItemSO defaultLegsItem;
         [SerializeField] protected ReplenishableStat stamina = new();
         [SerializeField] protected ReplenishableStat wrath = new();
         [SerializeField] protected bool useAutoCalculatedHealthPoints;
@@ -47,7 +43,6 @@ namespace RPGPlatformer.Combat
         protected Dictionary<EquipmentSlot, ItemSlot> equipSlots = new();
         protected DropSpawner dropSpawner;
         protected Weapon equippedWeapon;
-        //protected Weapon defaultWeapon;
         protected Weapon unarmedWeapon;
         protected Health health;
         protected Action FinalizeDeathTrigger;
@@ -65,7 +60,6 @@ namespace RPGPlatformer.Combat
         public float AttackRange { get; protected set; }
         public float IdealMinimumCombatDistance { get; protected set; }
         public IWeapon EquippedWeapon => equippedWeapon;
-        //public IWeapon DefaultWeapon => defaultWeapon;
         public IWeapon UnarmedWeapon => unarmedWeapon;
         public CombatStyle CurrentCombatStyle => equippedWeapon?.CombatStyle ?? CombatStyle.Unarmed;
         public IProjectile QueuedProjectile { get; set; }
@@ -182,7 +176,6 @@ namespace RPGPlatformer.Combat
         //BASIC FUNCTIONS
 
         //note this is not subscribed to any events. cc calls it directly
-        //also "health change" is damage, so > 0 means health lost
         public virtual float HandleHealthChange(float damage, IDamageDealer damageDealer)
         {
             if (damage > 0)
@@ -303,63 +296,12 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        //public void EquipDefaultWeapon()
-        ////caution these should really only be used in start because
-        ////they add the item to your inventory
-        ////(which runs the risk of creating duplicates of the item in your inventory)
-        //{
-        //    if (!CanEquip(defaultWeapon))
-        //    {
-        //        EquipItem(unarmedWeapon);
-        //        HandleUnequippedItem(defaultWeapon);
-        //    }
-        //    else
-        //    {
-        //        EquipItem(defaultWeapon);
-        //    }
-        //}
-
-        //public void EquipDefaultArmour()
-        ////caution these should really only be used in start because
-        ////they add the item to your inventory
-        ////(which runs the risk of creating duplicates of the item in your inventory)
-        //{
-        //    foreach (var entry in equipSlots)
-        //    {
-        //        if (entry.Value == null 
-        //            || entry.Key == EquipmentSlot.Mainhand 
-        //            || entry.Key == EquipmentSlot.Offhand)
-        //        {
-        //            continue;
-        //        }
-
-        //        var item = entry.Value.DefaultItem;
-        //        if (!CanEquip(item))
-        //        { 
-        //            HandleUnequippedItem(item);
-        //        }
-        //        else
-        //        {
-        //            EquipItem(item);
-        //        }
-        //    }
-        //}
-
         public virtual void InitializeUnarmedWeapon()
         {
             unarmedWeapon = (Weapon)unarmedWeaponSO.CreateInstanceOfItem();
 
             IdealMinimumCombatDistance = unarmedWeapon?.WeaponStats.AttackRange / 3 ?? 0.25f;
         }
-
-        //public Weapon CreateWeaponFromSO(WeaponSO weaponSO)
-        //{
-        //    if (weaponSO)
-        //    {
-        //        return (Weapon)weaponSO.CreateInstanceOfItem();
-        //    }
-        //    return null;
-        //}
 
         public bool CanEquip(EquippableItem item)
         {
@@ -438,7 +380,7 @@ namespace RPGPlatformer.Combat
 
         public void HandleUnequippedItem(EquippableItem item)
         {
-            if (item == null || item == unarmedWeapon) return;
+            if (item == null || item.Equals(unarmedWeapon)) return;
             inventory.DistributeToFirstAvailableSlots(item.ToInventorySlotData());
         }
 

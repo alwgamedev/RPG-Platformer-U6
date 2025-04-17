@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Combat;
+using RPGPlatformer.Dialogue;
 using RPGPlatformer.SceneManagement;
 using System;
 using System.Threading;

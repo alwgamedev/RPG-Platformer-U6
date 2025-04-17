@@ -33,14 +33,17 @@ namespace RPGPlatformer.UI
 
         protected virtual void Awake()
         {
-            FindTargetCanvas();
-
             if (disableWhenPlayerIsDead)
             {
                 GlobalGameTools.PlayerDeath += ClearMenu;
             }
 
             SettingsManager.IAMConfigured += OnIAMConfigure;
+        }
+
+        private void Start()
+        {
+            FindTargetCanvas();
         }
 
         protected virtual void FindTargetCanvas()

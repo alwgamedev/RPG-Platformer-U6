@@ -46,22 +46,6 @@ namespace RPGPlatformer.Inventory
             return baseData.LookupName?.GetHashCode() ?? base.GetHashCode();
         }
 
-        //public static bool ItemsAreOfSameType(InventoryItem item1, InventoryItem item2)
-        //{
-        //    if(item1 == null || item2 == null)
-        //    {
-        //        return false;
-        //    }
-        //    if(item1 is IDosedItem dosed1 && item2 is IDosedItem dosed2)
-        //    {
-        //        if(dosed1.Doses != dosed2.Doses || dosed1.DosesRemaining != dosed2.DosesRemaining)
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //    return item1.BaseData.DisplayName == item2.BaseData.DisplayName;
-        //}
-
         public virtual InventoryItem ItemCopy()
         {
             return new(baseData);
@@ -113,13 +97,5 @@ namespace RPGPlatformer.Inventory
                 yield return ($"Use {baseData.DisplayName}", Use);
             }
         }
-
-        //protected virtual void InitializeRightClickActions()
-        //{
-        //    RightClickActions = new()
-        //    {
-        //        ($"Use {baseData.DisplayName}", Use),
-        //    };
-        //}
     }
 }

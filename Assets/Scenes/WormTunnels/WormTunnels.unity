@@ -3873,7 +3873,7 @@ GameObject:
   m_Component:
   - component: {fileID: 194340097}
   m_Layer: 0
-  m_Name: Spawn Points
+  m_Name: Spawn Points & Portals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3894,6 +3894,7 @@ Transform:
   m_Children:
   - {fileID: 1937956084}
   - {fileID: 1621987222}
+  - {fileID: 1208757236}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &454273319 stripped
@@ -4078,6 +4079,88 @@ Transform:
 Camera:
   m_CorrespondingSourceObject: {fileID: 1911273675277112282, guid: 8ed4fb4129dbd6c49b7221b32290c6c7, type: 3}
   m_PrefabInstance: {fileID: 1875912231}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1208757235
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 194340097}
+    m_Modifications:
+    - target: {fileID: 1799163880222898114, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_Name
+      value: Tunnels Exit
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.2122039
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.02940532
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.017893795
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.9998399
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2643513551968489185, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_Size.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2643513551968489185, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: m_Direction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3955882607806610987, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: sceneTransition.sceneToLoad
+      value: OpeningScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 3955882607806610987, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+      propertyPath: sceneTransition.playerSpawnPoint
+      value: Tunnels Entrance Checkpoint
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+--- !u!4 &1208757236 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2560473877745485866, guid: 2e23bcf6f295e8f4c8909f8afebcbb47, type: 3}
+  m_PrefabInstance: {fileID: 1208757235}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1247122260 stripped
 Transform:
@@ -7486,7 +7569,7 @@ Transform:
   m_GameObject: {fileID: 1937956082}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.5780792, y: -1.8060522, z: 0.02940532}
+  m_LocalPosition: {x: -0.68, y: -3.17, z: 0.02940532}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7554,7 +7637,7 @@ PrefabInstance:
       objectReference: {fileID: 1937956083}
     - target: {fileID: 878149402931809323, guid: 060156084bad7d146a29591fd2256910, type: 3}
       propertyPath: sceneSpawnPoints.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 878149402931809323, guid: 060156084bad7d146a29591fd2256910, type: 3}
       propertyPath: 'sceneSpawnPoints.Array.data[0]'
@@ -7562,6 +7645,10 @@ PrefabInstance:
       objectReference: {fileID: 1937956083}
     - target: {fileID: 878149402931809323, guid: 060156084bad7d146a29591fd2256910, type: 3}
       propertyPath: 'sceneSpawnPoints.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1621987223}
+    - target: {fileID: 878149402931809323, guid: 060156084bad7d146a29591fd2256910, type: 3}
+      propertyPath: 'sceneSpawnPoints.Array.data[2]'
       value: 
       objectReference: {fileID: 1621987223}
     m_RemovedComponents: []
@@ -7577,10 +7664,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3755324276021580122, guid: 707c26bff6e4d374b84c3751eac6a2b6, type: 3}
-      propertyPath: glowingBranchSO
-      value: 
-      objectReference: {fileID: 11400000, guid: 1ae5c16abc01a94418c9e588557df66f, type: 2}
     - target: {fileID: 4226224267868922548, guid: 707c26bff6e4d374b84c3751eac6a2b6, type: 3}
       propertyPath: m_Name
       value: Luminescent Tree

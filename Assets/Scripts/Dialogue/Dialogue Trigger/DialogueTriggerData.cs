@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,6 +28,11 @@ namespace RPGPlatformer.Dialogue
         //but those actions would be stored in the DialogueSO
         //where the actors are identified by their speaker index,
         //hence for now there is no use for "find actor by name"
+
+        public void OnStart()
+        {
+            actors.FindPlayer();
+        }
 
         public string SpeakerName(DialogueNode node)
         {

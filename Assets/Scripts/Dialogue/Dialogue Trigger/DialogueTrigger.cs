@@ -8,7 +8,7 @@ namespace RPGPlatformer.Dialogue
 {
     public class DialogueTrigger : MonoBehaviour, IDialogueTrigger
     {
-        [SerializeField] List<DialogueTriggerData> dialogues;
+        [SerializeField] List<DialogueTriggerData> dialogues = new();
 
         bool triggerEnabled = true;
 
@@ -18,6 +18,14 @@ namespace RPGPlatformer.Dialogue
         public event Action<bool> TriggerEnabled;
 
         public static event Action<DialogueTrigger, DialogueTriggerData> DialogueTriggered;
+
+        private void Start()
+        {
+            foreach (var d in dialogues)
+            {
+                d?.OnStart();
+            }
+        }
 
         //NOTE: if your trigger is attached to an interactable NPC, it may be better to use
         //NPC.SetCursorTypeAndPrimaryAction (it feels like a higher level script, which we should go to first)

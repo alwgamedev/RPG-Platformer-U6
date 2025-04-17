@@ -47,17 +47,15 @@ namespace RPGPlatformer.Core
 
         public async void Search()
         {
+            if (playerInventoryOwner.HasItem(glowingBranch))
+            {
+                GameLog.Log("You already have a tree branch.");
+                return;
+            }
+
             if (playerHasInteracted)
             {
-                if (playerInventoryOwner.HasItem(glowingBranch))
-                {
-                    GameLog.Log("You already have a tree branch.");
-                }
-                else
-                {
-                    GiveTreeBranchToPlayer();
-                }
-
+                GiveTreeBranchToPlayer();
                 return;
             }
 
