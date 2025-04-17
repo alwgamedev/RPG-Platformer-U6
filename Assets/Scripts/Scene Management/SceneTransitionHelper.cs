@@ -9,7 +9,7 @@ namespace RPGPlatformer.SceneManagement
 {
     public class SceneTransitionHelper : MonoBehaviour, ISavable
     {
-        public string LastGameLevelPlayed { get; set; }
+        public string LastGameLevelPlayed { get; private set; }
         //the savable state
         //separate from "LastSceneTransition" which will be reset every time the game is opened
         //and includes all scene transitions (including to/from start menu)
@@ -50,10 +50,6 @@ namespace RPGPlatformer.SceneManagement
             //(or to default spawn point)
         }
 
-        //for now just doing async so we have a smoother transition
-        //(but we don't need to do anything at end of await; we'll just store whatever args we need
-        //and classes that need them can get them from the Instance)
-        //(we can also use the (built in) unity events SceneManager.sceneLoaded and sceneUnloaded)
         public async void LoadScene(SceneTransitionTriggerData data)
         {
             await LoadSceneTask(data);
@@ -69,14 +65,30 @@ namespace RPGPlatformer.SceneManagement
             //and in the future we can destroy/instantiate game ui canvas when we transition to/from start menu
 
             await SavingSystem.Instance.Save();
-            await SceneManager.LoadSceneAsync(data.SceneToLoad);
+
+            var ao = SceneManager.LoadSceneAsync(data.SceneToLoad);
+            ao.allowSceneActivation = false;
+
+            while (!ao.isDone)
+            {
+                if (ao.progress >= 0.9f)
+                {
+                    Debug.Log("INITIATING LAG!");
+                    ao.allowSceneActivation = true;
+                    break;
+                }
+
+                await Task.Yield();
+            }
 
             //saving system will then restore state in response to "SceneManager.sceneLoaded" event
             //(do it that way, because not every scene loading may go through the SceneTransitionHelper,
             //e.g. the first scene load upon opening the game;
             //it's also more reliable -- Unity order of execution guarantees that sceneLoaded fires
             //after OnEnable for all objects but BEFORE START, so we can be sure to have restored state
-            //before any Starts)
+            //before any Starts
+            //--EDIT: NO we can't guarantee state is restored before start bc loading is async and takes time...
+            //(we had this issue with PlayerSpawnManager and Combatant))
         }
 
         private void OnDestroy()

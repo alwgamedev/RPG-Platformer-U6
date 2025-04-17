@@ -1,26 +1,21 @@
 ﻿using Cinemachine;
+using RPGPlatformer.Core;
 using UnityEngine;
 
 namespace RPGPlatformer.Cinematics
 {
     public class PlayerFollowCamera : MonoBehaviour
     {
-        CinemachineVirtualCamera vc;
+        static CinemachineVirtualCamera vc;
 
         private void Awake()
         {
             vc = GetComponentInChildren<CinemachineVirtualCamera>();
         }
 
-        private void Start()
+        public static void FollowPlayer(bool val)
         {
-            FindAndFollowPlayer();
-        }
-
-        private void FindAndFollowPlayer()
-        {
-            Transform player = GameObject.FindWithTag("Player").transform;
-            vc.Follow = player;
+            vc.Follow = val ? GlobalGameTools.Instance.PlayerTransform : null;
         }
     }
 }

@@ -15,6 +15,8 @@ namespace RPGPlatformer.Saving
     {
         public static SavingSystem Instance;
 
+        public static event Action SceneLoadComplete;
+
         private void Awake()
         {
             if (Instance == null)
@@ -33,6 +35,7 @@ namespace RPGPlatformer.Saving
         private async void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             await Load();
+            SceneLoadComplete?.Invoke();
         }
 
         public async Task Save()
@@ -109,6 +112,7 @@ namespace RPGPlatformer.Saving
             {
                 Instance = null;
                 SceneManager.sceneLoaded -= OnSceneLoaded;
+                SceneLoadComplete = null;
             }
 
             //SettingsManager.IAMConfigured -= OnIAMConfigure;

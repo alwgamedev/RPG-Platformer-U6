@@ -6,6 +6,9 @@ namespace RPGPlatformer.SceneManagement
     {
         public static event Action<SceneTransitionTriggerData> SceneTransitionTriggered;
 
-        public void TriggerScene(string sceneName, object args);
+        public void TriggerScene(SceneTransitionTriggerData data)
+        {
+            SceneTransitionTriggered?.Invoke(data);
+        }
     }
 }

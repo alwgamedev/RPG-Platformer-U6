@@ -428,11 +428,6 @@ namespace RPGPlatformer.Combat
             {
                 equippedWeapon = unarmedWeapon;
                 OnWeaponEquip?.Invoke();
-                if (oldItem == unarmedWeapon)
-                {
-                    return;
-                    //so that we don't HandleUnequippedItem and redistribute it to our inventory
-                }
             }
 
             if (handleUnequippedItem)
@@ -443,7 +438,7 @@ namespace RPGPlatformer.Combat
 
         public void HandleUnequippedItem(EquippableItem item)
         {
-            if (item == null) return;
+            if (item == null || item == unarmedWeapon) return;
             inventory.DistributeToFirstAvailableSlots(item.ToInventorySlotData());
         }
 

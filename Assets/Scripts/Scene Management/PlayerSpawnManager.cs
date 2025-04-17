@@ -1,6 +1,8 @@
-﻿using RPGPlatformer.Core;
+﻿using Cinemachine;
+using RPGPlatformer.Cinematics;
+using RPGPlatformer.Core;
+using RPGPlatformer.Movement;
 using RPGPlatformer.Saving;
-using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -8,15 +10,14 @@ using UnityEngine;
 
 namespace RPGPlatformer.SceneManagement
 {
-    //this could also hold data like the UI Camera, if you want to make UI canvas persistent in the future
-    //(or ui canvas could just "SceneManager.onSceneLoaded" find the ui camera)
     public class PlayerSpawnManager : MonoBehaviour, ISavable
     {
         [SerializeField] bool automaticallyRespawnPlayerOnDeath = true;
         [SerializeField] PlayerSpawnPoint defaultSpawnPoint;
         [SerializeField] PlayerSpawnPoint[] sceneSpawnPoints;
 
-        public string LastPlayerCheckpoint { get; set; }//this will be the savable state
+        float playerHeight;
+        string lastPlayerCheckpoint;//this will be the savable state
 
         Dictionary<string, PlayerSpawnPoint> SpawnPointLookup = new();
 
@@ -29,18 +30,14 @@ namespace RPGPlatformer.SceneManagement
             }
 
             SaveCheckpoint.CheckpointReached += OnSaveCheckpointReached;
-        }
-
-        private void Start()
-        {
-            InitialPlayerSpawn();
+            SavingSystem.SceneLoadComplete += InitialPlayerSpawn;
         }
 
         private async void OnSaveCheckpointReached(SaveCheckpoint checkpoint)
         {
             var id = checkpoint.gameObject.name;
             SpawnPointLookup[id] = checkpoint;
-            LastPlayerCheckpoint = id;
+            lastPlayerCheckpoint = id;
             await SavingSystem.Instance.Save();
         }
 
@@ -58,22 +55,32 @@ namespace RPGPlatformer.SceneManagement
         //say that onSceneLoaded will trigger after OnEnable for all objects but before any Starts, so we're good)
         private void InitialPlayerSpawn()
         {
+            playerHeight = GlobalGameTools.Instance.PlayerTransform.GetComponent<IMover>().Height;
+
             var l = SceneTransitionHelper.LastSceneTransition;
             if (!l.HasValue || !TrySpawnPlayer(l.Value.nextSceneData.PlayerSpawnPoint))
             {
                 SpawnPlayerToLastCheckpointOrDefault();
             }
+
+            SavingSystem.SceneLoadComplete -= InitialPlayerSpawn;
         }
 
         private void SpawnPlayer(PlayerSpawnPoint playerSpawnPoint)
         {
-            GlobalGameTools.Instance.PlayerTransform.position = playerSpawnPoint.transform.position;
-            LastPlayerCheckpoint = playerSpawnPoint.gameObject.name;
+            PlayerFollowCamera.FollowPlayer(false);
+
+            GlobalGameTools.Instance.PlayerTransform.position = 
+                playerSpawnPoint.transform.position + 0.55f * playerHeight * Vector3.up;
+            lastPlayerCheckpoint = playerSpawnPoint.gameObject.name;
+
+            PlayerFollowCamera.FollowPlayer(true);
+            //so that the lookahead doesn't cause a wobble when we first start the scene
         }
 
         private void SpawnPlayerToLastCheckpointOrDefault()
         {
-            if (!TrySpawnPlayer(LastPlayerCheckpoint))
+            if (!TrySpawnPlayer(lastPlayerCheckpoint))
             {
                 SpawnPlayer(defaultSpawnPoint);
             }
@@ -110,16 +117,17 @@ namespace RPGPlatformer.SceneManagement
 
         public JsonNode CaptureState()
         {
-            return JsonSerializer.SerializeToNode(LastPlayerCheckpoint);
+            return JsonSerializer.SerializeToNode(lastPlayerCheckpoint);
         }
 
         public void RestoreState(JsonNode jNode)
         {
-            LastPlayerCheckpoint = jNode.Deserialize<string>();
+            lastPlayerCheckpoint = jNode.Deserialize<string>();
         }
 
         private void OnDestroy()
         {
+            SavingSystem.SceneLoadComplete -= InitialPlayerSpawn;
             GlobalGameTools.PlayerDeathFinalized -= RespawnPlayerOnDeath;
             SaveCheckpoint.CheckpointReached -= OnSaveCheckpointReached;
         }

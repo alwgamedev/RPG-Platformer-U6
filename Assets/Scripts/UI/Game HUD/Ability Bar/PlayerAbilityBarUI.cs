@@ -40,8 +40,11 @@ namespace RPGPlatformer.UI
         {
             base.OnDestroy();
 
-            player.AbilityBarResetEvent -= DisplayPlayerAbilityBar;
-            player.OnCooldownStarted -= OnCooldownStart;
+            if (player != null)
+            {
+                player.AbilityBarResetEvent -= DisplayPlayerAbilityBar;
+                player.OnCooldownStarted -= OnCooldownStart;
+            }
         }
     }
 }
