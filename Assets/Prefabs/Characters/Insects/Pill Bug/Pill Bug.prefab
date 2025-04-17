@@ -1,0 +1,619 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &930742976778500115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7593104108745265158}
+  - component: {fileID: 2427284186322851037}
+  m_Layer: 0
+  m_Name: Pill Bug
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7593104108745265158
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930742976778500115}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.993, y: -0.015, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6559669720389357972}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2427284186322851037
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930742976778500115}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 08f5f5b0a9189e240b6105b864e8f35a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!1001 &5487485307666589770
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7593104108745265158}
+    m_Modifications:
+    - target: {fileID: -9012421380054161512, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -9012421380054161512, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -8861639509399330268, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL30 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -8653719598885068355, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: pill bug
+      objectReference: {fileID: 0}
+    - target: {fileID: -8596930853604061233, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: Body 4 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -8412586355702751328, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8412586355702751328, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -8266243768396000877, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8266243768396000877, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -8254347435616096671, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8254347435616096671, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -7698961856865029643, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR11 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7478199275223070628, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -7478199275223070628, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -7368655330157520179, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -7368655330157520179, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -7081046432933550501, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR10 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -6912116826329615015, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -6912116826329615015, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -6731034672122619121, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -6731034672122619121, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -6377970940624885537, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR40 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -6259223505517042527, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -6259223505517042527, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -6243994635418287677, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -6243994635418287677, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -6143654663042115580, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -6143654663042115580, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -6103800795198520918, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: AntennaR2 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -5791262841511049204, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: AntennaL3 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -5643972706393701107, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL40 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -5107546187014427776, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR31 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -4992649887359332333, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL51 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -4804743416295163118, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL50 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -4758552027879546901, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4758552027879546901, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -4456728084715304914, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR20 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -4449158519462207472, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4449158519462207472, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -4346141866003910310, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4346141866003910310, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -4225404750263566803, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR00 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -4082568162607258480, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: AntennaL1 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -3591564963812325425, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR21 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -3209957688723929570, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -3209957688723929570, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -3118298416152120057, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: AntennaR0 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -2954808980149799198, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL10 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -2891158788166283510, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -2891158788166283510, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -2309748189156389918, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR30 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -2086394184460930234, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: AntennaL2 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -1539218603801338969, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -1539218603801338969, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -1251318048036372890, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: AntennaL0 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -1138913503614903466, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -1138913503614903466, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -1024815538560704356, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: Body 3 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -825289701315894021, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -825289701315894021, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -174324095282823261, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -174324095282823261, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: -41917969553504006, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR51 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: -36172909047379239, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR41 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 386791141387813222, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: Head Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 1065475456036547260, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1065475456036547260, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 1106423618952908628, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1106423618952908628, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156076501522568071, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156076501522568071, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183651863080273059, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL00 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 1331010854394070464, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1331010854394070464, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 1532292695198526193, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1532292695198526193, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 1556681259324121076, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1556681259324121076, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 1965355881918910436, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR50 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178551070374675849, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178551070374675849, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452042396220056799, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: AntennaR3 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 2799559505053895636, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2799559505053895636, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 2874507048560749494, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: Body 6 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 2982212116249693026, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2982212116249693026, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 3189896148995460361, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL41 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 3210930246499071457, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3210930246499071457, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282801681038763871, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: Body 5 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297364353584691495, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: Body 1 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 4139712751113087059, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4139712751113087059, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 4157741701538757237, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: Body 2 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 4458186893430736884, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL31 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 4614850231469255755, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: Body 8 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 4645495035996976063, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4645495035996976063, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 4902438068980305670, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL20 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 5057387136839636424, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5057387136839636424, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 5160630824246572320, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: AntennaR1 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 5181214733798986047, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegR01 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184270352963921573, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184270352963921573, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 5503512382155283203, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5503512382155283203, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 5582957396937781798, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL01 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946761023941063336, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946761023941063336, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991978282278052625, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: Body 7 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 7107569456798982831, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL21 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 7678778920928784381, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7678778920928784381, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 7871445800608304902, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7871445800608304902, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 8719299170048725001, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8719299170048725001, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 8730717817735972544, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_Name
+      value: LegL11 Bone
+      objectReference: {fileID: 0}
+    - target: {fileID: 8744284844891850377, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8744284844891850377, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    - target: {fileID: 8848809832964492656, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8848809832964492656, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -199256311
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 4843985084834002234, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+--- !u!4 &6559669720389357972 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: 33f2359a959a8bd4589512873c41a0ba, type: 3}
+  m_PrefabInstance: {fileID: 5487485307666589770}
+  m_PrefabAsset: {fileID: 0}

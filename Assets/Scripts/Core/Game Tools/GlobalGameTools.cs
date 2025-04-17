@@ -94,12 +94,15 @@ namespace RPGPlatformer.Core
 
             if (playerGO)
             {
-                playerCC = playerGO.GetComponent<PlayerCombatController>();
+                playerCC = playerGO.GetComponent<ICombatController>();
                 playerTransform = playerGO.transform;
                 if (playerCC != null)
                 {
                     playerCC.OnDeath += BroadcastPlayerDeath;
-                    playerCC.Combatant.DeathFinalized += BroadcastPlayerDeathFinalized;
+                    //playerCC.Combatant.DeathFinalized += BroadcastPlayerDeathFinalized;
+                    playerGO.GetComponent<ICombatant>().DeathFinalized += BroadcastPlayerDeathFinalized;
+                    //^get comp because the playerCC awake may come after GGT's, which means the playerCC
+                    //won't have found its combatant yet
                 }
             }
         }

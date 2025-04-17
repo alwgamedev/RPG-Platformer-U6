@@ -29,7 +29,7 @@ namespace RPGPlatformer.AIControl
             CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
             //AllowExecuteWithoutTarget = true,
-            CombatStyle = CombatStyle.Melee,
+            CombatStyle = CombatStyle.Unarmed,
             AnimationState = "Stab",
             Cooldown = 1.44f,
             StaminaFractionChange = 0,
@@ -50,7 +50,7 @@ namespace RPGPlatformer.AIControl
             },
             CanBeIncludedInAutoCastCycle = true,
             ObeyGCD = true,
-            CombatStyle = CombatStyle.Melee,
+            CombatStyle = CombatStyle.Unarmed,
             AnimationState = "Slam",
             //GetCombatantExecuteEffect = () =>//TO-DO
             //    (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Dust Cloud Effect"),

@@ -11,7 +11,7 @@ namespace RPGPlatformer.AIControl
 
         protected override void InitializeAbilityBars()
         {
-            abilityBarManager.SetAbilityBar(CombatStyle.Melee, EarthwormAbilities.EarthwormAbilityBar(this));
+            abilityBarManager.SetAbilityBar(CombatStyle.Unarmed, EarthwormAbilities.EarthwormAbilityBar(this));
         }
     }
 }

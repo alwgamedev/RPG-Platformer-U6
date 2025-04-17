@@ -8,14 +8,35 @@ namespace RPGPlatformer.Cinematics
     {
         static CinemachineVirtualCamera vc;
 
+        static PlayerFollowCamera Instance;
+
         private void Awake()
         {
+            Instance = this;
             vc = GetComponentInChildren<CinemachineVirtualCamera>();
         }
 
         public static void FollowPlayer(bool val)
         {
-            vc.Follow = val ? GlobalGameTools.Instance.PlayerTransform : null;
+            if (vc)
+            {
+                if (val && GlobalGameTools.Instance)
+                { 
+                    vc.Follow = GlobalGameTools.Instance.PlayerTransform;
+                }
+                else
+                {
+                    vc.Follow = null;
+                }
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                vc = null;
+            }
         }
     }
 }

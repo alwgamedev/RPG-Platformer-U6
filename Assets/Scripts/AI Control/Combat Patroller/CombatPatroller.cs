@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using RPGPlatformer.Combat;
+using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.AIControl
@@ -17,7 +18,7 @@ namespace RPGPlatformer.AIControl
         {
             if (playerEnemy)
             {
-                SetCombatTarget(GameObject.Find("Player").GetComponent<IHealth>());
+                SetCombatTarget(GlobalGameTools.Instance.Player.Combatant.Health);
             }
             else
             {
