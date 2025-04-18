@@ -92,7 +92,7 @@ namespace RPGPlatformer.Movement
 
             if (options.RotateToDirection)
             {
-                RotateTowardsMovementDirection(rb.transform, facingRight, moveDirection, options);
+                rb.transform.RotateTowardsMovementDirection(facingRight, moveDirection, options);
             }
 
             var v = options.ClampXVelocityOnly ?
