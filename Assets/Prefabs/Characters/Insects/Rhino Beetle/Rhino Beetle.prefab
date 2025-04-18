@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9ddd33a1735ac47995886d4af7684a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropPrefab: {fileID: 0}
+  dropPrefab: {fileID: 6284128859392026527, guid: 46707d3bb305f474a930c60eb8bad290, type: 3}
 --- !u!114 &4232548837455892979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,7 +384,6 @@ MonoBehaviour:
   offhandSlot: {fileID: 0}
   mainhandElbow: {fileID: 0}
   chestBone: {fileID: 0}
-  defaultWeaponSO: {fileID: 0}
   unarmedWeaponSO: {fileID: 11400000, guid: ea5f665753fe54c42a75f6e2bc8921ba, type: 2}
   stamina:
     minValue: 0
@@ -404,8 +403,11 @@ MonoBehaviour:
   dropLootOnFinalizeDeath: 1
   destroyOnFinalizeDeath: 1
   delayBeforeFinalizeDeath: 1
+  finalizeDeathViaTrigger: 0
   timeToDelayBeforeFinalizeDeath: 1.5
   combatXPReward: 5
+  dropSize: 0
+  dropTable: {fileID: 0}
 --- !u!114 &8244550270408134216
 MonoBehaviour:
   m_ObjectHideFlags: 0

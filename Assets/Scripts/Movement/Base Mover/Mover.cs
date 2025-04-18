@@ -144,64 +144,30 @@ namespace RPGPlatformer.Movement
             MoveWithoutAcceleration(direction, MaxSpeed, options);
         }
 
-        //direction assumed to be normalized
-        //current velocity (relV) is passed in in case your velocity is taken relative to a moving platform
-        //(o/w you'd just use the rigidbody's velocity for the clamp calculation)
-        public virtual void Move(Vector2 relV, Vector2 direction, float maxSpeed, MovementOptions options)
+        public virtual void Move(Vector2 relV, Vector2 moveDirection, float maxSpeed, MovementOptions options)
         {
-            if (direction == Vector2.zero)
-            {
-                return;
-            }
-
-            if (options.RotateToDirection)
-            {
-                RotateTowardsMovementDirection(direction, options);
-            }
-
-            var v = options.ClampXVelocityOnly ?
-                new Vector2(relV.x, 0) : relV;
-            var dot = Vector2.Dot(v, direction);
-
-            if (dot <= 0 || v.sqrMagnitude < maxSpeed * maxSpeed)//then we'll assume the angle between v and direction to be small (in fact, 0)
-            {
-                //myRigidbody.linearVelocity += options.Acceleration * Time.deltaTime * direction;
-                myRigidbody.AddForce(myRigidbody.mass * options.Acceleration * direction);
-            }
+            myRigidbody.Move(FacingRight, relV, moveDirection, maxSpeed, options);
         }
-
-        //to-do: clamping acceleration
-        //if dot <= 0, no clamp (although still maybe clamp because sometimes our guy goes shooting off weirdly)
-        //otherwise, assume angle between velocity and direction is zero, because we expect small changes in angle
-        //then just need |dv| <= M - |v| (where |dv| = accel * dt, accel to be the clamped acceleration)
-        //assuming |v| close to M, use a taylor polynomial centered at M to quickly approximate |v|
 
         public virtual void MoveWithoutAcceleration(Vector2 direction, float maxSpeed, MovementOptions options)
         {
-            if (direction == Vector2.zero) return;
-
-            if (options.RotateToDirection)
-            {
-                RotateTowardsMovementDirection(direction, options);
-            }
-
-            myRigidbody.linearVelocity = maxSpeed * direction;
+            myRigidbody.MoveWithoutAcceleration(FacingRight, direction, maxSpeed, options);
         }
 
-        public void RotateTowardsMovementDirection(Vector2 moveDirection, MovementOptions options)
-        {
-            var tUp = FacingRight ? options.ClampedTrUpGivenGoalTrRight(moveDirection)
-                : options.ClampedTrUpGivenGoalTrLeft(moveDirection);
-            TweenTransformUpTowards(tUp.normalized, options.RotationSpeed);
-        }
+        //public void RotateTowardsMovementDirection(Vector2 moveDirection, MovementOptions options)
+        //{
+        //    var tUp = FacingRight ? options.ClampedTrUpGivenGoalTrRight(moveDirection)
+        //        : options.ClampedTrUpGivenGoalTrLeft(moveDirection);
+        //    TweenTransformUpTowards(tUp.normalized, options.RotationSpeed);
+        //}
 
-        //goal transformUp should be normalized
-        public void TweenTransformUpTowards(Vector2 transformUp, float rotationalSpeed)
-        {
-            var tweened = PhysicsTools.CheapRotationalTween(transform.up, transformUp, 
-                rotationalSpeed, Time.deltaTime);
-            transform.rotation = Quaternion.LookRotation(transform.forward, tweened);
-        }
+        ////goal transformUp should be normalized
+        //public void TweenTransformUpTowards(Vector2 transformUp, float rotationalSpeed)
+        //{
+        //    var tweened = PhysicsTools.CheapRotationalTween(transform.up, transformUp, 
+        //        rotationalSpeed, Time.deltaTime);
+        //    transform.rotation = Quaternion.LookRotation(transform.forward, tweened);
+        //}
 
         public virtual void Stop(bool maintainVerticalVelocity = true)
         {

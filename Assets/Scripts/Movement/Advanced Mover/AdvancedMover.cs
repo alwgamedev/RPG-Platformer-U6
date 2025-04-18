@@ -67,13 +67,18 @@ namespace RPGPlatformer.Movement
             {
                 TriggerLanding();
             }
-            //transform.rotation = Quaternion.LookRotation(Vector3.forward, adjacentWallDirection);
-            TweenTransformUpTowards(adjacentWallDirection, rotationSpeed);
+
+            RotateTowardsAdjacentWall(rotationSpeed);
         }
 
         public void MaintainWallCling(float rotationSpeed)
         {
-            TweenTransformUpTowards(adjacentWallDirection, rotationSpeed);
+            RotateTowardsAdjacentWall(rotationSpeed);
+        }
+
+        public void RotateTowardsAdjacentWall(float rotationSpeed)
+        {
+            transform.TweenTransformUpTowards(adjacentWallDirection.normalized, rotationSpeed);
         }
 
         public void EndWallCling()

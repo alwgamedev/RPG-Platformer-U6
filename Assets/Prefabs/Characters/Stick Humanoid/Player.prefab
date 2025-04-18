@@ -485,9 +485,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 663912934581842271}
-    - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 489266092333141542}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
@@ -495,6 +492,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1804393810644820113}
+    - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 663912934581842271}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5777766962256256055}
@@ -534,66 +534,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
   m_PrefabInstance: {fileID: 4921577125819395448}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &663912934581842271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 474939305929962993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de355e656f54b6e47b36934d1af82e4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementOptions:
-  - movementType: 0
-    moveDirection: 0
-    acceleration: 55
-    flipSprite: 1
-    changeDirectionWrtGlobalUp: 0
-    clampXVelocityOnly: 0
-    rotateToDirection: 0
-    rotationSpeed: 0
-    maxRotationAngle: 0
-    minRotationAngle: 0
-    maxRotationRight: {x: 1, y: 0}
-    minRotationRight: {x: 1, y: 0}
-    maxRotationLeft: {x: -1, y: 0}
-    minRotationLeft: {x: -1, y: 0}
-  - movementType: 2
-    moveDirection: 2
-    acceleration: 55
-    flipSprite: 1
-    changeDirectionWrtGlobalUp: 0
-    clampXVelocityOnly: 1
-    rotateToDirection: 0
-    rotationSpeed: 0
-    maxRotationAngle: 0
-    minRotationAngle: 0
-    maxRotationRight: {x: 1, y: 0}
-    minRotationRight: {x: 1, y: 0}
-    maxRotationLeft: {x: -1, y: 0}
-    minRotationLeft: {x: -1, y: 0}
-  - movementType: 1
-    moveDirection: 2
-    acceleration: 30
-    flipSprite: 0
-    changeDirectionWrtGlobalUp: 0
-    clampXVelocityOnly: 1
-    rotateToDirection: 0
-    rotationSpeed: 0
-    maxRotationAngle: 0
-    minRotationAngle: 0
-    maxRotationRight: {x: 1, y: 0}
-    minRotationRight: {x: 1, y: 0}
-    maxRotationLeft: {x: -1, y: 0}
-    minRotationLeft: {x: -1, y: 0}
-  wallDetectionOptions:
-    detectWalls: 1
-    numWallCastsPerThird: 2
-    wallCastDistanceFactor: 2
-    wallClingRotationSpeed: 24
 --- !u!114 &489266092333141542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669,6 +609,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fff2b6c0084a44aabe198745fbf067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &663912934581842271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474939305929962993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de355e656f54b6e47b36934d1af82e4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementOptions:
+  - movementType: 0
+    moveDirection: 0
+    acceleration: 55
+    flipSprite: 1
+    changeDirectionWrtGlobalUp: 0
+    clampXVelocityOnly: 0
+    rotateToDirection: 0
+    rotationSpeed: 0
+    maxRotationAngle: 0
+    minRotationAngle: 0
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
+  - movementType: 2
+    moveDirection: 2
+    acceleration: 55
+    flipSprite: 1
+    changeDirectionWrtGlobalUp: 0
+    clampXVelocityOnly: 1
+    rotateToDirection: 0
+    rotationSpeed: 0
+    maxRotationAngle: 0
+    minRotationAngle: 0
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
+  - movementType: 1
+    moveDirection: 2
+    acceleration: 30
+    flipSprite: 0
+    changeDirectionWrtGlobalUp: 0
+    clampXVelocityOnly: 1
+    rotateToDirection: 0
+    rotationSpeed: 0
+    maxRotationAngle: 0
+    minRotationAngle: 0
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
+  wallDetectionOptions:
+    detectWalls: 1
+    numWallCastsPerThird: 2
+    wallCastDistanceFactor: 2
+    wallClingRotationSpeed: 1.58
 --- !u!114 &5777766962256256055
 MonoBehaviour:
   m_ObjectHideFlags: 0

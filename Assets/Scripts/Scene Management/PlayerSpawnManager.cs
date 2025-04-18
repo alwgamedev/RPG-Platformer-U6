@@ -12,6 +12,7 @@ namespace RPGPlatformer.SceneManagement
 {
     public class PlayerSpawnManager : MonoBehaviour, ISavable
     {
+        [SerializeField] bool useDefaultOverSaveData;//mainly for testing so I can spawn wherever I want if needed
         [SerializeField] bool automaticallyRespawnPlayerOnDeath = true;
         [SerializeField] PlayerSpawnPoint defaultSpawnPoint;
         [SerializeField] PlayerSpawnPoint[] sceneSpawnPoints;
@@ -80,7 +81,7 @@ namespace RPGPlatformer.SceneManagement
 
         private void SpawnPlayerToLastCheckpointOrDefault()
         {
-            if (!TrySpawnPlayer(lastPlayerCheckpoint))
+            if (useDefaultOverSaveData || !TrySpawnPlayer(lastPlayerCheckpoint))
             {
                 SpawnPlayer(defaultSpawnPoint);
             }

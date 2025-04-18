@@ -48,6 +48,7 @@ namespace RPGPlatformer.Movement
         //will be the move direction we want to face)
 
         //r,l do NOT have to be unit vectors! (although they usually will be already if come from move directions)
+        //return value will be unit vector if r is
         public Vector2 ClampedTrUpGivenGoalTrRight(Vector2 r)
         {
             if (r.y * maxRotationRight.x > r.x * maxRotationRight.y)
@@ -79,31 +80,11 @@ namespace RPGPlatformer.Movement
         public Quaternion ClampedRotationGivenGoalTrRight(Vector2 r)
         {
             return Quaternion.LookRotation(Vector3.forward, ClampedTrUpGivenGoalTrRight(r));
-            //if (r.y > maxRotationRight.y)
-            //{
-            //    return Quaternion.LookRotation(Vector3.forward, maxRotationRight.CCWPerp());
-            //}
-            //else if (r.y < minRotationRight.y)
-            //{
-            //    return Quaternion.LookRotation(Vector3.forward, minRotationRight.CCWPerp());
-            //}
-
-            //return Quaternion.LookRotation(Vector3.forward, r.CCWPerp());
         }
 
         public Quaternion ClampedRotationGivenGoalTrLeft(Vector2 l)
         {
             return Quaternion.LookRotation(Vector3.forward, ClampedTrUpGivenGoalTrLeft(l));
-            //if (l.y > maxRotationLeft.y)
-            //{
-            //    return Quaternion.LookRotation(Vector3.forward, - maxRotationLeft.CCWPerp());
-            //}
-            //else if (l.y < minRotationLeft.y)
-            //{
-            //    return Quaternion.LookRotation(Vector3.forward, - minRotationLeft.CCWPerp());
-            //}
-
-            //return Quaternion.LookRotation(Vector3.forward, - l.CCWPerp());
         }
 
         public void OnBeforeSerialize()

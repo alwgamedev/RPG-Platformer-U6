@@ -76,5 +76,70 @@ namespace RPGPlatformer.Movement
 
             return Vector3.Dot(a, b) * w + Vector3.Cross(c, w) + Vector3.Dot(u, w) * u;
         }
+
+        /// <summary>
+        /// moveDirection assumed normalized.
+        ///relV is current "relative" velocity (which is usually just rb.linearVelocity, unless
+        ///you want velocity to be taken relative to a moving platform, e.g. when player has mounted shuttlehawk)
+        /// </summary>
+        public static void Move(this Rigidbody2D rb, bool facingRight, 
+            Vector2 relV, Vector2 moveDirection, float maxSpeed, MovementOptions options)
+        {
+            if (moveDirection == Vector2.zero)
+            {
+                return;
+            }
+
+            if (options.RotateToDirection)
+            {
+                RotateTowardsMovementDirection(rb.transform, facingRight, moveDirection, options);
+            }
+
+            var v = options.ClampXVelocityOnly ?
+                new Vector2(relV.x, 0) : relV;
+            var dot = Vector2.Dot(v, moveDirection);
+
+            if (dot <= 0 || v.sqrMagnitude < maxSpeed * maxSpeed)
+            {
+                rb.AddForce(rb.mass * options.Acceleration * moveDirection);
+            }
+        }
+
+        /// <summary>
+        /// moveDirection assumed normalized
+        /// </summary>
+        public static void MoveWithoutAcceleration(this Rigidbody2D rb, bool facingRight,
+            Vector2 moveDirection, float maxSpeed, MovementOptions options)
+        {
+            if (moveDirection == Vector2.zero) return;
+
+            if (options.RotateToDirection)
+            {
+                rb.transform.RotateTowardsMovementDirection(facingRight, moveDirection, options);
+            }
+
+            rb.linearVelocity = maxSpeed * moveDirection;
+        }
+
+        /// <summary>
+        /// move direction is assumed normalized
+        /// </summary>
+        public static void RotateTowardsMovementDirection(this Transform t, bool facingRight, 
+            Vector2 moveDirection, MovementOptions options)
+        {
+            var tUp = facingRight ? options.ClampedTrUpGivenGoalTrRight(moveDirection)
+                : options.ClampedTrUpGivenGoalTrLeft(moveDirection);
+            t.TweenTransformUpTowards(tUp, options.RotationSpeed);
+        }
+
+        /// <summary>
+        /// goalTransformup assumed to be normalized
+        /// </summary>
+        public static void TweenTransformUpTowards(this Transform t, Vector2 goalTransformUp, float rotationalSpeed)
+        {
+            var tweened = CheapRotationalTween(t.up, goalTransformUp,
+                rotationalSpeed, Time.deltaTime);
+            t.rotation = Quaternion.LookRotation(t.forward, tweened);
+        }
     }
 }
