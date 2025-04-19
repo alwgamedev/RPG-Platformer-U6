@@ -29,7 +29,9 @@ namespace RPGPlatformer.Effects
         float tweenProgress;//from 0-1
         bool tweening;
 
-        //bool testing;
+        public bool Tweening => tweening;
+        public float HighlightPercentage => tweenProgress;//0-1 corresponding to minIntensity -> maxIntensity
+        public bool HighlightActive => HighlightPercentage > 0;
 
         public event Action HighlightTweenComplete;
 

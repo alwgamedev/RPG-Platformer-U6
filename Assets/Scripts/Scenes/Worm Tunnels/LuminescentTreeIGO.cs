@@ -14,7 +14,6 @@ namespace RPGPlatformer.Core
         [SerializeField] InventoryItemSO glowingBranchSO;
 
         Highlighter highlighter;
-        bool playerHasInteracted;
         InventoryItem glowingBranch;
         ILooter playerLooter;
         IInventoryOwner playerInventoryOwner;
@@ -47,21 +46,38 @@ namespace RPGPlatformer.Core
 
         public async void Search()
         {
+            if (!highlighter.HighlightActive)
+            {
+                SetInteractable(false);
+                await IlluminateTree();
+            }
+
             if (playerInventoryOwner.HasItem(glowingBranch))
             {
                 GameLog.Log("You already have a tree branch.");
-                return;
             }
-
-            if (playerHasInteracted)
+            else
             {
                 GiveTreeBranchToPlayer();
-                return;
             }
 
+            SetInteractable(true);
+        }
 
-            SetInteractable(false);
+        protected override void OnLeftClick()
+        {
+            Search();
+        }
 
+        private void GiveTreeBranchToPlayer()
+        {
+            playerLooter.TakeLoot(glowingBranch.ItemCopy().ToInventorySlotData(1));
+            GameLog.Log("You take one of the branches for closer inspection...");
+            GameLog.Log($"({glowingBranchSO.BaseData.DisplayName} has been placed in your inventory.)");
+        }
+
+        private async Task IlluminateTree()
+        {
             var tcs = new TaskCompletionSource<object>();
 
             void Cancel()
@@ -78,36 +94,16 @@ namespace RPGPlatformer.Core
 
             try
             {
-                playerHasInteracted = true;
                 GameLog.Log("A magical glow radiates from the tree's branches...");
 
                 highlighter.HighlightTweenComplete += Complete;
                 highlighter.EnableHighlight(true);
                 await tcs.Task;
-
-                GiveTreeBranchToPlayer();
-                SetInteractable(true);
-            }
-            catch (TaskCanceledException)
-            {
-                return;
             }
             finally
             {
                 highlighter.HighlightTweenComplete -= Complete;
             }
-        }
-
-        protected override void OnLeftClick()
-        {
-            Search();
-        }
-
-        private void GiveTreeBranchToPlayer()
-        {
-            playerLooter.TakeLoot(glowingBranch.ItemCopy().ToInventorySlotData(1));
-            GameLog.Log("You take one of the branches for closer inspection...");
-            GameLog.Log($"({glowingBranchSO.BaseData.DisplayName} has been placed in your inventory.)");
         }
     }
 }
