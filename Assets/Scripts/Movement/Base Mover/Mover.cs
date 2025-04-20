@@ -300,12 +300,15 @@ namespace RPGPlatformer.Movement
             if (FacingWrongDirection())
             {
                 var s = transform.localScale;
-                s.x = -s.x;
+                s.x *= -1;
                 transform.localScale = s;
 
                 if (flipWrtGlobalUp)
                 {
-                    transform.up = PhysicsTools.ReflectAlongUnitVector(Vector3.right, transform.up);
+                    s = transform.up;
+                    s.x *= -1;
+                    transform.up = s;
+                    //transform.up = PhysicsTools.ReflectAcrossPerpendicularHyperplane(Vector3.right, transform.up);
                 }
                 DirectionChanged.Invoke(CurrentOrientation);
             }

@@ -279,7 +279,7 @@ namespace RPGPlatformer.Movement
             stateDriver.SetOrientation((HorizontalOrientation)(-(int)CurrentOrientation), currentMovementOptions.FlipSprite,
                 currentMovementOptions.ChangeDirectionWrtGlobalUp);
             var dp = transform.position - CurrentMount.Position;
-            dp = ReflectAlongUnitVector(CurrentMount.VelocitySourceTransformRight, dp);
+            dp = ReflectAcrossPerpendicularHyperplane(CurrentMount.VelocitySourceTransformRight, dp);
             transform.position = CurrentMount.Position + dp;
         }
 

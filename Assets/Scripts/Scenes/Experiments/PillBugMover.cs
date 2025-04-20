@@ -1,20 +1,18 @@
 using RPGPlatformer.Movement;
 using UnityEngine;
 
-public class PillBugMover : MonoBehaviour
+public class PillBugMover : RopeWalker
 {
-    [SerializeField] RopeWalker walker;
+    //[SerializeField] RopeWalker walker;
     [SerializeField] WheelAxle axle;
-    [SerializeField] PhysicsMaterial2D defaultBodyMat;
-    [SerializeField] PhysicsMaterial2D rollingBodyMat;
     [SerializeField] float radiusMultiplier = 1;
     [SerializeField] float defaultBodyLinearDamping = 5;
     [SerializeField] float rollingBodyLinearDamping = 100;
 
-    int n;
+    //int n;
     bool walking;//either walking or rolling
     float wheelRadius;
-    float dTheta;//in rad (not Mathf.Cos takes rad but rigidbody2D.rotation is in deg)
+    float dTheta;//in rad (note Mathf.Cos takes rad but Rigidbody2D.rotation is in deg)
 
     HingeJoint2D[] wheelHinges;
 
@@ -32,16 +30,15 @@ public class PillBugMover : MonoBehaviour
 
     private void Start()
     {
-        n = walker.n;
-        wheelRadius = radiusMultiplier * (n / (float)(n - 1)) * walker.Length / (2 * Mathf.PI);
+        wheelRadius = radiusMultiplier * (n / (float)(n - 1)) * Length / (2 * Mathf.PI);
         wheelHinges = new HingeJoint2D[n];
         dTheta = 2 * Mathf.PI / n;
 
         for (int i = 0; i < n; i++)
         {
-            wheelHinges[i] = walker.BodyPieces[i].gameObject.GetComponent<HingeJoint2D>();
-            wheelHinges[i].connectedAnchor = new(wheelRadius * Mathf.Cos(i * dTheta), 
-                wheelRadius * Mathf.Sin(i * dTheta));
+            wheelHinges[i] = bodyPieces[i].gameObject.GetComponent<HingeJoint2D>();
+            //wheelHinges[i].connectedAnchor = new(wheelRadius * Mathf.Cos(i * dTheta), 
+            //    wheelRadius * Mathf.Sin(i * dTheta));
         }
 
         SetState(true);
@@ -55,19 +52,101 @@ public class PillBugMover : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    //protected override void FixedUpdate()
+    //{
+    //    if (walking)
+    //    {
+    //        base.FixedUpdate();
+    //    }
+    //    else
+    //    {
+    //        UpdateRollingRotations();
+    //    }
+    //}
+
+    protected override void UpdatePhysicsData()
     {
-        if (!walking)
+        if (walking)
+        {
+            base.UpdatePhysicsData();
+        }
+        else
         {
             UpdateRollingRotations();
         }
     }
 
+    private void UpdateRollingRotations()
+    {
+        for (int i = 0; i < n; i++)
+        {
+            bodyPieces[i].SetRotation(-90 + Mathf.Rad2Deg * i * dTheta + axle.Rigidbody.rotation);
+        }
+    }
+
+
+    //BASIC FUNCTIONS
+
+    protected override void HandleMoveInput(float moveInput)
+    {
+        if (walking)
+        {
+            base.HandleMoveInput(moveInput);
+        }
+        else
+        {
+            axle.DriveWheel(-moveInput);
+        }
+    }
+
+    protected override void ChangeDirection()
+    {
+        if (walking)
+        {
+            base.ChangeDirection();
+        }
+        else
+        {
+            ChangeDirectionRolling();
+        }
+    }
+
+    private void ChangeDirectionRolling()
+    {
+        CurrentOrientation = (HorizontalOrientation)(-(int)CurrentOrientation);
+
+        Vector3 d;
+
+        for (int i = 0; i < n; i++)
+        {
+            d = bodyPieces[i].transform.position - axle.transform.position;
+            d.x *= -1;
+            bodyPieces[i].transform.position = d + axle.transform.position;
+            d = bodyPieces[i].transform.localScale;
+            d.x *= -1;
+            bodyPieces[i].transform.localScale = d;
+        }
+
+        ConfigureConnectedAnchors();
+    }
+
+    private void ConfigureConnectedAnchors()
+    {
+        for (int i = 0; i < n; i++)
+        {
+            wheelHinges[i].connectedAnchor = new(((int)CurrentOrientation) * wheelRadius * Mathf.Cos(i * dTheta),
+                wheelRadius * Mathf.Sin(i * dTheta));
+        }
+    }
+
+
+    //TRANSITION BTWN ROLLING/WALKING
+
     private void SetState(bool walking)
     {
         this.walking = walking;
 
-        walker.enabled = walking;
+        //enabled = walking;
         axle.enabled = !walking;
 
         if (walking)
@@ -76,33 +155,26 @@ public class PillBugMover : MonoBehaviour
             for (int i = 0; i < n; i++)
             {
                 wheelHinges[i].enabled = false;
-                walker.BodyPieces[i].linearDamping = defaultBodyLinearDamping;
-                walker.BodyPieces[i].sharedMaterial = defaultBodyMat;
+                bodyPieces[i].linearDamping = defaultBodyLinearDamping;
             }
 
             axle.Rigidbody.bodyType = RigidbodyType2D.Static;//just so it doesn't go flying off somewhere
         }
         else
         {
+            ConfigureConnectedAnchors();
+
             axle.transform.position =
-                    0.5f * (walker.BodyPieces[0].position + walker.BodyPieces[n - 1].position);
+                    0.5f * (bodyPieces[0].position + bodyPieces[n - 1].position);
             //axle.Rigidbody.totalForce = Vector2.zero;
             //axle.Rigidbody.totalTorque = 0;
             axle.Rigidbody.bodyType = RigidbodyType2D.Dynamic;
 
             for (int i = 0; i < n; i++)
             {
-                walker.BodyPieces[i].linearDamping = rollingBodyLinearDamping;
+                bodyPieces[i].linearDamping = rollingBodyLinearDamping;
                 wheelHinges[i].enabled = true;
             }
-        }
-    }
-
-    private void UpdateRollingRotations()
-    {
-        for (int i = 0; i < n; i++)
-        {
-            walker.BodyPieces[i].SetRotation(-90 + Mathf.Rad2Deg * i * dTheta + axle.Rigidbody.rotation);
         }
     }
 }

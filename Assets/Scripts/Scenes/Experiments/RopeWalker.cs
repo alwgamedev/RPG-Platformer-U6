@@ -8,30 +8,30 @@ namespace RPGPlatformer.Movement
         //[SerializeField] Rigidbody2D head;
         //[SerializeField] Collider2D headCollider;
 
-        [SerializeField] Rigidbody2D[] bodyPieces;
-        [SerializeField] MovementOptions movementOptions;
-        [SerializeField] float maxSpeed;
-        [SerializeField] float distanceCorrectionForce;
+        [SerializeField] protected Rigidbody2D[] bodyPieces;
+        [SerializeField] protected MovementOptions movementOptions;
+        [SerializeField] protected float maxSpeed;
+        [SerializeField] protected float distanceCorrectionForce;
 
-        //int n;
-        int groundLayer;
+        protected int groundLayer;
         float[] goalDistances;
 
-        Vector2[] positions;
-        Vector2[] moveDirections;//(always pointing left to right)
-        HorizontalOrientation currentOrientation = HorizontalOrientation.right;
+        protected Vector2[] positions;
+        protected Vector2[] groundDirections;//(always pointing left to right)
 
         public int n { get; private set; }
-        public bool facingRight => currentOrientation == HorizontalOrientation.right;
-        public Rigidbody2D[] BodyPieces => bodyPieces;
+        public HorizontalOrientation CurrentOrientation { get; protected set; } = HorizontalOrientation.right;
+        public bool FacingRight => CurrentOrientation == HorizontalOrientation.right;
+        //public Rigidbody2D[] BodyPieces => bodyPieces;
         public float Length { get; private set; }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             n = bodyPieces.Length;
+            Debug.Log(n);
             goalDistances = new float[n - 1];
             positions = new Vector2[n];
-            moveDirections = new Vector2[n];
+            groundDirections = new Vector2[n];
             Length = 0;
             for (int i = 0; i < n - 1; i++)
             {
@@ -41,51 +41,56 @@ namespace RPGPlatformer.Movement
             groundLayer = LayerMask.GetMask("Ground");
         }
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
-            UpdateMoveDirections();
-            UpdateRotation();
+            UpdatePhysicsData();
 
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                if (facingRight)
+                if (FacingRight)
                 {
                     ChangeDirection();
                 }
-                Move(HorizontalOrientation.left);
+                HandleMoveInput(-1);
             }
             else if (Input.GetKey(KeyCode.RightArrow))
             {
-                if (!facingRight)
+                if (!FacingRight)
                 {
                     ChangeDirection();
                 }
-                Move(HorizontalOrientation.right);
+                HandleMoveInput(1);
             }
-
-            EnforceDistances();
         }
 
-        void Move(HorizontalOrientation o)
+        protected virtual void UpdatePhysicsData()
+        {
+            UpdateGroundDirections();
+            UpdateRotation();
+        }
+
+        protected virtual void HandleMoveInput(float moveInput)
         {
             Rigidbody2D rb;
 
             for (int i = 0; i < n; i++)
             {
                 rb = bodyPieces[i];
-                rb.Move(facingRight, rb.linearVelocity, moveDirections[i], 
+                rb.Move(FacingRight, rb.linearVelocity, moveInput * groundDirections[i], 
                     maxSpeed, movementOptions);
             }
+
+            EnforceDistances();
         }
 
-        void EnforceDistances()
+        protected void EnforceDistances()
         {
             Vector2 d;
 
             for (int i = 0; i < n - 1; i++)
             {
                 d = (bodyPieces[i + 1].position - bodyPieces[i].position).normalized;
-                d = bodyPieces[i].position - Mathf.Sign(d.x * (int)currentOrientation) * goalDistances[i] * d;
+                d = bodyPieces[i].position - Mathf.Sign(d.x * (int)CurrentOrientation) * goalDistances[i] * d;
                     //^goal position for bodyPieces[i + 1]
                 d = bodyPieces[i + 1].mass * distanceCorrectionForce * (d - bodyPieces[i + 1].position);
                     //^correction force to be applied
@@ -93,9 +98,12 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        void ChangeDirection()
+        protected virtual void ChangeDirection()
         {
+            CurrentOrientation = (HorizontalOrientation)(-(int)CurrentOrientation);
+
             Vector3 s;
+
             for (int i = 0; i < n; i++)
             {
                 positions[i] = bodyPieces[i].position;
@@ -107,40 +115,39 @@ namespace RPGPlatformer.Movement
                 s.x *= -1;
                 bodyPieces[i].transform.localScale = s;
             }
-
-            currentOrientation = (HorizontalOrientation)(-(int)currentOrientation);
         }
 
-        private void UpdateRotation()
+        protected void UpdateRotation()
         {
             for (int i = 0; i < n; i++)
             {
                 bodyPieces[i].transform
-                    .RotateTowardsMovementDirection(facingRight, moveDirections[i], movementOptions);
+                    .RotateTowardsMovementDirection(FacingRight, (int)CurrentOrientation * groundDirections[i], 
+                    movementOptions);
             }
         }
 
-        private void UpdateMoveDirections()
+        protected void UpdateGroundDirections()
         {
             for (int i = 0; i < n; i++)
             {
-                moveDirections[i] = ((int)currentOrientation) * GroundDirectionVector(bodyPieces[i]);
+                groundDirections[i] = GroundDirectionVector(bodyPieces[i]);
             }
         }
 
-        Vector2 GroundDirectionVector(Rigidbody2D body)
+        protected Vector2 GroundDirectionVector(Rigidbody2D body)
         {
 
             return (RightGroundcast(body).point - LeftGroundcast(body).point).normalized;
         }
 
-        RaycastHit2D RightGroundcast(Rigidbody2D body)
+        protected RaycastHit2D RightGroundcast(Rigidbody2D body)
         {
             var o = new Vector2(body.position.x + 0.05f, body.position.y);
             return Physics2D.Raycast(o, -Vector2.up, Mathf.Infinity, groundLayer);
         }
 
-        RaycastHit2D LeftGroundcast(Rigidbody2D body)
+        protected RaycastHit2D LeftGroundcast(Rigidbody2D body)
         {
             var o = new Vector2(body.position.x - 0.05f, body.position.y);
             return Physics2D.Raycast(o, -Vector2.up, Mathf.Infinity, groundLayer);

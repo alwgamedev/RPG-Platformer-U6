@@ -16,21 +16,29 @@ namespace RPGPlatformer.Movement
             Rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        private void FixedUpdate()
+        //private void FixedUpdate()
+        //{
+        //    if (Input.GetKey(KeyCode.RightArrow))
+        //    { 
+        //        if (Rigidbody.angularVelocity > -maxSpeed)
+        //        {
+        //            Rigidbody.AddTorque(-torque);
+        //        }
+        //    }
+        //    else if (Input.GetKey(KeyCode.LeftArrow))
+        //    {
+        //        if (Rigidbody.angularVelocity < maxSpeed)
+        //        {
+        //            Rigidbody.AddTorque(torque);
+        //        }
+        //    }
+        //}
+
+        public void DriveWheel(float scale)
         {
-            if (Input.GetKey(KeyCode.RightArrow))
-            { 
-                if (Rigidbody.angularVelocity > -maxSpeed)
-                {
-                    Rigidbody.AddTorque(-torque);
-                }
-            }
-            else if (Input.GetKey(KeyCode.LeftArrow))
+            if (Mathf.Abs(Rigidbody.angularVelocity) < maxSpeed)
             {
-                if (Rigidbody.angularVelocity < maxSpeed)
-                {
-                    Rigidbody.AddTorque(torque);
-                }
+                Rigidbody.AddTorque(scale * torque);
             }
         }
     }

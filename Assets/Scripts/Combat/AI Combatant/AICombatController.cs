@@ -109,12 +109,12 @@ namespace RPGPlatformer.Combat
             return base.GetAimPosition();
         }
 
-        //public override void OnInputDisabled()
-        //{
-        //    StopAttacking();
+        public override void OnInputDisabled()
+        {
+            StopAttacking();
 
-        //    base.OnInputDisabled();
-        //}
+            base.OnInputDisabled();
+        }
 
         protected virtual void OnMouseEnter()
         {

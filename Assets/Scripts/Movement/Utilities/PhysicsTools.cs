@@ -41,10 +41,9 @@ namespace RPGPlatformer.Movement
         }
 
         /// <summary>
-        /// Reflect v along axis u (u assumed to be unit vector). 
-        /// (I.e. reflect across hyperplane spanned by v and u x v).
+        /// Reflect v across hyperplane perpendicular to unit vector u.
         /// </summary>
-        public static Vector3 ReflectAlongUnitVector(Vector3 u, Vector3 v)
+        public static Vector3 ReflectAcrossPerpendicularHyperplane(Vector3 u, Vector3 v)
         {
             return v - 2 * Vector3.Dot(u, v) * u;
         }
