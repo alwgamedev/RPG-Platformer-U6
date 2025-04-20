@@ -1,6 +1,5 @@
 ﻿using TMPro;
 using UnityEngine;
-using System;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Movement;
 using RPGPlatformer.SceneManagement;
@@ -98,7 +97,7 @@ namespace RPGPlatformer.UI
         {
             dead = true;
             transform.SetParent(null, true);
-            HideAll();
+            //HideAll(); -> will already be fading out from OnCombatExit
             Destroy(gameObject, 1);
         }
 

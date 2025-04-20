@@ -67,7 +67,7 @@ namespace RPGPlatformer.AIControl
                 return false;
             }
 
-            if (combatController.Combatant.CanAttack(d2, t))
+            if (combatController.Combatant.CanAttackAtDistSqrd(d2, t))
             {
                 Trigger(typeof(Attack).Name);
                 return true;
@@ -114,7 +114,7 @@ namespace RPGPlatformer.AIControl
                 Trigger(typeof(Suspicion).Name);
                 return;
             }
-            else if (combatController.Combatant.CanAttack(d2, t))
+            else if (combatController.Combatant.CanAttackAtDistSqrd(d2, t))
             {
                 Trigger(typeof(Attack).Name);
             }
@@ -135,7 +135,7 @@ namespace RPGPlatformer.AIControl
             {
                 Trigger(typeof(Suspicion).Name);
             }
-            else if (!combatController.Combatant.CanAttack(d, t))
+            else if (!combatController.Combatant.CanAttackAtDistSqrd(d, t))
             {
                 Trigger(typeof(Pursuit).Name);
             }

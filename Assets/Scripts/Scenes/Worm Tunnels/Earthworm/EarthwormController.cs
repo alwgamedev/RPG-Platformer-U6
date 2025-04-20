@@ -215,6 +215,7 @@ namespace RPGPlatformer.AIControl
 
         public void DisableInput()
         {
+            OnUpdate = null;
             stateManager.Freeze();
             IsInputDisabled = true;
             InputDisabled?.Invoke();

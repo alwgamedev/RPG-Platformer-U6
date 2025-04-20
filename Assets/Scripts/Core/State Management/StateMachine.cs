@@ -13,7 +13,7 @@ namespace RPGPlatformer.Core
         public bool IsFrozen { get; protected set; }
 
         public event Action<State> StateChange;
-        public event Action<State> StateStored;
+        //public event Action<State> StateStored;
 
         public StateMachine()
         {
@@ -50,7 +50,6 @@ namespace RPGPlatformer.Core
             {
                 TransitionToState(newState);
                 //NOTE: does not check if Frozen, does not check if CanTransition
-                //also does NOT this new state in storedState
             }
         }
 
@@ -76,7 +75,7 @@ namespace RPGPlatformer.Core
         protected virtual void StoreState(State state)
         {
             storedState = state;
-            StateStored?.Invoke(storedState);
+            //StateStored?.Invoke(storedState);
         }
 
         protected virtual void ReturnToStoredState()

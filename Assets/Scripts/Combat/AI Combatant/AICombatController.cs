@@ -48,7 +48,7 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public void FireOneShot()
+        public void AutoAttack()
         {
             FaceAimPosition();
             RunAutoAbilityCycle(false);
@@ -59,13 +59,13 @@ namespace RPGPlatformer.Combat
             if (Attacking) return;
 
             Attacking = true;
-            FireOneShot();
-            stateManager.OnWeaponTick += FireOneShot;
+            AutoAttack();
+            stateManager.OnWeaponTick += AutoAttack;
         }
 
         public void StopAttacking()
         {
-            stateManager.OnWeaponTick -= FireOneShot;
+            stateManager.OnWeaponTick -= AutoAttack;
             if (ChannelingAbility)
             {
                 CancelAbilityInProgress();

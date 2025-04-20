@@ -107,14 +107,6 @@ namespace RPGPlatformer.Combat
             InitializeInventoryItems();
         }
 
-        //protected virtual void Update()
-        //{
-        //    if (FireButtonIsDown)
-        //    {
-        //        RunAutoAbilityCycle(false);
-        //    }
-        //}
-
         protected virtual void LateUpdate()
         {
             OnLateUpdate?.Invoke();
@@ -137,8 +129,6 @@ namespace RPGPlatformer.Combat
         protected override void ConfigureStateManager()
         {
             base.ConfigureStateManager();
-
-            //combatManager.Configure();
 
             stateManager.StateGraph.inCombat.OnEntry += OnCombatEntry;
             stateManager.StateGraph.inCombat.OnExit += OnCombatExit;

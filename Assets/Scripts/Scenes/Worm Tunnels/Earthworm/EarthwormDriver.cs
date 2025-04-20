@@ -176,11 +176,8 @@ namespace RPGPlatformer.AIControl
         public void PlayDeathParticles()
         {
             slamDustParticles.Stop();
-            //slamRockParticles.Stop();
             slamDustParticles.transform.position = aboveGroundBodyAnchor.position + 0.1f * Vector3.up;
-            //slamRockParticles.transform.position = aboveGroundBodyAnchor.position + 0.1f * Vector3.up;
             slamDustParticles.Play();
-            //slamRockParticles.Play();
         }
 
 
@@ -208,7 +205,17 @@ namespace RPGPlatformer.AIControl
 
         public async Task AboveGroundTimer(CancellationToken token)
         {
-            await MiscTools.DelayGameTime(maxTimeAboveGround, token);
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+
+            try
+            {
+                combatController.OnDeath += cts.Cancel;
+                await MiscTools.DelayGameTime(maxTimeAboveGround, cts.Token);
+            }
+            finally
+            {
+                combatController.OnDeath -= cts.Cancel;
+            }
         }
 
         public void AboveGroundTimerComplete()

@@ -201,7 +201,6 @@ namespace RPGPlatformer.Combat
             {
                 offhandSlot.gameObject.SetActive(false);
             }
-            //DropLoot();
         }
 
         //in case you want to finalize death via animation event
@@ -454,15 +453,15 @@ namespace RPGPlatformer.Combat
 
         public bool CanAttack(IHealth health)
         {
-            if (health == null || health.IsDead)
+            if (health == null || health.IsDead || this.health.IsDead)
             {
                 return false;
             }
-            return CanAttack(Vector2.SqrMagnitude(health.transform.position - transform.position),
+            return CanAttackAtDistSqrd(Vector2.SqrMagnitude(health.transform.position - transform.position),
                 health.TargetingTolerance + this.health.TargetingTolerance);
         }
 
-        public bool CanAttack(float distanceSqrd, float tolerance)
+        public bool CanAttackAtDistSqrd(float distanceSqrd, float tolerance)
         {
             var a = AttackRange + tolerance;
             return equippedWeapon != null && distanceSqrd < a * a;
