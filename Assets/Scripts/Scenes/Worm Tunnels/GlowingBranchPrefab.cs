@@ -11,7 +11,7 @@ namespace RPGPlatformer.Combat
         {
             if (SceneManager.GetActiveScene().name != "WormTunnels")
             {
-                GameLog.Log("The glowing branch evaporates to dust in the sunlight...");
+                GameLog.Log("The glowing branch evaporates to dust in the sunlight.");
                 IEquippableCharacter p = GlobalGameTools.Instance.Player.Combatant;
                 p.UnequipItem(EquipmentSlot.Mainhand, false);
 
