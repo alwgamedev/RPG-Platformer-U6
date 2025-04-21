@@ -1,21 +1,20 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace RPGPlatformer.Core
 {
-    //not gonna make this ExecuteAlways, bc then we just unnecessarily complicate
-    //things trying to avoid errors when fields aren't properly filled
+    [ExecuteAlways]
+    [RequireComponent(typeof(LineRenderer))]
     public class DynamicLineRenderer : MonoBehaviour
     {
-        [SerializeField] Transform[] points;
+        [SerializeField] Transform[] transforms;
 
         LineRenderer lineRenderer;
         Vector3[] positions;
 
-        private void Start()
+        private void Awake()
         {
             lineRenderer = GetComponent<LineRenderer>();
-            lineRenderer.positionCount = points.Length;
-            positions = new Vector3[lineRenderer.positionCount];
         }
 
         private void Update()
@@ -25,9 +24,24 @@ namespace RPGPlatformer.Core
 
         private void UpdateLine()
         {
-            for (int i = 0; i < points.Length; i++)
+            if (transforms == null || transforms.Length == 0) return;
+
+            if (positions == null || positions.Length != transforms.Length)
             {
-                positions[i] = points[i].position;
+                positions = new Vector3[transforms.Length];
+            }
+
+            for (int i = 0; i < transforms.Length; i++)
+            {
+                if (transforms[i])
+                {
+                    positions[i] = transforms[i].position;
+                }
+            }
+
+            if (lineRenderer.positionCount != transforms.Length)
+            {
+                lineRenderer.positionCount = transforms.Length;
             }
 
             lineRenderer.SetPositions(positions);

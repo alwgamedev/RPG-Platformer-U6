@@ -9,6 +9,8 @@ public class PillBugMover : RopeWalker
     [SerializeField] float radiusMultiplier = 1;
     [SerializeField] float defaultBodyLinearDamping = 5;
     [SerializeField] float rollingBodyLinearDamping = 100;
+    [SerializeField] protected PhysicsMaterial2D defaultMaterial;
+    [SerializeField] protected PhysicsMaterial2D rollingMaterial;
 
     //int n;
     bool walking;//either walking or rolling
@@ -144,6 +146,7 @@ public class PillBugMover : RopeWalker
             {
                 wheelHinges[i].enabled = false;
                 bodyPieces[i].linearDamping = defaultBodyLinearDamping;
+                bodyPieces[i].sharedMaterial = defaultMaterial;
             }
 
             axle.Rigidbody.bodyType = RigidbodyType2D.Static;//just so it doesn't go flying off somewhere
@@ -154,13 +157,12 @@ public class PillBugMover : RopeWalker
 
             axle.transform.position =
                     0.5f * (bodyPieces[0].position + bodyPieces[n - 1].position);
-            //axle.Rigidbody.totalForce = Vector2.zero;
-            //axle.Rigidbody.totalTorque = 0;
             axle.Rigidbody.bodyType = RigidbodyType2D.Dynamic;
 
             for (int i = 0; i < n; i++)
             {
                 bodyPieces[i].linearDamping = rollingBodyLinearDamping;
+                bodyPieces[i].sharedMaterial = rollingMaterial;
                 wheelHinges[i].enabled = true;
             }
         }

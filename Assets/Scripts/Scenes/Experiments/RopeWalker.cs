@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -110,8 +109,10 @@ namespace RPGPlatformer.Movement
                 r = Mathf.Clamp(Vector2.Dot(bodyPieces[i + 1].linearVelocity, m), 0, maxSpeed);
                 m = bodyPieces[i + 1].linearVelocity - r * m;
                 r = Vector2.Dot(m, d.normalized);
+
                 if (r < maxDistanceCorrectionSpeed)
                 {
+                    //this made it a lot smoother
                     for (int j = i + 1; j < n; j++)
                     {
                         bodyPieces[j].AddForce(bodyPieces[j].mass * distanceCorrectionScale * d);
