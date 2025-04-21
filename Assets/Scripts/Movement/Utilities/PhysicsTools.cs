@@ -36,8 +36,18 @@ namespace RPGPlatformer.Movement
         /// </summary>
         public static Vector2 CheapRotationalTween(Vector2 d1, Vector2 d2, float rotationalSpeed, float dt)
         {
+            return d1 + rotationalSpeed  * dt * ((d2 - d1).normalized);
+        }
+
+        /// <summary>
+        /// Approximately rotates unit vector d1 towards unit vector d2 at given rotational speed (rad/sec)
+        /// for time ellapsed dt. (Uses straight line approximation of arc length instead of
+        /// calculating an exact angle, basically).
+        /// </summary>
+        public static Vector2 CheapRotationalTweenClamped(Vector2 d1, Vector2 d2, float rotationalSpeed, float dt)
+        {
             var d = d2 - d1;
-            return d1 + (rotationalSpeed / d.magnitude ) * dt * d;
+            return d1 + Mathf.Clamp(rotationalSpeed * dt / d.magnitude, 0, 1) * d;
         }
 
         /// <summary>
@@ -136,7 +146,7 @@ namespace RPGPlatformer.Movement
         /// </summary>
         public static void TweenTransformUpTowards(this Transform t, Vector2 goalTransformUp, float rotationalSpeed)
         {
-            var tweened = CheapRotationalTween(t.up, goalTransformUp,
+            var tweened = CheapRotationalTweenClamped(t.up, goalTransformUp,
                 rotationalSpeed, Time.deltaTime);
             t.rotation = Quaternion.LookRotation(t.forward, tweened);
         }

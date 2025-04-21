@@ -5,14 +5,15 @@ public class PillBugMover : RopeWalker
 {
     //[SerializeField] RopeWalker walker;
     [SerializeField] WheelAxle axle;
+    [SerializeField] float wheelAngleRange;//rad -- range of angle over which the bodypieces will be spread out
     [SerializeField] float radiusMultiplier = 1;
     [SerializeField] float defaultBodyLinearDamping = 5;
     [SerializeField] float rollingBodyLinearDamping = 100;
 
     //int n;
     bool walking;//either walking or rolling
-    float wheelRadius;
-    float dTheta;//in rad (note Mathf.Cos takes rad but Rigidbody2D.rotation is in deg)
+    float wheelRadius => radiusMultiplier * (n / (float)(n - 1)) * Length / (2 * Mathf.PI);
+    float dTheta => wheelAngleRange / n;
 
     HingeJoint2D[] wheelHinges;
 
@@ -30,9 +31,7 @@ public class PillBugMover : RopeWalker
 
     private void Start()
     {
-        wheelRadius = radiusMultiplier * (n / (float)(n - 1)) * Length / (2 * Mathf.PI);
         wheelHinges = new HingeJoint2D[n];
-        dTheta = 2 * Mathf.PI / n;
 
         for (int i = 0; i < n; i++)
         {
@@ -52,18 +51,6 @@ public class PillBugMover : RopeWalker
         }
     }
 
-    //protected override void FixedUpdate()
-    //{
-    //    if (walking)
-    //    {
-    //        base.FixedUpdate();
-    //    }
-    //    else
-    //    {
-    //        UpdateRollingRotations();
-    //    }
-    //}
-
     protected override void UpdatePhysicsData()
     {
         if (walking)
@@ -80,7 +67,8 @@ public class PillBugMover : RopeWalker
     {
         for (int i = 0; i < n; i++)
         {
-            bodyPieces[i].SetRotation(-90 + Mathf.Rad2Deg * i * dTheta + axle.Rigidbody.rotation);
+            bodyPieces[i].SetRotation(((int)CurrentOrientation) * (-90 + Mathf.Rad2Deg * i * dTheta) 
+                + axle.Rigidbody.rotation);
         }
     }
 
