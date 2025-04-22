@@ -8,8 +8,8 @@ namespace RPGPlatformer.Movement
         ignore, stop, tryToJump
     }
 
-    public abstract class GenericAIMovementController<T0, T1, T2, T3> : GenericAdvancedMovementController<T0, T1, T2, T3>
-        //where T0 : AIMover
+    public abstract class GenericAIMovementController<T0, T1, T2, T3> 
+        : GenericAdvancedMovementController<T0, T1, T2, T3>, IAIMovementController
         where T0 : AdvancedMover
         where T1 : AdvancedMovementStateGraph
         where T2 : AdvancedMovementStateMachine<T1>
@@ -22,8 +22,7 @@ namespace RPGPlatformer.Movement
 
         protected bool stuckAtLedge;
 
-        public IHealth currentTarget;
-
+        public Transform CurrentTarget { get; set; }
         public float MaxPermissibleDropOffHeight { get; protected set; }
 
         public override Vector2 MoveInput
@@ -121,9 +120,9 @@ namespace RPGPlatformer.Movement
                 //CanJumpGap assumes you are moving at runSpeed in direction +/- transform.right 
                 if (stateDriver.CanJumpGap(out var landingPt))
                 {
-                    if (currentTarget == null
-                        || Vector2.Distance(landingPt, currentTarget.transform.position) <
-                        Vector2.Distance(stateDriver.ColliderCenterBottom, currentTarget.transform.position))
+                    if (!CurrentTarget
+                        || Vector2.Distance(landingPt, CurrentTarget.position) <
+                        Vector2.Distance(stateDriver.ColliderCenterBottom, CurrentTarget.position))
                     {
                         stateDriver.MoveWithoutAcceleration((int)CurrentOrientation * transform.right,
                             stateDriver.RunSpeed, currentMovementOptions);//get up to run speed

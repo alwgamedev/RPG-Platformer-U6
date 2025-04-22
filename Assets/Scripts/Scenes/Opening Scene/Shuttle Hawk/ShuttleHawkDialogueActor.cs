@@ -1,7 +1,5 @@
 ﻿using RPGPlatformer.AIControl;
 using RPGPlatformer.Core;
-using RPGPlatformer.Movement;
-using System.Collections.Generic;
 
 namespace RPGPlatformer.Dialogue
 {

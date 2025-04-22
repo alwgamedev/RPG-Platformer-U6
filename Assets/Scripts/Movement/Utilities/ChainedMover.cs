@@ -2,11 +2,8 @@
 
 namespace RPGPlatformer.Movement
 {
-    public class RopeWalker : MonoBehaviour
+    public class ChainedMover : MonoBehaviour
     {
-        //[SerializeField] Rigidbody2D head;
-        //[SerializeField] Collider2D headCollider;
-
         [SerializeField] protected Rigidbody2D[] bodyPieces;
         [SerializeField] protected MovementOptions movementOptions;
         [SerializeField] protected float maxSpeed;
@@ -16,25 +13,23 @@ namespace RPGPlatformer.Movement
         protected int groundLayer;
         protected float[] goalDistances;
         protected Vector2[] positions;
-        protected Vector2[] groundDirections;//(always pointing left to right)
+        protected Vector2[] groundDirections;//(always pointing left to right, normalized)
 
         protected float moveInput;
 
-        public int n { get; private set; }
+        public int numBodyPieces => bodyPieces.Length;
         public HorizontalOrientation CurrentOrientation { get; protected set; } = HorizontalOrientation.right;
         public bool FacingRight => CurrentOrientation == HorizontalOrientation.right;
-        //public Rigidbody2D[] BodyPieces => bodyPieces;
         public float Length { get; private set; }
 
         protected virtual void Awake()
         {
-            n = bodyPieces.Length;
-            goalDistances = new float[n - 1];
-            positions = new Vector2[n];
-            groundDirections = new Vector2[n];
+            goalDistances = new float[numBodyPieces - 1];
+            positions = new Vector2[numBodyPieces];
+            groundDirections = new Vector2[numBodyPieces];
             Length = 0;
 
-            for (int i = 0; i < n - 1; i++)
+            for (int i = 0; i < numBodyPieces - 1; i++)
             {
                 goalDistances[i] = Vector2.Distance(bodyPieces[i].position, bodyPieces[i + 1].position);
                 Length += goalDistances[i];
@@ -46,6 +41,7 @@ namespace RPGPlatformer.Movement
         {
             UpdatePhysicsData();
 
+            //(just for testing for now)
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 moveInput = -1;
@@ -85,7 +81,7 @@ namespace RPGPlatformer.Movement
             {
                 Rigidbody2D rb;
 
-                for (int i = 0; i < n; i++)
+                for (int i = 0; i < numBodyPieces; i++)
                 {
                     rb = bodyPieces[i];
                     rb.Move(FacingRight, rb.linearVelocity, moveInput * groundDirections[i],
@@ -100,20 +96,20 @@ namespace RPGPlatformer.Movement
             Vector2 m;
             float r;
 
-            for (int i = 0; i < n - 1; i++)
+            for (int i = 0; i < numBodyPieces - 1; i++)
             {
                 d = bodyPieces[i].position - (int)CurrentOrientation * groundDirections[i] * goalDistances[i];
                 //^goal position for bodyPieces[i + 1]
                 d = d - bodyPieces[i + 1].position;
-                m = ((int)CurrentOrientation) * groundDirections[i + 1].normalized;
+                m = ((int)CurrentOrientation) * groundDirections[i + 1];
                 r = Mathf.Clamp(Vector2.Dot(bodyPieces[i + 1].linearVelocity, m), 0, maxSpeed);
                 m = bodyPieces[i + 1].linearVelocity - r * m;
                 r = Vector2.Dot(m, d.normalized);
 
                 if (r < maxDistanceCorrectionSpeed)
                 {
-                    //this made it a lot smoother
-                    for (int j = i + 1; j < n; j++)
+                    //this made it a lot smoother (worth performance cost)
+                    for (int j = i + 1; j < numBodyPieces; j++)
                     {
                         bodyPieces[j].AddForce(bodyPieces[j].mass * distanceCorrectionScale * d);
                     }
@@ -127,13 +123,13 @@ namespace RPGPlatformer.Movement
 
             Vector3 s;
 
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < numBodyPieces; i++)
             {
                 positions[i] = bodyPieces[i].position;
             }
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < numBodyPieces; i++)
             {
-                bodyPieces[i].position = positions[n - i - 1];
+                bodyPieces[i].position = positions[numBodyPieces - i - 1];
                 s = bodyPieces[i].transform.localScale;
                 s.x *= -1;
                 bodyPieces[i].transform.localScale = s;
@@ -142,7 +138,7 @@ namespace RPGPlatformer.Movement
 
         protected void UpdateRotation()
         {
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < numBodyPieces; i++)
             {
                 bodyPieces[i].transform
                     .RotateTowardsMovementDirection(FacingRight, (int)CurrentOrientation * groundDirections[i], 
@@ -152,12 +148,15 @@ namespace RPGPlatformer.Movement
 
         protected void UpdateGroundDirections()
         {
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < numBodyPieces; i++)
             {
                 groundDirections[i] = GroundDirectionVector(bodyPieces[i]);
             }
         }
 
+        //this (and analogous methods in Mover) could be moved to static Physics tools
+        //(also you should correct how it compute right and left groundcast, i.e. collider bounds or someth
+        //-- not super important)
         protected Vector2 GroundDirectionVector(Rigidbody2D body)
         {
 

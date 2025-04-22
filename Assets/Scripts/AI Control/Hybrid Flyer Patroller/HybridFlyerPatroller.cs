@@ -2,8 +2,9 @@
 
 namespace RPGPlatformer.AIControl
 {
-    public class HybridFlyerPatroller : GenericAIPatroller<HybridFlyerController, HybridFlyer,
-        HybridFlyerStateGraph, HybridFlyerStateMachine, HybridFlyerStateManager>
+    public class HybridFlyerPatroller : GenericAIPatroller<IHybridFlyerController>
+        //GenericAIPatroller<HybridFlyerController, HybridFlyer,
+        //HybridFlyerStateGraph, HybridFlyerStateMachine, HybridFlyerStateManager>
     {
 
     }

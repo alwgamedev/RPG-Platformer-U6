@@ -25,8 +25,8 @@ namespace RPGPlatformer.AIControl
         {
             SetMountGravity(defaultMountGravity);
 
-            movementController.OnFlightEntry += () => SetMountGravity(inFlightMountGravity);
-            movementController.OnFlightExit += () => SetMountGravity(defaultMountGravity);
+            MovementController.OnFlightEntry += () => SetMountGravity(inFlightMountGravity);
+            MovementController.OnFlightExit += () => SetMountGravity(defaultMountGravity);
         }
 
         public void SetMountGravity(float gravity)
@@ -81,7 +81,7 @@ namespace RPGPlatformer.AIControl
         public void BeginFlightPath(PatrolPath flightPath, bool forwards = true)
         {
             BeginPatrol(forwards ? NavigationMode.pathForwards : NavigationMode.pathBackwards, flightPath);
-            movementController.BeginFlying();
+            MovementController.BeginFlying();
         }
 
         public void ShuttleDestionationReached()

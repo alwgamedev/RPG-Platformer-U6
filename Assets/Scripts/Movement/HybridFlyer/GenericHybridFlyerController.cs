@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
-    public class GenericHybridFlyerController<T0, T1, T2, T3> : GenericAIMovementController<T0, T1, T2, T3>
+    public class GenericHybridFlyerController<T0, T1, T2, T3> 
+        : GenericAIMovementController<T0, T1, T2, T3>, IHybridFlyerController
         where T0 : HybridFlyer
         where T1 : HybridFlyerStateGraph
         where T2 : HybridFlyerStateMachine<T1>

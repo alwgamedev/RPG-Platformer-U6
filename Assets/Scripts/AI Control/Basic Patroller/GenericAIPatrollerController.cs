@@ -9,17 +9,18 @@ namespace RPGPlatformer.AIControl
 {
     [RequireComponent(typeof(MonoBehaviorInputConfigurer))]
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
-    public class GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3, T4> 
+    public class GenericAIPatrollerController<T,/*T0, T00, T01, T02, T03,*/ T1, T2, T3, T4> 
         : StateDrivenController<T4, T2, T3, T1>, IInputSource, IAIPatrollerController, IPausable
-        where T0 : GenericAdvancedMovementController<T00, T01, T02, T03>
-        where T00 : AdvancedMover
-        where T01 : AdvancedMovementStateGraph
-        where T02 : AdvancedMovementStateMachine<T01>
-        where T03 : AdvancedMovementStateManager<T01, T02, T00>
-        where T1 : GenericAIPatroller<T0, T00, T01, T02, T03>
+        //where T0 : GenericAdvancedMovementController<T00, T01, T02, T03>
+        //where T00 : AdvancedMover
+        //where T01 : AdvancedMovementStateGraph
+        //where T02 : AdvancedMovementStateMachine<T01>
+        //where T03 : AdvancedMovementStateManager<T01, T02, T00>
+        where T : IMovementController
+        where T1 : GenericAIPatroller<T>//GenericAIPatroller<T0, T00, T01, T02, T03>
         where T2 : AIPatrollerStateGraph
         where T3 : AIPatrollerStateMachine<T2>
-        where T4 : AIPatrollerStateManager<T2, T3, T0, T00, T01, T02, T03, T1>
+        where T4 : AIPatrollerStateManager<T2, T3, T,/*T0, T00, T01, T02, T03,*/ T1>
     {
         [SerializeField] protected NavigationMode defaultPatrolMode;
         [SerializeField] protected MBNavigationParameters defaultPatrolParameters;

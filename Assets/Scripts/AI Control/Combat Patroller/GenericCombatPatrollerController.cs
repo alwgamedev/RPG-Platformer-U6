@@ -1,22 +1,21 @@
-﻿using UnityEngine;
-using RPGPlatformer.Combat;
+﻿using RPGPlatformer.Combat;
 using RPGPlatformer.Movement;
-using RPGPlatformer.Core;
 
 namespace RPGPlatformer.AIControl
 {
-    public class GenericCombatPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3, T4, T5> 
-        : GenericAIPatrollerController<T0, T00, T01, T02, T03, T2, T3, T4, T5>
-        where T0 : GenericAIMovementController<T00, T01, T02, T03>
-        where T00 : AdvancedMover
-        where T01 : AdvancedMovementStateGraph
-        where T02 : AdvancedMovementStateMachine<T01>
-        where T03 : AdvancedMovementStateManager<T01, T02, T00>
+    public class GenericCombatPatrollerController<T0, /*T00, T01, T02, T03,*/ T1, T2, T3, T4, T5> 
+        : GenericAIPatrollerController<T0, /*T00, T01, T02, T03,*/ T2, T3, T4, T5>
+        where T0 : IAIMovementController
+        //where T0 : GenericAIMovementController<T00, T01, T02, T03>
+        //where T00 : AdvancedMover
+        //where T01 : AdvancedMovementStateGraph
+        //where T02 : AdvancedMovementStateMachine<T01>
+        //where T03 : AdvancedMovementStateManager<T01, T02, T00>
         where T1 : AICombatController
-        where T2 : GenericCombatPatroller<T0, T00, T01, T02, T03, T1>
+        where T2 : GenericCombatPatroller<T0, T1>//GenericCombatPatroller<T0, T00, T01, T02, T03, T1>
         where T3 : CombatPatrollerStateGraph
         where T4 : CombatPatrollerStateMachine<T3>
-        where T5 : CombatPatrollerStateManager<T3, T4, T0, T00, T01, T02, T03, T1, T2>
+        where T5 : CombatPatrollerStateManager<T3, T4, T0, /*T00, T01, T02, T03,*/ T1, T2>
     {
         protected override void ConfigureStateManager()
         {

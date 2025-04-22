@@ -5,12 +5,11 @@ using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.AIControl
 {
-    //[RequireComponent(typeof(AIMovementController))]
     [RequireComponent(typeof(AINavigator))]
-    //[RequireComponent(typeof(AICombatController))]
-    public class CombatPatroller : GenericCombatPatroller<AIMovementController, 
-        AdvancedMover, AdvancedMovementStateGraph, AdvancedMovementStateMachine, AdvancedMovementStateManager,
-        AICombatController>
+    public class CombatPatroller : GenericCombatPatroller<IAIMovementController, AICombatController>
+        //GenericCombatPatroller<AIMovementController, 
+        //AdvancedMover, AdvancedMovementStateGraph, AdvancedMovementStateMachine, AdvancedMovementStateManager,
+        //AICombatController>
     {
         [SerializeField] bool playerEnemy = true;
 

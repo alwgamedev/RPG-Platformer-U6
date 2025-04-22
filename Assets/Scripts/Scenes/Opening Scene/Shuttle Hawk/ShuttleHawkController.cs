@@ -6,17 +6,19 @@ using System.Collections.Generic;
 
 namespace RPGPlatformer.AIControl
 {
-    using T0 = HybridFlyerController;
-    using T00 = HybridFlyer;
-    using T01 = HybridFlyerStateGraph;
-    using T02 = HybridFlyerStateMachine;
-    using T03 = HybridFlyerStateManager;
-    using T1 = ShuttleHawk;
-    using T2 = ShuttleHawkStateGraph;
-    using T3 = ShuttleHawkStateMachine;
+    //using T0 = HybridFlyerController;
+    //using T00 = HybridFlyer;
+    //using T01 = HybridFlyerStateGraph;
+    //using T02 = HybridFlyerStateMachine;
+    //using T03 = HybridFlyerStateManager;
+    //using T1 = ShuttleHawk;
+    //using T2 = ShuttleHawkStateGraph;
+    //using T3 = ShuttleHawkStateMachine;
 
-    public class ShuttleHawkController : GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3,
-        ShuttleHawkStateManager>
+    public class ShuttleHawkController : GenericAIPatrollerController<IHybridFlyerController, ShuttleHawk,
+        ShuttleHawkStateGraph, ShuttleHawkStateMachine, ShuttleHawkStateManager>
+        //: GenericAIPatrollerController<T0, T00, T01, T02, T03, T1, T2, T3,
+        //ShuttleHawkStateManager>
     {
         [SerializeField] PatrolPath shuttlePath;
         [SerializeField] PatrolPath returnPath;

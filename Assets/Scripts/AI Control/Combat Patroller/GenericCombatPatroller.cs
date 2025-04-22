@@ -5,12 +5,14 @@ using System;
 
 namespace RPGPlatformer.AIControl
 {
-    public class GenericCombatPatroller<T0, T00, T01, T02, T03, T1> : GenericAIPatroller<T0, T00, T01, T02, T03>
-        where T0 : GenericAIMovementController<T00, T01, T02, T03>
-        where T00 : AdvancedMover
-        where T01 : AdvancedMovementStateGraph
-        where T02 : AdvancedMovementStateMachine<T01>
-        where T03 : AdvancedMovementStateManager<T01, T02, T00>
+    public class GenericCombatPatroller<T0, /*T00, T01, T02, T03,*/ T1> : GenericAIPatroller<T0>
+        where T0 : IAIMovementController
+        //: GenericAIPatroller<T0, T00, T01, T02, T03>
+        //where T0 : GenericAIMovementController<T00, T01, T02, T03>
+        //where T00 : AdvancedMover
+        //where T01 : AdvancedMovementStateGraph
+        //where T02 : AdvancedMovementStateMachine<T01>
+        //where T03 : AdvancedMovementStateManager<T01, T02, T00>
         where T1 : AICombatController
     {
         [SerializeField] protected float pursuitRange = 5;
@@ -33,7 +35,7 @@ namespace RPGPlatformer.AIControl
             {
                 currentTarget = value;
                 combatController.currentTarget = value;
-                movementController.currentTarget = value;
+                MovementController.CurrentTarget = value?.transform;
             }
         }
 
@@ -121,11 +123,11 @@ namespace RPGPlatformer.AIControl
             else if (Mathf.Abs(CurrentTarget.transform.position.x - transform.position.x) > MinimumCombatDistance)
             //to avoid ai stuttering back and forth when their target is directly above them
             {
-                movementController.MoveTowards(CurrentTarget.transform.position);
+                MovementController.MoveTowards(CurrentTarget.transform.position);
             }
             else
             {
-                movementController.SoftStop();
+                MovementController.SoftStop();
             }
         }
 
@@ -149,9 +151,9 @@ namespace RPGPlatformer.AIControl
         {
             combatController.StartAttacking();
 
-            if (!movementController.Jumping)
+            if (!MovementController.Jumping)
             {
-                movementController.SoftStop();
+                MovementController.SoftStop();
             }
         }
 
@@ -174,12 +176,12 @@ namespace RPGPlatformer.AIControl
             {
                 float direction =
                     Mathf.Sign(transform.position.x - CurrentTarget.transform.position.x);
-                if (movementController.DropOffAhead((HorizontalOrientation)direction, out var d)
+                if (MovementController.DropOffAhead((HorizontalOrientation)direction, out var d)
                     && d < 1.5f * MinimumCombatDistance)
                 {
                     direction = -direction;
 
-                    if (movementController.DropOffAhead((HorizontalOrientation)direction, out d)
+                    if (MovementController.DropOffAhead((HorizontalOrientation)direction, out d)
                         && d < 1.5f * MinimumCombatDistance)
                     {
                         return;
@@ -187,12 +189,12 @@ namespace RPGPlatformer.AIControl
                 }
 
                 correctingCombatDistance = true;
-                movementController.MoveInput = new(direction, 0);
+                MovementController.MoveInput = new(direction, 0);
             }
             else if (correctingCombatDistance)
             {
                 correctingCombatDistance = false;
-                movementController.SoftStop();
+                MovementController.SoftStop();
             }
         }
 
