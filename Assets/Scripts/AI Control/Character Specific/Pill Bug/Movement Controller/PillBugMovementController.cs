@@ -9,6 +9,7 @@ namespace RPGPlatformer.Movement
         PillBugMovementStateGraph, PillBugMovementStateMachine, PillBugMover>, 
         IAIMovementController, IInputDependent
     {
+        Action OnUpdate;
         Action OnFixedUpdate;
 
         public IInputSource InputSource { get; private set; }
@@ -18,6 +19,7 @@ namespace RPGPlatformer.Movement
         public Vector2 RelativeVelocity => stateDriver.BodyPieces[0].linearVelocity;
         public IMover Mover => stateDriver;
         public HorizontalOrientation CurrentOrientation => stateDriver.CurrentOrientation;
+        public bool Curled => stateManager.StateMachine.CurrentState == stateManager.StateGraph.curled;
 
         protected override void Awake()
         {
@@ -30,7 +32,31 @@ namespace RPGPlatformer.Movement
         {
             base.Start();
 
+            OnUpdate = AnimateMovement;
             OnFixedUpdate = HandleMoveInput;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                SetCurled(!Curled);
+            }
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                MoveInput = Vector2.left;
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                MoveInput = Vector2.right;
+            }
+            else
+            {
+                MoveInput = Vector2.zero;
+            }
+
+            OnUpdate?.Invoke();
         }
 
         private void FixedUpdate()
@@ -48,14 +74,22 @@ namespace RPGPlatformer.Movement
             stateManager = new(stateDriver, GetComponent<AnimationControl>());
         }
 
-        protected override void ConfigureStateManager()
-        {
-            base.ConfigureStateManager();
-        }
+        //protected override void ConfigureStateManager()
+        //{
+        //    base.ConfigureStateManager();
+        //}
 
         private void HandleMoveInput()
         {
             stateDriver.HandleMoveInput(MoveInput.x);
+        }
+
+        private void AnimateMovement()
+        {
+            if (!Curled)
+            {
+                stateManager.AnimateMovement(SpeedFraction(stateDriver.RunSpeed));
+            }
         }
 
         //BASIC FUNCTIONS
@@ -102,20 +136,12 @@ namespace RPGPlatformer.Movement
 
         public void MoveAwayFrom(Vector2 point)
         {
-            MoveInput = new(Math.Sign(transform.position.x - point.x), 0);
+            MoveInput = new(transform.position.x - point.x, 0);
         }
 
         public void MoveTowards(Vector2 point)
         {
-            var d = point.x - transform.position.x;
-            if (d != 0)
-            {
-                MoveInput = new Vector2(Mathf.Sign(d), 0);
-            }
-            else
-            {
-                SoftStop();
-            }
+            MoveInput = new(point.x - transform.position.x, 0);
         }
 
         private float SpeedFraction(float maxSpeed)
@@ -129,6 +155,7 @@ namespace RPGPlatformer.Movement
         public void OnDeath()
         {
             stateManager.Freeze();
+            OnUpdate = null;
             OnFixedUpdate = null;
             SoftStop();
         }
@@ -144,6 +171,7 @@ namespace RPGPlatformer.Movement
 
         private void OnDestroy()
         {
+            OnUpdate = null;
             OnFixedUpdate = null;
         }
 

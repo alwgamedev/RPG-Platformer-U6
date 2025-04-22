@@ -29,7 +29,8 @@ namespace RPGPlatformer.Movement
                 wheelHinges[i] = bodyPieces[i].gameObject.GetComponent<HingeJoint2D>();
             }
 
-            SetCurled(true);
+            CurrentOrientation = HorizontalOrientation.right;
+            SetCurled(false);
         }
 
         protected override void UpdatePhysicsData()
@@ -82,6 +83,7 @@ namespace RPGPlatformer.Movement
             }
             else
             {
+                Debug.Log("changed direction rolling");
                 ChangeDirectionRolling();
             }
         }
@@ -121,7 +123,7 @@ namespace RPGPlatformer.Movement
         {
             curled = val;
 
-            if (val)
+            if (!curled)
             {
                 for (int i = 0; i < NumBodyPieces; i++)
                 {

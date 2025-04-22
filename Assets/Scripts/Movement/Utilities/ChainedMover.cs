@@ -8,7 +8,6 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected Rigidbody2D[] bodyPieces;
         [SerializeField] protected MovementOptions movementOptions;
-        //[SerializeField] protected float maxSpeed;
         [SerializeField] protected float walkSpeed;
         [SerializeField] protected float runSpeed;
         [SerializeField] protected float maxDistanceCorrectionSpeed;
@@ -26,6 +25,8 @@ namespace RPGPlatformer.Movement
         public HorizontalOrientation CurrentOrientation { get; protected set; } = HorizontalOrientation.right;
         public bool FacingRight => CurrentOrientation == HorizontalOrientation.right;
         public float MaxSpeed => Running ? runSpeed : walkSpeed;
+        public float WalkSpeed => walkSpeed;
+        public float RunSpeed => runSpeed;
         public bool Running { get; set; }
         public float Width { get; private set; }
         public float Height { get; private set; }
@@ -58,8 +59,9 @@ namespace RPGPlatformer.Movement
         {
             if (moveInput == 0) return;
 
+            moveInput = Mathf.Sign(moveInput);
             UpdatePhysicsData();
-            SetOrientation((HorizontalOrientation)Math.Sign(moveInput));
+            SetOrientation((HorizontalOrientation)moveInput);
             Move(moveInput);
         }
 
@@ -98,8 +100,6 @@ namespace RPGPlatformer.Movement
 
         protected virtual void ChangeDirection()
         {
-            //CurrentOrientation = (HorizontalOrientation)(-(int)CurrentOrientation);
-
             Vector3 s;
 
             for (int i = 0; i < NumBodyPieces; i++)

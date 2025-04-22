@@ -51,7 +51,7 @@ namespace RPGPlatformer.AIControl
                     BeginSingleDestinationPatrol((Vector3)parameters);
                     break;
                 case NavigationMode.bounded:
-                    BeginBoundedPatrol((Transform[])parameters);
+                    BeginBoundedPatrol(((Transform, Transform))parameters);
                     break;
                 case NavigationMode.pathForwards:
                     BeginPathPatrol((LinkedList<PatrolPathWayPoint>)parameters, true);
@@ -81,11 +81,11 @@ namespace RPGPlatformer.AIControl
             currentDestination = targetPosition;
         }
 
-        private void BeginBoundedPatrol(Transform[] bounds)
+        private void BeginBoundedPatrol((Transform, Transform) bounds)
         {
             CurrentMode = NavigationMode.bounded;
-            leftBound = bounds[0].position;
-            rightBound = bounds[1].position;
+            leftBound = bounds.Item1.position;
+            rightBound = bounds.Item2.position;
             GetNextBoundedDestination();
         }
 

@@ -4,8 +4,9 @@ namespace RPGPlatformer.AIControl
 {
     public class PatrolBounds : MBNavigationParameters
     {
-        [SerializeField] Transform[] bounds;
+        [SerializeField] Transform leftBound;
+        [SerializeField] Transform rightBound;
 
-        public override object Content => bounds;
+        public override object Content => (leftBound, rightBound);
     }
 }

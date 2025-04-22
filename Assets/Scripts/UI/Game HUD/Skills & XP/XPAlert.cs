@@ -35,9 +35,23 @@ namespace RPGPlatformer.UI
 
         public async Task HandleXPGainEvent(XPGainEventData eventData, CancellationToken token)
         {
-            NewXPGainEventReceived?.Invoke();
-            PlayXPGainedTextAnimation(eventData);
-            await ScheduleAlert(eventData, token);
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+
+            try
+            {
+                Destroyed += cts.Cancel;
+                NewXPGainEventReceived?.Invoke();
+                PlayXPGainedTextAnimation(eventData);
+                await ScheduleAlert(eventData, cts.Token);
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                Destroyed -= cts.Cancel;
+            }
         }
 
         private async Task ScheduleAlert(XPGainEventData eventData, CancellationToken token)
@@ -86,7 +100,10 @@ namespace RPGPlatformer.UI
                 }
 
                 animXP += animXPPerSecond * Time.deltaTime;
-                progressBar.fillAmount += fillAmountPerSecond * Time.deltaTime;
+                if (progressBar)
+                {
+                    progressBar.fillAmount += fillAmountPerSecond * Time.deltaTime;
+                }
 
                 if(animXP >= nextAnimLevelXP)
                 {
@@ -139,7 +156,6 @@ namespace RPGPlatformer.UI
 
                 try
                 {
-                    Destroyed += cts.Cancel;
                     NewXPGainEventReceived += cts.Cancel;
                     await MiscTools.DelayGameTime(timeToWaitBeforeDestroy, cts.Token);
                     Destroyed -= cts.Cancel;
@@ -152,7 +168,6 @@ namespace RPGPlatformer.UI
                 }
                 finally
                 {
-                    Destroyed -= cts.Cancel;
                     NewXPGainEventReceived -= cts.Cancel;
                 }
             }
