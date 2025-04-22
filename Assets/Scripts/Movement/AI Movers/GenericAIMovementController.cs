@@ -86,19 +86,6 @@ namespace RPGPlatformer.Movement
             return stateDriver.DropOffAhead(MaxPermissibleDropOffHeight, direction, out distance);
         }
 
-        //protected override void HandleMoveInput()
-        //{
-        //    if (moveInput != Vector2.zero)
-        //    {
-        //        SetOrientation(moveInput, currentMovementOptions.FlipSprite);
-
-        //        if (CanMove())
-        //        {
-        //            mover.Move(GetMoveDirection(moveInput), currentMovementOptions);
-        //        }
-        //    }
-        //}
-
         protected override void Move(Vector2 moveInput)
         {
             if (CanMove())

@@ -1,12 +1,16 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Core;
+using System;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
-    public class ChainedMover : MonoBehaviour
+    public class ChainedMover : StateDriver, IMover
     {
         [SerializeField] protected Rigidbody2D[] bodyPieces;
         [SerializeField] protected MovementOptions movementOptions;
-        [SerializeField] protected float maxSpeed;
+        //[SerializeField] protected float maxSpeed;
+        [SerializeField] protected float walkSpeed;
+        [SerializeField] protected float runSpeed;
         [SerializeField] protected float maxDistanceCorrectionSpeed;
         [SerializeField] protected float distanceCorrectionScale;
 
@@ -17,53 +21,98 @@ namespace RPGPlatformer.Movement
 
         protected float moveInput;
 
-        public int numBodyPieces => bodyPieces.Length;
+        public int NumBodyPieces => bodyPieces.Length;
+        public Rigidbody2D[] BodyPieces => bodyPieces;
         public HorizontalOrientation CurrentOrientation { get; protected set; } = HorizontalOrientation.right;
         public bool FacingRight => CurrentOrientation == HorizontalOrientation.right;
-        public float Length { get; private set; }
+        public float MaxSpeed => Running ? runSpeed : walkSpeed;
+        public bool Running { get; set; }
+        public float Width { get; private set; }
+        public float Height { get; private set; }
+
+        public event Action<HorizontalOrientation> DirectionChanged;
 
         protected virtual void Awake()
         {
-            goalDistances = new float[numBodyPieces - 1];
-            positions = new Vector2[numBodyPieces];
-            groundDirections = new Vector2[numBodyPieces];
-            Length = 0;
+            goalDistances = new float[NumBodyPieces - 1];
+            positions = new Vector2[NumBodyPieces];
+            groundDirections = new Vector2[NumBodyPieces];
 
-            for (int i = 0; i < numBodyPieces - 1; i++)
+            //Width = 0;
+            for (int i = 0; i < NumBodyPieces - 1; i++)
             {
                 goalDistances[i] = Vector2.Distance(bodyPieces[i].position, bodyPieces[i + 1].position);
-                Length += goalDistances[i];
+                Width += goalDistances[i];
             }
+
+            var c = bodyPieces[0].GetComponent<Collider2D>();
+            if (c)
+            {
+                Height = c.bounds.max.y - c.bounds.min.y;
+            }
+
             groundLayer = LayerMask.GetMask("Ground");
         }
 
-        protected virtual void FixedUpdate()
+        public virtual void HandleMoveInput(float moveInput)
         {
+            if (moveInput == 0) return;
+
             UpdatePhysicsData();
+            SetOrientation((HorizontalOrientation)Math.Sign(moveInput));
+            Move(moveInput);
+        }
 
-            //(just for testing for now)
-            if (Input.GetKey(KeyCode.LeftArrow))
+        public virtual void Stop()
+        {
+            foreach (var b in bodyPieces)
             {
-                moveInput = -1;
-                if (FacingRight)
+                b.linearVelocity = Vector2.zero;
+            }
+        }
+
+        protected virtual void Move(float moveInput)
+        {
+            if (moveInput != 0)
+            {
+                Rigidbody2D rb;
+
+                for (int i = 0; i < NumBodyPieces; i++)
                 {
-                    ChangeDirection();
+                    rb = bodyPieces[i];
+                    rb.Move(FacingRight, rb.linearVelocity, moveInput * groundDirections[i],
+                        MaxSpeed, movementOptions);
                 }
             }
-            else if (Input.GetKey(KeyCode.RightArrow))
-            {
-                moveInput = 1;
-                if (!FacingRight)
-                {
-                    ChangeDirection();
-                }
-            }
-            else
-            {
-                moveInput = 0;
-            }
+        }
 
-            HandleMoveInput(moveInput);
+        public virtual void SetOrientation(HorizontalOrientation o)
+        {
+            if (o != CurrentOrientation)
+            {
+                CurrentOrientation = o;
+                ChangeDirection();
+                DirectionChanged?.Invoke(CurrentOrientation);
+            }
+        }
+
+        protected virtual void ChangeDirection()
+        {
+            //CurrentOrientation = (HorizontalOrientation)(-(int)CurrentOrientation);
+
+            Vector3 s;
+
+            for (int i = 0; i < NumBodyPieces; i++)
+            {
+                positions[i] = bodyPieces[i].position;
+            }
+            for (int i = 0; i < NumBodyPieces; i++)
+            {
+                bodyPieces[i].position = positions[NumBodyPieces - i - 1];
+                s = bodyPieces[i].transform.localScale;
+                s.x *= -1;
+                bodyPieces[i].transform.localScale = s;
+            }
         }
 
         protected virtual void UpdatePhysicsData()
@@ -73,43 +122,26 @@ namespace RPGPlatformer.Movement
             EnforceDistances();
         }
 
-
-
-        protected virtual void HandleMoveInput(float moveInput)
-        {
-            if (moveInput != 0)
-            {
-                Rigidbody2D rb;
-
-                for (int i = 0; i < numBodyPieces; i++)
-                {
-                    rb = bodyPieces[i];
-                    rb.Move(FacingRight, rb.linearVelocity, moveInput * groundDirections[i],
-                        maxSpeed, movementOptions);
-                }
-            }
-        }
-
         protected void EnforceDistances()
         {
             Vector2 d;
             Vector2 m;
             float r;
 
-            for (int i = 0; i < numBodyPieces - 1; i++)
+            for (int i = 0; i < NumBodyPieces - 1; i++)
             {
                 d = bodyPieces[i].position - (int)CurrentOrientation * groundDirections[i] * goalDistances[i];
                 //^goal position for bodyPieces[i + 1]
                 d = d - bodyPieces[i + 1].position;
                 m = ((int)CurrentOrientation) * groundDirections[i + 1];
-                r = Mathf.Clamp(Vector2.Dot(bodyPieces[i + 1].linearVelocity, m), 0, maxSpeed);
+                r = Mathf.Clamp(Vector2.Dot(bodyPieces[i + 1].linearVelocity, m), 0, MaxSpeed);
                 m = bodyPieces[i + 1].linearVelocity - r * m;
                 r = Vector2.Dot(m, d.normalized);
 
                 if (r < maxDistanceCorrectionSpeed)
                 {
                     //this made it a lot smoother (worth performance cost)
-                    for (int j = i + 1; j < numBodyPieces; j++)
+                    for (int j = i + 1; j < NumBodyPieces; j++)
                     {
                         bodyPieces[j].AddForce(bodyPieces[j].mass * distanceCorrectionScale * d);
                     }
@@ -117,28 +149,9 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void ChangeDirection()
-        {
-            CurrentOrientation = (HorizontalOrientation)(-(int)CurrentOrientation);
-
-            Vector3 s;
-
-            for (int i = 0; i < numBodyPieces; i++)
-            {
-                positions[i] = bodyPieces[i].position;
-            }
-            for (int i = 0; i < numBodyPieces; i++)
-            {
-                bodyPieces[i].position = positions[numBodyPieces - i - 1];
-                s = bodyPieces[i].transform.localScale;
-                s.x *= -1;
-                bodyPieces[i].transform.localScale = s;
-            }
-        }
-
         protected void UpdateRotation()
         {
-            for (int i = 0; i < numBodyPieces; i++)
+            for (int i = 0; i < NumBodyPieces; i++)
             {
                 bodyPieces[i].transform
                     .RotateTowardsMovementDirection(FacingRight, (int)CurrentOrientation * groundDirections[i], 
@@ -148,7 +161,7 @@ namespace RPGPlatformer.Movement
 
         protected void UpdateGroundDirections()
         {
-            for (int i = 0; i < numBodyPieces; i++)
+            for (int i = 0; i < NumBodyPieces; i++)
             {
                 groundDirections[i] = GroundDirectionVector(bodyPieces[i]);
             }
@@ -165,14 +178,21 @@ namespace RPGPlatformer.Movement
 
         protected RaycastHit2D RightGroundcast(Rigidbody2D body)
         {
-            var o = new Vector2(body.position.x + 0.05f, body.position.y);
+            var o = new Vector2(body.position.x + 0.1f, body.position.y);
             return Physics2D.Raycast(o, -Vector2.up, Mathf.Infinity, groundLayer);
         }
 
         protected RaycastHit2D LeftGroundcast(Rigidbody2D body)
         {
-            var o = new Vector2(body.position.x - 0.05f, body.position.y);
+            var o = new Vector2(body.position.x - 0.1f, body.position.y);
             return Physics2D.Raycast(o, -Vector2.up, Mathf.Infinity, groundLayer);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            DirectionChanged = null;
         }
     }
 

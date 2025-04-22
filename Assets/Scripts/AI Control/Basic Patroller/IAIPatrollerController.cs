@@ -5,7 +5,7 @@ namespace RPGPlatformer.AIControl
     public interface IAIPatrollerController
     {
         public bool Patrolling { get; }
-        public IMovementController MovementController { get; }
+        public IAIMovementController MovementController { get; }
 
         public void BeginDefaultPatrol();
 

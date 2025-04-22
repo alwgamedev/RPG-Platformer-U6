@@ -16,23 +16,10 @@ namespace RPGPlatformer.Movement
             Rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        //private void FixedUpdate()
-        //{
-        //    if (Input.GetKey(KeyCode.RightArrow))
-        //    { 
-        //        if (Rigidbody.angularVelocity > -maxSpeed)
-        //        {
-        //            Rigidbody.AddTorque(-torque);
-        //        }
-        //    }
-        //    else if (Input.GetKey(KeyCode.LeftArrow))
-        //    {
-        //        if (Rigidbody.angularVelocity < maxSpeed)
-        //        {
-        //            Rigidbody.AddTorque(torque);
-        //        }
-        //    }
-        //}
+        public void Stop()
+        {
+            Rigidbody.angularVelocity = 0;
+        }
 
         public void DriveWheel(float scale)
         {

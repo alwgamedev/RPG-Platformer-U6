@@ -23,14 +23,13 @@ namespace RPGPlatformer.Movement
         //protected T3 movementManager;
 
         protected bool ignoreMoveInputNextUpdate;
+        protected Vector2 moveInput;
 
         protected Func<Vector2, Vector2> GetMoveDirection = (v) => default;
         protected Action OnFixedUpdate;
         protected Action TempFixedUpdate;
         protected Action OnUpdate;
         protected Action TempUpdate;
-
-        protected Vector2 moveInput;
 
         protected MovementOptions currentMovementOptions;
         protected Dictionary<string, MovementOptions> GetMovementOptions = new();
@@ -344,6 +343,8 @@ namespace RPGPlatformer.Movement
         public void OnInputDisabled()
         {
             SoftStop();
+            //and I guess idea is that MoveInput will not be set again while input disabled,
+            //so we don't have to set (Fixed)Update null?
         }
 
 
@@ -356,7 +357,7 @@ namespace RPGPlatformer.Movement
             TempUpdate = OnUpdate;
             OnFixedUpdate = null;
             OnUpdate = null;
-            moveInput = Vector2.zero;
+            SoftStop();
             stateManager.Freeze();
             stateDriver.OnDeath();
         }

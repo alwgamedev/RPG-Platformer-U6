@@ -16,7 +16,7 @@ namespace RPGPlatformer.AIControl
         //where T01 : AdvancedMovementStateGraph
         //where T02 : AdvancedMovementStateMachine<T01>
         //where T03 : AdvancedMovementStateManager<T01, T02, T00>
-        where T : IMovementController
+        where T : IAIMovementController
         where T1 : GenericAIPatroller<T>//GenericAIPatroller<T0, T00, T01, T02, T03>
         where T2 : AIPatrollerStateGraph
         where T3 : AIPatrollerStateMachine<T2>
@@ -34,7 +34,7 @@ namespace RPGPlatformer.AIControl
 
         public bool IsInputDisabled { get; protected set; }
         public bool Patrolling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.patrol;
-        public IMovementController MovementController => stateDriver.MovementController;
+        public IAIMovementController MovementController => stateDriver.MovementController;
 
         public event Action InputEnabled;
         public event Action InputDisabled;

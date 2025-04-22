@@ -2,7 +2,7 @@
 
 namespace RPGPlatformer.AIControl
 {
-    public class AIPatrollerController : GenericAIPatrollerController<IMovementController,
+    public class AIPatrollerController : GenericAIPatrollerController<IAIMovementController,
         AIPatroller, AIPatrollerStateGraph, AIPatrollerStateMachine, AIPatrollerStateManager>
     //GenericAIPatrollerController<AdvancedMovementController, AdvancedMover,
     //AdvancedMovementStateGraph, AdvancedMovementStateMachine, AdvancedMovementStateManager,

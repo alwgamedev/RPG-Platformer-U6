@@ -1,4 +1,3 @@
-using RPGPlatformer.Movement;
 using UnityEngine;
 
 namespace RPGPlatformer.Movement
@@ -13,36 +12,29 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected PhysicsMaterial2D defaultMaterial;
         [SerializeField] protected PhysicsMaterial2D rollingMaterial;
 
-        bool walking;
-        float wheelRadius => radiusMultiplier * (numBodyPieces / (float)(numBodyPieces - 1)) * Length / (2 * Mathf.PI);
-        float dTheta => wheelAngleRange / numBodyPieces;
-
+        bool curled;
         HingeJoint2D[] wheelHinges;
 
+        float wheelRadius => radiusMultiplier * (NumBodyPieces / (float)(NumBodyPieces - 1)) * Width / (2 * Mathf.PI);
+        float dTheta => wheelAngleRange / NumBodyPieces;
+
+        public WheelAxle Axle => axle;
 
         private void Start()
         {
-            wheelHinges = new HingeJoint2D[numBodyPieces];
+            wheelHinges = new HingeJoint2D[NumBodyPieces];
 
-            for (int i = 0; i < numBodyPieces; i++)
+            for (int i = 0; i < NumBodyPieces; i++)
             {
                 wheelHinges[i] = bodyPieces[i].gameObject.GetComponent<HingeJoint2D>();
             }
 
-            SetState(true);
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                SetState(!walking);
-            }
+            SetCurled(true);
         }
 
         protected override void UpdatePhysicsData()
         {
-            if (walking)
+            if (!curled)
             {
                 base.UpdatePhysicsData();
             }
@@ -54,7 +46,7 @@ namespace RPGPlatformer.Movement
 
         private void UpdateRollingRotations()
         {
-            for (int i = 0; i < numBodyPieces; i++)
+            for (int i = 0; i < NumBodyPieces; i++)
             {
                 bodyPieces[i].SetRotation(((int)CurrentOrientation) * (-90 + Mathf.Rad2Deg * i * dTheta)
                     + axle.Rigidbody.rotation);
@@ -64,11 +56,17 @@ namespace RPGPlatformer.Movement
 
         //BASIC FUNCTIONS
 
-        protected override void HandleMoveInput(float moveInput)
+        public override void Stop()
         {
-            if (walking)
+            base.Stop();
+            axle.Stop();
+        }
+
+        protected override void Move(float moveInput)
+        {
+            if (!curled)
             {
-                base.HandleMoveInput(moveInput);
+                base.Move(moveInput);
             }
             else
             {
@@ -78,7 +76,7 @@ namespace RPGPlatformer.Movement
 
         protected override void ChangeDirection()
         {
-            if (walking)
+            if (!curled)
             {
                 base.ChangeDirection();
             }
@@ -94,7 +92,7 @@ namespace RPGPlatformer.Movement
 
             Vector3 d;
 
-            for (int i = 0; i < numBodyPieces; i++)
+            for (int i = 0; i < NumBodyPieces; i++)
             {
                 d = bodyPieces[i].transform.position - axle.transform.position;
                 d.x *= -1;
@@ -109,7 +107,7 @@ namespace RPGPlatformer.Movement
 
         private void ConfigureConnectedAnchors()
         {
-            for (int i = 0; i < numBodyPieces; i++)
+            for (int i = 0; i < NumBodyPieces; i++)
             {
                 wheelHinges[i].connectedAnchor = new(((int)CurrentOrientation) * wheelRadius * Mathf.Cos(i * dTheta),
                     wheelRadius * Mathf.Sin(i * dTheta));
@@ -119,16 +117,13 @@ namespace RPGPlatformer.Movement
 
         //TRANSITION BTWN ROLLING/WALKING
 
-        private void SetState(bool walking)
+        public void SetCurled(bool val)
         {
-            this.walking = walking;
+            curled = val;
 
-            axle.enabled = !walking;
-
-            if (walking)
+            if (val)
             {
-
-                for (int i = 0; i < numBodyPieces; i++)
+                for (int i = 0; i < NumBodyPieces; i++)
                 {
                     wheelHinges[i].enabled = false;
                     bodyPieces[i].linearDamping = defaultBodyLinearDamping;
@@ -136,21 +131,25 @@ namespace RPGPlatformer.Movement
                 }
 
                 axle.Rigidbody.bodyType = RigidbodyType2D.Static;//just so it doesn't go flying off somewhere
+
+                Trigger(typeof(PillBugUncurled).Name);
             }
             else
             {
                 ConfigureConnectedAnchors();
 
                 axle.transform.position =
-                        0.5f * (bodyPieces[0].position + bodyPieces[numBodyPieces - 1].position);
+                        0.5f * (bodyPieces[0].position + bodyPieces[NumBodyPieces - 1].position);
                 axle.Rigidbody.bodyType = RigidbodyType2D.Dynamic;
 
-                for (int i = 0; i < numBodyPieces; i++)
+                for (int i = 0; i < NumBodyPieces; i++)
                 {
                     bodyPieces[i].linearDamping = rollingBodyLinearDamping;
                     bodyPieces[i].sharedMaterial = rollingMaterial;
                     wheelHinges[i].enabled = true;
                 }
+
+                Trigger(typeof(PillBugCurled).Name);
             }
         }
     }

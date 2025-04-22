@@ -4,7 +4,7 @@ using RPGPlatformer.Movement;
 namespace RPGPlatformer.AIControl
 {
     public class AIPatrollerStateManager
-        : AIPatrollerStateManager<AIPatrollerStateGraph, AIPatrollerStateMachine, IMovementController,
+        : AIPatrollerStateManager<AIPatrollerStateGraph, AIPatrollerStateMachine, IAIMovementController,
             AIPatroller>
             //AIPatrollerStateManager<AIPatrollerStateGraph, AIPatrollerStateMachine, AdvancedMovementController, 
             //AdvancedMover, AdvancedMovementStateGraph, AdvancedMovementStateMachine, AdvancedMovementStateManager,
@@ -17,7 +17,7 @@ namespace RPGPlatformer.AIControl
     public class AIPatrollerStateManager<T0, T1, T2,/* T20, T21, T22, T23,*/ T3> : StateManager<T0, T1, T3>
         where T0 : AIPatrollerStateGraph
         where T1 : AIPatrollerStateMachine<T0>
-        where T2 : IMovementController
+        where T2 : IAIMovementController
         //where T2 : GenericAdvancedMovementController<T20, T21, T22, T23>
         //where T20 : AdvancedMover
         //where T21 : AdvancedMovementStateGraph

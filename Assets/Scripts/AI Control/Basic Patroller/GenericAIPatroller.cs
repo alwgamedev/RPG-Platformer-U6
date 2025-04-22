@@ -7,7 +7,7 @@ namespace RPGPlatformer.AIControl
 {
     [RequireComponent(typeof(AINavigator))]
     public class GenericAIPatroller<T/*, T0, T1, T2, T3*/> : StateDriver, IInputDependent
-        where T : IMovementController
+        where T : IAIMovementController
         //where T : GenericAdvancedMovementController<T0, T1, T2, T3>
         //where T0 : AdvancedMover
         //where T1 : AdvancedMovementStateGraph
