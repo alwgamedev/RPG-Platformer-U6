@@ -11,6 +11,8 @@ using System.Threading;
 
 namespace RPGPlatformer.Combat
 {
+    using static Health;
+
     [RequireComponent(typeof(CharacterProgressionManager))]
     [RequireComponent(typeof(InventoryManager))]
     [RequireComponent(typeof(DropSpawner))]
@@ -488,7 +490,7 @@ namespace RPGPlatformer.Combat
 
             if (enemyCollider)
             {
-                var health = enemyCollider.GetComponentInParent<IHealth>();
+                var health = GetHealthComponent(enemyCollider);
                 if (health == null)
                 {
                     OnTargetingFailed?.Invoke();

@@ -154,6 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4166043204953211113}
   - component: {fileID: 3687036649613949729}
+  - component: {fileID: 8173232673246406765}
   m_Layer: 6
   m_Name: Combat Collider (4)
   m_TagString: Untagged
@@ -212,6 +213,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!114 &8173232673246406765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953388549965093707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327ee3fbc48d65748a47665835ad0f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 6856599071111275749}
 --- !u!1 &1376748828211789702
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,6 +236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7467768007904869462}
   - component: {fileID: 4246224547885450734}
+  - component: {fileID: 4285861498022460514}
   m_Layer: 6
   m_Name: Combat Collider (1)
   m_TagString: Untagged
@@ -280,6 +295,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!114 &4285861498022460514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376748828211789702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327ee3fbc48d65748a47665835ad0f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 6856599071111275749}
 --- !u!1 &2456100068353604521
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,6 +585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fff2b6c0084a44aabe198745fbf067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
 --- !u!114 &7811487076972133160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -853,6 +882,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5221591054694002309}
   - component: {fileID: 2558720042668142395}
+  - component: {fileID: 8571296445245106520}
   m_Layer: 6
   m_Name: Combat Collider (6)
   m_TagString: Untagged
@@ -911,6 +941,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!114 &8571296445245106520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4172146738656197371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327ee3fbc48d65748a47665835ad0f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 6856599071111275749}
 --- !u!1 &4197122059605495264
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,6 +1169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8579253823656801768}
   - component: {fileID: 1990241473852557884}
+  - component: {fileID: 7101884024161427095}
   m_Layer: 6
   m_Name: Combat Collider (2)
   m_TagString: Untagged
@@ -1184,6 +1228,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!114 &7101884024161427095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4990354670420500379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327ee3fbc48d65748a47665835ad0f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 6856599071111275749}
 --- !u!1 &5163353128633088503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,6 +1251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6645116009548877728}
   - component: {fileID: 5792057481903100525}
+  - component: {fileID: 1908272681078109265}
   m_Layer: 6
   m_Name: Combat Collider (3)
   m_TagString: Untagged
@@ -1252,6 +1310,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!114 &1908272681078109265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5163353128633088503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327ee3fbc48d65748a47665835ad0f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 6856599071111275749}
 --- !u!1 &5166603509125457508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1741,6 +1812,7 @@ GameObject:
   m_Component:
   - component: {fileID: 334035653383110857}
   - component: {fileID: 5275559811285257610}
+  - component: {fileID: 2979986060099191648}
   m_Layer: 6
   m_Name: Combat Collider (0)
   m_TagString: Untagged
@@ -1799,6 +1871,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!114 &2979986060099191648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6257248190846608490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327ee3fbc48d65748a47665835ad0f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 6856599071111275749}
 --- !u!1 &6479812957635094039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1809,6 +1894,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4039521530119611103}
   - component: {fileID: 8408827726596977077}
+  - component: {fileID: 7422740140058397419}
   m_Layer: 6
   m_Name: Combat Collider (7)
   m_TagString: Untagged
@@ -1867,6 +1953,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!114 &7422740140058397419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6479812957635094039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327ee3fbc48d65748a47665835ad0f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 6856599071111275749}
 --- !u!1 &6857100611916521349
 GameObject:
   m_ObjectHideFlags: 0
@@ -1993,6 +2092,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1004403560465596939}
   - component: {fileID: 688862211927184131}
+  - component: {fileID: 5332414075503437605}
   m_Layer: 6
   m_Name: Combat Collider (5)
   m_TagString: Untagged
@@ -2051,6 +2151,19 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
+--- !u!114 &5332414075503437605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7057711823419950535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327ee3fbc48d65748a47665835ad0f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 6856599071111275749}
 --- !u!1 &7823781928875592439
 GameObject:
   m_ObjectHideFlags: 0

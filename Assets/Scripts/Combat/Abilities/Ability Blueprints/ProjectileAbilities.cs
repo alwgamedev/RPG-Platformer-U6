@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace RPGPlatformer.Combat
@@ -7,6 +6,7 @@ namespace RPGPlatformer.Combat
     using static IProjectileAbility;
     using static AttackAbility;
     using static IAoeAbility;
+    using static Health;
 
     public interface IProjectileAbility
     {
@@ -21,7 +21,7 @@ namespace RPGPlatformer.Combat
         {
             return (controller, projectile) => (collider) =>
             {
-                var colliderHealth = collider.gameObject.GetComponentInParent<IHealth>();
+                var colliderHealth = GetHealthComponent(collider);
                 if(colliderHealth != null)
                 {
                     DealDamage(controller.Combatant, colliderHealth, 
@@ -56,7 +56,7 @@ namespace RPGPlatformer.Combat
         {
             return (controller, projectile) => (collider) =>
             {
-                var colliderHealth = collider.gameObject.GetComponentInParent<IHealth>();
+                var colliderHealth = GetHealthComponent(collider);
 
                 if (colliderHealth != null)
                 {

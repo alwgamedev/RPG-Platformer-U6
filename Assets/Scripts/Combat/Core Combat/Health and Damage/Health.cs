@@ -5,7 +5,7 @@ using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.Combat
 {
-    public class Health : MonoBehaviour, IHealth
+    public class Health : MonoBehaviour, IHealth, IHealthPointer
     {
         [SerializeField] bool takeDamageAutomatically;//these 3 bools are mainly for the combat dummy.
         [SerializeField] bool takeDefaultValueOnStart;//characters with a combat controller will set up 
@@ -92,6 +92,21 @@ namespace RPGPlatformer.Combat
             Killer = null;
             stat.CurrentValue = stat.DefaultValue;
             IsDead = false;
+        }
+
+        public IHealth HealthComponent()
+        {
+            return this;
+        }
+
+        public static IHealth GetHealthComponent(Collider2D collider)
+        {
+            if (collider)
+            {
+                return collider.GetComponent<IHealthPointer>()?.HealthComponent();
+            }
+
+            return null;
         }
 
         private void OnDestroy()

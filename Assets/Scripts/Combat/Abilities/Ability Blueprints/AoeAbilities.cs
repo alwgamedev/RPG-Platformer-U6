@@ -8,6 +8,7 @@ namespace RPGPlatformer.Combat
 {
     using static IAoeAbility;
     using static AttackAbility;
+    using static Health;
 
     public interface IAoeAbility
     {
@@ -19,7 +20,7 @@ namespace RPGPlatformer.Combat
         public static IEnumerable FindTargetsAtPosition(Vector2 position, float radius)
         {
             Collider2D[] hitColliders = Physics2D.OverlapBoxAll(position, 2 * radius * Vector2.right + 2 * radius * Vector2.up, 0);
-            return hitColliders.Select(x => x.GetComponentInParent<IHealth>()).Distinct();
+            return hitColliders.Select(x => GetHealthComponent(x)).Distinct();
         }
 
         //NOTE: the base DealDamage method already checks for null

@@ -11,6 +11,13 @@ namespace RPGPlatformer.AIControl
         private void Start()
         {
             cc = GetComponentInChildren<AICombatController>();
+            cc.Combatant.DeathFinalized += () =>
+            {
+                if (gameObject)
+                {
+                    Destroy(gameObject);
+                }
+            };
         }
 
         public void ExecuteStoredAction()
