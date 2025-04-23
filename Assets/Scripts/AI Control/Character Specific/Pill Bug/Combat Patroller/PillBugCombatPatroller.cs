@@ -9,18 +9,19 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float rollPursuitRange = 4;
         [SerializeField] float uncurlPursuitRange = .75f;
 
-        protected override void Pursue(float distanceSquared)
+        protected override void Pursue(float distanceSquared, float tolerance)
         {
-            if (!MovementController.Curled && distanceSquared > rollPursuitRange * rollPursuitRange)
+
+            if (!MovementController.Curled && !InRange(distanceSquared, rollPursuitRange, tolerance))
             {
                 MovementController.SetCurled(true);
             }
-            else if (MovementController.Curled && distanceSquared < uncurlPursuitRange * uncurlPursuitRange)
+            else if (MovementController.Curled && InRange(distanceSquared, uncurlPursuitRange, tolerance))
             {
                 MovementController.SetCurled(false);
             }
 
-            base.Pursue(distanceSquared);
+            base.Pursue(distanceSquared, tolerance);
         }
     }
 }

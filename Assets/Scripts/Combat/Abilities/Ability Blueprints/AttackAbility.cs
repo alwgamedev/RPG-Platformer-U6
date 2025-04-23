@@ -71,7 +71,7 @@ namespace RPGPlatformer.Combat
         {
             if (!CanBeExecuted(controller)) return;
 
-            controller.Combatant.Attack();
+            controller.Combatant.TriggerCombat();
             OnExecute?.Invoke(controller);
             controller.OnAbilityExecute(this);
 

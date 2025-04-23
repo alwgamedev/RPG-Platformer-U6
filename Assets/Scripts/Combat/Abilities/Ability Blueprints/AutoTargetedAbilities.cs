@@ -41,7 +41,7 @@ namespace RPGPlatformer.Combat
                 return;
             }
 
-            controller.Combatant.Attack();
+            controller.Combatant.TriggerCombat();
             OnExecute?.Invoke(controller, target);
             controller.OnAbilityExecute(this);
 

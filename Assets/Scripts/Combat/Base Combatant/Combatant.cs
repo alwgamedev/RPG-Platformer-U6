@@ -19,7 +19,7 @@ namespace RPGPlatformer.Combat
     {
         [SerializeField] protected string displayName;
         [SerializeField] protected string targetLayer;
-        [SerializeField] protected string targetTag;
+        [SerializeField] protected string targetTag;//unused
         [SerializeField] protected ItemSlot headSlot;
         [SerializeField] protected ItemSlot torsoSlot;
         [SerializeField] protected ItemSlot legsSlot;
@@ -113,7 +113,6 @@ namespace RPGPlatformer.Combat
         private void Start()
         {
             ConfigureReplenishableStats();
-
             InitializeMinCombatDistance();
         }
 
@@ -126,9 +125,7 @@ namespace RPGPlatformer.Combat
 
         public virtual void InitializeMinCombatDistance()
         {
-            health.InitializeTargetingTolerance();
-            IdealMinimumCombatDistance = unarmedWeapon.WeaponStats.AttackRange / 3
-                + health.TargetingTolerance;
+            IdealMinimumCombatDistance = unarmedWeapon.WeaponStats.AttackRange / 3;
         }
 
 
@@ -504,7 +501,7 @@ namespace RPGPlatformer.Combat
 
         //TRIGGER STATE CHANGES
 
-        public void Attack()
+        public void TriggerCombat()
         {
             Trigger(typeof(InCombat).Name);
         }

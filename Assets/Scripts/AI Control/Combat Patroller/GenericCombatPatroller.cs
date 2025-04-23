@@ -27,7 +27,6 @@ namespace RPGPlatformer.AIControl
 
         public float TargetingTolerance => combatController.Combatant.Health.TargetingTolerance;
         public float MinimumCombatDistance => combatController.Combatant.IdealMinimumCombatDistance;
-        //public T1 CombatController { get; protected set; }
         public ICombatController CombatController => combatController;
 
         public IHealth CurrentTarget
@@ -124,7 +123,7 @@ namespace RPGPlatformer.AIControl
 
         public void PursuitBehavior()
         {
-            if (!TryGetDistanceSqrd(CurrentTarget, out float d2, out float t) 
+            if (!TryGetDistanceSqrd(CurrentTarget, out float d2, out float t)
                 || !InRange(d2, pursuitRange, t))
             {
                 Trigger(typeof(Suspicion).Name);
@@ -134,10 +133,10 @@ namespace RPGPlatformer.AIControl
             {
                 Trigger(typeof(Attack).Name);
             }
-            else if (Mathf.Abs(CurrentTarget.transform.position.x - transform.position.x) > MinimumCombatDistance)
+            else if (!InRange(d2, MinimumCombatDistance, t))
             //to avoid ai stuttering back and forth when their target is directly above/below them
             {
-                Pursue(d2);
+                Pursue(d2, t);
                 //MovementController.MoveTowards(CurrentTarget.transform.position);
             }
             else
@@ -146,9 +145,9 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        //looks pointless, but allows child classes to decide "how" to pursue based on distance
+        //allows child classes to decide how to pursue based on distance
         //(e.g. pill bug will switch to rolling if distance is far enough)
-        protected virtual void Pursue(float distanceSquared)
+        protected virtual void Pursue(float distanceSquared, float tolerance)
         {
             MovementController.MoveTowards(CurrentTarget.transform.position);
         }
@@ -165,7 +164,7 @@ namespace RPGPlatformer.AIControl
             }
             else
             {
-                MaintainMinimumCombatDistance(d);
+                MaintainMinimumCombatDistance(d, t);
             }
         }
 
@@ -185,7 +184,7 @@ namespace RPGPlatformer.AIControl
             correctingCombatDistance = false;
         }
 
-        public virtual void MaintainMinimumCombatDistance(float currentDistSqrd)
+        public virtual void MaintainMinimumCombatDistance(float targetDistSqrd, float tolerance)
         {
             //not very performance-conscious, because he will continue scanning for drop offs
             //every frame that he is correcting combat distance,
@@ -194,7 +193,7 @@ namespace RPGPlatformer.AIControl
             //reassessing until you're far enough away again"
             //-- in that case the player could theoretically walk the enemy over to a far away cliff (if the 
             //enemy doesn't reassess at any point while getting walked toward the cliff)
-            if (currentDistSqrd < MinimumCombatDistance * MinimumCombatDistance)
+            if (InRange(targetDistSqrd, MinimumCombatDistance, tolerance))
             {
                 float direction =
                     Mathf.Sign(transform.position.x - CurrentTarget.transform.position.x);
@@ -227,6 +226,9 @@ namespace RPGPlatformer.AIControl
             return distSqrd < a * a;
         }
 
+        /// <summary>
+        /// Tolerance output is your targetingTolerance + target's targetingTolerance.
+        /// </summary>
         public bool TryGetDistanceSqrd(IHealth target, out float distanceSqrd, out float tolerance)
         {
             if (target != null && !target.IsDead)

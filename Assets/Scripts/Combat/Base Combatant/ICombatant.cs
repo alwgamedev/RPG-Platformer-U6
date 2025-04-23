@@ -32,7 +32,7 @@ namespace RPGPlatformer.Combat
             float forceMultiplier, Func<Collider2D, IHealth> hitAction, int maxHits = 1);
         public void PrepareAndShootProjectile(IProjectile projectile, Func<Vector2> getAimPos, 
             float forceMultiplier, Func<Collider2D, IHealth> hitAction, int maxHits = 1);
-        public void Attack();
+        public void TriggerCombat();
         public void Instakill();
         public void Revive();
     }

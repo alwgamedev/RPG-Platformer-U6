@@ -47,7 +47,7 @@ namespace RPGPlatformer.Combat
                 //NOTE: Prepare function is responsible for throwing TaskCanceledException when cts is cancelled,
                 //(but I'm still checking cts.IsCancellatioRequested after just to be safe)
 
-                controller.Combatant.Attack();
+                controller.Combatant.TriggerCombat();
                 OnExecute?.Invoke(controller, args);
                 controller.OnAbilityExecute(this);
 

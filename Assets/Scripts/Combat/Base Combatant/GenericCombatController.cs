@@ -541,9 +541,9 @@ namespace RPGPlatformer.Combat
 
         public virtual void OnHealthChanged(float damage, IDamageDealer damageDealer)
         {
-            if (stateManager.StateMachine.CurrentState is not InCombat && damage > 0)
+            if (damage > 0)
             {
-                stateDriver.Attack();
+                stateDriver.TriggerCombat();
             }
             float effectiveDamage = stateDriver.HandleHealthChange(damage, damageDealer);
             if (!ChannelingAbility)//so that take dmg animation doesn't mess up any drawn out combat animations

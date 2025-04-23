@@ -175,6 +175,7 @@ namespace RPGPlatformer.Movement
 
         public void OnDeath()
         {
+            SetCurled(false);
             stateManager.Freeze();
             OnUpdate = null;
             OnFixedUpdate = null;
