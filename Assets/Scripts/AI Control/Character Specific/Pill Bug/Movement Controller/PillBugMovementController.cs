@@ -40,9 +40,9 @@ namespace RPGPlatformer.Movement
         {
             //for testing:
             //if (Input.GetKeyDown(KeyCode.Z))
-            //{
-            //    SetCurled(!Curled);
-            //}
+            //    {
+            //        SetCurled(!Curled);
+            //    }
 
             //if (Input.GetKeyDown(KeyCode.LeftArrow))
             //{
@@ -137,12 +137,24 @@ namespace RPGPlatformer.Movement
 
         public void MoveAwayFrom(Vector2 point)
         {
-            MoveInput = new(transform.position.x - point.x, 0);
+            MoveInput = new(Mathf.Sign(transform.position.x - point.x), 0);
         }
 
         public void MoveTowards(Vector2 point)
         {
-            MoveInput = new(point.x - transform.position.x, 0);
+            var d = point.x - transform.position.x;
+            if (d > 0)
+            {
+                MoveInput = Vector2.right;
+            }
+            else if (d < 0)
+            {
+                MoveInput = Vector2.left;
+            }
+            else
+            {
+                MoveInput = Vector2.zero;
+            }
         }
 
         private float SpeedFraction(float maxSpeed)

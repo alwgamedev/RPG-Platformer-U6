@@ -5,8 +5,10 @@ namespace RPGPlatformer.Core
 {
     public class AnimationControl : MonoBehaviour//NOTE atm this has nothing to do with combat
     {
+        [SerializeField] Animator animator;
+
         RuntimeAnimatorController defaultAnimatorController;
-        Animator animator;
+        //Animator animator;
 
         //trying to be performant by using id's instead of names
         //(if you give it name the animator will have to go find the id anyway, so cache ids here)
@@ -17,7 +19,10 @@ namespace RPGPlatformer.Core
 
         private void Awake()
         {
-            animator = GetComponentInChildren<Animator>();
+            if (!animator)
+            {
+                animator = GetComponent<Animator>();
+            }
             defaultAnimatorController = animator.runtimeAnimatorController;
         }
 

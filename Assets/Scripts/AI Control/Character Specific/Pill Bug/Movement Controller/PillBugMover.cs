@@ -83,7 +83,6 @@ namespace RPGPlatformer.Movement
             }
             else
             {
-                Debug.Log("changed direction rolling");
                 ChangeDirectionRolling();
             }
         }
