@@ -11,18 +11,18 @@ namespace RPGPlatformer.AIControl
         //AdvancedMover, AdvancedMovementStateGraph, AdvancedMovementStateMachine, AdvancedMovementStateManager,
         //AICombatController>
     {
-        [SerializeField] bool playerEnemy = true;
+        //[SerializeField] bool playerEnemy = true;
 
-        public override void InitializeState()
-        {
-            if (playerEnemy)
-            {
-                SetCombatTarget(GlobalGameTools.Instance.Player.Combatant.Health);
-            }
-            else
-            {
-                SetCombatTarget(null);
-            }
-        }
+        //public override void InitializeState()
+        //{
+        //    if (playerEnemy)
+        //    {
+        //        SetCombatTarget(GlobalGameTools.Instance.Player.Combatant.Health);
+        //    }
+        //    else
+        //    {
+        //        SetCombatTarget(null);
+        //    }
+        //}
     }
 }

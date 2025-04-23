@@ -2,6 +2,7 @@
 using RPGPlatformer.Movement;
 using UnityEngine;
 using System;
+using RPGPlatformer.Core;
 
 namespace RPGPlatformer.AIControl
 {
@@ -17,6 +18,7 @@ namespace RPGPlatformer.AIControl
     {
         [SerializeField] protected float pursuitRange = 5;
         [SerializeField] protected float suspicionTime = 5;
+        [SerializeField] protected bool playerEnemy = true;
 
         protected bool correctingCombatDistance;
         protected float suspicionTimer;
@@ -44,6 +46,18 @@ namespace RPGPlatformer.AIControl
             base.Awake();
 
             combatController = GetComponent<T1>();
+        }
+
+        public override void InitializeState()
+        {
+            if (playerEnemy)
+            {
+                SetCombatTarget(GlobalGameTools.Instance.Player.Combatant.Health);
+            }
+            else
+            {
+                SetCombatTarget(null);
+            }
         }
 
         public virtual void SetCombatTarget(IHealth targetHealth)

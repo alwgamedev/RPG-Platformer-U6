@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d25028d2c3b735f47b896257a176ae54, type: 3}
-  m_Name: Melee (Earthworm)
+  m_Script: {fileID: 11500000, guid: a57bdbd47583c2b488cc8bf46d2a5f0f, type: 3}
+  m_Name: Unarmed (Pill Bug)
   m_EditorClassIdentifier: 
   baseData:
-    lookupName: Melee (Earthworm)
-    displayName: Earthworm Melee Weapon
+    lookupName: Unarmed (Pill Bug)
+    displayName: Unarmed
     description: 
     icon: {fileID: 0}
     maxStack: 1
@@ -26,7 +26,8 @@ MonoBehaviour:
     prefab: {fileID: 0}
     spriteSwapData: []
   weaponStats:
-    baseDamage: 70
-    attackRange: 3
-    baseAttackRate: 50
+    baseDamage: 25
+    attackRange: 0.5
+    baseAttackRate: 14
   animatorOverrideController: {fileID: 0}
+  weaponClass: 1

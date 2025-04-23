@@ -6532,7 +6532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 1800
-  torque: 2000
+  torque: 2800
 --- !u!1 &7207716348413886751
 GameObject:
   m_ObjectHideFlags: 0
@@ -7088,7 +7088,7 @@ MonoBehaviour:
   movementOptions:
     movementType: 0
     moveDirection: 0
-    acceleration: 500
+    acceleration: 275
     flipSprite: 0
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -7100,16 +7100,16 @@ MonoBehaviour:
     minRotationRight: {x: 0.0007962743, y: -0.9999997}
     maxRotationLeft: {x: -0.0007962743, y: 0.9999997}
     minRotationLeft: {x: -0.0007962743, y: -0.9999997}
-  walkSpeed: 0.6
-  runSpeed: 1.4
-  maxDistanceCorrectionSpeed: 2
-  distanceCorrectionScale: 4000
+  walkSpeed: 0.25
+  runSpeed: 2
+  maxDistanceCorrectionSpeed: 4
+  distanceCorrectionScale: 4500
   axle: {fileID: 1795958983599245269}
   wheelAngleRange: 6.28
   radiusMultiplier: 1
   defaultBodyLinearDamping: 100
   rollingBodyLinearDamping: 0
-  defaultMaterial: {fileID: 0}
+  defaultMaterial: {fileID: 6200000, guid: 7d2ddb69fd99eca46b20214b477e3851, type: 2}
   rollingMaterial: {fileID: 6200000, guid: 96217d743861f054a8d71ae2890828d8, type: 2}
 --- !u!114 &7541291080574717364
 MonoBehaviour:
@@ -7136,7 +7136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destinationTolerance: 0.5
-  boundedPatrolHangTime: 1
+  boundedPatrolHangTime: 0
   pathPatrolHangTime: 0
   checkHorizontalDistanceOnly: 1
 --- !u!114 &7505077070748825007
@@ -7153,6 +7153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pursuitRange: 6
   suspicionTime: 5
+  playerEnemy: 1
   rollPursuitRange: 4
   uncurlPursuitRange: 0.75
 --- !u!114 &6697429720330260212
@@ -7305,7 +7306,7 @@ MonoBehaviour:
   offhandSlot: {fileID: 0}
   mainhandElbow: {fileID: 0}
   chestBone: {fileID: 0}
-  unarmedWeaponSO: {fileID: 0}
+  unarmedWeaponSO: {fileID: 11400000, guid: 0213832b8a6dea646bf2c76fcb8e5c2b, type: 2}
   stamina:
     minValue: 0
     maxValue: 100
