@@ -121,14 +121,22 @@ namespace RPGPlatformer.AIControl
                 Trigger(typeof(Attack).Name);
             }
             else if (Mathf.Abs(CurrentTarget.transform.position.x - transform.position.x) > MinimumCombatDistance)
-            //to avoid ai stuttering back and forth when their target is directly above them
+            //to avoid ai stuttering back and forth when their target is directly above/below them
             {
-                MovementController.MoveTowards(CurrentTarget.transform.position);
+                Pursue(d2);
+                //MovementController.MoveTowards(CurrentTarget.transform.position);
             }
             else
             {
                 MovementController.SoftStop();
             }
+        }
+
+        //looks pointless, but allows child classes to decide "how" to pursue based on distance
+        //(e.g. pill bug will switch to rolling if distance is far enough)
+        protected virtual void Pursue(float distanceSquared)
+        {
+            MovementController.MoveTowards(CurrentTarget.transform.position);
         }
 
         public void AttackBehavior()
@@ -189,7 +197,8 @@ namespace RPGPlatformer.AIControl
                 }
 
                 correctingCombatDistance = true;
-                MovementController.MoveInput = new(direction, 0);
+                //MovementController.MoveInput = new(direction, 0);
+                MovementController.MoveAwayFrom(currentTarget.transform.position);
             }
             else if (correctingCombatDistance)
             {

@@ -113,6 +113,8 @@ namespace RPGPlatformer.Combat
         private void Start()
         {
             ConfigureReplenishableStats();
+
+            InitializeMinCombatDistance();
         }
 
         private void Update()
@@ -120,6 +122,13 @@ namespace RPGPlatformer.Combat
             //auto-replenish stats if enabled
             stamina.Update();
             wrath.Update();
+        }
+
+        public virtual void InitializeMinCombatDistance()
+        {
+            health.InitializeTargetingTolerance();
+            IdealMinimumCombatDistance = unarmedWeapon.WeaponStats.AttackRange / 3
+                + health.TargetingTolerance;
         }
 
 
@@ -298,8 +307,6 @@ namespace RPGPlatformer.Combat
         public virtual void InitializeUnarmedWeapon()
         {
             unarmedWeapon = (Weapon)unarmedWeaponSO.CreateInstanceOfItem();
-
-            IdealMinimumCombatDistance = unarmedWeapon?.WeaponStats.AttackRange / 3 ?? 0.25f;
         }
 
         public bool CanEquip(EquippableItem item)
@@ -464,7 +471,7 @@ namespace RPGPlatformer.Combat
         public bool CanAttackAtDistSqrd(float distanceSqrd, float tolerance)
         {
             var a = AttackRange + tolerance;
-            return equippedWeapon != null && distanceSqrd < a * a;
+            return distanceSqrd < a * a;
         }
 
         public bool TargetInRange(IHealth target)

@@ -12,6 +12,8 @@ namespace RPGPlatformer.Combat
         [SerializeField] bool findStatBarInChildren;//their Health themselves
         [SerializeField] ReplenishableStat stat;
 
+        bool hasInitializedTargetingTolerance;
+
         public bool IsDead { get; private set; }
         public IDamageDealer Killer { get; private set; }
         //public Transform Transform => transform; 
@@ -39,16 +41,25 @@ namespace RPGPlatformer.Combat
                 stat.TakeDefaultValue();
             }
 
-            if (TryGetComponent(out IMover mover))
-            {
-                TargetingTolerance = mover.Width / 2;
-            }
+            InitializeTargetingTolerance();
         }
 
 
         private void Update()
         {
             stat.Update();
+        }
+
+        public void InitializeTargetingTolerance()
+        {
+            if (hasInitializedTargetingTolerance) return;
+
+            if (TryGetComponent(out IMover mover))
+            {
+                TargetingTolerance = mover.Width / 2;
+            }
+
+            hasInitializedTargetingTolerance = true;
         }
 
         //point of having this separate from GainHealth is to allow higher level scripts (like combatant)
