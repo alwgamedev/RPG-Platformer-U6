@@ -59,7 +59,7 @@ namespace RPGPlatformer.AIControl
             DamageMultiplier = 5,//TO-DO (balance the damage dealt so player is incentivized to dodge instead of tank)
             StaminaFractionChange = 0,
             WrathFractionChange = -.24f,
-            AoeRadius = 1.25f,//TO-DO: figure out good range (so att is still dodgable)
+            AoeRadius = 1,//TO-DO: figure out good range (so att is still dodgable)
             //would be nice to actually have it do small range that is TAKEN FROM THE NOSE 
             //AT MOMENT OF IMPACT -- so that the hit is really connected with the physical location of the slam
             //(and it feels more logical and predictable for the player)

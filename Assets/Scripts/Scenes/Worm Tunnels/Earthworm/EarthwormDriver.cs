@@ -148,22 +148,18 @@ namespace RPGPlatformer.AIControl
 
             var oB = new Vector2(bodyTarget.x, GroundTopBound);
             var oN = new Vector2(noseTarget.x, GroundTopBound);
+            var oP = 0.75f * oB + 0.25f * oN;
 
             var hitB = Physics2D.Raycast(oB, -Vector2.up, Mathf.Infinity, movementController.GroundLayer);
             var hitN = Physics2D.Raycast(oN, -Vector2.up, Mathf.Infinity, movementController.GroundLayer);
+            var hitP = Physics2D.Raycast(oP, -Vector2.up, Mathf.Infinity, movementController.GroundLayer);
 
-            if (hitB && hitN)
-            {
-                bodyTarget = hitB.point + 0.25f * Vector2.up;
-                noseTarget = hitN.point + 0.25f * Vector2.up;
-            }
-
-            slamBodyIKEffect.SetTarget(bodyTarget);
-            slamNoseIKEffect.SetTarget(noseTarget);
+            slamBodyIKEffect.SetTarget(hitB.point + 0.25f * Vector2.up);
+            slamNoseIKEffect.SetTarget(hitN.point + 0.25f * Vector2.up);
             //Debug.DrawLine(hitB.point, hitN.point, Color.red, 5);
 
-            slamDustParticles.transform.position = bodyTarget;
-            slamRockParticles.transform.position = noseTarget;
+            slamDustParticles.transform.position = hitP.point;
+            slamRockParticles.transform.position = hitP.point;
         }
 
         //call from anim event
