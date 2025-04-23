@@ -38,23 +38,24 @@ namespace RPGPlatformer.Movement
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                SetCurled(!Curled);
-            }
+            //for testing:
+            //if (Input.GetKeyDown(KeyCode.Z))
+            //{
+            //    SetCurled(!Curled);
+            //}
 
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                MoveInput = Vector2.left;
-            }
-            else if (Input.GetKey(KeyCode.RightArrow))
-            {
-                MoveInput = Vector2.right;
-            }
-            else
-            {
-                MoveInput = Vector2.zero;
-            }
+            //if (Input.GetKeyDown(KeyCode.LeftArrow))
+            //{
+            //    MoveInput = Vector2.left;
+            //}
+            //else if (Input.GetKeyDown(KeyCode.RightArrow))
+            //{
+            //    MoveInput = Vector2.right;
+            //}
+            //else if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
+            //{
+            //    MoveInput = Vector2.zero;
+            //}
 
             OnUpdate?.Invoke();
         }

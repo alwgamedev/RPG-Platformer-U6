@@ -2564,7 +2564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c39bf3673bb8d243bd0d1663e6ace7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultPatrolMode: 0
+  defaultPatrolMode: 3
   defaultPatrolParameters: {fileID: 0}
 --- !u!114 &6145524459740639452
 MonoBehaviour:
@@ -2615,7 +2615,7 @@ MonoBehaviour:
   movementOptions:
     movementType: 0
     moveDirection: 0
-    acceleration: 750
+    acceleration: 500
     flipSprite: 0
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -2629,7 +2629,7 @@ MonoBehaviour:
     minRotationLeft: {x: -0.0007962743, y: -0.9999997}
   walkSpeed: 0.6
   runSpeed: 1.8
-  maxDistanceCorrectionSpeed: 8
+  maxDistanceCorrectionSpeed: 2
   distanceCorrectionScale: 4000
   axle: {fileID: 1795958983599245269}
   wheelAngleRange: 6.28
@@ -2663,7 +2663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destinationTolerance: 0.5
-  boundedPatrolHangTime: 1
+  boundedPatrolHangTime: 0
   pathPatrolHangTime: 0
   checkHorizontalDistanceOnly: 1
 --- !u!114 &3976953676660629326

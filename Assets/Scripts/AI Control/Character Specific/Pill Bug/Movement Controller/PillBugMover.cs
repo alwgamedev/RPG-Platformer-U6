@@ -90,8 +90,6 @@ namespace RPGPlatformer.Movement
 
         private void ChangeDirectionRolling()
         {
-            CurrentOrientation = (HorizontalOrientation)(-(int)CurrentOrientation);
-
             Vector3 d;
 
             for (int i = 0; i < NumBodyPieces; i++)

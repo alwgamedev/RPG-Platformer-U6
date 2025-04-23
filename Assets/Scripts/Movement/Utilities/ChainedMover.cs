@@ -22,7 +22,7 @@ namespace RPGPlatformer.Movement
 
         public int NumBodyPieces => bodyPieces.Length;
         public Rigidbody2D[] BodyPieces => bodyPieces;
-        public HorizontalOrientation CurrentOrientation { get; protected set; } = HorizontalOrientation.right;
+        public HorizontalOrientation CurrentOrientation { get; protected set; }
         public bool FacingRight => CurrentOrientation == HorizontalOrientation.right;
         public float MaxSpeed => Running ? runSpeed : walkSpeed;
         public float WalkSpeed => walkSpeed;
@@ -57,11 +57,9 @@ namespace RPGPlatformer.Movement
 
         public virtual void HandleMoveInput(float moveInput)
         {
-            if (moveInput == 0) return;
-
-            moveInput = Mathf.Sign(moveInput);
+            
+            SetOrientation(moveInput);
             UpdatePhysicsData();
-            SetOrientation((HorizontalOrientation)moveInput);
             Move(moveInput);
         }
 
@@ -85,6 +83,14 @@ namespace RPGPlatformer.Movement
                     rb.Move(FacingRight, rb.linearVelocity, moveInput * groundDirections[i],
                         MaxSpeed, movementOptions);
                 }
+            }
+        }
+
+        public virtual void SetOrientation(float moveInput)
+        {
+            if (moveInput != 0)
+            {
+                SetOrientation((HorizontalOrientation)Math.Sign(moveInput));
             }
         }
 
