@@ -9,15 +9,12 @@ namespace RPGPlatformer.Core
     public class CurveRenderer : MonoBehaviour//, ISerializationCallbackReceiver
     {
         [Min(0)][SerializeField] int lineRendererPositionCount = 75;
-        [SerializeField] CurveGuidePoint[] guidePoints;
-        [SerializeField] bool lerpMode;
+        [SerializeField] CurveGuidePoint[] guidePoints;//doesn't need to be serialized?
+        [SerializeField] bool lerpMode;//can be removed?
         [SerializeField] float lerpRate = 5;
         //note: numPointsDrawn is independent of pointData.Length.
         //pointData determines the curve we want to draw and numPointsDrawn
         //is number of points drawn along that curve.
-
-        //to-do: when it redraws curve it could lerp between old positions and new
-        //(so that deactivating a guide point can work in animator, i.e. still produce a gradual change in the curve)
 
         Vector3[] goalPositions;
         Vector3[] lineRendererPositions;//used as storage to get and set lineRenderer positions

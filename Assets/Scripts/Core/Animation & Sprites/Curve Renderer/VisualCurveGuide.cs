@@ -1,8 +1,5 @@
 ﻿using RPGPlatformer.Core;
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
 
 namespace RPGPlatformer
 {
