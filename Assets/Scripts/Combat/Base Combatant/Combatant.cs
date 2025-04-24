@@ -112,17 +112,23 @@ namespace RPGPlatformer.Combat
             InitializeUnarmedWeapon();
         }
 
-        private void Start()
-        {
-            ConfigureReplenishableStats();
-            InitializeMinCombatDistance();
-        }
+        //private void Start()
+        //{
+        //    //ConfigureReplenishableStats();
+        //    InitializeMinCombatDistance();
+        //}
 
         private void Update()
         {
             //auto-replenish stats if enabled
             stamina.Update();
             wrath.Update();
+        }
+
+        public virtual void OnStart()
+        {
+            ConfigureReplenishableStats();
+            InitializeMinCombatDistance();
         }
 
         public virtual void InitializeMinCombatDistance()
@@ -261,7 +267,10 @@ namespace RPGPlatformer.Combat
 
             if (destroyOnFinalizeDeath)
             {
-                Destroy(gameObject);
+                if (gameObject)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 

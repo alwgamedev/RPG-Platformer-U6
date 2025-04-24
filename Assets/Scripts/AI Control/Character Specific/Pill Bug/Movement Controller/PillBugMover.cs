@@ -18,6 +18,7 @@ namespace RPGPlatformer.Movement
         float wheelRadius => radiusMultiplier * (NumBodyPieces / (float)(NumBodyPieces - 1)) * Width / (2 * Mathf.PI);
         float dTheta => wheelAngleRange / NumBodyPieces;
 
+        public bool Curled => curled;
         public WheelAxle Axle => axle;
 
         private void Start()

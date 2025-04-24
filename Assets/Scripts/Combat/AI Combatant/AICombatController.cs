@@ -12,9 +12,11 @@ namespace RPGPlatformer.Combat
 
     public class AICombatController : GenericCombatController<CombatStateManager<T1, T2, T3, T4>, T1, T2, T3, T4>
     {
+        [SerializeField] protected CombatantHealthBarCanvas healthBarCanvas;
+
         public bool autoRetaliate = true;
 
-        protected CombatantHealthBarCanvas healthBarCanvas;
+        //protected CombatantHealthBarCanvas healthBarCanvas;
 
         public IHealth currentTarget;
 
@@ -22,8 +24,11 @@ namespace RPGPlatformer.Combat
 
         protected override void Start()
         {
-            healthBarCanvas = GetComponentInChildren<CombatantHealthBarCanvas>();
-            if (healthBarCanvas != null)
+            if (!healthBarCanvas)
+            {
+                healthBarCanvas = GetComponentInChildren<CombatantHealthBarCanvas>();
+            }
+            if (healthBarCanvas)
             {
                 healthBarCanvas.Configure(this);
             }

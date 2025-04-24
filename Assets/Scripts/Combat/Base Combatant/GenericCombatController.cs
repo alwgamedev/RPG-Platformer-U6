@@ -105,6 +105,8 @@ namespace RPGPlatformer.Combat
 
             stateDriver.OnInventoryOverflow += OnInventoryOverflow;
             InitializeInventoryItems();
+
+            stateDriver.OnStart();
         }
 
         protected virtual void LateUpdate()
