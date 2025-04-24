@@ -131,7 +131,7 @@ namespace RPGPlatformer.Movement
         protected virtual void BeginWallCling(bool airborne)
         {
             stateManager.AnimateWallCling(true);
-            stateDriver.BeginWallCling(airborne, wallDetectionOptions.WallClingRotationSpeed);
+            stateDriver.BeginWallCling(/*airborne,*/ wallDetectionOptions.WallClingRotationSpeed);
         }
 
         protected virtual void EndWallCling()
