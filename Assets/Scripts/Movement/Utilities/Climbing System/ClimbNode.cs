@@ -6,10 +6,87 @@ namespace RPGPlatformer.Movement
     {
         public ClimbNode Higher { get; private set; }
         public ClimbNode Lower {  get; private set; }
+        public float MaxPosition { get; private set; }
+        public float MinPosition { get; private set; }
+
+        private void FixedUpdate()
+        {
+            UpdateMaxAndMinPositions();
+        }
 
         public void SetAdjacentNodes(ClimbNode higher, ClimbNode lower)
         {
+            Higher = higher;
+            Lower = lower;
+        }
 
+        public ClimberData GetClimberData(float localPosition)
+        {
+            if (localPosition > MaxPosition && Higher)
+            {
+                return Higher.GetClimberData(Higher.MinPosition + localPosition - MaxPosition);
+            }
+
+            if (localPosition < MinPosition && Lower)
+            {
+                return Lower.GetClimberData(Lower.MaxPosition + localPosition - MinPosition);
+            }
+
+            return new(this, Mathf.Clamp(localPosition, MinPosition, MaxPosition));
+        }
+
+        //"local position" measured on a bent number line, where positives go in HigherDirection()
+        //and negatives in LowerDirection()
+        public Vector3 LocalToWorldPosition(float localPosition)
+        {
+            return transform.position 
+                + (localPosition > 0 ? localPosition * HigherDirection() : localPosition * LowerDirection());
+        }
+
+        public Vector3 HigherDirection()
+        {
+            if (!Higher)
+            {
+                return Vector3.zero;
+            }
+
+            return (Higher.transform.position - transform.position).normalized;
+        }
+
+        public Vector3 HigherRay()
+        {
+            if (!Higher)
+            {
+                return Vector3.zero;
+            }
+
+            return Higher.transform.position - transform.position;
+        }
+
+        public Vector3 LowerDirection()
+        {
+            if (!Lower)
+            {
+                return Vector2.zero;
+            }
+
+            return (Lower.transform.position - transform.position).normalized;
+        }
+
+        public Vector3 LowerRay()
+        {
+            if (!Lower)
+            {
+                return Vector3.zero;
+            }
+
+            return Lower.transform.position - transform.position;
+        }
+
+        private void UpdateMaxAndMinPositions()
+        {
+            MaxPosition = HigherRay().magnitude;
+            MinPosition = LowerRay().magnitude;
         }
     }
 }

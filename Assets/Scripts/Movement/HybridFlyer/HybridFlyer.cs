@@ -6,7 +6,7 @@ using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Movement
 {
-    public class HybridFlyer : AdvancedMover
+    public class HybridFlyer : AIMover
     {
         [SerializeField] float inFlightLinearDamping = 30;
         [SerializeField] float flightSpeed = 3;

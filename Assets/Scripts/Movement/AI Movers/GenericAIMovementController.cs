@@ -10,7 +10,7 @@ namespace RPGPlatformer.Movement
 
     public abstract class GenericAIMovementController<T0, T1, T2, T3> 
         : GenericAdvancedMovementController<T0, T1, T2, T3>, IAIMovementController
-        where T0 : AdvancedMover
+        where T0 : AIMover
         where T1 : AdvancedMovementStateGraph
         where T2 : AdvancedMovementStateMachine<T1>
         where T3 : AdvancedMovementStateManager<T1, T2, T0>

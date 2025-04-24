@@ -399,7 +399,7 @@ PrefabInstance:
       addedObject: {fileID: -4241576377121345369}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5255926580514553323}
+      addedObject: {fileID: 2066941567686738057}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8914383755510078053}
@@ -527,7 +527,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fff2b6c0084a44aabe198745fbf067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5255926580514553323
+  animator: {fileID: 0}
+--- !u!114 &2066941567686738057
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -536,7 +537,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8296160008381991138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68597781190fc664c9df98261ab08878, type: 3}
+  m_Script: {fileID: 11500000, guid: 9704eb5223fb39e4c94cddc7baec1101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   groundednessToleranceFactor: 0.7
@@ -673,6 +674,7 @@ MonoBehaviour:
       ability: 0
   useDefaultAbilityBars: 0
   immuneToStuns: 0
+  healthBarCanvas: {fileID: 0}
   autoRetaliate: 1
 --- !u!114 &3663846158437281456
 MonoBehaviour:
