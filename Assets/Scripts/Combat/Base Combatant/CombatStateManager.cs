@@ -83,7 +83,8 @@ namespace RPGPlatformer.Combat
         {
             if (stateDriver.EquippedWeapon != null)
             {
-                animationControl.SetAnimatorOverride(((Weapon)stateDriver.EquippedWeapon).AnimatorOverrideController);
+                animationControl.SetRuntimeAnimatorController(
+                    ((Weapon)stateDriver.EquippedWeapon).AnimatorOverrideController);
             }
         }
 

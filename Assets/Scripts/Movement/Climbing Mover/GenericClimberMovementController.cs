@@ -55,7 +55,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual async void OnClimbingEntry()
         {
-            FaceTarget(stateDriver.ClimberData.currentNode.transform);
+            //FaceTarget(stateDriver.ClimberData.currentNode.transform);
             await MiscTools.DelayGameTime(0.1f, GlobalGameTools.Instance.TokenSource.Token);
             //so you still get the initial impact with the climbable (e.g. if it's a swinging rope)
             if (Climbing)

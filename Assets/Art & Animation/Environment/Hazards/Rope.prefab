@@ -777,9 +777,9 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 777158391
-  m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingLayerID: -199256311
+  m_SortingLayer: 3
+  m_SortingOrder: -1
   m_Positions:
   - {x: 10, y: 6, z: 0}
   - {x: 10, y: 5.939189, z: 0}
@@ -858,7 +858,7 @@ LineRenderer:
   - {x: 10, y: 1.5, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.03
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -951,7 +951,7 @@ MonoBehaviour:
     point: {x: 10, y: 1.5, z: 0}
     velocity: {x: 0, y: -0.099999905, z: 0}
   lerpMode: 1
-  lerpRate: 50
+  lerpRate: 150
 --- !u!114 &2659651702566953675
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -105,16 +105,11 @@ namespace RPGPlatformer.Core
             animator.ResetTrigger(ParameterID(name));
         }
 
-        public void SetAnimatorOverride(AnimatorOverrideController animOverride)
+        public void SetRuntimeAnimatorController(RuntimeAnimatorController animController)
         {
-            if (!animator || animOverride == null) return;
-            animator.runtimeAnimatorController = animOverride;
-            //I believe setting to null will default back to the original controller
-        }
+            if (!animator || animController == null) return;
 
-        public void RevertAnimatorOverride()
-        {
-            if (!animator) return;
+            //cache state and parameter values before swapping!
 
             AnimatorStateInfo[] layerInfo = new AnimatorStateInfo[animator.layerCount];
 
@@ -142,13 +137,14 @@ namespace RPGPlatformer.Core
                 }
             }
 
-            animator.runtimeAnimatorController = defaultAnimatorController;
+            animator.runtimeAnimatorController = animController;
+            //I believe setting to null will default back to the original controller
+
 
             for (int i = 0; i < animator.layerCount; i++)
             {
                 animator.Play(layerInfo[i].fullPathHash, i, layerInfo[i].normalizedTime);
             }
-
             foreach (var p in floatParameters)
             {
                 animator.SetFloat(p.Key, p.Value);
@@ -159,6 +155,15 @@ namespace RPGPlatformer.Core
             }
 
             animator.Update(0.0f);
+        }
+
+        public void RevertAnimatorOverride()
+        {
+            SetRuntimeAnimatorController(defaultAnimatorController);
+
+            //if (!animator) return;
+
+            //animator.runtimeAnimatorController = defaultAnimatorController;
         }
 
         public void PlayAnimationState(string stateName, string layerName, float normalizedTime)
