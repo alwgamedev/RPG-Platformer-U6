@@ -4,16 +4,16 @@ namespace RPGPlatformer.Movement
 {
     public class ClimbNode : MonoBehaviour
     {
-        Rigidbody2D rb;
 
         public ClimbNode Higher { get; private set; }
         public ClimbNode Lower {  get; private set; }
         public float MaxPosition { get; private set; }
         public float MinPosition { get; private set; }
+        public Rigidbody2D Rigidbody { get; private set; }
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody2D>();
+            Rigidbody = GetComponent<Rigidbody2D>();
         }
 
         private void FixedUpdate()
@@ -29,9 +29,9 @@ namespace RPGPlatformer.Movement
 
         public void Push(float acceleration)
         {
-            if (rb)
+            if (Rigidbody)
             {
-                rb.AddForce(acceleration * rb.mass * Vector2.right);
+                Rigidbody.AddForce(acceleration * Rigidbody.mass * Vector2.right);
             }
         }
 

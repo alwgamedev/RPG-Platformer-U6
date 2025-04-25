@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Movement
 {
     public class Climber : AdvancedMover, IClimber
     {
-        int climbableObjectLayer;
+        protected int climbableObjectLayer;
+
+        public bool ClimbableCollisionEnabled { get; protected set; }
 
         protected override void Awake()
         {
@@ -17,6 +20,8 @@ namespace RPGPlatformer.Movement
 
         public override void Jump(Vector2 force, bool triggerJumping = true)
         {
+            //necessary to re-enable rigidbody before applying jump force
+            //(yes, end climb will get called again when you exit climbing state, but oh well)
             if (ClimberData.currentNode != null)
             {
                 EndClimb();
@@ -25,10 +30,8 @@ namespace RPGPlatformer.Movement
             base.Jump(force, triggerJumping);
         }
 
-        //CLIMBING
 
-        //and somewhere we need to trigger climbing state (and in entry, 
-        //movement controller will configure its update functions etc.)
+        //CLIMBING
 
         public void TryGrabOntoClimbableObject(ClimbingMovementOptions options)
         {
@@ -44,7 +47,7 @@ namespace RPGPlatformer.Movement
         public void OnBeginClimb()
         {
             myRigidbody.bodyType = RigidbodyType2D.Kinematic;
-            myCollider.enabled = false;
+            EnableCollisionWithClimbables(false);
         }
 
         public void UpdateClimb(float moveInput, ClimbingMovementOptions options)
@@ -53,8 +56,6 @@ namespace RPGPlatformer.Movement
             {
                 moveInput = Mathf.Sign(moveInput);
             }
-
-            //Debug.Log($"before: {ClimberData.currentNode.name}, {ClimberData.localPosition}");
 
             if (ClimberData.currentNode)
             {
@@ -68,14 +69,10 @@ namespace RPGPlatformer.Movement
                 return;
             }
 
-            //Debug.Log($"after: {ClimberData.currentNode.name}, {ClimberData.localPosition}");
-
-            //we could try lerp unclamped also
             var p = ClimberData.WorldPosition();
             var d = Vector3.Distance(transform.position, p);
             transform.position = Vector3.Lerp(transform.position, p,
                 options.PositionLerpRate * Time.deltaTime / d);
-            //transform.position = ClimberData.WorldPosition();
             var tUp = ClimberData.localPosition < 0 ? - ClimberData.currentNode.LowerDirection()
                 : ClimberData.currentNode.HigherDirection();
             transform.TweenTransformUpTowards(tUp, options.RotationSpeed);
@@ -85,14 +82,29 @@ namespace RPGPlatformer.Movement
         {
             ClimberData = default;
             myRigidbody.bodyType = RigidbodyType2D.Dynamic;
-            myRigidbody.linearVelocity = Vector3.zero;//otherwise rope velocity and collision send you flying
             transform.rotation = Quaternion.identity;
-            myCollider.enabled = true;
 
             if (triggerFreefall)
             {
                 TriggerFreefall();
             }
+
+            //EnableCollisionWithClimbables(false);
+            //^instead we're doing this after a delay in controller's OnClimbingExit (to avoid exit collision with rope)
+        }
+
+        public void EnableCollisionWithClimbables(bool val)
+        {
+            if (val)
+            {
+                myCollider.excludeLayers = myCollider.excludeLayers & ~climbableObjectLayer;
+            }
+            else
+            {
+                myCollider.excludeLayers = myCollider.excludeLayers | climbableObjectLayer;
+            }
+
+            ClimbableCollisionEnabled = val;
         }
     }
 }

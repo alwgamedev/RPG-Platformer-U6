@@ -66,10 +66,17 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void OnClimbingExit()
+        protected virtual async void OnClimbingExit()
         {
             //just to be extra sure rotation and rigidbody get reset
             stateDriver.EndClimb(false);
+
+            await MiscTools.DelayGameTime(0.5f, GlobalGameTools.Instance.TokenSource.Token);
+
+            if (!Climbing && !stateDriver.ClimbableCollisionEnabled)
+            {
+                stateDriver.EnableCollisionWithClimbables(true);
+            }
         }
 
         protected virtual void TryGrabOntoClimbableObject()
