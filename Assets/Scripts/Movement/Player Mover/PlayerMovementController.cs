@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using RPGPlatformer.Core;
-using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.Movement
 {
-    public class PlayerMovementController : AdvancedMovementController/*, IPausable*/
+    public class PlayerMovementController : ClimberMovementController/*, IPausable*/
     {
         //bool inputDisabled;
 
@@ -32,84 +31,42 @@ namespace RPGPlatformer.Movement
             {
                 if (InputSource.IsInputDisabled) return;
                 moveRightHeldDown = true;
-                UpdateMoveInput();
+                ComputeMoveInput();
             };
             iam.InputAction(InputActionsManager.moveRightActionName).canceled += (context) =>
             {
                 //if (!InputSource.IsInputEnabled) return;
                 moveRightHeldDown = false;
-                UpdateMoveInput();
+                ComputeMoveInput();
             };
             iam.InputAction(InputActionsManager.moveLeftActionName).started += (context) =>
             {
                 if (InputSource.IsInputDisabled) return;
                 moveLeftHeldDown = true;
-                UpdateMoveInput();
+                ComputeMoveInput();
             };
             iam.InputAction(InputActionsManager.moveLeftActionName).canceled += (context) =>
             {
                 //if (inputDisabled) return;
                 moveLeftHeldDown = false;
-                UpdateMoveInput();
+                ComputeMoveInput();
             };
-
             iam.InputAction(InputActionsManager.jumpActionName).started += (context) =>
             {
                 if (InputSource.IsInputDisabled) return;
                 stateDriver.Jump();
             };
+            iam.InputAction(InputActionsManager.climbActionName).started += (context) =>
+            {
+                if (InputSource.IsInputDisabled) return;
+                TryGrabOntoClimbableObject();
+            };
         }
 
-        //protected override void HandleMoveInput()
-        //{
-        //    if (CurrentMount == null)
-        //    {
-        //        base.HandleMoveInput();
-        //    }
-        //    else
-        //    {
-        //        HandleMoveInput(MoveInput, MoveWithoutAcceleration);
-        //        //mover.Rigidbody.linearVelocity += CurrentMount.Velocity;
-        //    }
-        //}
-
-        private void UpdateMoveInput()
+        private void ComputeMoveInput()
         {
             MoveInput = new Vector2((moveLeftHeldDown ? -1 : 0) + (moveRightHeldDown ? 1 : 0), 0);
         }
-
-        //public void Pause()
-        //{
-        //    DisableInput();
-        //}
-
-        //public void Unpause()
-        //{
-        //    EnableInput();
-        //}
-
-        //private void DisableInput()
-        //{
-        //    SoftStop();
-        //    inputDisabled = true;
-        //}
-
-        //private void EnableInput()
-        //{
-        //    inputDisabled = false;
-        //}
-
-        //public override void OnDeath()
-        //{
-        //    DisableInput();
-        //    base.OnDeath();
-        //}
-
-        //public override void OnRevival()
-        //{
-        //    base.OnRevival();
-        //    EnableInput();
-        //}
 
         protected override void OnDestroy()
         {

@@ -16,14 +16,6 @@ namespace RPGPlatformer.Movement
             this.localPosition = localPosition;
         }
 
-        public void IncrementPosition(float dP)
-        {
-            if (currentNode)
-            {
-                this = currentNode.GetClimberData(localPosition + dP);
-            }
-        }
-
         //note this will throw an error if no current node
         public Vector3 WorldPosition()
         {

@@ -326,7 +326,7 @@ namespace RPGPlatformer.Movement
         }
 
         //could hook this up to an animation event
-        public void OnDeath()
+        public virtual void PlayDeathEffect()
         {
             if (unfreezeRotationOnDeath)
             {
@@ -336,7 +336,7 @@ namespace RPGPlatformer.Movement
             myRigidbody.AddTorque((int)CurrentOrientation * deathTorque, ForceMode2D.Impulse);
         }
 
-        public void OnRevival()
+        public virtual void OnRevival()
         {
             myRigidbody.freezeRotation = true;
             myRigidbody.rotation = 0;

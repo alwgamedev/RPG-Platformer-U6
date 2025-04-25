@@ -137,7 +137,7 @@ namespace RPGPlatformer.Movement
             return false;
         }
 
-        protected override void HandleAdjacentWallInteraction(bool airborne)
+        protected override void HandleAdjacentWallInteraction(/*bool airborne*/)
         {
             if (stateDriver.FacingWall)
             {

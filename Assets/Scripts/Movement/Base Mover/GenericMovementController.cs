@@ -19,9 +19,6 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] MovementOptions[] movementOptions;
 
-        //protected T0 mover;
-        //protected T3 movementManager;
-
         protected bool ignoreMoveInputNextUpdate;
         protected Vector2 moveInput;
 
@@ -315,7 +312,6 @@ namespace RPGPlatformer.Movement
         {
             if (Freefalling)
             {
-                //UpdateMoveOptions(movementManager.StateGraph.freefall);
                 stateManager.AnimateFreefall();
             }
         }
@@ -359,7 +355,7 @@ namespace RPGPlatformer.Movement
             OnUpdate = null;
             SoftStop();
             stateManager.Freeze();
-            stateDriver.OnDeath();
+            stateDriver.PlayDeathEffect();
         }
 
         public virtual void OnRevival()

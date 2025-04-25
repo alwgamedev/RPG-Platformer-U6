@@ -497,7 +497,7 @@ PrefabInstance:
       addedObject: {fileID: 663912934581842271}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5777766962256256055}
+      addedObject: {fileID: 4224925343655634794}
     - targetCorrespondingSourceObject: {fileID: 4817627405498996873, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 253623311915411687}
@@ -609,6 +609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fff2b6c0084a44aabe198745fbf067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
 --- !u!114 &663912934581842271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669,7 +670,12 @@ MonoBehaviour:
     numWallCastsPerThird: 2
     wallCastDistanceFactor: 2
     wallClingRotationSpeed: 1.58
---- !u!114 &5777766962256256055
+  climbingMovementOptions:
+    nodeDetectionRadius: 0.5
+    climbSpeed: 1.5
+    rotationSpeed: 1.58
+    positionTweenRate: 5
+--- !u!114 &4224925343655634794
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -678,7 +684,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 474939305929962993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68597781190fc664c9df98261ab08878, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b7969c416dab274780ca9a255497825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   groundednessToleranceFactor: 0.72

@@ -22,17 +22,16 @@ namespace RPGPlatformer.Movement
         {
             base.Configure();
 
-            GetState(typeof(Grounded).Name).OnEntry += stateDriver.ResetJumpNum;
-            GetState(typeof(Grounded).Name).OnEntry += AnimateLanding;
+            StateGraph.jumping.OnExit += stateDriver.ResetJumpNum;
+            StateGraph.grounded.OnEntry += AnimateLanding;
 
-            GetState(typeof(Jumping).Name).OnEntry += AnimateJumping;
-            GetState(typeof(Jumping).Name).OnEntryToSameState += AnimateDoubleJump;
+            StateGraph.jumping.OnEntry += AnimateJumping;
+            StateGraph.jumping.OnEntryToSameState += AnimateDoubleJump;
         }
 
         public void AnimateMovement(float value)
         {
             animationControl.SetFloat("speedFraction", value, 0.1f, Time.deltaTime);
-            //animationControl.animator.SetFloat("moveMotionTime", Time.time);
         }
 
         public void AnimateJumping()

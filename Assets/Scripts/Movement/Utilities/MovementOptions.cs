@@ -7,7 +7,7 @@ namespace RPGPlatformer.Movement
 
     public enum MovementType
     {
-        Grounded, Freefall, Jumping, Flying
+        Grounded, Freefall, Jumping, Flying, Climbing
     }
 
     public enum MoveDirection

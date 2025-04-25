@@ -11,21 +11,21 @@
     }
 
     public class Jumping : Airborne { }
-    public class Climbing : Grounded { }
+    //public class Climbing : Grounded { }
 
     public class AdvancedMovementStateGraph : MovementStateGraph
     {
         public readonly Jumping jumping;
-        public readonly Climbing climbing;
+        //public readonly Climbing climbing;
 
         public AdvancedMovementStateGraph() : base()
         {
             jumping = CreateNewVertex<Jumping>();
-            climbing = CreateNewVertex<Climbing>();
+            //climbing = CreateNewVertex<Climbing>();
 
             AddEdgeBothWays((grounded, jumping));
             AddEdge((freefall, jumping));
-            AddEdgeBothWaysForAll(climbing);
+            //AddEdgeBothWaysForAll(climbing);
         }
     }
 }

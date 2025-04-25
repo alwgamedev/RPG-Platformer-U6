@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
-    public class AdvancedMover : Mover, IClimber
+    public class AdvancedMover : Mover
     {
         [SerializeField] protected float runSpeed = 3;
         [SerializeField] protected float walkSpeed = 0.8f;
@@ -20,7 +20,6 @@ namespace RPGPlatformer.Movement
         public float WalkSpeed => walkSpeed;
         public virtual bool Running { get; set; }
         public bool FacingWall => facingWall;
-        public ClimberData ClimberData { get; }
 
         public event Action AwkwardWallMoment;
 
@@ -72,7 +71,6 @@ namespace RPGPlatformer.Movement
             //    TriggerLanding();
             //}
 
-            //ResetJumpNum();
             TriggerLanding();
 
             RotateTowardsAdjacentWall(rotationSpeed);
@@ -157,44 +155,6 @@ namespace RPGPlatformer.Movement
         {
             adjacentWallDirection = Vector2.up;
             facingWall = false;
-        }
-
-
-        //CLIMBING
-
-        //and somewhere we need to trigger climbing state (and in entry, 
-        //movement controller will configure its update functions etc.)
-
-        public void TryGrabOntoClimbableObject()
-        {
-            //do an overlap circle from say 2/3 up body and latch onto nearest climbNode
-        }
-
-        public void OnBeginClimb()
-        {
-            //set rb to kinematic
-            //turn off collider? but then you can't get hit by projectiles
-            //just trying not to have collision with rope
-            //you could also deactive rope colliders, since only player interacts with them
-        }
-
-        //to be called in fixedupdate by movement controller
-        //(call even if move input zero, because we still need to update position and rotation)
-        //ClimbingMovementOptions = climbSpeed & rotationSpeed
-        public void UpdateClimb(float moveInput /*ClimbingMovementOptions*/)
-        {
-            //increment ClimbData position
-            //if currentNode == null EndClimb()
-            //set transform.position (+ offset)
-            //  (later maybe tween position, which would allow potential to be thrown off rope at certain distance
-            //  i.e. if rope is moving so rapidly that tween rate is too low to maintain position)
-            //match rotation
-        }
-
-        public void EndClimb()
-        {
-            //set current node to null
-            //re-enable normal physics
         }
 
         protected override void OnDestroy()

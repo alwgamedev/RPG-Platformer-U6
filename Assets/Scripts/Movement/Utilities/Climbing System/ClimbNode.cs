@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -24,12 +25,12 @@ namespace RPGPlatformer.Movement
         {
             if (localPosition > MaxPosition && Higher)
             {
-                return Higher.GetClimberData(Higher.MinPosition + localPosition - MaxPosition);
+                return Higher.GetClimberData(localPosition - MaxPosition);
             }
 
             if (localPosition < MinPosition && Lower)
             {
-                return Lower.GetClimberData(Lower.MaxPosition + localPosition - MinPosition);
+                return Lower.GetClimberData(localPosition - MinPosition);
             }
 
             return new(this, Mathf.Clamp(localPosition, MinPosition, MaxPosition));
@@ -40,14 +41,19 @@ namespace RPGPlatformer.Movement
         public Vector3 LocalToWorldPosition(float localPosition)
         {
             return transform.position 
-                + (localPosition > 0 ? localPosition * HigherDirection() : localPosition * LowerDirection());
+                + (localPosition > 0 ? localPosition * HigherDirection() : - localPosition * LowerDirection());
+        }
+
+        public float WorldToLocalPosition(Vector3 worldPosition)
+        {
+            return Vector3.Dot(worldPosition - transform.position, HigherDirection());
         }
 
         public Vector3 HigherDirection()
         {
             if (!Higher)
             {
-                return Vector3.zero;
+                return Vector3.up;
             }
 
             return (Higher.transform.position - transform.position).normalized;
@@ -67,7 +73,7 @@ namespace RPGPlatformer.Movement
         {
             if (!Lower)
             {
-                return Vector2.zero;
+                return - Vector3.up;
             }
 
             return (Lower.transform.position - transform.position).normalized;
@@ -86,7 +92,7 @@ namespace RPGPlatformer.Movement
         private void UpdateMaxAndMinPositions()
         {
             MaxPosition = HigherRay().magnitude;
-            MinPosition = LowerRay().magnitude;
+            MinPosition = - LowerRay().magnitude;
         }
     }
 }

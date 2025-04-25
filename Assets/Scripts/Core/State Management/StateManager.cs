@@ -41,7 +41,7 @@ namespace RPGPlatformer.Core
 
         protected T2 stateDriver;
 
-        public StateManager(T1 stateMachine = null, T2 driver = null)
+        public StateManager(T1 stateMachine = null, T2 stateDriver = null)
         {
             if (stateMachine != null)
             {
@@ -51,7 +51,7 @@ namespace RPGPlatformer.Core
             {
                 StateMachine = (T1)Activator.CreateInstance(typeof(T1));
             }
-            this.stateDriver = driver;
+            this.stateDriver = stateDriver;
         }
 
         public virtual void Configure()

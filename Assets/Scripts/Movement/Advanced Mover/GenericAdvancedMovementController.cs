@@ -3,7 +3,7 @@
 namespace RPGPlatformer.Movement
 {
     public abstract class GenericAdvancedMovementController<T0, T1, T2, T3> 
-        : GenericMovementController<T0, T1, T2, T3>, IMovementController
+        : GenericMovementController<T0, T1, T2, T3>
         where T0 : AdvancedMover
         where T1 : AdvancedMovementStateGraph
         where T2 : AdvancedMovementStateMachine<T1>
@@ -41,6 +41,13 @@ namespace RPGPlatformer.Movement
             stateDriver.AwkwardWallMoment += IgnoreMoveInputNextUpdate;
         }
 
+        protected override void ConfigureStateManager()
+        {
+            base.ConfigureStateManager();
+
+            stateManager.StateGraph.jumping.OnEntry += OnJumpingEntry;
+        }
+
         //BASIC FUNCTIONS
 
         protected override void UpdateMover()
@@ -62,6 +69,14 @@ namespace RPGPlatformer.Movement
 
 
         //STATE CHANGE HANDLERS
+
+        protected virtual void OnJumpingEntry()
+        {
+            if (stateManager.IsWallClinging())
+            {
+                EndWallCling();
+            }
+        }
 
         protected virtual void UpdateMaxSpeed()
         {
@@ -92,17 +107,17 @@ namespace RPGPlatformer.Movement
             stateDriver.UpdateAdjacentWall(Grounded, wallDetectionOptions.NumWallCastsPerThird, 
                 wallDetectionOptions.WallCastDistanceFactor);
             SetDownSpeed();
-            HandleAdjacentWallInteraction(!Grounded);
+            HandleAdjacentWallInteraction(/*!Grounded*/);
         }
 
-        protected virtual void HandleAdjacentWallInteraction(bool airborne)
+        protected virtual void HandleAdjacentWallInteraction(/*bool airborne*/)
         {
             if (moveInput != Vector2.zero && stateDriver.FacingWall)
             {
                 stateManager.AnimateWallScramble(false);
                 if (!stateManager.IsWallClinging())
                 {
-                    BeginWallCling(airborne);
+                    BeginWallCling(/*airborne*/);
                 }
                 else
                 {
@@ -128,7 +143,7 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void BeginWallCling(bool airborne)
+        protected virtual void BeginWallCling(/*bool airborne*/)
         {
             stateManager.AnimateWallCling(true);
             stateDriver.BeginWallCling(/*airborne,*/ wallDetectionOptions.WallClingRotationSpeed);
