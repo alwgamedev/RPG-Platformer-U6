@@ -33,7 +33,7 @@ namespace RPGPlatformer.Movement
             }
             else//doing this in FixedUpdate causes flickering
             {
-                stateDriver.UpdateClimb(MoveInput.x, climbingMovementOptions);
+                stateDriver.UpdateClimb(InSwingMode() ? 0 : MoveInput.x, climbingMovementOptions);
             }
         }
 
@@ -43,14 +43,16 @@ namespace RPGPlatformer.Movement
             {
                 base.HandleMoveInput();
             }
-            //else
-            //{
-            //    stateDriver.UpdateClimb(MoveInput.x, climbingMovementOptions);
-            //    //if (Climbing && stateDriver.ClimberData.currentNode)
-            //    //{
-            //    //    FaceTarget(stateDriver.ClimberData.currentNode.transform.position);
-            //    //}
-            //}
+            else if (MoveInput.x != 0 && InSwingMode() && stateDriver.ClimberData.currentNode)
+            {
+                stateDriver.ClimberData.currentNode.Push(climbingMovementOptions.SwingPushAcceleration
+                    * Mathf.Sign(MoveInput.x));
+            }
+        }
+
+        protected virtual bool InSwingMode()
+        {
+            return false;
         }
 
         protected virtual async void OnClimbingEntry()
@@ -84,7 +86,7 @@ namespace RPGPlatformer.Movement
             {
                 base.AnimateMovement();
             }
-            else
+            else if (!InSwingMode())
             {
                 stateManager.AnimateClimbing(MoveInput.x);
             }

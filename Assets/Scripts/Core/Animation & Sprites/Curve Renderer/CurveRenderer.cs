@@ -29,7 +29,7 @@ namespace RPGPlatformer.Core
 
         private void OnEnable()
         {
-            RedrawCurve();
+            SnapToGoalPositions();
         }
 
         private void Update()
@@ -38,16 +38,20 @@ namespace RPGPlatformer.Core
             {
                 LerpTowardGoalPositions();
             }
+            else
+            {
+                SnapToGoalPositions();
+            }
         }
 
         public void HandleGuidePointChanges(VisualCurveGuidePoint[] guides)
         {
             SetGuidePoints(guides);
             SetGoalPositions();
-            if (!lerpMode)
-            {
-                RedrawCurve();
-            }
+            //if (!lerpMode)
+            //{
+            //    RedrawCurve();
+            //}
         }
 
         private void SetGuidePoints(VisualCurveGuidePoint[] guides)
@@ -151,7 +155,19 @@ namespace RPGPlatformer.Core
             lineRenderer.SetPositions(lineRendererPositions);
         }
 
-        private void RedrawCurve()
+        //private void SnapToGoalPositions()
+        //{
+        //    if (goalPositions == null) return;
+
+        //    if (goalPositions.Length != lineRenderer.positionCount)
+        //    {
+        //        lineRenderer.positionCount = goalPositions.Length;
+        //    }
+
+        //    lineRenderer.SetPositions(goalPositions);
+        //}
+
+        private void SnapToGoalPositions()
         {
             if (goalPositions == null) return;
             if (lineRenderer == null)

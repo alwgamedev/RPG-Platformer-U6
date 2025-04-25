@@ -68,6 +68,11 @@ namespace RPGPlatformer.Movement
             MoveInput = new Vector2((moveLeftHeldDown ? -1 : 0) + (moveRightHeldDown ? 1 : 0), 0);
         }
 
+        protected override bool InSwingMode()
+        {
+            return SettingsManager.Instance.IAM.HeldDown(InputActionsManager.climbActionName);
+        }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();

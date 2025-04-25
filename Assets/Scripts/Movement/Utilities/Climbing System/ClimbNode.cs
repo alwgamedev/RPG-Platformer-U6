@@ -1,14 +1,20 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
     public class ClimbNode : MonoBehaviour
     {
+        Rigidbody2D rb;
+
         public ClimbNode Higher { get; private set; }
         public ClimbNode Lower {  get; private set; }
         public float MaxPosition { get; private set; }
         public float MinPosition { get; private set; }
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
 
         private void FixedUpdate()
         {
@@ -19,6 +25,14 @@ namespace RPGPlatformer.Movement
         {
             Higher = higher;
             Lower = lower;
+        }
+
+        public void Push(float acceleration)
+        {
+            if (rb)
+            {
+                rb.AddForce(acceleration * rb.mass * Vector2.right);
+            }
         }
 
         public ClimberData GetClimberData(float localPosition)
