@@ -78,6 +78,18 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        protected override void AnimateMovement()
+        {
+            if (!Climbing)
+            {
+                base.AnimateMovement();
+            }
+            else
+            {
+                stateManager.AnimateClimbing(MoveInput.x);
+            }
+        }
+
         public override void OnDeath()
         {
             if (Climbing)

@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Core;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -21,11 +22,23 @@ namespace RPGPlatformer.Movement
         {
             base.Configure();
 
-            //will also subscribe animateclimbing(true) here (to set an initial trigger)
-            //just see what's done in base movement state manager
+            StateGraph.climbing.OnEntry += OnClimbingEntry;
+            StateGraph.climbing.OnExit += OnClimbingExit;
         }
 
-        //animate climbing(bool val) (on climbing entry, set a trigger)
-        //animating climbing movement(moveInput) (if no moveinput trigger back to idle climbing pose)
+        public void OnClimbingEntry()
+        {
+            animationControl.SetBool("climbing", true);
+        }
+
+        public void OnClimbingExit()
+        {
+            animationControl.SetBool("climbing", false);
+        }
+
+        public void AnimateClimbing(float moveInput)
+        {
+            animationControl.SetFloat("climbVelocity", moveInput);
+        }
     }
 }

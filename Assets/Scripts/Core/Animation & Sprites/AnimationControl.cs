@@ -115,7 +115,50 @@ namespace RPGPlatformer.Core
         public void RevertAnimatorOverride()
         {
             if (!animator) return;
+
+            AnimatorStateInfo[] layerInfo = new AnimatorStateInfo[animator.layerCount];
+
+            for (int i = 0; i < animator.layerCount; i++)
+            {
+                layerInfo[i] = animator.GetCurrentAnimatorStateInfo(i);
+            }
+
+            Dictionary<int, float> floatParameters = new();
+            Dictionary<int, bool> boolParameters = new();
+
+            int id;
+
+            foreach (var p in animator.parameters)
+            {
+                id = ParameterID(p.name);
+
+                if (p.type == AnimatorControllerParameterType.Float)
+                {
+                    floatParameters[id] = animator.GetFloat(id);
+                }
+                else if (p.type == AnimatorControllerParameterType.Bool)
+                {
+                    boolParameters[id] = animator.GetBool(id);
+                }
+            }
+
             animator.runtimeAnimatorController = defaultAnimatorController;
+
+            for (int i = 0; i < animator.layerCount; i++)
+            {
+                animator.Play(layerInfo[i].fullPathHash, i, layerInfo[i].normalizedTime);
+            }
+
+            foreach (var p in floatParameters)
+            {
+                animator.SetFloat(p.Key, p.Value);
+            }
+            foreach (var p in boolParameters)
+            {
+                animator.SetBool(p.Key, p.Value);
+            }
+
+            animator.Update(0.0f);
         }
 
         public void PlayAnimationState(string stateName, string layerName, float normalizedTime)
