@@ -46,7 +46,7 @@ namespace RPGPlatformer.SceneManagement
         {
             SpawnPlayerToLastCheckpointOrDefault();
             GlobalGameTools.Instance.Player.Combatant.Revive();
-            GameLog.Log("(You have been revived at the last checkpoint.)");
+            GameLog.Log("You have been revived at the last checkpoint.");
         }
 
         //a scene transition trigger will take priority over last saved player checkpoint

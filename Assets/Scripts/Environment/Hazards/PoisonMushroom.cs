@@ -27,6 +27,8 @@ public class PoisonMushroom : MonoBehaviour, IDamageDealer
     {
         gasParticles.Play();
         GlobalGameTools.Instance.Player.MovementController.SetRunning(false);
+        GameLog.Log("Stepping on the mushroom causes it to release a noxious green gas.");
+        GameLog.Log($"You've been poisoned!");
         await AttackAbility.Bleed(this, playerHealth, 35, 12, 1);
         //+disable run
     }
