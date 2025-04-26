@@ -1,4 +1,5 @@
-﻿using RPGPlatformer.Movement;
+﻿using RPGPlatformer.Core;
+using RPGPlatformer.Movement;
 using UnityEngine;
 
 namespace RPGPlatformer.AIControl
@@ -101,7 +102,7 @@ namespace RPGPlatformer.AIControl
 
         private void MountedHandler(IMounter mounter)
         {
-            if (mounter.CompareTag("Player"))
+            if (mounter.transform == GlobalGameTools.Instance.PlayerTransform)
             {
                 playerHasMounted = true;
                 SubscribeMountedHandler(false);

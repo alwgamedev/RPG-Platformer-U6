@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPGPlatformer.Core;
+using System;
 using UnityEngine;
 
 namespace RPGPlatformer.SceneManagement
@@ -11,7 +12,7 @@ namespace RPGPlatformer.SceneManagement
         {
             if (!gameObject.activeInHierarchy) return;
 
-            if (collider.gameObject.CompareTag("Player"))
+            if (collider.transform == GlobalGameTools.Instance.PlayerTransform)
             {
                 CheckpointReached?.Invoke(this);
             }

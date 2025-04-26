@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Core;
+using UnityEngine;
 
 namespace RPGPlatformer.SceneManagement
 {
@@ -12,7 +13,7 @@ namespace RPGPlatformer.SceneManagement
         {
             if (transitionTriggered || !gameObject.activeInHierarchy) return;
 
-            if (collider.gameObject.CompareTag("Player"))
+            if (collider.transform == GlobalGameTools.Instance.PlayerTransform)
             {
                 transitionTriggered = true;
                 ((ISceneTransitionTrigger)this).TriggerScene(sceneTransition);

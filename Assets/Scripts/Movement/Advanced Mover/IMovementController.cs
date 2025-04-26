@@ -13,7 +13,7 @@ namespace RPGPlatformer.Movement
         //public HorizontalOrientation CurrentOrientation { get; }
         public IMover Mover { get; }
 
-        public void SetRunning(bool val);
+        //public void SetRunning(bool val);
         public void MoveTowards(Vector2 point);
         public void MoveAwayFrom(Vector2 point);
         //public void FaceTarget(Transform target);

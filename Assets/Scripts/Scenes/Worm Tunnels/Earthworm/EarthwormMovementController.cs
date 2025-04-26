@@ -157,5 +157,13 @@ namespace RPGPlatformer.AIControl
             DestinationReached = null;
             DirectionChanged = null;
         }
+
+        
+        //UNUSED INTERFACE METHODS
+
+        public void SetRunning(bool val)
+        {
+            return;
+        }
     }
 }

@@ -154,13 +154,19 @@ namespace RPGPlatformer.Combat
             return combatBonusesManager.DamageTakenMultiplier();
         }
 
-        public void BeginDebuff(/*debuff data*/) { }
+        //NOTE: note sure whether this should be done through combatant or combatcontroller
+        //(bc some debuffs may affect movement, in which case we want to go through the controller
+        //who has reference to movement controller)
+        //-- for now "SlowMovement()" is with the controller, so when we get around to doing
+        //the debuff system we may want to unite things
+        public void BeginDebuff(/*debuff data or IDebuff(Data)*/) { }
 
         //temporary until we implement the debuff system
         public void SetInvincible(bool val)
         {
             combatBonusesManager.invincible = val;
         }
+
 
 
         //STATS

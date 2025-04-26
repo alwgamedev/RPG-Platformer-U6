@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Core;
+using RPGPlatformer.Movement;
 using System;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace RPGPlatformer.Combat
         public bool FireButtonIsDown { get; }
         public TickTimer TickTimer { get; }
         public ICombatant Combatant { get; }
+        public ICombatantMovementController MovementController{ get; }
 
         public event Action CombatEntered;
         public event Action CombatExited;

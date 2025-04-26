@@ -11,6 +11,8 @@ namespace RPGPlatformer.Movement
 
         public void FaceTarget(Vector3 target);
 
+        public void SetRunning(bool val);
+
         public void OnDeath();
 
         public void OnRevival();

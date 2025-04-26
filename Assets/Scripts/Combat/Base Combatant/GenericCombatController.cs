@@ -1,6 +1,5 @@
 ﻿using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
-using RPGPlatformer.SceneManagement;
 using System.Threading.Tasks;
 using System.Threading;
 using System;

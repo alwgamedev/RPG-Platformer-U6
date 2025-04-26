@@ -1,8 +1,8 @@
-﻿using Cinemachine;
-using RPGPlatformer.Cinematics;
+﻿using RPGPlatformer.Cinematics;
 using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 using RPGPlatformer.Saving;
+using RPGPlatformer.UI;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -46,6 +46,7 @@ namespace RPGPlatformer.SceneManagement
         {
             SpawnPlayerToLastCheckpointOrDefault();
             GlobalGameTools.Instance.Player.Combatant.Revive();
+            GameLog.Log("(You have been revived at the last checkpoint.)");
         }
 
         //a scene transition trigger will take priority over last saved player checkpoint
