@@ -222,8 +222,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.085546404, g: 0.335849, b: 0.09045428, a: 0.101960786}
-      maxColor: {r: 0.49602786, g: 0.5396226, b: 0.3736632, a: 0.101960786}
+      minColor: {r: 0.06693479, g: 0.4490565, b: 0.07290544, a: 0.101960786}
+      maxColor: {r: 0.3273894, g: 0.3962264, b: 0.14877176, a: 0.101960786}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -287,8 +287,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 180
-      minScalar: 60
+      scalar: 90
+      minScalar: 30
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -612,7 +612,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 10
-      minScalar: 3
+      minScalar: 5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1053,8 +1053,8 @@ ParticleSystem:
           inWeight: 0
           outWeight: 1
         - serializedVersion: 3
-          time: 0.11443021
-          value: 0.93642175
+          time: 0.0643852
+          value: 0.97880685
           inSlope: 3.0864668
           outSlope: 3.0864668
           tangentMode: 0
@@ -1402,7 +1402,7 @@ ParticleSystem:
         ctime7: 0
         atime0: 0
         atime1: 3161
-        atime2: 60678
+        atime2: 50963
         atime3: 63916
         atime4: 65535
         atime5: 65535
@@ -2048,7 +2048,7 @@ ParticleSystem:
     radial:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 800
+      scalar: 500
       minScalar: -300
       maxCurve:
         serializedVersion: 2
@@ -2119,7 +2119,7 @@ ParticleSystem:
     speedModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.0005
+      scalar: 0.0001
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -3883,12 +3883,12 @@ ParticleSystem:
         m_RotationOrder: 4
     minKillSpeed: 0
     maxKillSpeed: 10000
-    radiusScale: 0.005
+    radiusScale: 0.0001
     collidesWith:
       serializedVersion: 2
       m_Bits: 8
     maxCollisionShapes: 256
-    quality: 2
+    quality: 0
     voxelSize: 0.5
     collisionMessages: 0
     collidesWithDynamic: 1
