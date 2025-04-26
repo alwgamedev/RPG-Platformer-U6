@@ -57,26 +57,18 @@ namespace RPGPlatformer.Movement
 
         protected virtual async void OnClimbingEntry()
         {
-            //FaceTarget(stateDriver.ClimberData.currentNode.transform);
             await MiscTools.DelayGameTime(0.1f, GlobalGameTools.Instance.TokenSource.Token);
-            //so you still get the initial impact with the climbable (e.g. if it's a swinging rope)
+            //^delay so you still get the initial impact with the climbable (e.g. if it's a swinging rope)
             if (Climbing)
             {
                 stateDriver.OnBeginClimb();
             }
         }
 
-        protected virtual async void OnClimbingExit()
+        protected virtual void OnClimbingExit()
         {
-            //just to be extra sure rotation and rigidbody get reset
+            //just to be extra sure rotation, rigidbody, and collider get reset
             stateDriver.EndClimb(false);
-
-            await MiscTools.DelayGameTime(0.5f, GlobalGameTools.Instance.TokenSource.Token);
-
-            if (!Climbing && !stateDriver.ClimbableCollisionEnabled)
-            {
-                stateDriver.EnableCollisionWithClimbables(true);
-            }
         }
 
         protected virtual void TryGrabOntoClimbableObject()
@@ -93,10 +85,24 @@ namespace RPGPlatformer.Movement
             {
                 base.AnimateMovement();
             }
-            else if (!InSwingMode())
+            else 
             {
-                stateManager.AnimateClimbing(MoveInput.x);
+                stateManager.AnimateSwinging(SwingSpeedFraction());
+
+                if (!InSwingMode())
+                {
+                    stateManager.AnimateClimbing(MoveInput.x);
+                }
             }
+        }
+
+        protected float SwingSpeedFraction()
+        {
+            if (!stateDriver.ClimberData.currentNode || !stateDriver.ClimberData.currentNode.Rigidbody) 
+                return 0;
+
+            return stateDriver.ClimberData.currentNode.Rigidbody.linearVelocity.magnitude
+                / 5 * stateDriver.RunSpeed;
         }
 
         public override void OnDeath()

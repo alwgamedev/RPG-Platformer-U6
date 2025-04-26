@@ -40,5 +40,10 @@ namespace RPGPlatformer.Movement
         {
             animationControl.SetFloat("climbVelocity", moveInput);
         }
+
+        public void AnimateSwinging(float swingSpeed)
+        {
+            animationControl.SetFloat("swingSpeed", swingSpeed, 1f, Time.deltaTime);
+        }
     }
 }

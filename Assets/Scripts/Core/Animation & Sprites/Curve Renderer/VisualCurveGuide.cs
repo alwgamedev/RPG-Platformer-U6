@@ -22,20 +22,20 @@ namespace RPGPlatformer
             ReconfigureIKEffects();
         }
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
         private void Update()
         {
-            if (!Application.isPlaying)
+            CheckForUpdates();
+        }
+        //#endif
+
+        //need to do this in fixed update if you want colliders to move with IK
+        private void FixedUpdate()
+        {
+            if (ikEnabled)
             {
                 CheckForUpdates();
             }
-        }
-#endif
-
-        //doing this in fixed update fixes the issue with tearing (I think caused by colliders)
-        private void FixedUpdate()
-        {
-            CheckForUpdates();
         }
 
         private void OnValidate()

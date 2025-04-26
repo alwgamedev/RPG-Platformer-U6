@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Movement
 {
@@ -21,7 +20,7 @@ namespace RPGPlatformer.Movement
         public override void Jump(Vector2 force, bool triggerJumping = true)
         {
             //necessary to re-enable rigidbody before applying jump force
-            //(yes, end climb will get called again when you exit climbing state, but oh well)
+            //(yes, EndClimb will get called again when you exit climbing state, but oh well)
             if (ClimberData.currentNode != null)
             {
                 EndClimb();
@@ -83,14 +82,12 @@ namespace RPGPlatformer.Movement
             ClimberData = default;
             myRigidbody.bodyType = RigidbodyType2D.Dynamic;
             transform.rotation = Quaternion.identity;
+            EnableCollisionWithClimbables(true);
 
             if (triggerFreefall)
             {
                 TriggerFreefall();
             }
-
-            //EnableCollisionWithClimbables(false);
-            //^instead we're doing this after a delay in controller's OnClimbingExit (to avoid exit collision with rope)
         }
 
         public void EnableCollisionWithClimbables(bool val)
