@@ -6,7 +6,8 @@ namespace RPGPlatformer.Effects
     {
         [SerializeField] protected ParticleSystem particleEffect;
 
-        public override float AutomaticRequeDelay => particleEffect.main.duration + particleEffect.main.startDelay.constantMax
+        public override float AutomaticRequeDelay => particleEffect.main.duration 
+            + particleEffect.main.startDelay.constantMax
             + particleEffect.main.startLifetime.constantMax;
 
         protected override void PlayEffect()

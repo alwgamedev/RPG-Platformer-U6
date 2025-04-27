@@ -8,6 +8,7 @@ namespace RPGPlatformer.Core
     public class IKLegWalker : MonoBehaviour
     {
         [SerializeField] float stepLength;
+        [SerializeField] float raycastLength;
         [SerializeField] float stepTime;//the time it should take to complete a step of length stepLength;
         [SerializeField] Transform body;
         [SerializeField] Transform hipJoint;//origin of the raycast
@@ -21,13 +22,14 @@ namespace RPGPlatformer.Core
         Vector2 currentStepCenter;
         Vector2 currentStepX;
         Vector2 currentStepY;
+        Vector2 currentStepGoal;
 
         private void Awake()
         {
             groundLayer = LayerMask.GetMask("Ground");
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (stepping)
             {
@@ -37,11 +39,15 @@ namespace RPGPlatformer.Core
             {
                 BeginStep(stepLength);
             }
+            else
+            {
+                MaintainFootPosition();
+            }
         }
 
         private bool ShouldStep(out Vector3 stepGoal)
         {
-            var hit = Physics2D.Raycast(hipJoint.position, -body.up, groundLayer);
+            var hit = Physics2D.Raycast(hipJoint.position, -body.up, raycastLength, groundLayer);
             if (!hit)
             {
                 stepGoal = default;
@@ -49,19 +55,19 @@ namespace RPGPlatformer.Core
             }
 
             stepGoal = hit.point;
-            return (stepGoal - ikTarget.position).sqrMagnitude > stepLength * stepLength;
+            return (stepGoal - ikTarget.position).sqrMagnitude < stepLength * stepLength;
         }
 
         private void BeginStep(Vector3 stepGoal)
         {
             var stepLength = Vector2.Distance(ikTarget.position, stepGoal);
 
+            currentStepSpeed = Mathf.PI * this.stepLength / (stepTime * stepLength);
             currentStepCenter = 0.5f * (ikTarget.position + stepGoal);
             currentStepRadius = 0.5f * stepLength;
             currentStepX = (stepGoal - ikTarget.position) / stepLength;
             currentStepY = Mathf.Sign(stepGoal.x - ikTarget.position.x) * currentStepX.CCWPerp();
-            currentStepSpeed = Mathf.PI * this.stepLength / (stepTime * stepLength);
-                //pi / desired step duration (bc step speed is angular speed in rad/sec)
+            currentStepGoal = stepGoal;
 
             stepTimer = 0;
             stepping = true;
@@ -72,7 +78,8 @@ namespace RPGPlatformer.Core
         private void EndStep()
         {
             stepping = false;
-            ikTarget.position = currentStepCenter + currentStepRadius * currentStepX;
+            ikTarget.position = currentStepGoal;
+
         }
 
         private void AnimateStep(float dt)
@@ -89,6 +96,11 @@ namespace RPGPlatformer.Core
                 ikTarget.position = currentStepCenter - currentStepRadius * Mathf.Cos(t) * currentStepX
                 + currentStepRadius * Mathf.Sin(t) * currentStepY;
             }
+        }
+
+        private void MaintainFootPosition()
+        {
+            ikTarget.position = currentStepGoal;
         }
     }
 }
