@@ -8,6 +8,7 @@ namespace RPGPlatformer.Core
     public class IKLegWalker : MonoBehaviour
     {
         [SerializeField] float stepLength;
+        [SerializeField] float stepHeightMultiplier = 1;
         [SerializeField] float stepTime;//the time it should take to complete a step of length stepLength;
         [SerializeField] float raycastLength;
         [SerializeField] Vector2 raycastDirection = - Vector2.up;
@@ -33,7 +34,7 @@ namespace RPGPlatformer.Core
             raycastDirection = raycastDirection.normalized;
         }
 
-        private void LateUpdate()
+        private void Update()
         {
             if (stepping)
             {
@@ -49,6 +50,16 @@ namespace RPGPlatformer.Core
             }
         }
 
+        private void Start()
+        {
+            var s = StepRaycast();
+            if (s)
+            {
+                currentStepGoal = s.point;
+                ikTarget.position = s.point;
+            }
+        }
+
         private bool ShouldStep(out Vector3 stepGoal)
         {
             var hit = StepRaycast();
@@ -59,13 +70,14 @@ namespace RPGPlatformer.Core
             }
 
             stepGoal = hit.point;
-            return (stepGoal - ikTarget.position).sqrMagnitude < stepLength * stepLength;
+            return (stepGoal.x - ikTarget.position.x) * body.localScale.x > 0
+                && (stepGoal - ikTarget.position).sqrMagnitude > stepLength * stepLength;
         }
 
         private RaycastHit2D StepRaycast()
         {
             return Physics2D.Raycast(hipJoint.position,
-                Mathf.Sign(body.localScale.x) * raycastDirection.x * body.right + raycastDirection.y * body.up,
+                body.localScale.x * raycastDirection.x * body.right + raycastDirection.y * body.up,
                 raycastLength, groundLayer);
         }
 
@@ -73,7 +85,8 @@ namespace RPGPlatformer.Core
         {
             var stepLength = Vector2.Distance(ikTarget.position, stepGoal);
 
-            currentStepSpeed = Mathf.PI * this.stepLength / (stepTime * stepLength);
+            //currentStepSpeed = Mathf.PI * this.stepLength / (stepTime * stepLength);
+            currentStepSpeed = Mathf.PI / stepTime;
             currentStepCenter = 0.5f * (ikTarget.position + stepGoal);
             currentStepRadius = 0.5f * stepLength;
             currentStepX = (stepGoal - ikTarget.position) / stepLength;
@@ -105,7 +118,7 @@ namespace RPGPlatformer.Core
             else
             {
                 ikTarget.position = currentStepCenter - currentStepRadius * Mathf.Cos(t) * currentStepX
-                + currentStepRadius * Mathf.Sin(t) * currentStepY;
+                + stepHeightMultiplier * currentStepRadius * Mathf.Sin(t) * currentStepY;
             }
         }
 
