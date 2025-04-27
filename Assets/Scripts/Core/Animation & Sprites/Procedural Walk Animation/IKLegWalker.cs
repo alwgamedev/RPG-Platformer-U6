@@ -8,11 +8,14 @@ namespace RPGPlatformer.Core
     public class IKLegWalker : MonoBehaviour
     {
         [SerializeField] float stepLength;
-        [SerializeField] float raycastLength;
         [SerializeField] float stepTime;//the time it should take to complete a step of length stepLength;
+        [SerializeField] float raycastLength;
+        [SerializeField] Vector2 raycastDirection = - Vector2.up;
         [SerializeField] Transform body;
         [SerializeField] Transform hipJoint;//origin of the raycast
         [SerializeField] Transform ikTarget;
+
+        //to-do: step time should be faster if body is moving faster
 
         int groundLayer;
         bool stepping;
@@ -27,6 +30,7 @@ namespace RPGPlatformer.Core
         private void Awake()
         {
             groundLayer = LayerMask.GetMask("Ground");
+            raycastDirection = raycastDirection.normalized;
         }
 
         private void LateUpdate()
@@ -47,7 +51,7 @@ namespace RPGPlatformer.Core
 
         private bool ShouldStep(out Vector3 stepGoal)
         {
-            var hit = Physics2D.Raycast(hipJoint.position, -body.up, raycastLength, groundLayer);
+            var hit = StepRaycast();
             if (!hit)
             {
                 stepGoal = default;
@@ -56,6 +60,13 @@ namespace RPGPlatformer.Core
 
             stepGoal = hit.point;
             return (stepGoal - ikTarget.position).sqrMagnitude < stepLength * stepLength;
+        }
+
+        private RaycastHit2D StepRaycast()
+        {
+            return Physics2D.Raycast(hipJoint.position,
+                Mathf.Sign(body.localScale.x) * raycastDirection.x * body.right + raycastDirection.y * body.up,
+                raycastLength, groundLayer);
         }
 
         private void BeginStep(Vector3 stepGoal)
