@@ -7,11 +7,15 @@ namespace RPGPlatformer.Core
     //(so that we can move the legs in other animations, like an attack)
     public class IKLegWalker : MonoBehaviour
     {
-        [SerializeField] float stepLength;
+        [SerializeField] int stepSmoothingIterations = 5;
+        [SerializeField] float stepMin;
+        [SerializeField] float stepMax;
         [SerializeField] float stepHeightMultiplier = 1;
         [SerializeField] float stepTime;//the time it should take to complete a step of length stepLength;
+        [SerializeField] float groundHeightBuffer;
         [SerializeField] float raycastLength;
-        [SerializeField] Vector2 raycastDirection = - Vector2.up;
+        [SerializeField] float maintainPositionStrength;
+        //[SerializeField] Vector2 raycastDirection = - Vector2.up;
         [SerializeField] Transform body;
         [SerializeField] Transform hipJoint;//origin of the raycast
         [SerializeField] Transform ikTarget;
@@ -28,61 +32,83 @@ namespace RPGPlatformer.Core
         Vector2 currentStepY;
         Vector2 currentStepGoal;
 
+        Vector2 hipGroundHit;
+        Vector2 hipGroundDirection;
+
         private void Awake()
         {
             groundLayer = LayerMask.GetMask("Ground");
-            raycastDirection = raycastDirection.normalized;
+            //raycastDirection = raycastDirection.normalized;
         }
 
-        private void Update()
+        private void Start()
+        {
+            if (body.TryGetComponent(out IEntityOrienter orienter))
+            {
+                orienter.DirectionChanged += OnDirectionChanged;
+            }
+
+            currentStepGoal = ikTarget.position;
+        }
+
+        private void LateUpdate()
         {
             if (stepping)
             {
                 AnimateStep(Time.deltaTime);
             }
-            else if (ShouldStep(out var stepLength))
-            {
-                BeginStep(stepLength);
-            }
             else
             {
-                MaintainFootPosition();
+                UpdateHipGroundData();
+
+                if (ShouldStep() && TryFindStepPosition(0, hipGroundDirection, out var stepPos))
+                { 
+                    BeginStep(stepPos);
+                }
+                else
+                {
+                    MaintainFootPosition();
+                }
             }
         }
 
-        private void Start()
-        {
-            var s = StepRaycast();
-            if (s)
-            {
-                currentStepGoal = s.point;
-                ikTarget.position = s.point;
-            }
-        }
+        //private void Start()
+        //{
+        //    var s = StepRaycast();
+        //    if (s)
+        //    {
+        //        currentStepGoal = s.point;
+        //        ikTarget.position = s.point;
+        //    }
+        //}
 
-        private bool ShouldStep(out Vector3 stepGoal)
-        {
-            var hit = StepRaycast();
-            if (!hit)
-            {
-                stepGoal = default;
-                return false;
-            }
+        //private bool ShouldStep(out Vector3 stepGoal)
+        //{
+            //var hit = StepRaycast();
+            //if (!hit)
+            //{
+            //    stepGoal = default;
+            //    return false;
+            //}
 
-            stepGoal = hit.point;
-            return (stepGoal.x - ikTarget.position.x) * body.localScale.x > 0
-                && (stepGoal - ikTarget.position).sqrMagnitude > stepLength * stepLength;
-        }
+            //stepGoal = hit.point;
+            //return (stepGoal.x - ikTarget.position.x) * body.localScale.x > 0
+            //    && (stepGoal - ikTarget.position).sqrMagnitude > stepLength * stepLength;
+        //}
 
-        private RaycastHit2D StepRaycast()
-        {
-            return Physics2D.Raycast(hipJoint.position,
-                body.localScale.x * raycastDirection.x * body.right + raycastDirection.y * body.up,
-                raycastLength, groundLayer);
-        }
+        //private RaycastHit2D StepRaycast()
+        //{
+        //    return Physics2D.Raycast(hipJoint.position,
+        //        body.localScale.x * raycastDirection.x * body.right + raycastDirection.y * body.up,
+        //        raycastLength, groundLayer);
+        //}
+
+
+        //IK POSITIONING
 
         private void BeginStep(Vector3 stepGoal)
         {
+            stepGoal = stepGoal + groundHeightBuffer * body.up;
             var stepLength = Vector2.Distance(ikTarget.position, stepGoal);
 
             //currentStepSpeed = Mathf.PI * this.stepLength / (stepTime * stepLength);
@@ -124,7 +150,90 @@ namespace RPGPlatformer.Core
 
         private void MaintainFootPosition()
         {
-            ikTarget.position = currentStepGoal;
+            ikTarget.position = Vector2.Lerp(ikTarget.position, currentStepGoal,
+                maintainPositionStrength * Time.deltaTime);
+        }
+
+        private void OnDirectionChanged(HorizontalOrientation o)
+        {
+            var d = currentStepGoal - (Vector2)body.position;
+            currentStepGoal = body.position 
+                + PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, d);
+            d = currentStepCenter - (Vector2)body.position;
+            currentStepCenter = body.position 
+                + PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, d);
+            currentStepX = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, currentStepX);
+            currentStepY = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, currentStepY);
+
+            //if (stepping)
+            //{
+            //    AnimateStep(0);
+            //}
+            //else
+            //{
+            //    ikTarget.position = currentStepGoal;
+            //}
+        }
+
+
+        //DETERMINING STEP POSITION
+
+        private bool ShouldStep()
+        {
+            return FootPosition(hipGroundDirection) < stepMin;
+        }
+
+        private bool TryFindStepPosition(int iteration, Vector2 searchDirection, out Vector2 stepPosition)
+        {
+            iteration++;
+
+            var hit = Physics2D.Raycast((Vector2)hipJoint.position + stepMax * searchDirection, -body.up, 
+                raycastLength, groundLayer);
+
+            if (!hit)
+            {
+                stepPosition = default;
+                return false;
+            }
+
+            if (iteration < stepSmoothingIterations
+                && Vector2.SqrMagnitude(hit.point - hipGroundHit) > stepMax * stepMax)
+            {
+                searchDirection = (hit.point - hipGroundHit).normalized;
+                if (!TryFindStepPosition(iteration, searchDirection, out stepPosition))
+                {
+                    stepPosition = hit.point;
+                }
+
+                return true;
+            }
+            else
+            {
+                stepPosition = hit.point;
+                return true;
+            }
+        }
+
+        private float FootPosition(Vector2 groundDirection)
+        {
+            return Vector2.Dot(ikTarget.position - hipJoint.position, groundDirection);
+        }
+
+        private void UpdateHipGroundData()
+        {
+            var hit0 = Physics2D.Raycast(hipJoint.position, -body.up, raycastLength, groundLayer);
+            var hit1 = Physics2D.Raycast(hipJoint.position + 0.1f * body.localScale.x * body.right,
+                -body.up, raycastLength, groundLayer);
+
+            if (hit0)
+            {
+                hipGroundHit = hit0.point;
+
+                if (hit1)
+                {
+                    hipGroundDirection = (hit1.point - hit0.point).normalized;
+                }
+            }
         }
     }
 }

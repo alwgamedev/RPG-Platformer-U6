@@ -1,9 +1,10 @@
 ﻿using RPGPlatformer.Core;
+using System;
 using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
-    public class SimpleTestingMover : MonoBehaviorInputConfigurer
+    public class SimpleTestingMover : MonoBehaviorInputConfigurer, IEntityOrienter
     {
         [SerializeField] float maxSpeed;
         [SerializeField] MovementOptions movementOptions;
@@ -17,6 +18,10 @@ namespace RPGPlatformer.Movement
             + coll.bounds.extents.x * transform.right;
         Vector2 colliderCenterLeft => coll.bounds.center
             - coll.bounds.extents.x * transform.right;
+
+        public HorizontalOrientation CurrentOrientation => (HorizontalOrientation)Math.Sign(transform.localScale.x);
+
+        public event Action<HorizontalOrientation> DirectionChanged;
 
         private void Awake()
         {
@@ -51,6 +56,7 @@ namespace RPGPlatformer.Movement
                 var s = transform.localScale;
                 s.x *= -1;
                 transform.localScale = s;
+                DirectionChanged?.Invoke(CurrentOrientation);
             }
         }
 
@@ -72,6 +78,11 @@ namespace RPGPlatformer.Movement
             }
 
             return Mathf.Sign(transform.localScale.x) * transform.right;
+        }
+
+        private void OnDestroy()
+        {
+            DirectionChanged = null;
         }
     }
 }
