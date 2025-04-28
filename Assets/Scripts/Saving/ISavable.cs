@@ -6,6 +6,6 @@ namespace RPGPlatformer.Saving
     {
         public JsonNode CaptureState();
 
-        void RestoreState(JsonNode jNode);
+        public void RestoreState(JsonNode jNode);
     }
 }

@@ -2,7 +2,6 @@ using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 using RPGPlatformer.UI;
-using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -17,7 +16,6 @@ namespace RPGPlatformer.Environment
         [SerializeField] int lingeringBleedCount;
 
         bool playerInBounds;
-        //bool playerIsPoisoned;
 
         IHealth playerHealth => GlobalGameTools.Instance.Player.Combatant.Health;
         bool gasActive => gasParticles && gasParticles.isPlaying;
@@ -77,7 +75,6 @@ namespace RPGPlatformer.Environment
         private void TriggerGas()
         {
             gasParticles.Play();
-            GlobalGameTools.Instance.Player.MovementController.SetRunning(false);
             GameLog.Log("Stepping on the mushroom causes it to release a noxious green gas.");
             PoisonPlayer();
         }
@@ -85,6 +82,7 @@ namespace RPGPlatformer.Environment
         private async void PoisonPlayer()
         {
             GameLog.Log("You've been poisoned!");
+            GlobalGameTools.Instance.Player.MovementController.SetRunning(false);
 
             while (gasActive && playerInBounds)
             {

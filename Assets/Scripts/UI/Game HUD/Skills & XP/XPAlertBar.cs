@@ -21,7 +21,9 @@ namespace RPGPlatformer.UI
 
         private async Task HandleXPGainEvent(XPGainEventData eventData)
         {
-            if (!activeXPAlerts.ContainsKey(eventData.skill) || !activeXPAlerts[eventData.skill].gameObject)
+            if (eventData.skill == null) return;
+
+            if (!activeXPAlerts.ContainsKey(eventData.skill) || !activeXPAlerts[eventData.skill])
             {
                 InstantiateNewAlert(eventData.skill);
             }
@@ -39,8 +41,10 @@ namespace RPGPlatformer.UI
 
         private void DestroyCompletedAlert(CharacterSkill key, XPAlert alert)
         {
+            if (key == null)
+
             activeXPAlerts[key] = null;
-            if (alert.gameObject)
+            if (alert)
             {
                 Destroy(alert.gameObject);
             }

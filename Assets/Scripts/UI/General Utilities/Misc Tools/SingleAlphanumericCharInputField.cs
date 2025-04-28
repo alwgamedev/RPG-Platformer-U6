@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using TMPro;
-using RPGPlatformer.Core;
-using UnityEngine.InputSystem;
 
 namespace RPGPlatformer.UI
 {
+    //?????????????? 16 asset references? wtf was this used for?
     public class SingleAlphanumericCharInputField : MonoBehaviour
     {
         TMP_InputField inputField;
