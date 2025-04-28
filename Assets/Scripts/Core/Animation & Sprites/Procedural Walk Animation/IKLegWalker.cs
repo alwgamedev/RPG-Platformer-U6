@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Movement;
+using System.Threading;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
@@ -9,11 +10,11 @@ namespace RPGPlatformer.Core
     {
         [SerializeField] float stepMin;
         [SerializeField] float stepMax;
-        [SerializeField] float initialOffset;
+        [SerializeField] float initialStepPositionFraction;
         [SerializeField] int stepSmoothingIterations = 5;
         [SerializeField] float stepHeightMultiplier = 1;
-        [SerializeField] float stepTime;//the time it should take to complete a step of length stepLength;
-        [SerializeField] float expectedMoveSpeed = 1;
+        [SerializeField] float stepSpeedMultiplier;
+        //[SerializeField] float expectedMoveSpeed = 1;
         [SerializeField] float groundHeightBuffer;
         [SerializeField] float raycastLength;
         [SerializeField] float maintainPositionStrength;
@@ -26,7 +27,7 @@ namespace RPGPlatformer.Core
         int groundLayer;
         bool stepping;
         float stepTimer;
-        float currentStepSpeed;//angular speed in radians per second
+        //float currentStepSpeed;//angular speed in radians per second
         float currentStepRadius;
         Vector2 currentStepCenter;
         Vector2 currentStepX;
@@ -54,6 +55,8 @@ namespace RPGPlatformer.Core
                 orienter.DirectionChanged += OnDirectionChanged;
             }
 
+            stepTimer = initialStepPositionFraction * (stepMax - stepMin);
+
             currentStepGoal = ikTarget.position;
         }
 
@@ -65,11 +68,18 @@ namespace RPGPlatformer.Core
             }
             else
             {
-                UpdateHipGroundData();
+                stepTimer += Time.deltaTime * body.linearVelocity.magnitude;
 
-                if (ShouldStep() && TryFindStepPosition(0, stepMax, hipGroundDirection, out var stepPos))
-                { 
-                    BeginStep(stepPos);
+                //UpdateHipGroundData();
+
+                if (stepTimer > stepMax - stepMin)
+                {
+                    UpdateHipGroundData();
+
+                    if (TryFindStepPosition(0, stepMax, hipGroundDirection, out var stepPos))
+                    {
+                        BeginStep(stepPos);
+                    }
                 }
                 else
                 {
@@ -81,7 +91,7 @@ namespace RPGPlatformer.Core
         public void InitializeFootPosition()
         {
             UpdateHipGroundData();
-            if (TryFindStepPosition(0, initialOffset, hipGroundDirection, out var s))
+            if (TryFindStepPosition(0, initialStepPositionFraction, hipGroundDirection, out var s))
             {
                 ikTarget.position = s;
             }
@@ -95,7 +105,7 @@ namespace RPGPlatformer.Core
             stepGoal = stepGoal + groundHeightBuffer * body.transform.up;
             var stepLength = Vector2.Distance(ikTarget.position, stepGoal);
 
-            currentStepSpeed = Mathf.PI / stepTime;
+            //currentStepSpeed = Mathf.PI * stepSpeedMultiplier;
             currentStepCenter = 0.5f * (ikTarget.position + stepGoal);
             currentStepRadius = 0.5f * stepLength;
             currentStepX = (stepGoal - ikTarget.position) / stepLength;
@@ -111,15 +121,16 @@ namespace RPGPlatformer.Core
         private void EndStep()
         {
             stepping = false;
+            stepTimer = 0;
             //ikTarget.position = currentStepGoal;
 
         }
 
         private void AnimateStep(float dt)
         {
-            var s = BodySpeedFraction();
+            var s = body.linearVelocity.magnitude;
             stepTimer += dt * s;
-            var t = stepTimer * currentStepSpeed;
+            var t = stepTimer * Mathf.PI * stepSpeedMultiplier;
 
             if (t > Mathf.PI)
             {
@@ -129,6 +140,7 @@ namespace RPGPlatformer.Core
             {
                 ikTarget.position = currentStepCenter - currentStepRadius * Mathf.Cos(t) * currentStepX
                 + Mathf.Clamp(s, 0, 1) * stepHeightMultiplier * currentStepRadius * Mathf.Sin(t) * currentStepY;
+                //^multiplying the y by s lets the leg rest at a natural position when body comes to a stop
             }
         }
 
@@ -150,17 +162,17 @@ namespace RPGPlatformer.Core
             currentStepY = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, currentStepY);
         }
 
-        private float BodySpeedFraction()
-        {
-            return body.linearVelocity.magnitude / expectedMoveSpeed;
-        }
+        //private float BodySpeed()
+        //{
+        //    return body.linearVelocity.magnitude;
+        //}
 
 
         //DETERMINING STEP POSITION
 
         private bool ShouldStep()
         {
-            return FootPosition(hipGroundDirection) < stepMin;
+            return FootPosition(/*hipGroundDirection*/) < stepMin;
         }
 
         private bool TryFindStepPosition(int iteration, float goalOffset, 
@@ -195,9 +207,11 @@ namespace RPGPlatformer.Core
             }
         }
 
-        private float FootPosition(Vector2 groundDirection)
+        private float FootPosition(/*Vector2 groundDirection*/)
         {
-            return Vector2.Dot(ikTarget.position - hipJoint.position, groundDirection);
+            return Vector2.Dot(ikTarget.position - hipJoint.position,
+                Mathf.Sign(body.transform.localScale.x) * body.transform.right);
+            //return Vector2.Dot(ikTarget.position - hipJoint.position, groundDirection);
         }
 
         private void UpdateHipGroundData()
