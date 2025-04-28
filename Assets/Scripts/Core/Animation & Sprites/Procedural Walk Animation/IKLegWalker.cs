@@ -9,14 +9,15 @@ namespace RPGPlatformer.Core
     {
         [SerializeField] float stepMin;
         [SerializeField] float stepMax;
-        [SerializeField] float initialOffset; 
+        [SerializeField] float initialOffset;
         [SerializeField] int stepSmoothingIterations = 5;
         [SerializeField] float stepHeightMultiplier = 1;
         [SerializeField] float stepTime;//the time it should take to complete a step of length stepLength;
+        [SerializeField] float expectedMoveSpeed = 1;
         [SerializeField] float groundHeightBuffer;
         [SerializeField] float raycastLength;
         [SerializeField] float maintainPositionStrength;
-        [SerializeField] Transform body;
+        [SerializeField] Rigidbody2D body;
         [SerializeField] Transform hipJoint;//origin of the raycast
         [SerializeField] Transform ikTarget;
 
@@ -91,10 +92,9 @@ namespace RPGPlatformer.Core
 
         private void BeginStep(Vector3 stepGoal)
         {
-            stepGoal = stepGoal + groundHeightBuffer * body.up;
+            stepGoal = stepGoal + groundHeightBuffer * body.transform.up;
             var stepLength = Vector2.Distance(ikTarget.position, stepGoal);
 
-            //currentStepSpeed = Mathf.PI * this.stepLength / (stepTime * stepLength);
             currentStepSpeed = Mathf.PI / stepTime;
             currentStepCenter = 0.5f * (ikTarget.position + stepGoal);
             currentStepRadius = 0.5f * stepLength;
@@ -111,13 +111,14 @@ namespace RPGPlatformer.Core
         private void EndStep()
         {
             stepping = false;
-            ikTarget.position = currentStepGoal;
+            //ikTarget.position = currentStepGoal;
 
         }
 
         private void AnimateStep(float dt)
         {
-            stepTimer += dt;
+            var s = BodySpeedFraction();
+            stepTimer += dt * s;
             var t = stepTimer * currentStepSpeed;
 
             if (t > Mathf.PI)
@@ -127,7 +128,7 @@ namespace RPGPlatformer.Core
             else
             {
                 ikTarget.position = currentStepCenter - currentStepRadius * Mathf.Cos(t) * currentStepX
-                + stepHeightMultiplier * currentStepRadius * Mathf.Sin(t) * currentStepY;
+                + Mathf.Clamp(s, 0, 1) * stepHeightMultiplier * currentStepRadius * Mathf.Sin(t) * currentStepY;
             }
         }
 
@@ -139,14 +140,19 @@ namespace RPGPlatformer.Core
 
         private void OnDirectionChanged(HorizontalOrientation o)
         {
-            var d = currentStepGoal - (Vector2)body.position;
-            currentStepGoal = body.position 
-                + PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, d);
-            d = currentStepCenter - (Vector2)body.position;
-            currentStepCenter = body.position 
-                + PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, d);
-            currentStepX = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, currentStepX);
-            currentStepY = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, currentStepY);
+            var d = currentStepGoal - (Vector2)body.transform.position;
+            currentStepGoal = body.transform.position 
+                + PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, d);
+            d = currentStepCenter - (Vector2)body.transform.position;
+            currentStepCenter = body.transform.position 
+                + PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, d);
+            currentStepX = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, currentStepX);
+            currentStepY = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, currentStepY);
+        }
+
+        private float BodySpeedFraction()
+        {
+            return body.linearVelocity.magnitude / expectedMoveSpeed;
         }
 
 
@@ -162,8 +168,8 @@ namespace RPGPlatformer.Core
         {
             iteration++;
 
-            var hit = Physics2D.Raycast((Vector2)hipJoint.position + goalOffset * searchDirection, -body.up, 
-                raycastLength, groundLayer);
+            var hit = Physics2D.Raycast((Vector2)hipJoint.position + goalOffset * searchDirection, 
+                -body.transform.up, raycastLength, groundLayer);
 
             if (!hit)
             {
@@ -196,9 +202,9 @@ namespace RPGPlatformer.Core
 
         private void UpdateHipGroundData()
         {
-            var hit0 = Physics2D.Raycast(hipJoint.position, -body.up, raycastLength, groundLayer);
-            var hit1 = Physics2D.Raycast(hipJoint.position + 0.1f * body.localScale.x * body.right,
-                -body.up, raycastLength, groundLayer);
+            var hit0 = Physics2D.Raycast(hipJoint.position, -body.transform.up, raycastLength, groundLayer);
+            var hit1 = Physics2D.Raycast(hipJoint.position + 0.1f * body.transform.localScale.x * body.transform.right,
+                -body.transform.up, raycastLength, groundLayer);
 
             if (hit0)
             {
