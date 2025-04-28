@@ -7,15 +7,15 @@ namespace RPGPlatformer.Core
     //(so that we can move the legs in other animations, like an attack)
     public class IKLegWalker : MonoBehaviour
     {
-        [SerializeField] int stepSmoothingIterations = 5;
         [SerializeField] float stepMin;
         [SerializeField] float stepMax;
+        [SerializeField] float initialOffset; 
+        [SerializeField] int stepSmoothingIterations = 5;
         [SerializeField] float stepHeightMultiplier = 1;
         [SerializeField] float stepTime;//the time it should take to complete a step of length stepLength;
         [SerializeField] float groundHeightBuffer;
         [SerializeField] float raycastLength;
         [SerializeField] float maintainPositionStrength;
-        //[SerializeField] Vector2 raycastDirection = - Vector2.up;
         [SerializeField] Transform body;
         [SerializeField] Transform hipJoint;//origin of the raycast
         [SerializeField] Transform ikTarget;
@@ -41,6 +41,11 @@ namespace RPGPlatformer.Core
             //raycastDirection = raycastDirection.normalized;
         }
 
+        private void OnEnable()
+        {
+            InitializeFootPosition();
+        }
+
         private void Start()
         {
             if (body.TryGetComponent(out IEntityOrienter orienter))
@@ -61,7 +66,7 @@ namespace RPGPlatformer.Core
             {
                 UpdateHipGroundData();
 
-                if (ShouldStep() && TryFindStepPosition(0, hipGroundDirection, out var stepPos))
+                if (ShouldStep() && TryFindStepPosition(0, stepMax, hipGroundDirection, out var stepPos))
                 { 
                     BeginStep(stepPos);
                 }
@@ -72,36 +77,14 @@ namespace RPGPlatformer.Core
             }
         }
 
-        //private void Start()
-        //{
-        //    var s = StepRaycast();
-        //    if (s)
-        //    {
-        //        currentStepGoal = s.point;
-        //        ikTarget.position = s.point;
-        //    }
-        //}
-
-        //private bool ShouldStep(out Vector3 stepGoal)
-        //{
-            //var hit = StepRaycast();
-            //if (!hit)
-            //{
-            //    stepGoal = default;
-            //    return false;
-            //}
-
-            //stepGoal = hit.point;
-            //return (stepGoal.x - ikTarget.position.x) * body.localScale.x > 0
-            //    && (stepGoal - ikTarget.position).sqrMagnitude > stepLength * stepLength;
-        //}
-
-        //private RaycastHit2D StepRaycast()
-        //{
-        //    return Physics2D.Raycast(hipJoint.position,
-        //        body.localScale.x * raycastDirection.x * body.right + raycastDirection.y * body.up,
-        //        raycastLength, groundLayer);
-        //}
+        public void InitializeFootPosition()
+        {
+            UpdateHipGroundData();
+            if (TryFindStepPosition(0, initialOffset, hipGroundDirection, out var s))
+            {
+                ikTarget.position = s;
+            }
+        }
 
 
         //IK POSITIONING
@@ -164,15 +147,6 @@ namespace RPGPlatformer.Core
                 + PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, d);
             currentStepX = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, currentStepX);
             currentStepY = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.right, currentStepY);
-
-            //if (stepping)
-            //{
-            //    AnimateStep(0);
-            //}
-            //else
-            //{
-            //    ikTarget.position = currentStepGoal;
-            //}
         }
 
 
@@ -183,11 +157,12 @@ namespace RPGPlatformer.Core
             return FootPosition(hipGroundDirection) < stepMin;
         }
 
-        private bool TryFindStepPosition(int iteration, Vector2 searchDirection, out Vector2 stepPosition)
+        private bool TryFindStepPosition(int iteration, float goalOffset, 
+            Vector2 searchDirection, out Vector2 stepPosition)
         {
             iteration++;
 
-            var hit = Physics2D.Raycast((Vector2)hipJoint.position + stepMax * searchDirection, -body.up, 
+            var hit = Physics2D.Raycast((Vector2)hipJoint.position + goalOffset * searchDirection, -body.up, 
                 raycastLength, groundLayer);
 
             if (!hit)
@@ -200,7 +175,7 @@ namespace RPGPlatformer.Core
                 && Vector2.SqrMagnitude(hit.point - hipGroundHit) > stepMax * stepMax)
             {
                 searchDirection = (hit.point - hipGroundHit).normalized;
-                if (!TryFindStepPosition(iteration, searchDirection, out stepPosition))
+                if (!TryFindStepPosition(iteration, goalOffset, searchDirection, out stepPosition))
                 {
                     stepPosition = hit.point;
                 }
