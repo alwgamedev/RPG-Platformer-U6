@@ -14,7 +14,7 @@ namespace RPGPlatformer.Core
         [SerializeField] int stepSmoothingIterations = 5;
         [SerializeField] float stepHeightMultiplier = 1;
         [SerializeField] float stepSpeedMultiplier;
-        //[SerializeField] float expectedMoveSpeed = 1;
+        [SerializeField] float speedLerpRate;
         [SerializeField] float groundHeightBuffer;
         [SerializeField] float raycastLength;
         [SerializeField] float maintainPositionStrength;
@@ -26,8 +26,8 @@ namespace RPGPlatformer.Core
 
         int groundLayer;
         bool stepping;
+        float smoothedSpeed;
         float stepTimer;
-        //float currentStepSpeed;//angular speed in radians per second
         float currentStepRadius;
         Vector2 currentStepCenter;
         Vector2 currentStepX;
@@ -128,8 +128,8 @@ namespace RPGPlatformer.Core
 
         private void AnimateStep(float dt)
         {
-            var s = body.linearVelocity.magnitude;
-            stepTimer += dt * s;
+            smoothedSpeed = Mathf.Lerp(smoothedSpeed, body.linearVelocity.magnitude, dt * speedLerpRate);
+            stepTimer += dt * smoothedSpeed;
             var t = stepTimer * Mathf.PI * stepSpeedMultiplier;
 
             if (t > Mathf.PI)
@@ -139,15 +139,18 @@ namespace RPGPlatformer.Core
             else
             {
                 ikTarget.position = currentStepCenter - currentStepRadius * Mathf.Cos(t) * currentStepX
-                + Mathf.Clamp(s, 0, 1) * stepHeightMultiplier * currentStepRadius * Mathf.Sin(t) * currentStepY;
+                + Mathf.Clamp(smoothedSpeed, 0, 1) * stepHeightMultiplier 
+                * currentStepRadius * Mathf.Sin(t) * currentStepY;
                 //^multiplying the y by s lets the leg rest at a natural position when body comes to a stop
+                //using the smoothedSpeed just for this bc it got a little jittery at slow speed
+                //(when speed is less steady)
             }
         }
 
         private void MaintainFootPosition()
         {
             ikTarget.position = Vector2.Lerp(ikTarget.position, currentStepGoal,
-                maintainPositionStrength * Time.deltaTime);
+                maintainPositionStrength * smoothedSpeed * Time.deltaTime);
         }
 
         private void OnDirectionChanged(HorizontalOrientation o)
