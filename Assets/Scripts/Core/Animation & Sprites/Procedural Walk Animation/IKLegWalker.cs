@@ -91,8 +91,10 @@ namespace RPGPlatformer.Core
         public void InitializeFootPosition()
         {
             UpdateHipGroundData();
-            if (TryFindStepPosition(0, initialStepPositionFraction, hipGroundDirection, out var s))
+            if (TryFindStepPosition(0, stepMin + initialStepPositionFraction * (stepMax - stepMin), 
+                hipGroundDirection, out var s))
             {
+                currentStepGoal = s;
                 ikTarget.position = s;
             }
         }
@@ -165,18 +167,19 @@ namespace RPGPlatformer.Core
             currentStepY = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, currentStepY);
         }
 
-        //private float BodySpeed()
-        //{
-        //    return body.linearVelocity.magnitude;
-        //}
-
 
         //DETERMINING STEP POSITION
 
-        private bool ShouldStep()
-        {
-            return FootPosition(/*hipGroundDirection*/) < stepMin;
-        }
+        //private float FootPosition()
+        //{
+        //    return Vector2.Dot(ikTarget.position - hipJoint.position,
+        //        Mathf.Sign(body.transform.localScale.x) * body.transform.right);
+        //}
+
+        //private bool ShouldStep()
+        //{
+        //    return FootPosition(/*hipGroundDirection*/) < stepMin;
+        //}
 
         private bool TryFindStepPosition(int iteration, float goalOffset, 
             Vector2 searchDirection, out Vector2 stepPosition)
@@ -208,13 +211,6 @@ namespace RPGPlatformer.Core
                 stepPosition = hit.point;
                 return true;
             }
-        }
-
-        private float FootPosition(/*Vector2 groundDirection*/)
-        {
-            return Vector2.Dot(ikTarget.position - hipJoint.position,
-                Mathf.Sign(body.transform.localScale.x) * body.transform.right);
-            //return Vector2.Dot(ikTarget.position - hipJoint.position, groundDirection);
         }
 
         private void UpdateHipGroundData()
