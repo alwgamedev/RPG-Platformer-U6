@@ -77,6 +77,8 @@ namespace RPGPlatformer.Movement
             InitializeFixedUpdate();
 
             stateDriver.FreefallVerified += OnFreefallVerified;
+
+            stateDriver.InitializeState();
         }
 
         protected virtual void Update()

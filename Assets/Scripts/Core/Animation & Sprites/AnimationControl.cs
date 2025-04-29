@@ -23,6 +23,7 @@ namespace RPGPlatformer.Core
             {
                 animator = GetComponent<Animator>();
             }
+
             defaultAnimatorController = animator.runtimeAnimatorController;
         }
 

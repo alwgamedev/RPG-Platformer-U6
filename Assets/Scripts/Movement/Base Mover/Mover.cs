@@ -85,6 +85,20 @@ namespace RPGPlatformer.Movement
                 groundLayer);
         }
 
+        public virtual void InitializeState()
+        {
+            UpdateGroundHits();
+
+            if (rightGroundHit || leftGroundHit)
+            {
+                TriggerLanding();
+            }
+            else
+            {
+                TriggerFreefall();
+            }
+        }
+
         public virtual void UpdateState(bool jumping, bool freefalling)
         {
             if (rightGroundHit || leftGroundHit)
@@ -303,13 +317,13 @@ namespace RPGPlatformer.Movement
                 s.x *= -1;
                 transform.localScale = s;
 
-                if (flipWrtGlobalUp)
+                if (flipWrtGlobalUp)//yes this needs to be in addition to the above flip
                 {
                     s = transform.up;
                     s.x *= -1;
                     transform.up = s;
-                    //transform.up = PhysicsTools.ReflectAcrossPerpendicularHyperplane(Vector3.right, transform.up);
                 }
+
                 DirectionChanged.Invoke(CurrentOrientation);
             }
         }

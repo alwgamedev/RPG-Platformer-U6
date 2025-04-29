@@ -21,7 +21,13 @@ namespace RPGPlatformer.Skills
 
         private void Awake()
         {
-            progressionData.Configure();
+            Configure();
+        }
+
+        protected virtual void Configure()
+        {
+            progressionData.ForceLevels = !canGainXP;
+            progressionData?.Configure();
         }
 
         public int GetLevel(StandardCharacterSkill skill)
@@ -67,7 +73,7 @@ namespace RPGPlatformer.Skills
         public void RestoreState(JsonNode jNode)
         {
             progressionData = jNode.Deserialize<CharacterProgressionData>();
-            progressionData.Configure();
+            Configure();
         }
 
         private void OnDestroy()

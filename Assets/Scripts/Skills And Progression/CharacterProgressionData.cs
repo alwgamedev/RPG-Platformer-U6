@@ -15,6 +15,8 @@ namespace RPGPlatformer.Skills
         [SerializeField] SkillProgressionData melee = new();
         [SerializeField] SkillProgressionData ranged = new();
 
+        public bool ForceLevels { get; set; }
+
         //properties for save system
         public SkillProgressionData Fitness
         {
@@ -94,7 +96,10 @@ namespace RPGPlatformer.Skills
         public void Configure()
         {
             BuildLookup();
-            RecomputeLevels();
+            if (!ForceLevels)
+            {
+                RecomputeLevels();
+            }
         }
 
         protected void BuildLookup()

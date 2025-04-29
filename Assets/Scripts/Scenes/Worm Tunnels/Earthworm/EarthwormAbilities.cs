@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using RPGPlatformer.Combat;
-using RPGPlatformer.Core;
-using RPGPlatformer.Effects;
 
 namespace RPGPlatformer.AIControl
 {

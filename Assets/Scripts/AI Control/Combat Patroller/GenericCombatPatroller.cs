@@ -49,7 +49,7 @@ namespace RPGPlatformer.AIControl
 
         public override void InitializeState()
         {
-            if (playerEnemy)
+            if (playerEnemy && GlobalGameTools.Instance)
             {
                 SetCombatTarget(GlobalGameTools.Instance.Player.Combatant.Health);
             }

@@ -34,9 +34,12 @@ namespace RPGPlatformer.Movement
                 {
                     base.MoveInput = value;
                 }
-                else if (stateDriver.FacingWall)
+                else
                 {
-                    SoftStop();
+                    if (stateDriver.FacingWall)
+                    {
+                        SoftStop();
+                    }
                 }
             }
         }

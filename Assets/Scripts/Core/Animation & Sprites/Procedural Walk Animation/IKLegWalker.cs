@@ -37,6 +37,8 @@ namespace RPGPlatformer.Core
         Vector2 hipGroundHit;
         Vector2 hipGroundDirection;
 
+        public bool paused;
+
         private void Awake()
         {
             groundLayer = LayerMask.GetMask("Ground");
@@ -62,6 +64,8 @@ namespace RPGPlatformer.Core
 
         private void LateUpdate()
         {
+            if (paused) return;
+
             if (stepping)
             {
                 AnimateStep(Time.deltaTime);
