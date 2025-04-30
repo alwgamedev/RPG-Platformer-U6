@@ -7,22 +7,32 @@ namespace RPGPlatformer.Movement
     {
         IKLegWalker[] legAnimators;
 
-        //public override Vector3 MoveInput
-        //{
-        //    get => base.MoveInput;
-        //    set
-        //    {
-        //        base.MoveInput = value;
-        //        if (!legAnimators[0].Reversed && MoveInput.z < 0)
-        //        {
-        //            SetLegsReversed(true);
-        //        }
-        //        else if (legAnimators[0].Reversed && MoveInput.z > 0)
-        //        {
-        //            SetLegsReversed(false);
-        //        }
-        //    }
-        //}
+        public override Vector3 MoveInput
+        {
+            get => base.MoveInput;
+            set
+            {
+                base.MoveInput = value;
+                if (!legAnimators[0].Reversed && MoveInput.z < 0)
+                {
+                    SetLegsReversed(true);
+                }
+                else if (legAnimators[0].Reversed && MoveInput.z >= 0)
+                {
+                    SetLegsReversed(false);
+                }
+
+                if (legAnimators[0].steppingDisabled && Moving)
+                {
+                    DisableStepping(false);
+                }
+                else if (!Moving)
+                {
+                    ReturnLegsToInitialPositions(false);
+                    DisableStepping(true);
+                }
+            }
+        }
 
         protected override void Awake()
         {
@@ -47,28 +57,39 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        public override void SoftStop()
-        {
-            base.SoftStop();
+        //public override void SoftStop()
+        //{
+        //    SetLegsReversed(false);
 
-            ReturnLegsToInitialPositions(false);
-        }
+        //    base.SoftStop();
+
+        //    ReturnLegsToInitialPositions(false);
+        //    DisableStepping(true);
+        //}
 
         private void ReturnLegsToInitialPositions(bool snapToPosition)
         {
-            Debug.Log("returning legs to initial position");
             foreach (var l in legAnimators)
             {
                 l.InitializeFootPosition(snapToPosition);
             }
         }
 
-        //public void SetLegsReversed(bool reversed)
-        //{
-        //    foreach (var l in legAnimators)
-        //    {
-        //        l.Reversed = reversed;
-        //    }
-        //}
+        private void SetLegsReversed(bool reversed)
+        {
+            Debug.Log($"setting legs reversed: {reversed}");
+            foreach (var l in legAnimators)
+            {
+                l.Reversed = reversed;
+            }
+        }
+
+        private void DisableStepping(bool disable)
+        {
+            foreach (var l in legAnimators)
+            {
+                l.steppingDisabled = disable;
+            }
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace RPGPlatformer.AIControl
         [SerializeField] protected float pursuitRange = 5;
         [SerializeField] protected float suspicionTime = 5;
         [SerializeField] protected bool playerEnemy = true;
-        //[SerializeField] protected bool setRunningWhenMaintainingMinimumCombatDistance;
+        [SerializeField] protected bool setRunningWhenMaintainingMinimumCombatDistance;
 
         protected bool correctingCombatDistance;
         protected float suspicionTimer;
@@ -221,16 +221,16 @@ namespace RPGPlatformer.AIControl
                 }
 
                 correctingCombatDistance = true;
-                //if (setRunningWhenMaintainingMinimumCombatDistance)
-                //{
-                //    MovementController.SetRunning(true);
-                //}
+                if (setRunningWhenMaintainingMinimumCombatDistance)
+                {
+                    MovementController.SetRunning(true);
+                }
                 MovementController.MoveAwayFrom(currentTarget.transform.position);
             }
             else if (correctingCombatDistance)
             {
                 correctingCombatDistance = false;
-                //MovementController.SetRunning(false);
+                MovementController.SetRunning(false);
                 MovementController.SoftStop();
                 combatController.FaceAimPosition();
             }

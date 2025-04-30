@@ -1,5 +1,4 @@
 ﻿using RPGPlatformer.Movement;
-using System.Threading;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
@@ -10,10 +9,16 @@ namespace RPGPlatformer.Core
     {
         [SerializeField] float stepMin;
         [SerializeField] float stepMax;
-        [SerializeField] float initialStepPositionFraction;
+        [SerializeField] float reversedStepMin;
+        [SerializeField] float reversedStepMax;
+        [SerializeField] float initialTimerFraction;
+        [SerializeField] float initialPositionFraction;
+        [SerializeField] float reversedInitialTimerFraction;
+        [SerializeField] float reversedInitialPositionFraction;
         [SerializeField] int stepSmoothingIterations = 5;
         [SerializeField] float stepHeightMultiplier = 1;
         [SerializeField] float stepSpeedMultiplier;
+        [SerializeField] float reversedStepSpeedMultiplier;
         [SerializeField] float speedLerpRate;
         [SerializeField] float groundHeightBuffer;
         [SerializeField] float raycastLength;
@@ -39,20 +44,33 @@ namespace RPGPlatformer.Core
         Vector2 hipGroundDirection;
 
         public bool paused;
+        public bool steppingDisabled;
 
-        //public bool Reversed
-        //{
-        //    get => reversed;
-        //    set
-        //    {
-        //        if (value != reversed)
-        //        {
-        //            reversed = value;
-        //            EndStep();
-        //            InitializeFootPosition(false);
-        //        }
-        //    }
-        //}
+        float StepMin => Reversed ? reversedStepMin : stepMin;
+        float StepMax => Reversed ? reversedStepMax : stepMax;
+        //step max will always be the position right after taking a step
+        //step max may be less than step min (when reversing)
+        float StepDelta => StepMin - StepMax;
+        float StepLength => Mathf.Abs(StepMax - StepMin);
+        float InitialTimerFraction 
+            => reversed ? reversedInitialTimerFraction : initialTimerFraction;
+        float InitialPositionFraction
+            => reversed ? reversedInitialPositionFraction : initialPositionFraction;
+        float StepSpeedMultiplier => reversed ? reversedStepSpeedMultiplier : stepSpeedMultiplier;
+
+        public bool Reversed
+        {
+            get => reversed;
+            set
+            {
+                if (value != reversed)
+                {
+                    reversed = value;
+                    //InitializeFootPosition(false);
+                    ResetTimerToInitialOffset();
+                }
+            }
+        }
 
         private void Awake()
         {
@@ -89,9 +107,7 @@ namespace RPGPlatformer.Core
             {
                 stepTimer += Time.deltaTime * body.linearVelocity.magnitude;
 
-                //UpdateHipGroundData();
-
-                if (stepTimer > stepMax - stepMin)
+                if (!steppingDisabled && stepTimer > StepLength)
                 {
                     UpdateHipGroundData();
 
@@ -109,14 +125,9 @@ namespace RPGPlatformer.Core
 
         public void InitializeFootPosition(bool snapToPosition)
         {
-            if (stepping)
-            {
-                EndStep();
-            }
-
+            ResetTimerToInitialOffset();
             UpdateHipGroundData();
-            stepTimer = initialStepPositionFraction * (stepMax - stepMin);
-            if (TryFindStepPosition(0, stepMin + stepTimer, 
+            if (TryFindStepPosition(0, StepMax + InitialPositionFraction * StepDelta, 
                 hipGroundDirection, out var s))
             {
                 currentStepGoal = s;
@@ -127,6 +138,12 @@ namespace RPGPlatformer.Core
             }
         }
 
+        private void ResetTimerToInitialOffset()
+        {
+            stepping = false;
+            stepTimer = InitialTimerFraction * StepLength;
+        }
+
 
         //IK POSITIONING
 
@@ -135,7 +152,6 @@ namespace RPGPlatformer.Core
             stepGoal = stepGoal + groundHeightBuffer * body.transform.up;
             var stepLength = Vector2.Distance(ikTarget.position, stepGoal);
 
-            //currentStepSpeed = Mathf.PI * stepSpeedMultiplier;
             currentStepCenter = 0.5f * (ikTarget.position + stepGoal);
             currentStepRadius = 0.5f * stepLength;
             currentStepX = (stepGoal - ikTarget.position) / stepLength;
@@ -148,7 +164,7 @@ namespace RPGPlatformer.Core
 
         }
 
-        public void EndStep()
+        private void EndStep()
         {
             stepping = false;
             stepTimer = 0;
@@ -160,7 +176,7 @@ namespace RPGPlatformer.Core
         {
             smoothedSpeed = Mathf.Lerp(smoothedSpeed, body.linearVelocity.magnitude, dt * speedLerpRate);
             stepTimer += dt * smoothedSpeed;
-            var t = stepTimer * Mathf.PI * stepSpeedMultiplier;
+            var t = stepTimer * Mathf.PI * StepSpeedMultiplier;
 
             if (t > Mathf.PI)
             {
@@ -198,20 +214,9 @@ namespace RPGPlatformer.Core
 
         //DETERMINING STEP POSITION
 
-        //private float FootPosition()
-        //{
-        //    return Vector2.Dot(ikTarget.position - hipJoint.position,
-        //        Mathf.Sign(body.transform.localScale.x) * body.transform.right);
-        //}
-
-        //private bool ShouldStep()
-        //{
-        //    return FootPosition(/*hipGroundDirection*/) < stepMin;
-        //}
-
         private bool TryFindStepPosition(out Vector2 stepPosition)
         {
-            return TryFindStepPosition(0, stepMax, hipGroundDirection, out stepPosition);
+            return TryFindStepPosition(0, StepMax, hipGroundDirection, out stepPosition);
         }
 
         private bool TryFindStepPosition(int iteration, float goalOffset, 
@@ -229,7 +234,7 @@ namespace RPGPlatformer.Core
             }
 
             if (iteration < stepSmoothingIterations
-                && Vector2.SqrMagnitude(hit.point - hipGroundHit) > stepMax * stepMax)
+                && Vector2.SqrMagnitude(hit.point - hipGroundHit) > StepMax * StepMax)
             {
                 searchDirection = (hit.point - hipGroundHit).normalized;
                 if (!TryFindStepPosition(iteration, goalOffset, searchDirection, out stepPosition))
