@@ -12,11 +12,11 @@ namespace RPGPlatformer.Movement
         Action OnUpdate;
         Action OnFixedUpdate;
 
-        Vector2 moveInput;
+        Vector3 moveInput;
 
         public IInputSource InputSource { get; private set; }
         public Transform CurrentTarget { get; set; }
-        public Vector2 MoveInput
+        public Vector3 MoveInput
         {
             get => moveInput;
             set
@@ -35,7 +35,7 @@ namespace RPGPlatformer.Movement
                 }
             }
         }
-        public bool Moving => MoveInput != Vector2.zero;
+        public bool Moving => (Vector2)MoveInput != Vector2.zero;
         public Vector2 RelativeVelocity => stateDriver.BodyPieces[0].linearVelocity;
         public IMover Mover => stateDriver;
         public HorizontalOrientation CurrentOrientation => stateDriver.CurrentOrientation;
@@ -58,25 +58,6 @@ namespace RPGPlatformer.Movement
 
         private void Update()
         {
-            //for testing:
-            //if (Input.GetKeyDown(KeyCode.Z))
-            //    {
-            //        SetCurled(!Curled);
-            //    }
-
-            //if (Input.GetKeyDown(KeyCode.LeftArrow))
-            //{
-            //    MoveInput = Vector2.left;
-            //}
-            //else if (Input.GetKeyDown(KeyCode.RightArrow))
-            //{
-            //    MoveInput = Vector2.right;
-            //}
-            //else if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
-            //{
-            //    MoveInput = Vector2.zero;
-            //}
-
             OnUpdate?.Invoke();
         }
 
@@ -94,11 +75,6 @@ namespace RPGPlatformer.Movement
         {
             stateManager = new(stateDriver, GetComponent<AnimationControl>());
         }
-
-        //protected override void ConfigureStateManager()
-        //{
-        //    base.ConfigureStateManager();
-        //}
 
         private void HandleMoveInput()
         {

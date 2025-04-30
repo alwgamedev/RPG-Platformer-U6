@@ -1,5 +1,4 @@
-﻿using RPGPlatformer.Combat;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -25,7 +24,7 @@ namespace RPGPlatformer.Movement
         public Transform CurrentTarget { get; set; }
         public float MaxPermissibleDropOffHeight { get; protected set; }
 
-        public override Vector2 MoveInput
+        public override Vector3 MoveInput
         {
             get => base.MoveInput;
             set
@@ -89,13 +88,14 @@ namespace RPGPlatformer.Movement
             return stateDriver.DropOffAhead(MaxPermissibleDropOffHeight, direction, out distance);
         }
 
-        protected override void Move(Vector2 moveInput)
+        protected override void Move(Vector3 moveInput)
         {
             if (CanMove())
             {
                 base.Move(moveInput);
             }
         }
+
 
         protected virtual bool HandlingDropoffAhead(float dist)
         {
@@ -114,7 +114,7 @@ namespace RPGPlatformer.Movement
                         || Vector2.Distance(landingPt, CurrentTarget.position) <
                         Vector2.Distance(stateDriver.ColliderCenterBottom, CurrentTarget.position))
                     {
-                        stateDriver.MoveWithoutAcceleration((int)CurrentOrientation * transform.right,
+                        stateDriver.MoveWithoutAcceleration(false, (int)CurrentOrientation * transform.right,
                             stateDriver.RunSpeed, currentMovementOptions);//get up to run speed
                         stateDriver.Jump();
                         stuckAtLedge = false;

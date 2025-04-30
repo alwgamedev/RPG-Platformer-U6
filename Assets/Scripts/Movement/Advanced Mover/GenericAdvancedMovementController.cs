@@ -87,7 +87,7 @@ namespace RPGPlatformer.Movement
         {
             if (Grounded)
             {
-                if (MoveInput == Vector2.zero)
+                if ((Vector2)MoveInput == Vector2.zero)
                 {
                     stateManager.AnimateMovement(0);
                     return;
@@ -112,7 +112,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void HandleAdjacentWallInteraction(/*bool airborne*/)
         {
-            if (moveInput != Vector2.zero && stateDriver.FacingWall)
+            if ((Vector2)moveInput != Vector2.zero && stateDriver.FacingWall)
             {
                 stateManager.AnimateWallScramble(false);
                 if (!stateManager.IsWallClinging())

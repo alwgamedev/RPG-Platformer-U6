@@ -148,24 +148,25 @@ namespace RPGPlatformer.Movement
             myRigidbody.AddForce(myRigidbody.mass * a);
         }
 
-        public virtual void Move(Vector2 relV, Vector2 direction, MovementOptions options)
+        public virtual void Move(bool backingUp, Vector2 relV, Vector2 direction, MovementOptions options)
         {
-            Move(relV, direction, MaxSpeed, options);
+            Move(backingUp, relV, direction, MaxSpeed, options);
         }
 
-        public virtual void MoveWithoutAcceleration(Vector2 direction, MovementOptions options)
+        public virtual void MoveWithoutAcceleration(bool backingUp, Vector2 direction, MovementOptions options)
         {
-            MoveWithoutAcceleration(direction, MaxSpeed, options);
+            MoveWithoutAcceleration(backingUp, direction, MaxSpeed, options);
         }
 
-        public virtual void Move(Vector2 relV, Vector2 moveDirection, float maxSpeed, MovementOptions options)
+        public virtual void Move(bool backingUp, Vector2 relV, Vector2 moveDirection,
+            float maxSpeed, MovementOptions options)
         {
-            myRigidbody.Move(FacingRight, relV, moveDirection, maxSpeed, options);
+            myRigidbody.Move(FacingRight, backingUp, relV, moveDirection, maxSpeed, options);
         }
 
-        public virtual void MoveWithoutAcceleration(Vector2 direction, float maxSpeed, MovementOptions options)
+        public virtual void MoveWithoutAcceleration(bool backingUp, Vector2 direction, float maxSpeed, MovementOptions options)
         {
-            myRigidbody.MoveWithoutAcceleration(FacingRight, direction, maxSpeed, options);
+            myRigidbody.MoveWithoutAcceleration(FacingRight, backingUp, direction, maxSpeed, options);
         }
 
         //public void RotateTowardsMovementDirection(Vector2 moveDirection, MovementOptions options)

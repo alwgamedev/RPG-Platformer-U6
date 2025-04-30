@@ -80,7 +80,7 @@ namespace RPGPlatformer.Movement
                 for (int i = 0; i < NumBodyPieces; i++)
                 {
                     rb = bodyPieces[i];
-                    rb.Move(FacingRight, rb.linearVelocity, moveInput * groundDirections[i],
+                    rb.Move(FacingRight, false, rb.linearVelocity, moveInput * groundDirections[i],
                         MaxSpeed, movementOptions);
                 }
             }

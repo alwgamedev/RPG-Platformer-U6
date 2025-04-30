@@ -91,7 +91,7 @@ namespace RPGPlatformer.Movement
         ///relV is current "relative" velocity (which is usually just rb.linearVelocity, unless
         ///you want velocity to be taken relative to a moving platform, e.g. when player has mounted shuttlehawk)
         /// </summary>
-        public static void Move(this Rigidbody2D rb, bool facingRight, 
+        public static void Move(this Rigidbody2D rb, bool facingRight, bool backingUp,
             Vector2 relV, Vector2 moveDirection, float maxSpeed, MovementOptions options)
         {
             if (moveDirection == Vector2.zero)
@@ -101,7 +101,8 @@ namespace RPGPlatformer.Movement
 
             if (options.RotateToDirection)
             {
-                rb.transform.RotateTowardsMovementDirection(facingRight, moveDirection, options);
+                rb.transform.RotateTowardsMovementDirection(facingRight, 
+                    backingUp ? - moveDirection : moveDirection, options);
             }
 
             var v = options.ClampXVelocityOnly ?
@@ -117,14 +118,15 @@ namespace RPGPlatformer.Movement
         /// <summary>
         /// moveDirection assumed normalized
         /// </summary>
-        public static void MoveWithoutAcceleration(this Rigidbody2D rb, bool facingRight,
+        public static void MoveWithoutAcceleration(this Rigidbody2D rb, bool facingRight, bool backingUp,
             Vector2 moveDirection, float maxSpeed, MovementOptions options)
         {
             if (moveDirection == Vector2.zero) return;
 
             if (options.RotateToDirection)
             {
-                rb.transform.RotateTowardsMovementDirection(facingRight, moveDirection, options);
+                rb.transform.RotateTowardsMovementDirection(facingRight,
+                    backingUp ? - moveDirection : moveDirection, options);
             }
 
             rb.linearVelocity = maxSpeed * moveDirection;
@@ -133,10 +135,10 @@ namespace RPGPlatformer.Movement
         /// <summary>
         /// move direction is assumed normalized
         /// </summary>
-        public static void RotateTowardsMovementDirection(this Transform t, bool facingRight, 
+        public static void RotateTowardsMovementDirection(this Transform t, bool moveDirectionIsGoalTrRight, 
             Vector2 moveDirection, MovementOptions options)
         {
-            var tUp = facingRight ? options.ClampedTrUpGivenGoalTrRight(moveDirection)
+            var tUp = moveDirectionIsGoalTrRight ? options.ClampedTrUpGivenGoalTrRight(moveDirection)
                 : options.ClampedTrUpGivenGoalTrLeft(moveDirection);
             t.TweenTransformUpTowards(tUp, options.RotationSpeed);
         }

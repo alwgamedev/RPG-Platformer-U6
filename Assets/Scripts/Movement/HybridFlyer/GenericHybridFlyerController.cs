@@ -45,6 +45,18 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        public override void MoveAwayFrom(Vector2 point)
+        {
+            if (Flying)
+            {
+                MoveInput = new Vector3(transform.position.x - point.x, transform.position.y - point.y, -1);
+            }
+            else
+            {
+                base.MoveAwayFrom(point);
+            }
+        }
+
         public virtual void BeginFlying()
         {
             if (Flying) return;

@@ -62,7 +62,7 @@ namespace RPGPlatformer.Movement
 
         private void HandleMoveInput()
         {
-            rb.Move(transform.localScale.x > 0, rb.linearVelocity,
+            rb.Move(transform.localScale.x > 0, false, rb.linearVelocity,
                 moveInput * GroundDirectionVector(),
                 maxSpeed, movementOptions);
         }

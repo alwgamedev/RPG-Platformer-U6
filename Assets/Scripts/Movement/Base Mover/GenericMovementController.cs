@@ -20,9 +20,9 @@ namespace RPGPlatformer.Movement
         [SerializeField] MovementOptions[] movementOptions;
 
         protected bool ignoreMoveInputNextUpdate;
-        protected Vector2 moveInput;
+        protected Vector3 moveInput;
 
-        protected Func<Vector2, Vector2> GetMoveDirection = (v) => default;
+        protected Func<Vector3, Vector2> GetMoveDirection = (v) => default;
         protected Action OnFixedUpdate;
         protected Action TempFixedUpdate;
         protected Action OnUpdate;
@@ -34,8 +34,9 @@ namespace RPGPlatformer.Movement
         public IInputSource InputSource { get; protected set; }
         public HorizontalOrientation CurrentOrientation => stateDriver.CurrentOrientation;
         public IMover Mover => stateDriver;
-        public virtual Vector2 MoveInput
+        public virtual Vector3 MoveInput
         //child classes will override get/set
+        //NOTE: z-axis will be used to indicate whether object is backing up (i.e. orientation gets *= -1)
         {
             get => moveInput;
             set
@@ -43,7 +44,7 @@ namespace RPGPlatformer.Movement
                 moveInput = value;
             }
         }
-        public bool Moving => moveInput != Vector2.zero;
+        public bool Moving => (Vector2)MoveInput != Vector2.zero;
         public bool Grounded => stateManager.StateMachine.CurrentState == stateManager.StateGraph.grounded;
         public bool Freefalling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.freefall;
         public virtual bool Jumping => false;
@@ -154,14 +155,14 @@ namespace RPGPlatformer.Movement
             GetMoveDirection = MoveDirectionFunction(currentMovementOptions.MoveDirection);
         }
 
-        protected virtual Func<Vector2, Vector2> MoveDirectionFunction(MoveDirection d)
+        protected virtual Func<Vector3, Vector2> MoveDirectionFunction(MoveDirection d)
         {
             return d switch
             {
-                MoveDirection.Ground => v => stateDriver.GroundDirectionVector(),
+                MoveDirection.Ground => v => Mathf.Sign(v.z) * stateDriver.GroundDirectionVector(),
                 MoveDirection.Input => MoveInputDirection,
-                MoveDirection.Horizontal => v => OrientationDirection(),
-                MoveDirection.Vertical => v => VerticalOrientationDirection(),
+                MoveDirection.Horizontal => v => Mathf.Sign(v.z) * OrientationDirection(),
+                MoveDirection.Vertical => v => Mathf.Sign(v.z) * VerticalOrientationDirection(),
                 _ => v => default
             };
         }
@@ -175,7 +176,7 @@ namespace RPGPlatformer.Movement
 
         public virtual void MoveAwayFrom(Vector2 point)
         {
-            MoveInput = new(transform.position.x - point.x, 0);
+            MoveInput = new(transform.position.x - point.x, 0, -1);
         }
 
         public void FaceTarget(Transform target)
@@ -188,25 +189,27 @@ namespace RPGPlatformer.Movement
 
         public void FaceTarget(Vector3 target)
         {
-            SetOrientation(target - transform.position);
+            SetOrientation((Vector2)(target - transform.position));
         }
 
-        public virtual void SetOrientation(Vector2 input)
+        public virtual void SetOrientation(Vector3 input)
         {
             SetOrientation(input, currentMovementOptions.FlipSprite, currentMovementOptions.ChangeDirectionWrtGlobalUp);
         }
 
-        public virtual void SetOrientation(Vector2 input, bool updateDirectionFaced, bool flipWrtGlobalUp) 
+        public virtual void SetOrientation(Vector3 input, bool updateDirectionFaced, bool flipWrtGlobalUp) 
         {
             if (input.x == 0) return;
-            stateDriver.SetOrientation((HorizontalOrientation)Mathf.Sign(input.x), updateDirectionFaced, flipWrtGlobalUp);
+
+            stateDriver.SetOrientation((HorizontalOrientation)(Mathf.Sign(input.z) * Mathf.Sign(input.x)), 
+                updateDirectionFaced, flipWrtGlobalUp);
         }
 
         public virtual void SoftStop()
         {
             //use moveInput rather than MoveInput so that
             //MoveInput.set can reference SoftStop without stack overflow
-            moveInput = Vector2.zero;
+            moveInput = Vector3.zero;
         }
 
         public virtual void HardStop(bool maintainVerticalVelocity = true)
@@ -215,7 +218,7 @@ namespace RPGPlatformer.Movement
             SoftStop();
         }
 
-        protected Vector2 MoveInputDirection(Vector2 moveInput)
+        protected Vector2 MoveInputDirection(Vector3 moveInput)
         {
             return moveInput.normalized;
         }
@@ -288,9 +291,9 @@ namespace RPGPlatformer.Movement
             HandleMoveInput(MoveInput, Move);
         }
 
-        protected virtual void HandleMoveInput(Vector2 moveInput, Action<Vector2> moveAction)
+        protected virtual void HandleMoveInput(Vector3 moveInput, Action<Vector3> moveAction)
         {
-            if (moveInput != Vector2.zero)
+            if ((Vector2)moveInput != Vector2.zero)
             {
                 SetOrientation(moveInput);
                 if (!ignoreMoveInputNextUpdate)
@@ -300,14 +303,14 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void Move(Vector2 moveInput)
+        protected virtual void Move(Vector3 moveInput)
         {
-            stateDriver.Move(RelativeVelocity, GetMoveDirection(moveInput), currentMovementOptions);
+            stateDriver.Move(moveInput.z < 0, RelativeVelocity, GetMoveDirection(moveInput), currentMovementOptions);
         }
 
-        protected virtual void MoveWithoutAcceleration(Vector2 moveInput)
+        protected virtual void MoveWithoutAcceleration(Vector3 moveInput)
         {
-            stateDriver.MoveWithoutAcceleration(GetMoveDirection(moveInput), currentMovementOptions);
+            stateDriver.MoveWithoutAcceleration(moveInput.z < 0, GetMoveDirection(moveInput), currentMovementOptions);
         }
 
         protected virtual void OnFreefallVerified()
