@@ -9,6 +9,7 @@ namespace RPGPlatformer.Combat
     public interface IPowerUpAbility
     {
         public float MaxPowerUpMultiplier { get; }
+        public int TicksToAchieveMaxPower { get; }
     }
 
     //Instance needs to fill in:
@@ -105,7 +106,7 @@ namespace RPGPlatformer.Combat
 
             try
             {
-                if(controller.FireButtonIsDown)
+                if(controller.FireButtonIsDown || controller is AICombatController)
                 {
                     StartAbilityPowerUp();
                 }

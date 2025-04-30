@@ -100,9 +100,8 @@ namespace RPGPlatformer.Combat
                 await GetStunned(duration, freezeAnimation, GlobalGameTools.Instance.TokenSource);
             stateDriver.Health.HealthChangeTrigger += OnHealthChanged;
 
-            InitializeCombatantEquipment();
-
             stateDriver.OnInventoryOverflow += OnInventoryOverflow;
+            InitializeCombatantEquipment();
             InitializeInventoryItems();
 
             stateDriver.OnStart();
@@ -189,7 +188,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void HandleAbilityInput(int index)
         {
-            ExecuteAbility(CurrentAbilityBar.GetAbility(index));
+            TryExecuteAbility(CurrentAbilityBar.GetAbility(index));
         }
 
         public virtual void RunAutoAbilityCycle(bool runOffGCD)
@@ -197,7 +196,7 @@ namespace RPGPlatformer.Combat
             if (!postCancellationLock && !ChannelingAbility
                 && ((queuedAbility == null && !GlobalCooldown) || runOffGCD))
             {
-                ExecuteAbility(CurrentAbilityBar?.GetAutoCastAbility());
+                TryExecuteAbility(CurrentAbilityBar?.GetAutoCastAbility());
             }
         }
 
@@ -209,17 +208,13 @@ namespace RPGPlatformer.Combat
                 || ability.CombatStyle == CombatStyle.Any);
         }
 
-        protected virtual void ExecuteAbility(AttackAbility ability)
+        protected virtual void TryExecuteAbility(AttackAbility ability)
         {
             if (ability == null) return;
 
             if (CanExecute(ability))
             {
-                if (ChannelingAbility)
-                {
-                    CancelAbilityInProgress();
-                }
-                ability.Execute(this);
+                ExecuteAbility(ability);
             }
             else if (!CurrentAbilityBar.IsOnCooldown(ability))
             {
@@ -229,6 +224,15 @@ namespace RPGPlatformer.Combat
             {
                 AttemptedToExecuteAbilityOnCooldown();
             }
+        }
+
+        protected virtual void ExecuteAbility(AttackAbility ability)
+        {
+            if (ChannelingAbility)
+            {
+                CancelAbilityInProgress();
+            }
+            ability.Execute(this);
         }
 
         protected virtual void CancelAbilityInProgress(bool delayedReleaseOfChannel = false)
@@ -394,7 +398,8 @@ namespace RPGPlatformer.Combat
 
         public virtual void OnWeaponEquip()
         {
-            EndChannel();
+            //EndChannel();
+            CancelAbilityInProgress();//new
             stateDriver.ReturnQueuedProjectileToPool();
             UpdateEquippedAbilityBar();
 
@@ -419,7 +424,7 @@ namespace RPGPlatformer.Combat
         protected virtual void OnWeaponTick()
         {
             GlobalCooldown = false;
-            ExecuteAbility(queuedAbility);
+            TryExecuteAbility(queuedAbility);
         }
 
         public virtual void PlayAnimation(string stateName, CombatStyle combatStyle)

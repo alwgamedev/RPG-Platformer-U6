@@ -1,0 +1,61 @@
+﻿using RPGPlatformer.Combat;
+using UnityEngine;
+
+namespace RPGPlatformer.AIControl
+{
+    public class MotherSpiderPatroller : CombatPatroller
+    {
+        float unarmedAttackRange;
+
+        bool UnarmedWeaponEquipped => combatController.Combatant.CurrentCombatStyle == CombatStyle.Unarmed;
+
+        private void Start()
+        {
+            unarmedAttackRange = combatController.Combatant.UnarmedWeapon.WeaponStats.AttackRange;
+            combatController.CombatExited += EquipRangedWeapon;
+            //let this be the default weapon
+            //basically so that if you leave den and come back he has the ranged weapon initially,
+            //like he would on the first encounter
+            //(I could put these in the patroller controller's state change handlers,
+            //but I'd rather not create a new script rn)
+        }
+
+        public override void OutOfRangeAttackBehavior(float distanceSqrd, float tolerance)
+        {
+            if (UnarmedWeaponEquipped)
+            {
+                EquipRangedWeapon();
+            }
+            else
+            {
+                EquipUnarmedWeapon();
+                //^so that he pursues you more closely without stuttering at the ranged weapon's attack range
+                Trigger(typeof(Pursuit).Name);
+            }
+        }
+
+        public override void InRangeAttackBehavior(float distanceSqrd, float tolerance)
+        {
+            if (!UnarmedWeaponEquipped)
+            {
+                if (combatController.Combatant.CanAttackAtDistSqrd(distanceSqrd, tolerance, unarmedAttackRange))
+                {
+                    EquipUnarmedWeapon();
+                }
+            }
+
+            //do this whether you swapped or not
+            base.InRangeAttackBehavior(distanceSqrd, tolerance);
+        }
+
+        private void EquipUnarmedWeapon()
+        {
+            ((AICombatant)combatController.Combatant).EquipWeaponSwap("Unarmed (Mother Spider)");
+        }
+
+        private void EquipRangedWeapon()
+        {
+            ((AICombatant)combatController.Combatant).EquipWeaponSwap("Ranged Weapon (Mother Spider)");
+        }
+    }
+}

@@ -152,7 +152,7 @@ namespace RPGPlatformer.AIControl
             MovementController.MoveTowards(CurrentTarget.transform.position);
         }
 
-        public void AttackBehavior()
+        public virtual void AttackBehavior()
         {
             if (!TryGetDistanceSqrd(CurrentTarget, out var d, out var t))
             {
@@ -160,12 +160,22 @@ namespace RPGPlatformer.AIControl
             }
             else if (!combatController.Combatant.CanAttackAtDistSqrd(d, t))
             {
-                Trigger(typeof(Pursuit).Name);
+                OutOfRangeAttackBehavior(d, t);
             }
             else
             {
-                MaintainMinimumCombatDistance(d, t);
+                InRangeAttackBehavior(d, t);
             }
+        }
+
+        public virtual void OutOfRangeAttackBehavior(float distanceSqrd, float tolerance)
+        {
+            Trigger(typeof(Pursuit).Name);
+        }
+
+        public virtual void InRangeAttackBehavior(float distanceSqrd, float tolerance)
+        {
+            MaintainMinimumCombatDistance(distanceSqrd, tolerance);
         }
 
         public void StartAttacking()

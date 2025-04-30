@@ -103,12 +103,18 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnTriggerEnter2D(Collider2D collider)
         {
-            OnCollide(collider);
+            if (gameObject.activeInHierarchy)
+            {
+                OnCollide(collider);
+            }
         }
 
         protected virtual void OnTriggerExit2D(Collider2D collider)
         {
-            OnCollide(collider);
+            if (gameObject.activeInHierarchy)
+            {
+                OnCollide(collider);
+            }
         }
 
         protected virtual void OnCollide(Collider2D collider)

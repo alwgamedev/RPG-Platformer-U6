@@ -364,11 +364,11 @@ namespace RPGPlatformer.Combat
             {
                 equippedWeapon = weapon;
                 OnWeaponEquip?.Invoke();
-                if (oldItem == unarmedWeapon)
-                {
-                    return;
-                    //so that we don't handle unequipped in this case
-                }
+                //if (oldItem == unarmedWeapon)
+                //{
+                //    return;
+                //    //so that we don't handle unequipped in this case
+                //}
             }
 
             if (handleUnequippedItem)
@@ -398,7 +398,7 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public void HandleUnequippedItem(EquippableItem item)
+        public virtual void HandleUnequippedItem(EquippableItem item)
         {
             if (item == null || item.Equals(unarmedWeapon)) return;
             inventory.DistributeToFirstAvailableSlots(item.ToInventorySlotData());
@@ -484,7 +484,12 @@ namespace RPGPlatformer.Combat
 
         public bool CanAttackAtDistSqrd(float distanceSqrd, float tolerance)
         {
-            var a = AttackRange + tolerance;
+            return CanAttackAtDistSqrd(distanceSqrd, tolerance, AttackRange);
+        }
+
+        public bool CanAttackAtDistSqrd(float distanceSqrd, float tolerance, float attackRange)
+        {
+            var a = attackRange + tolerance;
             return distanceSqrd < a * a;
         }
 

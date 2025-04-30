@@ -6,8 +6,20 @@ using RPGPlatformer.Effects;
 
 namespace RPGPlatformer.Combat
 {
+    //simple = execute on next fire button down
+    //powerUp = waits for fire button down, does something while held, then 
+    public enum AsyncAbilityInputType
+    {
+        simple, powerUp
+    }
+
+    public interface IAsyncAbility
+    {
+        public AsyncAbilityInputType InputType { get; }
+    }
+
     //Description: waits for a Task<T> Prepare to complete, like aiming or powering up, then passes along the T result to the OnExecute method
-    public class AsyncAbility<T> : AttackAbility
+    public class AsyncAbility<T> : AttackAbility, IAsyncAbility
     {
         //public override bool IsAsyncAbility => true;
         public bool DelayedReleaseOfChannel { get; init; } = true;
@@ -15,6 +27,7 @@ namespace RPGPlatformer.Combat
         public Func<ICombatController, CancellationTokenSource, Task<T>> Prepare { get; init; }
         //Prepare is responsible for cancelling itself when the token is cancelled
         public new Action<ICombatController, T> OnExecute { get; init; }
+        public virtual AsyncAbilityInputType InputType { get; }
 
         public override void Execute(ICombatController controller)
         {
@@ -23,8 +36,6 @@ namespace RPGPlatformer.Combat
 
         public async void ExecuteAsync(ICombatController controller, CancellationTokenSource tokenSource)
         {
-            if (!CanBeExecuted(controller)) return;
-
             //NOTE: although it would be convenient, we don't cancel OnChannelEnded here.
             //It is better to do that in the "innermost layer" of tasks (so in the Prepare function)
             //or else we get issues.
@@ -44,8 +55,9 @@ namespace RPGPlatformer.Combat
                 {
                     throw new TaskCanceledException();
                 }
-                //NOTE: Prepare function is responsible for throwing TaskCanceledException when cts is cancelled,
-                //(but I'm still checking cts.IsCancellatioRequested after just to be safe)
+                //V. IMPORTANT: Prepare function is responsible for throwing TaskCanceledException when
+                //cts is cancelled or when channel ends
+                //(but I'm still checking cts.IsCancellatioRequested afterwards just to be safe)
 
                 controller.Combatant.TriggerCombat();
                 OnExecute?.Invoke(controller, args);
@@ -87,6 +99,8 @@ namespace RPGPlatformer.Combat
     //then invokes OnExecute immediately after.
     public class AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<T> : AsyncAbility<T>
     {
+        public override AsyncAbilityInputType InputType => AsyncAbilityInputType.simple;
+
         public Func<ICombatController, T> GetData { get; init; }
 
         public AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately() : base()
@@ -97,7 +111,8 @@ namespace RPGPlatformer.Combat
         public async Task<T> GetDataOnFireButtonDown(ICombatController controller, 
             CancellationTokenSource tokenSource)
         {
-            if (controller.FireButtonIsDown) return this.GetData(controller);
+            if (controller.FireButtonIsDown || controller is AICombatController) 
+                return this.GetData(controller);
 
             TaskCompletionSource<T> tcs = new();
             using var registration = tokenSource.Token.Register(Cancel);

@@ -216,12 +216,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 503693799385673215}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.49883553, w: 0.8666968}
+  m_LocalPosition: {x: 0.71, y: 1, z: 0}
+  m_LocalScale: {x: 5.555553, y: 5.555553, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3257385418868346795}
+  m_Father: {fileID: 2020897638381876936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1893218083691054515
 MonoBehaviour:
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sortingLayer: 
   sortingOrder: 0
-  defaultItemSO: {fileID: 0}
+  defaultItemSO: {fileID: 11400000, guid: f753ab6e625b6f24ebea4f694ff2ff24, type: 2}
   dependentResolvers: []
 --- !u!1 &569505373767912213
 GameObject:
@@ -5834,6 +5834,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5486409142904396325}
+  - {fileID: 4675842901861787684}
   m_Father: {fileID: 5441023806341859700}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7237550495087371642
@@ -6635,7 +6636,7 @@ GameObject:
   - component: {fileID: 1260534678711385737}
   - component: {fileID: 1224215013977114335}
   - component: {fileID: 40284293126192684}
-  - component: {fileID: 1029985731310901082}
+  - component: {fileID: 3061942786066392952}
   - component: {fileID: 4381645486506441378}
   - component: {fileID: 3855336170115554620}
   - component: {fileID: 3760151246975433838}
@@ -6675,7 +6676,6 @@ Transform:
   - {fileID: 4230854498042159771}
   - {fileID: 7871268921317296534}
   - {fileID: 26467565533062018}
-  - {fileID: 4675842901861787684}
   - {fileID: 7161002516832035083}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6859,7 +6859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultPatrolMode: 3
   defaultPatrolParameters: {fileID: 0}
---- !u!114 &1029985731310901082
+--- !u!114 &3061942786066392952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6868,10 +6868,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8509952300785250002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ed0a0c49da5e114c9e9ee1a71fc3cc9, type: 3}
+  m_Script: {fileID: 11500000, guid: 29c78a5e7aec03949845d5f18877df09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pursuitRange: 5
+  pursuitRange: 6
   suspicionTime: 4
   playerEnemy: 1
 --- !u!114 &4381645486506441378
@@ -6902,7 +6902,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 60
+    acceleration: 75
     flipSprite: 1
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -6955,7 +6955,7 @@ MonoBehaviour:
   deathTorque: 0
   treatContactCharacterAsGround: 0
   adjustedHalfWidthFactor: 0.45
-  runSpeed: 3
+  runSpeed: 3.8
   walkSpeed: 1.5
   maxNumJumps: 0
   jumpForce: {x: 0, y: 375}
@@ -7123,6 +7123,7 @@ MonoBehaviour:
   combatXPReward: 50
   dropSize: 0
   dropTable: {fileID: 0}
+  weaponSwapSOs: []
 --- !u!1 &8530898117440902803
 GameObject:
   m_ObjectHideFlags: 0

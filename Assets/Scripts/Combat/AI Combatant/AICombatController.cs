@@ -1,5 +1,7 @@
 ﻿using RPGPlatformer.Core;
 using RPGPlatformer.UI;
+using System.Threading;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -77,6 +79,13 @@ namespace RPGPlatformer.Combat
             }
 
             Attacking = false;
+        }
+
+        public override void MaximumPowerAchieved()
+        {
+            base.MaximumPowerAchieved();
+
+            FireButtonUp();
         }
 
         public override void OnCombatEntry()

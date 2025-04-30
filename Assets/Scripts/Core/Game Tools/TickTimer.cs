@@ -10,6 +10,7 @@ namespace RPGPlatformer.Core
 
         protected float tickTime;
 
+        public float TickLength => tickLength;
         public float TickTime => tickTime;
 
         public event Action NewTick;
