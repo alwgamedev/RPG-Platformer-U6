@@ -7,6 +7,23 @@ namespace RPGPlatformer.Movement
     {
         IKLegWalker[] legAnimators;
 
+        //public override Vector3 MoveInput
+        //{
+        //    get => base.MoveInput;
+        //    set
+        //    {
+        //        base.MoveInput = value;
+        //        if (!legAnimators[0].Reversed && MoveInput.z < 0)
+        //        {
+        //            SetLegsReversed(true);
+        //        }
+        //        else if (legAnimators[0].Reversed && MoveInput.z > 0)
+        //        {
+        //            SetLegsReversed(false);
+        //        }
+        //    }
+        //}
+
         protected override void Awake()
         {
             base.Awake();
@@ -18,10 +35,7 @@ namespace RPGPlatformer.Movement
         {
             foreach (var l in legAnimators)
             {
-                if (l)
-                {
-                    l.paused = true;
-                }
+                l.paused = true;
             }
         }
 
@@ -29,11 +43,32 @@ namespace RPGPlatformer.Movement
         {
             foreach (var l in legAnimators)
             {
-                if (l)
-                {
-                    l.paused = false;
-                }
+                l.paused = false;
             }
         }
+
+        public override void SoftStop()
+        {
+            base.SoftStop();
+
+            ReturnLegsToInitialPositions(false);
+        }
+
+        private void ReturnLegsToInitialPositions(bool snapToPosition)
+        {
+            Debug.Log("returning legs to initial position");
+            foreach (var l in legAnimators)
+            {
+                l.InitializeFootPosition(snapToPosition);
+            }
+        }
+
+        //public void SetLegsReversed(bool reversed)
+        //{
+        //    foreach (var l in legAnimators)
+        //    {
+        //        l.Reversed = reversed;
+        //    }
+        //}
     }
 }

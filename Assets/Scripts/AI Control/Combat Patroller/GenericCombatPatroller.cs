@@ -19,13 +19,14 @@ namespace RPGPlatformer.AIControl
         [SerializeField] protected float pursuitRange = 5;
         [SerializeField] protected float suspicionTime = 5;
         [SerializeField] protected bool playerEnemy = true;
+        //[SerializeField] protected bool setRunningWhenMaintainingMinimumCombatDistance;
 
         protected bool correctingCombatDistance;
         protected float suspicionTimer;
         protected IHealth currentTarget;
         protected T1 combatController;
 
-        public float TargetingTolerance => combatController.Combatant.Health.TargetingTolerance;
+        public virtual float TargetingTolerance => combatController.Combatant.Health.TargetingTolerance;
         public float MinimumCombatDistance => combatController.Combatant.IdealMinimumCombatDistance;
         public ICombatController CombatController => combatController;
 
@@ -194,7 +195,7 @@ namespace RPGPlatformer.AIControl
             correctingCombatDistance = false;
         }
 
-        public virtual void MaintainMinimumCombatDistance(float targetDistSqrd, float tolerance)
+        protected virtual void MaintainMinimumCombatDistance(float targetDistSqrd, float tolerance)
         {
             //not very performance-conscious, because he will continue scanning for drop offs
             //every frame that he is correcting combat distance,
@@ -220,13 +221,18 @@ namespace RPGPlatformer.AIControl
                 }
 
                 correctingCombatDistance = true;
-                //MovementController.MoveInput = new(direction, 0);
+                //if (setRunningWhenMaintainingMinimumCombatDistance)
+                //{
+                //    MovementController.SetRunning(true);
+                //}
                 MovementController.MoveAwayFrom(currentTarget.transform.position);
             }
             else if (correctingCombatDistance)
             {
                 correctingCombatDistance = false;
+                //MovementController.SetRunning(false);
                 MovementController.SoftStop();
+                combatController.FaceAimPosition();
             }
         }
 

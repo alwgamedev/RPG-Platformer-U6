@@ -79,13 +79,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stepMin: 0.35
-  stepMax: 1.4
-  initialStepPositionFraction: 0.33
+  stepMax: 1.25
+  initialStepPositionFraction: -0.1
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
-  speedLerpRate: 75
-  groundHeightBuffer: 0.05
+  speedLerpRate: 100
+  groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionStrength: 4
   body: {fileID: 6511084936526347583}
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ConstrainRotation: 0
   m_SolveFromDefaultPose: 1
-  m_Weight: 0.8
+  m_Weight: 1
   m_Chain:
     m_EffectorTransform: {fileID: 2288468833362833700}
     m_TargetTransform: {fileID: 8060990842156072070}
@@ -286,13 +286,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stepMin: 0.15
-  stepMax: 1.25
-  initialStepPositionFraction: 0.17
+  stepMax: 1.15
+  initialStepPositionFraction: -0.15
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
-  speedLerpRate: 75
-  groundHeightBuffer: 0.05
+  speedLerpRate: 100
+  groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionStrength: 4
   body: {fileID: 6511084936526347583}
@@ -2075,7 +2075,7 @@ MonoBehaviour:
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.5
-  speedLerpRate: 75
+  speedLerpRate: 100
   groundHeightBuffer: 0.1
   raycastLength: 5
   maintainPositionStrength: 10
@@ -4671,7 +4671,7 @@ MonoBehaviour:
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.5
-  speedLerpRate: 75
+  speedLerpRate: 100
   groundHeightBuffer: 0.1
   raycastLength: 5
   maintainPositionStrength: 10
@@ -5461,13 +5461,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stepMin: 0.35
-  stepMax: 1.4
-  initialStepPositionFraction: 1
+  stepMax: 1.25
+  initialStepPositionFraction: 0.6
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
-  speedLerpRate: 75
-  groundHeightBuffer: 0.05
+  speedLerpRate: 100
+  groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionStrength: 4
   body: {fileID: 6511084936526347583}
@@ -5488,7 +5488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ConstrainRotation: 0
   m_SolveFromDefaultPose: 1
-  m_Weight: 0.8
+  m_Weight: 1
   m_Chain:
     m_EffectorTransform: {fileID: 4561274762118578603}
     m_TargetTransform: {fileID: 4536040588755604440}
@@ -5686,13 +5686,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stepMin: 0.15
-  stepMax: 1.25
-  initialStepPositionFraction: 0.83
+  stepMax: 1.15
+  initialStepPositionFraction: 0.55
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
-  speedLerpRate: 75
-  groundHeightBuffer: 0.05
+  speedLerpRate: 100
+  groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionStrength: 4
   body: {fileID: 6511084936526347583}
@@ -6232,7 +6232,7 @@ MonoBehaviour:
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.35
-  speedLerpRate: 75
+  speedLerpRate: 100
   groundHeightBuffer: 0.1
   raycastLength: 5
   maintainPositionStrength: 4
@@ -6802,8 +6802,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.9}
-  m_Size: {x: 2, y: 1.45}
+  m_Offset: {x: 0.15, y: 0.9}
+  m_Size: {x: 1.5, y: 1.45}
   m_Direction: 1
 --- !u!114 &2299468110930713171
 MonoBehaviour:
@@ -6928,6 +6928,7 @@ MonoBehaviour:
     minRotationRight: {x: 0.0007962743, y: -0.9999997}
     maxRotationLeft: {x: -0.0007962743, y: 0.9999997}
     minRotationLeft: {x: -0.0007962743, y: -0.9999997}
+  moveAwayBackwards: 0
   wallDetectionOptions:
     detectWalls: 0
     numWallCastsPerThird: 0
@@ -7319,7 +7320,7 @@ MonoBehaviour:
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.35
-  speedLerpRate: 75
+  speedLerpRate: 100
   groundHeightBuffer: 0.1
   raycastLength: 5
   maintainPositionStrength: 4

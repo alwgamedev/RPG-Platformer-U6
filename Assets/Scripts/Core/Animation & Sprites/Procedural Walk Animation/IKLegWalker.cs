@@ -26,6 +26,7 @@ namespace RPGPlatformer.Core
 
         int groundLayer;
         bool stepping;
+        bool reversed;
         float smoothedSpeed;
         float stepTimer;
         float currentStepRadius;
@@ -39,6 +40,20 @@ namespace RPGPlatformer.Core
 
         public bool paused;
 
+        //public bool Reversed
+        //{
+        //    get => reversed;
+        //    set
+        //    {
+        //        if (value != reversed)
+        //        {
+        //            reversed = value;
+        //            EndStep();
+        //            InitializeFootPosition(false);
+        //        }
+        //    }
+        //}
+
         private void Awake()
         {
             groundLayer = LayerMask.GetMask("Ground");
@@ -47,7 +62,7 @@ namespace RPGPlatformer.Core
 
         private void OnEnable()
         {
-            InitializeFootPosition();
+            InitializeFootPosition(true);
         }
 
         private void Start()
@@ -57,9 +72,9 @@ namespace RPGPlatformer.Core
                 orienter.DirectionChanged += OnDirectionChanged;
             }
 
-            stepTimer = initialStepPositionFraction * (stepMax - stepMin);
+            //stepTimer = initialStepPositionFraction * (stepMax - stepMin);
 
-            currentStepGoal = ikTarget.position;
+            //currentStepGoal = ikTarget.position;
         }
 
         private void LateUpdate()
@@ -80,7 +95,7 @@ namespace RPGPlatformer.Core
                 {
                     UpdateHipGroundData();
 
-                    if (TryFindStepPosition(0, stepMax, hipGroundDirection, out var stepPos))
+                    if (TryFindStepPosition(out var stepPos))
                     {
                         BeginStep(stepPos);
                     }
@@ -92,14 +107,23 @@ namespace RPGPlatformer.Core
             }
         }
 
-        public void InitializeFootPosition()
+        public void InitializeFootPosition(bool snapToPosition)
         {
+            if (stepping)
+            {
+                EndStep();
+            }
+
             UpdateHipGroundData();
-            if (TryFindStepPosition(0, stepMin + initialStepPositionFraction * (stepMax - stepMin), 
+            stepTimer = initialStepPositionFraction * (stepMax - stepMin);
+            if (TryFindStepPosition(0, stepMin + stepTimer, 
                 hipGroundDirection, out var s))
             {
                 currentStepGoal = s;
-                ikTarget.position = s;
+                if (snapToPosition)
+                {
+                    ikTarget.position = s;
+                }
             }
         }
 
@@ -124,7 +148,7 @@ namespace RPGPlatformer.Core
 
         }
 
-        private void EndStep()
+        public void EndStep()
         {
             stepping = false;
             stepTimer = 0;
@@ -184,6 +208,11 @@ namespace RPGPlatformer.Core
         //{
         //    return FootPosition(/*hipGroundDirection*/) < stepMin;
         //}
+
+        private bool TryFindStepPosition(out Vector2 stepPosition)
+        {
+            return TryFindStepPosition(0, stepMax, hipGroundDirection, out stepPosition);
+        }
 
         private bool TryFindStepPosition(int iteration, float goalOffset, 
             Vector2 searchDirection, out Vector2 stepPosition)

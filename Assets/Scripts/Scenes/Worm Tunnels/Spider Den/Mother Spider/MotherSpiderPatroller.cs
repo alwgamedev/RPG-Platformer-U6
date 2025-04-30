@@ -1,13 +1,17 @@
 ﻿using RPGPlatformer.Combat;
-using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
     public class MotherSpiderPatroller : CombatPatroller
     {
+        //[SerializeField] float targetingToleranceOverride;
+
         float unarmedAttackRange;
 
         bool UnarmedWeaponEquipped => combatController.Combatant.CurrentCombatStyle == CombatStyle.Unarmed;
+
+        //public override float TargetingTolerance => targetingToleranceOverride;
+        //or just make it's collider less wide (but keep in mind we still need it's collider to bump into walls)
 
         private void Start()
         {
@@ -47,6 +51,11 @@ namespace RPGPlatformer.AIControl
             //do this whether you swapped or not
             base.InRangeAttackBehavior(distanceSqrd, tolerance);
         }
+
+        //protected override void MaintainMinimumCombatDistance(float targetDistSqrd, float tolerance)
+        //{
+        //    base.MaintainMinimumCombatDistance(targetDistSqrd, 0.25f);
+        //}
 
         private void EquipUnarmedWeapon()
         {

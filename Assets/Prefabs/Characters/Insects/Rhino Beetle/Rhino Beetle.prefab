@@ -203,7 +203,7 @@ MonoBehaviour:
   - movementType: 1
     moveDirection: 2
     acceleration: 60
-    flipSprite: 0
+    flipSprite: 1
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 1
     rotateToDirection: 0
@@ -410,6 +410,7 @@ MonoBehaviour:
   combatXPReward: 5
   dropSize: 0
   dropTable: {fileID: 0}
+  weaponSwapSOs: []
 --- !u!114 &8244550270408134216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1577,7 +1578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3677044512451993327, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.162
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 3677044512451993327, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

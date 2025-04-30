@@ -18,6 +18,7 @@ namespace RPGPlatformer.Movement
         where T3 : MovementStateManager<T1, T2, T0>
     {
         [SerializeField] MovementOptions[] movementOptions;
+        [SerializeField] bool moveAwayBackwards = true;
 
         protected bool ignoreMoveInputNextUpdate;
         protected Vector3 moveInput;
@@ -176,7 +177,7 @@ namespace RPGPlatformer.Movement
 
         public virtual void MoveAwayFrom(Vector2 point)
         {
-            MoveInput = new(transform.position.x - point.x, 0, -1);
+            MoveInput = new(transform.position.x - point.x, 0, moveAwayBackwards ? -1 : 0);
         }
 
         public void FaceTarget(Transform target)
