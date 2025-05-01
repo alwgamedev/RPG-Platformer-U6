@@ -79,6 +79,9 @@ namespace RPGPlatformer.Combat
             return weaponSwaps.TryGetValue(key, out weapon);
         }
 
+        //NOTE: this can interrupt abilities, so you usually want to check if controller
+        //is channeling an ability (e.g. waiting for an animation event to execute the ability)
+        //before swapping weapons
         public void EquipWeaponSwap(string key)
         {
             if (weaponSwaps.TryGetValue(key, out var w) && w != null)

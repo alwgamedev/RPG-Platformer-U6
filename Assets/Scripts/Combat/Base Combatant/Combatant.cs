@@ -567,7 +567,8 @@ namespace RPGPlatformer.Combat
             QueuedProjectile = projectile;
         }
 
-        //Triggered by animation events
+        //NOTE: cc should StoreAction(ShootQueuedProjectile) rather than calling this directly
+        //(if you want to channel while projectile is queued)
         public void ShootQueuedProjectile()
         {
             QueuedProjectile?.Shoot();

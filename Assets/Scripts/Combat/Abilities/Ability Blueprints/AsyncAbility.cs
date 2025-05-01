@@ -8,26 +8,29 @@ namespace RPGPlatformer.Combat
 {
     //simple = execute on next fire button down
     //powerUp = waits for fire button down, does something while held, then 
-    public enum AsyncAbilityInputType
-    {
-        simple, powerUp
-    }
+    //public enum AsyncAbilityInputType
+    //{
+    //    simple, powerUp
+    //}
 
-    public interface IAsyncAbility
-    {
-        public AsyncAbilityInputType InputType { get; }
-    }
+    //public interface IAsyncAbility
+    //{
+    //    public AsyncAbilityInputType InputType { get; }
+    //}
 
     //Description: waits for a Task<T> Prepare to complete, like aiming or powering up, then passes along the T result to the OnExecute method
-    public class AsyncAbility<T> : AttackAbility, IAsyncAbility
+    public class AsyncAbility<T> : AttackAbility//, IAsyncAbility
     {
         //public override bool IsAsyncAbility => true;
+        public virtual bool EndChannelAutomatically { get; } = true;
+            //^we would want to leave channel open e.g. if the async ability has the CC store an action
+            //(like with projectile abilities)
         public bool DelayedReleaseOfChannel { get; init; } = true;
         public bool HasChannelAnimation { get; init; } = false;
         public Func<ICombatController, CancellationTokenSource, Task<T>> Prepare { get; init; }
         //Prepare is responsible for cancelling itself when the token is cancelled
         public new Action<ICombatController, T> OnExecute { get; init; }
-        public virtual AsyncAbilityInputType InputType { get; }
+        //public virtual AsyncAbilityInputType InputType { get; }
 
         public override void Execute(ICombatController controller)
         {
@@ -78,7 +81,7 @@ namespace RPGPlatformer.Combat
             }
             finally
             {
-                if (controller != null && controller.ChannelingAbility)
+                if (EndChannelAutomatically && controller != null && controller.ChannelingAbility)
                 { 
                     controller.EndChannel(DelayedReleaseOfChannel);
                 }
@@ -99,7 +102,7 @@ namespace RPGPlatformer.Combat
     //then invokes OnExecute immediately after.
     public class AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<T> : AsyncAbility<T>
     {
-        public override AsyncAbilityInputType InputType => AsyncAbilityInputType.simple;
+        //public override AsyncAbilityInputType InputType => AsyncAbilityInputType.simple;
 
         public Func<ICombatController, T> GetData { get; init; }
 

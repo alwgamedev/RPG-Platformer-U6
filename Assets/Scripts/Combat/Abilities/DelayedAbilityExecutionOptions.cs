@@ -1,5 +1,8 @@
 ﻿namespace RPGPlatformer.Combat
 {
+    //for non-async abilities that have delayed execution
+    //(i.e. abilities that use StoreAction and are executed via an animation event)
+    //Have I not included projectile abilities in this?
     public struct DelayedAbilityExecutionOptions
     {
         public readonly bool delayExecute;

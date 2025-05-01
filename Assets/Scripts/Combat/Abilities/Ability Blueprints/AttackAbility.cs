@@ -189,16 +189,22 @@ namespace RPGPlatformer.Combat
         //PROJECTILES
 
         public static void PrepareProjectile(ICombatController controller, IProjectile projectile, 
-            Func<Vector2> getAimPos, float powerMultiplier, GetHitActionDelegate getHitAction, int maxHits = 1)
+            Func<Vector2> getAimPos, float powerMultiplier, GetHitActionDelegate getHitAction, 
+            DelayedAbilityExecutionOptions storeOptions, int maxHits = 1)
         {
-            controller.Combatant.PrepareProjectile(projectile, getAimPos, powerMultiplier, getHitAction(controller, projectile), maxHits);
+            controller.Combatant.PrepareProjectile(projectile, getAimPos, powerMultiplier, 
+                getHitAction(controller, projectile), maxHits);
+            controller.StoreAction(controller.Combatant.ShootQueuedProjectile, 
+                storeOptions.channelDuringDelay, storeOptions.endChannelOnExecute);
         }
 
         public static void PrepareProjectileWithStandardAiming(ICombatController controller, IProjectile projectile,
-            float powerMultiplier, GetHitActionDelegate getHitAction, int maxHits = 1)
+            float powerMultiplier, GetHitActionDelegate getHitAction, 
+            DelayedAbilityExecutionOptions storeOptions, int maxHits = 1)
         {
             Func<Vector2> getAimPos = () => controller.GetAimPosition();
-            PrepareProjectile(controller, projectile, getAimPos, powerMultiplier, getHitAction, maxHits);
+            PrepareProjectile(controller, projectile, getAimPos, powerMultiplier, getHitAction, 
+                storeOptions, maxHits);
         }
     }
 }

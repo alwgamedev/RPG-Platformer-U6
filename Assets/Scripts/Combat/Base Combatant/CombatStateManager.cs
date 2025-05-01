@@ -23,7 +23,7 @@ namespace RPGPlatformer.Combat
         public event Action OnWeaponTick;
 
         protected int combatExitTimer;
-        protected int totalCombatTimer;//total ticks since entered combat
+        protected int weaponTickTimer;
 
         public CombatStateManager(T1 stateMachine, T2 combatant, T3 animationControl,
             float timeToLeaveCombat)
@@ -65,10 +65,10 @@ namespace RPGPlatformer.Combat
             if (StateMachine.HasState(typeof(InCombat)))
             {
                 combatExitTimer++;
-                totalCombatTimer++;
+                weaponTickTimer++;
 
                 if (stateDriver.EquippedWeapon != null 
-                    && totalCombatTimer % stateDriver.EquippedWeapon.WeaponStats.BaseAttackRate == 0)
+                    && weaponTickTimer % stateDriver.EquippedWeapon.WeaponStats.BaseAttackRate == 0)
                 {
                     OnWeaponTick?.Invoke();
                 }
@@ -88,6 +88,21 @@ namespace RPGPlatformer.Combat
             }
         }
 
+        public void OnWeaponEquip()
+        {
+            if (StateMachine.HasState(typeof(InCombat)))
+            {
+                InstallWeaponAnimOverride();
+            }
+
+            ResetWeaponTickTimer();
+        }
+
+        protected void ResetWeaponTickTimer()
+        {
+            weaponTickTimer = -1;
+        }
+
         protected void ResetCombatExitTimer()
         {
             combatExitTimer = 0;
@@ -98,8 +113,8 @@ namespace RPGPlatformer.Combat
             InstallWeaponAnimOverride();
             stateDriver.Health.Stat.autoReplenish = false;
             stateDriver.Wrath.autoReplenish = false;
-            totalCombatTimer = 0;
-            OnCombatEntry();
+            ResetWeaponTickTimer();
+            ResetCombatExitTimer();
         }
 
         protected virtual void OnCombatEntry()
@@ -109,7 +124,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnCombatExit()
         {
-            totalCombatTimer = 0;
+            ResetWeaponTickTimer();
             ResetCombatExitTimer();
             animationControl.RevertAnimatorOverride();
         }

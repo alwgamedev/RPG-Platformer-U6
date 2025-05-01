@@ -378,7 +378,10 @@ namespace RPGPlatformer.Combat
             StoredAction = action;
             if (channelWhileStored)
             {
-                StartChannel();//so that auto-cast cycle will not interrupt the animation
+                if (!ChannelingAbility)
+                {
+                    StartChannel();//so that auto-cast cycle will not interrupt the animation
+                }
                 if (endChannelOnExecute)
                 {
                     StoredAction += () => EndChannel();
@@ -402,11 +405,7 @@ namespace RPGPlatformer.Combat
             CancelAbilityInProgress();//new
             stateDriver.ReturnQueuedProjectileToPool();
             UpdateEquippedAbilityBar();
-
-            if (stateManager.StateMachine.HasState(typeof(InCombat).Name))
-            {
-                stateManager.InstallWeaponAnimOverride();
-            }
+            stateManager.OnWeaponEquip();
         }
 
         public virtual void OnCombatEntry()

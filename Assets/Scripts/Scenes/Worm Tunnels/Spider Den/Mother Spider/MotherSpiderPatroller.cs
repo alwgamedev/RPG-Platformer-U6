@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Combat;
+using System;
 
 namespace RPGPlatformer.AIControl
 {
@@ -32,15 +33,18 @@ namespace RPGPlatformer.AIControl
             }
             else
             {
-                EquipUnarmedWeapon();
                 //^so that he pursues you more closely without stuttering at the ranged weapon's attack range
-                Trigger(typeof(Pursuit).Name);
+                if (!combatController.ChannelingAbility)
+                {
+                    EquipUnarmedWeapon();
+                    Trigger(typeof(Pursuit).Name);
+                }
             }
         }
 
         public override void InRangeAttackBehavior(float distanceSqrd, float tolerance)
         {
-            if (!UnarmedWeaponEquipped)
+            if (!UnarmedWeaponEquipped && !combatController.ChannelingAbility)
             {
                 if (combatController.Combatant.CanAttackAtDistSqrd(distanceSqrd, tolerance, unarmedAttackRange))
                 {

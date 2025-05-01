@@ -92,7 +92,8 @@ namespace RPGPlatformer.Combat
         public GunLikeAbility()
         {
             OnExecute = (controller) => 
-                PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), 1, GetHitAction(this), MaxHits);
+                PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), 1, 
+                GetHitAction(this), DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute, MaxHits);
         }
     }
 
@@ -100,17 +101,20 @@ namespace RPGPlatformer.Combat
     //Instance needs to fill in:
     //(*) ProjectilePrefab
     //(*) base AttackAbility stats
-    public class GrenadeLikeAbility : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<object>, IProjectileAbility
+    public class GrenadeLikeAbility : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<object>, 
+        IProjectileAbility
     {
+        public override bool EndChannelAutomatically => false;
         public int MaxHits { get; init; } = 1;
         public Func<IProjectile> GetProjectile { get; init; }
         public Func<AttackAbility, GetHitActionDelegate> GetHitAction { get; set; } = GetHitActionSingleDamage;
 
         public GrenadeLikeAbility() : base()
         {
-            GetData = (controller) => null;//(controller) => controller.GetAimPosition();
+            GetData = (controller) => null;
             OnExecute = (controller, args) => 
-                PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), 1, GetHitAction(this), MaxHits);
+                PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), 1, 
+                GetHitAction(this), DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute, MaxHits);
         }
     }
 
@@ -133,6 +137,7 @@ namespace RPGPlatformer.Combat
     //(*) base AttackAbility stats
     public class GrenadeLikeAbilityWithPowerUp : AimedPowerUpAbility, IProjectileAbility
     {
+        public override bool EndChannelAutomatically => false;
         public int MaxHits { get; init; } = 1;
         public Func<IProjectile> GetProjectile { get; init; }
         public Func<AttackAbility, GetHitActionDelegate> GetHitAction { get; set; } = GetHitActionSingleDamage;
@@ -144,7 +149,8 @@ namespace RPGPlatformer.Combat
             OnExecute = (controller, args) =>
             {
                 float powerMultiplier = ComputePowerMultiplier(args.Item2);
-                PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), powerMultiplier, GetHitAction(this), MaxHits);
+                PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), powerMultiplier, 
+                    GetHitAction(this), DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute, MaxHits);
             };
         }
     }
