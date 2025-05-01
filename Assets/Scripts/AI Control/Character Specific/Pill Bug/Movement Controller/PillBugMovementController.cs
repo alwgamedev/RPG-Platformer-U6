@@ -19,7 +19,7 @@ namespace RPGPlatformer.Movement
         public Vector3 MoveInput
         {
             get => moveInput;
-            set
+            protected set
             {
                 if (value.x > 0)
                 {
@@ -75,6 +75,11 @@ namespace RPGPlatformer.Movement
         {
             stateManager = new(stateDriver, GetComponent<AnimationControl>());
         }
+
+        //public void SetMoveInput(Vector3 moveInput)
+        //{
+        //    MoveInput = moveInput;
+        //}
 
         private void HandleMoveInput()
         {

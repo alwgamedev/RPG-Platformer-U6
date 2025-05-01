@@ -37,10 +37,10 @@ namespace RPGPlatformer.Movement
         public IMover Mover => stateDriver;
         public virtual Vector3 MoveInput
         //child classes will override get/set
-        //NOTE: z-axis will be used to indicate whether object is backing up (i.e. orientation gets *= -1)
+        //z-coord will be used to indicate whether object is backing up (i.e. orientation gets *= -1)
         {
             get => moveInput;
-            set
+            protected set
             {
                 moveInput = value;
             }
@@ -208,9 +208,7 @@ namespace RPGPlatformer.Movement
 
         public virtual void SoftStop()
         {
-            //use moveInput rather than MoveInput so that
-            //MoveInput.set can reference SoftStop without stack overflow
-            moveInput = Vector3.zero;
+            MoveInput = Vector3.zero;
         }
 
         public virtual void HardStop(bool maintainVerticalVelocity = true)

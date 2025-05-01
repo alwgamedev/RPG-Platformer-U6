@@ -229,6 +229,7 @@ namespace RPGPlatformer.AIControl
             }
             else if (correctingCombatDistance)
             {
+                Debug.Log($"minimum combat distance soft stop");
                 correctingCombatDistance = false;
                 MovementController.SetRunning(false);
                 MovementController.SoftStop();

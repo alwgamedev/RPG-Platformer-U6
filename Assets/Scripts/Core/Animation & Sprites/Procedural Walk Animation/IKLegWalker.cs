@@ -53,10 +53,10 @@ namespace RPGPlatformer.Core
         float StepDelta => StepMin - StepMax;
         float StepLength => Mathf.Abs(StepMax - StepMin);
         float InitialTimerFraction 
-            => reversed ? reversedInitialTimerFraction : initialTimerFraction;
+            => Reversed ? reversedInitialTimerFraction : initialTimerFraction;
         float InitialPositionFraction
-            => reversed ? reversedInitialPositionFraction : initialPositionFraction;
-        float StepSpeedMultiplier => reversed ? reversedStepSpeedMultiplier : stepSpeedMultiplier;
+            => Reversed ? reversedInitialPositionFraction : initialPositionFraction;
+        float StepSpeedMultiplier => Reversed ? reversedStepSpeedMultiplier : stepSpeedMultiplier;
 
         public bool Reversed
         {
@@ -66,8 +66,8 @@ namespace RPGPlatformer.Core
                 if (value != reversed)
                 {
                     reversed = value;
-                    //InitializeFootPosition(false);
-                    ResetTimerToInitialOffset();
+                    InitializeFootPosition(false);
+                    //ResetTimerToInitialOffset();
                 }
             }
         }
@@ -236,12 +236,13 @@ namespace RPGPlatformer.Core
             if (iteration < stepSmoothingIterations
                 && Vector2.SqrMagnitude(hit.point - hipGroundHit) > StepMax * StepMax)
             {
-                searchDirection = (hit.point - hipGroundHit).normalized;
-                if (!TryFindStepPosition(iteration, goalOffset, searchDirection, out stepPosition))
+                searchDirection = Mathf.Sign(goalOffset) * (hit.point - hipGroundHit).normalized;
+                //searchDirection = (hit.point - hipGroundHit).normalized;
+                if (!TryFindStepPosition(iteration, goalOffset, searchDirection, 
+                    out stepPosition))
                 {
                     stepPosition = hit.point;
                 }
-
                 return true;
             }
             else

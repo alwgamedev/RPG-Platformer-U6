@@ -24,24 +24,24 @@ namespace RPGPlatformer.Movement
         public Transform CurrentTarget { get; set; }
         public float MaxPermissibleDropOffHeight { get; protected set; }
 
-        public override Vector3 MoveInput
-        {
-            get => base.MoveInput;
-            set
-            {
-                if (CanSetMoveInput())
-                {
-                    base.MoveInput = value;
-                }
-                else
-                {
-                    if (stateDriver.FacingWall)
-                    {
-                        SoftStop();
-                    }
-                }
-            }
-        }
+        //public override Vector3 MoveInput
+        //{
+        //    get => base.MoveInput;
+        //    protectedset
+        //    {
+        //        if (CanSetMoveInput())
+        //        {
+        //            base.MoveInput = value;
+        //        }
+        //        else
+        //        {
+        //            if (stateDriver.FacingWall)
+        //            {
+        //                SoftStop();
+        //            }
+        //        }
+        //    }
+        //}
 
         protected override void Start()
         {
@@ -61,6 +61,18 @@ namespace RPGPlatformer.Movement
         //{
         //    base.ConfigureWallDetection();
         //    mover.AwkwardWallMoment += SoftStop;
+        //}
+
+        //public void SetMoveInput(Vector3 moveInput)
+        //{
+        //    if (CanSetMoveInput())
+        //    {
+        //        MoveInput = moveInput;
+        //    }
+        //    else if (stateDriver.FacingWall)
+        //    {
+        //        SoftStop();
+        //    }
         //}
 
         protected virtual bool CanSetMoveInput()
@@ -95,6 +107,34 @@ namespace RPGPlatformer.Movement
                 base.Move(moveInput);
             }
         }
+
+        //This only gave you a soft stop if you were NOT grounded and facing wall?
+        //(I guess we were dealing with ai clinging to wall when falling,
+        //but we can just disable canMoveDuringFreefall).
+        //For now let's just leave it out.
+        //public override void MoveTowards(Vector2 point)
+        //{
+        //    if (CanSetMoveInput())
+        //    {
+        //        base.MoveTowards(point);
+        //    }
+        //    else if (stateDriver.FacingWall)
+        //    {
+        //        SoftStop();
+        //    }
+        //}
+
+        //public override void MoveAwayFrom(Vector2 point)
+        //{
+        //    if (CanSetMoveInput())
+        //    {
+        //        base.MoveAwayFrom(point);
+        //    }
+        //    else if (stateDriver.FacingWall)
+        //    {
+        //        SoftStop();
+        //    }
+        //}
 
 
         protected virtual bool HandlingDropoffAhead(float dist)

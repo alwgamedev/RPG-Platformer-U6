@@ -156,16 +156,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepMin: 0.35
   stepMax: 1.4
-  reversedStepMin: 0.6
-  reversedStepMax: 0.1
+  reversedStepMin: 0.5
+  reversedStepMax: -0.1
   initialTimerFraction: 0.833
   initialPositionFraction: 0.8
-  reversedInitialTimerFraction: 0
-  reversedInitialPositionFraction: 0
+  reversedInitialTimerFraction: 0.67
+  reversedInitialPositionFraction: 0.5
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
-  reversedStepSpeedMultiplier: 4.5
+  reversedStepSpeedMultiplier: 3
   speedLerpRate: 20
   groundHeightBuffer: 0
   raycastLength: 5
@@ -368,18 +368,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepMin: 0.18
+  stepMin: 0.35
   stepMax: 1.3
   reversedStepMin: 0.5
-  reversedStepMax: 0.1
+  reversedStepMax: -0.1
   initialTimerFraction: 0.993
   initialPositionFraction: 0.8
-  reversedInitialTimerFraction: 0
-  reversedInitialPositionFraction: 0
+  reversedInitialTimerFraction: 0.833
+  reversedInitialPositionFraction: 0.5
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
-  reversedStepSpeedMultiplier: 4.5
+  reversedStepSpeedMultiplier: 3
   speedLerpRate: 20
   groundHeightBuffer: 0
   raycastLength: 5
@@ -2312,16 +2312,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepMin: -0.2
   stepMax: 0.6
-  reversedStepMin: 0.1
-  reversedStepMax: -0.4
+  reversedStepMin: -0.2
+  reversedStepMax: -0.8
   initialTimerFraction: 0
   initialPositionFraction: 0.4
   reversedInitialTimerFraction: 0
-  reversedInitialPositionFraction: 0
+  reversedInitialPositionFraction: 0.2
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.15
-  reversedStepSpeedMultiplier: 4.5
+  reversedStepSpeedMultiplier: 3
   speedLerpRate: 20
   groundHeightBuffer: 0
   raycastLength: 5
@@ -5025,16 +5025,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepMin: -0.2
   stepMax: 0.6
-  reversedStepMin: 0.1
-  reversedStepMax: -0.4
+  reversedStepMin: -0.2
+  reversedStepMax: -0.8
   initialTimerFraction: 0.9348
   initialPositionFraction: 0.55
-  reversedInitialTimerFraction: 0
-  reversedInitialPositionFraction: 0
+  reversedInitialTimerFraction: 0.67
+  reversedInitialPositionFraction: 0.5
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.15
-  reversedStepSpeedMultiplier: 4.5
+  reversedStepSpeedMultiplier: 3
   speedLerpRate: 20
   groundHeightBuffer: 0
   raycastLength: 5
@@ -5827,16 +5827,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepMin: 0.35
   stepMax: 1.4
-  reversedStepMin: 0.6
-  reversedStepMax: 0.17
+  reversedStepMin: 0.5
+  reversedStepMax: -0.1
   initialTimerFraction: 0
   initialPositionFraction: 0.6
   reversedInitialTimerFraction: 0
-  reversedInitialPositionFraction: 0
+  reversedInitialPositionFraction: 0.2
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
-  reversedStepSpeedMultiplier: 4.5
+  reversedStepSpeedMultiplier: 3
   speedLerpRate: 20
   groundHeightBuffer: 0
   raycastLength: 5
@@ -6134,18 +6134,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepMin: 0.18
+  stepMin: 0.35
   stepMax: 1.3
   reversedStepMin: 0.5
-  reversedStepMax: 0.1
+  reversedStepMax: -0.1
   initialTimerFraction: 0.16
   initialPositionFraction: 0.5
-  reversedInitialTimerFraction: 0
-  reversedInitialPositionFraction: 0
+  reversedInitialTimerFraction: 0.16
+  reversedInitialPositionFraction: 0.2
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
-  reversedStepSpeedMultiplier: 4.5
+  reversedStepSpeedMultiplier: 3
   speedLerpRate: 20
   groundHeightBuffer: 0
   raycastLength: 5
@@ -6796,16 +6796,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepMin: -0.65
   stepMax: 0.1
-  reversedStepMin: -0.1
-  reversedStepMax: -0.65
+  reversedStepMin: -0.2
+  reversedStepMax: -0.8
   initialTimerFraction: 0.9
   initialPositionFraction: 0.5
-  reversedInitialTimerFraction: 0
-  reversedInitialPositionFraction: 0
+  reversedInitialTimerFraction: 0.833
+  reversedInitialPositionFraction: 0.5
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.25
-  reversedStepSpeedMultiplier: 4.5
+  reversedStepSpeedMultiplier: 3
   speedLerpRate: 20
   groundHeightBuffer: 0.1
   raycastLength: 5
@@ -7614,7 +7614,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 60
+    acceleration: 85
     flipSprite: 1
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -8028,16 +8028,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepMin: -0.65
   stepMax: 0.1
-  reversedStepMin: -0.1
-  reversedStepMax: -0.65
+  reversedStepMin: -0.2
+  reversedStepMax: -0.8
   initialTimerFraction: 0
   initialPositionFraction: 0.2
-  reversedInitialTimerFraction: 0
-  reversedInitialPositionFraction: 0
+  reversedInitialTimerFraction: 0.16
+  reversedInitialPositionFraction: 0.2
   stepSmoothingIterations: 15
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.25
-  reversedStepSpeedMultiplier: 4.5
+  reversedStepSpeedMultiplier: 3
   speedLerpRate: 20
   groundHeightBuffer: 0.1
   raycastLength: 5
