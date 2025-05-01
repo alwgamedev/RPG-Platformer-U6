@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using UnityEngine;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 namespace RPGPlatformer.Combat
 {
@@ -191,13 +192,16 @@ namespace RPGPlatformer.Combat
             TryExecuteAbility(CurrentAbilityBar.GetAbility(index));
         }
 
-        public virtual void RunAutoAbilityCycle(bool runOffGCD)
+        //returns whether an ability was executed
+        public virtual bool RunAutoAbilityCycle(bool runOffGCD)
         {
             if (!postCancellationLock && !ChannelingAbility
                 && ((queuedAbility == null && !GlobalCooldown) || runOffGCD))
             {
-                TryExecuteAbility(CurrentAbilityBar?.GetAutoCastAbility());
+                return TryExecuteAbility(CurrentAbilityBar?.GetAutoCastAbility());
             }
+
+            return false;
         }
 
         protected virtual bool CanExecute(AttackAbility ability)
@@ -208,21 +212,26 @@ namespace RPGPlatformer.Combat
                 || ability.CombatStyle == CombatStyle.Any);
         }
 
-        protected virtual void TryExecuteAbility(AttackAbility ability)
+        //returns whether an ability was executed
+        protected virtual bool TryExecuteAbility(AttackAbility ability)
         {
-            if (ability == null) return;
+            if (ability == null) 
+                return false;
 
             if (CanExecute(ability))
             {
                 ExecuteAbility(ability);
+                return true;
             }
             else if (!CurrentAbilityBar.IsOnCooldown(ability))
             {
                 queuedAbility = ability;
+                return false;
             }
             else
             {
                 AttemptedToExecuteAbilityOnCooldown();
+                return false;
             }
         }
 

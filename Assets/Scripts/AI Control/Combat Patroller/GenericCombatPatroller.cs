@@ -130,7 +130,7 @@ namespace RPGPlatformer.AIControl
                 Trigger(typeof(Suspicion).Name);
                 return;
             }
-            else if (combatController.Combatant.CanAttackAtDistSqrd(d2, t))
+            else if (ShouldBreakPursuitToAttack(d2, t))
             {
                 Trigger(typeof(Attack).Name);
             }
@@ -144,6 +144,11 @@ namespace RPGPlatformer.AIControl
             {
                 MovementController.SoftStop();
             }
+        }
+
+        protected virtual bool ShouldBreakPursuitToAttack(float distSquared, float tolerance)
+        {
+            return CombatController.Combatant.CanAttackAtDistSqrd(distSquared, tolerance);
         }
 
         //allows child classes to decide how to pursue based on distance
@@ -229,7 +234,6 @@ namespace RPGPlatformer.AIControl
             }
             else if (correctingCombatDistance)
             {
-                Debug.Log($"minimum combat distance soft stop");
                 correctingCombatDistance = false;
                 MovementController.SetRunning(false);
                 MovementController.SoftStop();

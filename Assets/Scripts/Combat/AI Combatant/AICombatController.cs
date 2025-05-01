@@ -1,8 +1,6 @@
 ﻿using RPGPlatformer.Core;
 using RPGPlatformer.UI;
-using System.Threading;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 namespace RPGPlatformer.Combat
@@ -23,6 +21,8 @@ namespace RPGPlatformer.Combat
         public IHealth currentTarget;
 
         public bool Attacking { get; protected set; }
+
+        public event Action AutoAttacked;
 
         protected override void Start()
         {
@@ -55,10 +55,13 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public void AutoAttack()
+        public virtual void AutoAttack()
         {
             FaceAimPosition();
-            RunAutoAbilityCycle(false);
+            if (RunAutoAbilityCycle(false))
+            {
+                AutoAttacked?.Invoke();
+            }
         }
 
         public void StartAttacking()
@@ -144,6 +147,13 @@ namespace RPGPlatformer.Combat
             {
                 healthBarCanvas.OnMouseExit();
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            AutoAttacked = null;
         }
     }
 }
