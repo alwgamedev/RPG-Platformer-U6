@@ -33,10 +33,11 @@ namespace RPGPlatformer.AIControl
             }
             else
             {
-                //^so that he pursues you more closely without stuttering at the ranged weapon's attack range
+                
                 if (!combatController.ChannelingAbility)
                 {
-                    EquipUnarmedWeapon();
+                    //EquipUnarmedWeapon();
+                    //^so that he pursues you more closely without stuttering at the ranged weapon's attack range
                     Trigger(typeof(Pursuit).Name);
                 }
             }
