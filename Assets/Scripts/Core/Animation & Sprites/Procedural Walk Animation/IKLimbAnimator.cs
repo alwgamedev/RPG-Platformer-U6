@@ -1,4 +1,5 @@
-﻿using RPGPlatformer.Movement;
+﻿using Cinemachine.Utility;
+using RPGPlatformer.Movement;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
@@ -25,6 +26,7 @@ namespace RPGPlatformer.Core
         [SerializeField] float stepHeightMultiplier = 1;
         [SerializeField] float stepSpeedMultiplier;
         [SerializeField] float reversedStepSpeedMultiplier;
+        [SerializeField] float baseStepSinkRate;
         [SerializeField] float groundHeightBuffer;
         [SerializeField] float raycastLength;
         [SerializeField] float maintainPositionSpeedScale;
@@ -41,13 +43,14 @@ namespace RPGPlatformer.Core
         //while tracking, you will interpolate between defaultPosition and target position based on trackingStrength
 
         //walk animation parameters
+        bool stepCancelled;
         bool stepping;
         float smoothedSpeed;
         float stepTimer;
         float currentStepRadius;
         Vector2 currentStepCenter;
         Vector2 currentStepX;
-        Vector2 currentStepY;
+        //Vector2 currentStepY;
         Vector2 currentStepGoal;
         Vector2 hipGroundHit;
         Vector2 hipGroundDirection;
@@ -65,6 +68,7 @@ namespace RPGPlatformer.Core
             => Reversed ? reversedInitialTimerFraction : initialTimerFraction;
         float InitialPositionFraction
             => Reversed ? reversedInitialPositionFraction : initialPositionFraction;
+        float InitialPositionOffset => StepMax + InitialPositionFraction * StepDelta;
         float StepSpeedMultiplier => Reversed ? reversedStepSpeedMultiplier : stepSpeedMultiplier;
 
         public LimbAnimatorMode AnimationMode { get; private set; } = LimbAnimatorMode.walking;
@@ -131,16 +135,24 @@ namespace RPGPlatformer.Core
 
         public void BeginTrackingTarget(Transform target)
         {
-            var r = Physics2D.Raycast(ikTarget.position + raycastLength * body.transform.up, -body.transform.up, 
-                2 * raycastLength, groundLayer);
-            BeginTrackingTarget(target, r ? r.point : currentStepGoal);
+            //var r = Physics2D.Raycast(ikTarget.position + body.transform.up, -body.transform.up, 
+            //    raycastLength, groundLayer);
+            if (!TryFindStepPosition(0, InitialPositionOffset, hipGroundDirection, out var p))
+            {
+                p = currentStepGoal;
+            }
+            BeginTrackingTarget(target, p/*r ? r.point : currentStepGoal*/);
         }
 
         public void BeginTrackingPosition(Vector3 position)
         {
-            var r = Physics2D.Raycast(ikTarget.position + raycastLength * body.transform.up, -body.transform.up, 
-               2 * raycastLength, groundLayer);
-            BeginTrackingPosition(position, r ? r.point : currentStepGoal);
+            //var r = Physics2D.Raycast(ikTarget.position + body.transform.up, -body.transform.up, 
+            //   raycastLength, groundLayer);
+            if (!TryFindStepPosition(0, InitialPositionOffset, hipGroundDirection, out var p))
+            {
+                p = currentStepGoal;
+            }
+            BeginTrackingPosition(position, p/*r ? r.point : currentStepGoal*/);
         }
 
         public void BeginTrackingTarget(Transform target, Vector3 defaultPosition)
@@ -161,6 +173,15 @@ namespace RPGPlatformer.Core
         {
             //if you want to return to walking state without restarting the walk anim.;
             AnimationMode = LimbAnimatorMode.walking;
+            //currentStepGoal = defaultPosition;
+            if (stepping)
+            {
+                stepCancelled = true;
+            }
+            else
+            {
+                currentStepGoal = defaultPosition;
+            }
         }
 
         private void UpdateTracking(Transform target)
@@ -209,7 +230,7 @@ namespace RPGPlatformer.Core
             ResetTimerToInitialOffset();
             UpdateHipGroundData();
             if (AnimationMode == LimbAnimatorMode.walking
-                && TryFindStepPosition(0, StepMax + InitialPositionFraction * StepDelta, 
+                && TryFindStepPosition(0, InitialPositionOffset, 
                 hipGroundDirection, out var s))
             {
                 currentStepGoal = s;
@@ -236,13 +257,14 @@ namespace RPGPlatformer.Core
 
         private void BeginStep(Vector3 stepGoal)
         {
+            stepCancelled = false;
             stepGoal = stepGoal + groundHeightBuffer * body.transform.up;
             var stepDistance = Vector2.Distance(ikTarget.position, stepGoal);
 
             currentStepCenter = 0.5f * (ikTarget.position + stepGoal);
             currentStepRadius = 0.5f * stepDistance;
             currentStepX = (stepGoal - ikTarget.position) / stepDistance;
-            currentStepY = Mathf.Sign(stepGoal.x - ikTarget.position.x) * currentStepX.CCWPerp();
+            //currentStepY = Mathf.Sign(stepGoal.x - ikTarget.position.x) * currentStepX.CCWPerp();
             currentStepGoal = stepGoal;
 
             StepTimerModEqStepLength();
@@ -265,13 +287,24 @@ namespace RPGPlatformer.Core
             {
                 EndStep();
             }
-            else
+            else if (!stepCancelled)
             {
+
                 ikTarget.position = currentStepCenter - currentStepRadius * Mathf.Cos(t) * currentStepX
-                + Mathf.Clamp(smoothedSpeed, 0, 1) * stepHeightMultiplier 
-                * currentStepRadius * Mathf.Sin(t) * currentStepY;
+                + Mathf.Clamp(smoothedSpeed - baseStepSinkRate * Time.deltaTime, 0, 1) * stepHeightMultiplier
+                * currentStepRadius * Mathf.Sin(t) * (Vector2)body.transform.up;//currentStepY;
+                //if (Vector2.Dot(ikTarget.position - hipJoint.position, body.transform.up)
+                //    > smoothedSpeed + Vector2.Dot(currentStepGoal - (Vector2)hipJoint.position, body.transform.up))
+                //{
+                //    ikTarget.position -= baseStepSinkRate * Time.deltaTime * body.transform.up;
+                //}
+
                 //^multiplying the y by s lets the leg rest at a natural position when body comes to a stop
             }
+            //else
+            //{
+            //    MaintainFootPosition();
+            //}
         }
 
         private void MaintainFootPosition()
@@ -289,7 +322,7 @@ namespace RPGPlatformer.Core
             currentStepCenter = body.transform.position 
                 + PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, d);
             currentStepX = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, currentStepX);
-            currentStepY = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, currentStepY);
+            //currentStepY = PhysicsTools.ReflectAcrossPerpendicularHyperplane(body.transform.right, currentStepY);
         }
 
 

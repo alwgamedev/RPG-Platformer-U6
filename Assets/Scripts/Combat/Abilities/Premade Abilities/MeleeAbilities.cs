@@ -66,7 +66,7 @@ namespace RPGPlatformer.Combat
             };
         }
 
-        public static AutoTargetedBleed Swipe = new()//basic bleed
+        public static AutoTargetedBleed Swipe = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//basic bleed
         {
             Description = "Silent but deadly.",
             AbilityTags = new()
@@ -107,28 +107,6 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = 0.05f,
             DamageMultiplier = 1.35f,
         };
-
-        //exactly the same as slash but can't be executed without a target
-        //can get ride of this if we get custom earthworm abilities working
-        //IN FACT MAKE SURE YOU GET RID OF IT SO IT DOESN'T SHOW UP IN SETTINGS MENU
-        //public static CloseRangeAbility SlashWithTargetOnly 
-        //    = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)
-        //{
-        //    Description = "A quick close range attack that deals a heavy chunk of damage.",
-        //    AbilityTags = new()
-        //    {
-        //        AbilityTag.AutoCastable
-        //    },
-        //    CanBeIncludedInAutoCastCycle = true,
-        //    ObeyGCD = true,
-        //    //AllowExecuteWithoutTarget = true,
-        //    CombatStyle = CombatStyle.Melee,
-        //    AnimationState = "Slash",
-        //    Cooldown = 1.44f,
-        //    StaminaFractionChange = -.03f,
-        //    WrathFractionChange = 0.05f,
-        //    DamageMultiplier = 1.35f,
-        //};
 
         public static CloseRangeAbility Uppercut = new()//basic
         {

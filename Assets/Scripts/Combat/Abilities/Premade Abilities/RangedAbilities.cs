@@ -120,7 +120,8 @@ namespace RPGPlatformer.Combat
             AnimationState = "Bow QuickShot",
             GetProjectile = () => (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Basic Arrow"),
             GetHitAction = (ability) => GetHitActionBleedDamage(ability),
-            GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Festering Wound Hit Effect"),
+            GetHitEffect = () => 
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Festering Wound Hit Effect"),
             DamageMultiplier = 0.8f,
             Cooldown = 8,
             StaminaFractionChange = -0.08f,

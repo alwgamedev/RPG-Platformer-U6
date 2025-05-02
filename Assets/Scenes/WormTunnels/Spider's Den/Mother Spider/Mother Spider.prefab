@@ -160,16 +160,17 @@ MonoBehaviour:
   trackingStrength: 0
   stepMin: 0
   stepMax: 1.55
-  reversedStepMin: 0.8
+  reversedStepMin: 0.6
   reversedStepMax: -0.5
   initialTimerFraction: 0.75
   initialPositionFraction: 0.8
   reversedInitialTimerFraction: 0.7
   reversedInitialPositionFraction: 0.6
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
+  baseStepSinkRate: 1
   groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -213,7 +214,7 @@ MonoBehaviour:
     - {x: 0, y: 0, z: -0.5320194, w: 0.8467322}
     - {x: 0, y: 0, z: -0.08005109, w: 0.9967908}
     - {x: 0, y: 0, z: -0.031532943, w: 0.9995028}
-  m_Iterations: 10
+  m_Iterations: 25
   m_Tolerance: 0.01
   m_Velocity: 0.4
 --- !u!1 &454323290715977646
@@ -378,17 +379,18 @@ MonoBehaviour:
   trackingStrength: 0
   stepMin: 0.55
   stepMax: 1.45
-  reversedStepMin: 0.8
+  reversedStepMin: 0.6
   reversedStepMax: -0.5
   initialTimerFraction: 1
   initialPositionFraction: 0.8
   reversedInitialTimerFraction: 0.9
   reversedInitialPositionFraction: 0.6
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: 0
+  baseStepSinkRate: 1
+  groundHeightBuffer: -0.05
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
@@ -411,7 +413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ConstrainRotation: 0
   m_SolveFromDefaultPose: 1
-  m_Weight: 0.9
+  m_Weight: 1
   m_Chain:
     m_EffectorTransform: {fileID: 3938178055049041694}
     m_TargetTransform: {fileID: 2445271863998336776}
@@ -431,7 +433,7 @@ MonoBehaviour:
     - {x: 0, y: 0, z: -0.74197, w: 0.67043316}
     - {x: 0, y: 0, z: -0.08925939, w: 0.99600846}
     - {x: 0, y: 0, z: 0, w: 1}
-  m_Iterations: 10
+  m_Iterations: 25
   m_Tolerance: 0.01
   m_Velocity: 0.4
 --- !u!1 &735433714523312887
@@ -2392,10 +2394,11 @@ MonoBehaviour:
   initialPositionFraction: 0.4
   reversedInitialTimerFraction: 0
   reversedInitialPositionFraction: 0.3
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.15
   reversedStepSpeedMultiplier: 2.5
+  baseStepSinkRate: 1
   groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -2439,7 +2442,7 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
-  m_Iterations: 10
+  m_Iterations: 25
   m_Tolerance: 0.01
   m_Velocity: 0.5
 --- !u!1 &2799519539172047738
@@ -5233,10 +5236,11 @@ MonoBehaviour:
   initialPositionFraction: 0.55
   reversedInitialTimerFraction: 0.75
   reversedInitialPositionFraction: 0.7
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.15
   reversedStepSpeedMultiplier: 2.5
+  baseStepSinkRate: 1
   groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -5280,7 +5284,7 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
-  m_Iterations: 10
+  m_Iterations: 25
   m_Tolerance: 0.01
   m_Velocity: 0.5
 --- !u!1 &5733616817364109521
@@ -6033,16 +6037,17 @@ MonoBehaviour:
   trackingStrength: 0
   stepMin: 0
   stepMax: 1.55
-  reversedStepMin: 0.8
+  reversedStepMin: 0.6
   reversedStepMax: -0.5
   initialTimerFraction: 0
   initialPositionFraction: 0.4
   reversedInitialTimerFraction: 0
   reversedInitialPositionFraction: 0.1
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
+  baseStepSinkRate: 1
   groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -6086,7 +6091,7 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
-  m_Iterations: 10
+  m_Iterations: 25
   m_Tolerance: 0.01
   m_Velocity: 0.4
 --- !u!1 &6481048834024291222
@@ -6346,17 +6351,18 @@ MonoBehaviour:
   trackingStrength: 0
   stepMin: 0.55
   stepMax: 1.45
-  reversedStepMin: 0.8
+  reversedStepMin: 0.6
   reversedStepMax: -0.5
   initialTimerFraction: 0.25
   initialPositionFraction: 0.3
   reversedInitialTimerFraction: 0.2
   reversedInitialPositionFraction: 0.1
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: 0
+  baseStepSinkRate: 1
+  groundHeightBuffer: -0.05
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
@@ -6379,7 +6385,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ConstrainRotation: 0
   m_SolveFromDefaultPose: 1
-  m_Weight: 0.9
+  m_Weight: 1
   m_Chain:
     m_EffectorTransform: {fileID: 524482430635505450}
     m_TargetTransform: {fileID: 4383841129658356951}
@@ -6399,7 +6405,7 @@ MonoBehaviour:
     - {x: 0, y: 0, z: -0.7452782, w: 0.66675365}
     - {x: 0, y: 0, z: -0.09133651, w: 0.9958201}
     - {x: 0, y: 0, z: -0.018682694, w: 0.9998255}
-  m_Iterations: 10
+  m_Iterations: 25
   m_Tolerance: 0.01
   m_Velocity: 0.4
 --- !u!1 &6997992112284971508
@@ -7047,10 +7053,11 @@ MonoBehaviour:
   initialPositionFraction: 0.5
   reversedInitialTimerFraction: 0.8
   reversedInitialPositionFraction: 0.7
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.25
   reversedStepSpeedMultiplier: 2.5
+  baseStepSinkRate: 1
   groundHeightBuffer: 0.1
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -7094,7 +7101,7 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
-  m_Iterations: 10
+  m_Iterations: 25
   m_Tolerance: 0.01
   m_Velocity: 0.75
 --- !u!1 &7896916054775541173
@@ -7680,8 +7687,8 @@ MonoBehaviour:
   - {fileID: 8254713963738691629}
   - {fileID: 2321543508875417384}
   - {fileID: 5579507722587143475}
-  speedLerpRate: 400
-  speedThreshold: 0.2
+  speedLerpRate: 25
+  speedThreshold: 0.25
 --- !u!114 &4144941228099318437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8091,7 +8098,7 @@ MonoBehaviour:
     minValue: 0
     maxValue: 100
     defaultValue: 0
-    replenishRate: 0
+    replenishRate: -0.05
     autoReplenish: 1
     statBar: {fileID: 0}
   useAutoCalculatedHealthPoints: 1
@@ -8305,10 +8312,11 @@ MonoBehaviour:
   initialPositionFraction: 0.2
   reversedInitialTimerFraction: 0.1
   reversedInitialPositionFraction: 0.3
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.25
   reversedStepSpeedMultiplier: 2.5
+  baseStepSinkRate: 1
   groundHeightBuffer: 0.1
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -8352,7 +8360,7 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
     - {x: 0, y: 0, z: 0, w: 0}
-  m_Iterations: 10
+  m_Iterations: 25
   m_Tolerance: 0.01
   m_Velocity: 0.75
 --- !u!1 &9059010282971441437

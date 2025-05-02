@@ -111,7 +111,7 @@ namespace RPGPlatformer.Combat
     //(*) base AttackAbility stats only
     public class AutoTargetedBleed : AutoTargetedAbility
     {
-        public AutoTargetedBleed() : base()
+        public AutoTargetedBleed(DelayedAbilityExecutionOptions delayOptions = default) : base(delayOptions)
         {
             OnExecute = async (controller, target) =>
             await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),

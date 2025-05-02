@@ -1,6 +1,4 @@
-﻿using RPGPlatformer.AIControl;
-
-namespace RPGPlatformer.Combat
+﻿namespace RPGPlatformer.Combat
 {
     public class MotherSpiderCombatController : AICombatController
     {
@@ -11,5 +9,15 @@ namespace RPGPlatformer.Combat
             abilityBarManager.SetAbilityBar(CombatStyle.Ranged,
                 MotherSpiderAbilities.MotherSpiderRangedAbilityBar(this));
         }
+
+        //public override void OnAbilityExecute(AttackAbility ability)
+        //{
+        //    base.OnAbilityExecute(ability);
+
+        //    if (ability == MotherSpiderAbilities.MotherSpiderBite)
+        //    {
+        //        GameLog.Log("You've been infected by the spider's poisonous bite!");
+        //    }
+        //}
     }
 }

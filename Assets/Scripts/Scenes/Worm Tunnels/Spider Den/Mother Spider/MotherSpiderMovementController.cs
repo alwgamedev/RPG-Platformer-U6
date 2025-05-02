@@ -40,5 +40,8 @@ namespace RPGPlatformer.Movement
                 l.SetReversed(reversed);
             }
         }
+
+        //we don't need to be computing speed every frame, bc it's not used for anything
+        protected override void AnimateMovement() { }
     }
 }
