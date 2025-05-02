@@ -309,8 +309,14 @@ namespace RPGPlatformer.Core
 
         private void MaintainFootPosition()
         {
-            ikTarget.position = Vector2.Lerp(ikTarget.position, currentStepGoal,
+            var p = Vector2.Lerp(ikTarget.position, currentStepGoal,
                 (baseMaintainPositionStrength + maintainPositionSpeedScale * smoothedSpeed) * Time.deltaTime);
+            var r = Physics2D.Raycast(p, - body.transform.up, raycastLength, groundLayer);
+            if (r)
+            {
+                p = r.point;
+            }
+            ikTarget.position = p;
         }
 
         private void OnDirectionChanged(HorizontalOrientation o)
