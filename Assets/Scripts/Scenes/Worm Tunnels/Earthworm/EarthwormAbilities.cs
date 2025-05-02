@@ -63,12 +63,7 @@ namespace RPGPlatformer.AIControl
             //(and it feels more logical and predictable for the player)
             GetAoeCenter = (controller) =>
             {
-                if (controller is EarthwormCombatController e)
-                {
-                    return e.Nose.position;
-                }
-
-                return controller.Combatant.transform.position;
+                return ((EarthwormCombatController)controller).Nose.position;
             },
             ExcludeInstigator = true,
             StunDuration = 4

@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.Effects
 {
@@ -35,14 +34,6 @@ namespace RPGPlatformer.Effects
 
             ReturnToOrigin();
             RedrawBowstring();
-
-            //IMovementController movementController = GetComponentInParent<IMovementController>();
-
-            //if (movementController != null)
-            //{
-            //    parentOrientation = movementController.CurrentOrientation;
-            //    movementController.Mover.DirectionChanged += SetOrientation;
-            //}
         }
 
         private void Update()
@@ -51,15 +42,9 @@ namespace RPGPlatformer.Effects
 
             if (stringGrabPt.hasChanged)
             {
-                //StretchStrings();
                 RedrawBowstring();
             }
         }
-
-        //public void SetOrientation(HorizontalOrientation orientation)
-        //{
-        //    parentOrientation = orientation;
-        //}
 
         public void BeginPull(Transform puller)
         {
@@ -120,47 +105,6 @@ namespace RPGPlatformer.Effects
 
             lineRenderer.SetPositions(bowstringPoints);
         }
-
-        //private void StretchStrings()
-        //{
-        //    Vector2 topGoal = TopStringGoalVector();
-        //    Vector2 bottomGoal = BottomStringGoalVector();
-
-        //    topString.rotation = Quaternion.LookRotation(Vector3.forward, 
-        //        (int) parentOrientation * topGoal.CCWPerp());
-        //    bottomString.rotation = Quaternion.LookRotation(Vector3.forward, 
-        //        (int) parentOrientation * bottomGoal.CCWPerp());
-
-        //    UpdateStringLengths(topGoal.magnitude, bottomGoal.magnitude);
-        //}
-
-        //private void UpdateStringLengths(float topGoalLength, float bottomGoalLength)
-        //{
-        //    float topStringLength = TopStringLength();
-        //    float bottomStringLength = BottomStringLength();
-
-        //    if (topStringLength == 0 || bottomStringLength == 0) return;
-
-        //    float topScaleFactor = topGoalLength / topStringLength;
-        //    float bottomScaleFactor = bottomGoalLength / bottomStringLength;
-
-        //    Vector3 topScale = topString.localScale;
-        //    Vector3 bottomScale = bottomString.localScale;
-
-        //    topString.localScale = (topScaleFactor * topScale.x) * Vector3.right + topScale.y * Vector3.up
-        //        + topScale.z * Vector3.forward;
-        //    bottomString.localScale = (bottomScaleFactor * bottomScale.x) * Vector3.right + bottomScale.y * Vector3.up 
-        //        + bottomScale.z * Vector3.forward;
-
-        //}
-
-        //float TopStringLength() => Vector2.Distance(topString.position, topStringEndPt.position);
-
-        //float BottomStringLength() => Vector2.Distance(bottomString.position, bottomStringEndPt.position);
-
-        //Vector2 TopStringGoalVector() => stringGrabPt.position - topString.position;
-
-        //Vector2 BottomStringGoalVector() => stringGrabPt.position - bottomString.position;
 
         private void OnDisable()
         {

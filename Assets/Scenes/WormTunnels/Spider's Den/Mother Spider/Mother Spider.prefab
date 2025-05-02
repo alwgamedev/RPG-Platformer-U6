@@ -140,6 +140,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8060990842156072070}
+  - {fileID: 4466567528238620018}
   m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4261347657609427198
@@ -154,7 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingLerpRate: 500
+  trackingGuide: {fileID: 4466567528238620018}
+  trackingLerpRate: 300
   trackingStrength: 0
   stepMin: 0
   stepMax: 1.55
@@ -175,7 +177,7 @@ MonoBehaviour:
   body: {fileID: 6511084936526347583}
   hipJoint: {fileID: 3225355039396306317}
   ikTarget: {fileID: 8060990842156072070}
-  paused: 0
+  animationDisabled: 0
   steppingDisabled: 0
 --- !u!114 &7092371205176355618
 MonoBehaviour:
@@ -356,6 +358,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2445271863998336776}
+  - {fileID: 1455773871831555102}
   m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &748794446973891522
@@ -370,7 +373,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingLerpRate: 500
+  trackingGuide: {fileID: 1455773871831555102}
+  trackingLerpRate: 300
   trackingStrength: 0
   stepMin: 0.55
   stepMax: 1.45
@@ -391,7 +395,7 @@ MonoBehaviour:
   body: {fileID: 6511084936526347583}
   hipJoint: {fileID: 8272262401686619927}
   ikTarget: {fileID: 2445271863998336776}
-  paused: 0
+  animationDisabled: 0
   steppingDisabled: 0
 --- !u!114 &4253125299576149042
 MonoBehaviour:
@@ -538,6 +542,37 @@ MonoBehaviour:
     m_Extent: {x: 0.51023006, y: 0.43816996, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
+--- !u!1 &754280683981009180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1455773871831555102}
+  m_Layer: 6
+  m_Name: LegL1 IK Tracking Guide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1455773871831555102
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 754280683981009180}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9097201423682990323}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &777680126868751262
 GameObject:
   m_ObjectHideFlags: 0
@@ -2206,6 +2241,37 @@ MonoBehaviour:
     m_Extent: {x: 0.33500004, y: 1.3613404, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
+--- !u!1 &2250631346316450558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4546078997354314187}
+  m_Layer: 6
+  m_Name: LegR2 IK Tracking Guide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4546078997354314187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2250631346316450558}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7261694372604110420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2285032693631514623
 GameObject:
   m_ObjectHideFlags: 0
@@ -2300,6 +2366,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8049614515935638449}
+  - {fileID: 4546078997354314187}
   m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4241700075896307063
@@ -2314,7 +2381,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingLerpRate: 500
+  trackingGuide: {fileID: 4546078997354314187}
+  trackingLerpRate: 300
   trackingStrength: 0
   stepMin: -0.1
   stepMax: 0.8
@@ -2335,7 +2403,7 @@ MonoBehaviour:
   body: {fileID: 6511084936526347583}
   hipJoint: {fileID: 786822608702253804}
   ikTarget: {fileID: 8049614515935638449}
-  paused: 0
+  animationDisabled: 0
   steppingDisabled: 0
 --- !u!114 &2043094232597083644
 MonoBehaviour:
@@ -2730,6 +2798,37 @@ MonoBehaviour:
     m_Extent: {x: 0.50822496, y: 0.339625, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
+--- !u!1 &3322729872392120453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1109310402625095987}
+  m_Layer: 6
+  m_Name: LegL2 IK Tracking Guide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1109310402625095987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3322729872392120453}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4230854498042159771}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3350293904674856310
 GameObject:
   m_ObjectHideFlags: 0
@@ -2826,6 +2925,68 @@ Transform:
   - {fileID: 252942405980139969}
   m_Father: {fileID: 2562137607174264754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 7.07}
+--- !u!1 &3419033079740925124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7088239792700145616}
+  m_Layer: 6
+  m_Name: LegL3 IK Tracking Guide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7088239792700145616
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3419033079740925124}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 26467565533062018}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3551529538864415666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1192145617381190941}
+  m_Layer: 6
+  m_Name: LegR1 IK Tracking Guide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1192145617381190941
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3551529538864415666}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 783581952952982697}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3746517583797603399
 GameObject:
   m_ObjectHideFlags: 0
@@ -3840,6 +4001,37 @@ MonoBehaviour:
     m_Extent: {x: 1.3199506, y: 0.81813, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
+--- !u!1 &4413352179658109147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4466567528238620018}
+  m_Layer: 6
+  m_Name: LegL0 IK Tracking Guide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4466567528238620018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4413352179658109147}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2079801297396970077}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4474199913241988218
 GameObject:
   m_ObjectHideFlags: 0
@@ -5015,6 +5207,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1456051668343074827}
+  - {fileID: 1109310402625095987}
   m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8254713963738691629
@@ -5029,7 +5222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingLerpRate: 500
+  trackingGuide: {fileID: 1109310402625095987}
+  trackingLerpRate: 300
   trackingStrength: 0
   stepMin: -0.1
   stepMax: 0.8
@@ -5050,7 +5244,7 @@ MonoBehaviour:
   body: {fileID: 6511084936526347583}
   hipJoint: {fileID: 3044277798898398349}
   ikTarget: {fileID: 1456051668343074827}
-  paused: 0
+  animationDisabled: 0
   steppingDisabled: 0
 --- !u!114 &2563751294587448887
 MonoBehaviour:
@@ -5819,6 +6013,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4536040588755604440}
+  - {fileID: 5269758553604408055}
   m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &868377128908292314
@@ -5833,7 +6028,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingLerpRate: 500
+  trackingGuide: {fileID: 5269758553604408055}
+  trackingLerpRate: 300
   trackingStrength: 0
   stepMin: 0
   stepMax: 1.55
@@ -5854,7 +6050,7 @@ MonoBehaviour:
   body: {fileID: 6511084936526347583}
   hipJoint: {fileID: 2292217998912717165}
   ikTarget: {fileID: 4536040588755604440}
-  paused: 0
+  animationDisabled: 0
   steppingDisabled: 0
 --- !u!114 &5613892386694799193
 MonoBehaviour:
@@ -6130,6 +6326,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4383841129658356951}
+  - {fileID: 1192145617381190941}
   m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &494217096423081394
@@ -6144,7 +6341,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingLerpRate: 500
+  trackingGuide: {fileID: 1192145617381190941}
+  trackingLerpRate: 300
   trackingStrength: 0
   stepMin: 0.55
   stepMax: 1.45
@@ -6165,7 +6363,7 @@ MonoBehaviour:
   body: {fileID: 6511084936526347583}
   hipJoint: {fileID: 1158101379274627059}
   ikTarget: {fileID: 4383841129658356951}
-  paused: 0
+  animationDisabled: 0
   steppingDisabled: 0
 --- !u!114 &5644883982866045758
 MonoBehaviour:
@@ -6346,6 +6544,37 @@ Transform:
   - {fileID: 3044277798898398349}
   - {fileID: 8272262401686619927}
   m_Father: {fileID: 8414175191717464819}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7117635095718255201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8276265502651182846}
+  m_Layer: 6
+  m_Name: LegR3 IK Tracking Guide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8276265502651182846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7117635095718255201}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7871268921317296534}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7129570286649633441
 GameObject:
@@ -6792,6 +7021,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6592975004326004418}
+  - {fileID: 7088239792700145616}
   m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5579507722587143475
@@ -6806,7 +7036,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingLerpRate: 500
+  trackingGuide: {fileID: 7088239792700145616}
+  trackingLerpRate: 300
   trackingStrength: 0
   stepMin: -0.5
   stepMax: 0.2
@@ -6827,7 +7058,7 @@ MonoBehaviour:
   body: {fileID: 6511084936526347583}
   hipJoint: {fileID: 5252050856298335485}
   ikTarget: {fileID: 6592975004326004418}
-  paused: 0
+  animationDisabled: 0
   steppingDisabled: 0
 --- !u!114 &180035221673252219
 MonoBehaviour:
@@ -7367,7 +7598,7 @@ GameObject:
   - component: {fileID: 3855336170115554620}
   - component: {fileID: 3760151246975433838}
   - component: {fileID: 2538534743440559232}
-  - component: {fileID: 126490695878192068}
+  - component: {fileID: 1595951100467022169}
   - component: {fileID: 6162601988446635239}
   - component: {fileID: 514837818185314671}
   - component: {fileID: 8002444785393355096}
@@ -7449,7 +7680,8 @@ MonoBehaviour:
   - {fileID: 8254713963738691629}
   - {fileID: 2321543508875417384}
   - {fileID: 5579507722587143475}
-  speedLerpRate: 200
+  speedLerpRate: 400
+  speedThreshold: 0.2
 --- !u!114 &4144941228099318437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7624,6 +7856,7 @@ MonoBehaviour:
   suspicionTime: 4
   playerEnemy: 1
   setRunningWhenMaintainingMinimumCombatDistance: 0
+  punchingArm: {fileID: 4261347657609427198}
 --- !u!114 &4381645486506441378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7725,7 +7958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tickLength: 0.06
   randomizeStartValue: 1
---- !u!114 &126490695878192068
+--- !u!114 &1595951100467022169
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7734,19 +7967,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8509952300785250002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b94a4cfa0b960342a1797cce63819c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 388a01e729d5d0b418a5afa8505efa7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeToLeaveCombat: 200
   abilityBarData:
-    unarmedAbilityBarItems:
-    - includeInAutoCastCycle: 1
-      ability: 0
+    unarmedAbilityBarItems: []
     mageAbilityBarItems: []
     meleeAbilityBarItems: []
-    rangedAbilityBarItems:
-    - includeInAutoCastCycle: 1
-      ability: 0
+    rangedAbilityBarItems: []
   useDefaultAbilityBars: 0
   immuneToStuns: 0
   healthBarCanvas: {fileID: 5532959312756395455}
@@ -8050,6 +8279,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1823854218410209852}
+  - {fileID: 8276265502651182846}
   m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2321543508875417384
@@ -8064,7 +8294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingLerpRate: 500
+  trackingGuide: {fileID: 8276265502651182846}
+  trackingLerpRate: 300
   trackingStrength: 0
   stepMin: -0.5
   stepMax: 0.2
@@ -8085,7 +8316,7 @@ MonoBehaviour:
   body: {fileID: 6511084936526347583}
   hipJoint: {fileID: 6086760481162316715}
   ikTarget: {fileID: 1823854218410209852}
-  paused: 0
+  animationDisabled: 0
   steppingDisabled: 0
 --- !u!114 &5918599067765875025
 MonoBehaviour:
@@ -8124,3 +8355,34 @@ MonoBehaviour:
   m_Iterations: 10
   m_Tolerance: 0.01
   m_Velocity: 0.75
+--- !u!1 &9059010282971441437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5269758553604408055}
+  m_Layer: 6
+  m_Name: LegR0 IK Tracking Guide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5269758553604408055
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9059010282971441437}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6044096165599487178}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

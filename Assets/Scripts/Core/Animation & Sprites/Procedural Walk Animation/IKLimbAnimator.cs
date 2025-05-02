@@ -10,7 +10,8 @@ namespace RPGPlatformer.Core
 
     public class IKLimbAnimator : MonoBehaviour
     {
-        [SerializeField] float trackingLerpRate;//how quickly you should move to tracking position
+        [SerializeField] Transform trackingGuide;
+        [SerializeField] float trackingLerpRate;//how quickly you should move towards goal tracking position
         [SerializeField] float trackingStrength;//btwn 0 - 1, how closely you want to track target 
         [SerializeField] float stepMin;
         [SerializeField] float stepMax;
@@ -29,10 +30,8 @@ namespace RPGPlatformer.Core
         [SerializeField] float maintainPositionSpeedScale;
         [SerializeField] float baseMaintainPositionStrength;
         [SerializeField] Rigidbody2D body;
-        [SerializeField] Transform hipJoint;//origin of the raycast
+        [SerializeField] Transform hipJoint;
         [SerializeField] Transform ikTarget;
-
-        //to-do: step time should be faster if body is moving faster
 
         int groundLayer;
 
@@ -43,7 +42,6 @@ namespace RPGPlatformer.Core
 
         //walk animation parameters
         bool stepping;
-        //bool reversed;
         float smoothedSpeed;
         float stepTimer;
         float currentStepRadius;
@@ -54,7 +52,7 @@ namespace RPGPlatformer.Core
         Vector2 hipGroundHit;
         Vector2 hipGroundDirection;
 
-        public bool paused;
+        public bool animationDisabled;//timer still running, but doesn't animate anything
         public bool steppingDisabled;
 
         float StepMin => Reversed ? reversedStepMin : stepMin;
@@ -92,7 +90,7 @@ namespace RPGPlatformer.Core
 
         private void LateUpdate()
         {
-            if (paused) return;
+            if (animationDisabled) return;
 
             switch (AnimationMode)
             {
@@ -126,14 +124,23 @@ namespace RPGPlatformer.Core
         
         //TARGET TRACKING
 
+        public void BeginTrackingGuide()
+        {
+            BeginTrackingTarget(trackingGuide);
+        }
+
         public void BeginTrackingTarget(Transform target)
         {
-            BeginTrackingTarget(target, currentStepGoal);
+            var r = Physics2D.Raycast(ikTarget.position + raycastLength * body.transform.up, -body.transform.up, 
+                2 * raycastLength, groundLayer);
+            BeginTrackingTarget(target, r ? r.point : currentStepGoal);
         }
 
         public void BeginTrackingPosition(Vector3 position)
         {
-            BeginTrackingPosition(position, currentStepGoal);
+            var r = Physics2D.Raycast(ikTarget.position + raycastLength * body.transform.up, -body.transform.up, 
+               2 * raycastLength, groundLayer);
+            BeginTrackingPosition(position, r ? r.point : currentStepGoal);
         }
 
         public void BeginTrackingTarget(Transform target, Vector3 defaultPosition)
@@ -201,7 +208,8 @@ namespace RPGPlatformer.Core
         {
             ResetTimerToInitialOffset();
             UpdateHipGroundData();
-            if (TryFindStepPosition(0, StepMax + InitialPositionFraction * StepDelta, 
+            if (AnimationMode == LimbAnimatorMode.walking
+                && TryFindStepPosition(0, StepMax + InitialPositionFraction * StepDelta, 
                 hipGroundDirection, out var s))
             {
                 currentStepGoal = s;
@@ -263,8 +271,6 @@ namespace RPGPlatformer.Core
                 + Mathf.Clamp(smoothedSpeed, 0, 1) * stepHeightMultiplier 
                 * currentStepRadius * Mathf.Sin(t) * currentStepY;
                 //^multiplying the y by s lets the leg rest at a natural position when body comes to a stop
-                //using the smoothedSpeed just for this bc it got a little jittery at slow speed
-                //(when speed is less steady)
             }
         }
 

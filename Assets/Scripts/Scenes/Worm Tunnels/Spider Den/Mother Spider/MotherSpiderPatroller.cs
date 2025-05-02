@@ -1,13 +1,12 @@
 ﻿using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
-using RPGPlatformer.Movement;
 using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
     public class MotherSpiderPatroller : CombatPatroller
     {
-        //[SerializeField] IKLimbAnimator punchingArm;
+        [SerializeField] IKLimbAnimator punchingArm;
 
         float unarmedAttackRange;
         int unarmedAttacksCounter;
@@ -27,20 +26,16 @@ namespace RPGPlatformer.AIControl
             combatController.AutoAttacked += OnAutoAttack;
         }
 
-        //THIS IDEA WAS DOODOO
         //call from anim event and gradually increase tracking strength in anim
-        //public void BeginPunch()
-        //{
-        //    if (CurrentTarget?.transform)
-        //    {
-        //        punchingArm.BeginTrackingPosition(CurrentTarget.transform.position + 0.05f * Vector3.up);
-        //    }
-        //}
+        public void BeginPunch()
+        {
+            punchingArm.BeginTrackingGuide();
+        }
 
-        //public void EndPunch()
-        //{
-        //    punchingArm.EndTracking();
-        //}
+        public void EndPunch()
+        {
+            punchingArm.EndTracking();
+        }
 
         public override void OutOfRangeAttackBehavior(float distanceSqrd, float tolerance)
         {
