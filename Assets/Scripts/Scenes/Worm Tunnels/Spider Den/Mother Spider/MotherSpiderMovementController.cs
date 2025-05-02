@@ -5,7 +5,7 @@ namespace RPGPlatformer.Movement
 {
     public class MotherSpiderMovementController : AIMovementController
     {
-        IKLegWalker[] legAnimators;
+        IKLimbAnimator[] legAnimators;
 
         public override Vector3 MoveInput
         {
@@ -13,7 +13,7 @@ namespace RPGPlatformer.Movement
             protected set
             {
                 base.MoveInput = value;
-                if (!legAnimators[0].Reversed && MoveInput.z < 0)
+                if (!legAnimators[0].Reversed && Moving && MoveInput.z < 0)
                 {
                     SetLegsReversed(true);
                 }
@@ -26,9 +26,8 @@ namespace RPGPlatformer.Movement
                 //{
                 //    DisableStepping(false);
                 //}
-                //else if (!Moving)
+                //else if (!legAnimators[0].steppingDisabled && !Moving)
                 //{
-                //    ReturnLegsToInitialPositions(false);
                 //    DisableStepping(true);
                 //}
             }
@@ -38,7 +37,7 @@ namespace RPGPlatformer.Movement
         {
             base.Awake();
 
-            legAnimators = GetComponentsInChildren<IKLegWalker>(true);
+            legAnimators = GetComponentsInChildren<IKLimbAnimator>();
         }
 
         public void PauseLegAnimators()
@@ -57,30 +56,30 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        //private void ReturnLegsToInitialPositions(bool snapToPosition)
-        //{
-        //    foreach (var l in legAnimators)
-        //    {
-        //        l.InitializeFootPosition(snapToPosition);
-        //    }
-        //}
-
-        private void SetLegsReversed(bool reversed)
+        public void ResetWalkAnimation(bool snapToPosition)
         {
             foreach (var l in legAnimators)
             {
-                l.Reversed = reversed;
+                l.ResetWalkAnimation(snapToPosition);
+            }
+        }
+
+        private void SetLegsReversed(bool reversed/*, bool restoreInitialPosition = false*/)
+        {
+            foreach (var l in legAnimators)
+            {
+                l.SetReversed(reversed/*, restoreInitialPosition*/);
             }
         }
 
         //was using this when stopping to make sure new steps aren't started immediately after resetting initial pos
         //but it doesn't seem necessary anymore
-        //private void DisableStepping(bool disable)
-        //{
-        //    foreach (var l in legAnimators)
-        //    {
-        //        l.steppingDisabled = disable;
-        //    }
-        //}
+        private void DisableStepping(bool disable)
+        {
+            foreach (var l in legAnimators)
+            {
+                l.steppingDisabled = disable;
+            }
+        }
     }
 }

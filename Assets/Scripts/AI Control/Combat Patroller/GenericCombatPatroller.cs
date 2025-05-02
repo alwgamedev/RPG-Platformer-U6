@@ -6,14 +6,8 @@ using RPGPlatformer.Core;
 
 namespace RPGPlatformer.AIControl
 {
-    public class GenericCombatPatroller<T0, /*T00, T01, T02, T03,*/ T1> : GenericAIPatroller<T0>
+    public class GenericCombatPatroller<T0, T1> : GenericAIPatroller<T0>
         where T0 : IAIMovementController
-        //: GenericAIPatroller<T0, T00, T01, T02, T03>
-        //where T0 : GenericAIMovementController<T00, T01, T02, T03>
-        //where T00 : AdvancedMover
-        //where T01 : AdvancedMovementStateGraph
-        //where T02 : AdvancedMovementStateMachine<T01>
-        //where T03 : AdvancedMovementStateManager<T01, T02, T00>
         where T1 : AICombatController
     {
         [SerializeField] protected float pursuitRange = 5;

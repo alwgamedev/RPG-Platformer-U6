@@ -3,10 +3,15 @@ using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
-    //note: we will probably be enabling/disabling this component when we enter/exit walk state
-    //(so that we can move the legs in other animations, like an attack)
-    public class IKLegWalker : MonoBehaviour
+    public enum LimbAnimatorMode
     {
+        walking, trackingTransform, trackingPosition
+    }
+
+    public class IKLimbAnimator : MonoBehaviour
+    {
+        [SerializeField] float trackingLerpRate;//how quickly you should move to tracking position
+        [SerializeField] float trackingStrength;//btwn 0 - 1, how closely you want to track target 
         [SerializeField] float stepMin;
         [SerializeField] float stepMax;
         [SerializeField] float reversedStepMin;
@@ -19,10 +24,10 @@ namespace RPGPlatformer.Core
         [SerializeField] float stepHeightMultiplier = 1;
         [SerializeField] float stepSpeedMultiplier;
         [SerializeField] float reversedStepSpeedMultiplier;
-        [SerializeField] float speedLerpRate;
         [SerializeField] float groundHeightBuffer;
         [SerializeField] float raycastLength;
-        [SerializeField] float maintainPositionStrength;
+        [SerializeField] float maintainPositionSpeedScale;
+        [SerializeField] float baseMaintainPositionStrength;
         [SerializeField] Rigidbody2D body;
         [SerializeField] Transform hipJoint;//origin of the raycast
         [SerializeField] Transform ikTarget;
@@ -30,8 +35,15 @@ namespace RPGPlatformer.Core
         //to-do: step time should be faster if body is moving faster
 
         int groundLayer;
+
+        Transform trackedTransform;
+        Vector3 trackedPosition;
+        Vector3 defaultPosition;
+        //while tracking, you will interpolate between defaultPosition and target position based on trackingStrength
+
+        //walk animation parameters
         bool stepping;
-        bool reversed;
+        //bool reversed;
         float smoothedSpeed;
         float stepTimer;
         float currentStepRadius;
@@ -39,7 +51,6 @@ namespace RPGPlatformer.Core
         Vector2 currentStepX;
         Vector2 currentStepY;
         Vector2 currentStepGoal;
-
         Vector2 hipGroundHit;
         Vector2 hipGroundDirection;
 
@@ -48,39 +59,27 @@ namespace RPGPlatformer.Core
 
         float StepMin => Reversed ? reversedStepMin : stepMin;
         float StepMax => Reversed ? reversedStepMax : stepMax;
-        //step max will always be the position right after taking a step
-        //step max may be less than step min (when reversing)
+        //step max is the position right after taking a step
+        //step max may be less than step min (e.g. when reversing)
         float StepDelta => StepMin - StepMax;
-        float StepLength => Mathf.Abs(StepMax - StepMin);
+        float StepLength => Mathf.Abs(StepDelta);
         float InitialTimerFraction 
             => Reversed ? reversedInitialTimerFraction : initialTimerFraction;
         float InitialPositionFraction
             => Reversed ? reversedInitialPositionFraction : initialPositionFraction;
         float StepSpeedMultiplier => Reversed ? reversedStepSpeedMultiplier : stepSpeedMultiplier;
 
-        public bool Reversed
-        {
-            get => reversed;
-            set
-            {
-                if (value != reversed)
-                {
-                    reversed = value;
-                    InitializeFootPosition(false);
-                    //ResetTimerToInitialOffset();
-                }
-            }
-        }
+        public LimbAnimatorMode AnimationMode { get; private set; } = LimbAnimatorMode.walking;
+        public bool Reversed { get; private set; }
 
         private void Awake()
         {
             groundLayer = LayerMask.GetMask("Ground");
-            //raycastDirection = raycastDirection.normalized;
         }
 
         private void OnEnable()
         {
-            InitializeFootPosition(true);
+            ResetWalkAnimation(true);
         }
 
         private void Start()
@@ -89,24 +88,99 @@ namespace RPGPlatformer.Core
             {
                 orienter.DirectionChanged += OnDirectionChanged;
             }
-
-            //stepTimer = initialStepPositionFraction * (stepMax - stepMin);
-
-            //currentStepGoal = ikTarget.position;
         }
 
         private void LateUpdate()
         {
             if (paused) return;
 
+            switch (AnimationMode)
+            {
+                case LimbAnimatorMode.walking:
+                    UpdateWalkAnimation();
+                    break;
+                case LimbAnimatorMode.trackingTransform:
+                    UpdateTracking(trackedTransform);
+                    break;
+                case LimbAnimatorMode.trackingPosition:
+                    UpdateTracking(trackedPosition);
+                    break;
+            }
+        }
+
+        public void UpdateTimer(float smoothedSpeed)
+        {
+            this.smoothedSpeed = smoothedSpeed;
+            stepTimer += Time.deltaTime * smoothedSpeed;
+        }
+
+
+        public void SetReversed(bool val)
+        {
+            if (val == Reversed) return;
+
+            Reversed = val;
+            ResetWalkAnimation(false);
+        }
+
+        
+        //TARGET TRACKING
+
+        public void BeginTrackingTarget(Transform target)
+        {
+            BeginTrackingTarget(target, currentStepGoal);
+        }
+
+        public void BeginTrackingPosition(Vector3 position)
+        {
+            BeginTrackingPosition(position, currentStepGoal);
+        }
+
+        public void BeginTrackingTarget(Transform target, Vector3 defaultPosition)
+        {
+            trackedTransform = target;
+            this.defaultPosition = defaultPosition;
+            AnimationMode = LimbAnimatorMode.trackingTransform;
+        }
+
+        public void BeginTrackingPosition(Vector3 position, Vector3 defaultPosition)
+        {
+            trackedPosition = position;
+            this.defaultPosition = defaultPosition;
+            AnimationMode = LimbAnimatorMode.trackingPosition;
+        }
+
+        public void EndTracking()
+        {
+            //if you want to return to walking state without restarting the walk anim.;
+            AnimationMode = LimbAnimatorMode.walking;
+        }
+
+        private void UpdateTracking(Transform target)
+        {
+            if (target)
+            {
+                UpdateTracking(target.position);
+            }
+        }
+
+        private void UpdateTracking(Vector3 targetPosition)
+        {
+            var g = Vector3.LerpUnclamped(defaultPosition, targetPosition, trackingStrength);
+            ikTarget.position = Vector3.Lerp(ikTarget.position, g, trackingLerpRate * Time.deltaTime);
+        }
+
+
+        //WALK ANIMATION
+
+        private void UpdateWalkAnimation()
+        {
             if (stepping)
             {
-                AnimateStep(Time.deltaTime);
+                AnimateStep();
             }
             else
             {
-                stepTimer += Time.deltaTime * body.linearVelocity.magnitude;
-
                 if (!steppingDisabled && stepTimer > StepLength)
                 {
                     UpdateHipGroundData();
@@ -123,7 +197,7 @@ namespace RPGPlatformer.Core
             }
         }
 
-        public void InitializeFootPosition(bool snapToPosition)
+        public void ResetWalkAnimation(bool snapToPosition)
         {
             ResetTimerToInitialOffset();
             UpdateHipGroundData();
@@ -144,38 +218,39 @@ namespace RPGPlatformer.Core
             stepTimer = InitialTimerFraction * StepLength;
         }
 
-
-        //IK POSITIONING
+        private void StepTimerModEqStepLength()
+        {
+            while (stepTimer >= StepLength && StepLength > 0)
+            {
+                stepTimer -= StepLength;
+            }
+        }
 
         private void BeginStep(Vector3 stepGoal)
         {
             stepGoal = stepGoal + groundHeightBuffer * body.transform.up;
-            var stepLength = Vector2.Distance(ikTarget.position, stepGoal);
+            var stepDistance = Vector2.Distance(ikTarget.position, stepGoal);
 
             currentStepCenter = 0.5f * (ikTarget.position + stepGoal);
-            currentStepRadius = 0.5f * stepLength;
-            currentStepX = (stepGoal - ikTarget.position) / stepLength;
+            currentStepRadius = 0.5f * stepDistance;
+            currentStepX = (stepGoal - ikTarget.position) / stepDistance;
             currentStepY = Mathf.Sign(stepGoal.x - ikTarget.position.x) * currentStepX.CCWPerp();
             currentStepGoal = stepGoal;
 
-            stepTimer = 0;
+            StepTimerModEqStepLength();
             stepping = true;
-
-
         }
 
         private void EndStep()
         {
             stepping = false;
-            stepTimer = 0;
-            //ikTarget.position = currentStepGoal;
+            stepTimer = 0;//just set = 0 here, bc we don't know the time to animate step circle
+            //(only know the time to drag back)
 
         }
 
-        private void AnimateStep(float dt)
+        private void AnimateStep()
         {
-            smoothedSpeed = Mathf.Lerp(smoothedSpeed, body.linearVelocity.magnitude, dt * speedLerpRate);
-            stepTimer += dt * smoothedSpeed;
             var t = stepTimer * Mathf.PI * StepSpeedMultiplier;
 
             if (t > Mathf.PI)
@@ -196,7 +271,7 @@ namespace RPGPlatformer.Core
         private void MaintainFootPosition()
         {
             ikTarget.position = Vector2.Lerp(ikTarget.position, currentStepGoal,
-                maintainPositionStrength * smoothedSpeed * Time.deltaTime);
+                (baseMaintainPositionStrength + maintainPositionSpeedScale * smoothedSpeed) * Time.deltaTime);
         }
 
         private void OnDirectionChanged(HorizontalOrientation o)
@@ -237,7 +312,6 @@ namespace RPGPlatformer.Core
                 && Vector2.SqrMagnitude(hit.point - hipGroundHit) > StepMax * StepMax)
             {
                 searchDirection = Mathf.Sign(goalOffset) * (hit.point - hipGroundHit).normalized;
-                //searchDirection = (hit.point - hipGroundHit).normalized;
                 if (!TryFindStepPosition(iteration, goalOffset, searchDirection, 
                     out stepPosition))
                 {

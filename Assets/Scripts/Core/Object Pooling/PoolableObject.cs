@@ -11,7 +11,7 @@ namespace RPGPlatformer.Core
 
         public virtual void ReturnToPool()
         {
-            if (source == null)
+            if (source == null || (source is Component c && !c))
             {
                 Destroy(gameObject);
                 return;
