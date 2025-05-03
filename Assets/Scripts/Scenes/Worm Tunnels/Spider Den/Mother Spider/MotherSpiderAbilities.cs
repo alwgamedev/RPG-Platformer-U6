@@ -77,7 +77,7 @@ namespace RPGPlatformer.Combat
             CombatStyle = CombatStyle.Unarmed,
             Cooldown = 8,
             StaminaFractionChange = 0,
-            WrathFractionChange = -0.5f
+            WrathFractionChange = -0.4f
         };
 
         public static GrenadeLikeAbility MotherSpiderSpit = new()//ranged attack
@@ -90,7 +90,25 @@ namespace RPGPlatformer.Combat
             CanBeIncludedInAutoCastCycle = true,
             DelayedReleaseOfChannel = false,
             ObeyGCD = true,
-            GetProjectile = () => (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Basic Arrow"),
+            GetProjectile = () =>
+                {
+                    //temporary just while testing mother spider in other scenes.
+                    Projectile p = null;
+                    if (SceneTools.Instance && SceneTools.Instance.ProjectilePooler)
+                    {
+                        p = (Projectile)SceneTools.Instance.ProjectilePooler.GetObject("Mother Spider Spit Projectile");
+                    }
+                    if (!p)
+                    {
+                        p = (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Basic Arrow");
+                    }
+                    return p;
+                },
+                //so that we don't spawn 50 mother spider projectiles in every scene where we don't need them,
+                //let's have a (singleton but non-persistent) "SceneTools" which can hold references to 
+                //effect and projectile pools that are specific to characters in that scene.
+                //we can use the basic arrow as a fall back (just so we have a projectile to use if
+                //testing in a different scene)
             CombatStyle = CombatStyle.Ranged,
             AnimationState = "Spit",
             Cooldown = 0.48f,

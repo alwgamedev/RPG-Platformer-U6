@@ -8,6 +8,8 @@ using RPGPlatformer.Inventory;
 namespace RPGPlatformer.Core
 {
     //GlobalGameTools will hold an instance of this
+    //manages any resources that need to be loaded from assets
+    //for now that's only a) the xp alert skill icons and b) the inventory item SOs
     [Serializable]
     public class ResourcesManager
     {
@@ -36,11 +38,16 @@ namespace RPGPlatformer.Core
         {
             CircularSkillIcons = new()
             {
-                [CharacterSkillBook.Fitness] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular health icon"),
-                [CharacterSkillBook.Defense] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular defense icon"),
-                [CharacterSkillBook.Magic] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular magic icon"),
-                [CharacterSkillBook.Melee] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular melee icon"),
-                [CharacterSkillBook.Ranged] = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular range icon")
+                [CharacterSkillBook.Fitness] 
+                    = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular health icon"),
+                [CharacterSkillBook.Defense] 
+                    = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular defense icon"),
+                [CharacterSkillBook.Magic] 
+                    = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular magic icon"),
+                [CharacterSkillBook.Melee] 
+                    = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular melee icon"),
+                [CharacterSkillBook.Ranged] 
+                    = Resources.Load<Sprite>("UI Resources/Skill Icons/Circular/circular range icon")
             };
         }
     }
