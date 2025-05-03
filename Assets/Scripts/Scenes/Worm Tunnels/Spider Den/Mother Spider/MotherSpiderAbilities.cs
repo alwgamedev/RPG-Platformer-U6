@@ -48,7 +48,7 @@ namespace RPGPlatformer.Combat
         };
 
         public static AutoTargetedBleed MotherSpiderBite 
-            = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//thresh bleed
+            = new(DelayedAbilityExecutionOptions.DelayAndManuallyEndChannel)//thresh bleed
         {
             AbilityTags = new()
             {

@@ -113,9 +113,20 @@ namespace RPGPlatformer.Combat
     {
         public AutoTargetedBleed(DelayedAbilityExecutionOptions delayOptions = default) : base(delayOptions)
         {
-            OnExecute = async (controller, target) =>
-            await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
+            if (delayOptions.delayExecute)
+            {
+                OnExecute = (controller, target)
+                    => controller.StoreAction(async () =>
+                        await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
+                        BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect),
+                        delayOptions.channelDuringDelay, delayOptions.endChannelOnExecute);
+            }
+            else
+            {
+                OnExecute = async (controller, target) =>
+                    await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
                         BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
+            }
         }
     }
 

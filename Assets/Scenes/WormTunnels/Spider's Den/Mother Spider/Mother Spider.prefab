@@ -156,12 +156,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackingGuide: {fileID: 4466567528238620018}
-  trackingLerpRate: 300
+  trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0
   stepMax: 1.5
-  reversedStepMin: 0.6
-  reversedStepMax: -0.5
+  reversedStepMin: 0.75
+  reversedStepMax: -0.2
   initialTimerFraction: 0.75
   initialPositionFraction: 0.8
   reversedInitialTimerFraction: 0.7
@@ -170,7 +170,6 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  baseStepSinkRate: 1
   groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -375,12 +374,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackingGuide: {fileID: 1455773871831555102}
-  trackingLerpRate: 300
+  trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0.55
   stepMax: 1.45
   reversedStepMin: 0.6
-  reversedStepMax: -0.5
+  reversedStepMax: -0.05
   initialTimerFraction: 1
   initialPositionFraction: 0.8
   reversedInitialTimerFraction: 0.9
@@ -389,7 +388,6 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  baseStepSinkRate: 1
   groundHeightBuffer: -0.05
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -2384,7 +2382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackingGuide: {fileID: 4546078997354314187}
-  trackingLerpRate: 300
+  trackingLerpRate: 100
   trackingStrength: 0
   stepMin: -0.1
   stepMax: 0.8
@@ -2398,7 +2396,6 @@ MonoBehaviour:
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.15
   reversedStepSpeedMultiplier: 2.5
-  baseStepSinkRate: 1
   groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -5226,7 +5223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackingGuide: {fileID: 1109310402625095987}
-  trackingLerpRate: 300
+  trackingLerpRate: 100
   trackingStrength: 0
   stepMin: -0.1
   stepMax: 0.8
@@ -5240,7 +5237,6 @@ MonoBehaviour:
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.15
   reversedStepSpeedMultiplier: 2.5
-  baseStepSinkRate: 1
   groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -6033,12 +6029,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackingGuide: {fileID: 5269758553604408055}
-  trackingLerpRate: 300
+  trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0
   stepMax: 1.5
-  reversedStepMin: 0.6
-  reversedStepMax: -0.5
+  reversedStepMin: 0.75
+  reversedStepMax: -0.2
   initialTimerFraction: 0
   initialPositionFraction: 0.4
   reversedInitialTimerFraction: 0
@@ -6047,7 +6043,6 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  baseStepSinkRate: 1
   groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -6347,12 +6342,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackingGuide: {fileID: 1192145617381190941}
-  trackingLerpRate: 300
+  trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0.55
   stepMax: 1.45
   reversedStepMin: 0.6
-  reversedStepMax: -0.5
+  reversedStepMax: -0.05
   initialTimerFraction: 0.25
   initialPositionFraction: 0.3
   reversedInitialTimerFraction: 0.2
@@ -6361,7 +6356,6 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  baseStepSinkRate: 1
   groundHeightBuffer: -0.05
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -7043,7 +7037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackingGuide: {fileID: 7088239792700145616}
-  trackingLerpRate: 300
+  trackingLerpRate: 100
   trackingStrength: 0
   stepMin: -0.5
   stepMax: 0.2
@@ -7057,7 +7051,6 @@ MonoBehaviour:
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.25
   reversedStepSpeedMultiplier: 2.5
-  baseStepSinkRate: 1
   groundHeightBuffer: 0.1
   raycastLength: 5
   maintainPositionSpeedScale: 4
@@ -7688,7 +7681,6 @@ MonoBehaviour:
   - {fileID: 2321543508875417384}
   - {fileID: 5579507722587143475}
   speedLerpRate: 100
-  speedThreshold: 0
 --- !u!114 &4144941228099318437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8302,7 +8294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trackingGuide: {fileID: 8276265502651182846}
-  trackingLerpRate: 300
+  trackingLerpRate: 100
   trackingStrength: 0
   stepMin: -0.5
   stepMax: 0.2
@@ -8316,7 +8308,6 @@ MonoBehaviour:
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.25
   reversedStepSpeedMultiplier: 2.5
-  baseStepSinkRate: 1
   groundHeightBuffer: 0.1
   raycastLength: 5
   maintainPositionSpeedScale: 4

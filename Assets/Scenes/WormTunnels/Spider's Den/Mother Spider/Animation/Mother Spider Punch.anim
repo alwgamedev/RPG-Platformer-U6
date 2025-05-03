@@ -359,7 +359,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.083333336
+        time: 0.16666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -379,14 +379,14 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.48333332
         value: 0.9
-        inSlope: -1.6000004
-        outSlope: -1.6000004
+        inSlope: -1.8461541
+        outSlope: -1.8461541
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.6333333
+        time: 0.6
         value: 0
         inSlope: 0
         outSlope: 0
@@ -398,6 +398,36 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: trackingStrength
+    path: LegL0 IK Solver
+    classID: 114
+    script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.16666667
+        value: 50
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: trackingLerpRate
     path: LegL0 IK Solver
     classID: 114
     script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
@@ -476,6 +506,15 @@ AnimationClip:
     - serializedVersion: 2
       path: 2926790036
       attribute: 608560075
+      script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
+      typeID: 114
+      customType: 0
+      isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    - serializedVersion: 2
+      path: 2926790036
+      attribute: 683018450
       script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
       typeID: 114
       customType: 0
@@ -1607,7 +1646,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.083333336
+        time: 0.16666667
         value: 1
         inSlope: 0
         outSlope: 0
@@ -1627,14 +1666,14 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.48333332
         value: 0.9
-        inSlope: -1.6000004
-        outSlope: -1.6000004
+        inSlope: -1.8461541
+        outSlope: -1.8461541
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.6333333
+        time: 0.6
         value: 0
         inSlope: 0
         outSlope: 0
@@ -1646,6 +1685,36 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: trackingStrength
+    path: LegL0 IK Solver
+    classID: 114
+    script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.16666667
+        value: 50
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: trackingLerpRate
     path: LegL0 IK Solver
     classID: 114
     script: {fileID: 11500000, guid: 8ff9ad20fdcedc848812602a664e84bb, type: 3}

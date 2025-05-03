@@ -14,6 +14,8 @@ namespace RPGPlatformer.AIControl
         bool charging;
         bool awaitingBeginCharge;
 
+        System.Random rng = new();
+
         //if false, the ranged weapon is equipped
         bool UnarmedWeaponEquipped => combatController.Combatant.CurrentCombatStyle == CombatStyle.Unarmed;
 
@@ -29,7 +31,7 @@ namespace RPGPlatformer.AIControl
         //call from anim event and gradually increase tracking strength in anim
         public void BeginPunch()
         {
-            punchingArm.BeginTrackingGuide();
+            punchingArm.BeginTrackingGuide((float)rng.NextDouble() * .6f + .4f);
         }
 
         public void EndPunch()
