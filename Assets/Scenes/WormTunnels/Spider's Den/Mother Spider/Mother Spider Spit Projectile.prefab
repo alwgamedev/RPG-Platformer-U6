@@ -55,7 +55,7 @@ MonoBehaviour:
   - {fileID: 6144672752492363006}
   shootForce: 18
   forceMultiplierScale: 1
-  timeToWaitAfterImpactBeforeReturningToPool: 0.2
+  timeToWaitAfterImpactBeforeReturningToPool: 0.05
   maxLifetime: 5
   updateRotationWhileFlying: 0
   freezePositionOnFinalImpact: 0
@@ -8643,12 +8643,12 @@ ParticleSystem:
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
-    multiplyColliderForceByCollisionAngle: 1
+    multiplyColliderForceByCollisionAngle: 0
     m_Planes: []
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -8805,7 +8805,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     minKillSpeed: 0
-    maxKillSpeed: 10000
+    maxKillSpeed: 0
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
