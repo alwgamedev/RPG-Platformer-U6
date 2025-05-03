@@ -166,7 +166,7 @@ MonoBehaviour:
   initialPositionFraction: 0.8
   reversedInitialTimerFraction: 0.7
   reversedInitialPositionFraction: 0.6
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
@@ -384,7 +384,7 @@ MonoBehaviour:
   initialPositionFraction: 0.8
   reversedInitialTimerFraction: 0.9
   reversedInitialPositionFraction: 0.6
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
@@ -6039,7 +6039,7 @@ MonoBehaviour:
   initialPositionFraction: 0.4
   reversedInitialTimerFraction: 0
   reversedInitialPositionFraction: 0.1
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
@@ -6352,7 +6352,7 @@ MonoBehaviour:
   initialPositionFraction: 0.3
   reversedInitialTimerFraction: 0.2
   reversedInitialPositionFraction: 0.1
-  stepSmoothingIterations: 10
+  stepSmoothingIterations: 25
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
@@ -7889,7 +7889,7 @@ MonoBehaviour:
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
     rotateToDirection: 1
-    rotationSpeed: 1.58
+    rotationSpeed: 8
     maxRotationAngle: 1.57
     minRotationAngle: -1.57
     maxRotationRight: {x: 0.0007962743, y: 0.9999997}
@@ -8098,7 +8098,7 @@ MonoBehaviour:
   destroyOnFinalizeDeath: 1
   delayBeforeFinalizeDeath: 1
   finalizeDeathViaTrigger: 0
-  timeToDelayBeforeFinalizeDeath: 1.5
+  timeToDelayBeforeFinalizeDeath: 2
   combatXPReward: 50
   dropSize: 0
   dropTable: {fileID: 0}
