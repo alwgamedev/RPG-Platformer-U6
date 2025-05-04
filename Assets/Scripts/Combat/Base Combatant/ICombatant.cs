@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
-    public interface ICombatant : IEquippableCharacter, IDamageDealer
+    public interface ICombatant : IEquippableCharacter, IDamageDealer, IDisplayNameSource
     {
-        public string DisplayName { get; }
+        //public string DisplayName { get; }
         public int CombatLevel { get; }
         public float AttackRange { get; }
         public float IdealMinimumCombatDistance { get; } //mainly for AI

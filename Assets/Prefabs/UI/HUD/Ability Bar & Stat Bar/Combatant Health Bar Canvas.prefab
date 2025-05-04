@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 5295939359872266940}
   - component: {fileID: 5476698184045574494}
   m_Layer: 6
-  m_Name: Health Bar Canvas
+  m_Name: Combatant Health Bar Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -488,7 +488,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &7937594830997975877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -527,6 +527,7 @@ MonoBehaviour:
   statBar: {fileID: 7937594830997975877}
   damagePopupSpawnPoint: {fileID: 4727780947784254717}
   damagePopupPrefab: {fileID: 4642073706672816971, guid: ccea7d19f71f7f64ab730d6a4cbb2a12, type: 3}
+  disengageTime: 0
 --- !u!225 &5295939359872266940
 CanvasGroup:
   m_ObjectHideFlags: 0

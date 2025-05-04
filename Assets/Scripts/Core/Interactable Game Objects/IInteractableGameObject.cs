@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
-    public interface IInteractableGameObject : IExaminable
+    public interface IInteractableGameObject : IExaminable, IDisplayNameSource
     {
         public Transform transform { get; }
-        public string DisplayName { get; }
+        //public string DisplayName { get; }
         public bool MouseOver { get; }
         public CursorType CursorType { get; }
 

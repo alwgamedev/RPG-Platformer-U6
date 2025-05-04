@@ -22,18 +22,28 @@ namespace RPGPlatformer.Combat
         public event Action<float, bool> OnStunned;//signature is (duration, freezeAnimation)
         public event Action<IDamageDealer> OnDeath;
 
-        private void Start()
+        private void Awake()
         {
             if (takeDamageAutomatically)//mainly for combat dummy
             {
-                HealthChangeTrigger += (damage, damageDealer) => GainHealth(-damage, true);
+                HealthChangeTrigger += (damage, damageDealer) =>
+                {
+                    GainHealth(-damage, true);
+                    if (stat.CurrentValue <= stat.MinValue)
+                    {
+                        Die(damageDealer);
+                    }
+                };
             }
 
             if (findStatBarInChildren)//this is just so the combat dummy's health displays
             {
                 stat.statBar = GetComponentInChildren<StatBarItem>();
             }
+        }
 
+        private void Start()
+        {
             if (takeDefaultValueOnStart)
             {
                 stat.TakeDefaultValue();
@@ -71,8 +81,6 @@ namespace RPGPlatformer.Combat
             {
                 stat.CurrentValue += amount;
             }
-
-
         }
 
         public void ReceiveStun(float duration, bool freezeAnimation)

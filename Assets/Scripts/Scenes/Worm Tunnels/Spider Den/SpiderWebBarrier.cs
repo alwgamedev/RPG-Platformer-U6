@@ -1,4 +1,6 @@
-﻿using RPGPlatformer.Core;
+﻿using RPGPlatformer.Combat;
+using RPGPlatformer.Core;
+using RPGPlatformer.UI;
 using UnityEngine;
 
 namespace RPGPlatformer.Environment
@@ -12,7 +14,12 @@ namespace RPGPlatformer.Environment
         [SerializeField] Joint2D breakPointBottom;
         [SerializeField] Vector2 topBreakAcceleration;
         [SerializeField] Vector2 bottomBreakAcceleration;
+        [SerializeField] Vector2 damageJiggleAcceleration;
         [SerializeField] float snapTime;
+
+        Health health;
+        HealthBarCanvas healthBarCanvas;
+        bool healthBarConfigured;
 
         Rigidbody2D breakPointTopRb;
         Rigidbody2D breakPointBottomRb;
@@ -26,6 +33,9 @@ namespace RPGPlatformer.Environment
 
         private void Awake()
         {
+            health = GetComponent<Health>();
+            healthBarCanvas = GetComponentInChildren<HealthBarCanvas>();
+
             breakPointTopRb = breakPointTop.GetComponent<Rigidbody2D>();
             breakPointBottomRb = breakPointBottom.GetComponent<Rigidbody2D>();
 
@@ -40,19 +50,24 @@ namespace RPGPlatformer.Environment
             }
         }
 
+        //my plan is that mob manager will enable this component when mother spider dies
+        //(or when all enemies in room slain)
+        //and that will set up the health and make wall breakable
+        private void Start()
+        {
+            ConfigureHealth();
+        }
+
         private void Update()
         {
+            //just for quick access in testing;
             if (Input.GetKeyDown(KeyCode.M))
             {
-                GlobalGameTools.Instance.Player.Combatant.transform.position = breakPointBottom.transform.position
-                    - 2 * Vector3.right;
+                GlobalGameTools.Instance.Player.Combatant.transform.position
+                    = transform.position - 2 * Vector3.right;
             }
 
-            if (!broken && Input.GetKeyDown(KeyCode.P))
-            {
-                Break();
-            }
-            else if (snapping)
+            if (snapping)
             {
                 snapTimer -= Time.deltaTime;
                 if (snapTimer <= 0)
@@ -63,15 +78,13 @@ namespace RPGPlatformer.Environment
                 }
 
                 var q = snapTime / snapTimer;
-                q = q * q * q;
                 q = q * q;
                 var s = topRenderer.textureScale;
                 topRenderer.textureScale = new(s.x, q);
                 s = bottomRender.textureScale;
                 bottomRender.textureScale = new(s.x, q);
 
-                /*r*/
-                q = Mathf.Max(1 / q, .2f);
+                q = 1 / (q * q);
 
                 for (int i = 0; i < joints.Length; i++)
                 {
@@ -80,10 +93,45 @@ namespace RPGPlatformer.Environment
             }
         }
 
+        private void OnMouseEnter()
+        {
+            healthBarCanvas.OnMouseEnter();
+        }
+
+        private void OnMouseExit()
+        {
+            healthBarCanvas.OnMouseExit();
+        }
+
+        private void ConfigureHealth()
+        {
+            if (!healthBarConfigured)
+            {
+                healthBarConfigured = true;
+                healthBarCanvas.Configure(health);
+            }
+            health.OnDeath += DeathHandler;
+            health.HealthChangeTrigger += DamageHandler;
+        }
+
+        private void DamageHandler(float damage, IDamageDealer d)
+        {
+            if (!health.IsDead && damage > 0)
+            {
+                breakPointTopRb.AddForce(breakPointTopRb.mass * damageJiggleAcceleration);
+            }
+        }
+
+        private void DeathHandler(IDamageDealer d)
+        {
+            Break();
+        }
+
         private void Break()
         {
+            if (broken) return;
+
             breakPointBottom.enabled = false;
-            //breakJointRb.AddForce(breakJointRb.mass * breakAcceleration);
 
             initialSnapAnchors = new Vector2[joints.Length];
 
@@ -107,5 +155,11 @@ namespace RPGPlatformer.Environment
             breakPointTopRb.AddForce(breakPointTopRb.mass * topBreakAcceleration, ForceMode2D.Impulse);
             breakPointBottomRb.AddForce(breakPointBottomRb.mass * bottomBreakAcceleration, ForceMode2D.Impulse);
         }
+
+        //private void OnDisable()
+        //{
+        //    health.OnDeath -= DeathHandler;
+        //    health.HealthChangeTrigger -= DamageHandler;
+        //}
     }
 }
