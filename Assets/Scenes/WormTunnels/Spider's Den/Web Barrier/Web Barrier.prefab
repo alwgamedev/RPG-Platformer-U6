@@ -74,6 +74,7 @@ GameObject:
   - component: {fileID: 5390671610555160642}
   - component: {fileID: 5662697369216336818}
   - component: {fileID: 8957303420592444803}
+  - component: {fileID: 2636257216027036835}
   m_Layer: 0
   m_Name: Web Barrier
   m_TagString: Untagged
@@ -149,20 +150,20 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: -114.82556, y: -25.505632, z: 0}
-  - {x: -114.82556, y: -25.592737, z: 0}
-  - {x: -114.82556, y: -25.708775, z: 0}
-  - {x: -114.82556, y: -25.842718, z: 0}
-  - {x: -114.82556, y: -25.983553, z: 0}
-  - {x: -114.82556, y: -26.120255, z: 0}
-  - {x: -114.82556, y: -26.241802, z: 0}
-  - {x: -114.82556, y: -26.337173, z: 0}
-  - {x: -114.82556, y: -26.41184, z: 0}
-  - {x: -114.82556, y: -26.498322, z: 0}
-  - {x: -114.82556, y: -26.59366, z: 0}
-  - {x: -114.82556, y: -26.69313, z: 0}
-  - {x: -114.82556, y: -26.792013, z: 0}
-  - {x: -114.82556, y: -26.885576, z: 0}
-  - {x: -114.82556, y: -26.969107, z: 0}
+  - {x: -114.82556, y: -25.582373, z: 0}
+  - {x: -114.82556, y: -25.67151, z: 0}
+  - {x: -114.82556, y: -25.768324, z: 0}
+  - {x: -114.82556, y: -25.868092, z: 0}
+  - {x: -114.82556, y: -25.966087, z: 0}
+  - {x: -114.82556, y: -26.057587, z: 0}
+  - {x: -114.82556, y: -26.137869, z: 0}
+  - {x: -114.82556, y: -26.217817, z: 0}
+  - {x: -114.82556, y: -26.327654, z: 0}
+  - {x: -114.82556, y: -26.458155, z: 0}
+  - {x: -114.82556, y: -26.598303, z: 0}
+  - {x: -114.82556, y: -26.73707, z: 0}
+  - {x: -114.82556, y: -26.863438, z: 0}
+  - {x: -114.82556, y: -26.966385, z: 0}
   - {x: -114.82556, y: -27.04488, z: 0}
   - {x: -114.82556, y: -27.14783, z: 0}
   - {x: -114.82556, y: -27.274195, z: 0}
@@ -255,7 +256,7 @@ MonoBehaviour:
     point: {x: -114.82556, y: -25.505632, z: 0}
     velocity: {x: 0, y: -0.5, z: 0}
   - virtualSegments: 1
-    point: {x: -114.82556, y: -26.355633, z: 0}
+    point: {x: -114.82556, y: -26.155632, z: 0}
     velocity: {x: 0, y: -0.5, z: 0}
   - virtualSegments: 1
     point: {x: -114.82556, y: -27.005632, z: 0}
@@ -289,6 +290,19 @@ MonoBehaviour:
   - {fileID: 883099397271225738}
   ikEnabled: 0
   ikEffects: []
+--- !u!114 &2636257216027036835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291069087900183595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68cc2493eabcf214fb51db5186eee0b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breakJoint: {fileID: 733958010543019117}
 --- !u!1 &2316574095946600167
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,7 +845,7 @@ Transform:
   m_GameObject: {fileID: 6786302978282323366}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1, y: 0.75, z: 0}
+  m_LocalPosition: {x: 0.1, y: 0.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -893,7 +907,7 @@ HingeJoint2D:
   m_BreakTorque: Infinity
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
-  m_Anchor: {x: 0, y: 0.85}
+  m_Anchor: {x: 0, y: 0.65}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
@@ -938,8 +952,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.425}
-  m_Size: {x: 0.2, y: 0.85}
+  m_Offset: {x: 0, y: 0.325}
+  m_Size: {x: 0.2, y: 0.65}
   m_Direction: 0
 --- !u!1 &7168352141786997765
 GameObject:
@@ -1064,7 +1078,7 @@ HingeJoint2D:
   m_BreakAction: 0
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0.65}
-  m_ConnectedAnchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: -0.20000076}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
