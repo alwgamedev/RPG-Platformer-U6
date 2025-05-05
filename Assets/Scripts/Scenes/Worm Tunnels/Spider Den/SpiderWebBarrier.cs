@@ -140,7 +140,7 @@ namespace RPGPlatformer.Environment
                 //j.anchor = Vector2.zero;
                 initialSnapAnchors[i] = joints[i].anchor;
                 joints[i].autoConfigureConnectedAnchor = false;
-                joints[i].useLimits = true;
+                //joints[i].useLimits = true;
                 if (colliders[i])
                 {
                     colliders[i].enabled = false;

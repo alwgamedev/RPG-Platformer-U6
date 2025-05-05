@@ -18,14 +18,14 @@ namespace RPGPlatformer.Effects
 
         bool fractured;
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                GlobalGameTools.Instance.PlayerTransform.position = transform.position + 0.5f * Vector3.up
-                    - 2 * Vector3.right;
-            }
-        }
+        //private void Update()
+        //{
+        //    if (Input.GetKeyDown(KeyCode.M))
+        //    {
+        //        GlobalGameTools.Instance.PlayerTransform.position = transform.position + 0.5f * Vector3.up
+        //            - 2 * Vector3.right;
+        //    }
+        //}
 
         private void OnTriggerEnter2D(Collider2D collider)
         {

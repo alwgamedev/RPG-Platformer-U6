@@ -13,7 +13,6 @@ namespace RPGPlatformer.Core
         [SerializeField] Transform trackingGuide;
         [SerializeField] float trackingLerpRate;//how quickly you should move towards goal tracking position
         [SerializeField] float trackingStrength;//btwn 0 - 1, how closely you want to track target
-        //[SerializeField] float bodySpeedThreshold;//will not begin a new step below this threshold
         [SerializeField] float stepMin;
         [SerializeField] float stepMax;
         [SerializeField] float reversedStepMin;
@@ -26,7 +25,6 @@ namespace RPGPlatformer.Core
         [SerializeField] float stepHeightMultiplier = 1;
         [SerializeField] float stepSpeedMultiplier;
         [SerializeField] float reversedStepSpeedMultiplier;
-        //[SerializeField] float baseStepSinkRate;
         [SerializeField] float groundHeightBuffer;
         [SerializeField] float raycastLength;
         [SerializeField] float maintainPositionSpeedScale;
@@ -59,19 +57,18 @@ namespace RPGPlatformer.Core
         public bool animationDisabled;//timer still running, but doesn't animate anything
         public bool steppingDisabled;
 
-        float StepMin => Reversed ? reversedStepMin : stepMin;
-        float StepMax => Reversed ? reversedStepMax : stepMax;
+        public float StepMin => Reversed ? reversedStepMin : stepMin;
+        public float StepMax => Reversed ? reversedStepMax : stepMax;
         //step max is the position right after taking a step
         //step max may be less than step min (e.g. when reversing)
-        float StepDelta => StepMin - StepMax;
-        float StepLength => Mathf.Abs(StepDelta);
-        float InitialTimerFraction 
+        public float StepDelta => StepMin - StepMax;
+        public float StepLength => Mathf.Abs(StepDelta);
+        public float InitialTimerFraction 
             => Reversed ? reversedInitialTimerFraction : initialTimerFraction;
-        float InitialPositionFraction
+        public float InitialPositionFraction
             => Reversed ? reversedInitialPositionFraction : initialPositionFraction;
-        float InitialPositionOffset => StepMax + InitialPositionFraction * StepDelta;
-        float StepSpeedMultiplier => Reversed ? reversedStepSpeedMultiplier : stepSpeedMultiplier;
-
+        public float InitialPositionOffset => StepMax + InitialPositionFraction * StepDelta;
+        public float StepSpeedMultiplier => Reversed ? reversedStepSpeedMultiplier : stepSpeedMultiplier;
         public LimbAnimatorMode AnimationMode { get; private set; } = LimbAnimatorMode.walking;
         public bool Reversed { get; private set; }
 
@@ -129,12 +126,12 @@ namespace RPGPlatformer.Core
         
         //TARGET TRACKING
 
-        public void BeginTrackingGuide(float defaultPositionOffset)
+        public void BeginTrackingGuide(float defaultPositionOffsetFraction)
         {
-            BeginTrackingTarget(trackingGuide, defaultPositionOffset);
+            BeginTrackingTarget(trackingGuide, defaultPositionOffsetFraction);
         }
 
-        public void BeginTrackingTarget(Transform target, float defaultPositionOffset)
+        public void BeginTrackingTarget(Transform target, float defaultPositionOffsetFraction)
         {
             //var r = Physics2D.Raycast(ikTarget.position + body.transform.up, -body.transform.up, 
             //    raycastLength, groundLayer);
@@ -142,7 +139,7 @@ namespace RPGPlatformer.Core
             //{
             //    p = currentStepGoal;
             //}
-            BeginTrackingTarget(target, TrackingDefaultPosition(defaultPositionOffset));
+            BeginTrackingTarget(target, TrackingDefaultPosition(defaultPositionOffsetFraction));
         }
 
         public void BeginTrackingPosition(Vector3 position, float defaultPositionOffsetFraction)
@@ -172,6 +169,8 @@ namespace RPGPlatformer.Core
 
         public void EndTracking()
         {
+            if (AnimationMode == LimbAnimatorMode.walking) return;
+
             //if you want to return to walking state without restarting the walk anim.;
             AnimationMode = LimbAnimatorMode.walking;
             //currentStepGoal = defaultPosition;
