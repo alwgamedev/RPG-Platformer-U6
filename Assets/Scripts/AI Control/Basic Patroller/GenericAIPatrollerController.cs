@@ -71,7 +71,7 @@ namespace RPGPlatformer.AIControl
             base.ConfigureStateManager();
 
             stateManager.StateGraph.patrol.OnEntry += OnPatrolEntry;
-            //stateManager.StateMachine.StateChange += s => Debug.Log(s.name);
+            //stateManager.StateMachine.StateChange += s => Debug.Log(s.name);//useful for testing
         }
 
         protected virtual void BuildStateBehaviorDict()

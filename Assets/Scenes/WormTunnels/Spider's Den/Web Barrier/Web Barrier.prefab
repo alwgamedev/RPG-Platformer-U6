@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 5384467005195757494}
   - component: {fileID: 2636257216027036835}
   - component: {fileID: 1212672894555921264}
+  - component: {fileID: 6297982449876297710}
   m_Layer: 6
   m_Name: Web Barrier
   m_TagString: Untagged
@@ -125,9 +126,9 @@ MonoBehaviour:
   - {fileID: 3575033487970814824}
   breakPointTop: {fileID: 7648429931194853832}
   breakPointBottom: {fileID: 1903553934933652376}
-  topBreakAcceleration: {x: 2, y: 0}
-  bottomBreakAcceleration: {x: 2, y: 0}
-  damageJiggleAcceleration: {x: 1, y: 0}
+  topBreakAcceleration: {x: 0, y: 0}
+  bottomBreakAcceleration: {x: 0, y: 0}
+  damageJiggleAcceleration: {x: 16, y: 0}
   snapTime: 0.4
 --- !u!114 &1212672894555921264
 MonoBehaviour:
@@ -151,6 +152,43 @@ MonoBehaviour:
     replenishRate: 0
     autoReplenish: 0
     statBar: {fileID: 0}
+--- !u!70 &6297982449876297710
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291069087900183595}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.15, y: 0}
+  m_Size: {x: 0.3, y: 2.5}
+  m_Direction: 0
 --- !u!1 &2290470166375233078
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,7 +312,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1500
-  m_LinearDamping: 2
+  m_LinearDamping: 1.5
   m_AngularDamping: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -370,7 +408,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 750
-  m_LinearDamping: 2
+  m_LinearDamping: 1.5
   m_AngularDamping: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -445,7 +483,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.1225}
-  m_Size: {x: 0.2, y: 1.225}
+  m_Size: {x: 0.25, y: 1.225}
   m_Direction: 0
 --- !u!255 &6556225875776751868
 FixedJoint2D:
@@ -652,7 +690,7 @@ LineRenderer:
   - {x: -114.82556, y: -26.880632, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 1.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -947,7 +985,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 2500
-  m_LinearDamping: 2
+  m_LinearDamping: 1.5
   m_AngularDamping: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -1022,7 +1060,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.325}
-  m_Size: {x: 0.2, y: 0.65}
+  m_Size: {x: 0.25, y: 0.65}
   m_Direction: 0
 --- !u!1 &7168352141786997765
 GameObject:
@@ -1212,7 +1250,7 @@ LineRenderer:
   - {x: -114.82556, y: -28.105633, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 1.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -1375,7 +1413,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1500
-  m_LinearDamping: 2
+  m_LinearDamping: 1.5
   m_AngularDamping: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -1450,7 +1488,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.3825}
-  m_Size: {x: 0.2, y: 0.725}
+  m_Size: {x: 0.25, y: 0.725}
   m_Direction: 0
 --- !u!1001 &5288095394661551238
 PrefabInstance:

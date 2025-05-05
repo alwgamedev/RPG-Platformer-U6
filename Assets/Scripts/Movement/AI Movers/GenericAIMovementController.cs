@@ -18,6 +18,8 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected bool canMoveDuringFreefall;
         [SerializeField] protected float maxPermissibleDropOffHeightFactor = 3;
         [SerializeField] protected float dropOffStopDistance = 0.5f;
+        [SerializeField] protected Transform rightBound;
+        [SerializeField] protected Transform leftBound;
 
         protected bool stuckAtLedge;
 
@@ -75,13 +77,15 @@ namespace RPGPlatformer.Movement
         //    }
         //}
 
-        protected virtual bool CanSetMoveInput()
-        {
-            return Grounded;
-        }
+        //protected virtual bool CanSetMoveInput()
+        //{
+        //    return Grounded;
+        //}
 
-        protected virtual bool CanMove()
+        protected virtual bool CanMove(Vector3 moveInput)
         {
+            if (rightBound && moveInput.x > 0 && transform.position.x > rightBound.position.x) return false;
+            if (leftBound && moveInput.x < 0 && transform.position.x < leftBound.position.x) return false;
             if (Freefalling && !canMoveDuringFreefall) return false;
             if (Grounded && stuckAtLedge) return false;
             if (Grounded && DropOffAhead(CurrentOrientation, out var dist)
@@ -102,7 +106,7 @@ namespace RPGPlatformer.Movement
 
         protected override void Move(Vector3 moveInput)
         {
-            if (CanMove())
+            if (CanMove(moveInput))
             {
                 base.Move(moveInput);
             }

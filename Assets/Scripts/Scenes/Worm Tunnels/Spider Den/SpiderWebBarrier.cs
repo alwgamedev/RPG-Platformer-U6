@@ -61,11 +61,11 @@ namespace RPGPlatformer.Environment
         private void Update()
         {
             //just for quick access in testing;
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                GlobalGameTools.Instance.Player.Combatant.transform.position
-                    = transform.position - 2 * Vector3.right;
-            }
+            //if (Input.GetKeyDown(KeyCode.M))
+            //{
+            //    GlobalGameTools.Instance.Player.Combatant.transform.position
+            //        = transform.position - 2 * Vector3.right;
+            //}
 
             if (snapping)
             {

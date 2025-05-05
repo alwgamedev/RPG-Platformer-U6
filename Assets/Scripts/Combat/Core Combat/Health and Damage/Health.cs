@@ -11,12 +11,14 @@ namespace RPGPlatformer.Combat
         [SerializeField] bool takeDefaultValueOnStart;//characters with a combat controller will set up 
         [SerializeField] bool findStatBarInChildren;//their Health themselves
         [SerializeField] ReplenishableStat stat;
+        [SerializeField] Transform hitEffectTransformOverride;
 
         public bool IsDead { get; private set; }
         public IDamageDealer Killer { get; private set; }
         //public Transform Transform => transform; 
         public float TargetingTolerance { get; private set; }
         public ReplenishableStat Stat => stat;
+        public Transform HitEffectTransform { get; private set; }
 
         public event Action<float, IDamageDealer> HealthChangeTrigger;
         public event Action<float, bool> OnStunned;//signature is (duration, freezeAnimation)
@@ -39,6 +41,15 @@ namespace RPGPlatformer.Combat
             if (findStatBarInChildren)//this is just so the combat dummy's health displays
             {
                 stat.statBar = GetComponentInChildren<StatBarItem>();
+            }
+
+            if (hitEffectTransformOverride)
+            {
+                HitEffectTransform = hitEffectTransformOverride;
+            }
+            else
+            {
+                HitEffectTransform = transform;
             }
         }
 

@@ -152,7 +152,7 @@ namespace RPGPlatformer.Combat
             PoolableEffect hitEffect = getHitEffect?.Invoke();
             if (hitEffect)
             {
-                hitEffect.PlayAtPosition(targetHealth.transform);
+                hitEffect.PlayAtPosition(targetHealth.HitEffectTransform);
             }
         }
 

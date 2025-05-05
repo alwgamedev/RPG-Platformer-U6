@@ -70,10 +70,10 @@ namespace RPGPlatformer.Movement
             stateDriver.UpdateState(Flying, Jumping, Freefalling);
         }
 
-        protected override bool CanSetMoveInput()
-        {
-            return Grounded || Flying;
-        }
+        //protected override bool CanSetMoveInput()
+        //{
+        //    return Grounded || Flying;
+        //}
 
         //STATE CHANGE HANDLERS
 
