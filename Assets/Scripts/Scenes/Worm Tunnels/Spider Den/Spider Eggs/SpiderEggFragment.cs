@@ -4,7 +4,7 @@ namespace RPGPlatformer.Effects
 {
     public class SpiderEggFragment : MonoBehaviour
     {
-        [SerializeField] Vector2 fractureAnchor;
+        //[SerializeField] Vector2 fractureAnchor;
         [SerializeField] Vector2 breakAccel;
 
         public Rigidbody2D Rb { get; private set; }
@@ -16,11 +16,11 @@ namespace RPGPlatformer.Effects
             Joint = GetComponent<FixedJoint2D>();
         }
 
-        public void Fracture()
-        {
-            Joint.autoConfigureConnectedAnchor = false;
-            Joint.anchor = fractureAnchor;
-        }
+        //public void Fracture()
+        //{
+        //    Joint.autoConfigureConnectedAnchor = false;
+        //    Joint.anchor = fractureAnchor;
+        //}
 
         public void Break()
         {

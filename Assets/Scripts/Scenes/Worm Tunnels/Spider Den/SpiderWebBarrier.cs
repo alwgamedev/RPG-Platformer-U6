@@ -16,6 +16,9 @@ namespace RPGPlatformer.Environment
         [SerializeField] Vector2 bottomBreakAcceleration;
         [SerializeField] Vector2 damageJiggleAcceleration;
         [SerializeField] float snapTime;
+        [SerializeField] Transform motherSpider;
+        //[SerializeField] Collider2D[] contactColliders;
+        //[SerializeField] Collider2D healthCollider;
 
         Health health;
         HealthBarCanvas healthBarCanvas;
@@ -24,7 +27,8 @@ namespace RPGPlatformer.Environment
         Rigidbody2D breakPointTopRb;
         Rigidbody2D breakPointBottomRb;
 
-        Collider2D[] colliders;
+        Collider2D[] contactColliders;
+        Collider2D healthCollider;
 
         bool broken;
         bool snapping;
@@ -39,15 +43,17 @@ namespace RPGPlatformer.Environment
             breakPointTopRb = breakPointTop.GetComponent<Rigidbody2D>();
             breakPointBottomRb = breakPointBottom.GetComponent<Rigidbody2D>();
 
-            colliders = new Collider2D[joints.Length];
+            contactColliders = new Collider2D[joints.Length];
 
             for (int i = 0; i < joints.Length; i++)
             {
                 if (joints[i].TryGetComponent(out Collider2D c))
                 {
-                    colliders[i] = c;
+                    contactColliders[i] = c;
                 }
             }
+
+            healthCollider = GetComponent<Collider2D>();
         }
 
         //my plan is that mob manager will enable this component when mother spider dies
@@ -56,6 +62,12 @@ namespace RPGPlatformer.Environment
         private void Start()
         {
             ConfigureHealth();
+
+            if (motherSpider && motherSpider.TryGetComponent(out ICombatController cc))
+            {
+                healthCollider.enabled = false;
+                cc.OnDeath += EnableHealth;
+            }
         }
 
         private void Update()
@@ -93,15 +105,21 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        private void OnMouseEnter()
-        {
-            healthBarCanvas.OnMouseEnter();
-        }
+        //private void OnMouseEnter()
+        //{
+        //    if (healthCollider.enabled)
+        //    {
+        //        healthBarCanvas.OnMouseEnter();
+        //    }
+        //}
 
-        private void OnMouseExit()
-        {
-            healthBarCanvas.OnMouseExit();
-        }
+        //private void OnMouseExit()
+        //{
+        //    if (healthCollider.enabled)
+        //    {
+        //        healthBarCanvas.OnMouseExit();
+        //    }
+        //}
 
         private void ConfigureHealth()
         {
@@ -112,6 +130,11 @@ namespace RPGPlatformer.Environment
             }
             health.OnDeath += DeathHandler;
             health.HealthChangeTrigger += DamageHandler;
+        }
+
+        private void EnableHealth()
+        {
+            healthCollider.enabled = true;
         }
 
         private void DamageHandler(float damage, IDamageDealer d)
@@ -141,9 +164,9 @@ namespace RPGPlatformer.Environment
                 initialSnapAnchors[i] = joints[i].anchor;
                 joints[i].autoConfigureConnectedAnchor = false;
                 //joints[i].useLimits = true;
-                if (colliders[i])
+                if (contactColliders[i])
                 {
-                    colliders[i].enabled = false;
+                    contactColliders[i].enabled = false;
                 }
                 //j.anchor = Vector2.zero;
             }
@@ -161,5 +184,13 @@ namespace RPGPlatformer.Environment
         //    health.OnDeath -= DeathHandler;
         //    health.HealthChangeTrigger -= DamageHandler;
         //}
+
+        private void OnDestroy()
+        {
+            if (motherSpider && motherSpider.TryGetComponent(out ICombatController cc))
+            {
+                cc.OnDeath -= EnableHealth;
+            }
+        }
     }
 }

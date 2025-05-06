@@ -14,6 +14,7 @@ namespace RPGPlatformer.AIControl
         [SerializeField] protected float suspicionTime = 5;
         [SerializeField] protected bool playerEnemy = true;
         [SerializeField] protected bool setRunningWhenMaintainingMinimumCombatDistance;
+        //[SerializeField] protected bool useHorizontalDistanceForCombatOnly;
 
         protected bool correctingCombatDistance;
         protected float suspicionTimer;

@@ -15,8 +15,12 @@ namespace RPGPlatformer.Effects
         [SerializeField] float shakeForce;
         [SerializeField] float shakeEscalationRate;
         [SerializeField] float timeToDestroyAfterBreak;
+        [SerializeField] Rigidbody2D babySpider;
+        [SerializeField] float spiderSpawnAccel;
+
 
         bool fractured;
+        System.Random rng = new();
 
         //private void Update()
         //{
@@ -26,6 +30,14 @@ namespace RPGPlatformer.Effects
         //            - 2 * Vector3.right;
         //    }
         //}
+
+        private void Start()
+        {
+            if (babySpider)
+            {
+                babySpider.gameObject.SetActive(false);
+            }
+        }
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
@@ -41,23 +53,33 @@ namespace RPGPlatformer.Effects
         {
             fractured = true;
 
-            //topPiece.Fracture();
-            //leftPiece.Fracture();
-            //rightPiece.Fracture();
-
             await Shake(GlobalGameTools.Instance.TokenSource.Token);
 
             topPiece.Break();
             leftPiece.Break();
             rightPiece.Break();
 
+            SpawnBabySpider();
+
             Destroy(gameObject, timeToDestroyAfterBreak);
+        }
+
+        private void SpawnBabySpider()
+        {
+            if (babySpider)
+            {
+                babySpider.transform.SetParent(null);
+                babySpider.gameObject.SetActive(true);
+                babySpider.AddForce(babySpider.mass * spiderSpawnAccel *
+                    new Vector2((float)rng.NextDouble() - .5f, 1), ForceMode2D.Impulse);
+            }
         }
 
         private async Task Shake(CancellationToken token)
         {
             var shakeForce = topPiece.Rb.mass * this.shakeForce * Vector2.right;
 
+            var n = rng.Next(numShakes / 2, 2 * numShakes);
             for (int i = 0; i < numShakes; i++)
             {
                 if (i == 1)

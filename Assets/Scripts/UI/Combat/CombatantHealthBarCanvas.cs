@@ -34,7 +34,7 @@ namespace RPGPlatformer.UI
             }
 
             cc.Combatant.Health.Stat.statBar = statBar;
-            tmp.text = $"{cc.Combatant.DisplayName} (Level {cc.Combatant.CombatLevel})";
+            tmp.text = $"{cc.Combatant.DisplayName}\n(Level {cc.Combatant.CombatLevel})";
 
             cc.CombatEntered += OnBeginEngagement;
             cc.CombatExited += OnEndEngagement;
