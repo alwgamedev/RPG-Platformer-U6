@@ -7713,7 +7713,7 @@ MonoBehaviour:
   - {fileID: 8254713963738691629}
   - {fileID: 2321543508875417384}
   - {fileID: 5579507722587143475}
-  speedLerpRate: 25
+  speedLerpRate: 10
 --- !u!114 &4144941228099318437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8028,7 +8028,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressionData:
     fitness:
-      level: 1
+      level: 3
       xp: 0
     defense:
       level: 1
@@ -8086,8 +8086,8 @@ MonoBehaviour:
   findStatBarInChildren: 0
   stat:
     minValue: 0
-    maxValue: 4000
-    defaultValue: 4000
+    maxValue: 1400
+    defaultValue: 1400
     replenishRate: 0
     autoReplenish: 1
     statBar: {fileID: 4489949363248811169}
@@ -8129,7 +8129,7 @@ MonoBehaviour:
     replenishRate: -0.05
     autoReplenish: 1
     statBar: {fileID: 0}
-  useAutoCalculatedHealthPoints: 1
+  useAutoCalculatedHealthPoints: 0
   dropLootOnFinalizeDeath: 1
   destroyOnFinalizeDeath: 1
   delayBeforeFinalizeDeath: 1
