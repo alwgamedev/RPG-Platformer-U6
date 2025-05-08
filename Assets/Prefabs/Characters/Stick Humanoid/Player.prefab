@@ -643,7 +643,7 @@ MonoBehaviour:
     minRotationLeft: {x: -1, y: 0}
   - movementType: 2
     moveDirection: 2
-    acceleration: 55
+    acceleration: 50
     flipSprite: 1
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 1
@@ -669,6 +669,7 @@ MonoBehaviour:
     minRotationRight: {x: 1, y: 0}
     maxRotationLeft: {x: -1, y: 0}
     minRotationLeft: {x: -1, y: 0}
+  moveAwayBackwards: 1
   wallDetectionOptions:
     detectWalls: 1
     numWallCastsPerThird: 2
@@ -781,7 +782,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressionData:
-    forceLevels: 0
     fitness:
       level: 1
       xp: 0
@@ -820,6 +820,7 @@ MonoBehaviour:
     replenishRate: 0.06
     autoReplenish: 1
     statBar: {fileID: 0}
+  hitEffectTransformOverride: {fileID: 0}
 --- !u!114 &369643323770825565
 MonoBehaviour:
   m_ObjectHideFlags: 0
