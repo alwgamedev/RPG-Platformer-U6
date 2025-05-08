@@ -1,10 +1,9 @@
-﻿using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Environment
 {
-    [ExecuteAlways]
-    public class BreakableObjectConfigurer : MonoBehaviour
+    [ExecuteInEditMode]
+    public class RigidbodyGroupConfigurer : MonoBehaviour
     {
         [SerializeField] PhysicsMaterial2D physicsMat;
         [SerializeField] float uniformMass;
@@ -12,6 +11,7 @@ namespace RPGPlatformer.Environment
         [SerializeField] LayerMask excludeLayers;
         [SerializeField] RigidbodyType2D bodyType;
         [SerializeField] bool freezeRotation;
+        [SerializeField] bool enableCollider;
 
         private void OnValidate()
         {
@@ -36,15 +36,9 @@ namespace RPGPlatformer.Environment
                 if (rb.TryGetComponent(out Collider2D c))
                 {
                     c.sharedMaterial = physicsMat;
-                    c.enabled = rb.bodyType == RigidbodyType2D.Dynamic;
+                    c.enabled = enableCollider;
                 }
             }
-        }
-
-        public void SetBodyType(RigidbodyType2D bodyType)
-        {
-            this.bodyType = bodyType;
-            UpdatePieces();
         }
     }
 }
