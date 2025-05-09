@@ -200,6 +200,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2833373770372381221}
   - {fileID: 6228484798234289335}
   - {fileID: 8807175088347621493}
   - {fileID: 4790085852600446367}
@@ -273,7 +274,6 @@ MonoBehaviour:
   - {fileID: 7982514116686344056}
   - {fileID: 1451034811490605956}
   breakDelay: 0.025
-  breakParticles: {fileID: 0}
 --- !u!1 &492004787161514407
 GameObject:
   m_ObjectHideFlags: 0
@@ -1311,6 +1311,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7460422792144190931}
   - {fileID: 3932800544191237313}
   - {fileID: 9186026789406046595}
   - {fileID: 6726182790468151293}
@@ -1372,7 +1373,6 @@ MonoBehaviour:
   - {fileID: 6763229947987559980}
   - {fileID: 1163807947196215604}
   breakDelay: 0.05
-  breakParticles: {fileID: 0}
 --- !u!1 &1211897924030484551
 GameObject:
   m_ObjectHideFlags: 0
@@ -8401,6 +8401,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4843374104291397863}
   - {fileID: 2618696250246690960}
   - {fileID: 7981302469685665330}
   - {fileID: 6998337957286926472}
@@ -8454,7 +8455,6 @@ MonoBehaviour:
   - {fileID: 913474316344697586}
   - {fileID: 2051168453272773887}
   breakDelay: 0.1
-  breakParticles: {fileID: 0}
 --- !u!1 &4308726298308609361
 GameObject:
   m_ObjectHideFlags: 0
@@ -9668,6 +9668,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 735672986952079811}
   - {fileID: 5743533890300585818}
   - {fileID: 6150290815180565890}
   - {fileID: 2054130022941553307}
@@ -9760,8 +9761,7 @@ MonoBehaviour:
   - {fileID: 5152660753009636304}
   - {fileID: 397823241647110622}
   - {fileID: 8926330065899857398}
-  breakDelay: 0
-  breakParticles: {fileID: 0}
+  breakDelay: 0.025
 --- !u!1 &4752745496683093940
 GameObject:
   m_ObjectHideFlags: 0
@@ -9793,6 +9793,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6968388335029156997}
   - {fileID: 8653322271534131265}
   - {fileID: 9050702885729611985}
   - {fileID: 7652066679363519519}
@@ -9844,7 +9845,6 @@ MonoBehaviour:
   - {fileID: 7016209108856134022}
   - {fileID: 4385819237793500126}
   breakDelay: 0.15
-  breakParticles: {fileID: 0}
 --- !u!1 &5094894907182012043
 GameObject:
   m_ObjectHideFlags: 0
@@ -11937,6 +11937,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6411696821678511207}
   - {fileID: 2493959594009602139}
   - {fileID: 8346014602383176944}
   - {fileID: 3752163915753048359}
@@ -11983,8 +11984,7 @@ MonoBehaviour:
   - {fileID: 1288334283478454494}
   - {fileID: 7671992135539989145}
   - {fileID: 3132879587425190362}
-  breakDelay: 0.2
-  breakParticles: {fileID: 0}
+  breakDelay: 0.15
 --- !u!1 &5997506580938067656
 GameObject:
   m_ObjectHideFlags: 0
@@ -13212,6 +13212,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4265110801810167577}
   - {fileID: 6092207384430520494}
   - {fileID: 6339200753467719256}
   - {fileID: 9128175420405385215}
@@ -13256,8 +13257,7 @@ MonoBehaviour:
   - {fileID: 5173331443419766038}
   - {fileID: 3638294067584544866}
   - {fileID: 6987420603908112259}
-  breakDelay: 0.2
-  breakParticles: {fileID: 0}
+  breakDelay: 0.15
 --- !u!1 &6555042916335934641
 GameObject:
   m_ObjectHideFlags: 0
@@ -14317,6 +14317,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6317493642096440932}
   - {fileID: 2589433264635957015}
   - {fileID: 5481264865733882043}
   - {fileID: 742732710836948157}
@@ -14366,7 +14367,6 @@ MonoBehaviour:
   - {fileID: 8415296333422112632}
   - {fileID: 880708874377476112}
   breakDelay: 0.15
-  breakParticles: {fileID: 0}
 --- !u!1 &8157017018105311076
 GameObject:
   m_ObjectHideFlags: 0
@@ -15718,6 +15718,516 @@ PolygonCollider2D:
       - {x: -0.0044955006, y: -0.019480502}
       - {x: 0.02347651, y: 0.019480502}
   m_UseDelaunayMesh: 0
+--- !u!1001 &296500416093890890
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8959261776406006706}
+    m_Modifications:
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_Name
+      value: Crumbling Soil Particles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: lengthInSec
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.33154142
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.46194053
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.5245282
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: InitialModule.startColor.minColor.b
+      value: 0.1751869
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: InitialModule.startColor.minColor.g
+      value: 0.24965404
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: InitialModule.startColor.minColor.r
+      value: 0.3584906
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+--- !u!4 &4265110801810167577 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+  m_PrefabInstance: {fileID: 296500416093890890}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1765406987374281846
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8457473279747569275}
+    m_Modifications:
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_Name
+      value: Crumbling Soil Particles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+--- !u!4 &2833373770372381221 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+  m_PrefabInstance: {fileID: 1765406987374281846}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3825936030624294800
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 9209305065555866531}
+    m_Modifications:
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_Name
+      value: Crumbling Soil Particles
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+--- !u!4 &735672986952079811 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+  m_PrefabInstance: {fileID: 3825936030624294800}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6387627245999014784
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8980005222587524687}
+    m_Modifications:
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_Name
+      value: Crumbling Soil Particles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.25
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+--- !u!4 &7460422792144190931 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+  m_PrefabInstance: {fileID: 6387627245999014784}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6888649696583664342
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5076439031873563251}
+    m_Modifications:
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.375
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_Name
+      value: Crumbling Soil Particles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.35
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+--- !u!4 &6968388335029156997 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+  m_PrefabInstance: {fileID: 6888649696583664342}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7482513534505298484
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 450635073632535259}
+    m_Modifications:
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_Name
+      value: Crumbling Soil Particles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: lengthInSec
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.45
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+--- !u!4 &6411696821678511207 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+  m_PrefabInstance: {fileID: 7482513534505298484}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7530556089761908791
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 112786201327033531}
+    m_Modifications:
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_Name
+      value: Crumbling Soil Particles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+--- !u!4 &6317493642096440932 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+  m_PrefabInstance: {fileID: 7530556089761908791}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8513599965389950947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15830,9 +16340,79 @@ MonoBehaviour:
   - {fileID: 2373874274787714642}
   - {fileID: 7381310778133499874}
   timeToDestroyGroupAfterBreak: 2
-  collisionBreakForce: 135
+  collisionBreakForce: 150
 --- !u!4 &6395682119626654962 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3378936736681986833, guid: ee70d445e4e7b0f49864ed6e2db4b8ad, type: 3}
   m_PrefabInstance: {fileID: 8513599965389950947}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8942681242454126260
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5369225473490849473}
+    m_Modifications:
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_Name
+      value: Crumbling Soil Particles
+      objectReference: {fileID: 0}
+    - target: {fileID: 7856554849706323598, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966227701482209219, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+--- !u!4 &4843374104291397863 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4552530246378438227, guid: 1dc7bd9441cd1164eb2b6c498dc31706, type: 3}
+  m_PrefabInstance: {fileID: 8942681242454126260}
   m_PrefabAsset: {fileID: 0}

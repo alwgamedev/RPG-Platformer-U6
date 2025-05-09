@@ -8,7 +8,7 @@ namespace RPGPlatformer.Environment
     {
         [SerializeField] Rigidbody2D[] rbs;
         [SerializeField] float breakDelay;
-        [SerializeField] ParticleSystem breakParticles;
+        //[SerializeField] ParticleSystem breakParticles;
 
         Collider2D[] colliders;
         bool hasBroken;
@@ -26,6 +26,11 @@ namespace RPGPlatformer.Environment
                     colliders[i] = rbs[i].GetComponent<Collider2D>();
                 }
             }
+
+            //if (breakParticles)
+            //{
+            //    breakParticles.GetComponent<ParticleSystemRenderer>().velocityScale = 0;
+            //}
         }
 
         public void EnableColliders(bool val)
@@ -54,10 +59,11 @@ namespace RPGPlatformer.Environment
             hasBroken = true;
             transform.SetParent(null);
 
-            if (breakParticles)
-            {
-                breakParticles.Play();
-            }
+            //if (breakParticles)
+            //{
+            //    //breakParticles.transform.position = transform.position + particleSystemOffset;
+            //    breakParticles.Play();
+            //}
 
             await MiscTools.DelayGameTime(breakDelay, token);
 
@@ -65,5 +71,14 @@ namespace RPGPlatformer.Environment
 
             Destroy(gameObject, timeToDestroy);
         }
+
+        //public void DetachParticles()
+        //{
+        //    if (breakParticles)
+        //    {
+        //        breakParticles.transform.SetParent(null);
+        //    }
+        //    //otherwise I can't get them to stop inheriting velocity and flying off
+        //}
     }
 }

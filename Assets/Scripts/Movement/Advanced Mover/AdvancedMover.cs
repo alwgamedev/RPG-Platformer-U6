@@ -15,6 +15,7 @@ namespace RPGPlatformer.Movement
         protected Vector2 doubleJumpForce;
         protected Vector2 adjacentWallDirection = Vector2.up;
         protected bool facingWall;
+        protected int waterLayer;
 
         public float RunSpeed => runSpeed;
         public float WalkSpeed => walkSpeed;
@@ -22,13 +23,44 @@ namespace RPGPlatformer.Movement
         public bool FacingWall => facingWall;
 
         public event Action AwkwardWallMoment;
+        public event Action WaterExited;
 
         protected override void Awake()
         {
             base.Awake();
 
             doubleJumpForce = doubleJumpForceMultiplier * jumpForce;
+            waterLayer = LayerMask.GetMask("Water");
         }
+
+
+        //WATER
+
+        private void OnTriggerEnter2D(Collider2D collider)
+        {
+            if (1 << collider.gameObject.layer == waterLayer)
+            {
+                Trigger(typeof(Swimming).Name);
+            }
+        }
+
+        protected virtual void OnTriggerExit2D(Collider2D collider)
+        {
+            if (1 << collider.gameObject.layer == waterLayer)
+            {
+                WaterExited?.Invoke();
+            }
+        }
+
+        public virtual void HandleWaterExit(bool stillInSwimmingState)
+        {
+            if (stillInSwimmingState)
+            {
+                TriggerFreefall();
+            }
+        }
+
+        //JUMPING
 
         public void Jump()
         {
@@ -161,6 +193,7 @@ namespace RPGPlatformer.Movement
         {
             base.OnDestroy();
             AwkwardWallMoment = null;
+            WaterExited = null;
         }
     }
 }

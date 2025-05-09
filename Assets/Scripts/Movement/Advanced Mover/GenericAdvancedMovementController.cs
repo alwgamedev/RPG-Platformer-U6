@@ -12,9 +12,12 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected WallDetectionOptions wallDetectionOptions;
 
         public override bool Jumping => stateManager.StateMachine.CurrentState == stateManager.StateGraph.jumping;
+        public virtual bool Swimming => stateManager.StateMachine.CurrentState == stateManager.StateGraph.swimming;
 
         protected override void Start()
         {
+            stateDriver.WaterExited += OnWaterExited;
+
             base.Start();
 
             UpdateMaxSpeed();
@@ -69,6 +72,11 @@ namespace RPGPlatformer.Movement
 
 
         //STATE CHANGE HANDLERS
+
+        protected virtual void OnWaterExited()
+        {
+            stateDriver.HandleWaterExit(Swimming);
+        }
 
         protected virtual void OnJumpingEntry()
         {

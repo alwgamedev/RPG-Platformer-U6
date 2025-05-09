@@ -114,6 +114,13 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        //protected virtual bool ShouldTriggerLandingIfGroundHit(bool jumping, bool freefalling)
+        //{
+        //    return (jumping && !verifyingJump) || (freefalling && !verifyingFreefall);
+        //}
+
+        //protected virtual bool ShouldTriggerFreefallIfNoGroundHit(bool jumping, bool freefalling)
+
         public void SetGravityScale(float f)
         {
             myRigidbody.gravityScale = f;
