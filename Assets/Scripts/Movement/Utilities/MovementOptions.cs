@@ -5,9 +5,9 @@ namespace RPGPlatformer.Movement
 {
     using static PhysicsTools;
 
-    public enum MovementType
+    public enum MovementStates
     {
-        Grounded, Freefall, Jumping, Flying, Climbing
+        Grounded, Freefall, Jumping, Flying, Climbing, Swimming
     }
 
     public enum MoveDirection
@@ -18,7 +18,7 @@ namespace RPGPlatformer.Movement
     [Serializable]
     public struct MovementOptions : ISerializationCallbackReceiver
     {
-        [SerializeField] MovementType movementType;
+        [SerializeField] MovementStates movementType;
         [SerializeField] MoveDirection moveDirection;
         [SerializeField] float acceleration;
         [SerializeField] bool flipSprite;
@@ -33,7 +33,7 @@ namespace RPGPlatformer.Movement
         [SerializeField] Vector2 maxRotationLeft;
         [SerializeField] Vector2 minRotationLeft;
 
-        public MovementType MovementType => movementType;
+        public MovementStates MovementType => movementType;
         public MoveDirection MoveDirection => moveDirection;
         public float Acceleration => acceleration;
         public bool FlipSprite => flipSprite;

@@ -669,6 +669,20 @@ MonoBehaviour:
     minRotationRight: {x: 1, y: 0}
     maxRotationLeft: {x: -1, y: 0}
     minRotationLeft: {x: -1, y: 0}
+  - movementType: 5
+    moveDirection: 2
+    acceleration: 1.8
+    flipSprite: 1
+    changeDirectionWrtGlobalUp: 0
+    clampXVelocityOnly: 0
+    rotateToDirection: 0
+    rotationSpeed: 0
+    maxRotationAngle: 0
+    minRotationAngle: 0
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
   moveAwayBackwards: 1
   wallDetectionOptions:
     detectWalls: 1
@@ -701,6 +715,7 @@ MonoBehaviour:
   adjustedHalfWidthFactor: 0.45
   runSpeed: 3
   walkSpeed: 1.2
+  swimSpeed: 1.2
   maxNumJumps: 2
   jumpForce: {x: 0, y: 290}
   doubleJumpForceMultiplier: 1.18

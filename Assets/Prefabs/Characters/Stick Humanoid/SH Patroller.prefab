@@ -548,6 +548,7 @@ MonoBehaviour:
   adjustedHalfWidthFactor: 0.45
   runSpeed: 2.4
   walkSpeed: 0.8
+  swimSpeed: 0.75
   maxNumJumps: 1
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
@@ -606,6 +607,21 @@ MonoBehaviour:
     minRotationRight: {x: 1, y: 0}
     maxRotationLeft: {x: -1, y: 0}
     minRotationLeft: {x: -1, y: 0}
+  - movementType: 5
+    moveDirection: 2
+    acceleration: 3
+    flipSprite: 1
+    changeDirectionWrtGlobalUp: 0
+    clampXVelocityOnly: 0
+    rotateToDirection: 0
+    rotationSpeed: 0
+    maxRotationAngle: 0
+    minRotationAngle: 0
+    maxRotationRight: {x: 1, y: 0}
+    minRotationRight: {x: 1, y: 0}
+    maxRotationLeft: {x: -1, y: 0}
+    minRotationLeft: {x: -1, y: 0}
+  moveAwayBackwards: 1
   wallDetectionOptions:
     detectWalls: 0
     numWallCastsPerThird: 0
@@ -615,6 +631,8 @@ MonoBehaviour:
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 2.5
   dropOffStopDistance: 0.5
+  rightBound: {fileID: 0}
+  leftBound: {fileID: 0}
 --- !u!114 &-2177855670895466878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,6 +648,7 @@ MonoBehaviour:
   pursuitRange: 8
   suspicionTime: 5
   playerEnemy: 1
+  setRunningWhenMaintainingMinimumCombatDistance: 0
 --- !u!114 &2807143126115891349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -737,6 +756,7 @@ MonoBehaviour:
     replenishRate: 0.06
     autoReplenish: 1
     statBar: {fileID: 0}
+  hitEffectTransformOverride: {fileID: 0}
 --- !u!114 &8124585906289909204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -783,6 +803,7 @@ MonoBehaviour:
   combatXPReward: 24
   dropSize: 0
   dropTable: {fileID: 0}
+  weaponSwapSOs: []
 --- !u!114 &8912017489112769141
 MonoBehaviour:
   m_ObjectHideFlags: 0

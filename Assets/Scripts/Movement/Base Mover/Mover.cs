@@ -20,7 +20,12 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected bool treatContactCharacterAsGround;
         [SerializeField] protected float adjustedHalfWidthFactor = 0.45f;
 
+        protected readonly string jumpingName = typeof(Jumping).Name;
+        protected readonly string freefallName = typeof(Freefall).Name;
+        protected readonly string swimmingName = typeof(Swimming).Name;
+
         protected int groundLayer;
+        protected int waterLayer;
         protected Collider2D myCollider;
         protected Rigidbody2D myRigidbody;
         protected float myHeight;
@@ -28,7 +33,8 @@ namespace RPGPlatformer.Movement
         protected float adjustedHalfWidth;
         protected float defaultGravityScale;
         protected bool verifyingJump;
-        protected bool verifyingFreefall;//TO-DO: could we just have one variable "verifyingAirborne"?
+        protected bool verifyingFreefall;
+        protected bool inWater;
         protected float groundednessTolerance;
         protected RaycastHit2D rightGroundHit;
         protected RaycastHit2D leftGroundHit;
@@ -54,6 +60,7 @@ namespace RPGPlatformer.Movement
         public event Action OnJump;
         public event Action OnFreefall;
         public event Action FreefallVerified;
+        public event Action WaterExited;
 
         protected virtual void Awake()
         {
@@ -71,6 +78,8 @@ namespace RPGPlatformer.Movement
             {
                 groundLayer = groundLayer | LayerMask.GetMask("Contact Character");
             }
+
+            waterLayer = LayerMask.GetMask("Water");
 
             groundednessTolerance = groundednessToleranceFactor * myHeight;
 
@@ -99,27 +108,44 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        public virtual void UpdateState(bool jumping, bool freefalling)
+        //returns whether a state change was triggered
+        public virtual void UpdateState(string currentState/*bool jumping, bool freefalling*/)
         {
+            bool jumping = currentState == jumpingName;
+            bool freefalling = currentState == freefallName;
+            bool swimming = currentState == swimmingName;
+
             if (rightGroundHit || leftGroundHit)
             {
-                if ((jumping && !verifyingJump) || (freefalling && !verifyingFreefall))
+                if (swimming || (jumping && !verifyingJump) || (freefalling && !verifyingFreefall))
                 {
                     TriggerLanding();
                 }
             }
-            else if (!jumping && !freefalling)
+            else if (inWater && !swimming && !verifyingJump && !verifyingFreefall)
+            {
+                Trigger(typeof(Swimming).Name);
+            }
+            else if (!inWater && !jumping && !freefalling)
             {
                 TriggerFreefall();
             }
         }
 
-        //protected virtual bool ShouldTriggerLandingIfGroundHit(bool jumping, bool freefalling)
+        //protected virtual bool ShouldTriggerLandingIfGroundHit(string currentState/*bool jumping, bool freefalling*/)
         //{
-        //    return (jumping && !verifyingJump) || (freefalling && !verifyingFreefall);
+        //    if (currentState == typeof(Jumping).Name && !verifyingJump)
+        //    {
+        //        return true;
+        //    }
+        //    if (currentState == )
+        //    //return (jumping && !verifyingJump) || (freefalling && !verifyingFreefall);
         //}
 
-        //protected virtual bool ShouldTriggerFreefallIfNoGroundHit(bool jumping, bool freefalling)
+        //protected virtual bool ShouldTriggerFreefallIfNoGroundHit(string currentState/*bool jumping, bool freefalling*/)
+        //{
+        //    return !jumping && !freefalling;
+        //}
 
         public void SetGravityScale(float f)
         {
@@ -150,6 +176,11 @@ namespace RPGPlatformer.Movement
             VerifyJump();
         }
 
+        protected virtual void TriggerSwimming()
+        {
+            Trigger(typeof(Swimming).Name);
+        }
+
         public virtual void Accelerate(Vector2 a)
         {
             myRigidbody.AddForce(myRigidbody.mass * a);
@@ -176,21 +207,6 @@ namespace RPGPlatformer.Movement
             myRigidbody.MoveWithoutAcceleration(FacingRight, backingUp, direction, maxSpeed, options);
         }
 
-        //public void RotateTowardsMovementDirection(Vector2 moveDirection, MovementOptions options)
-        //{
-        //    var tUp = FacingRight ? options.ClampedTrUpGivenGoalTrRight(moveDirection)
-        //        : options.ClampedTrUpGivenGoalTrLeft(moveDirection);
-        //    TweenTransformUpTowards(tUp.normalized, options.RotationSpeed);
-        //}
-
-        ////goal transformUp should be normalized
-        //public void TweenTransformUpTowards(Vector2 transformUp, float rotationalSpeed)
-        //{
-        //    var tweened = PhysicsTools.CheapRotationalTween(transform.up, transformUp, 
-        //        rotationalSpeed, Time.deltaTime);
-        //    transform.rotation = Quaternion.LookRotation(transform.forward, tweened);
-        //}
-
         public virtual void Stop(bool maintainVerticalVelocity = true)
         {
             if (maintainVerticalVelocity)
@@ -203,6 +219,15 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        public Vector2 OrientForce(Vector2 force)
+        {
+            force.x *= (int)CurrentOrientation;
+            return force;
+        }
+
+
+        //JUMPING
+
         public virtual void Jump(Vector2 force, bool triggerJumping = true)
         {
             myRigidbody.AddForce(force, ForceMode2D.Impulse);
@@ -210,12 +235,6 @@ namespace RPGPlatformer.Movement
             {
                 TriggerJumping();
             }
-        }
-
-        public Vector2 OrientForce(Vector2 force)
-        {
-            force.x *= (int)CurrentOrientation;
-            return force;
         }
 
         protected async void VerifyJump()
@@ -254,6 +273,9 @@ namespace RPGPlatformer.Movement
         {
             OnJump -= cts.Cancel;
         }
+
+
+        //FREEFALL
 
         protected async void VerifyFreefall()
         {
@@ -297,6 +319,38 @@ namespace RPGPlatformer.Movement
             OnFreefall -= cts.Cancel;
             OnJump -= cts.Cancel;
         }
+
+
+        //WATER
+
+        private void OnTriggerEnter2D(Collider2D collider)
+        {
+            if (1 << collider.gameObject.layer == waterLayer)
+            {
+                inWater = true;
+                Trigger(typeof(Swimming).Name);
+            }
+        }
+
+        protected virtual void OnTriggerExit2D(Collider2D collider)
+        {
+            if (1 << collider.gameObject.layer == waterLayer)
+            {
+                inWater = false;
+                WaterExited?.Invoke();
+            }
+        }
+
+        public virtual void HandleWaterExit(bool stillInSwimmingState)
+        {
+            if (stillInSwimmingState)
+            {
+                TriggerFreefall();
+            }
+        }
+
+
+        //ORIENTATION
 
         public virtual void SetOrientation(HorizontalOrientation orientation, bool updateDirectionFaced, 
             bool flipWrtGlobalUp)
@@ -373,6 +427,7 @@ namespace RPGPlatformer.Movement
             OnJump = null;
             OnFreefall = null;
             FreefallVerified = null;
+            WaterExited = null;
         }
     }
 }

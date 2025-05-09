@@ -21,6 +21,17 @@ namespace RPGPlatformer.Movement
             this.animationControl = animationControl;
         }
 
+        public override void Configure()
+        {
+            base.Configure();
+
+            StateGraph.grounded.OnEntry += AnimateLanding;
+            StateGraph.swimming.OnEntry += BeginAnimateSwimming;
+            StateGraph.swimming.OnExit += EndAnimateSwimming;
+
+            //animate freefall will get called by movement controller after freefall verification completes
+        }
+
         public void AnimateFreefall()
         {
             animationControl.SetTrigger("freefall");
@@ -29,6 +40,18 @@ namespace RPGPlatformer.Movement
         public void AnimateLanding()
         {
             animationControl.SetTrigger("land");
+        }
+
+        public void BeginAnimateSwimming()
+        {
+            animationControl.SetTrigger("beginSwim");
+            animationControl.ResetTrigger("endSwim");
+        }
+
+        public void EndAnimateSwimming()
+        {
+            animationControl.SetTrigger("endSwim");
+            animationControl.ResetTrigger("beginSwim");
         }
     }
 }

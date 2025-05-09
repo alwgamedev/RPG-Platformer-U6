@@ -11,21 +11,20 @@
     }
 
     public class Jumping : Airborne { }
-    public class Swimming : MoveState { }
 
     public class AdvancedMovementStateGraph : MovementStateGraph
     {
         public readonly Jumping jumping;
-        public readonly Swimming swimming;
+        //public readonly Swimming swimming;
 
         public AdvancedMovementStateGraph() : base()
         {
             jumping = CreateNewVertex<Jumping>();
-            swimming = CreateNewVertex<Swimming>();
+            //swimming = CreateNewVertex<Swimming>();
 
             AddEdgeBothWays((grounded, jumping));
             AddEdge((freefall, jumping));
-            AddEdgeBothWaysForAll(swimming);
+            AddEdgeBothWays((jumping, swimming));
             //^you could go swimming to freefall e.g. if you fall off a waterfall
         }
     }

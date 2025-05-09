@@ -48,6 +48,7 @@ namespace RPGPlatformer.Movement
         public bool Moving => (Vector2)MoveInput != Vector2.zero;
         public bool Grounded => stateManager.StateMachine.CurrentState == stateManager.StateGraph.grounded;
         public bool Freefalling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.freefall;
+        public virtual bool Swimming => stateManager.StateMachine.CurrentState == stateManager.StateGraph.swimming;
         public virtual bool Jumping => false;
         public IMountableEntity CurrentMount { get; protected set; }
         //can be any "ambient velocity source" (e.g. we are on a moving platform)
@@ -79,6 +80,7 @@ namespace RPGPlatformer.Movement
             InitializeFixedUpdate();
 
             stateDriver.FreefallVerified += OnFreefallVerified;
+            stateDriver.WaterExited += OnWaterExited;
 
             stateDriver.InitializeState();
         }
@@ -115,10 +117,10 @@ namespace RPGPlatformer.Movement
 
         protected virtual void BuildMovementOptionsDictionary()
         {
-            foreach (var type in Enum.GetValues(typeof(MovementType)))
+            foreach (var s in Enum.GetValues(typeof(MovementStates)))
             {
-                GetMovementOptions[((MovementType)type).ToString()]
-                    = movementOptions.FirstOrDefault(x => x.MovementType == (MovementType)type);
+                GetMovementOptions[((MovementStates)s).ToString()]
+                    = movementOptions.FirstOrDefault(x => x.MovementType == (MovementStates)s);
             }
         }
 
@@ -320,14 +322,19 @@ namespace RPGPlatformer.Movement
             }
         }
 
+        protected void OnFreefallExit()
+        {
+            stateDriver.UpdateDirectionFaced(currentMovementOptions.ChangeDirectionWrtGlobalUp);
+        }
+
         protected virtual void IgnoreMoveInputNextUpdate()
         {
             ignoreMoveInputNextUpdate = true;
         }
 
-        protected void OnFreefallExit()
+        protected virtual void OnWaterExited()
         {
-            stateDriver.UpdateDirectionFaced(currentMovementOptions.ChangeDirectionWrtGlobalUp);
+            stateDriver.HandleWaterExit(Swimming);
         }
 
 

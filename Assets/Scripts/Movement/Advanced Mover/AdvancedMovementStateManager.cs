@@ -23,7 +23,7 @@ namespace RPGPlatformer.Movement
             base.Configure();
 
             StateGraph.jumping.OnExit += stateDriver.ResetJumpNum;
-            StateGraph.grounded.OnEntry += AnimateLanding;
+            //StateGraph.grounded.OnEntry += AnimateLanding;
 
             StateGraph.jumping.OnEntry += AnimateJumping;
             StateGraph.jumping.OnEntryToSameState += AnimateDoubleJump;

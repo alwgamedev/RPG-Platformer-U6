@@ -16,18 +16,22 @@ namespace RPGPlatformer.Movement
     public abstract class Airborne : MoveState { }
     public class Grounded : MoveState { }
     public class Freefall : Airborne { }
+    public class Swimming : MoveState { }
 
     public class MovementStateGraph : StateGraph
     {
         public readonly Grounded grounded;
         public readonly Freefall freefall;
+        public readonly Swimming swimming;
 
         public MovementStateGraph() : base()
         {
             grounded = CreateNewVertex<Grounded>();
             freefall = CreateNewVertex<Freefall>();
+            swimming = CreateNewVertex<Swimming>();
 
             AddEdgeBothWays((grounded, freefall));
+            AddEdgeBothWaysForAll(swimming);
         }
     }
 }

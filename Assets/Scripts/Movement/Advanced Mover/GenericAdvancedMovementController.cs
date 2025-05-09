@@ -12,12 +12,9 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected WallDetectionOptions wallDetectionOptions;
 
         public override bool Jumping => stateManager.StateMachine.CurrentState == stateManager.StateGraph.jumping;
-        public virtual bool Swimming => stateManager.StateMachine.CurrentState == stateManager.StateGraph.swimming;
 
         protected override void Start()
-        {
-            stateDriver.WaterExited += OnWaterExited;
-
+        { 
             base.Start();
 
             UpdateMaxSpeed();
@@ -56,7 +53,7 @@ namespace RPGPlatformer.Movement
         protected override void UpdateMover()
         {
             stateDriver.UpdateGroundHits();
-            stateDriver.UpdateState(Jumping, Freefalling);
+            stateDriver.UpdateState(stateManager.StateMachine.CurrentState.name);
         }
 
         public virtual void ToggleRunning()
@@ -73,11 +70,6 @@ namespace RPGPlatformer.Movement
 
         //STATE CHANGE HANDLERS
 
-        protected virtual void OnWaterExited()
-        {
-            stateDriver.HandleWaterExit(Swimming);
-        }
-
         protected virtual void OnJumpingEntry()
         {
             if (stateManager.IsWallClinging())
@@ -88,20 +80,37 @@ namespace RPGPlatformer.Movement
 
         protected virtual void UpdateMaxSpeed()
         {
-            stateDriver.MaxSpeed = stateDriver.Running ? stateDriver.RunSpeed : stateDriver.WalkSpeed;
+            if (Swimming)
+            {
+                stateDriver.MaxSpeed = stateDriver.SwimSpeed;
+            }
+            else
+            {
+                stateDriver.MaxSpeed = stateDriver.Running ? stateDriver.RunSpeed : stateDriver.WalkSpeed;
+            }
         }
 
         protected virtual void AnimateMovement()
         {
             if (Grounded)
             {
-                if ((Vector2)MoveInput == Vector2.zero)
+                if (!Moving)
                 {
                     stateManager.AnimateMovement(0);
                     return;
                     //animator will transition to idle, but the transition is smooth!
                 }
                 stateManager.AnimateMovement(SpeedFraction(stateDriver.RunSpeed));
+            }
+            else if (Swimming)
+            {
+                if (!Moving)
+                {
+                    stateManager.AnimateMovement(0);
+                    return;
+                }
+
+                stateManager.AnimateMovement(Mathf.Abs(HorizontalSpeedFraction(stateDriver.SwimSpeed)));
             }
         }
 
@@ -115,17 +124,17 @@ namespace RPGPlatformer.Movement
             stateDriver.UpdateAdjacentWall(Grounded, wallDetectionOptions.NumWallCastsPerThird, 
                 wallDetectionOptions.WallCastDistanceFactor);
             SetDownSpeed();
-            HandleAdjacentWallInteraction(/*!Grounded*/);
+            HandleAdjacentWallInteraction();
         }
 
-        protected virtual void HandleAdjacentWallInteraction(/*bool airborne*/)
+        protected virtual void HandleAdjacentWallInteraction()
         {
-            if ((Vector2)moveInput != Vector2.zero && stateDriver.FacingWall)
+            if (Moving && stateDriver.FacingWall)
             {
                 stateManager.AnimateWallScramble(false);
                 if (!stateManager.IsWallClinging())
                 {
-                    BeginWallCling(/*airborne*/);
+                    BeginWallCling();
                 }
                 else
                 {
@@ -151,10 +160,10 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void BeginWallCling(/*bool airborne*/)
+        protected virtual void BeginWallCling()
         {
             stateManager.AnimateWallCling(true);
-            stateDriver.BeginWallCling(/*airborne,*/ wallDetectionOptions.WallClingRotationSpeed);
+            stateDriver.BeginWallCling(wallDetectionOptions.WallClingRotationSpeed);
         }
 
         protected virtual void EndWallCling()

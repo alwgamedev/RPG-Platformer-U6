@@ -7,6 +7,7 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected float runSpeed = 3;
         [SerializeField] protected float walkSpeed = 0.8f;
+        [SerializeField] protected float swimSpeed = .25f;
         [SerializeField] protected int maxNumJumps = 2;
         [SerializeField] protected Vector2 jumpForce = 375 * Vector2.up;
         [SerializeField] protected float doubleJumpForceMultiplier = 1.18f;
@@ -15,15 +16,14 @@ namespace RPGPlatformer.Movement
         protected Vector2 doubleJumpForce;
         protected Vector2 adjacentWallDirection = Vector2.up;
         protected bool facingWall;
-        protected int waterLayer;
 
         public float RunSpeed => runSpeed;
         public float WalkSpeed => walkSpeed;
+        public float SwimSpeed => swimSpeed;
         public virtual bool Running { get; set; }
         public bool FacingWall => facingWall;
 
         public event Action AwkwardWallMoment;
-        public event Action WaterExited;
 
         protected override void Awake()
         {
@@ -33,32 +33,6 @@ namespace RPGPlatformer.Movement
             waterLayer = LayerMask.GetMask("Water");
         }
 
-
-        //WATER
-
-        private void OnTriggerEnter2D(Collider2D collider)
-        {
-            if (1 << collider.gameObject.layer == waterLayer)
-            {
-                Trigger(typeof(Swimming).Name);
-            }
-        }
-
-        protected virtual void OnTriggerExit2D(Collider2D collider)
-        {
-            if (1 << collider.gameObject.layer == waterLayer)
-            {
-                WaterExited?.Invoke();
-            }
-        }
-
-        public virtual void HandleWaterExit(bool stillInSwimmingState)
-        {
-            if (stillInSwimmingState)
-            {
-                TriggerFreefall();
-            }
-        }
 
         //JUMPING
 
@@ -96,13 +70,8 @@ namespace RPGPlatformer.Movement
 
         //WALL CLINGING
 
-        public void BeginWallCling(/*bool airborne,*/ float rotationSpeed)
+        public void BeginWallCling(float rotationSpeed)
         {
-            //if (airborne)
-            //{
-            //    TriggerLanding();
-            //}
-
             TriggerLanding();
 
             RotateTowardsAdjacentWall(rotationSpeed);
@@ -193,7 +162,6 @@ namespace RPGPlatformer.Movement
         {
             base.OnDestroy();
             AwkwardWallMoment = null;
-            WaterExited = null;
         }
     }
 }

@@ -28,12 +28,16 @@ namespace RPGPlatformer.Movement
 
         public void OnClimbingEntry()
         {
-            animationControl.SetBool("climbing", true);
+            //animationControl.SetBool("climbing", true);
+            animationControl.SetTrigger("beginClimb");
+            animationControl.ResetTrigger("endClimb");
         }
 
         public void OnClimbingExit()
         {
-            animationControl.SetBool("climbing", false);
+            animationControl.SetTrigger("endClimb");
+            animationControl.ResetTrigger("beginClimb");
+            //animationControl.SetBool("climbing", false);
         }
 
         public void AnimateClimbing(float moveInput)
