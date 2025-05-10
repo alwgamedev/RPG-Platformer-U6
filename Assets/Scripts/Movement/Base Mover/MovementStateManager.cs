@@ -44,14 +44,12 @@ namespace RPGPlatformer.Movement
 
         public void BeginAnimateSwimming()
         {
-            animationControl.SetTrigger("beginSwim");
-            animationControl.ResetTrigger("endSwim");
+            animationControl.SetBool("swimming", true);
         }
 
         public void EndAnimateSwimming()
         {
-            animationControl.SetTrigger("endSwim");
-            animationControl.ResetTrigger("beginSwim");
+            animationControl.SetBool("swimming", false);
         }
     }
 }
