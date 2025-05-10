@@ -3181,11 +3181,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2765709863372221830, guid: f5381072d815e164e84021737173a10a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.6
+      value: -8.4
       objectReference: {fileID: 0}
     - target: {fileID: 2765709863372221830, guid: f5381072d815e164e84021737173a10a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.43
+      value: -6.53
       objectReference: {fileID: 0}
     - target: {fileID: 2765709863372221830, guid: f5381072d815e164e84021737173a10a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3861,6 +3861,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2765709863372221830, guid: f5381072d815e164e84021737173a10a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 951298213}
+    - targetCorrespondingSourceObject: {fileID: 2765709863372221830, guid: f5381072d815e164e84021737173a10a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6528260786197128226}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5381072d815e164e84021737173a10a, type: 3}
 --- !u!1 &687786265
@@ -7439,17 +7442,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Water
       objectReference: {fileID: 0}
-    - target: {fileID: 5568771760887523444, guid: c00116c980a79e44887fbd1e1faaa132, type: 3}
-      propertyPath: m_Enabled
+    - target: {fileID: 347366266739711597, guid: c00116c980a79e44887fbd1e1faaa132, type: 3}
+      propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6528260785499127475, guid: c00116c980a79e44887fbd1e1faaa132, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6528260785499127475, guid: c00116c980a79e44887fbd1e1faaa132, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6528260785499127475, guid: c00116c980a79e44887fbd1e1faaa132, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7494,30 +7489,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 347366266739711597, guid: c00116c980a79e44887fbd1e1faaa132, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2752121160950181375}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c00116c980a79e44887fbd1e1faaa132, type: 3}
---- !u!1 &2752121160950181374 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 347366266739711597, guid: c00116c980a79e44887fbd1e1faaa132, type: 3}
-  m_PrefabInstance: {fileID: 2752121160950181373}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2752121160950181375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2752121160950181374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 722eda2de9397824990a31e7104a35a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fluidDensity: 19000
-  dampingFactor: 100
 --- !u!1001 &3694604445217876962
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8673,6 +8646,108 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
+--- !u!4 &6528260786197128226 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+  m_PrefabInstance: {fileID: 6634168656627947258}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6634168656627947258
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 63536159}
+    m_Modifications:
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: numSprings
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: agitationMax
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: agitationMin
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: agitationBound
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: agitationDamping
+      value: 25000
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: agitationDampingPower
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.2747002
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.019655704
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752797798078596411, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: fluidDensity
+      value: 16500
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752797798078596411, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: dampingFactor
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8983547300682796491, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_Name
+      value: Procedural Water
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062588823146652322, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062588823146652322, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_UsedByEffector
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
 --- !u!1001 &6784442923098561529
 PrefabInstance:
   m_ObjectHideFlags: 0

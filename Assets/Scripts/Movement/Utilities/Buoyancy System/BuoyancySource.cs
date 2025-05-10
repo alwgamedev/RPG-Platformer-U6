@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Environment;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -7,6 +8,13 @@ namespace RPGPlatformer.Movement
         [SerializeField] float fluidDensity;
         [SerializeField] float dampingFactor;
         //[SerializeField] float testingHeight;
+
+        WaterMeshGenerator waterMesh;
+
+        private void Awake()
+        {
+            waterMesh = GetComponent<WaterMeshGenerator>();
+        }
 
         public Vector2 BuoyancyForce(float areaDisplaced)
         {
@@ -24,6 +32,10 @@ namespace RPGPlatformer.Movement
         //to-do
         public float FluidHeight(float xPosition)
         {
+            if (waterMesh)
+            {
+                return waterMesh.WaveYPosition(xPosition);
+            }
             return transform.position.y + 0.5f * transform.lossyScale.y;
         }
     }
