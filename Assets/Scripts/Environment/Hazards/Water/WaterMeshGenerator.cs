@@ -15,6 +15,7 @@ namespace RPGPlatformer.Environment
         [SerializeField] float dampingFactor;
         [SerializeField] float agitationDamping;
         [SerializeField] float agitationDampingPower;
+        [SerializeField] float agitationScale;
         [SerializeField] float waveSpreadRate;
         [SerializeField] int waveSmoothingIterations;
         [SerializeField] float testSplash;
@@ -64,7 +65,7 @@ namespace RPGPlatformer.Environment
 
             if (TryGetComponent(out BoxCollider2D b))
             {
-                b.size = new(width, height + 1);
+                b.size = new(width, height);
                 b.offset = Vector2.zero;
             }
         }
@@ -143,23 +144,20 @@ namespace RPGPlatformer.Environment
         public void AgitateWater(float x, float y, float halfWidth, float velocityY)
         {
             x -= transform.position.x - this.halfWidth;
-            y -= transform.position.y + halfHeight;
+            //y = Mathf.Abs(y - transform.position.y - halfHeight);
 
             if (x < 0 || x > width)
                 return;
 
             int iMin = (int)Mathf.Clamp((x - halfWidth) / springSpacing, 0, numSprings - 1);
             int iMax = (int)Mathf.Clamp((x + halfWidth) / springSpacing, 0, numSprings - 1);
-            float z;
+            //float z;
 
 
             for (int i = iMin; i <= iMax; i++)
             {
-                //if (y > springs[i].Displacement)
-                //    continue;
-
-                z = agitationDamping * Mathf.Pow(Mathf.Abs(springs[i].Displacement - y), agitationDampingPower);
-                PushSpring(i, velocityY / (1 + z));
+                //z = agitationDamping * Mathf.Pow(y, agitationDampingPower);
+                PushSpring(i, agitationScale * Time.deltaTime * velocityY);//agitationScale * velocityY / (1 + z));
             }
         }
 

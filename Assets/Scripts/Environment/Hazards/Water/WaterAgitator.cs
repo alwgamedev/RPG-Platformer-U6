@@ -19,10 +19,7 @@ namespace RPGPlatformer.Environment
 
         private void FixedUpdate()
         {
-            if (waterMesh)
-            {
-                waterMesh.AgitateWater(transform.position.x, transform.position.y, halfWidth, rb.linearVelocityY);
-            }
+            AgitateWater();
         }
 
         private void OnTriggerEnter2D(Collider2D collider)
@@ -33,6 +30,7 @@ namespace RPGPlatformer.Environment
             if (collider.gameObject.TryGetComponent(out WaterMeshGenerator w))
             {
                 waterMesh = w;
+                AgitateWater();
             }
         }
 
@@ -41,6 +39,14 @@ namespace RPGPlatformer.Environment
             if (waterMesh && collider.transform == waterMesh.transform)
             {
                 waterMesh = null;
+            }
+        }
+
+        private void AgitateWater()
+        {
+            if (waterMesh)
+            {
+                waterMesh.AgitateWater(transform.position.x, transform.position.y, halfWidth, rb.linearVelocityY);
             }
         }
     }

@@ -67,7 +67,7 @@ BoxCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 1
-  m_UsedByEffector: 1
+  m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
@@ -80,7 +80,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 8, y: 5}
+  m_Size: {x: 8, y: 4}
   m_EdgeRadius: 0
 --- !u!114 &6752797798078596411
 MonoBehaviour:
@@ -94,8 +94,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722eda2de9397824990a31e7104a35a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fluidDensity: 17000
-  dampingFactor: 200
+  fluidDensity: 17250
+  dampingFactor: 250
 --- !u!33 &1249946842698044796
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -164,10 +164,11 @@ MonoBehaviour:
   halfWidth: 4
   halfHeight: 2
   numSprings: 300
-  springConstant: 0.02
-  dampingFactor: 0.03
-  agitationDamping: 0
-  agitationDampingPower: 0
-  waveSpreadRate: 0.45
-  waveSmoothingIterations: 4
+  springConstant: 0.025
+  dampingFactor: 0.05
+  agitationDamping: 2500
+  agitationDampingPower: 1
+  agitationScale: 0.2
+  waveSpreadRate: 0.35
+  waveSmoothingIterations: 12
   testSplash: 1
