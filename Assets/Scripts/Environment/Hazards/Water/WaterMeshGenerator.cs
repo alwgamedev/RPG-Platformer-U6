@@ -13,8 +13,6 @@ namespace RPGPlatformer.Environment
         [Min(2)][SerializeField] int numSprings;
         [SerializeField] float springConstant;
         [SerializeField] float dampingFactor;
-        [SerializeField] float agitationDamping;
-        [SerializeField] float agitationDampingPower;
         [SerializeField] float agitationScale;
         [SerializeField] float waveSpreadRate;
         [SerializeField] int waveSmoothingIterations;
@@ -144,20 +142,17 @@ namespace RPGPlatformer.Environment
         public void AgitateWater(float x, float y, float halfWidth, float velocityY)
         {
             x -= transform.position.x - this.halfWidth;
-            //y = Mathf.Abs(y - transform.position.y - halfHeight);
 
             if (x < 0 || x > width)
                 return;
 
             int iMin = (int)Mathf.Clamp((x - halfWidth) / springSpacing, 0, numSprings - 1);
             int iMax = (int)Mathf.Clamp((x + halfWidth) / springSpacing, 0, numSprings - 1);
-            //float z;
 
 
             for (int i = iMin; i <= iMax; i++)
             {
-                //z = agitationDamping * Mathf.Pow(y, agitationDampingPower);
-                PushSpring(i, agitationScale * Time.deltaTime * velocityY);//agitationScale * velocityY / (1 + z));
+                PushSpring(i, agitationScale * Time.deltaTime * velocityY);
             }
         }
 

@@ -8659,6 +8659,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 63536159}
     m_Modifications:
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: halfWidth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: halfHeight
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: numSprings
+      value: 320
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: dampingFactor
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: agitationScale
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: springConstant
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: waveSpreadRate
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9676402158427503, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: waveSmoothingIterations
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 482098789093029217, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.2747002
@@ -8699,9 +8731,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6752797798078596411, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: fluidDensity
+      value: 16750
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752797798078596411, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: dampingFactor
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 8983547300682796491, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
       propertyPath: m_Name
       value: Procedural Water
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062588823146652322, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_Size.x
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9062588823146652322, guid: 0881e24c5e2661f41bceefdc5eae399d, type: 3}
+      propertyPath: m_Size.y
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

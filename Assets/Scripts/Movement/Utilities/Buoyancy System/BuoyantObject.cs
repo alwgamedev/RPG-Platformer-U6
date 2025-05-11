@@ -1,15 +1,22 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Environment;
+using System;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
     public class BuoyantObject : MonoBehaviour
     {
+        [SerializeField] float exitBuffer = .1f;
+
         Rigidbody2D rb;
         Collider2D coll;
         BuoyancySource buoyancySource;
 
         public float Width { get; private set; }
         public float Height { get; private set; }
+
+        public event Action<BuoyancySource> WaterEntered;
+        public event Action WaterExited;
 
         private void Awake()
         {
@@ -24,17 +31,25 @@ namespace RPGPlatformer.Movement
         {
             if (buoyancySource /*|| !buoyancySource.gameObject.activeInHierarchy*/)
             {
-                rb.AddForce(buoyancySource.BuoyancyForce(
-                    DisplacedArea(buoyancySource.FluidHeight(coll.bounds.center.x))));
+                var h = buoyancySource.FluidHeight(coll.bounds.center.x);
+
+                if (coll.bounds.min.y > h + exitBuffer)
+                {
+                    buoyancySource = null;
+                    WaterExited?.Invoke();
+                    return;
+                }
+
+                rb.AddForce(buoyancySource.BuoyancyForce(DisplacedArea(h)));
 
                 var s = rb.linearVelocity.magnitude;
                 if (s > 1E-05f)//unity uses this in their normalize function
                     //(not using normalize bc I need the speed, and don't want to compute magnitude twice)
                 {
                     var u = rb.linearVelocity / s;
-                    var a = CrossSectionWidth(u);
+                    var c = CrossSectionWidth(u);
 
-                    rb.AddForce(buoyancySource.DragForce(s, a, u));
+                    rb.AddForce(buoyancySource.DragForce(s, c, u));
                 }
             }
         }
@@ -65,15 +80,30 @@ namespace RPGPlatformer.Movement
             if (collider.gameObject.TryGetComponent(out BuoyancySource b))
             {
                 buoyancySource = b;
+                WaterEntered?.Invoke(b);
             }
         }
 
-        private void OnTriggerExit2D(Collider2D collider)
+        private void OnTriggerStay2D(Collider2D collider)
         {
-            if (buoyancySource && collider.transform == buoyancySource.transform)
+            if (!buoyancySource)
             {
-                buoyancySource = null;
+                OnTriggerEnter2D(collider);
             }
+        }
+
+        //private void OnTriggerExit2D(Collider2D collider)
+        //{
+        //    if (buoyancySource && collider.transform == buoyancySource.transform)
+        //    {
+        //        buoyancySource = null;
+        //    }
+        //}
+
+        private void OnDestroy()
+        {
+            WaterEntered = null;
+            WaterExited = null;
         }
     }
 }

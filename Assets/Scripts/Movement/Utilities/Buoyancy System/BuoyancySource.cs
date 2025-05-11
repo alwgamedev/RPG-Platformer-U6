@@ -9,11 +9,11 @@ namespace RPGPlatformer.Movement
         [SerializeField] float dampingFactor;
         //[SerializeField] float testingHeight;
 
-        WaterMeshGenerator waterMesh;
+        public WaterMeshGenerator WaterMesh { get; private set; }
 
         private void Awake()
         {
-            waterMesh = GetComponent<WaterMeshGenerator>();
+            WaterMesh = GetComponent<WaterMeshGenerator>();
         }
 
         public Vector2 BuoyancyForce(float areaDisplaced)
@@ -32,9 +32,9 @@ namespace RPGPlatformer.Movement
         //to-do
         public float FluidHeight(float xPosition)
         {
-            if (waterMesh)
+            if (WaterMesh)
             {
-                return waterMesh.WaveYPosition(xPosition);
+                return WaterMesh.WaveYPosition(xPosition);
             }
             return transform.position.y + 0.5f * transform.lossyScale.y;
         }
