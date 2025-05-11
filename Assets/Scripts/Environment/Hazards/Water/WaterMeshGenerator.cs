@@ -2,21 +2,19 @@
 
 namespace RPGPlatformer.Environment
 {
-    //[RequireComponent(typeof(BoxCollider2D))]
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
-    //[ExecuteAlways]
     public class WaterMeshGenerator : MonoBehaviour
     {
         [Min(.01f)][SerializeField] float halfWidth;
         [Min(.01f)][SerializeField] float halfHeight;
+        [SerializeField] float surfaceColliderBuffer;
         [Min(2)][SerializeField] int numSprings;
         [SerializeField] float springConstant;
         [SerializeField] float dampingFactor;
         [SerializeField] float agitationScale;
         [SerializeField] float waveSpreadRate;
         [SerializeField] int waveSmoothingIterations;
-        [SerializeField] float testSplash;
 
         Spring1D[] springs;
         float[] deltas;//i -> springs[i + 1].disp - springs[i].disp
@@ -26,7 +24,6 @@ namespace RPGPlatformer.Environment
         float springSpacing;
 
         Mesh mesh;
-        MeshFilter meshFilter;
         Vector3[] vertices;
 
         private void OnValidate()
@@ -38,9 +35,7 @@ namespace RPGPlatformer.Environment
         {
             SetDimensions();
             InitializeSprings();
-
-            meshFilter = GetComponent<MeshFilter>();
-            InitializeMesh();
+            GenerateMesh();
         }
 
         private void FixedUpdate()
@@ -63,8 +58,8 @@ namespace RPGPlatformer.Environment
 
             if (TryGetComponent(out BoxCollider2D b))
             {
-                b.size = new(width, height);
-                b.offset = Vector2.zero;
+                b.size = new(width, height + surfaceColliderBuffer);
+                b.offset = 0.5f * surfaceColliderBuffer * Vector2.up;
             }
         }
 
@@ -79,8 +74,10 @@ namespace RPGPlatformer.Environment
             deltas = new float[numSprings - 1];
         }
 
-        private void InitializeMesh()
+        public void GenerateMesh()
         {
+            var meshFilter = GetComponent<MeshFilter>();
+
             mesh = new();
 
             vertices = new Vector3[2 * numSprings];
@@ -119,8 +116,6 @@ namespace RPGPlatformer.Environment
             mesh.uv = uv;
 
             meshFilter.mesh = mesh;
-
-
         }
 
 
@@ -169,10 +164,10 @@ namespace RPGPlatformer.Environment
             int i = (int)d;
             if (i >= numSprings - 1)
             {
-                return transform.position.y + vertices[i].y;
+                return transform.position.y + vertices[i].y;// + surfaceColliderBuffer;
             }
             return transform.position.y +
-                Mathf.Lerp(vertices[i].y, vertices[i + 1].y, d - i);
+                Mathf.Lerp(vertices[i].y, vertices[i + 1].y, d - i);// + surfaceColliderBuffer;
         }
 
         private void UpdateSprings()

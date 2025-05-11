@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Core;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -64,6 +65,12 @@ namespace RPGPlatformer.Movement
         public override void SetRunning(bool val)
         {
             stateDriver.Running = val;
+            UpdateMaxSpeed();
+        }
+
+        protected override void UpdateMoveOptions(State state)
+        {
+            base.UpdateMoveOptions(state);
             UpdateMaxSpeed();
         }
 

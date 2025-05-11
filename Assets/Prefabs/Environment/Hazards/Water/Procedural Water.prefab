@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 6752797798078596411}
   - component: {fileID: 1249946842698044796}
   - component: {fileID: 67757955236110008}
-  - component: {fileID: 9676402158427503}
+  - component: {fileID: 1876302135158410637}
+  - component: {fileID: 1804120756768887523}
   m_Layer: 4
   m_Name: Procedural Water
   m_TagString: Untagged
@@ -70,7 +71,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0, y: -0.1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -80,7 +81,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 8, y: 4}
+  m_Size: {x: 8, y: 3.8}
   m_EdgeRadius: 0
 --- !u!114 &6752797798078596411
 MonoBehaviour:
@@ -94,8 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722eda2de9397824990a31e7104a35a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fluidDensity: 17250
-  dampingFactor: 250
+  fluidDensity: 11000
+  dampingFactor: 260
 --- !u!33 &1249946842698044796
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -127,7 +128,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: fd2c34a4e49953d4893f330a774ad015, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -149,7 +150,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &9676402158427503
+--- !u!114 &1876302135158410637
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,12 +164,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   halfWidth: 4
   halfHeight: 2
-  numSprings: 300
-  springConstant: 0.025
-  dampingFactor: 0.05
-  agitationDamping: 2500
-  agitationDampingPower: 1
-  agitationScale: 0.2
-  waveSpreadRate: 0.35
-  waveSmoothingIterations: 12
-  testSplash: 1
+  surfaceColliderBuffer: -0.2
+  numSprings: 320
+  springConstant: 0.06
+  dampingFactor: 0.065
+  agitationScale: 0.25
+  waveSpreadRate: 0.2
+  waveSmoothingIterations: 6
+--- !u!210 &1804120756768887523
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8983547300682796491}
+  m_Enabled: 1
+  m_SortingLayerID: 1074360337
+  m_SortingLayer: 4
+  m_SortingOrder: 0
+  m_SortAtRoot: 0

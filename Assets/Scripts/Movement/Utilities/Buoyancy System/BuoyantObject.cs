@@ -7,13 +7,16 @@ namespace RPGPlatformer.Movement
     public class BuoyantObject : MonoBehaviour
     {
         [SerializeField] float exitBuffer = .1f;
+        [SerializeField] float effectiveWidthMultiplier = 1;
 
         Rigidbody2D rb;
         Collider2D coll;
         BuoyancySource buoyancySource;
+        bool inWater;
 
         public float Width { get; private set; }
         public float Height { get; private set; }
+        public bool InWater => inWater;
 
         public event Action<BuoyancySource> WaterEntered;
         public event Action WaterExited;
@@ -23,19 +26,20 @@ namespace RPGPlatformer.Movement
             rb = GetComponent<Rigidbody2D>();
             coll = GetComponent<Collider2D>();
 
-            Width = coll.bounds.max.x - coll.bounds.min.x;
+            Width = effectiveWidthMultiplier * (coll.bounds.max.x - coll.bounds.min.x);
             Height = coll.bounds.max.y - coll.bounds.min.y;
         }
 
         private void FixedUpdate()
         {
-            if (buoyancySource /*|| !buoyancySource.gameObject.activeInHierarchy*/)
+            if (buoyancySource && buoyancySource.gameObject.activeInHierarchy)
             {
                 var h = buoyancySource.FluidHeight(coll.bounds.center.x);
 
                 if (coll.bounds.min.y > h + exitBuffer)
                 {
                     buoyancySource = null;
+                    inWater = false;
                     WaterExited?.Invoke();
                     return;
                 }
@@ -48,9 +52,14 @@ namespace RPGPlatformer.Movement
                 {
                     var u = rb.linearVelocity / s;
                     var c = CrossSectionWidth(u);
-
                     rb.AddForce(buoyancySource.DragForce(s, c, u));
                 }
+            }
+            else if (inWater) //in case buoyancy source got destroyed or disabled
+            {
+                inWater = false;
+                buoyancySource = null;
+                WaterExited?.Invoke();
             }
         }
 
@@ -80,6 +89,7 @@ namespace RPGPlatformer.Movement
             if (collider.gameObject.TryGetComponent(out BuoyancySource b))
             {
                 buoyancySource = b;
+                inWater = true;
                 WaterEntered?.Invoke(b);
             }
         }

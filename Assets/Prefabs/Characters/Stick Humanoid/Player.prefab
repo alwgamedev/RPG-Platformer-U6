@@ -677,7 +677,7 @@ MonoBehaviour:
     minRotationLeft: {x: -1, y: 0}
   - movementType: 5
     moveDirection: 2
-    acceleration: 1.8
+    acceleration: 2.5
     flipSprite: 1
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -892,6 +892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exitBuffer: 0.01
+  effectiveWidthMultiplier: 1.5
 --- !u!114 &1998430927009477733
 MonoBehaviour:
   m_ObjectHideFlags: 0

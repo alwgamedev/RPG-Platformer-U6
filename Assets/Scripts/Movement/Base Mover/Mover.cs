@@ -25,7 +25,7 @@ namespace RPGPlatformer.Movement
         protected readonly string swimmingName = typeof(Swimming).Name;
 
         protected int groundLayer;
-        protected int waterLayer;
+        //protected int waterLayer;
         protected Collider2D myCollider;
         protected Rigidbody2D myRigidbody;
         protected float myHeight;
@@ -34,12 +34,12 @@ namespace RPGPlatformer.Movement
         protected float defaultGravityScale;
         protected bool verifyingJump;
         protected bool verifyingFreefall;
-        protected bool inWater;
         protected float groundednessTolerance;
         protected RaycastHit2D rightGroundHit;
         protected RaycastHit2D leftGroundHit;
+        protected BuoyantObject swimmer;
 
-        //public Transform transform => base.transform;
+        public bool InWater => swimmer && swimmer.InWater;
         public Rigidbody2D Rigidbody => myRigidbody;
         public virtual float MaxSpeed { get; set; }
         public float Width => myWidth;
@@ -79,11 +79,13 @@ namespace RPGPlatformer.Movement
                 groundLayer = groundLayer | LayerMask.GetMask("Contact Character");
             }
 
-            waterLayer = LayerMask.GetMask("Water");
+            //waterLayer = LayerMask.GetMask("Water");
 
             groundednessTolerance = groundednessToleranceFactor * myHeight;
 
             defaultGravityScale = myRigidbody.gravityScale;
+
+            swimmer = GetComponent<BuoyantObject>();
         }
 
         public virtual void UpdateGroundHits()
@@ -94,8 +96,15 @@ namespace RPGPlatformer.Movement
                 groundLayer);
         }
 
+        //called in movement controller's start
         public virtual void InitializeState()
         {
+            if (swimmer)
+            {
+                swimmer.WaterEntered += EnterWater;
+                swimmer.WaterExited += ExitWater;
+            }
+
             UpdateGroundHits();
 
             if (rightGroundHit || leftGroundHit)
@@ -122,11 +131,11 @@ namespace RPGPlatformer.Movement
                     TriggerLanding();
                 }
             }
-            else if (inWater && !swimming && !verifyingJump && !verifyingFreefall)
+            else if (InWater && !swimming && !verifyingJump && !verifyingFreefall)
             {
                 Trigger(typeof(Swimming).Name);
             }
-            else if (!inWater && !jumping && !freefalling)
+            else if (!InWater && !jumping && !freefalling)
             {
                 TriggerFreefall();
             }
@@ -323,23 +332,34 @@ namespace RPGPlatformer.Movement
 
         //WATER
 
-        private void OnTriggerEnter2D(Collider2D collider)
+        private void EnterWater(BuoyancySource b)
         {
-            if (1 << collider.gameObject.layer == waterLayer)
-            {
-                inWater = true;
-                Trigger(typeof(Swimming).Name);
-            }
+            Trigger(typeof(Swimming).Name);
         }
 
-        protected virtual void OnTriggerExit2D(Collider2D collider)
+        private void ExitWater()
         {
-            if (1 << collider.gameObject.layer == waterLayer)
-            {
-                inWater = false;
-                WaterExited?.Invoke();
-            }
+            WaterExited?.Invoke();
+
         }
+
+        //private void OnTriggerEnter2D(Collider2D collider)
+        //{
+        //    if (1 << collider.gameObject.layer == waterLayer)
+        //    {
+        //        inWater = true;
+        //        Trigger(typeof(Swimming).Name);
+        //    }
+        //}
+
+        //protected virtual void OnTriggerExit2D(Collider2D collider)
+        //{
+        //    if (1 << collider.gameObject.layer == waterLayer)
+        //    {
+        //        inWater = false;
+        //        WaterExited?.Invoke();
+        //    }
+        //}
 
         public virtual void HandleWaterExit(bool stillInSwimmingState)
         {

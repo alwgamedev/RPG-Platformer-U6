@@ -32,35 +32,13 @@ namespace RPGPlatformer.Environment
 
         private void OnWaterEntered(BuoyancySource b)
         {
-            Debug.Log("water entered");
             waterMesh = b.WaterMesh;
         }
 
         private void OnWaterExited()
         {
-            Debug.Log("water exited");
             waterMesh = null;
         }
-
-        //private void OnTriggerEnter2D(Collider2D collider)
-        //{
-        //    if (!collider.gameObject.activeInHierarchy)
-        //        return;
-
-        //    if (collider.gameObject.TryGetComponent(out WaterMeshGenerator w))
-        //    {
-        //        waterMesh = w;
-        //        AgitateWater();
-        //    }
-        //}
-
-        //private void OnTriggerExit2D(Collider2D collider)
-        //{
-        //    if (waterMesh && collider.transform == waterMesh.transform)
-        //    {
-        //        waterMesh = null;
-        //    }
-        //}
 
         private void AgitateWater()
         {

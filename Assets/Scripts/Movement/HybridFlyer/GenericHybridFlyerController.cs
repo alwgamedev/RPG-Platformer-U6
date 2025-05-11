@@ -105,7 +105,7 @@ namespace RPGPlatformer.Movement
         protected virtual void OnFlyingEntry()
         {
             stateManager.AnimateMovement(0);
-            UpdateMaxSpeed();
+            //UpdateMaxSpeed();
             //mover.SetLinearDamping(true);
             stateManager.OnFlyingEntry();
             OnFlightEntry?.Invoke();
@@ -121,7 +121,7 @@ namespace RPGPlatformer.Movement
 
         protected virtual void OnFlyingExit()
         {
-            UpdateMaxSpeed();
+            //UpdateMaxSpeed();
             stateManager.OnFlyingExit();
             stateDriver.SetLinearDamping(false);
             OnFlightExit?.Invoke();

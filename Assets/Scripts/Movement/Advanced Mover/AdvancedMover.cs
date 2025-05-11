@@ -30,7 +30,6 @@ namespace RPGPlatformer.Movement
             base.Awake();
 
             doubleJumpForce = doubleJumpForceMultiplier * jumpForce;
-            waterLayer = LayerMask.GetMask("Water");
         }
 
 
