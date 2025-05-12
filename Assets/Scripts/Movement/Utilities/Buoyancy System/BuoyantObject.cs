@@ -47,7 +47,7 @@ namespace RPGPlatformer.Movement
                 rb.AddForce(buoyancySource.BuoyancyForce(DisplacedArea(h)));
 
                 var s = rb.linearVelocity.magnitude;
-                if (s > 1E-05f)//unity uses this in their normalize function
+                if (s > 1E-05f)//unity uses this in their normalize function to prevent NaN errors from division
                     //(not using normalize bc I need the speed, and don't want to compute magnitude twice)
                 {
                     var u = rb.linearVelocity / s;

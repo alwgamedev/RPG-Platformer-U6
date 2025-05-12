@@ -25,6 +25,7 @@ namespace RPGPlatformer.Environment
 
         Mesh mesh;
         Vector3[] vertices;
+        Vector3 v;
 
         private void OnValidate()
         {
@@ -42,6 +43,11 @@ namespace RPGPlatformer.Environment
         {
             UpdateSprings();
             PropagateWaves();
+            //UpdateMeshVertices();
+        }
+
+        private void Update()
+        {
             UpdateMeshVertices();
         }
 
@@ -125,7 +131,10 @@ namespace RPGPlatformer.Environment
         {
             for (int i = 0; i < numSprings; i++)
             {
-                vertices[i] = new(mesh.vertices[i].x, halfHeight + springs[i].Displacement, 0);
+                v = vertices[i];
+                v.y = halfHeight + springs[i].Displacement;
+                vertices[i] = v;
+                //vertices[i] = new(vertices[i].x, halfHeight + springs[i].Displacement, 0);
             }
 
             mesh.vertices = vertices;
