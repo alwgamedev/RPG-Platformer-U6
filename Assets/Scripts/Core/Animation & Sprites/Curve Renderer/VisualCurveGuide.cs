@@ -14,8 +14,8 @@ namespace RPGPlatformer
         public CurveIKEffect[] ikEffects;
 
         CurveRenderer curveRenderer;
-        Vector3[] unitRays;//direction of g[i + 1] - g[i]
-        Vector3[] unityRays2;//direction of g[i + 2] - g[i]
+        Vector2[] unitRays;//direction of g[i + 1] - g[i]
+        Vector2[] unityRays2;//direction of g[i + 2] - g[i]
         float[] lengths;//storage for lengths in the IK algorithm
         float totalLength;
 
@@ -134,12 +134,12 @@ namespace RPGPlatformer
             }
             if (unitRays == null || unitRays.Length != guides.Length - 1)
             {
-                unitRays = new Vector3[guides.Length - 1];
+                unitRays = new Vector2[guides.Length - 1];
             }
 
             if ((unityRays2 == null || unityRays2.Length != guides.Length - 2))
             {
-                unityRays2 = new Vector3[Math.Max(guides.Length - 2, 0)];
+                unityRays2 = new Vector2[Math.Max(guides.Length - 2, 0)];
             }
 
             Vector3 v;

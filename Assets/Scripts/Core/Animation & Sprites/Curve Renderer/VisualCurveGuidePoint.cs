@@ -15,16 +15,16 @@ namespace RPGPlatformer.Core
         }
         public bool Active() => gameObject.activeSelf && tangentPuller;
 
-        public Vector3 Point() => transform.position;
+        public Vector2 Point() => transform.position;
 
-        public Vector3 TangentDir() => tangentPuller.position - transform.position;
+        public Vector2 TangentDir() => tangentPuller.position - transform.position;
 
-        public void SetPoint(Vector3 p)
+        public void SetPoint(Vector2 p)
         {
             transform.position = p;
         }
 
-        public void SetTangentDir(Vector3 v)
+        public void SetTangentDir(Vector2 v)
         {
             tangentPuller.position = Point() + v;
         }

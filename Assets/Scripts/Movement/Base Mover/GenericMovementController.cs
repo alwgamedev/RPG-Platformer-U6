@@ -345,9 +345,9 @@ namespace RPGPlatformer.Movement
             InputSource = GetComponent<IInputSource>();
         }
 
-        public void OnInputEnabled() { }
+        public virtual void OnInputEnabled() { }
 
-        public void OnInputDisabled()
+        public virtual void OnInputDisabled()
         {
             SoftStop();
             //and I guess idea is that MoveInput will not be set again while input disabled,

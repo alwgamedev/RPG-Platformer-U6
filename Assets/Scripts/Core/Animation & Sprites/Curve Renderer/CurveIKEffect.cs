@@ -29,6 +29,8 @@ namespace RPGPlatformer.Core
         int startIndex = 0;
         int endIndex = -1;
 
+        public Transform IKTargetTransform => ikTargetTransform;
+
         public int StartIndex() => startIndex;
 
         public int EndIndex() => endIndex;
