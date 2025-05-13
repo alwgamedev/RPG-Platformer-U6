@@ -77,7 +77,7 @@ namespace RPGPlatformer.Combat
             CombatStyle = CombatStyle.Unarmed,
             Cooldown = 8,
             StaminaFractionChange = 0,
-            WrathFractionChange = -0.4f
+            WrathFractionChange = -0.3f
         };
 
         public static GrenadeLikeAbility MotherSpiderSpit = new()//ranged attack

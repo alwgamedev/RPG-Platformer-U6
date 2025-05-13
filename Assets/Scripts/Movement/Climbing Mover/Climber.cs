@@ -6,7 +6,7 @@ namespace RPGPlatformer.Movement
     {
         protected int climbableObjectLayer;
 
-        public bool ClimbableCollisionEnabled { get; protected set; }
+        //public bool ClimbableCollisionEnabled { get; protected set; }
 
         protected override void Awake()
         {
@@ -101,7 +101,7 @@ namespace RPGPlatformer.Movement
                 myCollider.excludeLayers = myCollider.excludeLayers | climbableObjectLayer;
             }
 
-            ClimbableCollisionEnabled = val;
+            //ClimbableCollisionEnabled = val;
         }
     }
 }

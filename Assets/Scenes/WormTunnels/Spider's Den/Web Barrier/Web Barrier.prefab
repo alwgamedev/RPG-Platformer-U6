@@ -130,6 +130,7 @@ MonoBehaviour:
   bottomBreakAcceleration: {x: 0, y: 0}
   damageJiggleAcceleration: {x: 16, y: 0}
   snapTime: 0.375
+  motherSpider: {fileID: 0}
 --- !u!114 &1212672894555921264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,8 +148,8 @@ MonoBehaviour:
   findStatBarInChildren: 0
   stat:
     minValue: 0
-    maxValue: 500
-    defaultValue: 500
+    maxValue: 300
+    defaultValue: 300
     replenishRate: 0
     autoReplenish: 0
     statBar: {fileID: 0}
@@ -322,7 +323,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1048447
+    m_Bits: 1047935
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -418,7 +419,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1048447
+    m_Bits: 1047935
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -483,8 +484,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.1225}
-  m_Size: {x: 0.25, y: 1.225}
+  m_Offset: {x: 0.1, y: 0.1225}
+  m_Size: {x: 0.5, y: 1.225}
   m_Direction: 0
 --- !u!255 &6556225875776751868
 FixedJoint2D:
@@ -773,6 +774,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.5, z: 0}
   lerpMode: 0
   lerpRate: 25
+  tangentWeight: 1
 --- !u!114 &7925956932343956914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,7 +864,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1048447
+    m_Bits: 1047935
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -995,7 +997,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1048447
+    m_Bits: 1047935
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -1061,7 +1063,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.325}
-  m_Size: {x: 0.25, y: 0.65}
+  m_Size: {x: 0.4, y: 0.65}
   m_Direction: 0
 --- !u!1 &7168352141786997765
 GameObject:
@@ -1333,6 +1335,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.5, z: 0}
   lerpMode: 0
   lerpRate: 5
+  tangentWeight: 1
 --- !u!114 &8747426317260882353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1423,7 +1426,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1048447
+    m_Bits: 1047935
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -1488,8 +1491,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.3825}
-  m_Size: {x: 0.25, y: 0.725}
+  m_Offset: {x: 0.05, y: 0.3825}
+  m_Size: {x: 0.5, y: 0.725}
   m_Direction: 0
 --- !u!1001 &5288095394661551238
 PrefabInstance:

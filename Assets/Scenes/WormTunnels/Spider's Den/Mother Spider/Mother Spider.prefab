@@ -7888,6 +7888,8 @@ MonoBehaviour:
   suspicionTime: 4
   playerEnemy: 1
   setRunningWhenMaintainingMinimumCombatDistance: 0
+  leftAttackBound: {fileID: 0}
+  rightAttackBound: {fileID: 0}
   punchingArm: {fileID: 4261347657609427198}
 --- !u!114 &4381645486506441378
 MonoBehaviour:
@@ -7975,6 +7977,7 @@ MonoBehaviour:
   adjustedHalfWidthFactor: 0.45
   runSpeed: 4
   walkSpeed: 1.5
+  swimSpeed: 0.25
   maxNumJumps: 0
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
@@ -8086,8 +8089,8 @@ MonoBehaviour:
   findStatBarInChildren: 0
   stat:
     minValue: 0
-    maxValue: 1400
-    defaultValue: 1400
+    maxValue: 1750
+    defaultValue: 1750
     replenishRate: 0
     autoReplenish: 1
     statBar: {fileID: 4489949363248811169}

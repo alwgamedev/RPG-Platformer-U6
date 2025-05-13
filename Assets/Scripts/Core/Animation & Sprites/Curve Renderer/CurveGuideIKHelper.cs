@@ -8,8 +8,8 @@ namespace RPGPlatformer.Core
     public static class CurveGuideIKHelper
     {
         public static void FABRIK(VisualCurveGuidePoint[] guides, int startIndex, int endIndex,
-            Vector3[] unitRays, float[] lengths, float totalLength, Vector3 target,
-            int iterations, float strength, float toleranceSqrd)
+            Vector3[] unitRays, Vector3[] unitRays2, float[] lengths, float totalLength, Vector3 target,
+            int iterations, float strength, float toleranceSqrd, bool rotateTangents)
         {
             if (iterations == 0 || strength == 0 || startIndex >= endIndex) return;
 
@@ -52,10 +52,33 @@ namespace RPGPlatformer.Core
 
             //rotate each tangent vector by the amount its previous ray rotated by
             //(not a particularly good choice, but struggled to find a better one that works)
-            for (int i = endIndex; i > startIndex; i--)
+            if (rotateTangents)
             {
-                v = (guides[i].Point() - guides[i - 1].Point()).normalized;
-                guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v, guides[i].TangentDir()));
+                for (int i = endIndex; i > startIndex; i--)
+                {
+                    if (i < endIndex)
+                    {
+                        v = (guides[i + 1].Point() - guides[i - 1].Point()).normalized;
+                        guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays2[i - 1], v, guides[i].TangentDir()));
+                    }
+                    else
+                    {
+                        v = (guides[i].Point() - guides[i - 1].Point()).normalized;
+                        guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v, guides[i].TangentDir()));
+                    }
+                    //unitRays[i - 1] = v;
+
+                    //if (i < endIndex)
+                    //{
+                    //    guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v, 
+                    //        guides[i].TangentDir()));
+                    //}
+                    //if (i <= unitRays2.Length)
+                    //{
+                    //    v = (guides[i + 1].Point() - guides[i - 1].Point()).normalized;
+                    //    guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays2[i - 1], v, guides[i].TangentDir()));
+                    //}
+                }
             }
 
             void Forward()

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
-    public enum TargetSource
+    public enum CurveIKTargetSource
     {
         transform, point
     }
@@ -13,8 +13,9 @@ namespace RPGPlatformer.Core
     //in curve guide, and the individual array elements are not animatable -- only a lone struct field would be)
     public class CurveIKEffect : MonoBehaviour
     {
-        public string description;
-        public TargetSource targetSource;
+        public string description;//just to make it easier to identify which ik effect is which in the inspector
+        public CurveIKTargetSource targetSource;
+        public bool dontRotateTangents;
         public int ikIterations = 1;
         public float ikStrength = 1;
         public float ikToleranceSqrd = .04f;
@@ -34,7 +35,7 @@ namespace RPGPlatformer.Core
 
         public Vector3 TargetPosition()
         {
-            if (targetSource == TargetSource.transform)
+            if (targetSource == CurveIKTargetSource.transform)
             {
                 return ikTargetTransform.position;
             }
@@ -45,20 +46,20 @@ namespace RPGPlatformer.Core
         public void SetTarget(Transform target)
         {
             ikTargetTransform = target;
-            targetSource = TargetSource.transform;
+            targetSource = CurveIKTargetSource.transform;
         }
 
         public void SetTarget(Vector3 target)
         {
             ikTargetPoint = target;
-            targetSource = TargetSource.point;
+            targetSource = CurveIKTargetSource.point;
         }
 
         //has changed in the sense of "transform.hasChanged"
         //(not has changed as in "got replaced by a different object")
         public bool TargetHasChanged()
         {
-            if (targetSource == TargetSource.point)
+            if (targetSource == CurveIKTargetSource.point)
             {
                 return false;
             }
@@ -68,8 +69,8 @@ namespace RPGPlatformer.Core
 
         public bool CanRunIK()
         {
-            return targetSource == TargetSource.point 
-                || (targetSource == TargetSource.transform && ikTargetTransform);
+            return targetSource == CurveIKTargetSource.point 
+                || (targetSource == CurveIKTargetSource.transform && ikTargetTransform);
         }
 
         public void RecomputeEndptIndices(VisualCurveGuidePoint[] guides)

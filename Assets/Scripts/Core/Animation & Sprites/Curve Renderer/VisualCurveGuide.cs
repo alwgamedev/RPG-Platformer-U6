@@ -1,5 +1,6 @@
 ﻿using RPGPlatformer.Core;
 using UnityEngine;
+using System;
 
 namespace RPGPlatformer
 {
@@ -13,7 +14,8 @@ namespace RPGPlatformer
         public CurveIKEffect[] ikEffects;
 
         CurveRenderer curveRenderer;
-        Vector3[] unitRays;
+        Vector3[] unitRays;//direction of g[i + 1] - g[i]
+        Vector3[] unityRays2;//direction of g[i + 2] - g[i]
         float[] lengths;//storage for lengths in the IK algorithm
         float totalLength;
 
@@ -106,8 +108,9 @@ namespace RPGPlatformer
                 {
                     if (e != null && e.enabled && e.CanRunIK())
                     {
-                        CurveGuideIKHelper.FABRIK(guides, e.StartIndex(), e.EndIndex(), unitRays, lengths, totalLength,
-                        e.TargetPosition(), e.ikIterations, e.ikStrength, e.ikToleranceSqrd);
+                        CurveGuideIKHelper.FABRIK(guides, e.StartIndex(), e.EndIndex(), 
+                            unitRays, unityRays2, lengths, totalLength,
+                            e.TargetPosition(), e.ikIterations, e.ikStrength, e.ikToleranceSqrd, !e.dontRotateTangents);
                     }
                 }
             }
@@ -134,6 +137,11 @@ namespace RPGPlatformer
                 unitRays = new Vector3[guides.Length - 1];
             }
 
+            if ((unityRays2 == null || unityRays2.Length != guides.Length - 2))
+            {
+                unityRays2 = new Vector3[Math.Max(guides.Length - 2, 0)];
+            }
+
             Vector3 v;
             float l;
 
@@ -146,6 +154,11 @@ namespace RPGPlatformer
                 totalLength += l;
                 unitRays[i] = v / l;
                 lengths[i] = l;
+            }
+
+            for (int i = 0; i < guides.Length - 2; i++)
+            {
+                unityRays2[i] = (guides[i + 2].Point() - guides[i].Point()).normalized;
             }
         }
 

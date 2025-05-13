@@ -14,6 +14,8 @@ namespace RPGPlatformer.AIControl
         [SerializeField] protected float suspicionTime = 5;
         [SerializeField] protected bool playerEnemy = true;
         [SerializeField] protected bool setRunningWhenMaintainingMinimumCombatDistance;
+        [SerializeField] protected Transform leftAttackBound;
+        [SerializeField] protected Transform rightAttackBound;
         //[SerializeField] protected bool useHorizontalDistanceForCombatOnly;
 
         protected bool correctingCombatDistance;
@@ -78,7 +80,7 @@ namespace RPGPlatformer.AIControl
                 return false;
             }
 
-            if (combatController.Combatant.CanAttackAtDistSqrd(d2, t))
+            if (CanAttackAtDistSqrd(d2, t))
             {
                 Trigger(typeof(Attack).Name);
                 return true;
@@ -86,6 +88,21 @@ namespace RPGPlatformer.AIControl
 
             Trigger(typeof(Pursuit).Name);
             return true;
+        }
+
+        protected virtual bool CanAttackAtDistSqrd(float d2, float t)
+        {
+            if (leftAttackBound && CurrentTarget.transform.position.x < leftAttackBound.transform.position.x)
+            {
+                return false;
+            }
+
+            if(rightAttackBound && CurrentTarget.transform.position.x > rightAttackBound.transform.position.x)
+            {
+                return false;
+            }
+
+            return combatController.Combatant.CanAttackAtDistSqrd(d2, t);
         }
 
         public override void PatrolBehavior()
@@ -143,7 +160,7 @@ namespace RPGPlatformer.AIControl
 
         protected virtual bool ShouldBreakPursuitToAttack(float distSquared, float tolerance)
         {
-            return CombatController.Combatant.CanAttackAtDistSqrd(distSquared, tolerance);
+            return CanAttackAtDistSqrd(distSquared, tolerance);
         }
 
         //allows child classes to decide how to pursue based on distance

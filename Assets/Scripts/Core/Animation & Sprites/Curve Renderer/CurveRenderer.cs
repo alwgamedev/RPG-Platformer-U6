@@ -12,6 +12,7 @@ namespace RPGPlatformer.Core
         [SerializeField] CurveGuidePoint[] guidePoints;//doesn't need to be serialized?
         [SerializeField] bool lerpMode;//can be removed?
         [SerializeField] float lerpRate = 5;
+        [SerializeField] float tangentWeight = 1;
         //note: numPointsDrawn is independent of pointData.Length.
         //pointData determines the curve we want to draw and numPointsDrawn
         //is number of points drawn along that curve.
@@ -70,7 +71,8 @@ namespace RPGPlatformer.Core
                 var guide = guides[i];
                 if (guide && guide.Active())
                 {
-                    transferQueue.Enqueue(new CurveGuidePoint(virtualSegs, guide.Point(), guide.TangentDir()));
+                    transferQueue.Enqueue(new CurveGuidePoint(virtualSegs, guide.Point(), 
+                        guide.TangentDir() * tangentWeight));
                     virtualSegs = 1;
                 }
                 else
