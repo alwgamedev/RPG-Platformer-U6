@@ -8,12 +8,17 @@ namespace RPGPlatformer
     public class VisualCurveGuide : MonoBehaviour
     {
         [SerializeField] bool drawGizmos;
+        [SerializeField] bool physicsDependent = true;
         [SerializeField] VisualCurveGuidePoint[] guides;
+        [HideInInspector][SerializeField] float _lengthScale = 1;
 
         public bool ikEnabled;
         public CurveIKEffect[] ikEffects;
+
         public bool enforceBounds;
         public CurveBounds bounds;
+
+        public float lengthScale = 1;
 
         CurveRenderer curveRenderer;
         Vector2[] unitRays;//direction of g[i + 1] - g[i]
@@ -21,15 +26,24 @@ namespace RPGPlatformer
         float[] lengths;//storage for lengths in the IK algorithm
         float totalLength;
 
+        bool effectAppliedThisFrame;
+
         private void Awake()
         {
+            lengthScale = 1;
+            _lengthScale = lengthScale;
             ReconfigureIKEffects();
             ReconfigureBounds();
         }
 
-//#if UNITY_EDITOR
+        //#if UNITY_EDITOR
         private void Update()
         {
+            if (lengthScale != _lengthScale)
+            {
+                UpdateLengthScale();
+            }
+
             CheckForUpdates();
         }
         //#endif
@@ -37,9 +51,9 @@ namespace RPGPlatformer
         //need to do this in fixed update if you want colliders to move with IK
         private void FixedUpdate()
         {
-            if (ikEnabled)
+            if (physicsDependent && ikEnabled)
             {
-                CheckForUpdates();
+                Update();
             }
         }
 
@@ -47,6 +61,25 @@ namespace RPGPlatformer
         {
             ReconfigureIKEffects();
             ReconfigureBounds();
+            //SetLengthScale(lengthScale);
+        }
+
+        public void UpdateLengthScale()
+        {
+            if (lengthScale <= 0)
+            {
+                lengthScale = _lengthScale;
+                return;
+            }
+
+            float r = lengthScale / _lengthScale;
+
+            for (int i = 1; i < guides.Length; i++)
+            {
+                guides[i].SetPoint(guides[0].Point() + r * (guides[i].Point() - guides[0].Point()));
+            }
+
+            _lengthScale = lengthScale;
         }
 
         public void DisableAllIK()
@@ -66,7 +99,7 @@ namespace RPGPlatformer
         }
 
         //should call this whenever you add new ik effects
-        public void ReconfigureIKEffects()
+        private void ReconfigureIKEffects()
         {
             if (ikEffects == null || guides == null) return;
 
@@ -76,7 +109,7 @@ namespace RPGPlatformer
             }
         }
 
-        public void ReconfigureBounds()
+        private void ReconfigureBounds()
         {
             if (guides == null || !bounds) return;
 
@@ -111,11 +144,11 @@ namespace RPGPlatformer
 
         private void UpdateRendererGuidePoints()
         {
-            bool effectApplied = false;
+            effectAppliedThisFrame = false;
 
             if (ikEnabled && ikEffects != null)
             {
-                effectApplied = true;
+                effectAppliedThisFrame = true;
                 RecomputeRaysAndLengths();
 
                 foreach (var e in ikEffects)
@@ -131,16 +164,16 @@ namespace RPGPlatformer
 
             if (enforceBounds && bounds)
             {
-                if (!effectApplied)
+                if (!effectAppliedThisFrame)
                 {
-                    effectApplied = true;
+                    effectAppliedThisFrame = true;
                     RecomputeRaysAndLengths();
                 }
 
                 bounds.EnforceBounds(guides, lengths);
             }
 
-            if (effectApplied)
+            if (effectAppliedThisFrame)
             {
                 CurveGuideIKHelper.RotateTangents(guides, unitRays, unitRays2);
             }

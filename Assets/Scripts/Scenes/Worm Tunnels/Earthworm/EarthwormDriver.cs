@@ -57,7 +57,7 @@ namespace RPGPlatformer.AIControl
             GlobalGameTools.PlayerDeath += TriggerDormant;
 
             stabIKEffect.SetTarget(CurrentTarget.transform);
-            curveGuide.ReconfigureIKEffects();
+            //curveGuide.ReconfigureIKEffects();
             DisableAllIK();
 
             SetBodyAnchor(false);
