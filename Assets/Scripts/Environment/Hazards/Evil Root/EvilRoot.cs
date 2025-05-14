@@ -1,8 +1,5 @@
 ﻿using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
-using System;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -10,82 +7,68 @@ namespace RPGPlatformer.Environment
 {
     public class EvilRoot : MonoBehaviour
     {
+        [SerializeField] float dormantLengthScale = 0.1f;
+        [SerializeField] float emergedLengthScale = 2.5f;
+        [SerializeField] float emergeTime = 2.5f;
+        [SerializeField] float retreatTime = 1;
+        [SerializeField] Transform dormantHeadPosition;
+        [SerializeField] Transform emergedHeadPosition;
         [SerializeField] CurveIKEffect followGuideIK;
         [SerializeField] CurveIKEffect followPlayerIK;
         [SerializeField] TriggerColliderMessenger head;
         [SerializeField] float grabTimeOut = 1;
         [SerializeField] float grabSpeed = 4;
+        [SerializeField] float throwLength;
+        [SerializeField] float throwForce;
+        [SerializeField] float throwTime = 0.25f;
+        [Range(0, 1)][SerializeField] float throwReleaseFraction = 0.6f;
 
+        VisualCurveGuide vcg;
         bool headIsTouchingPlayer;
         float headRadius2;
-        AnimationControl animator;
-        Task grabTask;//don't think we need to or should dispose of it OnDestroy
         Transform playerParent;
 
-        event Action Emerged;
+        System.Random rng = new();
 
         private void Awake()
         {
-            animator = GetComponent<AnimationControl>();
+            vcg = GetComponent<VisualCurveGuide>();
             headRadius2 = head.GetComponent<CircleCollider2D>().radius;
             headRadius2 *= headRadius2;
         }
 
-        private void Start()
+        private void OnEnable()
         {
             head.TriggerEnter += OnHeadTriggerEnter;
             head.TriggerStay += OnHeadTriggerStay;
             head.TriggerExit += OnHeadTriggerExit;
+
+            vcg.lengthScale = dormantLengthScale;
+            FollowGuide();
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                BeginNewGrabTaskIfNoneInProgress();
-            }
 
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                ReleasePlayer();
-            }
+        //BASIC FUNCTIONS
+
+        public async Task Emerge()
+        {
+            var a = followGuideIK.LerpBetweenTransforms(dormantHeadPosition, emergedHeadPosition, emergeTime);
+            var b = vcg.LerpLengthScale(emergedLengthScale, emergeTime);
+            await Task.WhenAll(a, b);
+            //hopefully task.whenall will do what i hope it does and run these "in parallel"; we'll see
         }
 
-        public void Emerge()
+        public async Task Retreat()
         {
-            animator.SetTrigger("emerge");
-        }
-
-        //call in animation event, so we know when emerge is done
-        public void CompleteEmerge()
-        {
-            Emerged?.Invoke();
-        }
-
-        //make sure all grab/throw tasks are completed before you call this
-        //I don't want to make this async (i.e. waiting for grabTask before we start)
-        //because then we may have to worry about retreat getting called when retreat is already in progress
-        public void Retreat()
-        {
-            animator.SetTrigger("retreat");
-
-        }
-
-        public async void BeginNewGrabTaskIfNoneInProgress()
-        {
-            if (grabTask == null || grabTask.IsCompleted)
-            {
-                grabTask = GrabPlayer();
-                await grabTask;
-            }
+            var a = followGuideIK.LerpTowardsTransform(dormantHeadPosition, retreatTime);
+            var b = vcg.LerpLengthScale(dormantLengthScale, retreatTime);
+            await Task.WhenAll(a, b);
         }
 
         public async Task GrabPlayer()
         {
-           Task<bool> reach = ReachForPlayer();
+            Task<bool> reach = ReachForPlayer();
             await reach;
-
-            Debug.Log($"reach successful? {reach.Result}");
 
             if (reach.Result)
             {
@@ -93,7 +76,10 @@ namespace RPGPlatformer.Environment
                 AnchorPlayer();
             }
 
-            await LerpBackToGuidePosition(grabSpeed);
+            //lerp back to position of ik guide (which will be wherever it was when we started the grab)
+            FollowGuide();
+            await followGuideIK.LerpBetweenPositions(head.transform.position, followGuideIK.TargetPosition(),
+                1 / grabSpeed);
         }
 
         public async Task<bool> ReachForPlayer()
@@ -122,6 +108,27 @@ namespace RPGPlatformer.Environment
             return headIsTouchingPlayer;
         }
 
+        public async Task ThrowPlayer()
+        {
+            float angle = (float)rng.NextDouble() * Mathf.PI / 8 + Mathf.PI / 16;
+            if (rng.Next(0, 2) == 1)
+            {
+                angle = Mathf.PI - angle;
+            }
+            var d = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            var f = throwForce * d;
+            d *= throwLength;
+
+            await followGuideIK.LerpTowardsPosition((Vector2)head.transform.position 
+                + throwReleaseFraction * d, throwTime);
+
+            ReleasePlayer(f);
+
+            d.y *= -1;//we'll see how this looks; trying to give the throw an arcing motion
+            await followGuideIK.LerpTowardsPosition((Vector2)head.transform.position 
+                + (1 - throwReleaseFraction) * d, throwTime);
+        }
+
         private void AnchorPlayer()
         {
             Debug.Log("anchoring");
@@ -136,13 +143,14 @@ namespace RPGPlatformer.Environment
             playerRb.transform.SetParent(head.transform);
         }
 
-        private void ReleasePlayer()
+        private void ReleasePlayer(Vector2 force)
         {
             Debug.Log("releasing player");
             var player = GlobalGameTools.Instance.Player;
             var playerRb = ((Mover)((IMovementController)player.MovementController).Mover).Rigidbody;
             playerRb.transform.SetParent(playerParent);
             playerRb.bodyType = RigidbodyType2D.Dynamic;
+            playerRb.AddForce(force * playerRb.mass, ForceMode2D.Impulse);
             ((IInputDependent)player).InputSource.EnableInput();
         }
 
@@ -155,29 +163,6 @@ namespace RPGPlatformer.Environment
 
             followPlayerIK.enabled = false;
             followGuideIK.enabled = true;
-        }
-
-        private async Task LerpBackToGuidePosition(float lerpRate)
-        {
-            Vector2 guidePosition = followGuideIK.IKTargetTransform.position;
-            Vector2 headPosition = head.transform.position;
-            followGuideIK.IKTargetTransform.position = headPosition;
-            FollowGuide();
-
-            float t = 0;
-
-            while (t < 1)
-            {
-                await Task.Yield();
-
-                if (GlobalGameTools.Instance.TokenSource.IsCancellationRequested)
-                {
-                    throw new TaskCanceledException();
-                }
-
-                t += Time.deltaTime * lerpRate;
-                followGuideIK.IKTargetTransform.position = Vector2.Lerp(headPosition, guidePosition, t);
-            }
         }
 
         private void FollowPlayer()
@@ -194,7 +179,7 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        public void DeactivateAllIK()
+        private void DeactivateAllIK()
         {
             followGuideIK.enabled = false;
             followPlayerIK.enabled = false;
@@ -238,9 +223,11 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
-            Emerged = null;
+            head.TriggerEnter -= OnHeadTriggerEnter;
+            head.TriggerStay -= OnHeadTriggerStay;
+            head.TriggerExit -= OnHeadTriggerExit;
         }
     }
 }

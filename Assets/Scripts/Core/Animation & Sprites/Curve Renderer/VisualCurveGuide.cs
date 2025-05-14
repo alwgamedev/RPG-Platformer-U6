@@ -1,6 +1,7 @@
 ﻿using RPGPlatformer.Core;
 using UnityEngine;
 using System;
+using System.Threading.Tasks;
 
 namespace RPGPlatformer
 {
@@ -80,6 +81,25 @@ namespace RPGPlatformer
             }
 
             _lengthScale = lengthScale;
+        }
+
+        //l = goal length scale, T = time to complete
+        public async Task LerpLengthScale(float l, float T)
+        {
+            float r = (l - lengthScale) / T;
+            float t = 0;
+
+            while (t < T)
+            {
+                await Task.Yield();
+
+                if (GlobalGameTools.Instance.TokenSource.Token.IsCancellationRequested)
+                {
+                    throw new TaskCanceledException();
+                }
+
+                lengthScale += r * Time.deltaTime;
+            }
         }
 
         public void DisableAllIK()

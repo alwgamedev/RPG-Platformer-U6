@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
@@ -24,18 +25,18 @@ namespace RPGPlatformer.Core
 
         //you will use one or the other depending on the chosen TargetSource
         [SerializeField] Transform ikTargetTransform;
-        [SerializeField] Vector3 ikTargetPoint;
+        [SerializeField] Vector2 ikTargetPoint;
 
         int startIndex = 0;
         int endIndex = -1;
 
-        public Transform IKTargetTransform => ikTargetTransform;
+        //public Transform IKTargetTransform => ikTargetTransform;
 
         public int StartIndex() => startIndex;
 
         public int EndIndex() => endIndex;
 
-        public Vector3 TargetPosition()
+        public Vector2 TargetPosition()
         {
             if (targetSource == CurveIKTargetSource.transform)
             {
@@ -51,10 +52,22 @@ namespace RPGPlatformer.Core
             targetSource = CurveIKTargetSource.transform;
         }
 
-        public void SetTarget(Vector3 target)
+        public void SetTarget(Vector2 target)
         {
             ikTargetPoint = target;
             targetSource = CurveIKTargetSource.point;
+        }
+
+        public void SetTargetPosition(Vector2 p)
+        {
+            if (targetSource == CurveIKTargetSource.transform)
+            {
+                ikTargetTransform.position = p;
+            }
+            else
+            {
+                ikTargetPoint = p;
+            }
         }
 
         //has changed in the sense of "transform.hasChanged"
@@ -97,6 +110,57 @@ namespace RPGPlatformer.Core
                 {
                     endIndex = i;
                 }
+            }
+        }
+
+        public async Task LerpBetweenTransforms(Transform tr0, Transform tr1, float T)
+        {
+            Vector2 p0() => tr0.transform.position;
+            Vector2 p1() => tr1.transform.position;
+            await LerpBetweenPositions(p0, p1, T);
+        }
+
+        public async Task LerpTowardsTransform(Transform tr, float T)
+        {
+            Vector2 p() => tr.position;
+            await LerpBetweenPositions(TargetPosition, p, T);
+        }
+
+        //T = time to complete
+        public async Task LerpBetweenPositions(Vector2 p0, Vector2 p1, float T)
+        {
+            Vector2 q0() => p0;
+            Vector2 q1() => q1();
+            await LerpBetweenPositions(q0, q1, T);
+        }
+
+        public async Task LerpTowardsPosition(Vector2 p, float T)
+        {
+            Vector2 q() => p;
+            await LerpBetweenPositions(TargetPosition, q, T);
+        }
+
+        public async Task LerpBetweenPositions(Func<Vector2> p, Func<Vector2> q, float T)
+        {
+            void UpdatePosition(float s)
+            {
+                SetTargetPosition(Vector2.Lerp(p(), q(), s));
+            }
+
+            float t = 0;
+            UpdatePosition(0);
+
+            while (t < T)
+            {
+                await Task.Yield();
+
+                if (GlobalGameTools.Instance.TokenSource.IsCancellationRequested)
+                {
+                    throw new TaskCanceledException();
+                }
+
+                t += Time.deltaTime;
+                UpdatePosition(t);
             }
         }
     }
