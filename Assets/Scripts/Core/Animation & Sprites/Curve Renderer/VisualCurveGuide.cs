@@ -2,6 +2,7 @@
 using UnityEngine;
 using System;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace RPGPlatformer
 {
@@ -31,13 +32,12 @@ namespace RPGPlatformer
 
         private void Awake()
         {
-            lengthScale = 1;
-            _lengthScale = lengthScale;
+            //lengthScale = 1;
+            //_lengthScale = lengthScale;
             ReconfigureIKEffects();
             ReconfigureBounds();
         }
 
-        //#if UNITY_EDITOR
         private void Update()
         {
             if (lengthScale != _lengthScale)
@@ -47,7 +47,11 @@ namespace RPGPlatformer
 
             CheckForUpdates();
         }
-        //#endif
+
+        public void CallUpdate()
+        {
+            Update();
+        }
 
         //need to do this in fixed update if you want colliders to move with IK
         private void FixedUpdate()
@@ -78,13 +82,14 @@ namespace RPGPlatformer
             for (int i = 1; i < guides.Length; i++)
             {
                 guides[i].SetPoint(guides[0].Point() + r * (guides[i].Point() - guides[0].Point()));
+                guides[i].SetTangentDir(r * guides[i].TangentDir());
             }
 
             _lengthScale = lengthScale;
         }
 
         //l = goal length scale, T = time to complete
-        public async Task LerpLengthScale(float l, float T)
+        public async Task LerpLengthScale(float l, float T, CancellationToken token)
         {
             float r = (l - lengthScale) / T;
             float t = 0;
@@ -92,12 +97,11 @@ namespace RPGPlatformer
             while (t < T)
             {
                 await Task.Yield();
-
-                if (GlobalGameTools.Instance.TokenSource.Token.IsCancellationRequested)
+                if (token.IsCancellationRequested)
                 {
                     throw new TaskCanceledException();
                 }
-
+                t += Time.deltaTime;
                 lengthScale += r * Time.deltaTime;
             }
         }
