@@ -77,10 +77,14 @@ namespace RPGPlatformer.Environment
 
         public async Task Emerge(CancellationToken token)
         {
+            vcg.enforceBounds = true;
             var a = vcg.LerpLengthScale(emergedLengthScale, emergeGrowTime, token);
-            var b = followGuideIK.LerpBetweenTransforms(dormantHeadPosition, emergedHeadPosition, emergeMoveTime,
-                token);
+            var b = followGuideIK.LerpBetweenTransforms(dormantHeadPosition, 
+                emergedHeadPosition, emergeMoveTime, token);
+            //var b = followGuideIK.LerpTowardsPosition(GlobalGameTools.Instance.PlayerTransform.position, 
+            //    emergeMoveTime, token);
             await Task.WhenAll(a, b);
+            vcg.enforceBounds = false;
         }
 
         public async Task Retreat(CancellationToken token)
@@ -92,6 +96,8 @@ namespace RPGPlatformer.Environment
 
         public async Task GrabPlayer(CancellationToken token)
         {
+            //Vector2 p = head.transform.position;
+            Vector2 p = followGuideIK.TargetPosition();
             Task<bool> reach = ReachForPlayer(token);
             await reach;
 
@@ -100,11 +106,14 @@ namespace RPGPlatformer.Environment
                 RootHoldingPlayer = this;
                 DeactivateAllIK();
                 AnchorPlayer();
+                //FollowGuide();
             }
 
-            //lerp back to position of ik guide (which will be wherever it was when we started the grab)
+            //lerp back to position where we started the grab
+            //Vector2 q = head.transform.position;
+            //Debug.Log($"retreating from {q} back to {p}");
             FollowGuide();
-            await followGuideIK.LerpBetweenPositions(head.transform.position, followGuideIK.TargetPosition(),
+            await followGuideIK.LerpBetweenPositions(head.transform.position, p,
                 grabSnapBackTime, token);
         }
 

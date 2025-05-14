@@ -8,19 +8,15 @@ namespace RPGPlatformer.Core
     {
         [SerializeField] Collider2D prohibitedZone;
         [SerializeField] float buffer;
-        //[SerializeField] VisualCurveGuidePoint startPoint;
-        //[SerializeField] VisualCurveGuidePoint endPoint;
-        
-        //int startIndex;
-        //int endIndex;
+        //[SerializeField] float resetAvoidanceDistanceFactorSqrd = 2.25f;
+        //[SerializeField] AvoidanceSide defaultAvoidanceSide;
 
-        //Vector2 max;
         Vector2 center;
-        //Vector2 min;
+        //float d;
         float r;
         float r2;
         Vector2 p;
-        Vector2 d;
+        //Vector2 v;
         bool outOfBounds;
 
         private void Start()
@@ -31,8 +27,9 @@ namespace RPGPlatformer.Core
                 Vector2.Distance(prohibitedZone.bounds.min, prohibitedZone.bounds.center));
                 r += buffer;
                 r2 = r * r;
-
             }
+
+            //avoidanceSide = defaultAvoidanceSide;
         }
 
         protected override bool EnforceBoundsIteration(VisualCurveGuidePoint[] guidePoints)
@@ -42,35 +39,64 @@ namespace RPGPlatformer.Core
 
             outOfBounds = false;
 
-            //max = prohibitedZone.bounds.max + buffer * Vector3.one;
-            //min = prohibitedZone.bounds.min - buffer * Vector3.one;
             center = prohibitedZone.bounds.center;
+            //v = endPoint.Point() - center;//startPoint.Point();
+
+            //if (avoidanceSide == AvoidanceSide.undetermined)
+            //{
+            //    avoidanceSide = AvoidanceSide.left;
+            //    //avoidanceSide = Vector2.Dot(endPoint.Point() - center, v) > 0 ?
+            //    //    AvoidanceSide.right : AvoidanceSide.left;
+            //}
 
             for (int i = startIndex; i <= endIndex; i++)
             {
                 p = guidePoints[i].Point();
+
                 if (Vector2.SqrMagnitude(p - center) < r2)
                 {
-                    //d = center + r * (p - center).normalized - p;
-                    p = center + r * (p - center).normalized;
                     outOfBounds = true;
-                    guidePoints[i].SetPoint(p);
-                    //outOfBounds = true;
-                    //d.x = d.x < center.x ? min.x - p.x : max.x - p.x;
-                    //d.y = d.y < center.y ? min.y - p.y : max.y - p.y;
-                    //for (int j = startIndex; j <= i; j++)
+                    //if (IsOnWrongSide(v, p - center, avoidanceSide))
                     //{
-                    //    guidePoints[j].SetPoint(guidePoints[j].Point() + d);
+                    //    p = center 
+                    //        + (Vector2)PhysicsTools.ReflectAcrossPerpendicularHyperplane(v.CCWPerp(), p - center);
                     //}
+                    p = center + r * (p - center).normalized;
+                    guidePoints[i].SetPoint(p);
                 }
             }
 
             return outOfBounds;
         }
 
-        //private bool LessThan(Vector2 a, Vector2 b)
+        //protected override bool AvoidanceSideCanBeReset(VisualCurveGuidePoint[] guidePoints)
         //{
-        //    return a.x < b.x && a.y < b.y;
+        //    for (int i = startIndex; i <= endIndex; i++)
+        //    {
+        //        if (Vector2.SqrMagnitude(guidePoints[i].Point() - center) < resetAvoidanceDistanceFactorSqrd * r2)
+        //        {
+        //            return false;
+        //        }
+        //    }
+
+        //    return true;
+        //}
+
+        //returns whether point q is on the wrong side of oriented line spanned by u
+        //(i.e. if avoidance side is right and q is on the left side or vice versa)
+        //private bool IsOnWrongSide(Vector2 u, Vector2 q, AvoidanceSide avoidanceSide)
+        //{
+        //    if (avoidanceSide == AvoidanceSide.right && Vector2.Dot(u, q) < 0)
+        //    {
+        //        return true;
+        //    }
+
+        //    if (avoidanceSide == AvoidanceSide.left && Vector2.Dot(u, q) > 0)
+        //    {
+        //        return true;
+        //    }
+
+        //    return false;
         //}
     }
 }

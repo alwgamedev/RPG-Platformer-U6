@@ -274,21 +274,21 @@ MonoBehaviour:
   guidePoints:
   - virtualSegments: 0
     point: {x: -130.81401, y: -16.259, z: 0}
-    velocity: {x: 0, y: -0.30000114, z: 0}
+    velocity: {x: 0.000030517578, y: -0.29999924, z: 0}
   - virtualSegments: 1
     point: {x: -130.81401, y: -16.508997, z: 0}
-    velocity: {x: 0, y: -0.29999733, z: 0}
+    velocity: {x: 0.000030517578, y: -0.29999352, z: 0}
   - virtualSegments: 1
     point: {x: -130.81401, y: -16.758993, z: 0}
-    velocity: {x: 0, y: -0.29999352, z: 0}
+    velocity: {x: 0.000030517578, y: -0.2999897, z: 0}
   - virtualSegments: 1
     point: {x: -130.81401, y: -17.009008, z: 0}
-    velocity: {x: 0, y: -0.29999542, z: 0}
+    velocity: {x: 0.000030517578, y: -0.2999897, z: 0}
   - virtualSegments: 1
     point: {x: -130.81401, y: -17.259005, z: 0}
-    velocity: {x: 0, y: -0.29999542, z: 0}
+    velocity: {x: 0.000030517578, y: -0.2999897, z: 0}
   lerpMode: 1
-  lerpRate: 200
+  lerpRate: 100
   tangentWeight: 1
 --- !u!114 &2334801344724765779
 MonoBehaviour:
@@ -332,7 +332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 4296129975827092884}
   endPoint: {fileID: 4323310675879455635}
-  iterations: 3
+  iterations: 5
   prohibitedZone: {fileID: 0}
   buffer: 0.1
 --- !u!114 &662670812258613749
@@ -350,20 +350,20 @@ MonoBehaviour:
   dormantLengthScale: 0.1
   emergedLengthScale: 3
   emergeMoveTime: 0.1
-  emergeGrowTime: 0.75
+  emergeGrowTime: 0.4
   retreatMoveTime: 0.3
   retreatGrowTime: 0.3
-  dormantHeadPosition: {fileID: 0}
-  emergedHeadPosition: {fileID: 0}
+  dormantHeadPosition: {fileID: 6475425159343801118}
+  emergedHeadPosition: {fileID: 4236495656175219310}
   followGuideIK: {fileID: 7141360877188178371}
   followPlayerIK: {fileID: 7639152704686829164}
   head: {fileID: 4201806285803211995}
   grabAttemptTimeOut: 0.4
-  grabSpeed: 1.5
-  grabSnapBackTime: 0.2
+  grabSpeed: 3
+  grabSnapBackTime: 0.1
   throwLength: 3
-  throwForce: 8
-  throwTime: 0.4
+  throwForce: 9
+  throwTime: 0.35
   throwReleaseFraction: 0.5
 --- !u!114 &3774359900322866545
 MonoBehaviour:
@@ -899,9 +899,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: follow ik guide
   targetSource: 0
-  ikIterations: 10
+  ikIterations: 25
   ikStrength: 1
-  ikToleranceSqrd: 0.04
+  ikToleranceSqrd: 0.0001
   startPoint: {fileID: 9183412842953314435}
   endPoint: {fileID: 4323310675879455635}
   ikTargetTransform: {fileID: 2653022756609778535}

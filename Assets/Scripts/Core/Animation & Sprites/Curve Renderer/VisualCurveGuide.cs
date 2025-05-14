@@ -186,7 +186,7 @@ namespace RPGPlatformer
                 }
             }
 
-            if (enforceBounds && bounds)
+            if (enforceBounds && bounds != null)
             {
                 if (!effectAppliedThisFrame)
                 {

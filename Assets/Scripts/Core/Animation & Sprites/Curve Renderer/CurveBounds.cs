@@ -8,8 +8,15 @@ namespace RPGPlatformer.Core
         [SerializeField] protected VisualCurveGuidePoint endPoint;
         [SerializeField] protected int iterations;
 
+        //protected enum AvoidanceSide
+        //{
+        //    undetermined, right, left
+        //}
+
         protected int startIndex;
         protected int endIndex;
+        //protected AvoidanceSide avoidanceSide = AvoidanceSide.undetermined;
+
 
         //returns whether 
         public void EnforceBounds(VisualCurveGuidePoint[] guidePoints, float[] lengths)
@@ -18,6 +25,13 @@ namespace RPGPlatformer.Core
             {
                 if (!EnforceBoundsIteration(guidePoints))
                 {
+                    //if (i == 0)
+                    //{
+                    //    if (avoidanceSide != AvoidanceSide.undetermined && AvoidanceSideCanBeReset(guidePoints))
+                    //    {
+                    //        avoidanceSide = AvoidanceSide.undetermined;
+                    //    }
+                    //}
                     return;
                 }
 
@@ -27,6 +41,8 @@ namespace RPGPlatformer.Core
 
         //will return whether the algorithm did anything (i.e. whether any points were outside bounds)
         protected abstract bool EnforceBoundsIteration(VisualCurveGuidePoint[] guidePoints);
+
+        //protected abstract bool AvoidanceSideCanBeReset(VisualCurveGuidePoint[] guidePoints);
 
         public void Configure(VisualCurveGuidePoint[] guidePoints)
         {
