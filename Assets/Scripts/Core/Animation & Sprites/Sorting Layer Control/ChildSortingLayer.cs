@@ -6,7 +6,6 @@ namespace RPGPlatformer.Core
     [ExecuteAlways]
     public class ChildSortingLayer : MonoBehaviour, SortingLayerDataSource
     {
-        [SerializeField] bool ignoreParentSortingData;
         [SerializeField] int orderDelta;
         [SerializeField] Transform dataSource;
 
@@ -64,8 +63,6 @@ namespace RPGPlatformer.Core
 
         private void SetSortingData(int? layerID, int? layerOrder)
         {
-            if (ignoreParentSortingData) return;
-
             if (!layerID.HasValue || !layerOrder.HasValue) return;
 
             if (TryGetComponent(out Renderer renderer))

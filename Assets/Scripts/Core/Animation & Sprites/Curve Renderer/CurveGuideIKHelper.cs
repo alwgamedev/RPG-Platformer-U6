@@ -11,8 +11,8 @@ namespace RPGPlatformer.Core
         //target = Vector2.LerpUnclamped... was V2 instead of V3.Lerp)
         //anyway for 2D project this is fine
         public static void FABRIK(VisualCurveGuidePoint[] guides, int startIndex, int endIndex,
-            Vector2[] unitRays, Vector2[] unitRays2, float[] lengths, float totalLength, Vector2 target,
-            int iterations, float strength, float toleranceSqrd, bool rotateTangents)
+            /*Vector2[] unitRays, Vector2[] unitRays2,*/ float[] lengths, float totalLength, Vector2 target,
+            int iterations, float strength, float toleranceSqrd/*, bool rotateTangents*/)
         {
             if (iterations == 0 || strength == 0 || startIndex >= endIndex) return;
 
@@ -20,7 +20,7 @@ namespace RPGPlatformer.Core
             var last = guides[endIndex];
             var originalFirst = first.Point();
             var originalLast = last.Point();
-            Vector2 v;
+            //Vector2 v;
 
             target = Vector2.LerpUnclamped(last.Point(), target, strength);
             var d = target - first.Point();
@@ -48,22 +48,22 @@ namespace RPGPlatformer.Core
 
             //rotate each tangent vector by the amount its previous ray rotated by
             //(not a particularly good choice, but struggled to find a better one that works)
-            if (rotateTangents)
-            {
-                for (int i = endIndex; i > startIndex; i--)
-                {
-                    if (i < endIndex)
-                    {
-                        v = (guides[i + 1].Point() - guides[i - 1].Point()).normalized;
-                        guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays2[i - 1], v, guides[i].TangentDir()));
-                    }
-                    else
-                    {
-                        v = (guides[i].Point() - guides[i - 1].Point()).normalized;
-                        guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v, guides[i].TangentDir()));
-                    }
-                }
-            }
+            //if (rotateTangents)
+            //{
+            //    for (int i = endIndex; i > startIndex; i--)
+            //    {
+            //        if (i < endIndex)
+            //        {
+            //            v = (guides[i + 1].Point() - guides[i - 1].Point()).normalized;
+            //            guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays2[i - 1], v, guides[i].TangentDir()));
+            //        }
+            //        else
+            //        {
+            //            v = (guides[i].Point() - guides[i - 1].Point()).normalized;
+            //            guides[i].SetTangentDir(PhysicsTools.FromToRotation(unitRays[i - 1], v, guides[i].TangentDir()));
+            //        }
+            //    }
+            //}
 
             void Forward()
             {
@@ -87,7 +87,32 @@ namespace RPGPlatformer.Core
                 }
             }
         }
+
+        public static void RotateTangents(VisualCurveGuidePoint[] guides, Vector2[] oldUnitRays, Vector2[] oldUnitRays2)
+        {
+            Vector2 v;
+            var n = guides.Length - 1;
+
+            for (int i = n; i > 0; i--)
+            {
+                if (i < n)
+                {
+                    v = (guides[i + 1].Point() - guides[i - 1].Point()).normalized;
+                    guides[i].SetTangentDir(PhysicsTools.FromToRotation(oldUnitRays2[i - 1], v, guides[i].TangentDir()));
+                }
+                else
+                {
+                    v = (guides[i].Point() - guides[i - 1].Point()).normalized;
+                    guides[i].SetTangentDir(PhysicsTools.FromToRotation(oldUnitRays[i - 1], v, guides[i].TangentDir()));
+                }
+            }
+
+            if (n > 0)
+            {
+                v = (guides[1].Point() - guides[0].Point()).normalized;
+                guides[0].SetTangentDir(PhysicsTools.FromToRotation(oldUnitRays[0], v, guides[0].TangentDir()));
+            }
+        }
     }
-
-
+    
 }

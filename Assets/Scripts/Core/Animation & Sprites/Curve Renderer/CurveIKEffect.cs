@@ -15,7 +15,7 @@ namespace RPGPlatformer.Core
     {
         public string description;//just to make it easier to identify which ik effect is which in the inspector
         public CurveIKTargetSource targetSource;
-        public bool dontRotateTangents;
+        //public bool dontRotateTangents;
         public int ikIterations = 1;
         public float ikStrength = 1;
         public float ikToleranceSqrd = .04f;

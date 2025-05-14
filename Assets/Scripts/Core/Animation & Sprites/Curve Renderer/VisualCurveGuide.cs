@@ -12,16 +12,19 @@ namespace RPGPlatformer
 
         public bool ikEnabled;
         public CurveIKEffect[] ikEffects;
+        public bool enforceBounds;
+        public CurveBounds bounds;
 
         CurveRenderer curveRenderer;
         Vector2[] unitRays;//direction of g[i + 1] - g[i]
-        Vector2[] unityRays2;//direction of g[i + 2] - g[i]
+        Vector2[] unitRays2;//direction of g[i + 2] - g[i]
         float[] lengths;//storage for lengths in the IK algorithm
         float totalLength;
 
         private void Awake()
         {
             ReconfigureIKEffects();
+            ReconfigureBounds();
         }
 
 //#if UNITY_EDITOR
@@ -43,6 +46,7 @@ namespace RPGPlatformer
         private void OnValidate()
         {
             ReconfigureIKEffects();
+            ReconfigureBounds();
         }
 
         public void DisableAllIK()
@@ -70,6 +74,13 @@ namespace RPGPlatformer
             {
                 effect?.RecomputeEndptIndices(guides);
             }
+        }
+
+        public void ReconfigureBounds()
+        {
+            if (guides == null || !bounds) return;
+
+            bounds.Configure(guides);
         }
 
         private void CheckForUpdates()
@@ -100,8 +111,11 @@ namespace RPGPlatformer
 
         private void UpdateRendererGuidePoints()
         {
+            bool effectApplied = false;
+
             if (ikEnabled && ikEffects != null)
             {
+                effectApplied = true;
                 RecomputeRaysAndLengths();
 
                 foreach (var e in ikEffects)
@@ -109,10 +123,26 @@ namespace RPGPlatformer
                     if (e != null && e.enabled && e.CanRunIK())
                     {
                         CurveGuideIKHelper.FABRIK(guides, e.StartIndex(), e.EndIndex(), 
-                            unitRays, unityRays2, lengths, totalLength,
-                            e.TargetPosition(), e.ikIterations, e.ikStrength, e.ikToleranceSqrd, !e.dontRotateTangents);
+                            /*unitRays, unityRays2,*/ lengths, totalLength,
+                            e.TargetPosition(), e.ikIterations, e.ikStrength, e.ikToleranceSqrd);
                     }
                 }
+            }
+
+            if (enforceBounds && bounds)
+            {
+                if (!effectApplied)
+                {
+                    effectApplied = true;
+                    RecomputeRaysAndLengths();
+                }
+
+                bounds.EnforceBounds(guides, lengths);
+            }
+
+            if (effectApplied)
+            {
+                CurveGuideIKHelper.RotateTangents(guides, unitRays, unitRays2);
             }
 
             if (curveRenderer == null)
@@ -137,9 +167,9 @@ namespace RPGPlatformer
                 unitRays = new Vector2[guides.Length - 1];
             }
 
-            if ((unityRays2 == null || unityRays2.Length != guides.Length - 2))
+            if (unitRays2 == null || unitRays2.Length != guides.Length - 2)
             {
-                unityRays2 = new Vector2[Math.Max(guides.Length - 2, 0)];
+                unitRays2 = new Vector2[Math.Max(guides.Length - 2, 0)];
             }
 
             Vector3 v;
@@ -158,7 +188,7 @@ namespace RPGPlatformer
 
             for (int i = 0; i < guides.Length - 2; i++)
             {
-                unityRays2[i] = (guides[i + 2].Point() - guides[i].Point()).normalized;
+                unitRays2[i] = (guides[i + 2].Point() - guides[i].Point()).normalized;
             }
         }
 
