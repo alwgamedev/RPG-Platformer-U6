@@ -6,54 +6,68 @@ namespace RPGPlatformer.Environment
 {
     public class EvilRootManager : MonoBehaviour
     {
-        [SerializeField] EvilRoot[] roots;
+        [SerializeField] Transform spawnMax;
+        [SerializeField] Transform spawnMin;
 
-        Queue<EvilRoot> dormant = new();
+        ObjectPool pool;
+        System.Random rng = new();
 
-        private void Start()
+        private void Awake()
         {
-            foreach (var r in roots)
-            {
-                if (r)
-                {
-                    r.gameObject.SetActive(false);
-                    dormant.Enqueue(r);
-                }
-            }
+            pool = GetComponent<ObjectPool>();
         }
 
-        private void Update()
+        //private void Start()
+        //{
+        //    foreach (var r in roots)
+        //    {
+        //        if (r)
+        //        {
+        //            r.gameObject.SetActive(false);
+        //            dormant.Enqueue(r);
+        //        }
+        //    }
+        //}
+
+        //private void Update()
+        //{
+        //    if (Input.GetKeyDown(KeyCode.M))
+        //    {
+        //        DeployRoot();
+        //    }
+        //}
+
+        //private void DeployRoot()
+        //{
+        //    if (dormant.Count != 0)
+        //    {
+        //        DeployRoot(dormant.Dequeue());
+        //    }
+        //}
+
+        private void SpawnRoot()
         {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                DeployRoot();
-            }
+            var r = (EvilRoot)pool.GetObject();
+            r.transform.SetParent(transform);
+
         }
 
-        private void DeployRoot()
-        {
-            if (dormant.Count != 0)
-            {
-                DeployRoot(dormant.Dequeue());
-            }
-        }
+        //private void DeployRoot(EvilRoot root)
+        //{
+        //    if (!root || root.gameObject.activeSelf)
+        //        return;
 
-        private void DeployRoot(EvilRoot root)
-        {
-            if (!root || root.gameObject.activeSelf)
-                return;
+        //    root.CycleComplete += CompletionHandler;
+        //    root.BeforeSetActive();
+        //    root.gameObject.SetActive(true);
+        //    root.OnDeploy(root.transform.position.x > transform.position.x, GlobalGameTools.Instance.TokenSource.Token);
 
-            root.CycleComplete += CompletionHandler;
-            root.BeforeSetActive();
-            root.gameObject.SetActive(true);
-            root.OnDeploy(root.transform.position.x > transform.position.x, GlobalGameTools.Instance.TokenSource.Token);
-
-            void CompletionHandler()
-            {
-                root.gameObject.SetActive(false);
-                dormant.Enqueue(root);
-                root.CycleComplete -= CompletionHandler;
-            }
-        }
+        //    void CompletionHandler()
+        //    {
+        //        root.gameObject.SetActive(false);
+        //        dormant.Enqueue(root);
+        //        root.CycleComplete -= CompletionHandler;
+        //    }
+        //}
     }
 }

@@ -1,13 +1,14 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
-    public abstract class PoolableObject : MonoBehaviour, IPoolableObject
+    public class PoolableObject : MonoBehaviour, IPoolableObject
     {
         public IObjectPool source;
 
-        public abstract void ResetPoolableObject();
+        public virtual void Configure(IObjectPool creator) { }
+
+        public virtual void ResetPoolableObject() { }
 
         public virtual void ReturnToPool()
         {

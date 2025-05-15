@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Environment
 {
-    public class EvilRoot : MonoBehaviour
+    public class EvilRoot : PoolableObject
     {
         [SerializeField] float dormantLengthScale = 0.1f;
         [SerializeField] float emergedLengthScale = 2.5f;
@@ -60,6 +60,14 @@ namespace RPGPlatformer.Environment
             vcg.lengthScale = dormantLengthScale;
             vcg.CallUpdate();
         }
+
+        //public override void Configure(IObjectPool creator)
+        //{
+        //    if (TryGetComponent(out ChildSortingLayer csl))
+        //    {
+        //        csl.
+        //    }
+        //}
 
         //BASIC FUNCTIONS
 

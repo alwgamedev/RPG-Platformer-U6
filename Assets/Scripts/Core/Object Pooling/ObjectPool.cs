@@ -9,7 +9,7 @@ namespace RPGPlatformer.Core
         public int poolSize;
         public bool generateOnAwake;
 
-        private Queue<PoolableObject> pool = new();
+        Queue<PoolableObject> pool = new();
 
         private void Awake()
         {
@@ -21,17 +21,25 @@ namespace RPGPlatformer.Core
 
         public PoolableObject GetObject()
         {
-            lock (pool)
+            if (pool.Count == 0)
             {
-                if (pool.Count == 0)
-                {
-                    return InstantiatePooledObject();
-                }
-
-                PoolableObject item = pool.Dequeue();
-                item.gameObject.SetActive(true);
-                return item;
+                return InstantiatePooledObject();
             }
+
+            PoolableObject item = pool.Dequeue();
+            item.gameObject.SetActive(true);
+            return item;
+            //lock (pool)
+            //{
+            //    if (pool.Count == 0)
+            //    {
+            //        return InstantiatePooledObject();
+            //    }
+
+            //    PoolableObject item = pool.Dequeue();
+            //    item.gameObject.SetActive(true);
+            //    return item;
+            //}
         }
 
         public void ReturnObject(PoolableObject item)
@@ -52,17 +60,16 @@ namespace RPGPlatformer.Core
             item.transform.SetParent(transform);
             item.source = this;
             pool.Enqueue(item);
-            if (item.gameObject.activeSelf)
-            {
-                item.gameObject.SetActive(false);
-            }
+            item.gameObject.SetActive(false);
         }
 
         public void GeneratePool()
         {
             for (int i = 0; i < poolSize; i++)
             {
-                AddToQueue(InstantiatePooledObject());
+                var o = InstantiatePooledObject();
+                o.Configure(this);
+                AddToQueue(o);
             }
         }
     }
