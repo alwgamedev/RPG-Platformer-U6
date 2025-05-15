@@ -6,6 +6,8 @@ namespace RPGPlatformer.Core
     {
         public IObjectPool source;
 
+        public virtual void Configure(object parameters) { }
+
         public virtual void OnEnqueued(IObjectPool source)
         {
             this.source = source;

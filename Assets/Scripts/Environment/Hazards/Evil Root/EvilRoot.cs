@@ -35,7 +35,7 @@ namespace RPGPlatformer.Environment
         float headRadius2;
         Transform playerParent;
 
-        System.Random rng = new();
+        //System.Random rng = new();
 
         //public event Action CycleComplete;
 
@@ -117,11 +117,11 @@ namespace RPGPlatformer.Environment
 
         public async Task Emerge(CancellationToken token)
         {
-            float emergeRate = 2.25f * (float)rng.NextDouble() + 0.75f;
+            float emergeTimeMult = MiscTools.RandomFloat(0.75f, 3);//2.25f * (float)rng.NextDouble() + 0.75f;
             vcg.enforceBounds = true;
-            var a = vcg.LerpLengthScale(emergedLengthScale, emergeRate * emergeGrowTime, token);
+            var a = vcg.LerpLengthScale(emergedLengthScale, emergeTimeMult * emergeGrowTime, token);
             var b = followGuideIK.LerpBetweenTransforms(dormantHeadPosition, 
-                emergedHeadPosition, emergeRate * emergeMoveTime, token);
+                emergedHeadPosition, emergeTimeMult * emergeMoveTime, token);
             //var b = followGuideIK.LerpTowardsPosition(GlobalGameTools.Instance.PlayerTransform.position, 
             //    emergeMoveTime, token);
             await Task.WhenAll(a, b);
@@ -186,7 +186,8 @@ namespace RPGPlatformer.Environment
 
         public async Task ThrowPlayer(bool throwRight, CancellationToken token)
         {
-            float angle = (float)rng.NextDouble() * Mathf.PI / 8 + Mathf.PI / 16;
+            float angle = MiscTools.RandomFloat(Mathf.PI / 16, 3 * Mathf.PI / 16);
+            //(float)rng.NextDouble() * Mathf.PI / 8 + Mathf.PI / 16;
             //if (rng.Next(0, 2) == 1)
             //{
             //    angle = Mathf.PI - angle;

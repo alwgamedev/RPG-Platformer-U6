@@ -20,7 +20,7 @@ namespace RPGPlatformer.Effects
 
 
         bool fractured;
-        System.Random rng = new();
+        //System.Random rng = new();
 
         //private void Update()
         //{
@@ -71,7 +71,8 @@ namespace RPGPlatformer.Effects
                 babySpider.transform.SetParent(null);
                 babySpider.gameObject.SetActive(true);
                 babySpider.AddForce(babySpider.mass * spiderSpawnAccel *
-                    new Vector2((float)rng.NextDouble() - .5f, 1), ForceMode2D.Impulse);
+                    new Vector2(MiscTools.RandomFloat(-0.5f, 0.5f)/*(float)rng.NextDouble() - .5f*/, 1), 
+                    ForceMode2D.Impulse);
             }
         }
 
@@ -79,7 +80,7 @@ namespace RPGPlatformer.Effects
         {
             var shakeForce = topPiece.Rb.mass * this.shakeForce * Vector2.right;
 
-            var n = rng.Next(numShakes / 2, 2 * numShakes);
+            var n = MiscTools.rng.Next(numShakes / 2, 2 * numShakes);
             for (int i = 0; i < numShakes; i++)
             {
                 if (i == 1)

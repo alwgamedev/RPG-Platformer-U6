@@ -22,7 +22,8 @@ namespace RPGPlatformer.Environment
             if (randomizeExternalInfluenceStrength && minExternalInfluenceStrength <= maxExternalInfluenceStrength)
             {
                 influenceStrength
-                    = UnityEngine.Random.Range(minExternalInfluenceStrength, maxExternalInfluenceStrength);
+                    = MiscTools.RandomFloat(minExternalInfluenceStrength, maxExternalInfluenceStrength);
+                //UnityEngine.Random.Range(minExternalInfluenceStrength, maxExternalInfluenceStrength);
             }
             else
             {

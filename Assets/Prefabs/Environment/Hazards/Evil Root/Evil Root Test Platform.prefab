@@ -249,12 +249,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   platform: {fileID: 1103823632358988394}
-  spawnMax: {fileID: 8486505501290071971}
-  spawnMin: {fileID: 8491723200777576005}
-  emergeMax: {fileID: 234599243010717855}
-  emergeMin: {fileID: 4321888007902840734}
-  spawnTimeMin: 0.1
-  spawnTimeMax: 0.5
+  spawnPos:
+    mode: 0
+    boundsSource: 0
+    minTransform: {fileID: 8491723200777576005}
+    maxTransform: {fileID: 8486505501290071971}
+    minPosition: {x: 0, y: 0, z: 0}
+    maxPosition: {x: 0, y: 0, z: 0}
+  emergePos:
+    mode: 0
+    boundsSource: 0
+    minTransform: {fileID: 4321888007902840734}
+    maxTransform: {fileID: 234599243010717855}
+    minPosition: {x: 0, y: 0, z: 0}
+    maxPosition: {x: 0, y: 0, z: 0}
+  spawnTime:
+    mode: 0
+    min: 0.1
+    max: 0.5
 --- !u!114 &1177008174235929219
 MonoBehaviour:
   m_ObjectHideFlags: 0

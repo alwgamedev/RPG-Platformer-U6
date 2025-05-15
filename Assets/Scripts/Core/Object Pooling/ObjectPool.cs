@@ -8,6 +8,9 @@ namespace RPGPlatformer.Core
         public PoolableObject pooledObject;
         public int poolSize;
         public bool generateOnAwake;
+        public Object configurationParameters;
+        //^use e.g. if the object depends on something in the scene that can't be added to prefab
+        //(like patroller needing patrol bounds)
 
         Queue<PoolableObject> pool = new();
 
@@ -24,11 +27,12 @@ namespace RPGPlatformer.Core
         public PoolableObject GetObject()
         {
             //don't think lock is necessary for us; we don't have any multithreading
+            //but if we do in the future, then we don't have to worry about forgetting to add this
             lock (pool)
             {
                 if (pool.Count == 0)
                 {
-                    return InstantiatePooledObject();
+                    return InstantiatePooledObject(configurationParameters);
                 }
 
                 PoolableObject item = pool.Dequeue();
@@ -45,9 +49,11 @@ namespace RPGPlatformer.Core
                 AddToQueue(item);
             }
         }
-        PoolableObject InstantiatePooledObject()
+        PoolableObject InstantiatePooledObject(object configurationParameters)
         {
-            return Instantiate(pooledObject);
+            var o = Instantiate(pooledObject);
+            o.Configure(configurationParameters);
+            return o;
         }
 
         void AddToQueue(PoolableObject item)
@@ -64,7 +70,7 @@ namespace RPGPlatformer.Core
         {
             for (int i = 0; i < poolSize; i++)
             {
-                AddToQueue(InstantiatePooledObject());
+                AddToQueue(InstantiatePooledObject(configurationParameters));
             }
         }
     }

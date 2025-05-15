@@ -14,7 +14,7 @@ namespace RPGPlatformer.Loot
 
         public IInventorySlotDataContainer RollAndGenerateDropItem()
         {
-            return GenerateDropItem(UnityEngine.Random.Range(0f, 1f));
+            return GenerateDropItem(MiscTools.RandomFloat(0, 1));
         }
 
         public IInventorySlotDataContainer GenerateDropItem(float roll)
@@ -24,7 +24,7 @@ namespace RPGPlatformer.Loot
                 return null;
             }
 
-            var q = UnityEngine.Random.Range(minQuantity, maxQuantity);
+            var q = MiscTools.rng.Next(minQuantity, maxQuantity + 1);
             return item.CreateInstanceOfItem().ToInventorySlotData(q);
         }
 

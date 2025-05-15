@@ -32,12 +32,12 @@ namespace RPGPlatformer.Environment
 
             if (minXScale <= maxXScale && randomizeXScale)
             {
-                xScale = Random.Range(minXScale, maxXScale);
+                xScale = MiscTools.RandomFloat(minXScale, maxXScale);//Random.Range(minXScale, maxXScale);
             }
 
             if (minYScale <= maxYScale && randomizeYScale)
             {
-                yScale = Random.Range(minYScale, maxYScale);
+                yScale = MiscTools.RandomFloat(minYScale, maxYScale);//Random.Range(minYScale, maxYScale);
             }
 
             transform.localScale = new Vector3(xScale, yScale, transform.localScale.z);

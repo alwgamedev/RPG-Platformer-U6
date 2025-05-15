@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Core;
+using UnityEngine;
 
 namespace RPGPlatformer.AIControl
 {
@@ -6,7 +7,8 @@ namespace RPGPlatformer.AIControl
     {
         [SerializeField] Transform leftBound;
         [SerializeField] Transform rightBound;
+        [SerializeField] RandomizableVector3 bounds;
 
-        public override object Content => (leftBound, rightBound);
+        public override object Content => bounds;//(leftBound, rightBound);
     }
 }

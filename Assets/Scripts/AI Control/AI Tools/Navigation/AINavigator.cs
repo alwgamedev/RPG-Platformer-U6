@@ -1,4 +1,5 @@
-﻿using RPGPlatformer.Movement;
+﻿using RPGPlatformer.Core;
+using RPGPlatformer.Movement;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,8 +21,9 @@ namespace RPGPlatformer.AIControl
         float hangTimer;
 
         //for bounded patrol & singleTarget patrol
-        Vector2 leftBound;
-        Vector2 rightBound;
+        //Vector2 leftBound;
+        //Vector2 rightBound;
+        RandomizableVector3 bounds;
         Vector2 currentDestination;
 
         public bool checkHorizontalDistanceOnly = true;
@@ -51,7 +53,7 @@ namespace RPGPlatformer.AIControl
                     BeginSingleDestinationPatrol((Vector3)parameters);
                     break;
                 case NavigationMode.bounded:
-                    BeginBoundedPatrol(((Transform, Transform))parameters);
+                    BeginBoundedPatrol((RandomizableVector3/*(Transform, Transform)*/)parameters);
                     break;
                 case NavigationMode.pathForwards:
                     BeginPathPatrol((LinkedList<PatrolPathWayPoint>)parameters, true);
@@ -81,11 +83,12 @@ namespace RPGPlatformer.AIControl
             currentDestination = targetPosition;
         }
 
-        private void BeginBoundedPatrol((Transform, Transform) bounds)
+        private void BeginBoundedPatrol(RandomizableVector3/*(Transform, Transform)*/ bounds)
         {
             CurrentMode = NavigationMode.bounded;
-            leftBound = bounds.Item1.position;
-            rightBound = bounds.Item2.position;
+            //leftBound = bounds.Item1.position;
+            //rightBound = bounds.Item2.position;
+            this.bounds = bounds;
             GetNextBoundedDestination();
         }
 
@@ -220,13 +223,14 @@ namespace RPGPlatformer.AIControl
 
         private bool GetNextBoundedDestination()
         {
-            if (leftBound == null ||  rightBound == null)
-            {
-                return false;
-            }
+            //if (leftBound == null ||  rightBound == null)
+            //{
+            //    return false;
+            //}
 
-            currentDestination = new (UnityEngine.Random.Range(leftBound.x, rightBound.x), 
-                UnityEngine.Random.Range(Math.Min(leftBound.y, rightBound.y), Math.Max(leftBound.y, rightBound.y)));
+            currentDestination = bounds.Value;
+                //new (MiscTools.RandomFloat(leftBound.x, rightBound.x), 
+                //MiscTools.RandomFloat(Math.Min(leftBound.y, rightBound.y), Math.Max(leftBound.y, rightBound.y)));
             return true;
         }
 

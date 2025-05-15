@@ -35,7 +35,7 @@ namespace RPGPlatformer.Core
 
         public void AddRandomizedOffset()
         {
-            tickTime += UnityEngine.Random.Range(0, tickLength);
+            tickTime += MiscTools.RandomFloat(0, tickLength);
 
             while (tickTime >= tickLength)
             {

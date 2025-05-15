@@ -285,7 +285,7 @@ namespace RPGPlatformer.AIControl
 
         public void ChooseRandomWormholePosition(float leftXBd, float rightXBd)
         {
-            var x = Random.Range(leftXBd, rightXBd);
+            var x = MiscTools.RandomFloat(leftXBd, rightXBd);
             var p = GroundCollider.ClosestPoint(new Vector2(x, GroundTopBound));
             SetWormholePosition(p);
         }

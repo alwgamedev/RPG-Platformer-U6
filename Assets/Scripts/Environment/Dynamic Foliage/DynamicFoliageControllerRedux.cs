@@ -23,18 +23,18 @@ namespace RPGPlatformer.Environment
 
         Action OnUpdate;
 
-        static System.Random rng = new();
+        //static System.Random rng = new();
 
         private void Awake()
         {
             if (randomizeEaseInTime)
             {
-                easeInRate *= (float)(0.5f * rng.NextDouble() + 0.75f);
+                easeInRate *= MiscTools.RandomFloat(0.75f, 1.25f);//(float)(0.5f * rng.NextDouble() + 0.75f);
             }
 
             if (randomizeEaseOutTime)
             {
-                easeOutTime *= (float)(0.5f * rng.NextDouble() + 0.75f);
+                easeOutTime *= MiscTools.RandomFloat(0.75f, 1.25f);//(float)(0.5f * rng.NextDouble() + 0.75f);
             }
 
             easeInRate = maxInfluence / easeInTime;

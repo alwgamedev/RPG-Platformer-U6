@@ -1,25 +1,29 @@
 ﻿using UnityEngine;
 using RPGPlatformer.Core;
+//using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.Environment
 {
     public class EvilRootManager : MonoBehaviour, IEvilRootManager
     {
         [SerializeField] Collider2D platform;
-        [SerializeField] Transform spawnMax;
-        [SerializeField] Transform spawnMin;
-        [SerializeField] Transform emergeMax;
-        [SerializeField] Transform emergeMin;
-        [SerializeField] float spawnTimeMin;
-        [SerializeField] float spawnTimeMax;
+        //[SerializeField] Transform spawnMax;
+        //[SerializeField] Transform spawnMin;
+        //[SerializeField] Transform emergeMax;
+        //[SerializeField] Transform emergeMin;
+        //[SerializeField] float spawnTimeMin;
+        //[SerializeField] float spawnTimeMax;
+        [SerializeField] RandomizableVector3 spawnPos;
+        [SerializeField] RandomizableVector3 emergePos;
+        [SerializeField] RandomizableFloat spawnTime;
 
         ObjectPool pool;
         bool playerInBounds;
         float nextSpawnTime;
         float spawnTimer;
-        System.Random rng = new();
+        //System.Random rng = new();
 
-        int DeployedRoots => pool.poolSize - pool.Available;
+        //int DeployedRoots => pool.poolSize - pool.Available;
 
         public Collider2D Platform => platform;
 
@@ -36,7 +40,8 @@ namespace RPGPlatformer.Environment
             }
             else if (playerInBounds && pool.Available != 0)
             {
-                nextSpawnTime = (spawnTimeMax - spawnTimeMin) * (float)rng.NextDouble() + spawnTimeMin;
+                nextSpawnTime = spawnTime.Value;//MiscTools.RandomFloat(spawnTimeMin, spawnTimeMax);
+                    //(spawnTimeMax - spawnTimeMin) * (float)MiscTools.rng.NextDouble() + spawnTimeMin;
                 spawnTimer = 0;
                 DeployRoot();
             }
@@ -52,17 +57,24 @@ namespace RPGPlatformer.Environment
 
         private Vector2 GetRandomSpawnPosition()
         {
-            var x = (spawnMax.position.x - spawnMin.position.x) * (float)rng.NextDouble() + spawnMin.position.x;
-            var y = (spawnMax.position.y - spawnMin.position.y) * (float)rng.NextDouble() + spawnMin.position.y;
-            return new Vector2(x, y);
+            return spawnPos.Value;
+            //return MiscTools.RandomPointInBox(spawnMin.position, spawnMax.position);
+            //var x = (spawnMax.position.x - spawnMin.position.x) * (float)rng.NextDouble() + spawnMin.position.x;
+            //var y = (spawnMax.position.y - spawnMin.position.y) * (float)rng.NextDouble() + spawnMin.position.y;
+            //return new Vector2(x, y);
         }
 
         private Vector2 GetRandomEmergePosition(float x)
         {
-            var w2 = (emergeMax.position.x - emergeMin.position.x) / 4;
-            x = x - w2 + 2 * w2 * (float)rng.NextDouble();
-            var y = (emergeMax.position.y - emergeMin.position.y) * (float)rng.NextDouble() + emergeMin.position.y;
+            var w2 = (emergePos.Max.x - emergePos.Min.x) / 2;
+            x = MiscTools.RandomFloat(x - w2, x + w2);
+            var y = MiscTools.RandomFloat(emergePos.Min.y, emergePos.Max.y);
             return new Vector2(x, y);
+            //var w2 = (emergeMax.position.x - emergeMin.position.x) / 4;
+            //x = x - w2 + 2 * w2 * (float)MiscTools.rng.NextDouble();
+            //var y = (emergeMax.position.y - emergeMin.position.y) * (float)MiscTools.rng.NextDouble() 
+            //    + emergeMin.position.y;
+            //return new Vector2(x, y);
         }
 
         private void OnPlayerEnter()

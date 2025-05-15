@@ -25,7 +25,7 @@ namespace RPGPlatformer.Loot
 
             for (int i =  0; i < table.Length; i++)
             {
-                j = Random.Range(0, table.Length - 1);
+                j = MiscTools.rng.Next(0, table.Length);
                 result[i] = table[j].RollAndGenerateDropItem();
                 //^I'm sure about randomizing j every time -- later we may want
                 //to have some number of table entries that are included in every drop
