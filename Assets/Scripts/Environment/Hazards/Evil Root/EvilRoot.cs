@@ -64,21 +64,34 @@ namespace RPGPlatformer.Environment
             vcg.CallUpdate();
         }
 
-        public override void OnEnqueued(IObjectPool source)
+        public override void Configure(object parameters)
         {
-            base.OnEnqueued(source);
-
-            if (!hasBeenEnqueued)
+            var g = (GameObject)parameters;
+            if (TryGetComponent(out ChildSortingLayer csl))
             {
-                var erm = ((Component)source).GetComponent<IEvilRootManager>();
-                if (TryGetComponent(out ChildSortingLayer csl))
-                {
-                    csl.dataSource = erm.transform;
-                }
+                csl.dataSource = g.transform;
+            }
+            if (g.TryGetComponent(out IEvilRootManager erm))
+            {
                 ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
-                hasBeenEnqueued = true;
             }
         }
+
+        //public override void OnEnqueued(IObjectPool source)
+        //{
+        //    base.OnEnqueued(source);
+
+        //    //if (!hasBeenEnqueued)
+        //    //{
+        //    //    var erm = ((Component)source).GetComponent<IEvilRootManager>();
+        //    //    if (TryGetComponent(out ChildSortingLayer csl))
+        //    //    {
+        //    //        csl.dataSource = erm.transform;
+        //    //    }
+        //    //    ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
+        //    //    hasBeenEnqueued = true;
+        //    //}
+        //}
 
         public void SetEmergePosition(Vector2 position)
         {
@@ -118,14 +131,14 @@ namespace RPGPlatformer.Environment
         public async Task Emerge(CancellationToken token)
         {
             float emergeTimeMult = MiscTools.RandomFloat(0.75f, 3);//2.25f * (float)rng.NextDouble() + 0.75f;
-            vcg.enforceBounds = true;
+            //vcg.enforceBounds = true;
             var a = vcg.LerpLengthScale(emergedLengthScale, emergeTimeMult * emergeGrowTime, token);
             var b = followGuideIK.LerpBetweenTransforms(dormantHeadPosition, 
                 emergedHeadPosition, emergeTimeMult * emergeMoveTime, token);
             //var b = followGuideIK.LerpTowardsPosition(GlobalGameTools.Instance.PlayerTransform.position, 
             //    emergeMoveTime, token);
             await Task.WhenAll(a, b);
-            vcg.enforceBounds = false;
+            //vcg.enforceBounds = false;
         }
 
         public async Task Retreat(CancellationToken token)

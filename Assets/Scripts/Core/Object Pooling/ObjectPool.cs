@@ -5,10 +5,12 @@ namespace RPGPlatformer.Core
 {
     public class ObjectPool : MonoBehaviour, IObjectPool
     {
-        public PoolableObject pooledObject;
-        public int poolSize;
+        //public PoolableObject pooledObject;
+        //public int poolSize;
+        ////public bool generateOnAwake;
+        //public Object configurationParameters;
+        public ObjectPoolData poolData;
         public bool generateOnAwake;
-        public Object configurationParameters;
         //^use e.g. if the object depends on something in the scene that can't be added to prefab
         //(like patroller needing patrol bounds)
 
@@ -32,7 +34,7 @@ namespace RPGPlatformer.Core
             {
                 if (pool.Count == 0)
                 {
-                    return InstantiatePooledObject(configurationParameters);
+                    return InstantiatePooledObject(poolData.configurationParameters);
                 }
 
                 PoolableObject item = pool.Dequeue();
@@ -51,7 +53,7 @@ namespace RPGPlatformer.Core
         }
         PoolableObject InstantiatePooledObject(object configurationParameters)
         {
-            var o = Instantiate(pooledObject);
+            var o = Instantiate(poolData.pooledObject);
             o.Configure(configurationParameters);
             return o;
         }
@@ -68,9 +70,9 @@ namespace RPGPlatformer.Core
 
         public void GeneratePool()
         {
-            for (int i = 0; i < poolSize; i++)
+            for (int i = 0; i < poolData.poolSize; i++)
             {
-                AddToQueue(InstantiatePooledObject(configurationParameters));
+                AddToQueue(InstantiatePooledObject(poolData.configurationParameters));
             }
         }
     }

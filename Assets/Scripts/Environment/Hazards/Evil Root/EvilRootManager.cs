@@ -7,12 +7,6 @@ namespace RPGPlatformer.Environment
     public class EvilRootManager : MonoBehaviour, IEvilRootManager
     {
         [SerializeField] Collider2D platform;
-        //[SerializeField] Transform spawnMax;
-        //[SerializeField] Transform spawnMin;
-        //[SerializeField] Transform emergeMax;
-        //[SerializeField] Transform emergeMin;
-        //[SerializeField] float spawnTimeMin;
-        //[SerializeField] float spawnTimeMax;
         [SerializeField] RandomizableVector3 spawnPos;
         [SerializeField] RandomizableVector3 emergePos;
         [SerializeField] RandomizableFloat spawnTime;
@@ -90,6 +84,17 @@ namespace RPGPlatformer.Environment
         private void OnTriggerEnter2D(Collider2D collider)
         {
             if (!gameObject.activeInHierarchy)
+                return;
+
+            if (collider.transform == GlobalGameTools.Instance.PlayerTransform)
+            {
+                OnPlayerEnter();
+            }
+        }
+
+        private void OnTriggerStay2D(Collider2D collider)
+        {
+            if (!gameObject.activeInHierarchy || playerInBounds)
                 return;
 
             if (collider.transform == GlobalGameTools.Instance.PlayerTransform)

@@ -16,6 +16,7 @@ namespace RPGPlatformer.Combat
         public ReplenishableStat Stamina { get; }
         public ReplenishableStat Wrath { get; }
         public IHealth Health { get; }
+        public bool DestroyOnFinalizeDeath { get; set; }
 
         public event Action OnTargetingFailed;
         public event Action DeathFinalized;
