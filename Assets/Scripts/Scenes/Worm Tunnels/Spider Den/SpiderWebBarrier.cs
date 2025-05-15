@@ -1,4 +1,5 @@
-﻿using RPGPlatformer.Combat;
+﻿using RPGPlatformer.AIControl;
+using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
 using RPGPlatformer.UI;
 using UnityEngine;
@@ -62,7 +63,7 @@ namespace RPGPlatformer.Environment
         private void Start()
         {
             ConfigureHealth();
-
+            
             if (motherSpider && motherSpider.TryGetComponent(out ICombatController cc))
             {
                 healthCollider.enabled = false;

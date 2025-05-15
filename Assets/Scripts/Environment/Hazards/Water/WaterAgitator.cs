@@ -8,14 +8,14 @@ namespace RPGPlatformer.Environment
     {
         float halfWidth;
         Rigidbody2D rb;
-        Collider2D coll;
+        //Collider2D coll;
         WaterMeshGenerator waterMesh;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
-            coll = GetComponent<Collider2D>();
-            halfWidth = 0.5f * (coll.bounds.max.x - coll.bounds.min.x);
+            //coll = GetComponent<Collider2D>();
+            //halfWidth = 0.5f * (coll.bounds.max.x - coll.bounds.min.x);
         }
 
         private void Start()
@@ -23,6 +23,7 @@ namespace RPGPlatformer.Environment
             var b = GetComponent<BuoyantObject>();
             b.WaterEntered += OnWaterEntered;
             b.WaterExited += OnWaterExited;
+            halfWidth = 0.5f * b.Width;
         }
 
         private void FixedUpdate()

@@ -13,6 +13,7 @@ namespace RPGPlatformer.Environment
         [SerializeField] float springConstant;
         [SerializeField] float dampingFactor;
         [SerializeField] float agitationScale;
+        [SerializeField] float agitationPower = 1;//higher power allows you to agitate water more, and throw player less
         [SerializeField] float waveSpreadRate;
         [SerializeField] int waveSmoothingIterations;
 
@@ -43,7 +44,6 @@ namespace RPGPlatformer.Environment
         {
             UpdateSprings();
             PropagateWaves();
-            //UpdateMeshVertices();
         }
 
         private void Update()
@@ -134,7 +134,6 @@ namespace RPGPlatformer.Environment
                 v = vertices[i];
                 v.y = halfHeight + springs[i].Displacement;
                 vertices[i] = v;
-                //vertices[i] = new(vertices[i].x, halfHeight + springs[i].Displacement, 0);
             }
 
             mesh.vertices = vertices;
@@ -153,10 +152,12 @@ namespace RPGPlatformer.Environment
             int iMin = (int)Mathf.Clamp((x - halfWidth) / springSpacing, 0, numSprings - 1);
             int iMax = (int)Mathf.Clamp((x + halfWidth) / springSpacing, 0, numSprings - 1);
 
+            velocityY = Mathf.Sign(velocityY) * Mathf.Pow(Mathf.Abs(velocityY), agitationPower);
+            velocityY *= agitationScale * Time.deltaTime;
 
             for (int i = iMin; i <= iMax; i++)
             {
-                PushSpring(i, agitationScale * Time.deltaTime * velocityY);
+               PushSpring(i, velocityY);
             }
         }
 
@@ -173,10 +174,10 @@ namespace RPGPlatformer.Environment
             int i = (int)d;
             if (i >= numSprings - 1)
             {
-                return transform.position.y + vertices[i].y;// + surfaceColliderBuffer;
+                return transform.position.y + vertices[i].y;
             }
             return transform.position.y +
-                Mathf.Lerp(vertices[i].y, vertices[i + 1].y, d - i);// + surfaceColliderBuffer;
+                Mathf.Lerp(vertices[i].y, vertices[i + 1].y, d - i);
         }
 
         private void UpdateSprings()
