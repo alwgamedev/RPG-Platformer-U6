@@ -1,13 +1,11 @@
-﻿using Cinemachine.Editor;
-using RPGPlatformer.Movement;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
     public class ColliderBasedCurveBounds : CurveBounds
     {
-        [SerializeField] Collider2D prohibitedZone;
-        [SerializeField] float buffer;
+        public Collider2D prohibitedZone;
+        public float buffer;
         //[SerializeField] float resetAvoidanceDistanceFactorSqrd = 2.25f;
         //[SerializeField] AvoidanceSide defaultAvoidanceSide;
 

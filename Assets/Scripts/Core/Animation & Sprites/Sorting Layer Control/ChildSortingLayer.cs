@@ -6,8 +6,8 @@ namespace RPGPlatformer.Core
     [ExecuteAlways]
     public class ChildSortingLayer : MonoBehaviour, SortingLayerDataSource
     {
-        [SerializeField] int orderDelta;
-        [SerializeField] Transform dataSource;
+        public int orderDelta;
+        public Transform dataSource;
 
         SortingLayerDataSource slds;
 

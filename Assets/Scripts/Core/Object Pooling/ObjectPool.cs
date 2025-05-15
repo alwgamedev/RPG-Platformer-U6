@@ -11,6 +11,8 @@ namespace RPGPlatformer.Core
 
         Queue<PoolableObject> pool = new();
 
+        public int Available => pool.Count;
+
         private void Awake()
         {
             if (generateOnAwake)
@@ -21,25 +23,19 @@ namespace RPGPlatformer.Core
 
         public PoolableObject GetObject()
         {
-            if (pool.Count == 0)
+            //don't think lock is necessary for us; we don't have any multithreading
+            lock (pool)
             {
-                return InstantiatePooledObject();
+                if (pool.Count == 0)
+                {
+                    return InstantiatePooledObject();
+                }
+
+                PoolableObject item = pool.Dequeue();
+                item.BeforeSetActive();
+                item.gameObject.SetActive(true);
+                return item;
             }
-
-            PoolableObject item = pool.Dequeue();
-            item.gameObject.SetActive(true);
-            return item;
-            //lock (pool)
-            //{
-            //    if (pool.Count == 0)
-            //    {
-            //        return InstantiatePooledObject();
-            //    }
-
-            //    PoolableObject item = pool.Dequeue();
-            //    item.gameObject.SetActive(true);
-            //    return item;
-            //}
         }
 
         public void ReturnObject(PoolableObject item)
@@ -58,7 +54,8 @@ namespace RPGPlatformer.Core
         {
             if (!item) return;
             item.transform.SetParent(transform);
-            item.source = this;
+            //item.source = this;
+            item.OnEnqueued(this);
             pool.Enqueue(item);
             item.gameObject.SetActive(false);
         }
@@ -67,9 +64,7 @@ namespace RPGPlatformer.Core
         {
             for (int i = 0; i < poolSize; i++)
             {
-                var o = InstantiatePooledObject();
-                o.Configure(this);
-                AddToQueue(o);
+                AddToQueue(InstantiatePooledObject());
             }
         }
     }

@@ -20,6 +20,7 @@ namespace RPGPlatformer.Environment
         [SerializeField] CurveIKEffect followGuideIK;
         [SerializeField] CurveIKEffect followPlayerIK;
         [SerializeField] TriggerColliderMessenger head;
+        [SerializeField] float grabRange = 3;
         [SerializeField] float grabAttemptTimeOut = 1;
         [SerializeField] float grabSpeed = 4;
         [SerializeField] float grabSnapBackTime = 0.1f;
@@ -29,15 +30,17 @@ namespace RPGPlatformer.Environment
         [Range(0, 1)][SerializeField] float throwReleaseFraction = 0.6f;
 
         VisualCurveGuide vcg;
+        bool hasBeenEnqueued;
         bool headIsTouchingPlayer;
         float headRadius2;
         Transform playerParent;
 
         System.Random rng = new();
 
-        public event Action CycleComplete;
+        //public event Action CycleComplete;
 
         static EvilRoot RootHoldingPlayer;
+        static event Action PlayerGrabbed;
 
         private void Awake()
         {
@@ -55,40 +58,70 @@ namespace RPGPlatformer.Environment
             FollowGuide();
         }
 
-        public void BeforeSetActive()
+        public override void BeforeSetActive()
         {
             vcg.lengthScale = dormantLengthScale;
             vcg.CallUpdate();
         }
 
-        //public override void Configure(IObjectPool creator)
-        //{
-        //    if (TryGetComponent(out ChildSortingLayer csl))
-        //    {
-        //        csl.
-        //    }
-        //}
+        public override void OnEnqueued(IObjectPool source)
+        {
+            base.OnEnqueued(source);
+
+            if (!hasBeenEnqueued)
+            {
+                var erm = ((Component)source).GetComponent<IEvilRootManager>();
+                if (TryGetComponent(out ChildSortingLayer csl))
+                {
+                    csl.dataSource = erm.transform;
+                }
+                ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
+                hasBeenEnqueued = true;
+            }
+        }
+
+        public void SetEmergePosition(Vector2 position)
+        {
+            emergedHeadPosition.position = position;
+        }
 
         //BASIC FUNCTIONS
 
         public async void OnDeploy(bool throwRight, CancellationToken token)
         {
-            await Emerge(token); 
-            await GrabPlayer(token);
-            if (RootHoldingPlayer == this)
+            await Emerge(token);
+            if (PlayerInGrabRange())
             {
-                await ThrowPlayer(throwRight, token);
+                using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+
+                try
+                {
+                    PlayerGrabbed += cts.Cancel;
+                    await GrabPlayer(cts.Token);
+                }
+                catch (TaskCanceledException) { }
+                finally
+                {
+                    PlayerGrabbed -= cts.Cancel;
+                }
+
+                if (RootHoldingPlayer == this)
+                {
+                    PlayerGrabbed?.Invoke();
+                    await ThrowPlayer(throwRight, token);
+                }
             }
             await Retreat(token);
-            CycleComplete?.Invoke();
+            ReturnToPool();
         }
 
         public async Task Emerge(CancellationToken token)
         {
+            float emergeRate = 2.25f * (float)rng.NextDouble() + 0.75f;
             vcg.enforceBounds = true;
-            var a = vcg.LerpLengthScale(emergedLengthScale, emergeGrowTime, token);
+            var a = vcg.LerpLengthScale(emergedLengthScale, emergeRate * emergeGrowTime, token);
             var b = followGuideIK.LerpBetweenTransforms(dormantHeadPosition, 
-                emergedHeadPosition, emergeMoveTime, token);
+                emergedHeadPosition, emergeRate * emergeMoveTime, token);
             //var b = followGuideIK.LerpTowardsPosition(GlobalGameTools.Instance.PlayerTransform.position, 
             //    emergeMoveTime, token);
             await Task.WhenAll(a, b);
@@ -249,15 +282,15 @@ namespace RPGPlatformer.Environment
             return Vector2.SqrMagnitude(t.position - head.transform.position) < headRadius2;
         }
 
-        //private bool InGrabRange(Transform t)
-        //{
-        //    return Vector2.SqrMagnitude(t.position - head.transform.position) < grabRange * grabRange;
-        //}
+        private bool InGrabRange(Transform t)
+        {
+            return Vector2.SqrMagnitude(t.position - head.transform.position) < grabRange * grabRange;
+        }
 
-        //private bool InGrabRange()
-        //{
-        //    return InGrabRange(GlobalGameTools.Instance.PlayerTransform);
-        //}
+        private bool PlayerInGrabRange()
+        {
+            return InGrabRange(GlobalGameTools.Instance.PlayerTransform);
+        }
 
         private void OnHeadTriggerEnter(Collider2D collider)
         {
@@ -297,7 +330,7 @@ namespace RPGPlatformer.Environment
 
         private void OnDestroy()
         {
-            CycleComplete = null;
+            PlayerGrabbed = null;
         }
     }
 }
