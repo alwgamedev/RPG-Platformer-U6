@@ -13,8 +13,6 @@ namespace RPGPlatformer.Saving
     public class SavableMonoBehaviour : MonoBehaviour
     {
         [SerializeField] string uniqueIdentifier;
-        
-        //Dictionary<string, ISavable> ComponentLookup = new();
 
         public string UniqueIdentifier => uniqueIdentifier;
 
@@ -52,10 +50,6 @@ namespace RPGPlatformer.Saving
             return componentStates;
         }
 
-        //NOTE: the savable components are only distinguished by their type, so cannot accommodate multiple ISavable
-        //components of the same type (most likely this won't be an issue)
-        //I tried to fix this by keeping component IDs in a dictionary but serializing the dictionary (so that it stays with
-        //the game object always) is a bigly pain to solve something that's most likely a non-issue
         public void RestoreState(JsonObject state)
         {
             IDictionary<string, JsonNode> stateDict = state;
@@ -73,34 +67,6 @@ namespace RPGPlatformer.Saving
                 }
             }
         }
-
-        //private void UpdateComponentLookup()
-        //{
-        //    SerializedObject serObject = new SerializedObject(this);
-        //    SerializedProperty serProperty = serObject.FindProperty("ComponentLookup");
-
-        //    var savableComponents = GetComponents<ISavable>();
-        //    var lookup = (Dictionary<string, ISavable>)serProperty;
-
-        //    foreach(var entry in serProperty)
-        //    {
-        //        //Remove deleted components from the Lookup
-        //        if (!savableComponents.Contains(entry.Value))
-        //        {
-        //            ComponentLookup.Remove(entry.Key);
-        //        }
-        //    }
-
-        //    foreach(var savable in savableComponents)
-        //    {
-        //        //Add any new components to the Lookup
-        //        if (!ComponentLookup.ContainsValue(savable))
-        //        {
-        //            string compID = System.Guid.NewGuid().ToString();
-        //            ComponentLookup[compID] = savable;
-        //        }
-        //    }
-        //}
 
         private bool IsUnique(string candidate)
         {
@@ -122,6 +88,5 @@ namespace RPGPlatformer.Saving
 
             return false;
         }
-
     }
 }

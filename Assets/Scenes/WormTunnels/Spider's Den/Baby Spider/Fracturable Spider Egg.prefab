@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8876290371445245117}
   - component: {fileID: 952252203634825465}
   - component: {fileID: 3112642288824746700}
+  - component: {fileID: 6125563036601651977}
   m_Layer: 0
   m_Name: Fracturable Spider Egg
   m_TagString: Untagged
@@ -84,6 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 927470d691b78174c832d220330590e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defeatableEntity: {fileID: 0}
   topPiece: {fileID: 7221888206633984531}
   leftPiece: {fileID: 9213608161377287375}
   rightPiece: {fileID: 8850008594242199991}
@@ -94,6 +96,19 @@ MonoBehaviour:
   timeToDestroyAfterBreak: 0.4
   babySpider: {fileID: 4568797184898932041}
   spiderSpawnAccel: 4.5
+--- !u!114 &6125563036601651977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2221396518201586296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec313f54535e9b84184bc4a7a93cf58a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueIdentifier: 
 --- !u!1001 &621643418417672444
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -417,7 +432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f69a32449a4ebbf4ca2f48c08a57e6fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fractureAnchor: {x: 0, y: 0.1}
   breakAccel: {x: 3, y: 0}
 --- !u!114 &6789343268218409230
 MonoBehaviour:
@@ -431,7 +445,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: -1
   dataSource: {fileID: 2210138400480141713}
 --- !u!1 &5203512024039034031 stripped
@@ -562,7 +575,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f69a32449a4ebbf4ca2f48c08a57e6fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fractureAnchor: {x: 0.2, y: 0}
   breakAccel: {x: -3, y: 0}
 --- !u!114 &3593389412726535057
 MonoBehaviour:
@@ -576,7 +588,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: -1
   dataSource: {fileID: 6429793135508318205}
 --- !u!4 &6429793135508318205 stripped
@@ -714,7 +725,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f69a32449a4ebbf4ca2f48c08a57e6fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fractureAnchor: {x: 0, y: -0.2}
   breakAccel: {x: 0, y: 4}
 --- !u!114 &6875512363893253401
 MonoBehaviour:
@@ -743,7 +753,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 0
   dataSource: {fileID: 2210138400480141713}
 --- !u!1001 &8655957449033588145

@@ -74,6 +74,7 @@ GameObject:
   - component: {fileID: 2636257216027036835}
   - component: {fileID: 1212672894555921264}
   - component: {fileID: 6297982449876297710}
+  - component: {fileID: 6415107917575265633}
   m_Layer: 6
   m_Name: Web Barrier
   m_TagString: Untagged
@@ -117,6 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68cc2493eabcf214fb51db5186eee0b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defeatableEntity: {fileID: 0}
   topRenderer: {fileID: 4488210158068368814}
   bottomRender: {fileID: 1547146143577324827}
   joints:
@@ -191,6 +193,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0.15, y: 0}
   m_Size: {x: 0.3, y: 2.5}
   m_Direction: 0
+--- !u!114 &6415107917575265633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291069087900183595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec313f54535e9b84184bc4a7a93cf58a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueIdentifier: 
 --- !u!1 &2290470166375233078
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,12 +803,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 832221741054300339}
   - {fileID: 8449539547978781744}
   - {fileID: 5377882983763301280}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!1 &4918255779640345137
 GameObject:
   m_ObjectHideFlags: 0
@@ -1349,12 +1369,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 1616848912470043208}
   - {fileID: 4194581394613067780}
   - {fileID: 883099397271225738}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!1 &7296787165175003288
 GameObject:
   m_ObjectHideFlags: 0

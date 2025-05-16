@@ -1,12 +1,13 @@
 ﻿using RPGPlatformer.AIControl;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
+using RPGPlatformer.SceneManagement;
 using RPGPlatformer.UI;
 using UnityEngine;
 
 namespace RPGPlatformer.Environment
 {
-    public class SpiderWebBarrier : MonoBehaviour
+    public class SpiderWebBarrier : SingleSpawnDefeatableEntity
     {
         [SerializeField] LineRenderer topRenderer;
         [SerializeField] LineRenderer bottomRender;
@@ -17,7 +18,7 @@ namespace RPGPlatformer.Environment
         [SerializeField] Vector2 bottomBreakAcceleration;
         [SerializeField] Vector2 damageJiggleAcceleration;
         [SerializeField] float snapTime;
-        [SerializeField] Transform motherSpider;
+        [SerializeField] SingleSpawnDefeatableEntity motherSpider;
         //[SerializeField] Collider2D[] contactColliders;
         //[SerializeField] Collider2D healthCollider;
 
@@ -36,8 +37,10 @@ namespace RPGPlatformer.Environment
         float snapTimer;
         Vector2[] initialSnapAnchors;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             health = GetComponent<Health>();
             healthBarCanvas = GetComponentInChildren<HealthBarCanvas>();
 
@@ -55,38 +58,24 @@ namespace RPGPlatformer.Environment
             }
 
             healthCollider = GetComponent<Collider2D>();
-        }
 
-        //my plan is that mob manager will enable this component when mother spider dies
-        //(or when all enemies in room slain)
-        //and that will set up the health and make wall breakable
-        private void Start()
-        {
-            ConfigureHealth();
-            
-            if (motherSpider && motherSpider.TryGetComponent(out ICombatController cc))
+            if (motherSpider)
             {
-                healthCollider.enabled = false;
-                cc.OnDeath += EnableHealth;
+                motherSpider.InitializationComplete += OnMotherSpiderInitialized;
+                //^make sure we only set up health after motherSpider has restored state
             }
         }
 
         private void Update()
         {
-            //just for quick access in testing;
-            //if (Input.GetKeyDown(KeyCode.M))
-            //{
-            //    GlobalGameTools.Instance.Player.Combatant.transform.position
-            //        = transform.position - 2 * Vector3.right;
-            //}
-
             if (snapping)
             {
                 snapTimer -= Time.deltaTime;
                 if (snapTimer <= 0)
                 {
                     snapping = false;
-                    Destroy(gameObject);
+                    //Destroy(gameObject);
+                    Defeat();
                     return;
                 }
 
@@ -106,21 +95,37 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        //private void OnMouseEnter()
+        //protected override void Configure()
         //{
-        //    if (healthCollider.enabled)
+        //    base.Configure();
+
+        //    ConfigureHealth();
+
+        //    if (motherSpider && !motherSpider.Defeated && motherSpider.TryGetComponent(out ICombatController cc))
         //    {
-        //        healthBarCanvas.OnMouseEnter();
+        //        healthCollider.enabled = false;
+        //        cc.OnDeath += EnableHealth;
         //    }
         //}
 
-        //private void OnMouseExit()
-        //{
-        //    if (healthCollider.enabled)
-        //    {
-        //        healthBarCanvas.OnMouseExit();
-        //    }
-        //}
+        private void OnMotherSpiderInitialized()
+        {
+            if (defeated)
+            {
+                motherSpider.InitializationComplete -= OnMotherSpiderInitialized;
+                return;
+            }
+
+            ConfigureHealth();
+
+            if (motherSpider && !motherSpider.Defeated)
+            {
+                healthCollider.enabled = false;
+                motherSpider.OnDefeated += EnableHealth;
+            }
+
+            motherSpider.InitializationComplete -= OnMotherSpiderInitialized;
+        }
 
         private void ConfigureHealth()
         {
@@ -161,15 +166,12 @@ namespace RPGPlatformer.Environment
 
             for (int i = 0; i < joints.Length; i++)
             {
-                //j.anchor = Vector2.zero;
                 initialSnapAnchors[i] = joints[i].anchor;
                 joints[i].autoConfigureConnectedAnchor = false;
-                //joints[i].useLimits = true;
                 if (contactColliders[i])
                 {
                     contactColliders[i].enabled = false;
                 }
-                //j.anchor = Vector2.zero;
             }
 
             broken = true;
@@ -180,17 +182,14 @@ namespace RPGPlatformer.Environment
             breakPointBottomRb.AddForce(breakPointBottomRb.mass * bottomBreakAcceleration, ForceMode2D.Impulse);
         }
 
-        //private void OnDisable()
-        //{
-        //    health.OnDeath -= DeathHandler;
-        //    health.HealthChangeTrigger -= DamageHandler;
-        //}
-
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
-            if (motherSpider && motherSpider.TryGetComponent(out ICombatController cc))
+            base.OnDestroy();
+
+            if (motherSpider)
             {
-                cc.OnDeath -= EnableHealth;
+                motherSpider.InitializationComplete -= OnMotherSpiderInitialized;
+                motherSpider.OnDefeated -= EnableHealth;
             }
         }
     }

@@ -1,11 +1,12 @@
 ﻿using RPGPlatformer.Core;
+using RPGPlatformer.SceneManagement;
 using UnityEngine;
 using System.Threading.Tasks;
 using System.Threading;
 
 namespace RPGPlatformer.Effects
 {
-    public class SpiderEgg : MonoBehaviour
+    public class SpiderEgg : SingleSpawnDefeatableEntity
     {
         [SerializeField] SpiderEggFragment topPiece;
         [SerializeField] SpiderEggFragment leftPiece;
@@ -41,7 +42,7 @@ namespace RPGPlatformer.Effects
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (!enabled || !gameObject.activeInHierarchy) return;
+            if (defeated || !enabled || !gameObject.activeInHierarchy) return;
 
             if (!fractured && collider.transform == GlobalGameTools.Instance.PlayerTransform)
             {
@@ -61,7 +62,8 @@ namespace RPGPlatformer.Effects
 
             SpawnBabySpider();
 
-            Destroy(gameObject, timeToDestroyAfterBreak);
+            Invoke(nameof(Defeat), timeToDestroyAfterBreak);
+            //Destroy(gameObject, timeToDestroyAfterBreak);
         }
 
         private void SpawnBabySpider()
