@@ -5,40 +5,41 @@ namespace RPGPlatformer.Core
 {
     public class ObjectPoolCollection : MonoBehaviour
     {
-        public List<ObjectPoolData> poolData = new();
-        public Dictionary<PoolableObject, ObjectPool> findObjectPool;
-        public Dictionary<string, ObjectPool> findObjectPoolByName;
+        [SerializeField] ObjectPoolData[] poolsData;
+        
+        Dictionary<PoolableObject, ObjectPool> FindObjectPool = new();
+        Dictionary<string, ObjectPool> FindObjectPoolByName = new();
 
         private void Awake()
         {
-            Configure();
+            CreatePools(poolsData);
         }
 
-        void Configure()
+        public void CreatePools(ObjectPoolData[] poolsData)
         {
-            findObjectPool = new();
-            findObjectPoolByName = new();
+            if (poolsData == null)
+                return;
 
-            foreach (var data in poolData)
+            foreach (var data in poolsData)
             {
-                GameObject carrier = new();
+                GameObject carrier = new($"Object Pool: {data.PooledObject.name}");
                 carrier.transform.parent = transform;
                 ObjectPool op = carrier.AddComponent<ObjectPool>();
-                //op.pooledObject = data.pooledObject;
-                //op.poolSize = data.poolSize;
                 op.poolData = data;
                 op.GeneratePool();
-                findObjectPool[data.pooledObject] = op;
-                findObjectPoolByName[data.pooledObject.name] = op;
-                //Debug.Log($"Added object pool dictionary key {data.pooledObject.name}");
+                FindObjectPool[data.PooledObject] = op;
+                FindObjectPoolByName[data.PooledObject.name] = op;
             }
         }
 
         public PoolableObject GetObject(PoolableObject prefab)
         {
-            if (findObjectPool.TryGetValue(prefab, out ObjectPool pool))
+            if (FindObjectPool.TryGetValue(prefab, out ObjectPool pool))
             {
-                return pool?.GetObject();
+                if (pool)
+                {
+                    return pool.GetObject();
+                }
             }
             Debug.Log($"Unable to find an object pool for prefab named {prefab.name}");
             return null;
@@ -46,9 +47,12 @@ namespace RPGPlatformer.Core
 
         public PoolableObject GetObject(string prefabName)
         {
-            if (findObjectPoolByName.TryGetValue(prefabName, out ObjectPool pool))
+            if (FindObjectPoolByName.TryGetValue(prefabName, out ObjectPool pool))
             {
-                return pool?.GetObject();
+                if (pool)
+                {
+                    return pool.GetObject();
+                }
             }
             Debug.Log($"Unable to find an object pool by name {prefabName}");
             return null;

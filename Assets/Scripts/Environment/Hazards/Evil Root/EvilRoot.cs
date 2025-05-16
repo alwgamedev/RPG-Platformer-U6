@@ -35,10 +35,6 @@ namespace RPGPlatformer.Environment
         float headRadius2;
         Transform playerParent;
 
-        //System.Random rng = new();
-
-        //public event Action CycleComplete;
-
         static EvilRoot RootHoldingPlayer;
         static event Action PlayerGrabbed;
 
@@ -66,32 +62,13 @@ namespace RPGPlatformer.Environment
 
         public override void Configure(object parameters)
         {
-            var g = (GameObject)parameters;
+            var erm = (IEvilRootManager)parameters;
             if (TryGetComponent(out ChildSortingLayer csl))
             {
-                csl.dataSource = g.transform;
+                csl.dataSource = erm.transform;
             }
-            if (g.TryGetComponent(out IEvilRootManager erm))
-            {
-                ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
-            }
+            ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
         }
-
-        //public override void OnEnqueued(IObjectPool source)
-        //{
-        //    base.OnEnqueued(source);
-
-        //    //if (!hasBeenEnqueued)
-        //    //{
-        //    //    var erm = ((Component)source).GetComponent<IEvilRootManager>();
-        //    //    if (TryGetComponent(out ChildSortingLayer csl))
-        //    //    {
-        //    //        csl.dataSource = erm.transform;
-        //    //    }
-        //    //    ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
-        //    //    hasBeenEnqueued = true;
-        //    //}
-        //}
 
         public void SetEmergePosition(Vector2 position)
         {

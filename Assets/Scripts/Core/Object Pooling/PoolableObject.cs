@@ -21,7 +21,10 @@ namespace RPGPlatformer.Core
         {
             if (source == null || (source is Component c && !c))
             {
-                Destroy(gameObject);
+                if (gameObject)
+                {
+                    Destroy(gameObject);
+                }
                 return;
             }
             ResetPoolableObject();
