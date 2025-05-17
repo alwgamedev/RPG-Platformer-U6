@@ -18,6 +18,7 @@ namespace RPGPlatformer.Combat
         public event Action CombatEntered;
         public event Action CombatExited;
         public event Action OnDeath;
+        public event Action OnRevive;
         public event Action<AttackAbility> OnCooldownStarted;
         public event Action OnFireButtonDown;
         public event Action OnFireButtonUp;

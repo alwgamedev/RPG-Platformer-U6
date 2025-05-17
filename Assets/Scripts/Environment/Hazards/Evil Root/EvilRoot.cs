@@ -30,7 +30,6 @@ namespace RPGPlatformer.Environment
         [Range(0, 1)][SerializeField] float throwReleaseFraction = 0.6f;
 
         VisualCurveGuide vcg;
-        bool hasBeenEnqueued;
         bool headIsTouchingPlayer;
         float headRadius2;
         Transform playerParent;
@@ -54,11 +53,13 @@ namespace RPGPlatformer.Environment
             FollowGuide();
         }
 
-        public override void BeforeSetActive()
+        private void Start()
         {
             vcg.lengthScale = dormantLengthScale;
             vcg.CallUpdate();
         }
+
+        public override void BeforeSetActive() { }
 
         public override void Configure(object parameters)
         {
@@ -69,6 +70,8 @@ namespace RPGPlatformer.Environment
             }
             ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
         }
+
+        public override void ResetPoolableObject() { }
 
         public void SetEmergePosition(Vector2 position)
         {
@@ -107,15 +110,11 @@ namespace RPGPlatformer.Environment
 
         public async Task Emerge(CancellationToken token)
         {
-            float emergeTimeMult = MiscTools.RandomFloat(0.75f, 3);//2.25f * (float)rng.NextDouble() + 0.75f;
-            //vcg.enforceBounds = true;
+            float emergeTimeMult = MiscTools.RandomFloat(0.75f, 3);
             var a = vcg.LerpLengthScale(emergedLengthScale, emergeTimeMult * emergeGrowTime, token);
             var b = followGuideIK.LerpBetweenTransforms(dormantHeadPosition, 
                 emergedHeadPosition, emergeTimeMult * emergeMoveTime, token);
-            //var b = followGuideIK.LerpTowardsPosition(GlobalGameTools.Instance.PlayerTransform.position, 
-            //    emergeMoveTime, token);
             await Task.WhenAll(a, b);
-            //vcg.enforceBounds = false;
         }
 
         public async Task Retreat(CancellationToken token)
@@ -127,7 +126,6 @@ namespace RPGPlatformer.Environment
 
         public async Task GrabPlayer(CancellationToken token)
         {
-            //Vector2 p = head.transform.position;
             Vector2 p = followGuideIK.TargetPosition();
             Task<bool> reach = ReachForPlayer(token);
             await reach;
@@ -137,15 +135,14 @@ namespace RPGPlatformer.Environment
                 RootHoldingPlayer = this;
                 DeactivateAllIK();
                 AnchorPlayer();
-                //FollowGuide();
+                FollowGuide();
+                await followGuideIK.LerpBetweenPositions(head.transform.position, p,
+                    grabSnapBackTime, token);
             }
-
-            //lerp back to position where we started the grab
-            //Vector2 q = head.transform.position;
-            //Debug.Log($"retreating from {q} back to {p}");
-            FollowGuide();
-            await followGuideIK.LerpBetweenPositions(head.transform.position, p,
-                grabSnapBackTime, token);
+            else
+            {
+                FollowGuide();
+            }
         }
 
         public async Task<bool> ReachForPlayer(CancellationToken token)
@@ -177,11 +174,6 @@ namespace RPGPlatformer.Environment
         public async Task ThrowPlayer(bool throwRight, CancellationToken token)
         {
             float angle = MiscTools.RandomFloat(Mathf.PI / 16, 3 * Mathf.PI / 16);
-            //(float)rng.NextDouble() * Mathf.PI / 8 + Mathf.PI / 16;
-            //if (rng.Next(0, 2) == 1)
-            //{
-            //    angle = Mathf.PI - angle;
-            //}
             if (!throwRight)//throw opposite direction head is "facing"
             {
                 angle = MathF.PI - angle;
@@ -198,7 +190,7 @@ namespace RPGPlatformer.Environment
 
             ReleasePlayer(f);
 
-            d.y *= - 1;//we'll see how this looks; lazy attempt to give the throw an arcing motion
+            d.y *= - 1;//easy way to give the throw an arcing motion
             await followGuideIK.LerpTowardsPosition(o + d, (1 - throwReleaseFraction) * throwTime,
                 token);
 

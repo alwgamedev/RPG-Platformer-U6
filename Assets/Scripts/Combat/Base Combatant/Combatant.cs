@@ -224,6 +224,18 @@ namespace RPGPlatformer.Combat
             }
         }
 
+        public virtual void OnRevival()
+        {
+            if (mainhandSlot)
+            {
+                mainhandSlot.gameObject.SetActive(true);
+            }
+            if (offhandSlot)
+            {
+                offhandSlot.gameObject.SetActive(false);
+            }
+        }
+
         //in case you want to finalize death via animation event
         public virtual void TriggerFinalizeDeath()
         {
@@ -408,7 +420,7 @@ namespace RPGPlatformer.Combat
         
         //INVENTORY AND LOOT
 
-        public void DropLoot()
+        public virtual void DropLoot()
         {
             DropLoot(inventory.RemoveAllItems());
         }

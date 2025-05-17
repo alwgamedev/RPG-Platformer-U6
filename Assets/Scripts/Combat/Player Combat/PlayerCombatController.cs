@@ -89,11 +89,6 @@ namespace RPGPlatformer.Combat
             stateDriver.TakeLoot(bwPants.CreateInstanceOfItem().ToInventorySlotData(1));
         }
 
-        //protected override void InitializeCombatantEquipment()
-        //{
-        //    base.InitializeCombatantEquipment();
-        //}
-
         private void OnIGOClicked()
         {
             CancelAbilityInProgress();
@@ -103,20 +98,6 @@ namespace RPGPlatformer.Combat
         {
             GameLog.Log("That ability is on cooldown.");
         }
-
-        //public void SetPlayerAlive(bool val)
-        //{
-        //    if (val == !stateDriver.Health.IsDead) return;
-
-        //    if (val)
-        //    {
-        //        stateDriver.Revive();
-        //    }
-        //    else
-        //    {
-        //        stateDriver.HandleHealthChange(Mathf.Infinity, null);
-        //    }
-        //}
 
         private void TogglePlayerAlive()//FOR TESTING PURPOSES
         {

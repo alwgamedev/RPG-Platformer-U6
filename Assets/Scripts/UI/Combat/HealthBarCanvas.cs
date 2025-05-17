@@ -73,7 +73,9 @@ namespace RPGPlatformer.UI
                 engagementTimer = 0;
                 SpawnDamagePopup(d);
             };
-            health.OnDeath += a => OnDeath();
+            
+            
+            health.OnDeath += HealthDeathHandler;
 
             HideAll();
         }
@@ -169,7 +171,13 @@ namespace RPGPlatformer.UI
             healthContainer.SetActive(false);
         }
 
-        protected void OnDeath()
+        protected void HealthDeathHandler(IDamageDealer d)
+        {
+            OnDeath();
+            DelayedDestroy();
+        }
+
+        protected virtual void OnDeath()
         {
             if (healthEngaged)
             {
@@ -178,9 +186,11 @@ namespace RPGPlatformer.UI
 
             healthDead = true;
             transform.SetParent(null, true);
+        }
+
+        protected virtual void DelayedDestroy()
+        {
             Destroy(gameObject, 1);
-            //^won't cause errors, because we freed ourselves from parent,
-            //so parent won't destroy us before we do
         }
 
         protected bool CanSpawnDamagePopup()

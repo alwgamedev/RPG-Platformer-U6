@@ -639,7 +639,8 @@ namespace RPGPlatformer.Combat
 
         protected virtual void Revival()
         {
-            stateDriver.EquipSlots[EquipmentSlot.Mainhand].gameObject.SetActive(true);
+            //stateDriver.EquipSlots[EquipmentSlot.Mainhand].gameObject.SetActive(true);
+            stateDriver.OnRevival();
             MovementController?.OnRevival();
             InputSource?.EnableInput();
             OnRevive?.Invoke();

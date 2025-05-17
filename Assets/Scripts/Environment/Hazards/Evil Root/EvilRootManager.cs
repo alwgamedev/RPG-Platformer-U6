@@ -43,7 +43,7 @@ namespace RPGPlatformer.Environment
 
         private void DeployRoot()
         {
-            var r = (EvilRoot)pool.GetObject();
+            var r = (EvilRoot)pool.ReleaseObject();
             r.transform.position = GetRandomSpawnPosition();
             r.SetEmergePosition(GetRandomEmergePosition(r.transform.position.x));
             r.OnDeploy(r.transform.position.x > transform.position.x, GlobalGameTools.Instance.TokenSource.Token);

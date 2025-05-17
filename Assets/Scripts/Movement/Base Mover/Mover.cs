@@ -46,13 +46,14 @@ namespace RPGPlatformer.Movement
         public float Height => myHeight;
         public bool VerifyingFreefall => verifyingFreefall;
         public bool VerifyingJump => verifyingJump;
-        public Vector3 ColliderCenterRight => myCollider.bounds.center + adjustedHalfWidth * transform.right;
-        public Vector3 ColliderCenterLeft => myCollider.bounds.center - adjustedHalfWidth * transform.right;
-        public Vector3 ColliderCenterFront => myCollider.bounds.center + adjustedHalfWidth
+        public Vector3 CenterPosition => myCollider.bounds.center;
+        public Vector3 ColliderCenterRight => CenterPosition + adjustedHalfWidth * transform.right;
+        public Vector3 ColliderCenterLeft => CenterPosition - adjustedHalfWidth * transform.right;
+        public Vector3 ColliderCenterFront => CenterPosition + adjustedHalfWidth
             * (int)CurrentOrientation * transform.right;
-        public Vector3 ColliderCenterBack => myCollider.bounds.center - adjustedHalfWidth
+        public Vector3 ColliderCenterBack => CenterPosition - adjustedHalfWidth
             * (int)CurrentOrientation * transform.right;
-        public Vector3 ColliderCenterBottom => myCollider.bounds.center - 0.5f * myHeight * transform.up;
+        public Vector3 ColliderCenterBottom => CenterPosition - 0.5f * myHeight * transform.up;
         public bool FacingRight => CurrentOrientation == HorizontalOrientation.right;
         public HorizontalOrientation CurrentOrientation { get; protected set; }
 

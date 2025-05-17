@@ -13,6 +13,7 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected float maxDistanceCorrectionSpeed;
         [SerializeField] protected float distanceCorrectionScale;
 
+        protected Vector3 centerOffset;//offset of "ColliderCenter" from transform.position
         protected int groundLayer;
         protected float[] goalDistances;
         protected Vector2[] positions;
@@ -30,6 +31,7 @@ namespace RPGPlatformer.Movement
         public bool Running { get; set; }
         public float Width { get; private set; }
         public float Height { get; private set; }
+        public Vector3 CenterPosition => transform.position + centerOffset;
 
         public event Action<HorizontalOrientation> DirectionChanged;
 
@@ -47,10 +49,11 @@ namespace RPGPlatformer.Movement
             }
 
             var c = bodyPieces[0].GetComponent<Collider2D>();
-            if (c)
-            {
-                Height = c.bounds.max.y - c.bounds.min.y;
-            }
+            Height = c.bounds.max.y - c.bounds.min.y;
+
+            centerOffset = 0.5f * (c.bounds.center
+                + bodyPieces[NumBodyPieces - 1].GetComponent<Collider2D>().bounds.center)
+                - transform.position;
 
             groundLayer = LayerMask.GetMask("Ground");
         }

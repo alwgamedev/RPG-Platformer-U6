@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using RPGPlatformer.Combat;
-using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.AIControl

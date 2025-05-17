@@ -10,6 +10,10 @@ namespace RPGPlatformer.Effects
             + particleEffect.main.startDelay.constantMax
             + particleEffect.main.startLifetime.constantMax;
 
+        public override void Configure(object parameters) { }
+
+        public override void BeforeSetActive() { }
+
         protected override void PlayEffect()
         {
             if (particleEffect)

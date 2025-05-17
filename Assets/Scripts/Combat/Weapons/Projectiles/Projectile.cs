@@ -95,7 +95,8 @@ namespace RPGPlatformer.Combat
                 trailEffect.Play();
             }
             LookAtTarget(GetAimPos());
-            myRigidbody.AddForce(powerMultiplier * shootForce * forceMultiplierScale * transform.up, ForceMode2D.Impulse);
+            myRigidbody.AddForce(powerMultiplier * shootForce * forceMultiplierScale * transform.up,
+                ForceMode2D.Impulse);
         }
 
 
@@ -209,5 +210,9 @@ namespace RPGPlatformer.Combat
             GetAimPos = null;
             HitAction = null;
         }
+
+        public override void Configure(object parameters) { }
+
+        public override void BeforeSetActive() { }
     }
 }

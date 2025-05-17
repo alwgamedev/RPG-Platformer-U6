@@ -15,5 +15,6 @@ namespace RPGPlatformer.SceneManagement
         public ObjectPoolData PoolData => poolData;
         public RandomizableVector3 SpawnPosition => spawnPosition;
         public MobMemberSpawnRate SpawnRate => spawnRate;
+        public MobSize MobSize => mobSize;
     }
 }

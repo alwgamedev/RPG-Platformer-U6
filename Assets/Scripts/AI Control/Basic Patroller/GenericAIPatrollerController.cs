@@ -9,32 +9,28 @@ namespace RPGPlatformer.AIControl
 {
     [RequireComponent(typeof(MonoBehaviorInputConfigurer))]
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
-    public class GenericAIPatrollerController<T,/*T0, T00, T01, T02, T03,*/ T1, T2, T3, T4> 
+    public class GenericAIPatrollerController<T, T1, T2, T3, T4> 
         : StateDrivenController<T4, T2, T3, T1>, IInputSource, IAIPatrollerController, IPausable
-        //where T0 : GenericAdvancedMovementController<T00, T01, T02, T03>
-        //where T00 : AdvancedMover
-        //where T01 : AdvancedMovementStateGraph
-        //where T02 : AdvancedMovementStateMachine<T01>
-        //where T03 : AdvancedMovementStateManager<T01, T02, T00>
         where T : IAIMovementController
-        where T1 : GenericAIPatroller<T>//GenericAIPatroller<T0, T00, T01, T02, T03>
+        where T1 : GenericAIPatroller<T>
         where T2 : AIPatrollerStateGraph
         where T3 : AIPatrollerStateMachine<T2>
-        where T4 : AIPatrollerStateManager<T2, T3, T,/*T0, T00, T01, T02, T03,*/ T1>
+        where T4 : AIPatrollerStateManager<T2, T3, T, T1>
     {
         [SerializeField] protected NavigationMode defaultPatrolMode;
         [SerializeField] protected MBNavigationParameters defaultPatrolParameters;
 
         protected Action OnUpdate;
         protected bool stateBehaviorSubscribed;
-        protected object defaultPatrolParams;
+        //protected object defaultPatrolParams;
         //in case you want to supply different default params (non-mb)
 
         protected Dictionary<State, Action> StateBehavior = new();
 
         public bool IsInputDisabled { get; protected set; }
         public bool Patrolling => stateManager.StateMachine.CurrentState == stateManager.StateGraph.patrol;
-        public IAIMovementController MovementController => stateDriver.MovementController;
+        public IAIPatroller Patroller => stateDriver;
+        public object DefaultPatrolParams { get; set; }
 
         public event Action InputEnabled;
         public event Action InputDisabled;
@@ -45,7 +41,7 @@ namespace RPGPlatformer.AIControl
 
             if (defaultPatrolParameters)
             {
-                defaultPatrolParams = defaultPatrolParameters.Content;
+                DefaultPatrolParams = defaultPatrolParameters.Content;
             }
         }
 
@@ -65,6 +61,12 @@ namespace RPGPlatformer.AIControl
         {
             OnUpdate?.Invoke();
         }
+
+        //public void SetDefaultPatrolParameters(MBNavigationParameters p)
+        //{
+        //    defaultPatrolParameters = p;
+        //    DefaultPatrolParams = p.Content;
+        //}
 
         protected override void ConfigureStateManager()
         {
@@ -112,7 +114,7 @@ namespace RPGPlatformer.AIControl
 
         public virtual void BeginDefaultPatrol()
         {
-            BeginPatrol(defaultPatrolMode, defaultPatrolParams);
+            BeginPatrol(defaultPatrolMode, DefaultPatrolParams);
         }
 
         public virtual void BeginPatrolRest()

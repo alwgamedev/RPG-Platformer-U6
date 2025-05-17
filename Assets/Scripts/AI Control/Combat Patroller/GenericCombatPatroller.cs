@@ -6,7 +6,7 @@ using RPGPlatformer.Core;
 
 namespace RPGPlatformer.AIControl
 {
-    public class GenericCombatPatroller<T0, T1> : GenericAIPatroller<T0>
+    public class GenericCombatPatroller<T0, T1> : GenericAIPatroller<T0>, ICombatPatroller
         where T0 : IAIMovementController
         where T1 : AICombatController
     {
@@ -26,7 +26,6 @@ namespace RPGPlatformer.AIControl
         public virtual float TargetingTolerance => combatController.Combatant.Health.TargetingTolerance;
         public float MinimumCombatDistance => combatController.Combatant.IdealMinimumCombatDistance;
         public ICombatController CombatController => combatController;
-
         public IHealth CurrentTarget
         {
             get => currentTarget;
@@ -35,6 +34,22 @@ namespace RPGPlatformer.AIControl
                 currentTarget = value;
                 combatController.currentTarget = value;
                 MovementController.CurrentTarget = value?.transform;
+            }
+        }
+        public Transform LeftAttackBound
+        {
+            get => leftAttackBound;
+            set
+            {
+                leftAttackBound = value;
+            }
+        }
+        public Transform RightAttackBound
+        {
+            get => rightAttackBound;
+            set
+            {
+                rightAttackBound = value;
             }
         }
 

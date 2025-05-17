@@ -9,6 +9,9 @@ namespace RPGPlatformer.Movement
         PillBugMovementStateGraph, PillBugMovementStateMachine, PillBugMover>, 
         IAIMovementController, IInputDependent
     {
+        [SerializeField] Transform leftBound;
+        [SerializeField] Transform rightBound;
+
         Action OnUpdate;
         Action OnFixedUpdate;
 
@@ -40,6 +43,17 @@ namespace RPGPlatformer.Movement
         public IMover Mover => stateDriver;
         public HorizontalOrientation CurrentOrientation => stateDriver.CurrentOrientation;
         public bool Curled => stateManager.StateMachine.CurrentState == stateManager.StateGraph.curled;
+        public Transform LeftMovementBound
+        {
+            get => leftBound;
+            set => leftBound = value;
+        }
+
+        public Transform RightMovementBound
+        {
+            get => rightBound;
+            set => rightBound = value;
+        }
 
         protected override void Awake()
         {

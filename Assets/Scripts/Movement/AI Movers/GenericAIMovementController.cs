@@ -24,6 +24,16 @@ namespace RPGPlatformer.Movement
         protected bool stuckAtLedge;
 
         public Transform CurrentTarget { get; set; }
+        public Transform LeftMovementBound
+        {
+            get => leftBound;
+            set => leftBound = value;
+        }
+        public Transform RightMovementBound
+        {
+            get => rightBound;
+            set => rightBound = value;
+        }
         public float MaxPermissibleDropOffHeight { get; protected set; }
 
         //public override Vector3 MoveInput

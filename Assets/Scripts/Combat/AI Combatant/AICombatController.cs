@@ -47,12 +47,16 @@ namespace RPGPlatformer.Combat
         //they can give if their drop fails)
         protected override void InitializeInventoryItems()
         {
-            if (stateDriver.DropTable != null)
-            {
-                stateDriver.TakeLoot(stateDriver.DropTable.GenerateDrop(stateDriver.DropSize), false);
-                //note that drop items beyond the inventory size will be ignored
-                //(so set inventory size accordingly)
-            }
+            stateDriver.GenerateLootDrop();
+            //note that drop items beyond the inventory size will be ignored
+            //(so set inventory size accordingly)
+
+            //if (stateDriver.DropTable != null)
+            //{
+            //    stateDriver.TakeLoot(stateDriver.DropTable.GenerateDrop(stateDriver.DropSize), false);
+            //    //note that drop items beyond the inventory size will be ignored
+            //    //(so set inventory size accordingly)
+            //}
         }
 
         public virtual void AutoAttack()

@@ -2,7 +2,7 @@
 {
     public interface IObjectPool
     {
-        public PoolableObject GetObject();
+        public PoolableObject ReleaseObject();
         public void ReturnObject(PoolableObject item);
     }
 }

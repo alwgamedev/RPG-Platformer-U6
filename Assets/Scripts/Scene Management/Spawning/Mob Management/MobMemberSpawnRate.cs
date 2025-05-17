@@ -9,7 +9,14 @@ namespace RPGPlatformer.SceneManagement
     {
         [SerializeField] RandomizableFloat quantityPerSpawn;
         [SerializeField] RandomizableInt ticksBetweenSpawns;
-        [SerializeField] RandomizableInt onlySpawnWhenBelow;
-        [SerializeField] RandomizableInt forceSpawnWhenActiveBelow;
+        [SerializeField] RandomizableInt maxActivePopulation;
+        
+        //spawnTimer will not run until active < onlySpawnWhenActiveBelow
+        //then it will spawn quantityPerSpawn at interval ticksBetweenSpawns
+        //until population is above the threshold again
+
+        public RandomizableFloat QuantityPerSpawn => quantityPerSpawn;
+        public RandomizableInt TicksBetweenSpawns => ticksBetweenSpawns;
+        public RandomizableInt MaxActivePopulation => maxActivePopulation;
     }
 }

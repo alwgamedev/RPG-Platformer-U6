@@ -2,20 +2,23 @@
 
 namespace RPGPlatformer.Core
 {
-    public class PoolableObject : MonoBehaviour, IPoolableObject
+    public abstract class PoolableObject : MonoBehaviour, IPoolableObject
     {
         public IObjectPool source;
 
-        public virtual void Configure(object parameters) { }
+        public abstract void Configure(object parameters);
 
         public virtual void OnEnqueued(IObjectPool source)
         {
             this.source = source;
         }
 
-        public virtual void BeforeSetActive() { }
+        public abstract void BeforeSetActive();
+        //you could put this in OnEnable instead,
+        //but then we can't guarantee that other components have completed Awake
+        //so that is the one small reason to do this
 
-        public virtual void ResetPoolableObject() { }
+        public abstract void ResetPoolableObject();
 
         public virtual void ReturnToPool()
         {

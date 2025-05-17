@@ -1,24 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
 {
     public class ObjectPool : MonoBehaviour, IObjectPool
     {
-        //public PoolableObject pooledObject;
-        //public int poolSize;
-        ////public bool generateOnAwake;
-        //public Object configurationParameters;
         public ObjectPoolData poolData;
         public bool generateOnAwake;
-        //^use e.g. if the object depends on something in the scene that can't be added to prefab
-        //(like patroller needing patrol bounds)
 
         Queue<PoolableObject> pool = new();
 
         public int Available => pool.Count;
         public int TotalReleased { get; private set; }
         public int TotalReturned { get; private set; }
+        public int Active { get; private set; }
+        //^note active can be inaccurate if
+        //a) an item is returned to the pool that wasn't originally released from this pool
+        //b) a released item is destroyed and never returned
+        //ATM neither of these cases occurs, but keep it in mind
 
         private void Awake()
         {
@@ -28,21 +28,33 @@ namespace RPGPlatformer.Core
             }
         }
 
-        public PoolableObject GetObject()
+        public PoolableObject ReleaseObject()
         {
             //don't think lock is necessary for us; we don't have any multithreading
             //but if we do in the future, then we don't have to worry about forgetting to add this
             lock (pool)
             {
-                if (pool.Count == 0)
-                {
-                    return InstantiatePooledObject(poolData.ConfigurationParameters);
-                }
-
-                PoolableObject item = pool.Dequeue();
+                PoolableObject item = pool.Count != 0 ?
+                    pool.Dequeue() : InstantiatePooledObject(poolData.ConfigurationParameters);
                 item.BeforeSetActive();
                 item.gameObject.SetActive(true);
                 TotalReleased++;
+                Active++;
+                return item;
+            }
+        }
+
+        public PoolableObject ReleaseObject(Vector3 position)
+        {
+            lock (pool)
+            {
+                PoolableObject item = pool.Count != 0 ?
+                    pool.Dequeue() : InstantiatePooledObject(poolData.ConfigurationParameters);
+                item.transform.position = position;
+                item.BeforeSetActive();
+                item.gameObject.SetActive(true);
+                TotalReleased++;
+                Active++;
                 return item;
             }
         }
@@ -53,6 +65,7 @@ namespace RPGPlatformer.Core
             {
                 AddToQueue(item);
                 TotalReturned++;
+                Active--;
             }
         }
         PoolableObject InstantiatePooledObject(object configurationParameters)
