@@ -2,6 +2,7 @@ using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 using RPGPlatformer.UI;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -9,22 +10,36 @@ namespace RPGPlatformer.Environment
 {
     public class PoisonMushroom : MonoBehaviour, IDamageDealer
     {
+        struct IntruderData
+        {
+            public ICombatController cc;
+            public bool inBounds;
+            public bool canBePoisoned;
+
+            public IntruderData(ICombatController cc, bool inBounds, bool canBePoisoned)
+            {
+                this.cc = cc;
+                this.inBounds = inBounds;
+                this.canBePoisoned = canBePoisoned;
+            }
+        }
+
         [SerializeField] ParticleSystem gasParticles;
         [SerializeField] TriggerColliderMessenger gasBounds;
         [SerializeField] float poisonDamage;
         [SerializeField] float poisonRate;
         [SerializeField] int lingeringBleedCount;
 
-        bool playerInBounds;
+        Dictionary<Collider2D, IntruderData> intruders = new();
 
-        IHealth playerHealth => GlobalGameTools.Instance.Player.Combatant.Health;
         bool gasActive => gasParticles && gasParticles.isPlaying;
 
         public CombatStyle CurrentCombatStyle => CombatStyle.Unarmed;
 
         private void Start()
         {
-            gasBounds.TriggerEnter += OnGasBoundsEntered;
+            gasBounds.TriggerEnter += OnGasBoundsStay;
+            gasBounds.TriggerStay += OnGasBoundsStay;
             gasBounds.TriggerExit += OnGasBoundsExited;
         }
 
@@ -32,85 +47,151 @@ namespace RPGPlatformer.Environment
         {
             if (!gameObject.activeInHierarchy) return;
 
-            if (collider.transform == GlobalGameTools.Instance.PlayerTransform)
+            if (intruders.TryGetValue(collider, out var d))
             {
                 if (!gasActive)
                 {
-                    TriggerGas();
+                    TriggerGas(collider.transform);
+                }
+            }
+            else if (collider.TryGetComponent(out ICombatController cc))
+            {
+                intruders[collider] = new(cc, false, true);
+                if (!gasActive)
+                {
+                    TriggerGas(collider.transform);
                 }
             }
         }
 
-        private void OnGasBoundsEntered(Collider2D collider)
+        private void OnGasBoundsStay(Collider2D c)
         {
-            if (collider.transform == GlobalGameTools.Instance.PlayerTransform)
+            if (intruders.TryGetValue(c, out var d))
             {
-                PlayerEnteredGasBounds();
+                if (!d.inBounds)
+                {
+                    d.inBounds = true;
+                    intruders[c] = d;
+                }
+
+                if (gasActive && d.canBePoisoned && !d.cc.Combatant.Health.IsDead)
+                {
+                    PoisonIntruder(c);
+                }
+            }
+            else if (c.TryGetComponent(out ICombatController cc))
+            {
+                intruders[c] = new(cc, true, true);
+                if (gasActive && !cc.Combatant.Health.IsDead)
+                {
+                    PoisonIntruder(c);
+                }
             }
         }
 
-        private void OnGasBoundsExited(Collider2D collider)
+        private void OnGasBoundsExited(Collider2D c)
         {
-            if (collider.transform == GlobalGameTools.Instance.PlayerTransform)
+            if (intruders.TryGetValue(c, out var d))
             {
-                PlayerExitedGasBounds();
+                d.inBounds = false;
+                intruders[c] = d;
+            }
+            else if (c.TryGetComponent(out ICombatController cc))
+            {
+                intruders[c] = new(cc, false, true);
             }
         }
 
-        private void PlayerEnteredGasBounds()
-        {
-            playerInBounds = true;
+        //private void CombatantEnteredGasBounds(ICombatController cc)
+        //{
+        //    f (gasActive)
+        //    {
+        //        PoisonIntruder(cc);
+        //    }
+        //}
 
-            if (gasActive)
-            {
-                PoisonPlayer();
-            }
-        }
+        //private void CombatantExitedGasBounds(ICombatController cc)
+        //{
+        //    inBounds[cc] = false;
+        //}
 
-        private void PlayerExitedGasBounds()
-        {
-            playerInBounds = false;
-        }
+        //private bool CanTrigger(GameObject go)
+        //{
+        //    return ((1 << go.layer) & layersThatCanTrigger) != 0;
+        //}
 
-        private void TriggerGas()
+        private void TriggerGas(Transform t)
         {
             gasParticles.Play();
-            GameLog.Log("Stepping on the mushroom causes it to release a noxious green gas.");
-            PoisonPlayer();
+            if (t == GlobalGameTools.Instance.PlayerTransform)
+            {
+                GameLog.Log("Stepping on the mushroom causes it to release a noxious green gas.");
+            }
+            //PoisonIntruder(c);
         }
 
-        private async void PoisonPlayer()
+        private async void PoisonIntruder(Collider2D c)
         {
-            GameLog.Log("You've been poisoned!");
-            GlobalGameTools.Instance.Player.MovementController.SetRunning(false);
+            var d = intruders[c];
+            d.canBePoisoned = false;
+            intruders[c] = d;
 
-            while (gasActive && playerInBounds)
+            if (d.cc == GlobalGameTools.Instance.Player)
             {
-                if (playerHealth == null || playerHealth.IsDead)
-                    break;
-                await PoisonBleedHit();
+                GameLog.Log("You've been poisoned!");
             }
 
-            //lingering bleed when player exits gas bounds
+            d.cc.MovementController.SetRunning(false);
+
+            while (gasActive && intruders[c].inBounds)
+            {
+                if (d.cc?.Combatant?.Health == null || !d.cc.Combatant.Health.transform)
+                {
+                    intruders.Remove(c);
+                    return;
+                }
+                if (d.cc.Combatant.Health.IsDead)
+                {
+                    d.canBePoisoned = true;
+                    intruders[c] = d;
+                    return;
+                }
+                await PoisonBleedHit(d.cc.Combatant.Health);
+            }
+
+            //lingering bleed when intruder exits gas bounds
             int i = 0;
             while (gasActive && i < lingeringBleedCount)
             {
-                if (playerHealth == null || playerHealth.IsDead)
-                    break;
-                await PoisonBleedHit();
+                if (d.cc?.Combatant?.Health == null || !d.cc.Combatant.Health.transform)
+                {
+                    intruders.Remove(c);
+                }
+                if (d.cc.Combatant.Health.IsDead)
+                {
+                    d.canBePoisoned = true;
+                    intruders[c] = d;
+                    return;
+                }
+                await PoisonBleedHit(d.cc.Combatant.Health);
                 i++;
             }
+
+            d.canBePoisoned = true;
+            intruders[c] = d;
+
         }
 
-        private async Task PoisonBleedHit()
+        private async Task PoisonBleedHit(IHealth health)
         {
-            AttackAbility.DealDamage(this, playerHealth, poisonDamage);
+            AttackAbility.DealDamage(this, health, poisonDamage);
             await MiscTools.DelayGameTime(poisonRate, GlobalGameTools.Instance.TokenSource.Token);
         }
 
         private void OnDestroy()
         {
-            gasBounds.TriggerEnter -= OnGasBoundsEntered;
+            gasBounds.TriggerEnter -= OnGasBoundsStay;
+            gasBounds.TriggerStay -= OnGasBoundsStay;
             gasBounds.TriggerExit -= OnGasBoundsExited;
         }
     }

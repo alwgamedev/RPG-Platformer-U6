@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
@@ -14,7 +15,7 @@ namespace RPGPlatformer.Core
         public int Available => pool.Count;
         public int TotalReleased { get; private set; }
         public int TotalReturned { get; private set; }
-        public int Active { get; private set; }
+        public int Active => TotalReleased - TotalReturned;
         //^note active can be inaccurate if
         //a) an item is returned to the pool that wasn't originally released from this pool
         //b) a released item is destroyed and never returned
@@ -39,7 +40,6 @@ namespace RPGPlatformer.Core
                 item.BeforeSetActive();
                 item.gameObject.SetActive(true);
                 TotalReleased++;
-                Active++;
                 return item;
             }
         }
@@ -54,7 +54,6 @@ namespace RPGPlatformer.Core
                 item.BeforeSetActive();
                 item.gameObject.SetActive(true);
                 TotalReleased++;
-                Active++;
                 return item;
             }
         }
@@ -65,7 +64,6 @@ namespace RPGPlatformer.Core
             {
                 AddToQueue(item);
                 TotalReturned++;
-                Active--;
             }
         }
         PoolableObject InstantiatePooledObject(object configurationParameters)

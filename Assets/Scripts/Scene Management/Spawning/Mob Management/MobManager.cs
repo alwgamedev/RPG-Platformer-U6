@@ -54,7 +54,7 @@ namespace RPGPlatformer.SceneManagement
             {
                 //begin spawn behavior
                 //i.e. configure update function
-                ResetSpawnTimer();
+                //ResetSpawnTimer();
                 GlobalGameTools.Instance.TickTimer.NewTick += OnNewTick;
             }
 
@@ -64,7 +64,9 @@ namespace RPGPlatformer.SceneManagement
         protected virtual void OnNewTick()
         {
             if (!CanSpawn())
+            {
                 return;
+            }
 
             if (MobDefeated())
             {
@@ -74,7 +76,6 @@ namespace RPGPlatformer.SceneManagement
             }
 
             ticksSinceLastSpawn++;
-
             if (ticksSinceLastSpawn >= currentSpawnRate)
             {
                 Spawn();
@@ -104,9 +105,12 @@ namespace RPGPlatformer.SceneManagement
             var toSpawn = Math.Min(mobData.SpawnRate.MaxActivePopulation.Value - pool.Active,
                 mobData.SpawnRate.QuantityPerSpawn.Value);
 
+            Debug.Log($"spawning {toSpawn} units");
+
             for (int i = 0; i < toSpawn; i++)
             {
-                var o = pool.ReleaseObject(mobData.SpawnPosition.Value);
+                Debug.Log($"spawning unit {i}");
+                pool.ReleaseObject(mobData.SpawnPosition.Value);
             }
         }
 
