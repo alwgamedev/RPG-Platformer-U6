@@ -105,11 +105,8 @@ namespace RPGPlatformer.SceneManagement
             var toSpawn = Math.Min(mobData.SpawnRate.MaxActivePopulation.Value - pool.Active,
                 mobData.SpawnRate.QuantityPerSpawn.Value);
 
-            Debug.Log($"spawning {toSpawn} units");
-
             for (int i = 0; i < toSpawn; i++)
             {
-                Debug.Log($"spawning unit {i}");
                 pool.ReleaseObject(mobData.SpawnPosition.Value);
             }
         }

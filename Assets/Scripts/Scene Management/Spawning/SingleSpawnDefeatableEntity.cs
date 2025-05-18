@@ -31,8 +31,6 @@ namespace RPGPlatformer.SceneManagement
         {
             if (!defeatableEntity)
             {
-                Debug.Log($"{GetType().Name} component on {gameObject.name} did not have a defeatable " +
-                    $"entity filled in. Using {gameObject.name} as the defeatable entity.");
                 defeatableEntity = gameObject;
             }
 

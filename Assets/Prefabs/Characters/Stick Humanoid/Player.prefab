@@ -677,7 +677,7 @@ MonoBehaviour:
     minRotationLeft: {x: -1, y: 0}
   - movementType: 5
     moveDirection: 2
-    acceleration: 10
+    acceleration: 12
     flipSprite: 1
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -700,7 +700,7 @@ MonoBehaviour:
     climbSpeed: 1.5
     rotationSpeed: 10
     positionTweenRate: 500
-    swingPushAcceleration: 25
+    swingPushAcceleration: 35
 --- !u!114 &4224925343655634794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,7 +721,8 @@ MonoBehaviour:
   adjustedHalfWidthFactor: 0.45
   runSpeed: 3
   walkSpeed: 1.2
-  swimSpeed: 1.2
+  swimmingRunSpeed: 2.4
+  swimmingWalkSpeed: 1
   maxNumJumps: 2
   jumpForce: {x: 0, y: 290}
   doubleJumpForceMultiplier: 1.18

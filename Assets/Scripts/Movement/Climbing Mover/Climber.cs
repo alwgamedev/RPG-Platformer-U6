@@ -36,7 +36,7 @@ namespace RPGPlatformer.Movement
         {
             Collider2D c = Physics2D.OverlapCircle(transform.position, options.NodeDetectionRadius, 
                 climbableObjectLayer);
-            if (c && c.TryGetComponent(out ClimbNode node))
+            if (c && c.TryGetComponent(out IClimbNode node))
             {
                 ClimberData = new ClimberData(node, node.WorldToLocalPosition(transform.position));
                 Trigger(typeof(Climbing).Name);
@@ -56,13 +56,13 @@ namespace RPGPlatformer.Movement
                 moveInput = Mathf.Sign(moveInput);
             }
 
-            if (ClimberData.currentNode)
+            if (ClimberData.currentNode != null)
             {
                 ClimberData = ClimberData.currentNode.GetClimberData(
                     ClimberData.localPosition + moveInput * options.ClimbSpeed * Time.deltaTime);
             }
 
-            if (!ClimberData.currentNode)
+            if (ClimberData.currentNode == null)
             {
                 EndClimb(true);
                 return;

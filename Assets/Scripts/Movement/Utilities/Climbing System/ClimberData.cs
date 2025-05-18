@@ -4,13 +4,13 @@ namespace RPGPlatformer.Movement
 {
     public struct ClimberData
     {
-        public ClimbNode currentNode;
+        public IClimbNode currentNode;
         public float localPosition;
         //position relative to current node measured on a bent number line, where
         //positive numbers go in the direction current -> current.Higher and negatives in the
         //direction current -> current.Lower
 
-        public ClimberData(ClimbNode currentNode, float localPosition)
+        public ClimberData(IClimbNode currentNode, float localPosition)
         {
             this.currentNode = currentNode;
             this.localPosition = localPosition;

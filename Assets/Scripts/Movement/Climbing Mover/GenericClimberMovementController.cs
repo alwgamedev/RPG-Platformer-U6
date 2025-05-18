@@ -43,7 +43,7 @@ namespace RPGPlatformer.Movement
             {
                 base.HandleMoveInput();
             }
-            else if (MoveInput.x != 0 && InSwingMode() && stateDriver.ClimberData.currentNode)
+            else if (MoveInput.x != 0 && InSwingMode() && stateDriver.ClimberData.currentNode != null)
             {
                 stateDriver.ClimberData.currentNode.ApplyAcceleration(climbingMovementOptions.SwingPushAcceleration
                     * Mathf.Sign(MoveInput.x) * transform.right);
@@ -98,11 +98,10 @@ namespace RPGPlatformer.Movement
 
         protected float SwingSpeedFraction()
         {
-            if (!stateDriver.ClimberData.currentNode || !stateDriver.ClimberData.currentNode.Rigidbody) 
+            if (stateDriver.ClimberData.currentNode == null) 
                 return 0;
 
-            return stateDriver.ClimberData.currentNode.Rigidbody.linearVelocity.magnitude
-                / 5 * stateDriver.RunSpeed;
+            return 0.2f * stateDriver.ClimberData.currentNode.Speed * stateDriver.RunSpeed;
         }
 
         public override void OnDeath()

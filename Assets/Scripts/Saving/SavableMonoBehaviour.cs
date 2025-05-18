@@ -44,8 +44,8 @@ namespace RPGPlatformer.Saving
                 //ISavable savable = entry.Value;
                 componentStates[savable.GetType().Name] = savable.CaptureState();
 
-                Debug.Log($"{GetType().Name} on {gameObject.name} " +
-                    $"captured state of component of type {savable.GetType().Name}");
+                //Debug.Log($"{GetType().Name} on {gameObject.name} " +
+                //    $"captured state of component of type {savable.GetType().Name}");
             }
             return componentStates;
         }
@@ -62,8 +62,8 @@ namespace RPGPlatformer.Saving
                     JsonNode jNode = stateDict[savable.GetType().Name];
                     savable.RestoreState(jNode);
 
-                    Debug.Log($"{GetType().Name} on {gameObject.name} " +
-                        $"restored state of component of type {savable.GetType().Name}");
+                    //Debug.Log($"{GetType().Name} on {gameObject.name} " +
+                    //    $"restored state of component of type {savable.GetType().Name}");
                 }
             }
         }

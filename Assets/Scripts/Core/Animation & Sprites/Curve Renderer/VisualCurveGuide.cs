@@ -14,6 +14,20 @@ namespace RPGPlatformer
         [SerializeField] VisualCurveGuidePoint[] guides;
         [HideInInspector][SerializeField] float _lengthScale = 1;
 
+        VisualCurveGuidePoint[] _guides;
+        VisualCurveGuidePoint[] Guides
+        {
+            get
+            {
+                if (_guides == null)
+                {
+                    _guides = guides;
+                }
+
+                return _guides;
+            }
+        }
+
         public bool ikEnabled;
         public CurveIKEffect[] ikEffects;
 
@@ -69,6 +83,18 @@ namespace RPGPlatformer
             //SetLengthScale(lengthScale);
         }
 
+        public void SetGuidePoints(VisualCurveGuidePoint[] guides)
+        {
+            if (guides == null)
+                return;
+
+            int n = guides.Length;
+            _guides = new VisualCurveGuidePoint[n];
+            Array.Copy(guides, _guides, n);
+            ReconfigureIKEffects();
+            ReconfigureBounds();
+        }
+
         public void UpdateLengthScale()
         {
             if (lengthScale <= 0)
@@ -81,8 +107,8 @@ namespace RPGPlatformer
 
             for (int i = 1; i < guides.Length; i++)
             {
-                guides[i].SetPoint(guides[0].Point() + r * (guides[i].Point() - guides[0].Point()));
-                guides[i].SetTangentDir(r * guides[i].TangentDir());
+                Guides[i].SetPoint(Guides[0].Point() + r * (Guides[i].Point() - Guides[0].Point()));
+                Guides[i].SetTangentDir(r * Guides[i].TangentDir());
             }
 
             _lengthScale = lengthScale;
@@ -125,24 +151,24 @@ namespace RPGPlatformer
         //should call this whenever you add new ik effects
         private void ReconfigureIKEffects()
         {
-            if (ikEffects == null || guides == null) return;
+            if (ikEffects == null || Guides == null) return;
 
             foreach (var effect in ikEffects)
             {
-                effect?.RecomputeEndptIndices(guides);
+                effect?.RecomputeEndptIndices(Guides);
             }
         }
 
         private void ReconfigureBounds()
         {
-            if (guides == null || !bounds) return;
+            if (Guides == null || !bounds) return;
 
-            bounds.Configure(guides);
+            bounds.Configure(Guides);
         }
 
         private void CheckForUpdates()
         {
-            if (guides == null) return;
+            if (Guides == null) return;
 
             if (ikEffects != null)
             {
@@ -156,7 +182,7 @@ namespace RPGPlatformer
                 }
             }
 
-            foreach (var guide in guides)
+            foreach (var guide in Guides)
             {
                 if (guide && guide.HasChanged())
                 {
@@ -179,7 +205,7 @@ namespace RPGPlatformer
                 {
                     if (e != null && e.enabled && e.CanRunIK())
                     {
-                        CurveGuideIKHelper.FABRIK(guides, e.StartIndex(), e.EndIndex(), 
+                        CurveGuideIKHelper.FABRIK(Guides, e.StartIndex(), e.EndIndex(), 
                             /*unitRays, unityRays2,*/ lengths, totalLength,
                             e.TargetPosition(), e.ikIterations, e.ikStrength, e.ikToleranceSqrd);
                     }
@@ -194,12 +220,12 @@ namespace RPGPlatformer
                     RecomputeRaysAndLengths();
                 }
 
-                bounds.EnforceBounds(guides, lengths);
+                bounds.EnforceBounds(Guides, lengths);
             }
 
             if (effectAppliedThisFrame)
             {
-                CurveGuideIKHelper.RotateTangents(guides, unitRays, unitRays2);
+                CurveGuideIKHelper.RotateTangents(Guides, unitRays, unitRays2);
             }
 
             if (curveRenderer == null)
@@ -208,25 +234,25 @@ namespace RPGPlatformer
             }
             if (curveRenderer != null)
             {
-                curveRenderer.HandleGuidePointChanges(guides);
+                curveRenderer.HandleGuidePointChanges(Guides);
             }
             //let's see if this triggers curve renderer's validate, or we should call draw ourselves
         }
 
         private void RecomputeRaysAndLengths()
         {
-            if (lengths == null || lengths.Length != guides.Length - 1)
+            if (lengths == null || lengths.Length != Guides.Length - 1)
             {
-                lengths = new float[guides.Length - 1];
+                lengths = new float[Guides.Length - 1];
             }
-            if (unitRays == null || unitRays.Length != guides.Length - 1)
+            if (unitRays == null || unitRays.Length != Guides.Length - 1)
             {
-                unitRays = new Vector2[guides.Length - 1];
+                unitRays = new Vector2[Guides.Length - 1];
             }
 
-            if (unitRays2 == null || unitRays2.Length != guides.Length - 2)
+            if (unitRays2 == null || unitRays2.Length != Guides.Length - 2)
             {
-                unitRays2 = new Vector2[Math.Max(guides.Length - 2, 0)];
+                unitRays2 = new Vector2[Math.Max(Guides.Length - 2, 0)];
             }
 
             Vector3 v;
@@ -234,48 +260,48 @@ namespace RPGPlatformer
 
             totalLength = 0;
 
-            for (int i = 0; i < guides.Length - 1; i++)
+            for (int i = 0; i < Guides.Length - 1; i++)
             {
-                v = guides[i + 1].Point() - guides[i].Point();
+                v = Guides[i + 1].Point() - Guides[i].Point();
                 l = v.magnitude;
                 totalLength += l;
                 unitRays[i] = v / l;
                 lengths[i] = l;
             }
 
-            for (int i = 0; i < guides.Length - 2; i++)
+            for (int i = 0; i < Guides.Length - 2; i++)
             {
-                unitRays2[i] = (guides[i + 2].Point() - guides[i].Point()).normalized;
+                unitRays2[i] = (Guides[i + 2].Point() - Guides[i].Point()).normalized;
             }
         }
 
         private void OnDrawGizmos()
         {
-            if (!drawGizmos || guides == null) return;
+            if (!drawGizmos || Guides == null) return;
 
             int i = 0;
-            while (i < guides.Length)
+            while (i < Guides.Length)
             {
-                if (!guides[i] || !guides[i].Active())
+                if (!Guides[i] || !Guides[i].Active())
                 {
                     i++; 
                     continue;
                 }
 
-                guides[i].DrawGizmo();
+                Guides[i].DrawGizmo();
 
                 int j = i + 1;
 
                 //find the next active node
-                while (j < guides.Length)
+                while (j < Guides.Length)
                 {
-                    if (!guides[j] || !guides[j].Active())
+                    if (!Guides[j] || !Guides[j].Active())
                     {
                         j++;
                         continue;
                     }
 
-                    Debug.DrawLine(guides[i].Point(), guides[j].Point(), Color.green);
+                    Debug.DrawLine(Guides[i].Point(), Guides[j].Point(), Color.green);
                     break;
                 }
 

@@ -41,11 +41,13 @@ namespace RPGPlatformer.Saving
         public async Task Save()
         {
             await Save(DefaultFilePath(), GlobalGameTools.Instance.TokenSource.Token);
+            Debug.Log($"{gameObject.name}: save complete");
         }
 
         public async Task Load()
         {
             await Load(DefaultFilePath(), GlobalGameTools.Instance.TokenSource.Token);
+            Debug.Log($"{gameObject.name}: load complete");
         }
 
         public async Task Save(string filePath, CancellationToken token)

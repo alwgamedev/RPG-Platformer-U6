@@ -26,9 +26,10 @@ namespace RPGPlatformer.Core
         private void Awake()
         {
             lineRenderer = GetComponent<LineRenderer>();
+            lineRenderer.positionCount = lineRendererPositionCount;
         }
 
-        private void OnEnable()
+        private void Start()
         {
             SnapToGoalPositions();
         }
@@ -42,6 +43,18 @@ namespace RPGPlatformer.Core
             else
             {
                 SnapToGoalPositions();
+            }
+        }
+
+        private void OnValidate()
+        {
+            if (!lineRenderer)
+            {
+                lineRenderer = GetComponent<LineRenderer>();
+            }
+            if (lineRenderer)
+            {
+                lineRenderer.positionCount = lineRendererPositionCount;
             }
         }
 
@@ -112,11 +125,11 @@ namespace RPGPlatformer.Core
             float l = 0;//length units covered within the current path segment
 
 
-            for (int i = 0; i < lineRenderer.positionCount; i++)
+            for (int i = 0; i < lineRendererPositionCount; i++)
             {
-                if (i == lineRenderer.positionCount - 1)
+                if (i == lineRendererPositionCount - 1)
                 {
-                    goalPositions[i] = guidePoints[^1].point;
+                    goalPositions[i] = guidePoints[^1].point;//^1 = length - 1 (last elmt of arry)
                     break;
                 }
 
@@ -146,7 +159,7 @@ namespace RPGPlatformer.Core
 
             GetLineRendererPositions();
 
-            var m = Math.Min(lineRendererPositions.Length, goalPositions.Length);
+            int m = Math.Min(lineRendererPositions.Length, goalPositions.Length);
 
             for (int i = 0; i < m; i++)
             {
@@ -156,18 +169,6 @@ namespace RPGPlatformer.Core
 
             lineRenderer.SetPositions(lineRendererPositions);
         }
-
-        //private void SnapToGoalPositions()
-        //{
-        //    if (goalPositions == null) return;
-
-        //    if (goalPositions.Length != lineRenderer.positionCount)
-        //    {
-        //        lineRenderer.positionCount = goalPositions.Length;
-        //    }
-
-        //    lineRenderer.SetPositions(goalPositions);
-        //}
 
         private void SnapToGoalPositions()
         {
