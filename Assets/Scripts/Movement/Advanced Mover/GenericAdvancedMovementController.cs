@@ -89,7 +89,8 @@ namespace RPGPlatformer.Movement
         {
             if (Swimming)
             {
-                stateDriver.MaxSpeed = stateDriver.SwimSpeed;
+                stateDriver.MaxSpeed = stateDriver.Running ? 
+                    stateDriver.SwimmingRunSpeed :stateDriver.SwimmingWalkSpeed;
             }
             else
             {
@@ -117,7 +118,7 @@ namespace RPGPlatformer.Movement
                     return;
                 }
 
-                stateManager.AnimateMovement(Mathf.Abs(HorizontalSpeedFraction(stateDriver.SwimSpeed)));
+                stateManager.AnimateMovement(Mathf.Abs(HorizontalSpeedFraction(stateDriver.SwimmingWalkSpeed)));
             }
         }
 

@@ -7,7 +7,8 @@ namespace RPGPlatformer.Movement
     {
         [SerializeField] protected float runSpeed = 3;
         [SerializeField] protected float walkSpeed = 0.8f;
-        [SerializeField] protected float swimSpeed = .25f;
+        [SerializeField] protected float swimmingRunSpeed = 2;
+        [SerializeField] protected float swimmingWalkSpeed = 1;
         [SerializeField] protected int maxNumJumps = 2;
         [SerializeField] protected Vector2 jumpForce = 375 * Vector2.up;
         [SerializeField] protected float doubleJumpForceMultiplier = 1.18f;
@@ -19,7 +20,8 @@ namespace RPGPlatformer.Movement
 
         public float RunSpeed => runSpeed;
         public float WalkSpeed => walkSpeed;
-        public float SwimSpeed => swimSpeed;
+        public float SwimmingWalkSpeed => swimmingWalkSpeed;
+        public float SwimmingRunSpeed => swimmingRunSpeed;
         public virtual bool Running { get; set; }
         public bool FacingWall => facingWall;
 

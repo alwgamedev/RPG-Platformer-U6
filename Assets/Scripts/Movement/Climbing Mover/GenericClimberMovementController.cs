@@ -45,8 +45,8 @@ namespace RPGPlatformer.Movement
             }
             else if (MoveInput.x != 0 && InSwingMode() && stateDriver.ClimberData.currentNode)
             {
-                stateDriver.ClimberData.currentNode.Push(climbingMovementOptions.SwingPushAcceleration
-                    * Mathf.Sign(MoveInput.x));
+                stateDriver.ClimberData.currentNode.ApplyAcceleration(climbingMovementOptions.SwingPushAcceleration
+                    * Mathf.Sign(MoveInput.x) * transform.right);
             }
         }
 

@@ -27,12 +27,9 @@ namespace RPGPlatformer.Movement
             Lower = lower;
         }
 
-        public void Push(float acceleration)
+        public void ApplyAcceleration(Vector2 acceleration)
         {
-            if (Rigidbody)
-            {
-                Rigidbody.AddForce(acceleration * Rigidbody.mass * Vector2.right);
-            }
+            Rigidbody.AddForce(Rigidbody.mass * acceleration);
         }
 
         public ClimberData GetClimberData(float localPosition)
