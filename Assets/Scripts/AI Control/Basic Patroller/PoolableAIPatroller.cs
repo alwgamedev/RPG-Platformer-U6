@@ -7,7 +7,7 @@ namespace RPGPlatformer.AIControl
     public class PoolableAIPatroller : PoolableObject
     {
         [SerializeField] bool snapSpawnPositionToGround = true;
-        [SerializeField] float spawnHeightBuffer = 0.05f;
+        //[SerializeField] float spawnHeightBuffer = 0.05f;
 
         IAIPatrollerController controller;
         int groundLayer;
@@ -65,28 +65,38 @@ namespace RPGPlatformer.AIControl
 
         private void CorrectSpawnPosition()
         {
-            var o = controller.Patroller.AIMovementController.Mover.CenterPosition;
-            var h = controller.Patroller.AIMovementController.Mover.Height + spawnHeightBuffer;
-            var r = Physics2D.Raycast(o, -Vector2.up, Mathf.Infinity, groundLayer);
+            //var o = controller.Patroller.AIMovementController.Mover.CenterPosition;
+            //var h = 0.5f * controller.Patroller.AIMovementController.Mover.Height + spawnHeightBuffer;
+            var r = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Infinity, groundLayer);
 
-            if (!r) return;
+            if (r && r.distance > 0)
+            {
+                transform.position = r.point;
+                //as stupid as it looks, this is the only thing that works
+                //(trying a more logical solution like setting position to ground pos + half height,
+                //always starts him with a freefall (even if you use collider center etc.))
+            }
 
-            if (r.distance < h)//our spawn position is below ground
-            {
-                //if i remember correctly, this snaps to a vertex of the collider (for polygon collider)
-                //which could be undesirable when there are few vertices nearby
-                //we'll see what it does
-                //to eradicate this issue you could just try to choose spawnMin and spawnMax points to be above 
-                //ground max height so that we never spawn below ground
-                Debug.Log("spawned under ground, moving to closest point on ground collider");
-                transform.position = r.collider.ClosestPoint(r.point) + h * Vector2.up
-                    + (Vector2)(transform.position - o);
-            }
-            else if (r && r.distance > h)
-            {
-                Debug.Log("spawned too high, moving down to ground");
-                transform.position = r.point + h * Vector2.up + (Vector2)(transform.position - o);
-            }
+            //if (!r) return;
+
+            //if (r.distance <= 0)//our spawn position is below ground
+            //{
+            //    //if i remember correctly, this snaps to a vertex of the collider (for polygon collider)
+            //    //which could be undesirable when there are few vertices nearby
+            //    //we'll see what it does
+            //    //to eradicate this issue you could just try to choose spawnMin and spawnMax points to be above 
+            //    //ground max height so that we never spawn below ground
+            //    Debug.Log("spawned under ground, moving to closest point on ground collider");
+            //    transform.position = r.collider.ClosestPoint(r.point) + h * Vector2.up
+            //        + (Vector2)(transform.position - o);
+            //}
+            //else if (r && r.distance > 0)
+            //{
+            //    Debug.DrawLine(o, r.point, Color.red, 5);
+            //    Debug.Log($"pos before correction: {transform.position}");
+            //    transform.position -= r.distance * Vector3.up;
+            //    Debug.Log($"pos after: {transform.position}");
+            //}
         }
     }
 }
