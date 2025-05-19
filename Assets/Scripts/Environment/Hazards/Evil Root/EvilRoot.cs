@@ -11,7 +11,7 @@ namespace RPGPlatformer.Environment
     {
         [SerializeField] float dormantLengthScale = 0.1f;
         [SerializeField] float emergedLengthScale = 2.5f;
-        [SerializeField] float emergeMoveTime = 2.5f;
+        //[SerializeField] float emergeMoveTime = 1;
         [SerializeField] float emergeGrowTime = 1;
         [SerializeField] float retreatMoveTime = 1;
         [SerializeField] float retreatGrowTime = 1.5f;
@@ -32,6 +32,7 @@ namespace RPGPlatformer.Environment
         VisualCurveGuide vcg;
         bool headIsTouchingPlayer;
         float headRadius2;
+        bool hasThrown;
         Transform playerParent;
 
         static EvilRoot RootHoldingPlayer;
@@ -71,51 +72,123 @@ namespace RPGPlatformer.Environment
             ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
         }
 
-        public override void ResetPoolableObject() { }
+        public override void ResetPoolableObject()
+        {
+            hasThrown = false;
+        }
 
         public void SetEmergePosition(Vector2 position)
         {
             emergedHeadPosition.position = position;
         }
 
+        //public void SetColliderAvoidanceSide(CurveBounds.AvoidanceSide avoidanceSide)
+        //{
+        //    if (vcg.bounds)
+        //    {
+        //        vcg.bounds.avoidanceSide = avoidanceSide;
+        //    }
+        //}
+
         //BASIC FUNCTIONS
 
-        public async void OnDeploy(bool throwRight, CancellationToken token)
+        public async void OnDeploy(/*bool throwRight,*/ CancellationToken token)
         {
-            await Emerge(token);
-            if (PlayerInGrabRange())
-            {
-                using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+            //await Emerge(token);
 
-                try
-                {
-                    PlayerGrabbed += cts.Cancel;
-                    await GrabPlayer(cts.Token);
-                }
-                catch (TaskCanceledException) { }
-                finally
-                {
-                    PlayerGrabbed -= cts.Cancel;
-                }
+            //float emergeTimeMult = MiscTools.RandomFloat(0.75f, 3);
+            var a = vcg.LerpLengthScale(emergedLengthScale, /*emergeTimeMult **/ emergeGrowTime,
+                token, HasNotThrownYet);
+            var b = Emerge(/*emergeTimeMult,*/ /*throwRight,*/ token);
+            await Task.WhenAll(a, b);
 
-                if (RootHoldingPlayer == this)
-                {
-                    PlayerGrabbed?.Invoke();
-                    await ThrowPlayer(throwRight, token);
-                }
-            }
+            //if (PlayerInGrabRange())
+            //{
+            //    using var cts2 = CancellationTokenSource.CreateLinkedTokenSource(token);
+
+            //    try
+            //    {
+            //        PlayerGrabbed += cts2.Cancel;
+            //        await GrabPlayer(cts2.Token);
+            //    }
+            //    catch (TaskCanceledException) { }
+            //    finally
+            //    {
+            //        PlayerGrabbed -= cts2.Cancel;
+            //    }
+
+            //    if (RootHoldingPlayer == this)
+            //    {
+            //        PlayerGrabbed?.Invoke();
+            //        await ThrowPlayer(throwRight, token);
+            //    }
+            //}
             await Retreat(token);
             ReturnToPool();
         }
 
-        public async Task Emerge(CancellationToken token)
+        public async Task Emerge(/*float emergeTimeMult,*/ /*bool throwRight,*/ CancellationToken token)
         {
-            float emergeTimeMult = MiscTools.RandomFloat(0.75f, 3);
-            var a = vcg.LerpLengthScale(emergedLengthScale, emergeTimeMult * emergeGrowTime, token);
-            var b = followGuideIK.LerpBetweenTransforms(dormantHeadPosition, 
-                emergedHeadPosition, emergeTimeMult * emergeMoveTime, token);
-            await Task.WhenAll(a, b);
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+
+            try
+            {
+                PlayerGrabbed += cts.Cancel;
+                await GrabPlayer(cts.Token);
+            }
+            catch (TaskCanceledException) { }
+            finally
+            {
+                PlayerGrabbed -= cts.Cancel;
+            }
+
+            if (RootHoldingPlayer == this)
+            {
+                PlayerGrabbed?.Invoke();
+                //bool throwRight = GlobalGameTools.Instance.Player.MovementController.CurrentOrientation
+                //    == HorizontalOrientation.left;
+                //if (MiscTools.rng.Next(0, 5) == 0)//25% chance of throwing in the wrong direction
+                //{
+                //    throwRight = !throwRight;
+                //}
+                await ThrowPlayer(ThrowRight(), token);
+            }
+            //await followGuideIK.LerpBetweenTransforms(dormantHeadPosition,
+            //    emergedHeadPosition, emergeTimeMult * emergeMoveTime,
+            //    token, 1, PlayerNotInGrabRange);
+            //if (PlayerInGrabRange())
+            //{
+            //    using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+
+            //    try
+            //    {
+            //        PlayerGrabbed += cts.Cancel;
+            //        await GrabPlayer(cts.Token);
+            //    }
+            //    catch (TaskCanceledException) { }
+            //    finally
+            //    {
+            //        PlayerGrabbed -= cts.Cancel;
+            //    }
+
+            //    if (RootHoldingPlayer == this)
+            //    {
+            //        PlayerGrabbed?.Invoke();
+            //        await ThrowPlayer(throwRight, token);
+            //    }
+            //}
         }
+
+        //public async Task Emerge(float emergeTimeMult, CancellationToken token)
+        //{
+        //    //float emergeTimeMult = MiscTools.RandomFloat(0.75f, 3);
+        //    var a = vcg.LerpLengthScale(emergedLengthScale, emergeTimeMult * emergeGrowTime, 
+        //        token/*, PlayerNotInGrabRange*/);
+        //    var b = followGuideIK.LerpBetweenTransforms(dormantHeadPosition, 
+        //        emergedHeadPosition, emergeTimeMult * emergeMoveTime, 
+        //        token/*, 1, PlayerNotInGrabRange*/);
+        //    await Task.WhenAll(a, b);
+        //}
 
         public async Task Retreat(CancellationToken token)
         {
@@ -173,6 +246,7 @@ namespace RPGPlatformer.Environment
 
         public async Task ThrowPlayer(bool throwRight, CancellationToken token)
         {
+            hasThrown = true;//so that we stop growing lengthScale at this point
             float angle = MiscTools.RandomFloat(Mathf.PI / 16, 3 * Mathf.PI / 16);
             if (!throwRight)//throw opposite direction head is "facing"
             {
@@ -190,7 +264,7 @@ namespace RPGPlatformer.Environment
 
             ReleasePlayer(f);
 
-            d.y *= - 1;//easy way to give the throw an arcing motion
+            d.y *= - 1;//to give the throw an arcing motion
             await followGuideIK.LerpTowardsPosition(o + d, (1 - throwReleaseFraction) * throwTime,
                 token);
 
@@ -218,6 +292,18 @@ namespace RPGPlatformer.Environment
             playerRb.bodyType = RigidbodyType2D.Dynamic;
             playerRb.AddForce(force * playerRb.mass, ForceMode2D.Impulse);
             ((IInputDependent)player).InputSource.EnableInput();
+        }
+
+        private bool ThrowRight()
+        {
+            var t = GlobalGameTools.Instance.Player.MovementController.CurrentOrientation
+                    == HorizontalOrientation.left;
+            if (MiscTools.rng.Next(0, 5) == 0)//25% chance of throwing in the wrong direction
+            {
+                t = !t;
+            }
+
+            return t;
         }
 
         //IK SETTINGS
@@ -260,6 +346,11 @@ namespace RPGPlatformer.Environment
                 && c.transform == GlobalGameTools.Instance.PlayerTransform;
         }
 
+        private bool HasNotThrownYet()
+        {
+            return !hasThrown;
+        }
+
         private bool InHoldRange(Transform t)
         {
             return Vector2.SqrMagnitude(t.position - head.transform.position) < headRadius2;
@@ -268,6 +359,11 @@ namespace RPGPlatformer.Environment
         private bool InGrabRange(Transform t)
         {
             return Vector2.SqrMagnitude(t.position - head.transform.position) < grabRange * grabRange;
+        }
+
+        private bool PlayerNotInGrabRange()
+        {
+            return !PlayerInGrabRange();
         }
 
         private bool PlayerInGrabRange()

@@ -220,7 +220,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0.335849, g: 0.28646135, b: 0.13624062, a: 1}
-      key1: {r: 0.8415094, g: 0.7793295, b: 0.64621574, a: 1}
+      key1: {r: 0.8415094, g: 0.77625585, b: 0.6335137, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -250,7 +250,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 2
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
@@ -332,7 +332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {fileID: 4296129975827092884}
   endPoint: {fileID: 4323310675879455635}
-  iterations: 5
+  iterations: 10
   prohibitedZone: {fileID: 0}
   buffer: 0.1
 --- !u!114 &662670812258613749
@@ -348,8 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dormantLengthScale: 0.1
-  emergedLengthScale: 3
-  emergeMoveTime: 0.1
+  emergedLengthScale: 2.5
   emergeGrowTime: 0.4
   retreatMoveTime: 1
   retreatGrowTime: 1
@@ -358,8 +357,8 @@ MonoBehaviour:
   followGuideIK: {fileID: 7141360877188178371}
   followPlayerIK: {fileID: 7639152704686829164}
   head: {fileID: 4201806285803211995}
-  grabRange: 3
-  grabAttemptTimeOut: 0.5
+  grabRange: 2
+  grabAttemptTimeOut: 0.75
   grabSpeed: 3
   grabSnapBackTime: 0.1
   throwLength: 3

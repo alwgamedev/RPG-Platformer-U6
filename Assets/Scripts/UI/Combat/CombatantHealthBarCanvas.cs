@@ -54,7 +54,7 @@ namespace RPGPlatformer.UI
                 {
                     DelayedDestroy();
                 }
-                else
+                else if (storedParent)
                 {
                     transform.SetParent(storedParent);
                     transform.localPosition = storedParentLocalPos;

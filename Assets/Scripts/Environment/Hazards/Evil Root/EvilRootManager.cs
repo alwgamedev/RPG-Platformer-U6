@@ -16,9 +16,6 @@ namespace RPGPlatformer.Environment
         bool playerInBounds;
         float nextSpawnTime;
         float spawnTimer;
-        //System.Random rng = new();
-
-        //int DeployedRoots => pool.poolSize - pool.Available;
 
         public Transform RootSortingLayerDataSource => rootSortingLayerDataSource;
         public Collider2D Platform => platform;
@@ -30,14 +27,16 @@ namespace RPGPlatformer.Environment
 
         private void Update()
         {
-            if (playerInBounds && spawnTimer < nextSpawnTime)
+            if (!playerInBounds)
+                return;
+
+            if (spawnTimer < nextSpawnTime)
             {
                 spawnTimer += Time.deltaTime;
             }
-            else if (playerInBounds && pool.Available != 0)
+            else if (pool.Available != 0)
             {
-                nextSpawnTime = spawnTime.Value;//MiscTools.RandomFloat(spawnTimeMin, spawnTimeMax);
-                    //(spawnTimeMax - spawnTimeMin) * (float)MiscTools.rng.NextDouble() + spawnTimeMin;
+                nextSpawnTime = spawnTime.Value;
                 spawnTimer = 0;
                 DeployRoot();
             }
@@ -48,7 +47,10 @@ namespace RPGPlatformer.Environment
             var r = (EvilRoot)pool.ReleaseObject();
             r.transform.position = GetRandomSpawnPosition();
             r.SetEmergePosition(GetRandomEmergePosition(r.transform.position.x));
-            r.OnDeploy(r.transform.position.x > transform.position.x, GlobalGameTools.Instance.TokenSource.Token);
+            //r.SetColliderAvoidanceSide(r.transform.position.x < transform.position.x ?
+            //    CurveBounds.AvoidanceSide.left : CurveBounds.AvoidanceSide.right);
+            bool throwRight = MiscTools.rng.Next(0, 2) > 0;
+            r.OnDeploy(GlobalGameTools.Instance.TokenSource.Token);
         }
 
         private Vector2 GetRandomSpawnPosition()
@@ -81,6 +83,7 @@ namespace RPGPlatformer.Environment
         private void OnPlayerExit()
         {
             playerInBounds = false;
+            nextSpawnTime = 0;//so that we spawn immediately when player enters bounds again
         }
 
         private void OnTriggerEnter2D(Collider2D collider)

@@ -115,12 +115,12 @@ namespace RPGPlatformer
         }
 
         //l = goal length scale, T = time to complete
-        public async Task LerpLengthScale(float l, float T, CancellationToken token)
+        public async Task LerpLengthScale(float l, float T, CancellationToken token, Func<bool> canContinue = null)
         {
             float r = (l - lengthScale) / T;
             float t = 0;
 
-            while (t < T)
+            while (t < T && (canContinue?.Invoke() ?? true))
             {
                 await Task.Yield();
                 if (token.IsCancellationRequested)

@@ -8,14 +8,15 @@ namespace RPGPlatformer.Core
         [SerializeField] protected VisualCurveGuidePoint endPoint;
         [SerializeField] protected int iterations;
 
-        //protected enum AvoidanceSide
+        //public AvoidanceSide avoidanceSide;// = AvoidanceSide.undetermined;
+
+        //public enum AvoidanceSide
         //{
-        //    undetermined, right, left
+        //    /*undetermined,*/ right, left
         //}
 
         protected int startIndex;
         protected int endIndex;
-        //protected AvoidanceSide avoidanceSide = AvoidanceSide.undetermined;
 
 
         //returns whether 

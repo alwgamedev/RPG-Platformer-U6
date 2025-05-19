@@ -115,40 +115,40 @@ namespace RPGPlatformer.Core
         }
 
         public async Task LerpBetweenTransforms(Transform tr0, Transform tr1, float T, CancellationToken token,
-            float lerpStrength = 1)
+            float lerpStrength = 1, Func<bool> canContinue = null)
         {
             Vector2 p0() => tr0.transform.position;
             Vector2 p1() => tr1.transform.position;
-            await LerpBetweenPositions(p0, p1, T, token, lerpStrength);
+            await LerpBetweenPositions(p0, p1, T, token, lerpStrength, canContinue);
         }
 
         public async Task LerpTowardsTransform(Transform tr, float T, CancellationToken token,
-            float lerpStrength = 1)
+            float lerpStrength = 1, Func<bool> canContinue = null)
         {
             Vector2 p0() => endPoint.Point();
             Vector2 p1() => tr.position;
-            await LerpBetweenPositions(p0, p1, T, token, lerpStrength);
+            await LerpBetweenPositions(p0, p1, T, token, lerpStrength, canContinue);
         }
 
         //T = time to complete
         public async Task LerpBetweenPositions(Vector2 p0, Vector2 p1, float T, CancellationToken token,
-            float lerpStrength = 1)
+            float lerpStrength = 1, Func<bool> canContinue = null)
         {
             Vector2 q0() => p0;
             Vector2 q1() => p1;
-            await LerpBetweenPositions(q0, q1, T, token, lerpStrength);
+            await LerpBetweenPositions(q0, q1, T, token, lerpStrength, canContinue);
         }
 
         public async Task LerpTowardsPosition(Vector2 p1, float T, CancellationToken token, 
-            float lerpStrength = 1)
+            float lerpStrength = 1, Func<bool> canContinue = null)
         {
             Vector2 q0() => endPoint.Point();
             Vector2 q1() => p1;
-            await LerpBetweenPositions(q0, q1, T, token, lerpStrength);
+            await LerpBetweenPositions(q0, q1, T, token, lerpStrength, canContinue);
         }
 
         public async Task LerpBetweenPositions(Func<Vector2> p, Func<Vector2> q, float T,
-            CancellationToken token, float lerpStrength = 1)
+            CancellationToken token, float lerpStrength = 1, Func<bool> canContinue = null)
         {
             void UpdatePosition(float s)
             {
@@ -157,7 +157,7 @@ namespace RPGPlatformer.Core
 
             float t = 0;
 
-            while (t < T)
+            while (t < T && (canContinue?.Invoke() ?? true))
             {
                 UpdatePosition(t);
                 await Task.Yield();

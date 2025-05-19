@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.Core
 {
@@ -7,7 +8,6 @@ namespace RPGPlatformer.Core
         public Collider2D prohibitedZone;
         public float buffer;
         //[SerializeField] float resetAvoidanceDistanceFactorSqrd = 2.25f;
-        //[SerializeField] AvoidanceSide defaultAvoidanceSide;
 
         Vector2 center;
         //float d;
@@ -38,13 +38,13 @@ namespace RPGPlatformer.Core
             outOfBounds = false;
 
             center = prohibitedZone.bounds.center;
-            //v = endPoint.Point() - center;//startPoint.Point();
+            //v = (endPoint.Point() - startPoint.Point()).normalized;
 
             //if (avoidanceSide == AvoidanceSide.undetermined)
             //{
-            //    avoidanceSide = AvoidanceSide.left;
-            //    //avoidanceSide = Vector2.Dot(endPoint.Point() - center, v) > 0 ?
-            //    //    AvoidanceSide.right : AvoidanceSide.left;
+            //    //determine which quadrant endPoint is in for the basis v, v.CCWPerp() (relative to center)
+            //    //bool upperHalfPlane = Vector2.Dot(endPoint.Point() - center, v.CCWPerp()) > 0;//lower
+            //    //bool rightHalfPlane = Vector2.Dot(endPoint.Point() - center, v) > 0;
             //}
 
             for (int i = startIndex; i <= endIndex; i++)
@@ -56,8 +56,7 @@ namespace RPGPlatformer.Core
                     outOfBounds = true;
                     //if (IsOnWrongSide(v, p - center, avoidanceSide))
                     //{
-                    //    p = center 
-                    //        + (Vector2)PhysicsTools.ReflectAcrossPerpendicularHyperplane(v.CCWPerp(), p - center);
+                    //    p = center + (Vector2)PhysicsTools.ReflectAcrossPerpendicularHyperplane(v.CCWPerp(), p - center);
                     //}
                     p = center + r * (p - center).normalized;
                     guidePoints[i].SetPoint(p);
@@ -95,6 +94,11 @@ namespace RPGPlatformer.Core
         //    }
 
         //    return false;
+        //}
+
+        //private void OnDisable()
+        //{
+        //    avoidanceSide = AvoidanceSide.undetermined;
         //}
     }
 }
