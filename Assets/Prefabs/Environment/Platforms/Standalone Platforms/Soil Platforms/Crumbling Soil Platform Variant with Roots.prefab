@@ -604,6 +604,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.025001526, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &843418088549653140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -617,13 +618,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 6778891008907715619}
   - {fileID: 4625397540967556648}
   - {fileID: 2381738706604083210}
   - {fileID: 2826078442568760026}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &7615222025231989896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636,7 +642,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 1
   dataSource: {fileID: 2603532980797004901}
 --- !u!1 &317676968786170504
@@ -932,6 +937,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.020000458, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &1475684758594523359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -945,13 +951,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 1248913151962715564}
   - {fileID: 4123589655351490358}
   - {fileID: 1027494324039846618}
   - {fileID: 5514609887338162344}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &6464178272772355411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -964,7 +975,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 1
   dataSource: {fileID: 2603532980797004901}
 --- !u!1 &421330219439773298
@@ -1214,6 +1224,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.01099968, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &4209938290129095962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1227,13 +1238,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 3587798221606098328}
   - {fileID: 3381020238304929445}
   - {fileID: 5081547679317556933}
   - {fileID: 6949089173913332733}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &4991788384651771006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1246,7 +1262,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 1
   dataSource: {fileID: 2603532980797004901}
 --- !u!1 &446447829469556613
@@ -1691,6 +1706,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.011001587, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &4984109038759420332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1704,13 +1720,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 7625574943542469585}
   - {fileID: 6419777626084146713}
   - {fileID: 883894627498305748}
   - {fileID: 5767881290091294761}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &318135423248864755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1723,7 +1744,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: -1
   dataSource: {fileID: 8473641417629267650}
 --- !u!1 &684273373717473535
@@ -4950,6 +4970,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.012001038, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &9024228095098720097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4963,13 +4984,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 6943535793406841461}
   - {fileID: 8500067014386362257}
   - {fileID: 7028200131209462039}
   - {fileID: 7990614484031274721}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &3016304829968104511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4982,7 +5008,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: -1
   dataSource: {fileID: 8473641417629267650}
 --- !u!1 &3468322370281549244
@@ -6377,6 +6402,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.01499939, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &1661993478237009651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6390,13 +6416,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 7094038069369614086}
   - {fileID: 2523074989049087570}
   - {fileID: 1407027678302955019}
   - {fileID: 5145203037027851597}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &8915099040075725877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6409,7 +6440,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 1
   dataSource: {fileID: 2603532980797004901}
 --- !u!1 &4457521585951530525
@@ -6659,6 +6689,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.01999855, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &5347089144322171152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6672,13 +6703,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 8629160594435979293}
   - {fileID: 1306710411475341431}
   - {fileID: 2507916185600714442}
   - {fileID: 7638355096113614839}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &841434836764331837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6691,7 +6727,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 1
   dataSource: {fileID: 2603532980797004901}
 --- !u!1 &4459653335798503188
@@ -7715,6 +7750,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.012999535, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &3978714332479611888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7728,13 +7764,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 5111249672763751365}
   - {fileID: 4799572920659142381}
   - {fileID: 3187000898715191704}
   - {fileID: 1316852390240536469}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &6022655742962875744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7747,7 +7788,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: -1
   dataSource: {fileID: 8473641417629267650}
 --- !u!1 &5265007051418382352
@@ -9319,6 +9359,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.015001297, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &4883876456175251781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9332,13 +9373,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 814773289787596107}
   - {fileID: 2485156723874222870}
   - {fileID: 3291017614165792207}
   - {fileID: 6305512941191638159}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &261942815541445713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9351,7 +9397,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 1
   dataSource: {fileID: 2603532980797004901}
 --- !u!1 &6294109674544268019
@@ -10582,6 +10627,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.01999855, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &2990879605460074332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10595,13 +10641,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 3166313017260301306}
   - {fileID: 838214653042349624}
   - {fileID: 4799585220630729523}
   - {fileID: 5058397726011917159}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &2652032807761404249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10614,7 +10665,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 1
   dataSource: {fileID: 2603532980797004901}
 --- !u!1 &7515657563858288504
@@ -11416,6 +11466,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.020000458, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &8065911254012881586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11429,13 +11480,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 1536621958480740883}
   - {fileID: 1947703800739935603}
   - {fileID: 9101695687711904683}
   - {fileID: 5822892778373038585}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &5325016167887571345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11448,7 +11504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: -1
   dataSource: {fileID: 8473641417629267650}
 --- !u!1 &8110993933945569192
@@ -12463,6 +12518,7 @@ MonoBehaviour:
     velocity: {x: 0, y: -0.020000458, z: 0}
   lerpMode: 1
   lerpRate: 150
+  tangentWeight: 1
 --- !u!114 &8102375749737670607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12476,13 +12532,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 0
+  physicsDependent: 1
   guides:
   - {fileID: 8673500758215648167}
   - {fileID: 9195262117505956550}
   - {fileID: 6270729375103478824}
   - {fileID: 2485580247619882977}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects: []
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &5250757306669626721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12495,7 +12556,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: -1
   dataSource: {fileID: 8473641417629267650}
 --- !u!1 &9159438807257210867
@@ -12805,7 +12865,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 0
   dataSource: {fileID: 8473641417629267650}
 --- !u!50 &7281439925875532725 stripped
@@ -12880,6 +12939,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 0
   dataSource: {fileID: 2603532980797004901}

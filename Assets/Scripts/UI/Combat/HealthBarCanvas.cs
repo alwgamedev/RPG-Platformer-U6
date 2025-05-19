@@ -119,7 +119,10 @@ namespace RPGPlatformer.UI
         protected virtual void OnEndEngagement()
         {
             healthEngaged = false;
-            StartCoroutine(FadeOut());
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(FadeOut());
+            }
         }
 
         public void OnMouseEnter()
@@ -132,7 +135,7 @@ namespace RPGPlatformer.UI
 
         public void OnMouseExit()
         {
-            if (healthDead || healthEngaged) return;
+            if (healthDead || healthEngaged || !gameObject.activeInHierarchy) return;
             StartCoroutine(FadeOut(0.5f));
         }
 

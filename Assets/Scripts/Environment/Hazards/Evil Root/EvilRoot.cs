@@ -66,7 +66,7 @@ namespace RPGPlatformer.Environment
             var erm = (IEvilRootManager)parameters;
             if (TryGetComponent(out ChildSortingLayer csl))
             {
-                csl.dataSource = erm.transform;
+                csl.dataSource = erm.RootSortingLayerDataSource;
             }
             ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
         }

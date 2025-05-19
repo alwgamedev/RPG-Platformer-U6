@@ -136,7 +136,6 @@ namespace RPGPlatformer.Movement
 
             //movementManager.StateGraph.freefall.OnEntry += OnFreefallEntry;
             stateManager.StateGraph.freefall.OnExit += OnFreefallExit;
-
             stateManager.StateMachine.StateChange += UpdateMoveOptions;
         }
 

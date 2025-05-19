@@ -231,7 +231,10 @@ namespace RPGPlatformer.Core
             }
         }
 
-        protected virtual void OnLeftClick() { }
+        protected virtual void OnLeftClick()
+        {
+            Examine();
+        }
 
         protected virtual void OnDestroy()
         {

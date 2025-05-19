@@ -6,6 +6,7 @@ namespace RPGPlatformer.Environment
 {
     public class EvilRootManager : MonoBehaviour, IEvilRootManager
     {
+        [SerializeField] Transform rootSortingLayerDataSource;
         [SerializeField] Collider2D platform;
         [SerializeField] RandomizableVector3 spawnPos;
         [SerializeField] RandomizableVector3 emergePos;
@@ -19,6 +20,7 @@ namespace RPGPlatformer.Environment
 
         //int DeployedRoots => pool.poolSize - pool.Available;
 
+        public Transform RootSortingLayerDataSource => rootSortingLayerDataSource;
         public Collider2D Platform => platform;
 
         private void Awake()

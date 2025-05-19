@@ -71,7 +71,6 @@ namespace RPGPlatformer.Movement
 
         protected virtual async void OnClimbingExit()
         {
-            Debug.Log("climbing exit");
             stateDriver.EndClimb();
 
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);

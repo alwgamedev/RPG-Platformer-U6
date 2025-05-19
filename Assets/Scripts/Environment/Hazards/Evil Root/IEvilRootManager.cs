@@ -4,7 +4,7 @@ namespace RPGPlatformer.Environment
 {
     public interface IEvilRootManager
     {
-        public Transform transform { get; }
+        public Transform RootSortingLayerDataSource { get; }
         public Collider2D Platform { get; }
     }
 }
