@@ -53,7 +53,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 1048383
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fluidDensity: 10500
-  dampingFactor: 125
+  dampingFactor: 90
 --- !u!33 &1249946842698044796
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -167,7 +167,7 @@ MonoBehaviour:
   surfaceColliderBuffer: 0
   numSprings: 255
   springConstant: 0.07
-  dampingFactor: 0.085
+  dampingFactor: 0.08
   agitationScale: 0.1
   agitationPower: 1.75
   waveSpreadRate: 0.025

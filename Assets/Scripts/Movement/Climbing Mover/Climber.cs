@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using UnityEngine;
 
 namespace RPGPlatformer.Movement
 {
@@ -64,7 +67,7 @@ namespace RPGPlatformer.Movement
 
             if (ClimberData.currentNode == null)
             {
-                EndClimb(true);
+                FallOffClimbable();
                 return;
             }
 
@@ -72,22 +75,21 @@ namespace RPGPlatformer.Movement
             var d = Vector3.Distance(transform.position, p);
             transform.position = Vector3.Lerp(transform.position, p,
                 options.PositionLerpRate * Time.deltaTime / d);
-            var tUp = ClimberData.localPosition < 0 ? - ClimberData.currentNode.LowerDirection()
+            var tUp = ClimberData.localPosition < 0 ? -ClimberData.currentNode.LowerDirection()
                 : ClimberData.currentNode.HigherDirection();
             transform.TweenTransformUpTowards(tUp, options.RotationSpeed);
         }
 
-        public void EndClimb(bool triggerFreefall = false)
+        public void EndClimb()
         {
             ClimberData = default;
             myRigidbody.bodyType = RigidbodyType2D.Dynamic;
             transform.rotation = Quaternion.identity;
-            EnableCollisionWithClimbables(true);
+        }
 
-            if (triggerFreefall)
-            {
-                TriggerFreefall();
-            }
+        public void FallOffClimbable()
+        {
+            TriggerFreefall();
         }
 
         public void EnableCollisionWithClimbables(bool val)
@@ -100,8 +102,6 @@ namespace RPGPlatformer.Movement
             {
                 myCollider.excludeLayers = myCollider.excludeLayers | climbableObjectLayer;
             }
-
-            //ClimbableCollisionEnabled = val;
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using RPGPlatformer.Core;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace RPGPlatformer.Movement
 {
@@ -19,6 +21,7 @@ namespace RPGPlatformer.Movement
             base.ConfigureStateManager();
 
             stateManager.StateGraph.climbing.OnEntry += OnClimbingEntry;
+            stateManager.StateGraph.climbing.OnExit += OnClimbingExit;
         }
 
         //TO-DO: may also EndClimb when input is disabled? bc then getting stunned
@@ -55,20 +58,38 @@ namespace RPGPlatformer.Movement
             return false;
         }
 
-        protected virtual async void OnClimbingEntry()
+        protected virtual /*async*/ void OnClimbingEntry()
         {
-            await MiscTools.DelayGameTime(0.1f, GlobalGameTools.Instance.TokenSource.Token);
+            //await MiscTools.DelayGameTime(0.1f, GlobalGameTools.Instance.TokenSource.Token);
             //^delay so you still get the initial impact with the climbable (e.g. if it's a swinging rope)
+            //^nvmd was stupid and looked buggy, plus we are happy to avoid async overhead when we can
             if (Climbing)
             {
                 stateDriver.OnBeginClimb();
             }
         }
 
-        protected virtual void OnClimbingExit()
+        protected virtual async void OnClimbingExit()
         {
-            //just to be extra sure rotation, rigidbody, and collider get reset
-            stateDriver.EndClimb(false);
+            Debug.Log("climbing exit");
+            stateDriver.EndClimb();
+
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
+
+            try
+            {
+                stateManager.StateGraph.climbing.OnEntry += cts.Cancel;
+                await MiscTools.DelayGameTime(1, cts.Token);
+                stateDriver.EnableCollisionWithClimbables(true);
+            }
+            catch(TaskCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                stateManager.StateGraph.climbing.OnEntry -= cts.Cancel;
+            }
         }
 
         protected virtual void TryGrabOntoClimbableObject()
@@ -108,7 +129,7 @@ namespace RPGPlatformer.Movement
         {
             if (Climbing)
             {
-                stateDriver.EndClimb(true);
+                stateDriver.FallOffClimbable();
             }
 
             base.OnDeath();

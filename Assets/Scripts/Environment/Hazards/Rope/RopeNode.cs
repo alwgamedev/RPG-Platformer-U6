@@ -10,11 +10,13 @@ namespace RPGPlatformer.Environment
     public class RopeNode : GenericClimbNode<RopeNode>
     {
         public VisualCurveGuidePoint CurveGuidePoint { get; private set; }
+        public CircleCollider2D CircleCollider { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
             CurveGuidePoint = GetComponent<VisualCurveGuidePoint>();
+            CircleCollider = GetComponent<CircleCollider2D>();
         }
 
         protected override void FixedUpdate()

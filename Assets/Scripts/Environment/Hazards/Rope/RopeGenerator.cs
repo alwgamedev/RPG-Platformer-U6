@@ -29,17 +29,26 @@ namespace RPGPlatformer.Environment
 
             nodes[0] = Instantiate(nodePrefab, transform);
             nodes[0].Rigidbody.bodyType = RigidbodyType2D.Kinematic;
+            nodes[0].CircleCollider.enabled = false;
 
             for (int i = 1; i < numNodes; i++)
             {
                 nodes[i] = Instantiate(nodePrefab, transform);
                 nodes[i].gameObject.name = $"Rope Node {i}";
                 nodes[i].transform.localPosition = -i * spacing * Vector3.up;
-                nodes[i].GetComponent<CircleCollider2D>().radius = spacing / 2; 
+                nodes[i].CircleCollider.radius = spacing / 2; 
                 var j = nodes[i].AddComponent<HingeJoint2D>();
                 j.connectedBody = nodes[i - 1].Rigidbody;
                 j.anchor = spacing * Vector2.up;
                 j.breakAction = JointBreakAction2D.Ignore;
+            }
+
+            foreach (var n in nodes)
+            {
+                if (Physics2D.OverlapCircle(n.transform.position, spacing / 2, groundLayer))
+                {
+                    n.Rigidbody.excludeLayers |= groundLayer;
+                }
             }
         }
     }
