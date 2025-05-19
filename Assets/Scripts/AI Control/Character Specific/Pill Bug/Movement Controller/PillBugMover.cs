@@ -64,15 +64,15 @@ namespace RPGPlatformer.Movement
             axle.Stop();
         }
 
-        protected override void Move(float moveInput)
+        protected override void Move(Vector3 moveInput)
         {
             if (!curled)
             {
                 base.Move(moveInput);
             }
-            else
+            else if (moveInput.x != 0)
             {
-                axle.DriveWheel(-moveInput);
+                axle.DriveWheel(- Mathf.Sign(moveInput.x));
             }
         }
 

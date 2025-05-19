@@ -36,7 +36,7 @@ namespace RPGPlatformer.Movement
         public HorizontalOrientation CurrentOrientation => stateDriver.CurrentOrientation;
         public IMover Mover => stateDriver;
         public virtual Vector3 MoveInput
-        //child classes will override get/set
+        //not silly, child classes may override get/set
         //z-coord will be used to indicate whether object is backing up (i.e. orientation gets *= -1)
         {
             get => moveInput;

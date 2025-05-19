@@ -19,25 +19,7 @@ namespace RPGPlatformer.Movement
 
         public IInputSource InputSource { get; private set; }
         public Transform CurrentTarget { get; set; }
-        public Vector3 MoveInput
-        {
-            get => moveInput;
-            protected set
-            {
-                if (value.x > 0)
-                {
-                    moveInput = Vector2.right;
-                }
-                else if (value.x < 0)
-                {
-                    moveInput = Vector2.left;
-                }
-                else
-                {
-                    moveInput = Vector2.zero;
-                }
-            }
-        }
+        public Vector3 MoveInput => moveInput;
         public bool Moving => (Vector2)MoveInput != Vector2.zero;
         public Vector2 RelativeVelocity => stateDriver.BodyPieces[0].linearVelocity;
         public IMover Mover => stateDriver;
@@ -97,7 +79,7 @@ namespace RPGPlatformer.Movement
 
         private void HandleMoveInput()
         {
-            stateDriver.HandleMoveInput(MoveInput.x);
+            stateDriver.HandleMoveInput(MoveInput);
         }
 
         private void AnimateMovement()
@@ -147,17 +129,17 @@ namespace RPGPlatformer.Movement
 
         public void SoftStop()
         {
-            MoveInput = Vector2.zero;
+            moveInput = Vector2.zero;
         }
 
         public void MoveAwayFrom(Vector2 point)
         {
-            MoveInput = new(transform.position.x - point.x, 0);
+            moveInput = new(transform.position.x - point.x, 0, -1);
         }
 
         public void MoveTowards(Vector2 point)
         {
-            MoveInput = new(point.x - transform.position.x, 0);
+            moveInput = new(point.x - transform.position.x, 0, 0);
         }
 
         private float SpeedFraction(float maxSpeed)

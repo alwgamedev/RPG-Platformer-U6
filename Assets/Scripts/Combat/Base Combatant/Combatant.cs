@@ -38,6 +38,7 @@ namespace RPGPlatformer.Combat
         [SerializeField] protected bool delayBeforeFinalizeDeath = true;
         [SerializeField] protected bool finalizeDeathViaTrigger = false;
         [SerializeField] protected float timeToDelayBeforeFinalizeDeath = 1.5f;
+        [SerializeField] protected float minimumCombatDistanceMultiplier = 0.5f;
 
         protected CharacterProgressionManager progressionManager;
         protected CombatBonusesManager combatBonusesManager;
@@ -134,7 +135,7 @@ namespace RPGPlatformer.Combat
 
         public virtual void InitializeMinCombatDistance()
         {
-            IdealMinimumCombatDistance = unarmedWeapon.WeaponStats.AttackRange / 3;
+            IdealMinimumCombatDistance = unarmedWeapon.WeaponStats.AttackRange * minimumCombatDistanceMultiplier;
         }
 
 

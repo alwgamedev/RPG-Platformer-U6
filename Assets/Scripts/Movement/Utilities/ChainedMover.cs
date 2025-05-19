@@ -58,9 +58,8 @@ namespace RPGPlatformer.Movement
             groundLayer = LayerMask.GetMask("Ground");
         }
 
-        public virtual void HandleMoveInput(float moveInput)
+        public virtual void HandleMoveInput(Vector3 moveInput)
         {
-            
             SetOrientation(moveInput);
             UpdatePhysicsData();
             Move(moveInput);
@@ -74,26 +73,25 @@ namespace RPGPlatformer.Movement
             }
         }
 
-        protected virtual void Move(float moveInput)
+        protected virtual void Move(Vector3 moveInput)
         {
-            if (moveInput != 0)
+            if (moveInput.x != 0)
             {
-                Rigidbody2D rb;
+                moveInput.x = Mathf.Sign(moveInput.x);
 
                 for (int i = 0; i < NumBodyPieces; i++)
                 {
-                    rb = bodyPieces[i];
-                    rb.Move(FacingRight, false, rb.linearVelocity, moveInput * groundDirections[i],
-                        MaxSpeed, movementOptions);
+                    bodyPieces[i].Move(FacingRight, moveInput.z < 0, bodyPieces[i].linearVelocity, 
+                        moveInput.x * groundDirections[i], MaxSpeed, movementOptions);
                 }
             }
         }
 
-        public virtual void SetOrientation(float moveInput)
+        public virtual void SetOrientation(Vector3 moveInput)
         {
-            if (moveInput != 0)
+            if (moveInput.x != 0)
             {
-                SetOrientation((HorizontalOrientation)Math.Sign(moveInput));
+                SetOrientation((HorizontalOrientation)(Math.Sign(moveInput.x) * Mathf.Sign(moveInput.z)));
             }
         }
 
