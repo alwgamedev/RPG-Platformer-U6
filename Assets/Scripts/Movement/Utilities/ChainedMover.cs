@@ -58,6 +58,11 @@ namespace RPGPlatformer.Movement
             groundLayer = LayerMask.GetMask("Ground");
         }
 
+        protected virtual void FixedUpdate()
+        {
+            EnforceDistances();
+        }
+
         public virtual void HandleMoveInput(Vector3 moveInput)
         {
             SetOrientation(moveInput);
@@ -126,7 +131,7 @@ namespace RPGPlatformer.Movement
         {
             UpdateGroundDirections();
             UpdateRotation();
-            EnforceDistances();
+            //EnforceDistances();
         }
 
         protected void EnforceDistances()

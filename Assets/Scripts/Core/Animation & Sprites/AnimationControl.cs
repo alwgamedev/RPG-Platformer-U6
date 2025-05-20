@@ -161,10 +161,6 @@ namespace RPGPlatformer.Core
         public void RevertAnimatorOverride()
         {
             SetRuntimeAnimatorController(defaultAnimatorController);
-
-            //if (!animator) return;
-
-            //animator.runtimeAnimatorController = defaultAnimatorController;
         }
 
         public void PlayAnimationState(string stateName, string layerName, float normalizedTime)

@@ -18,6 +18,12 @@ namespace RPGPlatformer.Core
         //but then we can't guarantee that other components have completed Awake
         //so that is the one small reason to do this
 
+        //e.g. pill bug needs to override this
+        public virtual void SetPosition(Vector3 position)
+        {
+            transform.position = position;
+        }
+
         public abstract void ResetPoolableObject();
 
         public virtual void ReturnToPool()

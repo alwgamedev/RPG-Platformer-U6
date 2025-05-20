@@ -6,16 +6,21 @@ namespace RPGPlatformer.AIControl
 {
     public class PoolableAIPatroller : PoolableObject
     {
-        [SerializeField] bool snapSpawnPositionToGround = true;
-        //[SerializeField] float spawnHeightBuffer = 0.05f;
+        [SerializeField] protected bool snapSpawnPositionToGround = true;
+        [SerializeField] protected Transform patrollerTransform;
+        //for characters like pill bug or worm that don't have the patroller script on a child transform
 
-        IAIPatrollerController controller;
+        protected IAIPatrollerController controller;
         int groundLayer;
 
-        private void Awake()
+        protected virtual Vector3 Position => transform.position;
+
+        protected virtual void Awake()
         {
             groundLayer = LayerMask.GetMask("Ground");
-            controller = GetComponent<IAIPatrollerController>();
+            controller = patrollerTransform ?
+                patrollerTransform.GetComponent<IAIPatrollerController>()
+                : GetComponent<IAIPatrollerController>();
         }
 
         public override void Configure(object parameters)
@@ -63,15 +68,15 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        private void CorrectSpawnPosition()
+        protected virtual void CorrectSpawnPosition()
         {
             //var o = controller.Patroller.AIMovementController.Mover.CenterPosition;
             //var h = 0.5f * controller.Patroller.AIMovementController.Mover.Height + spawnHeightBuffer;
-            var r = Physics2D.Raycast(transform.position, -Vector2.up, Mathf.Infinity, groundLayer);
+            var r = Physics2D.Raycast(Position, -Vector2.up, Mathf.Infinity, groundLayer);
 
             if (r && r.distance > 0)
             {
-                transform.position = r.point;
+                SetPosition(r.point);
                 //as stupid as it looks, this is the only thing that works
                 //(trying a more logical solution like setting position to ground pos + half height,
                 //always starts him with a freefall (even if you use collider center etc.))

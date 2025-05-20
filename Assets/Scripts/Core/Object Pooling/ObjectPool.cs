@@ -50,7 +50,7 @@ namespace RPGPlatformer.Core
             {
                 PoolableObject item = pool.Count != 0 ?
                     pool.Dequeue() : InstantiatePooledObject(poolData.ConfigurationParameters);
-                item.transform.position = position;
+                item.SetPosition(position);
                 item.BeforeSetActive();
                 item.gameObject.SetActive(true);
                 TotalReleased++;

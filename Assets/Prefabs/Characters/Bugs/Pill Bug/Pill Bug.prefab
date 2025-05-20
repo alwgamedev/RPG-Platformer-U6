@@ -621,7 +621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1185568982093507357}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.12771177, w: 0.9918114}
+  m_LocalRotation: {x: 0, y: 0, z: -0.12771232, w: 0.99181134}
   m_LocalPosition: {x: 0.8996627, y: -0.38315922, z: 0}
   m_LocalScale: {x: 0.79999995, y: 0.79999995, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1911,7 +1911,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2189009417185297381}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.16944893, w: 0.985539}
+  m_LocalRotation: {x: 0, y: 0, z: -0.16944973, w: 0.9855389}
   m_LocalPosition: {x: 0.88133365, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2066,7 +2066,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2401841163031113095}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.17147295, w: 0.9851889}
+  m_LocalRotation: {x: 0, y: 0, z: -0.17148255, w: 0.98518723}
   m_LocalPosition: {x: 0.7166143, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2353,6 +2353,7 @@ GameObject:
   - component: {fileID: 4042354811445059972}
   - component: {fileID: 218739074781042147}
   - component: {fileID: 655252568479682089}
+  - component: {fileID: 7218110065737451213}
   m_Layer: 6
   m_Name: Pill Bug
   m_TagString: Untagged
@@ -2369,7 +2370,7 @@ Transform:
   m_GameObject: {fileID: 2661177145852104022}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.98, y: 0.177, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2421,6 +2422,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a03777b2ec84c74a99c6c31fe000377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7218110065737451213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2661177145852104022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17aff023601faa743842783f3a2c9685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snapSpawnPositionToGround: 1
+  patrollerTransform: {fileID: 162596757391823784}
 --- !u!1 &2672019315004399135
 GameObject:
   m_ObjectHideFlags: 0
@@ -3845,7 +3860,7 @@ MonoBehaviour:
   setRunningWhenMaintainingMinimumCombatDistance: 0
   leftAttackBound: {fileID: 0}
   rightAttackBound: {fileID: 0}
-  rollPursuitRange: 4
+  rollPursuitRange: 3.75
   uncurlPursuitRange: 0
 --- !u!114 &4094806393276404433
 MonoBehaviour:
@@ -3886,7 +3901,7 @@ MonoBehaviour:
   movementOptions:
     movementType: 0
     moveDirection: 0
-    acceleration: 350
+    acceleration: 325
     flipSprite: 0
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -3899,7 +3914,7 @@ MonoBehaviour:
     maxRotationLeft: {x: -0.0007962743, y: 0.9999997}
     minRotationLeft: {x: -0.0007962743, y: -0.9999997}
   walkSpeed: 0.25
-  runSpeed: 2.5
+  runSpeed: 2.25
   maxDistanceCorrectionSpeed: 10
   distanceCorrectionScale: 8000
   axle: {fileID: 1795958983599245269}
@@ -3970,7 +3985,7 @@ MonoBehaviour:
     replenishRate: -0.1
     autoReplenish: 0
     statBar: {fileID: 0}
-  useAutoCalculatedHealthPoints: 1
+  useAutoCalculatedHealthPoints: 0
   dropLootOnFinalizeDeath: 1
   destroyOnFinalizeDeath: 0
   delayBeforeFinalizeDeath: 1
@@ -3998,8 +4013,8 @@ MonoBehaviour:
   findStatBarInChildren: 0
   stat:
     minValue: 0
-    maxValue: 0
-    defaultValue: 0
+    maxValue: 600
+    defaultValue: 600
     replenishRate: 0.06
     autoReplenish: 0
     statBar: {fileID: 0}
@@ -4073,7 +4088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destinationTolerance: 0.5
-  boundedPatrolHangTime: 0
+  boundedPatrolHangTime: 1
   pathPatrolHangTime: 0
   checkHorizontalDistanceOnly: 1
 --- !u!114 &3608289152780969091
@@ -4169,15 +4184,15 @@ LineRenderer:
   m_SortingLayer: 3
   m_SortingOrder: -9
   m_Positions:
-  - {x: 3.0985, y: 0.153, z: 0}
-  - {x: 2.959, y: 0.168, z: 0}
-  - {x: 2.881, y: 0.192, z: 0}
-  - {x: 2.7940001, y: 0.204, z: 0}
-  - {x: 2.6890001, y: 0.2025, z: 0}
-  - {x: 2.608, y: 0.1965, z: 0}
-  - {x: 2.533, y: 0.189, z: 0}
-  - {x: 2.4295, y: 0.177, z: 0}
-  - {x: 2.3140001, y: 0.1665, z: 0}
+  - {x: 0.118499994, y: -0.024, z: 0}
+  - {x: -0.021000002, y: -0.009, z: 0}
+  - {x: -0.099, y: 0.015, z: 0}
+  - {x: -0.18599999, y: 0.026999999, z: 0}
+  - {x: -0.291, y: 0.025500001, z: 0}
+  - {x: -0.372, y: 0.0195, z: 0}
+  - {x: -0.44700003, y: 0.012, z: 0}
+  - {x: -0.55050004, y: 0, z: 0}
+  - {x: -0.66599995, y: -0.010500001, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.2
@@ -6186,7 +6201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6429292589268308194}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.18765418, w: 0.9822352}
+  m_LocalRotation: {x: 0, y: 0, z: -0.18764688, w: 0.98223656}
   m_LocalPosition: {x: 0.7683041, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6495,7 +6510,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6832942275872702404}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.012391371, w: 0.9999233}
+  m_LocalRotation: {x: -0, y: -0, z: 0.012395036, w: 0.99992317}
   m_LocalPosition: {x: 0.82, y: -0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

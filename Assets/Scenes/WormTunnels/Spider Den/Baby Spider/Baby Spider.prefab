@@ -4943,7 +4943,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.58}
-  m_Size: {x: 1, y: 0.45}
+  m_Size: {x: 0.75, y: 0.45}
   m_Direction: 1
 --- !u!114 &6897966607616369498
 MonoBehaviour:
@@ -5015,6 +5015,8 @@ MonoBehaviour:
   suspicionTime: 4
   playerEnemy: 1
   setRunningWhenMaintainingMinimumCombatDistance: 0
+  leftAttackBound: {fileID: 0}
+  rightAttackBound: {fileID: 0}
 --- !u!114 &5806438338527870737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5101,6 +5103,8 @@ MonoBehaviour:
   adjustedHalfWidthFactor: 0.45
   runSpeed: 1.4
   walkSpeed: 0.6
+  swimmingRunSpeed: 2
+  swimmingWalkSpeed: 1
   maxNumJumps: 0
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
@@ -5263,6 +5267,7 @@ MonoBehaviour:
   delayBeforeFinalizeDeath: 1
   finalizeDeathViaTrigger: 0
   timeToDelayBeforeFinalizeDeath: 1.5
+  minimumCombatDistanceMultiplier: 0.35
   combatXPReward: 8
   dropSize: 0
   dropTable: {fileID: 0}

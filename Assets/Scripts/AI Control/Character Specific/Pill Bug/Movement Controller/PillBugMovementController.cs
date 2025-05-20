@@ -14,6 +14,8 @@ namespace RPGPlatformer.Movement
 
         Action OnUpdate;
         Action OnFixedUpdate;
+        Action TempUpdate;
+        Action TempFixedUpdate;
 
         Vector3 moveInput;
 
@@ -79,7 +81,14 @@ namespace RPGPlatformer.Movement
 
         private void HandleMoveInput()
         {
-            stateDriver.HandleMoveInput(MoveInput);
+            if (CanMove())
+            {
+                stateDriver.HandleMoveInput(MoveInput);
+            }
+            else if (Curled)
+            {
+                SetCurled(false);
+            }
         }
 
         private void AnimateMovement()
@@ -100,6 +109,7 @@ namespace RPGPlatformer.Movement
         public void SetCurled(bool val)
             //expose this at the top level, bc higher up AI controllers will only know about the MovementController
         {
+            if (val && !CanMove(.75f)) return;
             stateDriver.SetCurled(val);
         }
 
@@ -129,7 +139,7 @@ namespace RPGPlatformer.Movement
 
         public void SoftStop()
         {
-            moveInput = Vector2.zero;
+            moveInput = Vector3.zero;
         }
 
         public void MoveAwayFrom(Vector2 point)
@@ -147,19 +157,43 @@ namespace RPGPlatformer.Movement
             return RelativeVelocity.magnitude / maxSpeed;
         }
 
+        private bool CanMove(float buffer = 0)
+        {
+            if (rightBound && moveInput.x > 0 && transform.position.x > rightBound.position.x - buffer) return false;
+            if (leftBound && moveInput.x < 0 && transform.position.x < leftBound.position.x + buffer) return false;
+
+            return true;
+        }
+
 
         //DEATH AND DISABLE HANDLERS
 
         public void OnDeath()
         {
             SetCurled(false);
+            //foreach (var b in stateDriver.BodyPieces)
+            //{
+            //    b.SetKinematic();
+            //}
             stateManager.Freeze();
+            TempUpdate = OnUpdate;
+            TempFixedUpdate = OnFixedUpdate;
             OnUpdate = null;
             OnFixedUpdate = null;
             SoftStop();
         }
 
-        public void OnRevival() { }
+        public void OnRevival()
+        {
+            //foreach (var b in stateDriver.BodyPieces)
+            //{
+            //    b.bodyType = RigidbodyType2D.Dynamic;
+            //}
+            stateManager.Unfreeze();
+            //stateDriver.OnRevival();
+            OnFixedUpdate = TempFixedUpdate;
+            OnUpdate = TempUpdate;
+        }
 
         public void OnInputEnabled() { }
 
@@ -172,6 +206,8 @@ namespace RPGPlatformer.Movement
         {
             OnUpdate = null;
             OnFixedUpdate = null;
+            TempUpdate = null;
+            TempFixedUpdate = null;
         }
 
 

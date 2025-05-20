@@ -170,6 +170,8 @@ MonoBehaviour:
   adjustedHalfWidthFactor: 0.45
   runSpeed: 2.3
   walkSpeed: 1
+  swimmingRunSpeed: 2
+  swimmingWalkSpeed: 1
   maxNumJumps: 0
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
@@ -214,6 +216,7 @@ MonoBehaviour:
     minRotationRight: {x: 0.0007962743, y: -0.9999997}
     maxRotationLeft: {x: -0.0007962743, y: 0.9999997}
     minRotationLeft: {x: -0.0007962743, y: -0.9999997}
+  moveAwayBackwards: 1
   wallDetectionOptions:
     detectWalls: 0
     numWallCastsPerThird: 0
@@ -223,6 +226,8 @@ MonoBehaviour:
   canMoveDuringFreefall: 0
   maxPermissibleDropOffHeightFactor: 3
   dropOffStopDistance: 0.5
+  rightBound: {fileID: 0}
+  leftBound: {fileID: 0}
 --- !u!114 &7059299931344284500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,11 +314,12 @@ MonoBehaviour:
   findStatBarInChildren: 0
   stat:
     minValue: 0
-    maxValue: 300
-    defaultValue: 300
+    maxValue: 750
+    defaultValue: 750
     replenishRate: 0
     autoReplenish: 0
     statBar: {fileID: 0}
+  hitEffectTransformOverride: {fileID: 0}
 --- !u!114 &7909152550555218581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,6 +413,7 @@ MonoBehaviour:
   delayBeforeFinalizeDeath: 1
   finalizeDeathViaTrigger: 0
   timeToDelayBeforeFinalizeDeath: 1.5
+  minimumCombatDistanceMultiplier: 0.5
   combatXPReward: 5
   dropSize: 0
   dropTable: {fileID: 0}
@@ -426,6 +433,9 @@ MonoBehaviour:
   pursuitRange: 5
   suspicionTime: 5
   playerEnemy: 1
+  setRunningWhenMaintainingMinimumCombatDistance: 0
+  leftAttackBound: {fileID: 0}
+  rightAttackBound: {fileID: 0}
 --- !u!114 &7847680296851163206
 MonoBehaviour:
   m_ObjectHideFlags: 0

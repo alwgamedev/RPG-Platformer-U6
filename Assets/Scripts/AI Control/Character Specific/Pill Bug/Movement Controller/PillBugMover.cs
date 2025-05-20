@@ -31,7 +31,15 @@ namespace RPGPlatformer.Movement
             }
 
             CurrentOrientation = HorizontalOrientation.right;
-            SetCurled(false);
+            SetCurled(false, true);
+        }
+
+        protected override void FixedUpdate()
+        {
+            if (!curled)
+            {
+                base.FixedUpdate();
+            }
         }
 
         protected override void UpdatePhysicsData()
@@ -57,6 +65,27 @@ namespace RPGPlatformer.Movement
 
 
         //BASIC FUNCTIONS
+
+        public void SetPosition(Vector3 position)
+        {
+            foreach (var b in bodyPieces)
+            {
+                b.SetKinematic();
+            }
+
+            for (int i = 0; i < NumBodyPieces; i++)
+            {
+                if (bodyPieces[i].transform == transform) continue;
+                bodyPieces[i].transform.position = position + (bodyPieces[i].transform.position - transform.position);
+            }
+
+            transform.position = position;
+
+            foreach (var b in bodyPieces)
+            {
+                b.bodyType = RigidbodyType2D.Dynamic;
+            }
+        }
 
         public override void Stop()
         {
@@ -117,10 +146,12 @@ namespace RPGPlatformer.Movement
 
         //TRANSITION BTWN ROLLING/WALKING
 
-        public void SetCurled(bool val)
+        public void SetCurled(bool val, bool ignoreCurledValue = false)
         {
-            curled = val;
+            if (curled == val && !ignoreCurledValue)
+                return;
 
+            curled = val;
             if (!curled)
             {
                 for (int i = 0; i < NumBodyPieces; i++)
