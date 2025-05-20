@@ -4,7 +4,10 @@ namespace RPGPlatformer.Movement
 {
     public interface IClimbNode
     {
-        public float Speed { get; }
+        public Vector2 Velocity { get; }
+        public float Speed => Velocity.magnitude;
+
+        public Vector2 VelocityAtPosition(float localPosition);
 
         public void ApplyAcceleration(Vector2 acceleration);
 

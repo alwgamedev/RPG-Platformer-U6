@@ -49,7 +49,7 @@ namespace RPGPlatformer.Environment
             r.SetEmergePosition(GetRandomEmergePosition(r.transform.position.x));
             //r.SetColliderAvoidanceSide(r.transform.position.x < transform.position.x ?
             //    CurveBounds.AvoidanceSide.left : CurveBounds.AvoidanceSide.right);
-            bool throwRight = MiscTools.rng.Next(0, 2) > 0;
+            //bool throwRight = MiscTools.rng.Next(0, 2) > 0;
             r.OnDeploy(GlobalGameTools.Instance.TokenSource.Token);
         }
 

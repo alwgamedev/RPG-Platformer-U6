@@ -8,18 +8,7 @@ namespace RPGPlatformer.Movement
         public T Lower { get; protected set; }
         public float MaxPosition { get; protected set; }
         public float MinPosition { get; protected set; }
-        public float Speed
-        {
-            get
-            {
-                if (Rigidbody)
-                {
-                    return Rigidbody.linearVelocity.magnitude;
-                }
-
-                return 0;
-            }
-        }
+        public Vector2 Velocity => Rigidbody.linearVelocity;
         public Rigidbody2D Rigidbody { get; protected set; }
 
         protected virtual void Awake()
@@ -41,6 +30,26 @@ namespace RPGPlatformer.Movement
         public void ApplyAcceleration(Vector2 acceleration)
         {
             Rigidbody.AddForce(Rigidbody.mass * acceleration);
+        }
+
+        public Vector2 VelocityAtPosition(float localPosition)
+        {
+            if (localPosition >= 0)
+            {
+                if (Higher)
+                {
+                    return Vector2.Lerp(Velocity, Higher.Velocity, localPosition / MaxPosition);
+                }
+
+                return Velocity;
+            }
+
+            if (localPosition < 0 && Lower)
+            {
+                return Vector2.Lerp(Velocity, Lower.Velocity, localPosition / MinPosition);
+            }
+
+            return Velocity;
         }
 
         public ClimberData GetClimberData(float localPosition)

@@ -87,9 +87,21 @@ namespace RPGPlatformer.Movement
         }
 
         /// <summary>
+        /// Sets total force and velocity to zero, so you don't have any lingering velocity
+        /// that screws things up. Should use this pretty much everywhere you plan to toggle
+        /// an rb btwn kinematic and dynamic (e.g. climbing, evil root grab).
+        /// </summary>
+        public static void SetKinematic(this Rigidbody2D rb)
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.totalForce = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        /// <summary>
         /// moveDirection assumed normalized.
-        ///relV is current "relative" velocity (which is usually just rb.linearVelocity, unless
-        ///you want velocity to be taken relative to a moving platform, e.g. when player has mounted shuttlehawk)
+        /// relV is current "relative" velocity (which is usually just rb.linearVelocity, unless
+        /// you want velocity to be taken relative to a moving platform, e.g. when player has mounted shuttlehawk)
         /// </summary>
         public static void Move(this Rigidbody2D rb, bool facingRight, bool backingUp,
             Vector2 relV, Vector2 moveDirection, float maxSpeed, MovementOptions options)

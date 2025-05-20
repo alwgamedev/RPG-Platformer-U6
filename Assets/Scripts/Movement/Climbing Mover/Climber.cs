@@ -48,7 +48,10 @@ namespace RPGPlatformer.Movement
 
         public void OnBeginClimb()
         {
-            myRigidbody.bodyType = RigidbodyType2D.Kinematic;
+            myRigidbody.SetKinematic();
+            //myRigidbody.totalForce = Vector2.zero;
+            //myRigidbody.linearVelocity = Vector2.zero;
+            //myRigidbody.bodyType = RigidbodyType2D.Kinematic;
             EnableCollisionWithClimbables(false);
         }
 
@@ -82,6 +85,10 @@ namespace RPGPlatformer.Movement
 
         public void EndClimb()
         {
+            if (ClimberData.currentNode != null)
+            {
+                myRigidbody.linearVelocity = ClimberData.currentNode.VelocityAtPosition(ClimberData.localPosition);
+            }
             ClimberData = default;
             myRigidbody.bodyType = RigidbodyType2D.Dynamic;
             transform.rotation = Quaternion.identity;

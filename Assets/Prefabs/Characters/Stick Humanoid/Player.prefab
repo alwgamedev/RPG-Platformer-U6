@@ -602,11 +602,12 @@ MonoBehaviour:
     autoReplenish: 0
     statBar: {fileID: 0}
   useAutoCalculatedHealthPoints: 1
-  dropLootOnFinalizeDeath: 1
+  dropLootOnFinalizeDeath: 0
   destroyOnFinalizeDeath: 0
   delayBeforeFinalizeDeath: 1
   finalizeDeathViaTrigger: 0
   timeToDelayBeforeFinalizeDeath: 2
+  minimumCombatDistanceMultiplier: 0.5
 --- !u!114 &1804393810644820113
 MonoBehaviour:
   m_ObjectHideFlags: 0

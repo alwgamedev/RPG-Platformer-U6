@@ -159,7 +159,7 @@ MonoBehaviour:
   trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0
-  stepMax: 1.5
+  stepMax: 1.25
   reversedStepMin: 0.75
   reversedStepMax: -0.2
   initialTimerFraction: 0.75
@@ -376,8 +376,8 @@ MonoBehaviour:
   trackingGuide: {fileID: 1455773871831555102}
   trackingLerpRate: 100
   trackingStrength: 0
-  stepMin: 0.55
-  stepMax: 1.45
+  stepMin: 0.8
+  stepMax: 1.4
   reversedStepMin: 0.6
   reversedStepMax: -0.05
   initialTimerFraction: 1
@@ -388,7 +388,7 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: -0.05
+  groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
@@ -2385,8 +2385,8 @@ MonoBehaviour:
   trackingGuide: {fileID: 4546078997354314187}
   trackingLerpRate: 100
   trackingStrength: 0
-  stepMin: -0.1
-  stepMax: 0.8
+  stepMin: -0.25
+  stepMax: 0.6
   reversedStepMin: 0
   reversedStepMax: -1.5
   initialTimerFraction: 0
@@ -5257,8 +5257,8 @@ MonoBehaviour:
   trackingGuide: {fileID: 1109310402625095987}
   trackingLerpRate: 100
   trackingStrength: 0
-  stepMin: -0.1
-  stepMax: 0.8
+  stepMin: -0.25
+  stepMax: 0.6
   reversedStepMin: 0
   reversedStepMax: -1.5
   initialTimerFraction: 0.9348
@@ -6064,7 +6064,7 @@ MonoBehaviour:
   trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0
-  stepMax: 1.5
+  stepMax: 1.25
   reversedStepMin: 0.75
   reversedStepMax: -0.2
   initialTimerFraction: 0
@@ -6376,8 +6376,8 @@ MonoBehaviour:
   trackingGuide: {fileID: 1192145617381190941}
   trackingLerpRate: 100
   trackingStrength: 0
-  stepMin: 0.55
-  stepMax: 1.45
+  stepMin: 0.8
+  stepMax: 1.4
   reversedStepMin: 0.6
   reversedStepMax: -0.05
   initialTimerFraction: 0.25
@@ -6388,7 +6388,7 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: -0.05
+  groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
@@ -7071,7 +7071,7 @@ MonoBehaviour:
   trackingGuide: {fileID: 7088239792700145616}
   trackingLerpRate: 100
   trackingStrength: 0
-  stepMin: -0.5
+  stepMin: -0.65
   stepMax: 0.2
   reversedStepMin: -0.5
   reversedStepMax: -1.5
@@ -7083,7 +7083,7 @@ MonoBehaviour:
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.25
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: 0.1
+  groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
@@ -7817,7 +7817,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0.15, y: 0.9}
-  m_Size: {x: 1.5, y: 1.45}
+  m_Size: {x: 1.5, y: 1.35}
   m_Direction: 1
 --- !u!114 &2299468110930713171
 MonoBehaviour:
@@ -7978,7 +7978,8 @@ MonoBehaviour:
   adjustedHalfWidthFactor: 0.45
   runSpeed: 4
   walkSpeed: 1.5
-  swimSpeed: 0.25
+  swimmingRunSpeed: 2
+  swimmingWalkSpeed: 1
   maxNumJumps: 0
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
@@ -8139,6 +8140,7 @@ MonoBehaviour:
   delayBeforeFinalizeDeath: 1
   finalizeDeathViaTrigger: 0
   timeToDelayBeforeFinalizeDeath: 2
+  minimumCombatDistanceMultiplier: 0.5
   combatXPReward: 50
   dropSize: 0
   dropTable: {fileID: 0}
@@ -8156,7 +8158,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snapSpawnPositionToGround: 1
-  spawnHeightBuffer: 0
 --- !u!1 &8530898117440902803
 GameObject:
   m_ObjectHideFlags: 0
@@ -8350,7 +8351,7 @@ MonoBehaviour:
   trackingGuide: {fileID: 8276265502651182846}
   trackingLerpRate: 100
   trackingStrength: 0
-  stepMin: -0.5
+  stepMin: -0.65
   stepMax: 0.2
   reversedStepMin: -0.5
   reversedStepMax: -1.5
@@ -8362,7 +8363,7 @@ MonoBehaviour:
   stepHeightMultiplier: 0.55
   stepSpeedMultiplier: 1.25
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: 0.1
+  groundHeightBuffer: 0
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
