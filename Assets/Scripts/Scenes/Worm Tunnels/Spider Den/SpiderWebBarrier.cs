@@ -19,8 +19,6 @@ namespace RPGPlatformer.Environment
         [SerializeField] Vector2 damageJiggleAcceleration;
         [SerializeField] float snapTime;
         [SerializeField] SingleSpawnDefeatableEntity motherSpider;
-        //[SerializeField] Collider2D[] contactColliders;
-        //[SerializeField] Collider2D healthCollider;
 
         Health health;
         HealthBarCanvas healthBarCanvas;
@@ -58,6 +56,8 @@ namespace RPGPlatformer.Environment
             }
 
             healthCollider = GetComponent<Collider2D>();
+
+            ConfigureHealth();
 
             if (motherSpider)
             {
@@ -116,7 +116,7 @@ namespace RPGPlatformer.Environment
                 return;
             }
 
-            ConfigureHealth();
+            //ConfigureHealth();
 
             if (motherSpider && !motherSpider.Defeated)
             {

@@ -193,16 +193,27 @@ namespace RPGPlatformer.Combat
         }
 
         //returns whether an ability was executed
+        //(but that ability may still fail to fully execute if you have insufficient wrath or stamina)
         public virtual bool RunAutoAbilityCycle(bool runOffGCD)
         {
             if (!postCancellationLock && !ChannelingAbility
                 && ((queuedAbility == null && !GlobalCooldown) || runOffGCD))
             {
-                return TryExecuteAbility(CurrentAbilityBar?.GetAutoCastAbility());
+                var a = CurrentAbilityBar?.GetAutoCastAbility();
+                if (a != null)
+                {
+                    return TryExecuteAbility(a);
+                }
+                else
+                {
+                    OnNoAutoCastAbility();
+                }
             }
 
             return false;
         }
+
+        protected virtual void OnNoAutoCastAbility() { }
 
         protected virtual bool CanExecute(AttackAbility ability)
         {
@@ -212,7 +223,8 @@ namespace RPGPlatformer.Combat
                 || ability.CombatStyle == CombatStyle.Any);
         }
 
-        //returns whether an ability was executed
+        //returns whether ability was execute
+        //(but that ability may still fail to fully execute if you have insufficient wrath or stamina)
         protected virtual bool TryExecuteAbility(AttackAbility ability)
         {
             if (ability == null) 

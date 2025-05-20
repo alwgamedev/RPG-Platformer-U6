@@ -184,10 +184,17 @@ namespace RPGPlatformer.Combat
             //health and wrath auto-replenish will change when you enter and exit combat.
             //this is set up by the combat manager
 
+            stamina.Depleted += OnStaminaDepleted;
+            wrath.Depleted += OnWrathDepleted;
+
             Health.Stat.TakeDefaultValue();
             stamina.TakeDefaultValue();
             wrath.TakeDefaultValue();
         }
+
+        protected virtual void OnStaminaDepleted() { }
+
+        protected virtual void OnWrathDepleted() { }
 
         protected virtual void UpdateAttackRange()
         {
@@ -629,6 +636,8 @@ namespace RPGPlatformer.Combat
 
         protected override void OnDestroy()
         {
+            stamina.Depleted -= OnStaminaDepleted;
+            wrath.Depleted -= OnWrathDepleted;
             OnTargetingFailed = null;
             OnWeaponEquip = null;
             OnInventoryOverflow = null;

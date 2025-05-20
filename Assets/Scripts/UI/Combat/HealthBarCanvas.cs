@@ -118,6 +118,7 @@ namespace RPGPlatformer.UI
 
         protected virtual void OnEndEngagement()
         {
+            Debug.Log("end engagement (should fade out)");
             healthEngaged = false;
             if (gameObject.activeInHierarchy)
             {
@@ -188,7 +189,7 @@ namespace RPGPlatformer.UI
             }
 
             healthDead = true;
-            transform.SetParent(null, true);
+            transform.SetParent(null);
         }
 
         protected virtual void DelayedDestroy()

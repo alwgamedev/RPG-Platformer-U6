@@ -7,6 +7,10 @@ namespace RPGPlatformer.Combat
 {
     public class PlayerCombatController : CombatController
     {
+        bool hasSentAutoCastStaminaWarning;
+        //gets reset next time you cast an auto ability
+        //or release fire button
+
         protected override void Awake()
         {
             base.Awake();
@@ -21,7 +25,10 @@ namespace RPGPlatformer.Combat
         {
             if (FireButtonIsDown)
             {
-                RunAutoAbilityCycle(false);
+                if (RunAutoAbilityCycle(false) && hasSentAutoCastStaminaWarning)
+                {
+                    hasSentAutoCastStaminaWarning = false;
+                }
             }
 
             //JUST FOR TESTING
@@ -97,6 +104,31 @@ namespace RPGPlatformer.Combat
         protected override void AttemptedToExecuteAbilityOnCooldown()
         {
             GameLog.Log("That ability is on cooldown.");
+        }
+
+        protected override void OnNoAutoCastAbility()
+        {
+            //bool insuffStamina = abilityBarManager.CurrentAbilityBar.HasInsufficientStaminaToAutoCast();
+            if (abilityBarManager.CurrentAbilityBar.HasInsufficientStaminaToAutoCast()
+                && !hasSentAutoCastStaminaWarning)
+            {
+                GameLog.Log("You don't have enough stamina to execute any of your auto-cast abilities.");
+                hasSentAutoCastStaminaWarning = true;
+            }
+            //else if (!insuffStamina && hasSentAutoCastStaminaWarning)
+            //{
+            //    hasSentAutoCastStaminaWarning = false;
+            //}
+        }
+                
+
+        protected override void BaseOnFireButtonUp()
+        {
+            base.BaseOnFireButtonUp();
+            if (hasSentAutoCastStaminaWarning)
+            {
+                hasSentAutoCastStaminaWarning = false;
+            }
         }
 
         private void TogglePlayerAlive()//FOR TESTING PURPOSES

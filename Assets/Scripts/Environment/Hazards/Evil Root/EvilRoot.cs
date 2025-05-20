@@ -32,6 +32,8 @@ namespace RPGPlatformer.Environment
         VisualCurveGuide vcg;
         bool headIsTouchingPlayer;
         float headRadius2;
+        //Vector2 headPosition;
+        //Vector2 headVelocity;
         bool hasThrown;
         Transform playerParent;
 
@@ -59,6 +61,14 @@ namespace RPGPlatformer.Environment
             vcg.lengthScale = dormantLengthScale;
             vcg.CallUpdate();
         }
+
+        //private void FixedUpdate()
+        //{
+        //    var s = 1 / Time.deltaTime;
+        //    headVelocity = new(s * (head.transform.position.x - headPosition.x), 
+        //        s *(head.transform.position.y - headPosition.y));
+        //    headPosition = head.transform.position;
+        //}
 
         public override void BeforeSetActive() { }
 
@@ -256,16 +266,14 @@ namespace RPGPlatformer.Environment
             Vector2 o = head.transform.position;
             var d = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             var f = throwForce * d;
+            var t = throwReleaseFraction * throwTime;
             d *= throwLength;
 
-            await followGuideIK.LerpTowardsPosition(o + throwReleaseFraction * d, 
-                throwReleaseFraction * throwTime, 
-                token);
-
+            await followGuideIK.LerpTowardsPosition(o + throwReleaseFraction * d, t, token);
             ReleasePlayer(f);
 
             d.y *= - 1;//to give the throw an arcing motion
-            await followGuideIK.LerpTowardsPosition(o + d, (1 - throwReleaseFraction) * throwTime,
+            await followGuideIK.LerpTowardsPosition(o + d, throwTime - t,
                 token);
 
             RootHoldingPlayer = null;
@@ -278,8 +286,8 @@ namespace RPGPlatformer.Environment
             var playerMover = ((AdvancedMover)((IMovementController)player.MovementController).Mover);
             var playerRb = playerMover.Rigidbody;
             ((IInputDependent)player).InputSource.DisableInput();
-            playerRb.bodyType = RigidbodyType2D.Kinematic;
-            playerRb.linearVelocity = Vector2.zero;
+            playerRb.SetKinematic();
+            //playerRb.linearVelocity = Vector2.zero;
             playerMover.ResetJumpNum();
             playerRb.transform.SetParent(head.transform);
         }
@@ -289,6 +297,7 @@ namespace RPGPlatformer.Environment
             var player = GlobalGameTools.Instance.Player;
             var playerRb = ((Mover)((IMovementController)player.MovementController).Mover).Rigidbody;
             playerRb.transform.SetParent(playerParent);
+            //playerRb.linearVelocity = velocity;
             playerRb.bodyType = RigidbodyType2D.Dynamic;
             playerRb.AddForce(force * playerRb.mass, ForceMode2D.Impulse);
             ((IInputDependent)player).InputSource.EnableInput();

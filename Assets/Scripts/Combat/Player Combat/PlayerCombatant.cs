@@ -33,6 +33,16 @@ namespace RPGPlatformer.Combat
             base.ConfigureReplenishableStats();
         }
 
+        protected override void OnStaminaDepleted()
+        {
+            GameLog.Log("Your stamina has depleted.");
+        }
+
+        protected override void OnWrathDepleted()
+        {
+            GameLog.Log("Your wrath has depleted.");
+        }
+
         public override void OnEquipmentLevelReqFailed()
         {
             GameLog.Log("You do not meet the level requirements to equip that item.");

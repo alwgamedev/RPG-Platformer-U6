@@ -20,7 +20,6 @@ namespace RPGPlatformer.Combat
         public float MinValue => minValue;
         public float MaxValue => maxValue;
         public float DefaultValue => defaultValue;
-
         public float CurrentValue
         {
             get => currentValue;
@@ -48,6 +47,8 @@ namespace RPGPlatformer.Combat
             }
         }
 
+        public event Action Depleted;
+
         public void SetMaxValue(float value)
         {
             defaultValue = value;
@@ -69,9 +70,16 @@ namespace RPGPlatformer.Combat
             CurrentValue = defaultValue;
         }
 
+        //I don't check for depleted in CurrentValue.set,
+        //so that we don't get depleted messages on initialization
         public void SetValueClamped(float value)
         {
+            bool wasDepleted = CurrentValue <= minValue;
             CurrentValue = Mathf.Clamp(value, minValue, maxValue);
+            if (CurrentValue <= minValue && !wasDepleted)
+            {
+                Depleted?.Invoke();
+            }
         }
 
         public void AddValueClamped(float value)

@@ -37,9 +37,11 @@ namespace RPGPlatformer.Combat
 
         public AttackAbility GetAutoCastAbility()
         {
+            AttackAbility ability;
+
             foreach (var item in abilityBarItems)
             {
-                var ability = item?.Ability;
+                ability = item?.Ability;
                 if (ability == null) continue;
 
                 if (item.IncludeInAutoCastCycle && !IsAbilityOnCooldown[ability]
@@ -49,7 +51,34 @@ namespace RPGPlatformer.Combat
                     return ability;
                 }
             }
+
             return null;
+        }
+
+        public bool HasInsufficientStaminaToAutoCast()
+        {
+            AttackAbility ability;
+            bool anyAbilityOffCD = false;
+
+            foreach (var item in abilityBarItems)
+            {
+                ability = item?.Ability;
+                if (ability == null) continue;
+
+                if (item.IncludeInAutoCastCycle && !IsAbilityOnCooldown[ability])
+                {
+                    if (!anyAbilityOffCD)
+                    {
+                        anyAbilityOffCD = true;
+                    }
+                    if (ability.CombatantHasSufficientStamina(CombatController.Combatant))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return anyAbilityOffCD;
         }
 
         public bool AbilityValid(AttackAbility ability)
