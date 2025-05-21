@@ -34,7 +34,7 @@ namespace RPGPlatformer.Movement
             {
                 base.UpdateMover();
             }
-            else//doing this in FixedUpdate causes flickering
+            else//doing this in FixedUpdate causes flickering (and it's not physics dependent anyway)
             {
                 stateDriver.UpdateClimb(InSwingMode() ? 0 : MoveInput.x, climbingMovementOptions);
             }
@@ -122,6 +122,16 @@ namespace RPGPlatformer.Movement
                 return 0;
 
             return 0.2f * stateDriver.ClimberData.currentNode.Speed * stateDriver.RunSpeed;
+        }
+
+        protected override bool CanBeginWallCling()
+        {
+            return !Climbing && base.CanBeginWallCling();
+        }
+
+        protected override bool CanAnimateWallScramble()
+        {
+            return !Climbing && base.CanAnimateWallScramble();
         }
 
         public override void OnDeath()

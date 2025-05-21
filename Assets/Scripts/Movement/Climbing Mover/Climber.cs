@@ -96,6 +96,7 @@ namespace RPGPlatformer.Movement
 
         public void FallOffClimbable()
         {
+            Debug.Log("fall off climb");
             TriggerFreefall();
         }
 
@@ -103,11 +104,11 @@ namespace RPGPlatformer.Movement
         {
             if (val)
             {
-                myCollider.excludeLayers = myCollider.excludeLayers & ~climbableObjectLayer;
+                myCollider.excludeLayers &= /*myCollider.excludeLayers &*/ ~climbableObjectLayer;
             }
             else
             {
-                myCollider.excludeLayers = myCollider.excludeLayers | climbableObjectLayer;
+                myCollider.excludeLayers |= /*myCollider.excludeLayers |*/ climbableObjectLayer;
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Core;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace RPGPlatformer.Movement
@@ -140,7 +141,7 @@ namespace RPGPlatformer.Movement
             if (Moving && stateDriver.FacingWall)
             {
                 stateManager.AnimateWallScramble(false);
-                if (!stateManager.IsWallClinging())
+                if (CanBeginWallCling())
                 {
                     BeginWallCling();
                 }
@@ -157,8 +158,7 @@ namespace RPGPlatformer.Movement
                 return;
             }
 
-            if (!stateManager.StateMachine.HasState(typeof(Jumping))
-                && stateDriver.FacingWall)
+            if (CanAnimateWallScramble())
             {
                 stateManager.AnimateWallScramble(true);
             }
@@ -166,6 +166,16 @@ namespace RPGPlatformer.Movement
             {
                 stateManager.AnimateWallScramble(false);
             }
+        }
+
+        protected virtual bool CanBeginWallCling()
+        {
+            return !stateManager.IsWallClinging();
+        }
+
+        protected virtual bool CanAnimateWallScramble()
+        {
+            return !Jumping && stateDriver.FacingWall;
         }
 
         protected virtual void BeginWallCling()
