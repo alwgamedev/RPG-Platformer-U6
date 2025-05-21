@@ -33,6 +33,13 @@ namespace RPGPlatformer.AIControl
             StateBehavior[stateManager.StateGraph.attack] = stateDriver.AttackBehavior;
         }
 
+        public void Revive()
+        {
+            stateDriver.InitializeState();
+            //re-determine state before reviving (o/w state manager unfreeze straight back to previous state)
+            stateDriver.CombatController.Combatant.Revive();
+        }
+
         protected virtual void OnSuspicionEntry()
         {
             stateDriver.MovementController.SoftStop();

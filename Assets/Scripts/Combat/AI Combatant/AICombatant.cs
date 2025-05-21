@@ -127,6 +127,8 @@ namespace RPGPlatformer.Combat
                     XPRewardSystem.AwardXPForCombatKill(combatXPReward, recipient, entry.Value);
                 }
             }
+
+            damageTracker.ClearTracker();
         }
 
         public override void DropLoot()

@@ -29,7 +29,7 @@ namespace RPGPlatformer.AIControl
         public IHealth CurrentTarget
         {
             get => currentTarget;
-            protected set
+            set
             {
                 currentTarget = value;
                 combatController.currentTarget = value;
@@ -64,27 +64,32 @@ namespace RPGPlatformer.AIControl
         {
             if (playerEnemy && GlobalGameTools.Instance)
             {
-                SetCombatTarget(GlobalGameTools.Instance.Player.Combatant.Health);
+                CurrentTarget = GlobalGameTools.Instance.Player.Combatant.Health;
             }
             else
             {
-                SetCombatTarget(null);
+                CurrentTarget = null;
             }
-        }
 
-        public virtual void SetCombatTarget(IHealth targetHealth)
-        {
-            CurrentTarget = targetHealth;
-
-            if (CurrentTarget != null)
-            {
-                Trigger(typeof(Suspicion).Name);
-            }
-            else
+            if (CurrentTarget == null || !ScanForTarget(null))
             {
                 Trigger(typeof(Patrol).Name);
             }
         }
+
+        //public virtual void SetCombatTarget(IHealth targetHealth)
+        //{
+        //    CurrentTarget = targetHealth;
+
+        //    //if (CurrentTarget != null)
+        //    //{
+        //    //    Trigger(typeof(Suspicion).Name);
+        //    //}
+        //    //else
+        //    //{
+        //    //    Trigger(typeof(Patrol).Name);
+        //    //}
+        //}
 
         protected bool ScanForTarget(Action TargetOutOfRange = null)
         {

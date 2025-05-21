@@ -165,8 +165,6 @@ namespace RPGPlatformer.Core
 
         public void PlayAnimationState(string stateName, string layerName, float normalizedTime)
         {
-            if (!animator || !gameObject.activeInHierarchy) return;
-
             animator.Play(StateID(stateName), LayerIndex(layerName), normalizedTime);
         }
 

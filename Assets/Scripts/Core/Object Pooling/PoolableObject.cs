@@ -13,10 +13,13 @@ namespace RPGPlatformer.Core
             this.source = source;
         }
 
-        public abstract void BeforeSetActive();
         //you could put this in OnEnable instead,
         //but then we can't guarantee that other components have completed Awake
         //so that is the one small reason to do this
+        public abstract void BeforeSetActive();
+
+        //because we can't rely on OnEnable
+        public abstract void AfterSetActive();
 
         //e.g. pill bug needs to override this
         public virtual void SetPosition(Vector3 position)

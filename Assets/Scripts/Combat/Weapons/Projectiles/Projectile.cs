@@ -205,14 +205,16 @@ namespace RPGPlatformer.Combat
             EnableDynamicCollider(true);
         }
 
+        public override void Configure(object parameters) { }
+
+        public override void BeforeSetActive() { }
+
+        public override void AfterSetActive() { }
+
         private void OnDestroy()
         {
             GetAimPos = null;
             HitAction = null;
         }
-
-        public override void Configure(object parameters) { }
-
-        public override void BeforeSetActive() { }
     }
 }

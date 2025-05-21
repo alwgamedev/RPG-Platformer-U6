@@ -37,7 +37,11 @@ namespace RPGPlatformer.AIControl
         //    //i would do this in BeforeSetActive, but we get a warning about
         //    //playing an animation on an inactive game object
 
-              //but the problem with this is he gets revived when he hasn't been re-positioned yet
+              //^except we don't actually know whether cc will be enabled yet when this OnEnable
+              //gets called
+
+        //    //but the problem with this is he gets revived when he hasn't been re-positioned yet
+        //    //^ no he doesn't?
         //}
 
         public override void Configure(object parameters)
@@ -72,13 +76,15 @@ namespace RPGPlatformer.AIControl
             {
                 CorrectSpawnPosition();
             }
+        }
 
-            if (controller != null && controller is ICombatPatrollerController c)
+        public override void AfterSetActive()
+        {
+            if (controller is ICombatPatrollerController c)
             {
-                if (c?.CombatPatroller?.CombatController?.Combatant?.Health != null
-                    && c.CombatPatroller.CombatController.Combatant.Health.IsDead)
+                if (c.CombatPatroller.CombatController.Combatant.Health.IsDead)
                 {
-                    c.CombatPatroller.CombatController.Combatant.Revive();
+                    c.Revive();
                 }
             }
         }

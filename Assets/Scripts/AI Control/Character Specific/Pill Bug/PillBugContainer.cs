@@ -27,7 +27,7 @@ namespace RPGPlatformer.AIControl
         {
             cc.Combatant.DeathFinalized += () =>
             {
-                if (gameObject && cc?.Combatant != null && cc.Combatant.DestroyOnFinalizeDeath)
+                if (gameObject && cc && cc.Combatant != null && cc.Combatant.DestroyOnFinalizeDeath)
                 {
                     Destroy(gameObject);
                 }
@@ -43,45 +43,6 @@ namespace RPGPlatformer.AIControl
         {
             cc.ExecuteStoredAction();
         }
-
-        //public void RecordBodyPieceOffsets()
-        //{
-        //    if (bodyPieceOffsets == null)
-        //    {
-        //        bodyPieceOffsets = new Vector3[mover.NumBodyPieces];
-        //    }
-
-        //    Vector3 d;
-
-        //    for (int i = 0; i < mover.NumBodyPieces; i++)
-        //    {
-        //       d = mover.BodyPieces[i].transform.position - transform.position;
-        //       if (mover.CurrentOrientation == HorizontalOrientation.left)
-        //       {
-        //           d.x *= -1;
-        //       }
-        //    }
-        //}
-
-        //public void RestoreBodyPieceOffsets()
-        //{
-        //    foreach (var b in mover.BodyPieces)
-        //    {
-        //        b.SetKinematic();
-        //    }
-
-        //    for (int i = 0; i < bodyPieceOffsets.Length; i++)
-        //    {
-        //        var d = bodyPieceOffsets[i];
-        //        d.x *= (int)mover.CurrentOrientation;
-        //        mover.BodyPieces[i].transform.position = transform.position + d;
-        //    }
-
-        //    foreach (var b in mover.BodyPieces)
-        //    {
-        //        b.bodyType = RigidbodyType2D.Dynamic;
-        //    }
-        //}
 
         public void PositionHealthBarCanvas()
         {

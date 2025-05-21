@@ -71,7 +71,7 @@ namespace RPGPlatformer.Combat
 
         public void StartAttacking()
         {
-            if (Attacking) return;
+            if (Attacking || Combatant.Health.IsDead) return;
 
             Attacking = true;
             AutoAttack();
@@ -119,6 +119,7 @@ namespace RPGPlatformer.Combat
             if (!stateDriver.Health.IsDead)
             {
                 stateDriver.DamageTracker.ClearTracker();
+                //if dead, then it will get cleared after dropping xp reward
             }
         }
 

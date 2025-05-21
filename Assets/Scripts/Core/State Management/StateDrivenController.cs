@@ -15,11 +15,20 @@ namespace RPGPlatformer.Core
         protected virtual void Awake()
         {
             InitializeDriver();
+            //InitializeStateManager();
+        }
+
+        private void OnEnable()
+        {
+            if (stateManager == null)
+            {
+                InitializeStateManager();
+            }
+            //we only do this once, but I'm just making sure it gets called after anything else in Awake
         }
 
         protected virtual void Start()
         {
-            InitializeStateManager();
             ConfigureStateManager();
         }
 

@@ -10,6 +10,8 @@ namespace RPGPlatformer.Effects
 
         public override void BeforeSetActive() { }
 
+        public override void AfterSetActive() { }
+
         public override void Configure(object parameters) { }
 
         protected override void PlayEffect()

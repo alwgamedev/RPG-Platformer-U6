@@ -17,15 +17,16 @@ namespace RPGPlatformer.AIControl
             container = GetComponent<PillBugContainer>();
         }
 
-        public override void BeforeSetActive()
-        {
-            base.BeforeSetActive();
-            container.PositionHealthBarCanvas();
-        }
+        //public override void BeforeSetActive()
+        //{
+        //    base.BeforeSetActive();
+        //    //container.PositionHealthBarCanvas();
+        //}
 
         public override void SetPosition(Vector3 position)
         {
             container.Mover.SetPosition(position);
+            container.PositionHealthBarCanvas();
         }
     }
 }

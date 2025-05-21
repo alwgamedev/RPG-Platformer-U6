@@ -29,30 +29,43 @@ namespace RPGPlatformer.Core
             }
         }
 
-        public PoolableObject ReleaseObject()
-        {
-            //don't think lock is necessary for us; we don't have any multithreading
-            //but if we do in the future, then we don't have to worry about forgetting to add this
-            lock (pool)
-            {
-                PoolableObject item = pool.Count != 0 ?
-                    pool.Dequeue() : InstantiatePooledObject(poolData.ConfigurationParameters);
-                item.BeforeSetActive();
-                item.gameObject.SetActive(true);
-                TotalReleased++;
-                return item;
-            }
-        }
+        //public PoolableObject ReleaseObject()
+        //{
+        //    //don't think lock is necessary for us; we don't have any multithreading
+        //    //but if we do in the future, then we don't have to worry about forgetting to add this
+        //    //lock (pool)
+        //    //{
+        //    //    PoolableObject item = pool.Count != 0 ?
+        //    //        pool.Dequeue() : InstantiatePooledObject(poolData.ConfigurationParameters);
+        //    //    item.BeforeSetActive();
+        //    //    item.gameObject.SetActive(true);
+        //    //    item.AfterSetActive();
+        //    //    TotalReleased++;
+        //    //    return item;
+        //    //}
 
-        public PoolableObject ReleaseObject(Vector3 position)
+        //    PoolableObject item = pool.Count != 0 ?
+        //            pool.Dequeue() : InstantiatePooledObject(poolData.ConfigurationParameters);
+        //    item.BeforeSetActive();
+        //    item.gameObject.SetActive(true);
+        //    item.AfterSetActive();
+        //    TotalReleased++;
+        //    return item;
+        //}
+
+        public PoolableObject ReleaseObject(Vector3? position = null)
         {
             lock (pool)
             {
                 PoolableObject item = pool.Count != 0 ?
                     pool.Dequeue() : InstantiatePooledObject(poolData.ConfigurationParameters);
-                item.SetPosition(position);
+                if (position.HasValue)
+                {
+                    item.SetPosition(position.Value);
+                }
                 item.BeforeSetActive();
                 item.gameObject.SetActive(true);
+                item.AfterSetActive();
                 TotalReleased++;
                 return item;
             }

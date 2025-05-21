@@ -72,6 +72,8 @@ namespace RPGPlatformer.Environment
 
         public override void BeforeSetActive() { }
 
+        public override void AfterSetActive() { }
+
         public override void Configure(object parameters)
         {
             var erm = (IEvilRootManager)parameters;

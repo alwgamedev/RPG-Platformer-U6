@@ -14,6 +14,8 @@ namespace RPGPlatformer.Effects
 
         public override void BeforeSetActive() { }
 
+        public override void AfterSetActive() { }
+
         protected override void PlayEffect()
         {
             if (particleEffect)
