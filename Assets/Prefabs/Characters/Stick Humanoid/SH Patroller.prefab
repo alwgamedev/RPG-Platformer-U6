@@ -548,7 +548,8 @@ MonoBehaviour:
   adjustedHalfWidthFactor: 0.45
   runSpeed: 2.4
   walkSpeed: 0.8
-  swimSpeed: 0.75
+  swimmingRunSpeed: 2
+  swimmingWalkSpeed: 1
   maxNumJumps: 1
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
@@ -649,6 +650,8 @@ MonoBehaviour:
   suspicionTime: 5
   playerEnemy: 1
   setRunningWhenMaintainingMinimumCombatDistance: 0
+  leftAttackBound: {fileID: 0}
+  rightAttackBound: {fileID: 0}
 --- !u!114 &2807143126115891349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,6 +697,7 @@ MonoBehaviour:
   useDefaultAbilityBars: 0
   immuneToStuns: 0
   healthBarCanvas: {fileID: 0}
+  healthCanvasHasOwnCollider: 0
   autoRetaliate: 1
 --- !u!114 &3663846158437281456
 MonoBehaviour:
@@ -771,7 +775,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: SH Patroller
   targetLayer: Player
-  targetTag: Player
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   headSlot: {fileID: 7065905096157934285}
   torsoSlot: {fileID: 2615689212663765879}
   legsSlot: {fileID: 412377182372396703}
@@ -800,6 +806,7 @@ MonoBehaviour:
   delayBeforeFinalizeDeath: 1
   finalizeDeathViaTrigger: 0
   timeToDelayBeforeFinalizeDeath: 1.5
+  minimumCombatDistanceMultiplier: 0.5
   combatXPReward: 24
   dropSize: 0
   dropTable: {fileID: 0}

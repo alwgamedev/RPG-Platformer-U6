@@ -578,7 +578,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: 
   targetLayer: Enemy
-  targetTag: Enemy
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   headSlot: {fileID: 1709556298534080478}
   torsoSlot: {fileID: 5907165940807591524}
   legsSlot: {fileID: 8074881040599090060}

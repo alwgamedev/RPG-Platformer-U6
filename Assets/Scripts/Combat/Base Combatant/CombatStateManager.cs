@@ -144,11 +144,13 @@ namespace RPGPlatformer.Combat
         {
             stateDriver.Health.Stat.autoReplenish = false;
             animationControl.PlayAnimationState("Die", "Base Layer", 0);
+            animationControl.ResetTrigger("revive");
         }
 
         protected virtual void OnRevival()
         {
-            animationControl.PlayAnimationState("Idle", "Base Layer", 0);
+            //animationControl.PlayAnimationState("Idle", "Base Layer", 0);
+            animationControl.SetTrigger("revive");
         }
 
         public virtual void AnimateHealthChange(float damage)

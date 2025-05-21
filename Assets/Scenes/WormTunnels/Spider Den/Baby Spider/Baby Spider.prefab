@@ -5145,6 +5145,7 @@ MonoBehaviour:
   useDefaultAbilityBars: 0
   immuneToStuns: 0
   healthBarCanvas: {fileID: 7583572994318548635}
+  healthCanvasHasOwnCollider: 0
   autoRetaliate: 1
 --- !u!114 &4865065203236999512
 MonoBehaviour:
@@ -5238,7 +5239,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Baby Spider
   targetLayer: Player
-  targetTag: Player
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   headSlot: {fileID: 0}
   torsoSlot: {fileID: 0}
   legsSlot: {fileID: 0}

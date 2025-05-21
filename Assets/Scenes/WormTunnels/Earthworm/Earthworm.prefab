@@ -143,7 +143,7 @@ MonoBehaviour:
   startPoint: {fileID: 0}
   endPoint: {fileID: 0}
   ikTargetTransform: {fileID: 0}
-  ikTargetPoint: {x: 0, y: 0, z: 0}
+  ikTargetPoint: {x: 0, y: 0}
 --- !u!1 &953388549965093707
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,6 +724,7 @@ MonoBehaviour:
     replenishRate: 0.01
     autoReplenish: 1
     statBar: {fileID: 0}
+  hitEffectTransformOverride: {fileID: 0}
 --- !u!114 &6388221137094567040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -745,6 +746,7 @@ MonoBehaviour:
   useDefaultAbilityBars: 0
   immuneToStuns: 1
   healthBarCanvas: {fileID: 0}
+  healthCanvasHasOwnCollider: 0
   autoRetaliate: 1
   nose: {fileID: 6669010231008610307}
 --- !u!114 &4194975810890797505
@@ -761,7 +763,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Giant Worm
   targetLayer: Player
-  targetTag: Player
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   headSlot: {fileID: 0}
   torsoSlot: {fileID: 0}
   legsSlot: {fileID: 0}
@@ -790,9 +794,11 @@ MonoBehaviour:
   delayBeforeFinalizeDeath: 0
   finalizeDeathViaTrigger: 1
   timeToDelayBeforeFinalizeDeath: 0
+  minimumCombatDistanceMultiplier: 0.5
   combatXPReward: 350
   dropSize: 1
   dropTable: {fileID: 11400000, guid: 24fd6ec42274d43498ad9fd9a852adcb, type: 2}
+  weaponSwapSOs: []
 --- !u!114 &5621162454144449062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1534,7 +1540,7 @@ MonoBehaviour:
   startPoint: {fileID: 1575890875473671495}
   endPoint: {fileID: 4216333155788050412}
   ikTargetTransform: {fileID: 0}
-  ikTargetPoint: {x: 1.5, y: -3.5, z: 0}
+  ikTargetPoint: {x: 1.5, y: -3.5}
 --- !u!1 &5807448308730072207
 GameObject:
   m_ObjectHideFlags: 0
@@ -1655,7 +1661,7 @@ MonoBehaviour:
   startPoint: {fileID: 2066384736793860254}
   endPoint: {fileID: 1575890875473671495}
   ikTargetTransform: {fileID: 0}
-  ikTargetPoint: {x: 0.4, y: -3.5, z: 0}
+  ikTargetPoint: {x: 0.4, y: -3.5}
 --- !u!1 &6051220668610941455
 GameObject:
   m_ObjectHideFlags: 0
@@ -2441,6 +2447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawGizmos: 1
+  physicsDependent: 1
   guides:
   - {fileID: 2066384736793860254}
   - {fileID: 346302038216586973}
@@ -2450,11 +2457,15 @@ MonoBehaviour:
   - {fileID: 1575890875473671495}
   - {fileID: 4786633743375696552}
   - {fileID: 4216333155788050412}
+  _lengthScale: 1
   ikEnabled: 0
   ikEffects:
   - {fileID: 5845238348918447950}
   - {fileID: 6193460663096928393}
   - {fileID: 2164953188684200436}
+  enforceBounds: 0
+  bounds: {fileID: 0}
+  lengthScale: 1
 --- !u!114 &7323158423895243465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2470,31 +2481,32 @@ MonoBehaviour:
   lineRendererPositionCount: 60
   guidePoints:
   - virtualSegments: 0
-    point: {x: -0.05, y: -4.2599998, z: 0}
+    point: {x: 4.97, y: -3.7150002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.05, y: -4.0724998, z: 0}
+    point: {x: 4.97, y: -3.5275002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.05, y: -3.8849998, z: 0}
+    point: {x: 4.97, y: -3.3400002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.05, y: -3.6974998, z: 0}
+    point: {x: 4.97, y: -3.1525002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.05, y: -3.5099998, z: 0}
+    point: {x: 4.97, y: -2.9650002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.05, y: -3.3224998, z: 0}
+    point: {x: 4.97, y: -2.7775002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.05, y: -3.1349998, z: 0}
+    point: {x: 4.97, y: -2.5900002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   - virtualSegments: 1
-    point: {x: -0.05, y: -2.9474998, z: 0}
+    point: {x: 4.97, y: -2.4025002, z: 0}
     velocity: {x: 0, y: 0.25, z: 0}
   lerpMode: 1
   lerpRate: 40
+  tangentWeight: 1
 --- !u!120 &7510194389748565361
 LineRenderer:
   serializedVersion: 2
@@ -2541,66 +2553,66 @@ LineRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Positions:
-  - {x: -0.05, y: -4.2599998, z: 0}
-  - {x: -0.05, y: -4.232769, z: 0}
-  - {x: -0.05, y: -4.209565, z: 0}
-  - {x: -0.05, y: -4.189134, z: 0}
-  - {x: -0.05, y: -4.170224, z: 0}
-  - {x: -0.05, y: -4.151583, z: 0}
-  - {x: -0.05, y: -4.1319575, z: 0}
-  - {x: -0.05, y: -4.1100945, z: 0}
-  - {x: -0.05, y: -4.0847435, z: 0}
-  - {x: -0.05, y: -4.056373, z: 0}
-  - {x: -0.05, y: -4.0315967, z: 0}
-  - {x: -0.05, y: -4.010131, z: 0}
-  - {x: -0.05, y: -3.9907224, z: 0}
-  - {x: -0.05, y: -3.9721193, z: 0}
-  - {x: -0.05, y: -3.9530692, z: 0}
-  - {x: -0.05, y: -3.9323184, z: 0}
-  - {x: -0.05, y: -3.9086158, z: 0}
-  - {x: -0.05, y: -3.8808157, z: 0}
-  - {x: -0.05, y: -3.854237, z: 0}
-  - {x: -0.05, y: -3.8315055, z: 0}
-  - {x: -0.05, y: -3.811369, z: 0}
-  - {x: -0.05, y: -3.792574, z: 0}
-  - {x: -0.05, y: -3.7738686, z: 0}
-  - {x: -0.05, y: -3.7540002, z: 0}
-  - {x: -0.05, y: -3.731716, z: 0}
-  - {x: -0.05, y: -3.7057638, z: 0}
-  - {x: -0.05, y: -3.677584, z: 0}
-  - {x: -0.05, y: -3.6533573, z: 0}
-  - {x: -0.05, y: -3.6322615, z: 0}
-  - {x: -0.05, y: -3.613045, z: 0}
-  - {x: -0.05, y: -3.5944548, z: 0}
-  - {x: -0.05, y: -3.575238, z: 0}
-  - {x: -0.05, y: -3.5541427, z: 0}
-  - {x: -0.05, y: -3.5299158, z: 0}
-  - {x: -0.05, y: -3.501736, z: 0}
-  - {x: -0.05, y: -3.4757836, z: 0}
-  - {x: -0.05, y: -3.4534996, z: 0}
-  - {x: -0.05, y: -3.4336307, z: 0}
-  - {x: -0.05, y: -3.4149256, z: 0}
-  - {x: -0.05, y: -3.3961308, z: 0}
-  - {x: -0.05, y: -3.3759937, z: 0}
-  - {x: -0.05, y: -3.3532624, z: 0}
-  - {x: -0.05, y: -3.326684, z: 0}
-  - {x: -0.05, y: -3.2988837, z: 0}
-  - {x: -0.05, y: -3.275181, z: 0}
-  - {x: -0.05, y: -3.2544305, z: 0}
-  - {x: -0.05, y: -3.2353802, z: 0}
-  - {x: -0.05, y: -3.2167768, z: 0}
-  - {x: -0.05, y: -3.1973689, z: 0}
-  - {x: -0.05, y: -3.1759024, z: 0}
-  - {x: -0.05, y: -3.1511261, z: 0}
-  - {x: -0.05, y: -3.1227562, z: 0}
-  - {x: -0.05, y: -3.0974045, z: 0}
-  - {x: -0.05, y: -3.0755422, z: 0}
-  - {x: -0.05, y: -3.0559168, z: 0}
-  - {x: -0.05, y: -3.037275, z: 0}
-  - {x: -0.05, y: -3.0183654, z: 0}
-  - {x: -0.05, y: -2.9979348, z: 0}
-  - {x: -0.05, y: -2.97473, z: 0}
-  - {x: -0.05, y: -2.9474998, z: 0}
+  - {x: 4.97, y: -3.7150002, z: 0}
+  - {x: 4.97, y: -3.6877697, z: 0}
+  - {x: 4.97, y: -3.6645653, z: 0}
+  - {x: 4.97, y: -3.6441345, z: 0}
+  - {x: 4.97, y: -3.6252246, z: 0}
+  - {x: 4.97, y: -3.606583, z: 0}
+  - {x: 4.97, y: -3.5869575, z: 0}
+  - {x: 4.97, y: -3.5650954, z: 0}
+  - {x: 4.97, y: -3.5397434, z: 0}
+  - {x: 4.97, y: -3.511374, z: 0}
+  - {x: 4.97, y: -3.4865973, z: 0}
+  - {x: 4.97, y: -3.4651313, z: 0}
+  - {x: 4.97, y: -3.445723, z: 0}
+  - {x: 4.97, y: -3.4271197, z: 0}
+  - {x: 4.97, y: -3.4080696, z: 0}
+  - {x: 4.97, y: -3.3873188, z: 0}
+  - {x: 4.97, y: -3.3636162, z: 0}
+  - {x: 4.97, y: -3.3358161, z: 0}
+  - {x: 4.97, y: -3.3092375, z: 0}
+  - {x: 4.97, y: -3.286506, z: 0}
+  - {x: 4.97, y: -3.2663693, z: 0}
+  - {x: 4.97, y: -3.2475743, z: 0}
+  - {x: 4.97, y: -3.228869, z: 0}
+  - {x: 4.97, y: -3.2090006, z: 0}
+  - {x: 4.97, y: -3.1867163, z: 0}
+  - {x: 4.97, y: -3.1607642, z: 0}
+  - {x: 4.97, y: -3.1325843, z: 0}
+  - {x: 4.97, y: -3.1083577, z: 0}
+  - {x: 4.97, y: -3.087262, z: 0}
+  - {x: 4.97, y: -3.0680454, z: 0}
+  - {x: 4.97, y: -3.0494552, z: 0}
+  - {x: 4.97, y: -3.0302384, z: 0}
+  - {x: 4.97, y: -3.009143, z: 0}
+  - {x: 4.97, y: -2.9849162, z: 0}
+  - {x: 4.97, y: -2.9567363, z: 0}
+  - {x: 4.97, y: -2.930784, z: 0}
+  - {x: 4.97, y: -2.9085, z: 0}
+  - {x: 4.97, y: -2.888631, z: 0}
+  - {x: 4.97, y: -2.869926, z: 0}
+  - {x: 4.97, y: -2.8511312, z: 0}
+  - {x: 4.97, y: -2.8309941, z: 0}
+  - {x: 4.97, y: -2.8082628, z: 0}
+  - {x: 4.97, y: -2.7816844, z: 0}
+  - {x: 4.97, y: -2.753884, z: 0}
+  - {x: 4.97, y: -2.7301815, z: 0}
+  - {x: 4.97, y: -2.709431, z: 0}
+  - {x: 4.97, y: -2.6903806, z: 0}
+  - {x: 4.97, y: -2.6717772, z: 0}
+  - {x: 4.97, y: -2.6523693, z: 0}
+  - {x: 4.97, y: -2.6309028, z: 0}
+  - {x: 4.97, y: -2.6061265, z: 0}
+  - {x: 4.97, y: -2.5777566, z: 0}
+  - {x: 4.97, y: -2.5524049, z: 0}
+  - {x: 4.97, y: -2.5305426, z: 0}
+  - {x: 4.97, y: -2.5109172, z: 0}
+  - {x: 4.97, y: -2.4922755, z: 0}
+  - {x: 4.97, y: -2.4733658, z: 0}
+  - {x: 4.97, y: -2.4529352, z: 0}
+  - {x: 4.97, y: -2.4297304, z: 0}
+  - {x: 4.97, y: -2.4025002, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.23943482

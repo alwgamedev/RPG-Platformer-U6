@@ -20,6 +20,7 @@ namespace RPGPlatformer.Combat
 
         public event Action OnTargetingFailed;
         public event Action DeathFinalized;
+        public event Action AfterDeathFinalized;
 
         public int GetLevel(CharacterSkill skill);
         public float AdditiveDamageBonus();

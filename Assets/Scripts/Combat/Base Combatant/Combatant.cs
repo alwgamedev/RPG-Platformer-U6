@@ -20,8 +20,9 @@ namespace RPGPlatformer.Combat
     public class Combatant : StateDriver, ICombatant, IInventoryOwner, ILooter, ILootDropper
     {
         [SerializeField] protected string displayName;
-        [SerializeField] protected string targetLayer;
-        [SerializeField] protected string targetTag;//unused
+        //[SerializeField] protected string targetLayer;
+        [SerializeField] protected LayerMask targetLayerMask;
+        //[SerializeField] protected string targetTag;//unused
         [SerializeField] protected ItemSlot headSlot;
         [SerializeField] protected ItemSlot torsoSlot;
         [SerializeField] protected ItemSlot legsSlot;
@@ -49,13 +50,14 @@ namespace RPGPlatformer.Combat
         protected Weapon unarmedWeapon;
         protected Health health;
         protected Action FinalizeDeathTrigger;
-        protected int targetLayerMask;
+        //protected int _targetLayer;
+        //protected Collider2D[] targetingStorage;
 
         public string DisplayName => $"<b>{displayName}</b>";
         public int CombatLevel => progressionManager.CombatLevel;
         public virtual bool IsPlayer => false;
-        public string TargetLayer => targetLayer;
-        public string TargetTag => targetTag;
+        //public string TargetLayer => targetLayer;
+        //public string TargetTag => targetTag;
         public InventoryManager Inventory => inventory;
         public Dictionary<EquipmentSlot, ItemSlot> EquipSlots => equipSlots;
         public Transform MainhandElbow => mainhandElbow;
@@ -75,6 +77,7 @@ namespace RPGPlatformer.Combat
         public event Action OnWeaponEquip;
         public event Action OnInventoryOverflow;
         public event Action DeathFinalized;
+        public event Action AfterDeathFinalized;
 
         protected virtual void Awake()
         {
@@ -84,7 +87,7 @@ namespace RPGPlatformer.Combat
             dropSpawner = GetComponent<DropSpawner>(); 
             
             combatBonusesManager = new(this);
-            targetLayerMask = LayerMask.GetMask(targetLayer);
+            //_targetLayer = LayerMask.GetMask(targetLayer);
 
             equipSlots = new();
             
@@ -291,6 +294,7 @@ namespace RPGPlatformer.Combat
             }
 
             DeathFinalized?.Invoke();
+            AfterDeathFinalized?.Invoke();
 
             if (destroyOnFinalizeDeath)
             {
@@ -526,19 +530,34 @@ namespace RPGPlatformer.Combat
 
         public virtual IHealth FindTarget(Vector2 position, float searchRadius)
         {
-            Collider2D enemyCollider = Physics2D.OverlapCircle(position, searchRadius, 
-                targetLayerMask);
+            var t = Physics2D.OverlapCircleAll(position, searchRadius, targetLayerMask);
 
-            if (enemyCollider)
+            foreach (var c in t)
             {
-                var health = GetHealthComponent(enemyCollider);
-                if (health == null)
+                var h = GetHealthComponent(c);
+
+                if (h != null && !h.IsDead)
                 {
-                    OnTargetingFailed?.Invoke();
+                    return h;
                 }
-                return health;
             }
+
+            OnTargetingFailed?.Invoke();
             return null;
+
+            //Collider2D enemyCollider = Physics2D.OverlapCircle(position, searchRadius,
+            //    _targetLayer);
+
+            //if (enemyCollider)
+            //{
+            //    var health = GetHealthComponent(enemyCollider);
+            //    if (health == null)
+            //    {
+            //        OnTargetingFailed?.Invoke();
+            //    }
+            //    return health;
+            //}
+            //return null;
         }
 
 
@@ -643,6 +662,7 @@ namespace RPGPlatformer.Combat
             OnInventoryOverflow = null;
             FinalizeDeathTrigger = null;
             DeathFinalized = null;
+            AfterDeathFinalized = null;
         }
     }
 }

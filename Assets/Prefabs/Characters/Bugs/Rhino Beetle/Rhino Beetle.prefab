@@ -355,6 +355,7 @@ MonoBehaviour:
   useDefaultAbilityBars: 0
   immuneToStuns: 0
   healthBarCanvas: {fileID: 0}
+  healthCanvasHasOwnCollider: 0
   autoRetaliate: 1
 --- !u!114 &2525433368886563850
 MonoBehaviour:
@@ -384,7 +385,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Rhino Beetle
   targetLayer: Player
-  targetTag: Player
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   headSlot: {fileID: 0}
   torsoSlot: {fileID: 0}
   legsSlot: {fileID: 0}

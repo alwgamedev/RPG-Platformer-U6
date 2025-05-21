@@ -49,6 +49,7 @@ namespace RPGPlatformer.UI
 
         public void Configure(ICombatController cc)
         {
+            health = cc?.Combatant?.Health;
             if (cc == null) return;
 
             parentOrienter = cc.Combatant.transform.GetComponent<IEntityOrienter>();
@@ -61,7 +62,7 @@ namespace RPGPlatformer.UI
             tmp.text = $"{cc.Combatant.DisplayName}\n(Level {cc.Combatant.CombatLevel})";
 
             cc.CombatEntered += OnBeginEngagement;
-            cc.CombatExited += OnEndEngagement;
+            cc.CombatExited += OnEndEngagement;//competing with ondeath?
             cc.OnDeath += CombatantDeathHandler(cc);
             cc.HealthChangeEffected += CombatantHealthChangeHandler(cc);
 
@@ -105,6 +106,7 @@ namespace RPGPlatformer.UI
                 }
                 else if (storedParent)
                 {
+                    HideAll();
                     rectTransform.SetParent(storedParent);
                     rectTransform.localPosition = storedParentLocalPos;
                 }

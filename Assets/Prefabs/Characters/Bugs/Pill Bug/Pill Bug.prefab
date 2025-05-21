@@ -2435,7 +2435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snapSpawnPositionToGround: 1
-  spawnHeightBuffer: 0
+  spawnHeightBuffer: 0.15
   patrollerTransform: {fileID: 162596757391823784}
 --- !u!1 &2672019315004399135
 GameObject:
@@ -3948,6 +3948,7 @@ MonoBehaviour:
   useDefaultAbilityBars: 0
   immuneToStuns: 0
   healthBarCanvas: {fileID: 8525337694204483833}
+  healthCanvasHasOwnCollider: 1
   autoRetaliate: 1
 --- !u!114 &6981005985232699652
 MonoBehaviour:
@@ -3963,7 +3964,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Pill Bug
   targetLayer: Player
-  targetTag: Player
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   headSlot: {fileID: 0}
   torsoSlot: {fileID: 0}
   legsSlot: {fileID: 0}
@@ -8380,8 +8383,53 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5114048950063824794, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2157723397011847975}
   m_SourcePrefab: {fileID: 100100000, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+--- !u!1 &3172312519129060664 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5114048950063824794, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+  m_PrefabInstance: {fileID: 7709759045782284962}
+  m_PrefabAsset: {fileID: 0}
+--- !u!70 &2157723397011847975
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3172312519129060664}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.05, y: 0}
+  m_Size: {x: 1.1, y: 0.75}
+  m_Direction: 1
 --- !u!224 &6483474279562556493 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3677044512451993327, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
@@ -8392,7 +8440,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2066734928849760859, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
   m_PrefabInstance: {fileID: 7709759045782284962}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 3172312519129060664}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20095327fad9b2c49acd0d56e9180300, type: 3}

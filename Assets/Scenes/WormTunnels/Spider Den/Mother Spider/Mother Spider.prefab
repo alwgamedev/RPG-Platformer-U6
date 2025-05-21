@@ -1492,11 +1492,11 @@ RectTransform:
   m_Children:
   - {fileID: 3060534338489348561}
   - {fileID: 1295896363967052569}
-  m_Father: {fileID: 1768158316448098699}
+  m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.186, y: 0.12599993}
+  m_AnchoredPosition: {x: 0, y: 1.2499999}
   m_SizeDelta: {x: 1.4, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4944062862597565165
@@ -2827,8 +2827,7 @@ Transform:
   m_LocalPosition: {x: 0.186, y: 1.124, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7161002516832035083}
+  m_Children: []
   m_Father: {fileID: 3257385418868346795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3322729872392120453
@@ -7658,6 +7657,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7161002516832035083}
   - {fileID: 6412919866554275128}
   - {fileID: 6044096165599487178}
   - {fileID: 2079801297396970077}
@@ -8018,6 +8018,7 @@ MonoBehaviour:
   useDefaultAbilityBars: 0
   immuneToStuns: 0
   healthBarCanvas: {fileID: 5532959312756395455}
+  healthCanvasHasOwnCollider: 0
   autoRetaliate: 1
 --- !u!114 &6162601988446635239
 MonoBehaviour:
@@ -8111,7 +8112,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Mother Spider
   targetLayer: Player
-  targetTag: Player
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   headSlot: {fileID: 0}
   torsoSlot: {fileID: 0}
   legsSlot: {fileID: 0}

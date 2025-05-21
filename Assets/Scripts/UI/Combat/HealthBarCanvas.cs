@@ -5,6 +5,7 @@ using System.Collections;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
 using System;
+using UnityEngine.EventSystems;
 
 namespace RPGPlatformer.UI
 {
@@ -24,9 +25,9 @@ namespace RPGPlatformer.UI
         protected bool healthEngaged;
         //for combatants this will be whether combatant is inCombat
         //for non-combatants this will turn on whenever health takes damage and toggle off after a timer; 
-        protected bool healthDead;
         protected float engagementTimer;
         protected IEntityOrienter parentOrienter;
+        protected IHealth health;
 
         protected override void Awake()
         {
@@ -53,6 +54,7 @@ namespace RPGPlatformer.UI
         //(e.g. health on a barrier that can be broken down)
         public void Configure(IHealth health)
         {
+            this.health = health;
             if (health == null) return;
 
             parentOrienter = health.transform.GetComponent<IEntityOrienter>();
@@ -72,7 +74,7 @@ namespace RPGPlatformer.UI
                 noParentName = true;
             }
 
-            health.HealthChangeTrigger += HealthHealthChangeHandler(health);
+            health.HealthChangeTrigger += BaseHealthChangeHandler;
             
             
             health.OnDeath += HealthDeathHandler;
@@ -119,48 +121,47 @@ namespace RPGPlatformer.UI
         protected virtual void OnEndEngagement()
         {
             healthEngaged = false;
-            if (gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy)//bc you can't start a coroutine when game object inactive apparently
             {
                 StartCoroutine(FadeOut());
             }
         }
 
-        protected virtual Action<float, IDamageDealer> HealthHealthChangeHandler(IHealth health)
+        protected virtual void BaseHealthChangeHandler(float damage, IDamageDealer dd)
         {
-            void Handler(float d, IDamageDealer dd)
+            if (health == null || health.IsDead) return;
+
+            if (!healthEngaged)
             {
-                if (health.IsDead) return;
-
-                if (!healthEngaged)
-                {
-                    OnBeginEngagement();
-                }
-
-                engagementTimer = 0;
-                SpawnDamagePopup(d);
+                OnBeginEngagement();
             }
 
-            return Handler;
+            engagementTimer = 0;
+            SpawnDamagePopup(damage);
         }
 
         public void OnMouseEnter()
         //since health bar canvas doesn't have a collider,
         //these need to be called by a parent (whatever health or combat controller we're linked up to)
+        //we could just use PointerEnter/Exit (since this is a UI object), but I didn't want the
+        //canvas to block raycasting
         {
-            if (healthDead || healthEngaged) return;
+            if (!gameObject.activeInHierarchy) return;
+            if (health == null || health.IsDead || healthEngaged) return;
             ShowNameOnly();
         }
 
         public void OnMouseExit()
         {
-            if (healthDead || healthEngaged || !gameObject.activeInHierarchy) return;
+            if (!gameObject.activeInHierarchy) return;
+            if (health == null || health.IsDead || healthEngaged) return;
             StartCoroutine(FadeOut(0.5f));
         }
 
         public void ShowNameOnly()
         {
             if (noParentName) return;
-
+            
             StopAllCoroutines();
             CanvasGroup.alpha = 1;
             nameContainer.SetActive(true);
@@ -179,7 +180,7 @@ namespace RPGPlatformer.UI
 
         public IEnumerator FadeOut(float startDelay = 0)
         {
-            if (healthDead) yield break;
+            //if (health == null || health.IsDead) yield break;
             yield return new WaitForSeconds(startDelay);
             yield return CanvasGroup.FadeOut(0.25f);
             HideAll();
@@ -205,8 +206,11 @@ namespace RPGPlatformer.UI
                 OnEndEngagement();
             }
 
-            healthDead = true;
+            //healthDead = true;
+            var p = rectTransform.position;
+            var q = rectTransform.rotation;
             rectTransform.SetParent(null);
+            rectTransform.SetPositionAndRotation(p, q);//<- stupid but wasn't working correctly for spider
         }
 
         protected virtual void DelayedDestroy()

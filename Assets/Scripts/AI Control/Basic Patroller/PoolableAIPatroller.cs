@@ -24,6 +24,22 @@ namespace RPGPlatformer.AIControl
                 : GetComponent<IAIPatrollerController>();
         }
 
+        //private void OnEnable()
+        //{
+        //    if (controller != null && controller is ICombatPatrollerController c)
+        //    {
+        //        if (c?.CombatPatroller?.CombatController?.Combatant?.Health != null
+        //            && c.CombatPatroller.CombatController.Combatant.Health.IsDead)
+        //        {
+        //            c.CombatPatroller.CombatController.Combatant.Revive();
+        //        }
+        //    }
+        //    //i would do this in BeforeSetActive, but we get a warning about
+        //    //playing an animation on an inactive game object
+
+              //but the problem with this is he gets revived when he hasn't been re-positioned yet
+        //}
+
         public override void Configure(object parameters)
         {
             var p = parameters as PoolableAIPatrollerConfigurationParameters;
@@ -41,7 +57,7 @@ namespace RPGPlatformer.AIControl
             if (controller is ICombatPatrollerController c)
             {
                 c.CombatPatroller.CombatController.Combatant.DestroyOnFinalizeDeath = false;
-                c.CombatPatroller.CombatController.Combatant.DeathFinalized += ReturnToPool;
+                c.CombatPatroller.CombatController.Combatant.AfterDeathFinalized += ReturnToPool;
                 if (p)
                 {
                     c.CombatPatroller.LeftAttackBound = p.LeftAttackBound;
@@ -56,18 +72,27 @@ namespace RPGPlatformer.AIControl
             {
                 CorrectSpawnPosition();
             }
-        }
 
-        public override void ResetPoolableObject()
-        {
-            if (controller is ICombatPatrollerController c)
+            if (controller != null && controller is ICombatPatrollerController c)
             {
-                if (c.CombatPatroller.CombatController.Combatant.Health.IsDead)
+                if (c?.CombatPatroller?.CombatController?.Combatant?.Health != null
+                    && c.CombatPatroller.CombatController.Combatant.Health.IsDead)
                 {
                     c.CombatPatroller.CombatController.Combatant.Revive();
                 }
             }
         }
+
+        public override void ResetPoolableObject() { }
+        //{
+        //    if (controller is ICombatPatrollerController c)
+        //    {
+        //        if (c.CombatPatroller.CombatController.Combatant.Health.IsDead)
+        //        {
+        //            c.CombatPatroller.CombatController.Combatant.Revive();
+        //        }
+        //    }
+        //}
 
         protected virtual void CorrectSpawnPosition()
         {

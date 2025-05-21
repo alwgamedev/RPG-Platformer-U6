@@ -13,6 +13,7 @@ namespace RPGPlatformer.Combat
     public class AICombatController : GenericCombatController<CombatStateManager<T1, T2, T3, T4>, T1, T2, T3, T4>
     {
         [SerializeField] protected CombatantHealthBarCanvas healthBarCanvas;
+        [SerializeField] protected bool healthCanvasHasOwnCollider;
 
         public bool autoRetaliate = true;
 
@@ -139,7 +140,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnMouseEnter()
         {
-            if (healthBarCanvas)
+            if (healthBarCanvas && !healthCanvasHasOwnCollider)
             {
                 healthBarCanvas.OnMouseEnter();
             }
@@ -147,7 +148,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnMouseExit()
         {
-            if (healthBarCanvas)
+            if (healthBarCanvas && !healthCanvasHasOwnCollider)
             {
                 healthBarCanvas.OnMouseExit();
             }
