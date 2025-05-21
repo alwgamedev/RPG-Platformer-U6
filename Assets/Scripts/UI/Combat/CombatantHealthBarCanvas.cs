@@ -9,8 +9,41 @@ namespace RPGPlatformer.UI
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
     public class CombatantHealthBarCanvas : HealthBarCanvas
     {
+        const int focusedSortingOrder = -1;
+        const int defaultSortingOrder = -2;
+
+        //Canvas canvas;
+
         Transform storedParent;
         Vector3 storedParentLocalPos;
+
+        static CombatantHealthBarCanvas lastHit;
+
+        public static CombatantHealthBarCanvas LastHit
+        {
+            get => lastHit;
+            protected set
+            {
+                //we could maybe do lock(lastHit) { ... }, but not necessary for us
+                if (lastHit != value)
+                {
+                    lastHit = value;
+                    LastHitChanged?.Invoke();
+                }
+            }
+        }
+
+        public static event Action LastHitChanged;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            canvas = GetComponent<Canvas>();
+            canvas.sortingOrder = defaultSortingOrder;
+
+            LastHitChanged += UpdateCanvasSortingOrder;
+        }
 
         protected override void Update() { }
 
@@ -29,18 +62,34 @@ namespace RPGPlatformer.UI
 
             cc.CombatEntered += OnBeginEngagement;
             cc.CombatExited += OnEndEngagement;
-            cc.OnDeath += CombatDeathHandler(cc);
-            cc.HealthChangeEffected += SpawnDamagePopup;
+            cc.OnDeath += CombatantDeathHandler(cc);
+            cc.HealthChangeEffected += CombatantHealthChangeHandler(cc);
 
             HideAll();
         }
 
-        private Action CombatDeathHandler(ICombatController cc)
+        private void UpdateCanvasSortingOrder()
+        {
+            canvas.sortingOrder = LastHit == this ? focusedSortingOrder : defaultSortingOrder;
+        }
+
+        private Action<float> CombatantHealthChangeHandler(ICombatController cc)
+        {
+            void Handler(float d)
+            {
+                LastHit = this;
+                SpawnDamagePopup(d);
+            }
+
+            return Handler;
+        }
+
+        private Action CombatantDeathHandler(ICombatController cc)
         {
             void Handler()
             {
-                storedParent = transform.parent;
-                storedParentLocalPos = transform.localPosition;
+                storedParent = rectTransform.parent;
+                storedParentLocalPos = rectTransform.localPosition;
                 cc.Combatant.DeathFinalized += OnDeathFinalized;
                 OnDeath();
             }
@@ -56,14 +105,26 @@ namespace RPGPlatformer.UI
                 }
                 else if (storedParent)
                 {
-                    transform.SetParent(storedParent);
-                    transform.localPosition = storedParentLocalPos;
+                    rectTransform.SetParent(storedParent);
+                    rectTransform.localPosition = storedParentLocalPos;
                 }
 
                 cc.Combatant.DeathFinalized -= OnDeathFinalized;
             }
 
             return Handler;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            LastHitChanged -= UpdateCanvasSortingOrder;
+
+            if (LastHit == this)
+            {
+                LastHit = null;
+            }
         }
     }
 }

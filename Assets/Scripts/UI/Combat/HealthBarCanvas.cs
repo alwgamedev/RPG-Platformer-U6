@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
+using System;
 
 namespace RPGPlatformer.UI
 {
@@ -17,6 +18,8 @@ namespace RPGPlatformer.UI
         [SerializeField] protected DamagePopup damagePopupPrefab;
         [SerializeField] protected float disengageTime = 6;
 
+        protected RectTransform rectTransform;
+        protected Canvas canvas;
         protected bool noParentName;
         protected bool healthEngaged;
         //for combatants this will be whether combatant is inCombat
@@ -24,6 +27,14 @@ namespace RPGPlatformer.UI
         protected bool healthDead;
         protected float engagementTimer;
         protected IEntityOrienter parentOrienter;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            rectTransform = GetComponent<RectTransform>();
+            canvas = GetComponent<Canvas>();
+        }
 
         protected virtual void Update()
         {
@@ -61,18 +72,7 @@ namespace RPGPlatformer.UI
                 noParentName = true;
             }
 
-            health.HealthChangeTrigger += (d, dd) =>
-            {
-                if (health.IsDead) return;
-
-                if (!healthEngaged)
-                {
-                    OnBeginEngagement();
-                }
-
-                engagementTimer = 0;
-                SpawnDamagePopup(d);
-            };
+            health.HealthChangeTrigger += HealthHealthChangeHandler(health);
             
             
             health.OnDeath += HealthDeathHandler;
@@ -123,6 +123,24 @@ namespace RPGPlatformer.UI
             {
                 StartCoroutine(FadeOut());
             }
+        }
+
+        protected virtual Action<float, IDamageDealer> HealthHealthChangeHandler(IHealth health)
+        {
+            void Handler(float d, IDamageDealer dd)
+            {
+                if (health.IsDead) return;
+
+                if (!healthEngaged)
+                {
+                    OnBeginEngagement();
+                }
+
+                engagementTimer = 0;
+                SpawnDamagePopup(d);
+            }
+
+            return Handler;
         }
 
         public void OnMouseEnter()
@@ -188,7 +206,7 @@ namespace RPGPlatformer.UI
             }
 
             healthDead = true;
-            transform.SetParent(null);
+            rectTransform.SetParent(null);
         }
 
         protected virtual void DelayedDestroy()

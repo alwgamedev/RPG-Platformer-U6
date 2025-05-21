@@ -16,6 +16,7 @@ namespace RPGPlatformer.AIControl
         {
             base.ConfigureStateManager();
 
+            stateManager.StateGraph.suspicion.OnEntry += OnSuspicionEntry;
             stateManager.StateGraph.suspicion.OnExit += OnSuspicionExit;
             stateManager.StateGraph.pursuit.OnEntry += OnPursuitEntry;
             stateManager.StateGraph.pursuit.OnExit += OnPursuitExit;
@@ -30,6 +31,11 @@ namespace RPGPlatformer.AIControl
             StateBehavior[stateManager.StateGraph.suspicion] = stateDriver.SuspicionBehavior;
             StateBehavior[stateManager.StateGraph.pursuit] = stateDriver.PursuitBehavior;
             StateBehavior[stateManager.StateGraph.attack] = stateDriver.AttackBehavior;
+        }
+
+        protected virtual void OnSuspicionEntry()
+        {
+            stateDriver.MovementController.SoftStop();
         }
 
         protected virtual void OnSuspicionExit()

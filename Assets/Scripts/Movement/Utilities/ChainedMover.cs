@@ -13,7 +13,7 @@ namespace RPGPlatformer.Movement
         [SerializeField] protected float maxDistanceCorrectionSpeed;
         [SerializeField] protected float distanceCorrectionScale;
 
-        protected Vector3 centerOffset;//offset of "ColliderCenter" from transform.position
+        //protected Vector3 centerOffset;//offset of "ColliderCenter" from transform.position
         protected int groundLayer;
         protected float[] goalDistances;
         protected Vector2[] positions;
@@ -31,7 +31,7 @@ namespace RPGPlatformer.Movement
         public bool Running { get; set; }
         public float Width { get; private set; }
         public float Height { get; private set; }
-        public Vector3 CenterPosition => transform.position + centerOffset;
+        public Vector3 CenterPosition => transform.position;
 
         public event Action<HorizontalOrientation> DirectionChanged;
 
@@ -51,9 +51,9 @@ namespace RPGPlatformer.Movement
             var c = bodyPieces[0].GetComponent<Collider2D>();
             Height = c.bounds.max.y - c.bounds.min.y;
 
-            centerOffset = 0.5f * (c.bounds.center
-                + bodyPieces[NumBodyPieces - 1].GetComponent<Collider2D>().bounds.center)
-                - transform.position;
+            //centerOffset = 0.5f * (c.bounds.center
+            //    + bodyPieces[NumBodyPieces - 1].GetComponent<Collider2D>().bounds.center)
+            //    - transform.position;
 
             groundLayer = LayerMask.GetMask("Ground");
         }
@@ -75,6 +75,27 @@ namespace RPGPlatformer.Movement
             foreach (var b in bodyPieces)
             {
                 b.linearVelocity = Vector2.zero;
+            }
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            foreach (var b in bodyPieces)
+            {
+                b.SetKinematic();
+            }
+
+            for (int i = 0; i < NumBodyPieces; i++)
+            {
+                if (bodyPieces[i].transform == transform) continue;
+                bodyPieces[i].transform.position = position + (bodyPieces[i].transform.position - transform.position);
+            }
+
+            transform.position = position;
+
+            foreach (var b in bodyPieces)
+            {
+                b.bodyType = RigidbodyType2D.Dynamic;
             }
         }
 

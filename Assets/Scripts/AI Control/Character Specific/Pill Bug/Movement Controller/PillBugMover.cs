@@ -66,27 +66,6 @@ namespace RPGPlatformer.Movement
 
         //BASIC FUNCTIONS
 
-        public void SetPosition(Vector3 position)
-        {
-            foreach (var b in bodyPieces)
-            {
-                b.SetKinematic();
-            }
-
-            for (int i = 0; i < NumBodyPieces; i++)
-            {
-                if (bodyPieces[i].transform == transform) continue;
-                bodyPieces[i].transform.position = position + (bodyPieces[i].transform.position - transform.position);
-            }
-
-            transform.position = position;
-
-            foreach (var b in bodyPieces)
-            {
-                b.bodyType = RigidbodyType2D.Dynamic;
-            }
-        }
-
         public override void Stop()
         {
             base.Stop();
