@@ -171,7 +171,6 @@ namespace RPGPlatformer.Movement
             //in this case there may have been a second hit, but not in a way that counts as wall clinging
             if (firstHitIndex != -1 && (!grounded || firstHitIndex < 0.75f * m))
             {
-                Debug.Log("awkward wall moment");
                 AwkwardWallMoment?.Invoke();
             }
         }
