@@ -109,7 +109,7 @@ namespace RPGPlatformer.Movement
         public void SetCurled(bool val)
             //expose this at the top level, bc higher up AI controllers will only know about the MovementController
         {
-            if (val && !CanMove(.75f)) return;
+            if (val && !CanMove(.75f)) return;//prevent him from curling and uncurling when at edge of movement bounds
             stateDriver.SetCurled(val);
         }
 
@@ -140,6 +140,10 @@ namespace RPGPlatformer.Movement
         public void SoftStop()
         {
             moveInput = Vector3.zero;
+            if (Curled)
+            {
+                SetCurled(false);
+            }
         }
 
         public void MoveAwayFrom(Vector2 point)

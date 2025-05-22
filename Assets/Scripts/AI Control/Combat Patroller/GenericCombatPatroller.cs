@@ -29,7 +29,7 @@ namespace RPGPlatformer.AIControl
         public IHealth CurrentTarget
         {
             get => currentTarget;
-            set
+            protected set
             {
                 currentTarget = value;
                 combatController.currentTarget = value;
@@ -166,7 +166,7 @@ namespace RPGPlatformer.AIControl
             {
                 Trigger(typeof(Attack).Name);
             }
-            else if (!InRange(d2, MinimumCombatDistance, t))
+            else if (CanPursue(d2, t))
             //to avoid ai stuttering back and forth when their target is directly above/below them
             {
                 Pursue(d2, t);
@@ -181,6 +181,14 @@ namespace RPGPlatformer.AIControl
         protected virtual bool ShouldBreakPursuitToAttack(float distSquared, float tolerance)
         {
             return CanAttackAtDistSqrd(distSquared, tolerance);
+        }
+
+        //prevent ai from stuttering when target is directly overhead
+        //(would want to change this for flying enemies)
+        protected virtual bool CanPursue(float distSquared, float tolerance)
+        {
+            return !InRange(Mathf.Abs(currentTarget.transform.position.x - transform.position.x),
+                MinimumCombatDistance, tolerance);
         }
 
         //allows child classes to decide how to pursue based on distance
