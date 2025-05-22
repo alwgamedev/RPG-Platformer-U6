@@ -183,7 +183,7 @@ namespace RPGPlatformer.AIControl
             return CanAttackAtDistSqrd(distSquared, tolerance);
         }
 
-        //prevent ai from stuttering when target is directly overhead
+        //prevent ai from stuttering back and forth when target is directly overhead
         //(would want to change this for flying enemies)
         protected virtual bool CanPursue(float distSquared, float tolerance)
         {

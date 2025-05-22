@@ -577,7 +577,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: 
-  targetLayer: Enemy
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -697,7 +696,7 @@ MonoBehaviour:
     detectWalls: 1
     numWallCastsPerThird: 2
     wallCastDistanceFactor: 2
-    wallClingRotationSpeed: 1.58
+    wallClingRotationSpeed: 3.2
   climbingMovementOptions:
     nodeDetectionRadius: 0.6
     climbSpeed: 1.5
