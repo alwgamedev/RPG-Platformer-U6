@@ -6,49 +6,55 @@ namespace RPGPlatformer.Environment
 {
     public class BreakableObjectBreakGroup : MonoBehaviour
     {
-        [SerializeField] Rigidbody2D[] rbs;
+        //[SerializeField] Rigidbody2D[] rbs;
+        [SerializeField] BreakableObjectPiece[] pieces;
         [SerializeField] float breakDelay;
         //[SerializeField] ParticleSystem breakParticles;
 
-        Collider2D[] colliders;
+        //Collider2D[] colliders;
         bool hasBroken;
 
         public float BreakDelay => breakDelay;
 
-        private void Awake()
-        {
-            colliders = new Collider2D[rbs.Length];
+        //private void Start()
+        //{
+        //    //colliders = new Collider2D[pieces.Length];
 
-            for (int i = 0; i < rbs.Length; i++)
-            {
-                if (rbs[i])
-                {
-                    colliders[i] = rbs[i].GetComponent<Collider2D>();
-                }
-            }
+        //    //for (int i = 0; i < pieces.Length; i++)
+        //    //{
+        //    //    if (pieces[i])
+        //    //    {
+        //    //        colliders[i] = pieces[i].Collider;
+        //    //    }
+        //    //}
 
-            //if (breakParticles)
-            //{
-            //    breakParticles.GetComponent<ParticleSystemRenderer>().velocityScale = 0;
-            //}
-        }
+        //    //if (breakParticles)
+        //    //{
+        //    //    breakParticles.GetComponent<ParticleSystemRenderer>().velocityScale = 0;
+        //    //}
+        //}
 
         public void EnableColliders(bool val)
         {
-            foreach (var c in colliders)
+            foreach (var p in pieces)
             {
-                if (c)
-                {
-                    c.enabled = val;
-                }
+                p.Collider.enabled = val;
             }
         }
 
         public void SetRigidbodyType(RigidbodyType2D bodyType)
         {
-            foreach (var rb in rbs)
+            foreach (var p in pieces)
             {
-                rb.bodyType = bodyType;
+                p.Rigidbody.bodyType = bodyType;
+            }
+        }
+
+        private void ApplyBreakForce()
+        {
+            foreach (var p in pieces)
+            {
+                p.ApplyBreakForce();
             }
         }
 
@@ -68,6 +74,8 @@ namespace RPGPlatformer.Environment
             await MiscTools.DelayGameTime(breakDelay, token);
 
             SetRigidbodyType(RigidbodyType2D.Dynamic);
+            ApplyBreakForce();
+            
 
             Destroy(gameObject, timeToDestroy);
         }

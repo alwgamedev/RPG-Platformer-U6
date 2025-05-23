@@ -7,11 +7,14 @@ namespace RPGPlatformer.Environment
     {
         [SerializeField] BreakableObjectBreakGroup[] breakGroups;
         [SerializeField] float timeToDestroyGroupAfterBreak;
-        [SerializeField] float collisionBreakForce;
+        [SerializeField] Transform parentToDestroy;
+        //[SerializeField] float collisionBreakForce;
 
         Rigidbody2D container;
         Collider2D containerCollider;
         bool hasBroken;
+
+        public bool HasBroken => hasBroken;
 
         private void Awake()
         {
@@ -27,16 +30,16 @@ namespace RPGPlatformer.Environment
         //    }
         //}
 
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            if (hasBroken) return;
+        //private void OnCollisionEnter2D(Collision2D collision)
+        //{
+        //    if (hasBroken) return;
 
-            var contactForce = collision.GetContact(0).normalImpulse;
-            if (contactForce > collisionBreakForce)
-            {
-                Break();
-            }
-        }
+        //    var contactForce = collision.GetContact(0).normalImpulse;
+        //    if (contactForce > collisionBreakForce)
+        //    {
+        //        Break();
+        //    }
+        //}
 
         public async void Break()
         {
@@ -57,7 +60,7 @@ namespace RPGPlatformer.Environment
                 await group.Break(timeToDestroyGroupAfterBreak, GlobalGameTools.Instance.TokenSource.Token);
             }
 
-            Destroy(gameObject);
+            Destroy(parentToDestroy.gameObject);
         }
     }
 }

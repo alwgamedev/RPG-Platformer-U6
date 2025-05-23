@@ -69,7 +69,7 @@ public static class MiscTools
         return new(x, y);
     }
 
-    public static Vector2 RandomPointInBox(Vector2 min, Vector2 max)
+    public static Vector3 RandomPointInBox(Vector3 min, Vector3 max)
     {
         return RandomPointInBox(min, max, rng);
     }
