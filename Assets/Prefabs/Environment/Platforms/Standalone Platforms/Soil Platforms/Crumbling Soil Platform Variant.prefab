@@ -105,7 +105,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -182,13 +182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &355481516982468628
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,6 +248,7 @@ MonoBehaviour:
   physicsMat: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
   uniformMass: 1
   uniformLinearDamping: 0
+  gravityScale: 0
   excludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -398,7 +392,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -473,13 +467,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &634142936916709170
 GameObject:
   m_ObjectHideFlags: 0
@@ -585,7 +572,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -663,13 +650,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &797478539683259947
 GameObject:
   m_ObjectHideFlags: 0
@@ -775,7 +755,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -852,13 +832,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &959526726259235256
 GameObject:
   m_ObjectHideFlags: 0
@@ -964,7 +937,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -1040,13 +1013,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1047942192446318117
 GameObject:
   m_ObjectHideFlags: 0
@@ -1152,7 +1118,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -1226,13 +1192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1155066922263693900
 GameObject:
   m_ObjectHideFlags: 0
@@ -1338,7 +1297,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -1412,13 +1371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1196010029999828371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,6 +1431,7 @@ MonoBehaviour:
   physicsMat: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
   uniformMass: 2
   uniformLinearDamping: 0
+  gravityScale: 0
   excludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1616,7 +1569,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -1692,13 +1645,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1301360246211842256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1804,7 +1750,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -1881,13 +1827,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1403177648122212088
 GameObject:
   m_ObjectHideFlags: 0
@@ -1993,7 +1932,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -2069,13 +2008,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1503219632812815154
 GameObject:
   m_ObjectHideFlags: 0
@@ -2181,7 +2113,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -2255,13 +2187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1504376714871805374
 GameObject:
   m_ObjectHideFlags: 0
@@ -2367,7 +2292,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -2443,13 +2368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1576019796883067348
 GameObject:
   m_ObjectHideFlags: 0
@@ -2555,7 +2473,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -2633,13 +2551,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1711708269008289319
 GameObject:
   m_ObjectHideFlags: 0
@@ -2745,7 +2656,7 @@ Rigidbody2D:
   m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -2821,13 +2732,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1737417841771134873
 GameObject:
   m_ObjectHideFlags: 0
@@ -2933,7 +2837,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3009,13 +2913,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &1949365058713150204
 GameObject:
   m_ObjectHideFlags: 0
@@ -3121,7 +3018,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3199,13 +3096,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2003870384112626610
 GameObject:
   m_ObjectHideFlags: 0
@@ -3311,7 +3201,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3386,13 +3276,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2025443006510973912
 GameObject:
   m_ObjectHideFlags: 0
@@ -3498,7 +3381,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3573,13 +3456,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2044779400535642209
 GameObject:
   m_ObjectHideFlags: 0
@@ -3685,7 +3561,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3762,13 +3638,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2139979231558625648
 GameObject:
   m_ObjectHideFlags: 0
@@ -3874,7 +3743,7 @@ Rigidbody2D:
   m_Mass: 40
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -3951,13 +3820,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2221173721385005203
 GameObject:
   m_ObjectHideFlags: 0
@@ -4063,7 +3925,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4141,13 +4003,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2366190937117747588
 GameObject:
   m_ObjectHideFlags: 0
@@ -4253,7 +4108,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4327,13 +4182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2475382302420784482
 GameObject:
   m_ObjectHideFlags: 0
@@ -4439,7 +4287,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4514,13 +4362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2541846033506455740
 GameObject:
   m_ObjectHideFlags: 0
@@ -4626,7 +4467,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4706,13 +4547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2548991922897645275
 GameObject:
   m_ObjectHideFlags: 0
@@ -4818,7 +4652,7 @@ Rigidbody2D:
   m_Mass: 12.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4894,13 +4728,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2567500744937238794
 GameObject:
   m_ObjectHideFlags: 0
@@ -5006,7 +4833,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -5083,13 +4910,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2586274510501547657
 GameObject:
   m_ObjectHideFlags: 0
@@ -5195,7 +5015,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -5271,13 +5091,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2652768745671840425
 GameObject:
   m_ObjectHideFlags: 0
@@ -5383,7 +5196,7 @@ Rigidbody2D:
   m_Mass: 40
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -5460,13 +5273,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2674041369388230256
 GameObject:
   m_ObjectHideFlags: 0
@@ -5572,7 +5378,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -5647,13 +5453,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2737077044187133259
 GameObject:
   m_ObjectHideFlags: 0
@@ -5759,7 +5558,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -5833,13 +5632,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2902249158214560488
 GameObject:
   m_ObjectHideFlags: 0
@@ -5945,7 +5737,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -6022,13 +5814,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &2975344879797060979
 GameObject:
   m_ObjectHideFlags: 0
@@ -6134,7 +5919,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -6211,13 +5996,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3026286048606094848
 GameObject:
   m_ObjectHideFlags: 0
@@ -6323,7 +6101,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -6398,13 +6176,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3042402940796956250
 GameObject:
   m_ObjectHideFlags: 0
@@ -6510,7 +6281,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -6584,13 +6355,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3048754555417337824
 GameObject:
   m_ObjectHideFlags: 0
@@ -6696,7 +6460,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -6770,13 +6534,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3097171554990663754
 GameObject:
   m_ObjectHideFlags: 0
@@ -6882,7 +6639,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -6958,13 +6715,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3281908228912529072
 GameObject:
   m_ObjectHideFlags: 0
@@ -7070,7 +6820,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -7145,13 +6895,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3289639729668436980
 GameObject:
   m_ObjectHideFlags: 0
@@ -7257,7 +7000,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -7336,13 +7079,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3310075977833283450
 GameObject:
   m_ObjectHideFlags: 0
@@ -7448,7 +7184,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -7524,13 +7260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3424738503661082322
 GameObject:
   m_ObjectHideFlags: 0
@@ -7636,7 +7365,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -7713,13 +7442,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3540836082956088538
 GameObject:
   m_ObjectHideFlags: 0
@@ -7825,7 +7547,7 @@ Rigidbody2D:
   m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -7904,13 +7626,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3557252506118298628
 GameObject:
   m_ObjectHideFlags: 0
@@ -8016,7 +7731,7 @@ Rigidbody2D:
   m_Mass: 12.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -8095,13 +7810,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3768532069819985940
 GameObject:
   m_ObjectHideFlags: 0
@@ -8207,7 +7915,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -8282,13 +7990,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3772757831577624743
 GameObject:
   m_ObjectHideFlags: 0
@@ -8394,7 +8095,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -8470,13 +8171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &3871224071260233828
 GameObject:
   m_ObjectHideFlags: 0
@@ -8582,7 +8276,7 @@ Rigidbody2D:
   m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -8658,13 +8352,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4070963980592167186
 GameObject:
   m_ObjectHideFlags: 0
@@ -8770,7 +8457,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -8847,13 +8534,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4130717836901058974
 GameObject:
   m_ObjectHideFlags: 0
@@ -8959,7 +8639,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -9033,13 +8713,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4170985962795956721
 GameObject:
   m_ObjectHideFlags: 0
@@ -9145,7 +8818,7 @@ Rigidbody2D:
   m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -9223,13 +8896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4246648272887504882
 GameObject:
   m_ObjectHideFlags: 0
@@ -9286,6 +8952,7 @@ MonoBehaviour:
   physicsMat: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
   uniformMass: 5
   uniformLinearDamping: 0
+  gravityScale: 0
   excludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -9419,7 +9086,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -9499,13 +9166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4342656860225855713
 GameObject:
   m_ObjectHideFlags: 0
@@ -9611,7 +9271,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -9688,13 +9348,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4382926613663276507
 GameObject:
   m_ObjectHideFlags: 0
@@ -9800,7 +9453,7 @@ Rigidbody2D:
   m_Mass: 12.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -9877,13 +9530,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4423459367224116167
 GameObject:
   m_ObjectHideFlags: 0
@@ -9989,7 +9635,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -10064,13 +9710,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4449311911866595501
 GameObject:
   m_ObjectHideFlags: 0
@@ -10176,7 +9815,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -10254,13 +9893,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4566628434357470137
 GameObject:
   m_ObjectHideFlags: 0
@@ -10366,7 +9998,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -10440,13 +10072,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4669085241454462685
 GameObject:
   m_ObjectHideFlags: 0
@@ -10552,7 +10177,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -10629,13 +10254,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &4740864713329448696
 GameObject:
   m_ObjectHideFlags: 0
@@ -10712,6 +10330,7 @@ MonoBehaviour:
   physicsMat: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
   uniformMass: 0.5
   uniformLinearDamping: 0
+  gravityScale: 0
   excludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -10815,6 +10434,7 @@ MonoBehaviour:
   physicsMat: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
   uniformMass: 5
   uniformLinearDamping: 0
+  gravityScale: 0
   excludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -10947,7 +10567,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -11024,13 +10644,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5194649161755039122
 GameObject:
   m_ObjectHideFlags: 0
@@ -11136,7 +10749,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -11213,13 +10826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5264167358611946552
 GameObject:
   m_ObjectHideFlags: 0
@@ -11325,7 +10931,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -11403,13 +11009,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5273601806391313286
 GameObject:
   m_ObjectHideFlags: 0
@@ -11515,7 +11114,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -11591,13 +11190,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5324089846080899566
 GameObject:
   m_ObjectHideFlags: 0
@@ -11703,7 +11295,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -11780,13 +11372,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5394069207964566048
 GameObject:
   m_ObjectHideFlags: 0
@@ -11892,7 +11477,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -11968,13 +11553,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5516277085411143340
 GameObject:
   m_ObjectHideFlags: 0
@@ -12080,7 +11658,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -12154,13 +11732,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5675695541435630624
 GameObject:
   m_ObjectHideFlags: 0
@@ -12266,7 +11837,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -12343,13 +11914,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5791825738496048105
 GameObject:
   m_ObjectHideFlags: 0
@@ -12455,7 +12019,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -12531,13 +12095,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5914642450286485056
 GameObject:
   m_ObjectHideFlags: 0
@@ -12643,7 +12200,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -12720,13 +12277,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5947818812929823042
 GameObject:
   m_ObjectHideFlags: 0
@@ -12832,7 +12382,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -12907,13 +12457,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5948403087192034475
 GameObject:
   m_ObjectHideFlags: 0
@@ -13019,7 +12562,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -13094,13 +12637,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &5979517451555954638
 GameObject:
   m_ObjectHideFlags: 0
@@ -13154,6 +12690,7 @@ MonoBehaviour:
   physicsMat: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
   uniformMass: 12.5
   uniformLinearDamping: 0
+  gravityScale: 0
   excludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -13284,7 +12821,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -13360,13 +12897,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &6036691379436843869
 GameObject:
   m_ObjectHideFlags: 0
@@ -13472,7 +13002,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -13549,13 +13079,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &6136432179735458883
 GameObject:
   m_ObjectHideFlags: 0
@@ -13661,7 +13184,7 @@ Rigidbody2D:
   m_Mass: 40
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -13739,13 +13262,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &6339180127664709771
 GameObject:
   m_ObjectHideFlags: 0
@@ -13851,7 +13367,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -13927,13 +13443,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &6450010693439144665
 GameObject:
   m_ObjectHideFlags: 0
@@ -14039,7 +13548,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -14117,13 +13626,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &6468227099338820129
 GameObject:
   m_ObjectHideFlags: 0
@@ -14229,7 +13731,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -14306,13 +13808,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &6501076370453736137
 GameObject:
   m_ObjectHideFlags: 0
@@ -14418,7 +13913,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -14494,13 +13989,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &6507077357014017818
 GameObject:
   m_ObjectHideFlags: 0
@@ -14553,6 +14041,7 @@ MonoBehaviour:
   physicsMat: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
   uniformMass: 40
   uniformLinearDamping: 0
+  gravityScale: 0
   excludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -14682,7 +14171,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -14761,13 +14250,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &6634245279705632003
 GameObject:
   m_ObjectHideFlags: 0
@@ -14873,7 +14355,7 @@ Rigidbody2D:
   m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -14949,13 +14431,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &7162567753945420316
 GameObject:
   m_ObjectHideFlags: 0
@@ -15061,7 +14536,7 @@ Rigidbody2D:
   m_Mass: 40
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -15139,13 +14614,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &7524568304739364067
 GameObject:
   m_ObjectHideFlags: 0
@@ -15251,7 +14719,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -15328,13 +14796,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &7563971704902746550
 GameObject:
   m_ObjectHideFlags: 0
@@ -15440,7 +14901,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -15514,13 +14975,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &8005954907631627367
 GameObject:
   m_ObjectHideFlags: 0
@@ -15626,7 +15080,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -15704,13 +15158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &8045842598588597079
 GameObject:
   m_ObjectHideFlags: 0
@@ -15765,6 +15212,7 @@ MonoBehaviour:
   physicsMat: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
   uniformMass: 10
   uniformLinearDamping: 0
+  gravityScale: 0
   excludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -15896,7 +15344,7 @@ Rigidbody2D:
   m_Mass: 12.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -15974,13 +15422,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &8229155806502235761
 GameObject:
   m_ObjectHideFlags: 0
@@ -16086,7 +15527,7 @@ Rigidbody2D:
   m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -16164,13 +15605,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &8356122479583055235
 GameObject:
   m_ObjectHideFlags: 0
@@ -16276,7 +15710,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -16354,13 +15788,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &8394993628966906640
 GameObject:
   m_ObjectHideFlags: 0
@@ -16466,7 +15893,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -16540,13 +15967,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &8463575773218049749
 GameObject:
   m_ObjectHideFlags: 0
@@ -16652,7 +16072,7 @@ Rigidbody2D:
   m_Mass: 0.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -16729,13 +16149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &8620421198679836285
 GameObject:
   m_ObjectHideFlags: 0
@@ -16841,7 +16254,7 @@ Rigidbody2D:
   m_Mass: 12.5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -16919,13 +16332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &8624536958844235297
 GameObject:
   m_ObjectHideFlags: 0
@@ -17031,7 +16437,7 @@ Rigidbody2D:
   m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -17109,13 +16515,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1 &9000771110395965076
 GameObject:
   m_ObjectHideFlags: 0
@@ -17221,7 +16620,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -17295,13 +16694,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6ce5db94b34148b2c13a0698456e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakForce:
-    mode: 1
-    boundsSource: 1
-    minTransform: {fileID: 0}
-    maxTransform: {fileID: 0}
-    minPosition: {x: 0, y: 0}
-    maxPosition: {x: 0, y: 0}
 --- !u!1001 &8513599965389950947
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17423,6 +16815,9 @@ MonoBehaviour:
   - {fileID: 7381310778133499874}
   timeToDestroyGroupAfterBreak: 2
   parentToDestroy: {fileID: 235251948913832818}
+  options:
+    inheritVelocity: 0
+    applyBreakForce: 0
 --- !u!114 &5738071314963646850
 MonoBehaviour:
   m_ObjectHideFlags: 0

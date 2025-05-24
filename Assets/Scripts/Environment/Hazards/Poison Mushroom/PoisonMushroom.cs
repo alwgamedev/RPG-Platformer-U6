@@ -102,24 +102,6 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        //private void CombatantEnteredGasBounds(ICombatController cc)
-        //{
-        //    f (gasActive)
-        //    {
-        //        PoisonIntruder(cc);
-        //    }
-        //}
-
-        //private void CombatantExitedGasBounds(ICombatController cc)
-        //{
-        //    inBounds[cc] = false;
-        //}
-
-        //private bool CanTrigger(GameObject go)
-        //{
-        //    return ((1 << go.layer) & layersThatCanTrigger) != 0;
-        //}
-
         private void TriggerGas(Transform t)
         {
             gasParticles.Play();
@@ -127,7 +109,6 @@ namespace RPGPlatformer.Environment
             {
                 GameLog.Log("Stepping on the mushroom causes it to release a noxious green gas.");
             }
-            //PoisonIntruder(c);
         }
 
         private async void PoisonIntruder(Collider2D c)

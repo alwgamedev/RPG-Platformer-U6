@@ -8,6 +8,7 @@ namespace RPGPlatformer.Environment
         [SerializeField] PhysicsMaterial2D physicsMat;
         [SerializeField] float uniformMass;
         [SerializeField] float uniformLinearDamping;
+        [SerializeField] float gravityScale;
         [SerializeField] LayerMask excludeLayers;
         [SerializeField] RigidbodyType2D bodyType;
         [SerializeField] bool freezeRotation;
@@ -29,6 +30,7 @@ namespace RPGPlatformer.Environment
 
                 rb.mass = uniformMass;
                 rb.linearDamping = uniformLinearDamping;
+                rb.gravityScale = gravityScale;
                 rb.excludeLayers = excludeLayers;
                 rb.bodyType = bodyType;
                 rb.freezeRotation = freezeRotation;
