@@ -97,10 +97,11 @@ namespace RPGPlatformer.Movement
         {
             //note we only use 0.85 of the height
             //(gives more natural angles, but making this too small means
-            //it will be harder to grab onto the side of a platform when falling)
-            var origin = ColliderCenterBack + 0.25f * myHeight * transform.up;
+            //it will be harder to grab onto the side of a platform when falling,
+            //also you miss awkward wall moments where only your head hits)
+            var origin = ColliderCenterBack + 0.15f * myHeight * transform.up;
             var m = 3 * n;
-            var spacing = 0.75f * myHeight / m;
+            var spacing = 0.85f * myHeight / m;
             if (grounded)
             {
                 spacing *= 0.95f;//to avoid feet casts hitting against steep slopes while walking
