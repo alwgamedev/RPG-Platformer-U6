@@ -9,6 +9,7 @@ namespace RPGPlatformer.Environment
     [RequireComponent(typeof(BreakableObject))]
     public class FallingStalactite : PoolableObject, IDamageDealer
     {
+        [SerializeField] RandomizableVector3 scale;
         [SerializeField] float impactDamage;
         [SerializeField] float rumbleDisplacement;
         [SerializeField] float rumbleFrequency;//time to go from 0 to rumbleDisplacement
@@ -16,6 +17,7 @@ namespace RPGPlatformer.Environment
         [SerializeField] Transform sHead;
         [SerializeField] Transform sBase;
         [SerializeField] float emergeSpeed;
+        [SerializeField] float anchorHeightBuffer;
 
         Collider2D ceiling;
         Collider2D containerCollider;
@@ -42,14 +44,6 @@ namespace RPGPlatformer.Environment
             containerCollider.enabled = false;
             state = State.dormant;
         }
-
-        //private void Update()
-        //{
-        //    if (Input.GetKeyDown(KeyCode.P))
-        //    {
-        //        Trigger();
-        //    }
-        //}
 
 
         //BASIC FUNCTIONS
@@ -140,6 +134,7 @@ namespace RPGPlatformer.Environment
             //NOTE: breakable object will disable container collider and destroy game object
         }
 
+
         //POOLABLE OBJECT METHODS
 
         public override void Configure(object parameters)
@@ -149,7 +144,9 @@ namespace RPGPlatformer.Environment
 
         public override void BeforeSetActive()
         {
-            transform.position += transform.position - sHead.position;
+            transform.localScale = scale.Value;
+            transform.position += transform.position - sHead.position 
+                + transform.localScale.y * anchorHeightBuffer * Vector3.up;
         }
 
         public override async void AfterSetActive()

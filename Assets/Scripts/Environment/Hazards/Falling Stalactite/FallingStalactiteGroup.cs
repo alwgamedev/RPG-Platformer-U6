@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
+using System.Threading;
 
 namespace RPGPlatformer.Environment
 {
@@ -12,10 +14,17 @@ namespace RPGPlatformer.Environment
         [SerializeField] RandomizableInt spawnWhenActiveBelow;
         [SerializeField] RandomizableInt goalActive;
         [SerializeField] RandomizableFloat timeBetweenSpawns;
+        [SerializeField] RandomizableFloat timeBetweenDrops;
 
+        bool playerInBounds;
         Collider2D ceiling;
         ObjectPool pool;
-        Queue<FallingStalactite> active;
+        Queue<FallingStalactite> active = new();
+
+        Task dropCycle;
+
+        event Action PlayerEnteredBounds;
+        event Action PlayerExitedBounds;
 
         private void Awake()
         {
@@ -24,19 +33,31 @@ namespace RPGPlatformer.Environment
             pool.GeneratePool();
         }
 
-        private async Task RefreshActive()
+        private void Start()
+        {
+            InitializeActive();
+            PlayerEnteredBounds += OnPlayerEnteredBounds;
+        }
+
+
+        //SPAWNING
+
+        private void InitializeActive()
+        {
+            for (int i = 0; i < goalActive.Value; i++)
+            {
+                SpawnStalactite();
+            }
+        }
+
+        private async Task RefreshActive(CancellationToken token)
         {
             var g = goalActive.Value;
-            var toSpawn = g - active.Count;
-
-            if (toSpawn > 0)
+            g -= active.Count;
+            for (int i = 0; i < g; i++)
             {
-                for (int i = 0; i < toSpawn; i++)
-                {
-                    await MiscTools.DelayGameTime(timeBetweenSpawns.Value, 
-                        GlobalGameTools.Instance.TokenSource.Token);
-                    SpawnStalactite();
-                }
+                await MiscTools.DelayGameTime(timeBetweenSpawns.Value, token);
+                SpawnStalactite();
             }
         }
 
@@ -51,16 +72,96 @@ namespace RPGPlatformer.Environment
             active.Enqueue((FallingStalactite)pool.ReleaseObject(p));
         }
 
-        private async void DropStalactite()
+
+        //DROPPING
+
+        private async void OnPlayerEnteredBounds()
+        {
+            if (dropCycle == null || dropCycle.IsCompleted)
+            {
+                using var cts = CancellationTokenSource
+                    .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
+
+                //dropCycle task will complete when playerInBounds = false,
+                //but this allows us to end the cycle immediately rather than at beginning of
+                //next iteration
+                try
+                {
+                    PlayerExitedBounds += cts.Cancel;
+                    dropCycle = DropCycle(cts.Token);
+                    await dropCycle;
+                }
+                catch (TaskCanceledException)
+                {
+                    return;
+                }
+                finally
+                {
+                    PlayerExitedBounds -= cts.Cancel;
+                }
+            }
+        }
+
+        private async Task DropCycle(CancellationToken token)
+        {
+            while (playerInBounds)
+            {
+                DropStalactite(token);
+                await MiscTools.DelayGameTime(timeBetweenDrops.Value, token);
+            }
+        }
+
+        private void DropStalactite(CancellationToken token)
         {
             if (active.Count != 0)
             {
                 active.Dequeue().Trigger();
             }
-            if (active.Count < goalActive.Value)
+
+            if (active.Count < spawnWhenActiveBelow.Value)
             {
-                await RefreshActive();
+                //await RefreshActive(token);
+                dropCycle = Task.WhenAll(dropCycle, RefreshActive(token));
             }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collider)
+        {
+            if (!gameObject.activeInHierarchy) return;
+
+            if (!playerInBounds && collider.transform == GlobalGameTools.Instance.PlayerTransform)
+            {
+                playerInBounds = true;
+                PlayerEnteredBounds?.Invoke();
+            }
+        }
+
+        private void OnTriggerStay2D(Collider2D collider)
+        {
+            if (!gameObject.activeInHierarchy) return;
+
+            if (!playerInBounds && collider.transform == GlobalGameTools.Instance.PlayerTransform)
+            {
+                playerInBounds = true;
+                PlayerEnteredBounds?.Invoke();
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D collider)
+        {
+            if (!gameObject.activeInHierarchy) return;
+
+            if (playerInBounds && collider.transform == GlobalGameTools.Instance.PlayerTransform)
+            {
+                playerInBounds = false;
+                PlayerExitedBounds?.Invoke();
+            }
+        }
+
+        private void OnDestroy()
+        {
+            PlayerEnteredBounds = null;
+            PlayerExitedBounds = null;
         }
     }
 }
