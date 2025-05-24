@@ -9,9 +9,11 @@ namespace RPGPlatformer.AIControl
         public float wiggleMax;
         public float wiggleSpeed;
         
-        int wiggleDirection;//1 = up, -1 = down
+        int wiggleDirection = 1;//1 = up, -1 = down
         float wigglePosition;
         VisualCurveGuidePoint vcgp;//will be childed to EelVertex, so that EelVertex.pos can be the neutral position
+
+        public Vector2 CurvePoint => vcgp.Point();
 
         private void Awake()
         {
@@ -34,7 +36,7 @@ namespace RPGPlatformer.AIControl
 
             wigglePosition += wiggleDirection * wiggleSpeed * dt;
             vcgp.SetPoint((Vector2)transform.position + ((int)o) * wigglePosition * u.CCWPerp());
-            vcgp.SetTangentDir(-u);
+            vcgp.SetTangentDir(u);
             //we can either use vcg "tangent weight" to uniformly scale the tangents
             //or scale them individually
             //actually a good idea might be to scale tangent with or inversely to wigglePosition

@@ -629,8 +629,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2e3e0531c807e42bc03f53c0de3cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wiggleMax: 0
-  wiggleSpeed: 0
+  wiggleMax: 0.1
+  wiggleSpeed: 0.75
 --- !u!1001 &145113025
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1772,6 +1772,7 @@ GameObject:
   - component: {fileID: 247904713}
   - component: {fileID: 247904712}
   - component: {fileID: 247904711}
+  - component: {fileID: 247904714}
   m_Layer: 0
   m_Name: Giant Eel
   m_TagString: Untagged
@@ -1839,7 +1840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b55ba63ab7d2994699e4821ada179f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineRendererPositionCount: 40
+  lineRendererPositionCount: 60
   guidePoints:
   - virtualSegments: 0
     point: {x: -2.02, y: -7.03, z: 0}
@@ -1909,44 +1910,64 @@ LineRenderer:
   m_SortingOrder: 25
   m_Positions:
   - {x: -2.02, y: -7.03, z: 0}
-  - {x: -1.9143425, y: -7.03, z: 0}
-  - {x: -1.8453511, y: -7.03, z: 0}
-  - {x: -1.8003824, y: -7.03, z: 0}
-  - {x: -1.7667928, y: -7.03, z: 0}
-  - {x: -1.7319387, y: -7.03, z: 0}
-  - {x: -1.683177, y: -7.03, z: 0}
-  - {x: -1.6078639, y: -7.03, z: 0}
-  - {x: -1.4953284, y: -7.03, z: 0}
-  - {x: -1.3980154, y: -7.03, z: 0}
-  - {x: -1.3348399, y: -7.03, z: 0}
-  - {x: -1.2931587, y: -7.03, z: 0}
-  - {x: -1.2603277, y: -7.03, z: 0}
-  - {x: -1.2237036, y: -7.03, z: 0}
-  - {x: -1.1706431, y: -7.03, z: 0}
-  - {x: -1.0885024, y: -7.03, z: 0}
-  - {x: -0.9725278, y: -7.03, z: 0}
-  - {x: -0.88305396, y: -7.03, z: 0}
-  - {x: -0.8251889, y: -7.03, z: 0}
-  - {x: -0.786289, y: -7.03, z: 0}
-  - {x: -0.753711, y: -7.03, z: 0}
-  - {x: -0.71481115, y: -7.03, z: 0}
-  - {x: -0.656946, y: -7.03, z: 0}
-  - {x: -0.5674721, y: -7.03, z: 0}
-  - {x: -0.45149752, y: -7.03, z: 0}
-  - {x: -0.36935687, y: -7.03, z: 0}
-  - {x: -0.3162963, y: -7.03, z: 0}
-  - {x: -0.2796723, y: -7.03, z: 0}
-  - {x: -0.24684139, y: -7.03, z: 0}
-  - {x: -0.20516002, y: -7.03, z: 0}
-  - {x: -0.14198458, y: -7.03, z: 0}
-  - {x: -0.044671774, y: -7.03, z: 0}
-  - {x: 0.067863904, y: -7.03, z: 0}
-  - {x: 0.14317703, y: -7.03, z: 0}
-  - {x: 0.19193882, y: -7.03, z: 0}
-  - {x: 0.22679275, y: -7.03, z: 0}
-  - {x: 0.26038235, y: -7.03, z: 0}
-  - {x: 0.30535114, y: -7.03, z: 0}
-  - {x: 0.37434244, y: -7.03, z: 0}
+  - {x: -1.9454184, y: -7.03, z: 0}
+  - {x: -1.8887304, y: -7.03, z: 0}
+  - {x: -1.8462846, y: -7.03, z: 0}
+  - {x: -1.8144288, y: -7.03, z: 0}
+  - {x: -1.7895114, y: -7.03, z: 0}
+  - {x: -1.7678808, y: -7.03, z: 0}
+  - {x: -1.7458848, y: -7.03, z: 0}
+  - {x: -1.7198718, y: -7.03, z: 0}
+  - {x: -1.6861904, y: -7.03, z: 0}
+  - {x: -1.641188, y: -7.03, z: 0}
+  - {x: -1.5812137, y: -7.03, z: 0}
+  - {x: -1.5034769, y: -7.03, z: 0}
+  - {x: -1.4327662, y: -7.03, z: 0}
+  - {x: -1.3792188, y: -7.03, z: 0}
+  - {x: -1.3391831, y: -7.03, z: 0}
+  - {x: -1.309007, y: -7.03, z: 0}
+  - {x: -1.2850393, y: -7.03, z: 0}
+  - {x: -1.2636276, y: -7.03, z: 0}
+  - {x: -1.2411205, y: -7.03, z: 0}
+  - {x: -1.213866, y: -7.03, z: 0}
+  - {x: -1.1782124, y: -7.03, z: 0}
+  - {x: -1.1305078, y: -7.03, z: 0}
+  - {x: -1.0671008, y: -7.03, z: 0}
+  - {x: -0.98778635, y: -7.03, z: 0}
+  - {x: -0.92080045, y: -7.03, z: 0}
+  - {x: -0.87024754, y: -7.03, z: 0}
+  - {x: -0.832476, y: -7.03, z: 0}
+  - {x: -0.8038338, y: -7.03, z: 0}
+  - {x: -0.78066933, y: -7.03, z: 0}
+  - {x: -0.75933075, y: -7.03, z: 0}
+  - {x: -0.73616624, y: -7.03, z: 0}
+  - {x: -0.7075241, y: -7.03, z: 0}
+  - {x: -0.6697524, y: -7.03, z: 0}
+  - {x: -0.6191995, y: -7.03, z: 0}
+  - {x: -0.55221367, y: -7.03, z: 0}
+  - {x: -0.47289935, y: -7.03, z: 0}
+  - {x: -0.40949216, y: -7.03, z: 0}
+  - {x: -0.36178765, y: -7.03, z: 0}
+  - {x: -0.32613406, y: -7.03, z: 0}
+  - {x: -0.29887956, y: -7.03, z: 0}
+  - {x: -0.2763724, y: -7.03, z: 0}
+  - {x: -0.25496078, y: -7.03, z: 0}
+  - {x: -0.23099294, y: -7.03, z: 0}
+  - {x: -0.20081708, y: -7.03, z: 0}
+  - {x: -0.16078132, y: -7.03, z: 0}
+  - {x: -0.10723406, y: -7.03, z: 0}
+  - {x: -0.036523342, y: -7.03, z: 0}
+  - {x: 0.041213606, y: -7.03, z: 0}
+  - {x: 0.10118811, y: -7.03, z: 0}
+  - {x: 0.14619029, y: -7.03, z: 0}
+  - {x: 0.17987192, y: -7.03, z: 0}
+  - {x: 0.20588478, y: -7.03, z: 0}
+  - {x: 0.22788072, y: -7.03, z: 0}
+  - {x: 0.2495114, y: -7.03, z: 0}
+  - {x: 0.27442876, y: -7.03, z: 0}
+  - {x: 0.30628446, y: -7.03, z: 0}
+  - {x: 0.3487304, y: -7.03, z: 0}
+  - {x: 0.40541828, y: -7.03, z: 0}
   - {x: 0.48, y: -7.03, z: 0}
   m_Parameters:
     serializedVersion: 3
@@ -2007,6 +2028,25 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &247904714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247904708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a731fe67723cd1342ae0fe6233c209b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vertices:
+  - {fileID: 1208587594}
+  - {fileID: 1790156291}
+  - {fileID: 141503922}
+  - {fileID: 1636697912}
+  - {fileID: 1284609744}
+  - {fileID: 891448211}
 --- !u!4 &295852326 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2765709863372221830, guid: f5381072d815e164e84021737173a10a, type: 3}
@@ -5236,8 +5276,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2e3e0531c807e42bc03f53c0de3cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wiggleMax: 0
-  wiggleSpeed: 0
+  wiggleMax: 0.1
+  wiggleSpeed: 0.75
 --- !u!1 &924206013
 GameObject:
   m_ObjectHideFlags: 0
@@ -6678,8 +6718,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2e3e0531c807e42bc03f53c0de3cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wiggleMax: 0
-  wiggleSpeed: 0
+  wiggleMax: 0.1
+  wiggleSpeed: 0.75
 --- !u!1 &1326822147
 GameObject:
   m_ObjectHideFlags: 0
@@ -7643,8 +7683,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2e3e0531c807e42bc03f53c0de3cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wiggleMax: 0
-  wiggleSpeed: 0
+  wiggleMax: 0.1
+  wiggleSpeed: 0.75
 --- !u!1 &1783169582
 GameObject:
   m_ObjectHideFlags: 0
@@ -7721,8 +7761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2e3e0531c807e42bc03f53c0de3cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wiggleMax: 0
-  wiggleSpeed: 0
+  wiggleMax: 0.1
+  wiggleSpeed: 0.75
 --- !u!1001 &1794712102
 PrefabInstance:
   m_ObjectHideFlags: 0
