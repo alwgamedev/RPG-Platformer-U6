@@ -16,7 +16,7 @@ namespace RPGPlatformer.Environment
         [SerializeField] float rumbleDuration;
         [SerializeField] Transform sHead;
         [SerializeField] Transform sBase;
-        [SerializeField] float emergeSpeed;
+        [SerializeField] float emergeTime;
         [SerializeField] float anchorHeightBuffer;
 
         Collider2D ceiling;
@@ -27,7 +27,7 @@ namespace RPGPlatformer.Environment
 
         enum State
         {
-            dormant, rumbling, falling, broken
+            dormant, /*rumbling,*/ falling, broken
         }
 
         public CombatStyle CurrentCombatStyle => CombatStyle.Unarmed;
@@ -37,6 +37,7 @@ namespace RPGPlatformer.Environment
             breakableObject = GetComponent<BreakableObject>();
             containerRb = GetComponent<Rigidbody2D>();
             containerCollider = GetComponent<Collider2D>();
+            transform.localScale = scale.Value;
         }
 
         private void Start()
@@ -50,65 +51,62 @@ namespace RPGPlatformer.Environment
 
         public async Task Emerge(CancellationToken token)
         {
-            Vector3 d = sHead.position - sBase.position;
-            float l = d.magnitude;
-            if (l < 1E-05f) return;
+            Vector2 p = transform.position;
+            Vector2 q = transform.position + sHead.position - sBase.position;
 
-            d = d / l;
             float t = 0;
-            float T = l / emergeSpeed;
 
-            while (t < T)
+            while (t < emergeTime)
             {
                 await Task.Yield();
                 if (token.IsCancellationRequested)
                 {
                     throw new TaskCanceledException();
                 }
-                if (state != State.dormant && state != State.rumbling)
+                if (state != State.dormant /*&& state != State.rumbling*/)
                 {
                     return;
                 }
 
                 t += Time.deltaTime;
-                transform.position += d * emergeSpeed * Time.deltaTime;
+                transform.position = Vector2.Lerp(p, q, t / emergeTime);
             }
         }
 
-        public async void Trigger()
+        public /*async*/ void Trigger()
         {
             if (state != State.dormant) return;
 
-            await Rumble(GlobalGameTools.Instance.TokenSource.Token);
+            //await Rumble(GlobalGameTools.Instance.TokenSource.Token);
             Fall();
         }
 
-        private async Task Rumble(CancellationToken token)
-        {
-            state = State.rumbling;
-            float timer = 0;
-            float d;
-            float displacement = 0;
-            float speed = rumbleDisplacement / rumbleFrequency;
-            int direction = 1;
+        //private async Task Rumble(CancellationToken token)
+        //{
+        //    state = State.rumbling;
+        //    float timer = 0;
+        //    float d;
+        //    float displacement = 0;
+        //    float speed = rumbleDisplacement / rumbleFrequency;
+        //    int direction = 1;
 
-            while (timer < rumbleDuration)
-            {
-                await Task.Yield();
-                if (token.IsCancellationRequested)
-                {
-                    throw new TaskCanceledException();
-                }
-                timer += Time.deltaTime;
-                d = Time.deltaTime * speed * direction;
-                displacement += d;
-                transform.position += d * Vector3.right;
-                if (displacement * direction > rumbleDisplacement)
-                {
-                    direction *= -1;
-                }
-            }
-        }
+        //    while (timer < rumbleDuration)
+        //    {
+        //        await Task.Yield();
+        //        if (token.IsCancellationRequested)
+        //        {
+        //            throw new TaskCanceledException();
+        //        }
+        //        timer += Time.deltaTime;
+        //        d = Time.deltaTime * speed * direction;
+        //        displacement += d;
+        //        transform.position += d * Vector3.right;
+        //        if (displacement * direction > rumbleDisplacement)
+        //        {
+        //            direction *= -1;
+        //        }
+        //    }
+        //}
 
         private void Fall()
         {
@@ -144,9 +142,9 @@ namespace RPGPlatformer.Environment
 
         public override void BeforeSetActive()
         {
-            transform.localScale = scale.Value;
+            //transform.localScale = scale.Value;
             transform.position += transform.position - sHead.position 
-                + transform.localScale.y * anchorHeightBuffer * Vector3.up;
+                + anchorHeightBuffer * Vector3.up;
         }
 
         public override async void AfterSetActive()

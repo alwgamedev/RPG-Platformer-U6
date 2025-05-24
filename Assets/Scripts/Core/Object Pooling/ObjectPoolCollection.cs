@@ -28,7 +28,7 @@ namespace RPGPlatformer.Core
                 //ObjectPool op = carrier.AddComponent<ObjectPool>();
                 //op.poolData = data;
                 var op = AddPoolAsChild(data, transform);
-                op.GeneratePool();
+                op.FillPool();
                 FindObjectPool[data.PooledObject] = op;
                 FindObjectPoolByName[data.PooledObject.name] = op;
             }

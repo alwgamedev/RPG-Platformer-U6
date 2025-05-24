@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
@@ -25,7 +27,7 @@ namespace RPGPlatformer.Core
         {
             if (generateOnAwake)
             {
-                GeneratePool();
+                FillPool();
             }
         }
 
@@ -96,11 +98,25 @@ namespace RPGPlatformer.Core
             item.gameObject.SetActive(false);
         }
 
-        public void GeneratePool()
+        public void AddToPool(int q)
         {
-            for (int i = 0; i < poolData.PoolSize; i++)
+            for (int i = 0; i < q; i++)
             {
                 AddToQueue(InstantiatePooledObject(poolData.ConfigurationParameters));
+            }
+        }
+
+        public void FillPool()
+        {
+            AddToPool(poolData.PoolSize - Available);
+        }
+
+        public async Task FillPoolAsync(int quantityPerFrame, float dt, CancellationToken token)
+        {
+            while (Available < poolData.PoolSize)
+            {
+                AddToPool(Math.Min(poolData.PoolSize - Available, quantityPerFrame));
+                await MiscTools.DelayGameTime(dt, token);
             }
         }
     }

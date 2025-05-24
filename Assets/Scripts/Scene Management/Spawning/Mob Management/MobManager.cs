@@ -40,7 +40,7 @@ namespace RPGPlatformer.SceneManagement
             //you can set poolsize = 0 and have it instantiate the poolable object
             //as needed, based on the SpawnRate data
             pool = ObjectPoolCollection.AddPoolAsChild(mobData.PoolData, transform);
-            pool.GeneratePool();
+            pool.FillPool();
             SavingSystem.SceneLoadComplete += OnSceneLoadComplete;
         }
 

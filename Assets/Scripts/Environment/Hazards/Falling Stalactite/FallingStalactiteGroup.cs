@@ -11,11 +11,11 @@ namespace RPGPlatformer.Environment
     {
         [SerializeField] ObjectPoolData poolData;
         [SerializeField] RandomizableVector2 spawnPosition;
-        [SerializeField] RandomizableInt spawnWhenActiveBelow;
         [SerializeField] RandomizableInt goalActive;
         [SerializeField] RandomizableFloat timeBetweenSpawns;
         [SerializeField] RandomizableFloat timeBetweenDrops;
 
+        int groundLayer;
         bool playerInBounds;
         Collider2D ceiling;
         ObjectPool pool;
@@ -24,19 +24,21 @@ namespace RPGPlatformer.Environment
         Task dropCycle;
 
         event Action PlayerEnteredBounds;
-        event Action PlayerExitedBounds;
+        //event Action PlayerExitedBounds;
 
         private void Awake()
         {
+            groundLayer = LayerMask.GetMask("ground");
             ceiling = ((GameObject)poolData.ConfigurationParameters).GetComponent<Collider2D>();
             pool = ObjectPoolCollection.AddPoolAsChild(poolData, transform);
-            pool.GeneratePool();
+            pool.FillPool();
         }
 
         private void Start()
         {
             InitializeActive();
             PlayerEnteredBounds += OnPlayerEnteredBounds;
+            GlobalGameTools.Instance.Player.OnDeath += OnPlayerDeath;
         }
 
 
@@ -52,6 +54,12 @@ namespace RPGPlatformer.Environment
 
         private async Task RefreshActive(CancellationToken token)
         {
+            if (pool.Available == 0)
+            {
+                dropCycle = Task.WhenAll(dropCycle, pool.FillPoolAsync(1, .1f, token));
+                await Task.Yield();
+            }
+
             var g = goalActive.Value;
             g -= active.Count;
             for (int i = 0; i < g; i++)
@@ -63,12 +71,16 @@ namespace RPGPlatformer.Environment
 
         private void SpawnStalactite()
         {
-            if (pool.Available == 0)
+            var p = spawnPosition.Value;
+            var r = Physics2D.Raycast(p, Vector2.up, Mathf.Infinity, groundLayer);
+            if (r)
             {
-                pool.GeneratePool();
+                p = r.point;
             }
-
-            var p = ceiling.ClosestPoint(spawnPosition.Value);
+            else
+            {
+                p = ceiling.ClosestPoint(p);
+            }
             active.Enqueue((FallingStalactite)pool.ReleaseObject(p));
         }
 
@@ -82,23 +94,26 @@ namespace RPGPlatformer.Environment
                 using var cts = CancellationTokenSource
                     .CreateLinkedTokenSource(GlobalGameTools.Instance.TokenSource.Token);
 
+                dropCycle = DropCycle(cts.Token);
+                await dropCycle;
+
                 //dropCycle task will complete when playerInBounds = false,
                 //but this allows us to end the cycle immediately rather than at beginning of
                 //next iteration
-                try
-                {
-                    PlayerExitedBounds += cts.Cancel;
-                    dropCycle = DropCycle(cts.Token);
-                    await dropCycle;
-                }
-                catch (TaskCanceledException)
-                {
-                    return;
-                }
-                finally
-                {
-                    PlayerExitedBounds -= cts.Cancel;
-                }
+                //try
+                //{
+                //    PlayerExitedBounds += cts.Cancel;
+                //    dropCycle = DropCycle(cts.Token);
+                //    await dropCycle;
+                //}
+                //catch (TaskCanceledException)
+                //{
+                //    return;
+                //}
+                //finally
+                //{
+                //    PlayerExitedBounds -= cts.Cancel;
+                //}
             }
         }
 
@@ -106,22 +121,21 @@ namespace RPGPlatformer.Environment
         {
             while (playerInBounds)
             {
-                DropStalactite(token);
+                await DropStalactite(token);
                 await MiscTools.DelayGameTime(timeBetweenDrops.Value, token);
             }
         }
 
-        private void DropStalactite(CancellationToken token)
+        private async Task DropStalactite(CancellationToken token)
         {
             if (active.Count != 0)
             {
                 active.Dequeue().Trigger();
             }
 
-            if (active.Count < spawnWhenActiveBelow.Value)
+            if (active.Count == 0)
             {
-                //await RefreshActive(token);
-                dropCycle = Task.WhenAll(dropCycle, RefreshActive(token));
+                await RefreshActive(token);
             }
         }
 
@@ -129,23 +143,24 @@ namespace RPGPlatformer.Environment
         {
             if (!gameObject.activeInHierarchy) return;
 
-            if (!playerInBounds && collider.transform == GlobalGameTools.Instance.PlayerTransform)
+            if (!playerInBounds && collider.transform == GlobalGameTools.Instance.PlayerTransform
+                && !GlobalGameTools.Instance.PlayerIsDead)
             {
                 playerInBounds = true;
                 PlayerEnteredBounds?.Invoke();
             }
         }
 
-        private void OnTriggerStay2D(Collider2D collider)
-        {
-            if (!gameObject.activeInHierarchy) return;
+        //private void OnTriggerStay2D(Collider2D collider)
+        //{
+        //    if (!gameObject.activeInHierarchy) return;
 
-            if (!playerInBounds && collider.transform == GlobalGameTools.Instance.PlayerTransform)
-            {
-                playerInBounds = true;
-                PlayerEnteredBounds?.Invoke();
-            }
-        }
+        //    if (!playerInBounds && collider.transform == GlobalGameTools.Instance.PlayerTransform)
+        //    {
+        //        playerInBounds = true;
+        //        PlayerEnteredBounds?.Invoke();
+        //    }
+        //}
 
         private void OnTriggerExit2D(Collider2D collider)
         {
@@ -154,14 +169,22 @@ namespace RPGPlatformer.Environment
             if (playerInBounds && collider.transform == GlobalGameTools.Instance.PlayerTransform)
             {
                 playerInBounds = false;
-                PlayerExitedBounds?.Invoke();
+                //PlayerExitedBounds?.Invoke();
+            }
+        }
+
+        private void OnPlayerDeath()
+        {
+            if (playerInBounds)
+            {
+                playerInBounds = false;
             }
         }
 
         private void OnDestroy()
         {
             PlayerEnteredBounds = null;
-            PlayerExitedBounds = null;
+            //PlayerExitedBounds = null;
         }
     }
 }

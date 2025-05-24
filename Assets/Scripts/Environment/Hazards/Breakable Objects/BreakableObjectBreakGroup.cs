@@ -49,6 +49,11 @@ namespace RPGPlatformer.Environment
                 p.OnBreak(data);
             }
             Destroy(gameObject, timeToDestroy);
+            //await MiscTools.DelayGameTime(timeToDestroy, token);
+            //if (gameObject)
+            //{
+            //    Destroy(gameObject);
+            //}
         }
     }
 }
