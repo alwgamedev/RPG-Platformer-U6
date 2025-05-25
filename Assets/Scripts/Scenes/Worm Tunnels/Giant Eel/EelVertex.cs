@@ -14,11 +14,15 @@ namespace RPGPlatformer.AIControl
         VisualCurveGuidePoint vcgp;//will be childed to EelVertex, so that EelVertex.pos can be the neutral position
 
         public float WiggleTimer => wiggleTimer;
+        public VisualCurveGuidePoint VisualCurveGuidePoint => vcgp;
 
         private void Awake()
         {
             vcgp = GetComponentInChildren<VisualCurveGuidePoint>();
         }
+
+
+        //ANIMATION
 
         public void InitializeWiggle(int direction, float time)
         {
