@@ -109,6 +109,10 @@ namespace RPGPlatformer.Core
 
         private void SetGoalPositions()
         {
+            if (lineRenderer == null)
+            {
+                lineRenderer = GetComponent<LineRenderer>();
+            }
             if (guidePoints == null || guidePoints.Length < 2) return;
 
             if (goalPositions == null || goalPositions.Length != lineRendererPositionCount)

@@ -7,40 +7,42 @@ namespace RPGPlatformer.AIControl
     public class EelVertex : MonoBehaviour
     {
         public float wiggleMax;
-        public float wiggleSpeed;
+        public float wiggleTime;//time to go from 0 to wiggleMax
         
         int wiggleDirection = 1;//1 = up, -1 = down
-        float wigglePosition;
+        float wiggleTimer;//oscilates between -1 & 1
         VisualCurveGuidePoint vcgp;//will be childed to EelVertex, so that EelVertex.pos can be the neutral position
 
-        public Vector2 CurvePoint => vcgp.Point();
+        public float WiggleTimer => wiggleTimer;
 
         private void Awake()
         {
             vcgp = GetComponentInChildren<VisualCurveGuidePoint>();
         }
 
-        public void InitializeWiggleDirection(int o)
+        public void InitializeWiggle(int direction, float time)
         {
-            wiggleDirection = o;
+            wiggleDirection = direction;
+            wiggleTimer = time;
         }
 
-        //u = body direction (normalized); wiggle will be perpendicular to u
-        //actually u might be direction between two adjecent vertices (v[i-1] & v[i+1])
-        public void UpdateWiggle(Vector2 u, HorizontalOrientation o, float dt)
+        public void UpdateWiggle(Vector2 leadBodyPosition, float leadWiggleTimer, HorizontalOrientation o, float dt)
         {
-            if (wigglePosition * wiggleDirection > wiggleMax)
+            var u = (leadBodyPosition - (Vector2)transform.position).normalized;
+            var v = ((int)o) * u.CCWPerp();
+            var z = 1 / Mathf.Sqrt(1 + leadWiggleTimer * leadWiggleTimer);
+            //because sin'(x) = sin(x + pi/2), slope of the eel's curve at vertex[i]
+            //should be vertex[i - 1].leadWiggletimer,
+            //so tangent vector should be (z, leadWiggleTimer * z) (in the basis u,v, with z as above)
+
+            if (wiggleTimer * wiggleDirection > wiggleTime)
             {
                 wiggleDirection *= -1;
             }
 
-            wigglePosition += wiggleDirection * wiggleSpeed * dt;
-            vcgp.SetPoint((Vector2)transform.position + ((int)o) * wigglePosition * u.CCWPerp());
-            vcgp.SetTangentDir(u);
-            //we can either use vcg "tangent weight" to uniformly scale the tangents
-            //or scale them individually
-            //actually a good idea might be to scale tangent with or inversely to wigglePosition
-            //(although this could be unnecessary overkill)
+            wiggleTimer += wiggleDirection * dt;
+            vcgp.SetPoint((Vector2)transform.position + wiggleTimer * wiggleMax * v);
+            vcgp.SetTangentDir(z * u + leadWiggleTimer * z * v);
         }
     }
 }

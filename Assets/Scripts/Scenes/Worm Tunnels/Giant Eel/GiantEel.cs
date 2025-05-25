@@ -6,8 +6,6 @@ namespace RPGPlatformer.AIControl
     public class GiantEel : MonoBehaviour
     {
         [SerializeField] EelVertex[] vertices;
-        //[SerializeField] float testWiggleSpeed;
-        //[SerializeField] float testWiggleMax;
 
         HorizontalOrientation currentOrientation;
 
@@ -17,9 +15,8 @@ namespace RPGPlatformer.AIControl
 
             for (int i = 1; i < vertices.Length; i++)
             {
-                vertices[i].InitializeWiggleDirection(2 * (i % 2) - 1);
-                //vertices[i].wiggleMax = testWiggleMax;
-                //vertices[i].wiggleSpeed = testWiggleSpeed;
+                var d = 2 * ((i + 1) / 2 % 2) - 1;
+                vertices[i].InitializeWiggle(d, d * (i % 2));
             }
         }
 
@@ -30,16 +27,11 @@ namespace RPGPlatformer.AIControl
 
         private void UpdateWiggle(float dt)
         {
-            //exclude v[0] (head) from wiggle
-            Vector2 u;
-            for (int i = 1; i < vertices.Length - 1; i++)
+            for (int i = 1; i < vertices.Length; i++)
             {
-                u = (vertices[i - 1].transform.position - vertices[i + 1].transform.position).normalized;
-                vertices[i].UpdateWiggle(u, currentOrientation, dt);
+                vertices[i].UpdateWiggle(vertices[i - 1].transform.position, vertices[i - 1].WiggleTimer, 
+                    currentOrientation, dt);
             }
-
-            u = (vertices[^2].transform.position - vertices[^1].transform.position).normalized;
-            vertices[^1].UpdateWiggle(u, currentOrientation, dt);
         }
     }
 }

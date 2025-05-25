@@ -78,8 +78,10 @@ namespace RPGPlatformer
 
         private void OnValidate()
         {
+            _guides = guides;
             ReconfigureIKEffects();
             ReconfigureBounds();
+            UpdateRendererGuidePoints();
             //SetLengthScale(lengthScale);
         }
 
