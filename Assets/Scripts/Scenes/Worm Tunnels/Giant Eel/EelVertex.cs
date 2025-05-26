@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
+using System;
+using RPGPlatformer.Combat;
 
 namespace RPGPlatformer.AIControl
 {
@@ -17,14 +19,26 @@ namespace RPGPlatformer.AIControl
 
         public float WiggleTimer { get; private set; }
         public VisualCurveGuidePoint VCGP { get; private set; }
+        public CollisionMessenger CollisionMessenger { get; private set; }
         public CapsuleCollider2D Collider { get; private set; }
         public ParticleSystem ParticleSystem { get; private set; }
+
+        public event Action<Vector2> ShockTrigger;
 
         private void Awake()
         {
             VCGP = GetComponentInChildren<VisualCurveGuidePoint>();
+            CollisionMessenger = GetComponentInChildren<CollisionMessenger>();
             Collider = GetComponentInChildren<CapsuleCollider2D>();
             ParticleSystem = GetComponentInChildren<ParticleSystem>();
+        }
+
+        private void Start()
+        {
+            if (CollisionMessenger)
+            {
+                CollisionMessenger.CollisionEnter += OnCollision;
+            }
         }
 
         public void Configure(EelVertex leader, EelVertex follower, float spacing)
@@ -92,6 +106,20 @@ namespace RPGPlatformer.AIControl
             {
                 ParticleSystem.transform.right = VCGP.Point() - follower.VCGP.Point();
             }
+        }
+
+        private void OnCollision(Collision2D collision)
+        {
+            if (collision.transform == GlobalGameTools.Instance.PlayerTransform
+                && !GlobalGameTools.Instance.PlayerIsDead)
+            {
+                ShockTrigger?.Invoke(collision.GetContact(0).normal);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            ShockTrigger = null;
         }
     }
 }

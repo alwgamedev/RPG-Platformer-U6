@@ -2,10 +2,13 @@
 using RPGPlatformer.Movement;
 using RPGPlatformer.Core;
 using UnityEngine.UIElements;
+using System.Threading.Tasks;
+using System.Threading;
+using RPGPlatformer.Combat;
 
 namespace RPGPlatformer.AIControl
 {
-    public class GiantEel : MonoBehaviour
+    public class GiantEel : MonoBehaviour, IDamageDealer
     {
         [SerializeField] float vertexSpacing = .25f;
         [SerializeField] float turnSpeed = 2;
@@ -14,12 +17,17 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float moveSpeed;
         [SerializeField] EelVertex[] vertices;
         [SerializeField] RandomizableVector2 movementBounds;
+        [SerializeField] float shockForce;
+        [SerializeField] float shockDamage;
+        [SerializeField] int shockBleedHits;
+        [SerializeField] float shockBleedRate;
 
         LineRenderer lineRenderer;
         Vector2 moveDirection;
         Vector2 currentDestination;
 
-        HorizontalOrientation currentOrientation => (HorizontalOrientation)Mathf.Sign(-lineRenderer.textureScale.y);
+        HorizontalOrientation CurrentOrientation => (HorizontalOrientation)Mathf.Sign(-lineRenderer.textureScale.y);
+        public CombatStyle CurrentCombatStyle => CombatStyle.Unarmed;
 
         private void Awake()
         {
@@ -35,6 +43,11 @@ namespace RPGPlatformer.AIControl
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                PlayBodyParticles();
+            }
+
             UpdateWiggle();
             LerpMoveDirection(currentDestination);
             UpdateMovement();
@@ -44,6 +57,9 @@ namespace RPGPlatformer.AIControl
             }
         }
 
+
+        //SETUP
+
         private void ConfigureVertices()
         {
             for (int i = 0; i < vertices.Length; i++)
@@ -51,13 +67,16 @@ namespace RPGPlatformer.AIControl
                 var leader = i > 0 ? vertices[i - 1] : null;
                 var follower = i < vertices.Length - 1 ? vertices[i + 1] : null;
                 vertices[i].Configure(leader, follower, vertexSpacing);
-                //vertices[i].transform.position = vertices[i - 1].transform.position - vertexSpacing * Vector3.right;
-                //var s = vertices[i].Collider.size;
-                //s.x = vertexSpacing;
-                //vertices[i].Collider.size = s;
-                //vertices[i].Collider.offset = new(vertexSpacing / 2, 0);
+            }
+
+            foreach (var v in vertices)
+            {
+                v.ShockTrigger += OnShockTrigger;
             }
         }
+
+
+        //ANIMATION & EFFECTS
 
         private void InitializeWiggle()
         {
@@ -72,9 +91,38 @@ namespace RPGPlatformer.AIControl
         {
             for (int i = 1; i < vertices.Length; i++)
             {
-                vertices[i].UpdateWiggle(currentOrientation, Time.deltaTime);
+                vertices[i].UpdateWiggle(CurrentOrientation, Time.deltaTime);
             }
         }
+
+        private void PlayBodyParticles()
+        {
+            foreach (var v in vertices)
+            {
+                if (v.ParticleSystem)
+                {
+                    v.ParticleSystem.Play();
+                }
+            }
+        }
+
+        private async void OnShockTrigger(Vector2 collisionNormal)
+        {
+            await ShockTask(collisionNormal);
+        }
+
+        private async Task ShockTask(Vector2 collisionNormal)
+        {
+            var p = GlobalGameTools.Instance.Player;
+            var pRb = ((Mover)((IMovementController)p.MovementController).Mover).Rigidbody;
+            PlayBodyParticles();
+            pRb.AddForce(-pRb.mass * shockForce * collisionNormal, ForceMode2D.Impulse);
+            await AttackAbility.Bleed(this, p.Combatant.Health, shockDamage,
+                shockBleedHits, shockBleedRate);
+        }
+
+
+        //MOVEMENT CONTROL
 
         private void LerpMoveDirection(Vector2 destination)
         {
@@ -95,7 +143,7 @@ namespace RPGPlatformer.AIControl
             }
 
             var d = vertices[0].transform.position.x - vertices[1].transform.position.x;
-            if (d * (int)currentOrientation < changeDirectionThreshold)
+            if (d * (int)CurrentOrientation < changeDirectionThreshold)
             {
                 ChangeOrientation();
             }
