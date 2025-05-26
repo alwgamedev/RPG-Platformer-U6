@@ -28,7 +28,7 @@ namespace RPGPlatformer.AIControl
 
         private void Start()
         {
-            InitializeVertexPositions();
+            ConfigureVertices();
             InitializeWiggle();
             currentDestination = movementBounds.Value;
         }
@@ -44,11 +44,18 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        private void InitializeVertexPositions()
+        private void ConfigureVertices()
         {
-            for (int i = 1; i < vertices.Length; i++)
+            for (int i = 0; i < vertices.Length; i++)
             {
-                vertices[i].transform.position = vertices[i - 1].transform.position - vertexSpacing * Vector3.right;
+                var leader = i > 0 ? vertices[i - 1] : null;
+                var follower = i < vertices.Length - 1 ? vertices[i + 1] : null;
+                vertices[i].Configure(leader, follower, vertexSpacing);
+                //vertices[i].transform.position = vertices[i - 1].transform.position - vertexSpacing * Vector3.right;
+                //var s = vertices[i].Collider.size;
+                //s.x = vertexSpacing;
+                //vertices[i].Collider.size = s;
+                //vertices[i].Collider.offset = new(vertexSpacing / 2, 0);
             }
         }
 
@@ -65,8 +72,7 @@ namespace RPGPlatformer.AIControl
         {
             for (int i = 1; i < vertices.Length; i++)
             {
-                vertices[i].UpdateWiggle(vertices[i - 1].transform.position, vertices[i - 1].WiggleTimer, 
-                    currentOrientation, Time.deltaTime);
+                vertices[i].UpdateWiggle(currentOrientation, Time.deltaTime);
             }
         }
 
@@ -74,7 +80,7 @@ namespace RPGPlatformer.AIControl
         {
             Vector2 u = (destination - (Vector2)vertices[0].transform.position).normalized;
             moveDirection = Vector2.Lerp(moveDirection, u, Time.deltaTime * turnSpeed).normalized;
-            vertices[0].VisualCurveGuidePoint.SetTangentDir(moveDirection);
+            vertices[0].VCGP.SetTangentDir(moveDirection);
             //or we could just have vertices[0] tang direction be 0 always
         }
 
@@ -92,6 +98,11 @@ namespace RPGPlatformer.AIControl
             if (d * (int)currentOrientation < changeDirectionThreshold)
             {
                 ChangeOrientation();
+            }
+
+            foreach (var v in vertices)
+            {
+                v.UpdateParticleSystemRotation();
             }
         }
 
