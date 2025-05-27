@@ -7892,7 +7892,7 @@ Transform:
   m_GameObject: {fileID: 1838831494}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.38, y: 0.16, z: 0}
+  m_LocalPosition: {x: -5.95, y: -1.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7972,7 +7972,7 @@ Transform:
   m_GameObject: {fileID: 2139563478}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.23, y: 0.79, z: 0}
+  m_LocalPosition: {x: 10.28, y: 0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7987,6 +7987,22 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1087362208993036362, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: moveSpeed
+      value: 1.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 1087362208993036362, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: turnSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1087362208993036362, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: boundsBuffer
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1087362208993036362, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: turnOppositeThreshold
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1087362208993036362, guid: d213763c5cedd514589ccb058698dadd, type: 3}
       propertyPath: movementBounds.maxTransform
       value: 
       objectReference: {fileID: 2139563479}
@@ -7997,6 +8013,38 @@ PrefabInstance:
     - target: {fileID: 1761220674813688474, guid: d213763c5cedd514589ccb058698dadd, type: 3}
       propertyPath: m_Name
       value: Giant Eel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8025,6 +8073,14 @@ PrefabInstance:
     - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.381
+      objectReference: {fileID: 0}
+    - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -8.897
       objectReference: {fileID: 0}
     - target: {fileID: 2856112245456305702, guid: d213763c5cedd514589ccb058698dadd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

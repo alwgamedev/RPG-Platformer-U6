@@ -76,7 +76,9 @@ namespace RPGPlatformer.AIControl
         public void UpdateWiggle(HorizontalOrientation o, float dt)
         {
             if (!leader) return;
-            var u = ((Vector2)leader.transform.position - (Vector2)transform.position).normalized;
+            Vector2 p = follower ? follower.transform.position : transform.position;
+            Vector2 q = leader ? leader.transform.position : transform.position; 
+            var u = (q - p).normalized;
             var v = ((int)o) * u.CCWPerp();
             var z = 1 / Mathf.Sqrt(1 + leader.WiggleTimer * leader.WiggleTimer);
             //because sin'(x) = sin(x + pi/2), slope of the eel's curve at vertex[i]
@@ -94,6 +96,17 @@ namespace RPGPlatformer.AIControl
             WiggleTimer += wiggleDirection * dt;
             VCGP.SetPoint((Vector2)transform.position + WiggleTimer * wiggleMax * v);
             VCGP.SetTangentDir(z * u + leader.WiggleTimer * z * v);
+            //p = follower ? follower.VCGP.Point() : VCGP.Point();
+            //q = leader ? leader.VCGP.Point() : VCGP.Point();
+            //VCGP.SetTangentDir(q - p);
+        }
+
+        public void EnforceBounds(RandomizableVector2 b, float buffer)
+        {
+            var p = transform.position;
+            p.x = Mathf.Clamp(p.x, b.Min.x - buffer, b.Max.x + buffer);
+            p.y = Mathf.Clamp(p.y, b.Min.y - buffer, b.Max.y + buffer);
+            transform.position = p;
         }
 
         public void UpdateParticleSystemRotation()

@@ -28,6 +28,8 @@ namespace RPGPlatformer.Core
             }
         }
 
+        public Vector2 Midpoint => 0.5f * (Min + Max);
+
         public Vector2 Min =>
             boundsSource == RandomizableVectorBoundsSource.Transform ? minTransform.position : minPosition;
 
