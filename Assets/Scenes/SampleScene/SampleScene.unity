@@ -8181,13 +8181,25 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3777771460061379425, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
+      propertyPath: poolsData.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3777771460061379425, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
       propertyPath: poolData.Array.data[0].poolSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3777771460061379425, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
+      propertyPath: poolsData.Array.data[0].poolSize
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 3777771460061379425, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
       propertyPath: poolData.Array.data[0].pooledObject
       value: 
       objectReference: {fileID: 663186611169696029, guid: 8388202dc4933414bb5cf6d7c7b27698, type: 3}
+    - target: {fileID: 3777771460061379425, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
+      propertyPath: poolsData.Array.data[0].pooledObject
+      value: 
+      objectReference: {fileID: 7260304636975102721, guid: e3b5dfc759e734046b93cf632f562004, type: 3}
     - target: {fileID: 7017891467700708507, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 17.650274
@@ -8228,6 +8240,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8072378975923877246, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
+      propertyPath: poolsData.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8072378975923877246, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
+      propertyPath: poolsData.Array.data[0].poolSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8072378975923877246, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
+      propertyPath: poolsData.Array.data[0].pooledObject
+      value: 
+      objectReference: {fileID: 7260304636975102721, guid: e3b5dfc759e734046b93cf632f562004, type: 3}
     - target: {fileID: 8396491329099951506, guid: 6881b265094f8464d8466a9dc95658e9, type: 3}
       propertyPath: m_Name
       value: Scene Tools

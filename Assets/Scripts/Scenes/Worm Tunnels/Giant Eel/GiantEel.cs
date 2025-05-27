@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using System.Threading.Tasks;
 using System.Threading;
 using RPGPlatformer.Combat;
+using RPGPlatformer.Effects;
 
 namespace RPGPlatformer.AIControl
 {
@@ -118,7 +119,17 @@ namespace RPGPlatformer.AIControl
             PlayBodyParticles();
             pRb.AddForce(-pRb.mass * shockForce * collisionNormal, ForceMode2D.Impulse);
             await AttackAbility.Bleed(this, p.Combatant.Health, shockDamage,
-                shockBleedHits, shockBleedRate);
+                shockBleedHits, shockBleedRate, null, ShockHitEffect);
+        }
+
+        private PoolableEffect ShockHitEffect()
+        {
+            if (SceneResourcesPooler.Instance)
+            {
+                return (PoolableEffect)SceneResourcesPooler.Instance.EffectPooler.GetObject("Shock Hit Particles");
+            }
+
+            return null;
         }
 
 

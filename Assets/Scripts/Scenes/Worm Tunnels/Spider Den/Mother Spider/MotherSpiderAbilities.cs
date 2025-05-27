@@ -94,9 +94,9 @@ namespace RPGPlatformer.Combat
                 {
                     //temporary just while testing mother spider in other scenes.
                     Projectile p = null;
-                    if (SceneCombatResources.Instance && SceneCombatResources.Instance.ProjectilePooler)
+                    if (SceneResourcesPooler.Instance && SceneResourcesPooler.Instance.ProjectilePooler)
                     {
-                        p = (Projectile)SceneCombatResources.Instance.ProjectilePooler.GetObject("Mother Spider Spit Projectile");
+                        p = (Projectile)SceneResourcesPooler.Instance.ProjectilePooler.GetObject("Mother Spider Spit Projectile");
                     }
                     if (!p)
                     {

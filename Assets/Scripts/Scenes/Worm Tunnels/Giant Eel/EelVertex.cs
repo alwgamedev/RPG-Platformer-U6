@@ -82,6 +82,7 @@ namespace RPGPlatformer.AIControl
             //because sin'(x) = sin(x + pi/2), slope of the eel's curve at vertex[i]
             //should be vertex[i - 1].leadWiggletimer,
             //so tangent vector should be (z, leadWiggleTimer * z) (in the basis u,v, with z as above)
+            //**WELL because of variable amplitude we need to fix this still
 
             Collider.transform.right = u;
 
@@ -93,11 +94,6 @@ namespace RPGPlatformer.AIControl
             WiggleTimer += wiggleDirection * dt;
             VCGP.SetPoint((Vector2)transform.position + WiggleTimer * wiggleMax * v);
             VCGP.SetTangentDir(z * u + leader.WiggleTimer * z * v);
-
-            //if (ParticleSystem)
-            //{
-            //    ParticleSystem.transform.right = leader.VCGP.Point() - VCGP.Point();
-            //}
         }
 
         public void UpdateParticleSystemRotation()
