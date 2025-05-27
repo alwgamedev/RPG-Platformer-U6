@@ -108,11 +108,7 @@ namespace RPGPlatformer.Movement
             else 
             {
                 stateManager.AnimateSwinging(SwingSpeedFraction());
-
-                if (!InSwingMode())
-                {
-                    stateManager.AnimateClimbing(MoveInput.x);
-                }
+                stateManager.AnimateClimbing(InSwingMode() ? 0 : MoveInput.x);
             }
         }
 

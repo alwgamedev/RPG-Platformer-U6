@@ -14,9 +14,14 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float changeDirectionThreshold = -0.125f;
         [SerializeField] float turnOppositeThreshold = 0.25f;
         [SerializeField] float boundsBuffer = 0.25f;
+        //^how far outside movementBounds vertices are allowed to go
+        //(so destination will always be chosen within movementBounds, but to make sure
+        //he has room to flex a little around the destination, the movementBounds will be a bit inset
+        //from where he is really allowed to go)
         [SerializeField] float destinationToleranceSqrd = .01f;
-        [SerializeField] float moveSpeed;
-        //[SerializeField] RandomizableFloat pursuitCooldown;
+        [SerializeField] float baseMoveSpeed = 1.5f;
+        [SerializeField] float pursuitMoveSpeed = 3;
+        [SerializeField] float acceleration = 1;
         [SerializeField] EelVertex[] vertices;
         [SerializeField] RandomizableVector2 movementBounds;
         [SerializeField] float shockForce;
@@ -29,6 +34,7 @@ namespace RPGPlatformer.AIControl
         Vector2 currentDestination;
         //float pursuitCooldownTimer;
         Vector3 playerHeightOffset;
+        float currentMoveSpeed;
 
         //choosing destinations a bit inset from bounds helps him avoid making tight turns near the 
         //edges of bounds
@@ -47,6 +53,7 @@ namespace RPGPlatformer.AIControl
         private void Awake()
         {
             lineRenderer = GetComponent<LineRenderer>();
+            currentMoveSpeed = baseMoveSpeed;
         }
 
         private void Start()
@@ -73,6 +80,14 @@ namespace RPGPlatformer.AIControl
             if (PlayerInBounds() /*&& pursuitCooldownTimer <= 0*/)
             {
                 currentDestination = PlayerTargetPosition();
+                if (currentMoveSpeed != pursuitMoveSpeed)
+                {
+                    currentMoveSpeed = Mathf.Lerp(currentMoveSpeed, pursuitMoveSpeed, acceleration * Time.deltaTime);
+                }
+            }
+            else if (currentMoveSpeed != baseMoveSpeed)
+            {
+                currentMoveSpeed = Mathf.Lerp(currentMoveSpeed, baseMoveSpeed, acceleration * Time.deltaTime);
             }
             LerpMoveDirection(currentDestination);
             UpdateMovement();
@@ -198,7 +213,7 @@ namespace RPGPlatformer.AIControl
         private void UpdateMovement()
         {
             Vector3 u;
-            vertices[0].transform.position += Time.deltaTime * moveSpeed * (Vector3)moveDirection;
+            vertices[0].transform.position += Time.deltaTime * currentMoveSpeed * (Vector3)moveDirection;
             for (int i = 1; i < vertices.Length; i++)
             {
                 u = (vertices[i].transform.position - vertices[i - 1].transform.position).normalized;

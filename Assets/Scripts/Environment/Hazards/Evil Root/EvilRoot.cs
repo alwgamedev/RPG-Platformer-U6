@@ -309,7 +309,7 @@ namespace RPGPlatformer.Environment
         {
             var t = GlobalGameTools.Instance.Player.MovementController.CurrentOrientation
                     == HorizontalOrientation.left;
-            if (MiscTools.rng.Next(0, 5) == 0)//25% chance of throwing in the wrong direction
+            if (MiscTools.rng.Next() < .05)//5% chance of throwing in the wrong direction
             {
                 t = !t;
             }
