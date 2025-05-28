@@ -18,6 +18,8 @@ namespace RPGPlatformer.AIControl
         //(so destination will always be chosen within movementBounds, but to make sure
         //he has room to flex a little around the destination, the movementBounds will be a bit inset
         //from where he is really allowed to go)
+        [SerializeField] bool hasPursuitRange;
+        [SerializeField] float pursuitRangeSqrd = 6.25f;
         [SerializeField] float destinationToleranceSqrd = .01f;
         [SerializeField] float baseMoveSpeed = 1.5f;
         [SerializeField] float pursuitMoveSpeed = 3;
@@ -77,7 +79,7 @@ namespace RPGPlatformer.AIControl
             //    pursuitCooldownTimer -= Time.deltaTime;
             //}
 
-            if (PlayerInBounds() /*&& pursuitCooldownTimer <= 0*/)
+            if (ShouldPursuePlayer())
             {
                 currentDestination = PlayerTargetPosition();
                 if (currentMoveSpeed != pursuitMoveSpeed)
@@ -250,14 +252,28 @@ namespace RPGPlatformer.AIControl
                 < destinationToleranceSqrd;
         }
 
-        private bool PlayerInBounds()
+        private bool ShouldPursuePlayer()
         {
             if (GlobalGameTools.Instance.PlayerIsDead) return false;
+
             var p = PlayerTargetPosition();
-            return p.x > movementBounds.Min.x - boundsBuffer 
-                && p.x < movementBounds.Max.x + boundsBuffer
-                && p.y > movementBounds.Min.y - boundsBuffer 
-                && p.y < movementBounds.Max.y + boundsBuffer;
+            return PlayerInBounds(p) && InPursuitRange(p);
+        }
+
+        private bool PlayerInBounds(Vector2 playerTargetPos)
+        {
+            return playerTargetPos.x > movementBounds.Min.x - boundsBuffer 
+                && playerTargetPos.x < movementBounds.Max.x + boundsBuffer
+                && playerTargetPos.y > movementBounds.Min.y - boundsBuffer 
+                && playerTargetPos.y < movementBounds.Max.y + boundsBuffer;
+        }
+
+        private bool InPursuitRange(Vector2 playerTargetPos)
+        {
+            if (!hasPursuitRange) return true;
+
+            return Vector2.SqrMagnitude(playerTargetPos - (Vector2)vertices[0].transform.position)
+                < pursuitRangeSqrd;
         }
 
         private Vector2 PlayerTargetPosition()
