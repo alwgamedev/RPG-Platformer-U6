@@ -1,6 +1,5 @@
 ﻿using RPGPlatformer.Combat;
-using RPGPlatformer.Dialogue;
-using RPGPlatformer.SceneManagement;
+using RPGPlatformer.Movement;
 using System;
 using System.Threading;
 using UnityEngine;
@@ -15,34 +14,38 @@ namespace RPGPlatformer.Core
         [SerializeField] ObjectPoolCollection effectPooler;
 
         Transform playerTransform;
+        IMovementController playerMover;
         ICombatController playerCC;
 
         public static GlobalGameTools Instance { get; private set; }
         public static string PlayerName { get; private set; } = "Player";
-        public Transform PlayerTransform
-        {
-            get
-            {
-                if (playerTransform == null)
-                {
-                    FindPlayer();
-                }
+        public Transform PlayerTransform => playerTransform;
+        //{
+        //    //this is in case something needs player before GGT has done Awake, I guess?
+        //    //that's terrible because FindPlayer includes subscribing to an event??
+        //    get
+        //    {
+        //        if (playerTransform == null)
+        //        {
+        //            FindPlayer();
+        //        }
 
-                return playerTransform;
-            }
-        }
-        public ICombatController Player
-        {
-            get
-            {
-                if (playerCC == null)
-                {
-                    FindPlayer();
-                }
+        //        return playerTransform;
+        //    }
+        //}
+        public IMovementController PlayerMover => playerMover;
+        public ICombatController Player => playerCC;
+        //{
+        //    get
+        //    {
+        //        if (playerCC == null)
+        //        {
+        //            FindPlayer();
+        //        }
 
-                return playerCC;
-            }
-        }
+        //        return playerCC;
+        //    }
+        //}
         public bool PlayerIsDead => Player == null || Player.Combatant.Health.IsDead;
         //public static bool PlayerIsInCombat => Player != null && Player.IsInCombat;
         public CancellationTokenSource TokenSource {  get; private set; }
@@ -77,34 +80,37 @@ namespace RPGPlatformer.Core
         private void Configure()
         {
             TokenSource = new();
-
             TickTimer = GetComponent<TickTimer>();
-
-            //ProjectilePooler = GameObject.Find("Projectile Pooler").GetComponent<ObjectPoolCollection>();
-            //EffectPooler = GameObject.Find("Effect Pooler").GetComponent<ObjectPoolCollection>();
-
             resourcesManager.InitializeResources();
-
             FindPlayer();
         }
 
         private void FindPlayer()
         {
             var playerGO = GameObject.FindWithTag("Player");
+            playerTransform = playerGO.transform;
+            playerMover = playerTransform.GetComponent<IMovementController>();
+            playerCC = playerGO.GetComponent<ICombatController>();
+            playerCC.OnDeath += BroadcastPlayerDeath;
+            playerGO.GetComponent<ICombatant>().DeathFinalized += BroadcastPlayerDeathFinalized;
+            //***get comp instead of playerCC.Combatant, because the playerCC awake may come after GGT's,
+            //which means the playerCC won't have found its combatant yet
 
-            if (playerGO)
-            {
-                playerCC = playerGO.GetComponent<ICombatController>();
-                playerTransform = playerGO.transform;
-                if (playerCC != null)
-                {
-                    playerCC.OnDeath += BroadcastPlayerDeath;
-                    //playerCC.Combatant.DeathFinalized += BroadcastPlayerDeathFinalized;
-                    playerGO.GetComponent<ICombatant>().DeathFinalized += BroadcastPlayerDeathFinalized;
-                    //^get comp because the playerCC awake may come after GGT's, which means the playerCC
-                    //won't have found its combatant yet
-                }
-            }
+            //var playerGO = GameObject.FindWithTag("Player");
+
+            //if (playerGO)
+            //{
+            //    playerCC = playerGO.GetComponent<ICombatController>();
+            //    playerTransform = playerGO.transform;
+            //    if (playerCC != null)
+            //    {
+            //        playerCC.OnDeath += BroadcastPlayerDeath;
+            //        //playerCC.Combatant.DeathFinalized += BroadcastPlayerDeathFinalized;
+            //        playerGO.GetComponent<ICombatant>().DeathFinalized += BroadcastPlayerDeathFinalized;
+            //        //^get comp because the playerCC awake may come after GGT's, which means the playerCC
+            //        //won't have found its combatant yet
+            //    }
+            //}
         }
 
         private void BroadcastPlayerDeath()
