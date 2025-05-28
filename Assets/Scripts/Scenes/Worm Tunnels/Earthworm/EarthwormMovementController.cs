@@ -12,6 +12,7 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float destinationTolerance = 0.1f;
         [SerializeField] ParticleSystem tunnelingParticles;
         [SerializeField] PolygonCollider2D groundCollider;
+        [SerializeField] RandomizableVector2 groundBounds;
 
         Vector3 destination;
         float moveSpeed;
@@ -26,9 +27,9 @@ namespace RPGPlatformer.AIControl
         public Vector3 BodyAnchorOffset => bodyAnchor.position - transform.position;
         public PolygonCollider2D GroundCollider => groundCollider;
         public int GroundLayer => groundLayer;
-        public float GroundLeftBound => groundCollider.bounds.min.x + 0.5f;//giving a little padding for safety
-        public float GroundRightBound => groundCollider.bounds.max.x - 0.5f;
-        public float GroundTopBound => groundCollider.bounds.center.y + groundCollider.bounds.size.y;
+        public float GroundLeftBound => groundBounds.Min.x;//groundCollider.bounds.min.x + 0.5f;//giving a little padding for safety
+        public float GroundRightBound => groundBounds.Max.x;//groundCollider.bounds.max.x - 0.5f;
+        public float GroundTopBound => groundBounds.Max.y;//groundCollider.bounds.center.y + groundCollider.bounds.size.y;
         //higher than any point on the ground collider
 
         public event Action DestinationReached;

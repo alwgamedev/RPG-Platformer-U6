@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: 8244550270408134216}
   - component: {fileID: 7847680296851163206}
   - component: {fileID: 2082181269679480034}
+  - component: {fileID: 6823015054336766348}
   m_Layer: 6
   m_Name: Rhino Beetle
   m_TagString: Enemy
@@ -384,7 +385,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Rhino Beetle
-  targetLayer: Player
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -467,6 +467,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4df54fd93182014ca715844d31d17ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6823015054336766348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4640224479810571276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504526017ed37ae4b82a7ff7ee5186a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snapSpawnPositionToGround: 1
+  spawnHeightBuffer: 0
+  patrollerTransform: {fileID: 0}
 --- !u!1 &6277706183260746356
 GameObject:
   m_ObjectHideFlags: 0

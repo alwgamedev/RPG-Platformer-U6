@@ -228,7 +228,9 @@ namespace RPGPlatformer.AIControl
 
         public async Task PursueTarget(CancellationToken token)
         {
-            var p = new Vector2(CurrentTarget.transform.position.x, GroundTopBound);
+            var x = Mathf.Clamp(CurrentTarget.transform.position.x, movementController.GroundLeftBound,
+                movementController.GroundRightBound);
+            var p = new Vector2(x, GroundTopBound);
             var q = GroundCollider.ClosestPoint(p);
             SetWormholePosition(q);
             await TunnelTowardsAnchor(token);
@@ -280,7 +282,7 @@ namespace RPGPlatformer.AIControl
 
         public void ChooseRandomWormholePosition()
         {
-            ChooseRandomWormholePosition(GroundLeftBound + 0.5f, GroundRightBound - 0.5f);
+            ChooseRandomWormholePosition(GroundLeftBound, GroundRightBound);
         }
 
         public void ChooseRandomWormholePosition(float leftXBd, float rightXBd)
