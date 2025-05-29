@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
 using UnityEngine;
@@ -13,6 +15,7 @@ namespace RPGPlatformer.AIControl
         [SerializeField] ParticleSystem tunnelingParticles;
         [SerializeField] PolygonCollider2D groundCollider;
         [SerializeField] RandomizableVector2 groundBounds;
+        [SerializeField] float rotationalSpeed = 3;
 
         Vector3 destination;
         float moveSpeed;
@@ -32,6 +35,7 @@ namespace RPGPlatformer.AIControl
         public float GroundTopBound => groundBounds.Max.y;//groundCollider.bounds.center.y + groundCollider.bounds.size.y;
         //higher than any point on the ground collider
 
+        event Action Destroyed;
         public event Action DestinationReached;
         public event Action<HorizontalOrientation> DirectionChanged;
 
@@ -141,6 +145,47 @@ namespace RPGPlatformer.AIControl
             }
         }
 
+        public async Task RotateContinuouslyTowardsGroundDirection(CancellationToken token)
+        {
+            //all looks pretty silly, but I just want to be safe
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+
+            try
+            {
+                Destroyed += cts.Cancel;
+                while (transform)
+                { 
+                    RotateTowardsGroundDirection();
+                    await Task.Yield();
+                    if (cts.IsCancellationRequested)
+                    {
+                        throw new TaskCanceledException();
+                    }
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                Destroyed -= cts.Cancel;
+            }
+        }
+
+        public void RotateTowardsGroundDirection()
+        {
+            var oR = new Vector2(transform.position.x + 0.2f, GroundTopBound);
+            var oL = new Vector2(transform.position.x - 0.2f, GroundTopBound);
+            var hitR = Physics2D.Raycast(oR, -Vector2.up, Mathf.Infinity, groundLayer);
+            var hitL = Physics2D.Raycast(oL, -Vector2.up, Mathf.Infinity, groundLayer);
+            if (hitR && hitL)
+            {
+                var d = (hitR.point - hitL.point).normalized;
+                transform.TweenTransformUpTowards(d.CCWPerp(), rotationalSpeed * Time.deltaTime);
+            }
+        }
+
         public void OnInputEnabled() { }
 
         public void OnInputDisabled() { }
@@ -154,6 +199,9 @@ namespace RPGPlatformer.AIControl
 
         private void OnDestroy()
         {
+            Destroyed?.Invoke();
+
+            Destroyed = null;
             MoveAction = null;
             DestinationReached = null;
             DirectionChanged = null;

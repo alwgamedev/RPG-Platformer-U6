@@ -43,14 +43,7 @@ namespace RPGPlatformer.Combat
                 stat.statBar = GetComponentInChildren<StatBarItem>();
             }
 
-            if (hitEffectTransformOverride)
-            {
-                HitEffectTransform = hitEffectTransformOverride;
-            }
-            else
-            {
-                HitEffectTransform = transform;
-            }
+            HitEffectTransform = hitEffectTransformOverride ? hitEffectTransformOverride : transform;
         }
 
         private void Start()

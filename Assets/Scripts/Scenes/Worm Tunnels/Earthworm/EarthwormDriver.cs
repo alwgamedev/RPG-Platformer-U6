@@ -115,6 +115,15 @@ namespace RPGPlatformer.AIControl
             }
         }
 
+        public void SetHitEffectsActive(bool val)
+        {
+            var t = combatController.Combatant.Health.HitEffectTransform;
+            if (t != transform && val != t.gameObject.activeSelf)
+            {
+                t.gameObject.SetActive(val);
+            }
+        }
+
         private void OnWormholeTriggered(Collider2D collider)
         {
             if (collider.transform == CurrentTarget.transform)
@@ -176,6 +185,12 @@ namespace RPGPlatformer.AIControl
             slamDustParticles.Play();
         }
 
+        public async void BeginDeathRotation()
+        {
+            await movementController
+                .RotateContinuouslyTowardsGroundDirection(GlobalGameTools.Instance.TokenSource.Token);
+        }
+
 
         //STATE BEHAVIORS
 
@@ -233,7 +248,7 @@ namespace RPGPlatformer.AIControl
             var p = new Vector2(x, GroundTopBound);
             var q = GroundCollider.ClosestPoint(p);
             SetWormholePosition(q);
-            await TunnelTowardsAnchor(token);
+            await TunnelTowardsWormhole(token);
         }
 
         //making this separate so that handler of the pursuit -> aboveground transition 
@@ -337,7 +352,7 @@ namespace RPGPlatformer.AIControl
             }
         }
 
-        public async Task TunnelTowardsAnchor(CancellationToken token)
+        public async Task TunnelTowardsWormhole(CancellationToken token)
         {
             TaskCompletionSource<object> tcs = new();
             using var reg = token.Register(Cancel);

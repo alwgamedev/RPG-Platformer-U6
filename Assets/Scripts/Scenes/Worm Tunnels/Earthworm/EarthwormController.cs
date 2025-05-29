@@ -49,10 +49,19 @@ namespace RPGPlatformer.AIControl
             stateManager.StateGraph.aboveGround.OnExit += OnAboveGroundExit;
             stateManager.StateGraph.pursuit.OnEntry += async () => await OnPursuitEntry();
             stateManager.StateGraph.retreat.OnEntry += async () => await OnRetreatEntry();
+            stateManager.StateMachine.StateChange += DisableHitEffects;
         }
 
 
         //STATE TRANSITION HANDLERS
+
+        private void DisableHitEffects(State state)
+        {
+            if (state != stateManager.StateGraph.aboveGround)
+            {
+                stateDriver.SetHitEffectsActive(false);
+            }
+        }
 
         private async Task OnDormantEntry()
         {
@@ -92,9 +101,17 @@ namespace RPGPlatformer.AIControl
                 stateManager.StateGraph.aboveGround.OnExit += EarlyExitHandler;
                 await stateDriver.Emerge(cts.Token);
                 stateDriver.FaceTarget();
+                stateDriver.SetHitEffectsActive(true);
                 await stateDriver.AboveGroundTimer(cts.Token);
+                while (stateDriver.CombatController.ChannelingAbility)
+                {
+                    await Task.Yield();
+                    if (GlobalGameTools.Instance.TokenSource.IsCancellationRequested)
+                    {
+                        throw new TaskCanceledException();
+                    }
+                }
                 stateManager.StateGraph.aboveGround.OnExit -= EarlyExitHandler;
-
                 stateDriver.AboveGroundTimerComplete();
             }
             catch (TaskCanceledException)
@@ -174,7 +191,7 @@ namespace RPGPlatformer.AIControl
                 stateManager.StateGraph.retreat.OnExit += EarlyExitHandler;
                 await stateDriver.Submerge(cts.Token);
                 stateDriver.ChooseRandomWormholePosition();
-                await stateDriver.TunnelTowardsAnchor(cts.Token);
+                await stateDriver.TunnelTowardsWormhole(cts.Token);
                 stateDriver.EnableWormholeTrigger(true);
             }
             catch (TaskCanceledException)

@@ -223,8 +223,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.3056603, g: 0.227455, b: 0.14244923, a: 0.101960786}
-      maxColor: {r: 0.6981132, g: 0.6490926, b: 0.5255607, a: 0.101960786}
+      minColor: {r: 0.3207547, g: 0.23274623, b: 0.13495904, a: 0.078431375}
+      maxColor: {r: 0.5773585, g: 0.5024493, b: 0.39543608, a: 0.078431375}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -288,8 +288,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 200
-      minScalar: 50
+      scalar: 125
+      minScalar: 30
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2031,7 +2031,7 @@ ParticleSystem:
     radial:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 500
+      scalar: 600
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -4904,6 +4904,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreParentSortingData: 0
   orderDelta: 1
   dataSource: {fileID: 0}
