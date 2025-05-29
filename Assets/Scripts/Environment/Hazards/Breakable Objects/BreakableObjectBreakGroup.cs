@@ -41,7 +41,7 @@ namespace RPGPlatformer.Environment
         {
             if (hasBroken) return;
 
-            hasBroken = true;
+            hasBroken = true; 
             transform.SetParent(null);
             await MiscTools.DelayGameTime(breakDelay, token);
             foreach (var p in pieces)
@@ -49,11 +49,6 @@ namespace RPGPlatformer.Environment
                 p.OnBreak(data);
             }
             Destroy(gameObject, timeToDestroy);
-            //await MiscTools.DelayGameTime(timeToDestroy, token);
-            //if (gameObject)
-            //{
-            //    Destroy(gameObject);
-            //}
         }
     }
 }

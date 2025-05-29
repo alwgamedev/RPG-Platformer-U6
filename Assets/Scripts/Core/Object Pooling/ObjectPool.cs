@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
@@ -30,30 +29,6 @@ namespace RPGPlatformer.Core
                 FillPool();
             }
         }
-
-        //public PoolableObject ReleaseObject()
-        //{
-        //    //don't think lock is necessary for us; we don't have any multithreading
-        //    //but if we do in the future, then we don't have to worry about forgetting to add this
-        //    //lock (pool)
-        //    //{
-        //    //    PoolableObject item = pool.Count != 0 ?
-        //    //        pool.Dequeue() : InstantiatePooledObject(poolData.ConfigurationParameters);
-        //    //    item.BeforeSetActive();
-        //    //    item.gameObject.SetActive(true);
-        //    //    item.AfterSetActive();
-        //    //    TotalReleased++;
-        //    //    return item;
-        //    //}
-
-        //    PoolableObject item = pool.Count != 0 ?
-        //            pool.Dequeue() : InstantiatePooledObject(poolData.ConfigurationParameters);
-        //    item.BeforeSetActive();
-        //    item.gameObject.SetActive(true);
-        //    item.AfterSetActive();
-        //    TotalReleased++;
-        //    return item;
-        //}
 
         public PoolableObject ReleaseObject(Vector3? position = null)
         {
@@ -92,7 +67,6 @@ namespace RPGPlatformer.Core
         {
             if (!item) return;
             item.transform.SetParent(transform);
-            //item.source = this;
             item.OnEnqueued(this);
             pool.Enqueue(item);
             item.gameObject.SetActive(false);

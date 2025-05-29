@@ -27,7 +27,7 @@ namespace RPGPlatformer.Environment
 
         enum State
         {
-            dormant, /*rumbling,*/ falling, broken
+            dormant, falling, broken
         }
 
         public CombatStyle CurrentCombatStyle => CombatStyle.Unarmed;
@@ -73,40 +73,12 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        public /*async*/ void Trigger()
+        public void Trigger()
         {
             if (state != State.dormant) return;
 
-            //await Rumble(GlobalGameTools.Instance.TokenSource.Token);
             Fall();
         }
-
-        //private async Task Rumble(CancellationToken token)
-        //{
-        //    state = State.rumbling;
-        //    float timer = 0;
-        //    float d;
-        //    float displacement = 0;
-        //    float speed = rumbleDisplacement / rumbleFrequency;
-        //    int direction = 1;
-
-        //    while (timer < rumbleDuration)
-        //    {
-        //        await Task.Yield();
-        //        if (token.IsCancellationRequested)
-        //        {
-        //            throw new TaskCanceledException();
-        //        }
-        //        timer += Time.deltaTime;
-        //        d = Time.deltaTime * speed * direction;
-        //        displacement += d;
-        //        transform.position += d * Vector3.right;
-        //        if (displacement * direction > rumbleDisplacement)
-        //        {
-        //            direction *= -1;
-        //        }
-        //    }
-        //}
 
         private void Fall()
         {
@@ -142,7 +114,6 @@ namespace RPGPlatformer.Environment
 
         public override void BeforeSetActive()
         {
-            //transform.localScale = scale.Value;
             transform.position += transform.position - sHead.position 
                 + anchorHeightBuffer * Vector3.up;
         }

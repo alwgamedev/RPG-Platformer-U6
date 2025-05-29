@@ -31,5 +31,10 @@ namespace RPGPlatformer.Core
         public float Min => min;
 
         public float Max => max;
+
+        public bool PointIsInBounds(float p, float buffer = 0)
+        {
+            return p > min - buffer && p < max + buffer;
+        }
     }
 }

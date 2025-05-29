@@ -58,7 +58,6 @@ namespace RPGPlatformer.Environment
             }
 
             Destroy(parentToDestroy.gameObject);
-            //parentToDestroy.gameObject.SetActive(false);
         }
 
         private BreakData DefaultBreakData()

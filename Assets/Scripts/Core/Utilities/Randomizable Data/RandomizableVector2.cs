@@ -35,5 +35,13 @@ namespace RPGPlatformer.Core
 
         public Vector2 Max =>
             boundsSource == RandomizableVectorBoundsSource.Transform ? maxTransform.position : maxPosition;
+
+        public bool PointIsInBounds(Vector2 p, Vector2 buffer = default)
+        {
+            return p.x > Min.x - buffer.x
+                && p.x < Max.x + buffer.x
+                && p.y > Min.y - buffer.y
+                && p.y < Max.y + buffer.y;
+        }
     }
 }
