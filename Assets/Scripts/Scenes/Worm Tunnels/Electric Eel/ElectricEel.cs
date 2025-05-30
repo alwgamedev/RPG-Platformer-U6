@@ -174,7 +174,7 @@ namespace RPGPlatformer.AIControl
         {
             if (SceneResourcesPooler.Instance)
             {
-                return (PoolableEffect)SceneResourcesPooler.Instance.EffectPooler.GetObject("Shock Hit Particles");
+                return (PoolableEffect)SceneResourcesPooler.Instance.EffectPooler.ReleaseObject("Shock Hit Particles");
             }
 
             return null;

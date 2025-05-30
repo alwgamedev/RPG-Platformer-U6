@@ -41,7 +41,7 @@ namespace RPGPlatformer.Combat
             CombatStyle = CombatStyle.Unarmed,
             AnimationState = "Slap",
             GetHitEffect = ()
-                => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Punch Hit Effect"),
+                => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Punch Hit Effect"),
             Cooldown = 0.5f,
             StaminaFractionChange = 0,
             WrathFractionChange = 0.05f
@@ -60,7 +60,7 @@ namespace RPGPlatformer.Combat
             ObeyGCD = true,
             AnimationState = "Bite",
             GetHitEffect = () =>
-                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Festering Wound Hit Effect"),
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Festering Wound Hit Effect"),
             DamageMultiplier = 1,
             DamagePerBleedIteration = (i, d) => i == 0 ? 1.75f * d : d,
             BleedCount = 6,
@@ -96,11 +96,11 @@ namespace RPGPlatformer.Combat
                     Projectile p = null;
                     if (SceneResourcesPooler.Instance && SceneResourcesPooler.Instance.ProjectilePooler)
                     {
-                        p = (Projectile)SceneResourcesPooler.Instance.ProjectilePooler.GetObject("Mother Spider Spit Projectile");
+                        p = (Projectile)SceneResourcesPooler.Instance.ProjectilePooler.ReleaseObject("Mother Spider Spit Projectile");
                     }
                     if (!p)
                     {
-                        p = (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Basic Arrow");
+                        p = (Projectile)GlobalGameTools.Instance.ProjectilePooler.ReleaseObject("Basic Arrow");
                     }
                     return p;
                 },

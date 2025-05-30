@@ -79,7 +79,7 @@ namespace RPGPlatformer.Combat
             DelayedReleaseOfChannel = false,
             ObeyGCD = true,
             GetProjectile = () => 
-                (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Green Trail Projectile"),
+                (Projectile)GlobalGameTools.Instance.ProjectilePooler.ReleaseObject("Green Trail Projectile"),
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Blast",
             Cooldown = 0.3f,
@@ -100,7 +100,7 @@ namespace RPGPlatformer.Combat
             DisplayName = "Afflict",
             AnimationState = "Captivate",
             GetHitEffect = () => 
-                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Afflict Hit Effect"),
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Afflict Hit Effect"),
             AutoTarget = TargetAimPosition,
             DamageMultiplier = 0.8f,
             Cooldown = 8,
@@ -122,7 +122,7 @@ namespace RPGPlatformer.Combat
             DisplayName = "Daze",
             AnimationState = "Blast",
             GetHitEffect = () => 
-                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Rope Coil Effect"),
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Rope Coil Effect"),
             AutoTarget = TargetAimPosition,
             DamageMultiplier = 1.35f,
             Cooldown = 8,
@@ -143,7 +143,7 @@ namespace RPGPlatformer.Combat
                 AbilityTag.ProjectileAbility
             },
             GetProjectile = () => 
-                (Projectile)GlobalGameTools.Instance.ProjectilePooler.GetObject("Grenade Projectile"),
+                (Projectile)GlobalGameTools.Instance.ProjectilePooler.ReleaseObject("Grenade Projectile"),
             GetHitAction = (ability) => GetHitActionAoeDamage(ability, 1.5f, false),
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Demolish",
@@ -166,7 +166,7 @@ namespace RPGPlatformer.Combat
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Captivate",
             GetHitEffect = () => 
-                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Captivate Hit Effect"),
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Captivate Hit Effect"),
             Cooldown = 12,
             DamageMultiplier = 1.5f,
             StaminaFractionChange = 0.18f,//gain stamina, because you can catch your breath while your opponents are stunned
@@ -194,7 +194,7 @@ namespace RPGPlatformer.Combat
             CombatStyle = CombatStyle.Mage,
             AnimationState = "Desecrate",
             GetCombatantExecuteEffect = () => 
-                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Desecrate Execute Effect"),
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Desecrate Execute Effect"),
             Cooldown = 12,
             DamageMultiplier = 3.8f,
             StaminaFractionChange = -.25f,
@@ -215,9 +215,9 @@ namespace RPGPlatformer.Combat
             AnimationState = "Invoke",
             HasPowerUpAnimation = true,
             GetCombatantPowerUpEffect = () => 
-                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Invoke PowerUp Effect"),
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Invoke PowerUp Effect"),
             GetHitEffect = () =>
-                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Invoke Hit Effect"),
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Invoke Hit Effect"),
             Cooldown = 15,
             DamageMultiplier = 1,
             StaminaFractionChange = 0.25f,

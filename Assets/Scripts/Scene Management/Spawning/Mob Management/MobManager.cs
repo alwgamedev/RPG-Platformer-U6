@@ -7,40 +7,19 @@ using System;
 
 namespace RPGPlatformer.SceneManagement
 {
-    //[RequireComponent(typeof(ObjectPool))]
     public class MobManager : MonoBehaviour, ISavable
     {
         [SerializeField] MobData mobData;
 
-        ObjectPool pool;
+        ObjectPoolCollection pools;
         bool mobDefeated;
         int currentSpawnRate;
         int ticksSinceLastSpawn;
 
-        //when go to spawn, will use mob size to re-evaluate whether is defeated
-        //if defeated, save state and destroy game object (or set inactive maybe safer)
-        //mobSize.CountingOption will determine whether we use pool.Released or pool.Returned
-        //to determine whether mob has been defeated
-
-        //so we need to make sure we don't spawn anything until SavingSystem has completed load
-        //at beginning of scene (this can be after start in some cases; it's async and we don't know...)
-
-        //note, if choose to count on return, you need to make sure "defeated" members are returned 
-        //on death rather than destroyed
-
-        //we will have a PoolableAICombatant which in its Configure will
-        //a) if TryGetComponent(AIPatroller), set patrol bounds (those will be the configuration parameters)
-        //b) set combatant.destroyOnFinalizeDeath = false and subscribe ReturnToSource to comb.OnDeathFinalized
-        //we can make more PoolableObject derived classes for specific cases as needed
-        //that require different configure functions and/or configure parameters
-
         private void Awake()
         {
-            //if you are worried about the performance hit on scene transitions, 
-            //you can set poolsize = 0 and have it instantiate the poolable object
-            //as needed, based on the SpawnRate data
-            pool = ObjectPoolCollection.AddPoolAsChild(mobData.PoolData, transform);
-            pool.FillPool();
+            //if you are worried about the performance hit on scene transitions (i.e. generating big pool on scene load), 
+            //you can set poolsize = 0 and have it instantiate the poolable object as needed?
             SavingSystem.SceneLoadComplete += OnSceneLoadComplete;
         }
 
@@ -52,9 +31,8 @@ namespace RPGPlatformer.SceneManagement
             }
             else
             {
-                //begin spawn behavior
-                //i.e. configure update function
-                //ResetSpawnTimer();
+                pools = gameObject.AddComponent<ObjectPoolCollection>();
+                pools.CreatePools(mobData.PoolData);
                 GlobalGameTools.Instance.TickTimer.NewTick += OnNewTick;
             }
 
@@ -91,23 +69,23 @@ namespace RPGPlatformer.SceneManagement
             }
 
             var count = mobData.MobSize.CountingOption == MobSize.MobSizeCountingOption.onRelease ?
-                pool.TotalReleased : pool.TotalReturned;
+                pools.TotalReleased : pools.TotalReturned;
             return count > mobData.MobSize.MaxToSpawn;
         }
 
         protected virtual bool CanSpawn()
         {
-            return pool.Active < mobData.SpawnRate.MaxActivePopulation.Value;
+            return pools.Active < mobData.SpawnRate.MaxActivePopulation.Value;
         }
 
         protected virtual void Spawn()
         {
-            var toSpawn = Math.Min(mobData.SpawnRate.MaxActivePopulation.Value - pool.Active,
+            var toSpawn = Math.Min(mobData.SpawnRate.MaxActivePopulation.Value - pools.Active,
                 mobData.SpawnRate.QuantityPerSpawn.Value);
 
             for (int i = 0; i < toSpawn; i++)
             {
-                pool.ReleaseObject(mobData.SpawnPosition.Value);
+                pools.ReleaseRandomObject(mobData.SpawnPosition.Value);
             }
         }
 

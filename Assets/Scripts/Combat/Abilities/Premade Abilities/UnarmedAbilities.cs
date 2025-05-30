@@ -60,7 +60,7 @@ namespace RPGPlatformer.Combat
             CombatStyle = CombatStyle.Unarmed,
             AnimationState = "Punch",
             GetHitEffect = ()
-                => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Punch Hit Effect"),
+                => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Punch Hit Effect"),
             Cooldown = 0.75f,
             StaminaFractionChange = -0.04f,
             WrathFractionChange = 0.02f

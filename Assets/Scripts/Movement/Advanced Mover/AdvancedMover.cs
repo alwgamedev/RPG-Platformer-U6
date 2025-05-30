@@ -111,7 +111,7 @@ namespace RPGPlatformer.Movement
             var firstHit = Vector2.zero;
             var firstHitIndex = -1;
             float m2 = 0.5f * m;
-            float m4 = 0.5f * m2;
+            float m5 = 0.2f * m;
 
             //break height into thirds, each third having n pieces (total of 3n + 1 hits to check)
 
@@ -132,14 +132,14 @@ namespace RPGPlatformer.Movement
                     i++;
                     continue;
                 }
-                else if (firstHitIndex < m4)
+                else if (firstHitIndex < m5)
                 {
                     firstHitIndex = i;
                     if (i > m2)
                     {
                         break;
                     }
-                    else if (i >= m4)
+                    else if (i >= m5)
                     {
                         firstHit = hit.point;
                         i = n + firstHitIndex;
@@ -173,7 +173,7 @@ namespace RPGPlatformer.Movement
             NoAdjacentWall();
 
             //in this case there may have been a second hit, but not in a way that counts as wall clinging
-            if (firstHitIndex != -1 && (!grounded || firstHitIndex < 3 * m4))
+            if (firstHitIndex != -1 && (!grounded || firstHitIndex < 0.75f * m))
             {
                 AwkwardWallMoment?.Invoke();
             }

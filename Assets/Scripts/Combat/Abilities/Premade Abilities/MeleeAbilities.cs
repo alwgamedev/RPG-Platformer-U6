@@ -78,7 +78,7 @@ namespace RPGPlatformer.Combat
             AllowExecuteWithoutTarget = true,
             ObeyGCD = true,
             AnimationState = "Swipe",
-            GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Swipe Hit Effect"),
+            GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Swipe Hit Effect"),
             DamageMultiplier = 0.8f,
             BleedCount = 5,
             BleedRate = 1.2f,
@@ -142,7 +142,7 @@ namespace RPGPlatformer.Combat
             AllowExecuteWithoutTarget = true,
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Jab",
-            GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Rope Coil Effect"),
+            GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Rope Coil Effect"),
             Cooldown = 8,
             StaminaFractionChange = .18f,
             WrathFractionChange = 0.05f,
@@ -208,7 +208,7 @@ namespace RPGPlatformer.Combat
             CombatStyle = CombatStyle.Melee,
             AnimationState = "Slam",
             GetCombatantExecuteEffect = () => 
-                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Dust Cloud Effect"),
+                (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Dust Cloud Effect"),
             Cooldown = 12,
             DamageMultiplier = 4.2f,
             StaminaFractionChange = -.25f,
@@ -233,7 +233,7 @@ namespace RPGPlatformer.Combat
             AnimationState = "Ravage",
             HasPowerUpAnimation = true,
             GetCombatantExecuteEffect = 
-                () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.GetObject("Ravage Execute Effect"),
+                () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Ravage Execute Effect"),
             TicksToAchieveMaxPower = 18,//18 ticks = 1.08s
             PowerGainRate = 12,//max power multiplier 2.5x
             Cooldown = 15,

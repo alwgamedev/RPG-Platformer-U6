@@ -66,6 +66,7 @@ namespace RPGPlatformer.UI
             cc.OnDeath += CombatantDeathHandler(cc);
             cc.HealthChangeEffected += CombatantHealthChangeHandler(cc);
 
+            Unflip(parentOrienter.CurrentOrientation);
             HideAll();
         }
 

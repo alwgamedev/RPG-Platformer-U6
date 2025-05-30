@@ -119,15 +119,9 @@ namespace RPGPlatformer.AIControl
 
             if (r.distance == 0)//bottom of body is below ground
             {
-                //if i remember correctly, this snaps to a vertex of the collider (for polygon collider)
-                //which could be undesirable when there are few vertices nearby
-                //we'll see what it does
-                //to eradicate this issue you could just try to choose spawnMin and spawnMax points to be above 
-                //ground max height so that we never spawn below ground
-                Debug.Log("spawned under ground, moving to closest point on ground collider");
                 SetPosition(r.collider.ClosestPoint(r.point) + h * Vector2.up);
             }
-            else if (r && r.distance > 0)
+            else if (r.distance > 0)
             {
                 SetPosition(Position - r.distance * Vector3.up);
             }
