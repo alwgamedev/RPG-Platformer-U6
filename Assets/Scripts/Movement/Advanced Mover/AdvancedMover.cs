@@ -95,13 +95,9 @@ namespace RPGPlatformer.Movement
 
         public void UpdateAdjacentWall(bool grounded, int n, float d)
         {
-            //note we only use 0.85 of the height
-            //(gives more natural angles, but making this too small means
-            //it will be harder to grab onto the side of a platform when falling,
-            //also you miss awkward wall moments where only your head hits)
-            var origin = ColliderCenterBack + 0.15f * myHeight * transform.up;
+            var origin = ColliderCenterBack + 0.5f * myHeight * transform.up;
             var m = 3 * n;
-            var spacing = 0.85f * myHeight / m;
+            var spacing = myHeight / m;
             if (grounded)
             {
                 spacing *= 0.95f;//to avoid feet casts hitting against steep slopes while walking
@@ -114,7 +110,8 @@ namespace RPGPlatformer.Movement
             RaycastHit2D hit;
             var firstHit = Vector2.zero;
             var firstHitIndex = -1;
-            int m2 = m / 2;
+            float m2 = 0.5f * m;
+            float m4 = 0.5f * m2;
 
             //break height into thirds, each third having n pieces (total of 3n + 1 hits to check)
 
@@ -135,20 +132,26 @@ namespace RPGPlatformer.Movement
                     i++;
                     continue;
                 }
-                else if (firstHitIndex == -1)
+                else if (firstHitIndex < m4)
                 {
                     firstHitIndex = i;
                     if (i > m2)
                     {
                         break;
                     }
-                    else
+                    else if (i >= m4)
                     {
                         firstHit = hit.point;
                         i = n + firstHitIndex;
-                        //^we require firstHitIndex - secondHitIndex >= n (i.e. separated by 1/3)
+                        //^we require firstHitIndex - secondHitIndex >= n (i.e. separated by 1/3 of height)
                         continue;
                     }
+
+                    i++;
+                    continue;
+                    //continue until find a hit with i >= m4
+                    //(if only hit is < m4 then we're just hitting our head and it should count as an
+                    //awkward wall moment)
                 }
                 else
                 {
@@ -170,7 +173,7 @@ namespace RPGPlatformer.Movement
             NoAdjacentWall();
 
             //in this case there may have been a second hit, but not in a way that counts as wall clinging
-            if (firstHitIndex != -1 && (!grounded || firstHitIndex < 0.75f * m))
+            if (firstHitIndex != -1 && (!grounded || firstHitIndex < 3 * m4))
             {
                 AwkwardWallMoment?.Invoke();
             }
