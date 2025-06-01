@@ -2,6 +2,8 @@
 using RPGPlatformer.Core;
 using RPGPlatformer.Combat;
 
+using System;
+
 namespace RPGPlatformer.Effects
 {
     public abstract class PoolableEffect : PoolableObject
@@ -71,7 +73,6 @@ namespace RPGPlatformer.Effects
             DisconnectParentHealth();
             parentHealth = health;
             parentHealth.OnDeath += ParentDeathHandler;
-
         }
 
         protected void DisconnectParentHealth()
@@ -98,6 +99,11 @@ namespace RPGPlatformer.Effects
         protected void ParentDeathHandler(IDamageDealer damageDealer)
         {
             ReleaseFromParent();
+            DisconnectParentHealth();
+        }
+
+        private void OnDestroy()
+        {
             DisconnectParentHealth();
         }
     }

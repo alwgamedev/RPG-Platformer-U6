@@ -87,18 +87,21 @@ namespace RPGPlatformer.AIControl
                     currentMoveSpeed = Mathf.Lerp(currentMoveSpeed, pursuitMoveSpeed, acceleration * Time.deltaTime);
                 }
             }
-            else if (currentMoveSpeed != baseMoveSpeed)
+            else
             {
-                currentMoveSpeed = Mathf.Lerp(currentMoveSpeed, baseMoveSpeed, acceleration * Time.deltaTime);
+                if (HasReachedDestination(currentDestination))
+                {
+                    currentDestination = NewDestination();
+                }
+                if (currentMoveSpeed != baseMoveSpeed)
+                {
+                    currentMoveSpeed = Mathf.Lerp(currentMoveSpeed, baseMoveSpeed, acceleration * Time.deltaTime);
+                }
             }
             LerpMoveDirection(currentDestination);
             UpdateMovement();
             UpdateWiggle();
             EnforceBounds();
-            if (HasReachedDestination(currentDestination))
-            {
-                currentDestination = NewDestination();
-            }
         }
 
 

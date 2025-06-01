@@ -41,7 +41,7 @@ namespace RPGPlatformer.SceneManagement
 
         protected virtual void OnNewTick()
         {
-            if (!CanSpawn())
+            if (!gameObject.activeInHierarchy || !CanSpawn())
             {
                 return;
             }
