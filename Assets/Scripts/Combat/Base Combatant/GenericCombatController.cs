@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using UnityEngine;
+using RPGPlatformer.AIControl;
 
 namespace RPGPlatformer.Combat
 {
@@ -214,36 +215,65 @@ namespace RPGPlatformer.Combat
 
         protected virtual void OnNoAutoCastAbility() { }
 
-        protected virtual bool CanExecute(AttackAbility ability)
+        protected enum CanExecuteResult
         {
-            return !CurrentAbilityBar.IsOnCooldown(ability)
-                && (!ability.ObeyGCD || !GlobalCooldown)
-                && (stateDriver.EquippedWeapon?.CombatStyle == ability.CombatStyle
-                || ability.CombatStyle == CombatStyle.Any);
+            pass, onCooldown, gcdBlock, wrongCombatStyle, noAbility, insufficientStats
+        }
+
+        protected virtual CanExecuteResult CanExecute(AttackAbility ability)
+        {
+            //note the order is important! we will only return gcdBlock if it is off cooldown and passes
+            //all other tests; then it can be queued
+            if (ability == null)
+            {
+                return CanExecuteResult.noAbility;
+            }
+            if (stateDriver.EquippedWeapon?.CombatStyle != ability.CombatStyle && ability.CombatStyle != CombatStyle.Any)
+            {
+                return CanExecuteResult.wrongCombatStyle;
+            }
+            if (CurrentAbilityBar.IsOnCooldown(ability))
+            {
+                return CanExecuteResult.onCooldown;
+            }
+            if (!ability.CanBeExecuted(this))
+            {
+                return CanExecuteResult.insufficientStats;
+            }
+            if (ability.ObeyGCD && GlobalCooldown)
+            {
+                return CanExecuteResult.gcdBlock;
+            }
+
+            return CanExecuteResult.pass;
         }
 
         //returns whether ability was execute
         //(but that ability may still fail to fully execute if you have insufficient wrath or stamina)
         protected virtual bool TryExecuteAbility(AttackAbility ability)
         {
-            if (ability == null) 
-                return false;
+            var r = CanExecute(ability);
 
-            if (CanExecute(ability))
+            switch(r)
             {
-                ExecuteAbility(ability);
-                return true;
+                case CanExecuteResult.noAbility:
+                    return false;
+                case CanExecuteResult.wrongCombatStyle:
+                    return false;
+                case CanExecuteResult.onCooldown:
+                    AttemptedToExecuteAbilityOnCooldown();
+                    return false;
+                case CanExecuteResult.insufficientStats:
+                    return false;
+                case CanExecuteResult.gcdBlock:
+                    queuedAbility = ability;
+                    return false;
+                case CanExecuteResult.pass:
+                    ExecuteAbility(ability);
+                    return true;
             }
-            else if (!CurrentAbilityBar.IsOnCooldown(ability))
-            {
-                queuedAbility = ability;
-                return false;
-            }
-            else
-            {
-                AttemptedToExecuteAbilityOnCooldown();
-                return false;
-            }
+
+            return false;
         }
 
         protected virtual void ExecuteAbility(AttackAbility ability)

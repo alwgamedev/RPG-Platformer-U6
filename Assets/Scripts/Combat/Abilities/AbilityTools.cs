@@ -32,35 +32,27 @@ namespace RPGPlatformer.Combat
 
         public static AttackAbility GetAbility(CombatStyle combatStyle, string abilityName)
         {
-            switch(combatStyle)
+            return combatStyle switch
             {
-                case CombatStyle.Mage:
-                    return MageAbilities.GetAbility(abilityName);
-                case CombatStyle.Melee:
-                    return MeleeAbilities.GetAbility(abilityName);
-                case CombatStyle.Ranged:
-                    return RangedAbilities.GetAbility(abilityName);
-                case CombatStyle.Unarmed:
-                    return UnarmedAbilities.GetAbility(abilityName);
-            }
-            return null;
+                CombatStyle.Mage => MageAbilities.GetAbility(abilityName),
+                CombatStyle.Melee => MeleeAbilities.GetAbility(abilityName),
+                CombatStyle.Ranged => RangedAbilities.GetAbility(abilityName),
+                CombatStyle.Unarmed => UnarmedAbilities.GetAbility(abilityName),
+                _ => null,
+            };
         }
 
         public static bool TryGetAbility(CombatStyle combatStyle, string abilityName, out AttackAbility ability)
         {
-            ability = null; 
-            switch(combatStyle)
+            ability = null;
+            return combatStyle switch
             {
-                case CombatStyle.Mage:
-                    return MageAbilities.TryGetAbility(abilityName, out ability);
-                case CombatStyle.Melee:
-                    return MeleeAbilities.TryGetAbility(abilityName, out ability);
-                case CombatStyle.Ranged:
-                    return RangedAbilities.TryGetAbility(abilityName, out ability);
-                case CombatStyle.Unarmed:
-                    return UnarmedAbilities.TryGetAbility(abilityName, out ability);
-            }
-            return false;
+                CombatStyle.Mage => MageAbilities.TryGetAbility(abilityName, out ability),
+                CombatStyle.Melee => MeleeAbilities.TryGetAbility(abilityName, out ability),
+                CombatStyle.Ranged => RangedAbilities.TryGetAbility(abilityName, out ability),
+                CombatStyle.Unarmed => UnarmedAbilities.TryGetAbility(abilityName, out ability),
+                _ => false,
+            };
         }
 
         public static bool TryGetResources(AttackAbility ability, out AbilityResourceData resources)

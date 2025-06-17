@@ -90,12 +90,7 @@ namespace RPGPlatformer.SceneManagement
 
         private bool TrySpawnPlayer(string spawnPointID)
         {
-            if (spawnPointID == null)
-            {
-                return false;
-            }
-
-            if (SpawnPointLookup.TryGetValue(spawnPointID, out var s) && s)
+            if (spawnPointID != null && SpawnPointLookup.TryGetValue(spawnPointID, out var s) && s)
             {
                 SpawnPlayer(s);
                 return true;

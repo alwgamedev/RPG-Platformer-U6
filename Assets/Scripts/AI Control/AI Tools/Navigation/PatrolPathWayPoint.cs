@@ -18,9 +18,8 @@ namespace RPGPlatformer.AIControl
             if (!gameObject.activeInHierarchy) return;
 
             HandleTrigger(collider);
-            //doing both enter and stay (despite performance cost),
-            //because a patroller may begin the path while already inside the collider of the first point,
-            //and if we only had triggerenter then he would never know to go to the next point
+            //doing both enter and stay
+            //because a patroller may begin the path while already inside the collider of the first point
         }
 
         private void HandleTrigger(Collider2D collider)

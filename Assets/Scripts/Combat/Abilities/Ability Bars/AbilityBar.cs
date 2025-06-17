@@ -145,8 +145,6 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        //TO-DO: re-order abilities so that auto-casts are at the beginning of the list
-        //or maybe at the END of the list, because you want to use your "good binds" for the non-auto cast abilities
         public void Configure()
         {
             foreach (var item in abilityBarItems)

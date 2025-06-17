@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGPlatformer.Combat
 {
-    //[RequireComponent(typeof(CharacterProgressionManager))]
+    //TO-DO
     public class CombatBonusesManager
     {
         //will need references to
@@ -12,7 +12,7 @@ namespace RPGPlatformer.Combat
 
         //Functions:
         //-keep track of active buffs/debuffs from potions, defensive abilities, passive abilities, etc.
-        // (or "curses" inflicted on us by enemies -- not poison can just be implement as a bleed,
+        // (or "curses" inflicted on us by enemies -- note poison can just be implement as a bleed,
         // so we don't need that here)
         //-compute additive damage bonus based on stats and active buffs
         //-compute damage taken based on stats and active buffs

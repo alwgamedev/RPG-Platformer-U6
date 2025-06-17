@@ -17,11 +17,10 @@ namespace RPGPlatformer.Combat
 
         //in the future this is going to be an issue when we want to include e.g. defensive abilities on
         //a mage ability bar. Try having them all just be List<SerializableAbilityBarItem>()
-        //-- get that to work (they should still use their overriden functionality for their combat style)
 
         //also to avoid having to directly list out each combat style you could make an
-        //array of List<seritem> where the index in the array corresponds to combat style as int
-        //(then you just have to know the int to correctly set things up in inspector)
+        //array of List<seritem> where the index in the array is the combat style enum value
+        //(would just use dictionary but doesn't work in inspector)
 
         public List<SerializableUnarmedAbilityBarItem> UnarmedAbilityBarItems
         {

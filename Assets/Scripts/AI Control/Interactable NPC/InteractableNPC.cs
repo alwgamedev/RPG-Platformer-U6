@@ -16,7 +16,7 @@ namespace RPGPlatformer.AIControl
         //    OnUpdate?.Invoke();
         //}
 
-        //NOTE: trigger is assumed to be a component on the NPC, so they have the same lifetime
+        //NOTE: trigger is a component on the NPC, so they have the same lifetime
         //protected virtual void TriggerDialogue(IDialogueTrigger trigger, int index)
         //{
         //    trigger.DialogueBeganSuccessfully += DialogueBeganHandler;

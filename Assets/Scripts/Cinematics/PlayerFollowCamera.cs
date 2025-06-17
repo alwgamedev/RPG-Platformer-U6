@@ -35,6 +35,7 @@ namespace RPGPlatformer.Cinematics
         {
             if (Instance == this)
             {
+                Instance = null;
                 vc = null;
             }
         }

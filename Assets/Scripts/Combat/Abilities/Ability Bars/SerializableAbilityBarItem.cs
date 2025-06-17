@@ -11,10 +11,8 @@ namespace RPGPlatformer.Combat
 
     public abstract class SerializableAbilityBarItem
     {
-        [SerializeField] protected bool includeInAutoCastCycle; 
-        
-        //yes we need both the [SF] and the public { get; set; } so that we can both edit these in inspector
-        //and serialize/deserialize to JSON
+        [SerializeField] protected bool includeInAutoCastCycle;
+
         public bool IncludeInAutoCastCycle
         {
             get => includeInAutoCastCycle;

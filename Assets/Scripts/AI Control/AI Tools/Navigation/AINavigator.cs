@@ -83,11 +83,9 @@ namespace RPGPlatformer.AIControl
             currentDestination = targetPosition;
         }
 
-        private void BeginBoundedPatrol(RandomizableVector3/*(Transform, Transform)*/ bounds)
+        private void BeginBoundedPatrol(RandomizableVector3 bounds)
         {
             CurrentMode = NavigationMode.bounded;
-            //leftBound = bounds.Item1.position;
-            //rightBound = bounds.Item2.position;
             this.bounds = bounds;
             GetNextBoundedDestination();
         }
@@ -223,14 +221,7 @@ namespace RPGPlatformer.AIControl
 
         private bool GetNextBoundedDestination()
         {
-            //if (leftBound == null ||  rightBound == null)
-            //{
-            //    return false;
-            //}
-
             currentDestination = bounds.Value;
-                //new (MiscTools.RandomFloat(leftBound.x, rightBound.x), 
-                //MiscTools.RandomFloat(Math.Min(leftBound.y, rightBound.y), Math.Max(leftBound.y, rightBound.y)));
             return true;
         }
 

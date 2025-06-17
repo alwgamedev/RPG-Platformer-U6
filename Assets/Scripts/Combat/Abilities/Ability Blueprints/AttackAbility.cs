@@ -69,7 +69,7 @@ namespace RPGPlatformer.Combat
 
         public virtual void Execute(ICombatController controller)
         {
-            if (!CanBeExecuted(controller)) return;
+            //if (!CanBeExecuted(controller)) return;
 
             controller.Combatant.TriggerCombat();
             OnExecute?.Invoke(controller);
