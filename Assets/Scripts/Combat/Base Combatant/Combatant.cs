@@ -8,7 +8,6 @@ using RPGPlatformer.Loot;
 using RPGPlatformer.Skills;
 using System.Threading.Tasks;
 using System.Threading;
-using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.Combat
 {

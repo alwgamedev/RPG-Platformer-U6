@@ -83,7 +83,7 @@ namespace RPGPlatformer.UI
                 AbilityBar.Configure();
             }
 
-            foreach(var slot in slots)
+            foreach (var slot in slots)
             {
                 slot.SetAcceptedCombatStyles(acceptedCombatStyles);
             }

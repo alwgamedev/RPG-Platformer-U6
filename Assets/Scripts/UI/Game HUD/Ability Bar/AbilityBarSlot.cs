@@ -31,7 +31,11 @@ namespace RPGPlatformer.UI
 
         protected virtual void Awake()
         {
-            SettingsManager.IAMConfigured += DisplayKeybind;
+            if (SettingsManager.Instance && SettingsManager.Instance.IAMIsConfigured)
+            {
+                DisplayKeybind();
+            }
+            SettingsManager.IAMConfigured += DisplayKeybind;//still subscribe to get settings updates
         }
 
 

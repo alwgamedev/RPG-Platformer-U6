@@ -1,7 +1,4 @@
-﻿using RPGPlatformer.Combat;
-using System;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace RPGPlatformer.UI
 {

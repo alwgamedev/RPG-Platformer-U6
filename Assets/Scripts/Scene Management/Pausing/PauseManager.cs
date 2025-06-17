@@ -21,7 +21,11 @@ namespace RPGPlatformer.SceneManagement
             if (Instance == null)
             {
                 Instance = this;
-                SettingsManager.IAMConfigured += OnIAMConfigured;
+                if (SettingsManager.Instance && SettingsManager.Instance.IAMIsConfigured)
+                {
+                    OnIAMConfigured();
+                }
+                SettingsManager.IAMConfigured += OnIAMConfigured;//still subscribe to get settings updates
             }
             else
             {

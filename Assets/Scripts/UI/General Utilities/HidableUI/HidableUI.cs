@@ -45,6 +45,8 @@ namespace RPGPlatformer.UI
             ConfigureUnpauseAction();
         }
 
+        //This isn't actually a great idea -- if other scripts (e.g. on child game objects)
+        //are subscribed to OnShow, then they might not have done Awake/Enable yet when Show is called
         protected virtual void OnEnable()
         {
             if (useShowOnEnable)

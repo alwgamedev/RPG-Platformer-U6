@@ -166,7 +166,7 @@ namespace RPGPlatformer.Combat
             AnimationState = "Bow Shot",
             GetProjectile = () => (Projectile)GlobalGameTools.Instance.ProjectilePooler.ReleaseObject("Exploding Arrow"),
             GetHitAction = (ability) => GetHitActionAoeDamage(ability, 2, true),
-            GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Bombard Hit Effect"),
+            //GetHitEffect = () => (PoolableEffect)GlobalGameTools.Instance.EffectPooler.ReleaseObject("Bombard Hit Effect"),
             HasPowerUpAnimation = true,
             UseActiveAimingWhilePoweringUp = true,
             HoldAimOnRelease = true,

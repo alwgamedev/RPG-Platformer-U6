@@ -9,6 +9,7 @@ namespace RPGPlatformer.Core
     {
         public static SettingsManager Instance { get; private set; } = null;
 
+        public bool IAMIsConfigured { get; private set; }
         public InputActionsManager IAM { get; private set; }
         public InputBindingData InputSettings { get; private set; }
         public SerializableCharacterAbilityBarData PlayerAbilityBars { get; private set; }
@@ -62,6 +63,7 @@ namespace RPGPlatformer.Core
 
         private void BroadcastIAMConfigure()
         {
+            IAMIsConfigured = true;
             IAMConfigured?.Invoke();
         }
 

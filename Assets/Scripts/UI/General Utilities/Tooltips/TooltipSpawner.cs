@@ -45,8 +45,11 @@ namespace RPGPlatformer.UI
                 async () => await ClearTooltipDelayed(GlobalGameTools.Instance.TokenSource.Token) 
                 : ClearTooltipImmediate;
 
-            SettingsManager.IAMConfigured += OnIAMConfigure;
-            //still subscribe in case action map gets rebuilt due to input bindings change or something
+            if (SettingsManager.Instance && SettingsManager.Instance.IAMIsConfigured)
+            {
+                OnIAMConfigure();
+            }
+            SettingsManager.IAMConfigured += OnIAMConfigure;//still subscribe to get settings updates
         }
 
         protected virtual void Start()

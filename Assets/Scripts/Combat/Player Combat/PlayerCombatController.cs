@@ -15,7 +15,11 @@ namespace RPGPlatformer.Combat
         {
             base.Awake();
 
-            SettingsManager.IAMConfigured += OnIAMConfigure;
+            if (SettingsManager.Instance && SettingsManager.Instance.IAMIsConfigured)
+            {
+                OnIAMConfigure();
+            }
+            SettingsManager.IAMConfigured += OnIAMConfigure;//still subscribe to get settings updates
             SettingsManager.NewAbilityBarSettings += UpdateAbilityBars;
 
             InteractableGameObject.IGOClicked += OnIGOClicked;

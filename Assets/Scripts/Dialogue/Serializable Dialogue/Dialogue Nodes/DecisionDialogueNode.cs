@@ -65,6 +65,6 @@ namespace RPGPlatformer.Dialogue
                 EditorUtility.SetDirty(this);
             }
         }
-    }
 #endif
+    }
 }

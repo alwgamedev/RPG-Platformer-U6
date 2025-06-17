@@ -39,14 +39,17 @@ namespace RPGPlatformer.UI
                     SettingsTabLookup[entry.Key] = st; 
                 }
             }
-
-            saveTabButton.Button.onClick.AddListener(() => TrySaveOpenTab());
-            saveAllButton.Button.onClick.AddListener(() => TrySaveAllTabs());
-
+            
             OnShow += ClosePopupPanel;
             OnShow += Redraw;
 
             OnHide += ClosePopupPanel;
+        }
+
+        private void Start()
+        {
+            saveTabButton.Button.onClick.AddListener(SaveOpenTab);
+            saveAllButton.Button.onClick.AddListener(SaveAllTabs);
             closeButton.onClick.AddListener(CloseMenu);
         }
 
@@ -59,6 +62,16 @@ namespace RPGPlatformer.UI
                     entry.Value.Redraw();
                 }
             }
+        }
+
+        private void SaveOpenTab()
+        {
+            TrySaveOpenTab();
+        }
+
+        private void SaveAllTabs()
+        {
+            TrySaveAllTabs();
         }
 
         private bool TrySaveOpenTab()
@@ -164,6 +177,12 @@ namespace RPGPlatformer.UI
                 }
             }
             popupPanel.Hide();
+        }
+
+        private void OnDisable()
+        {
+            saveTabButton.Button.onClick.RemoveListener(SaveOpenTab);
+            saveAllButton.Button.onClick.RemoveListener(SaveAllTabs);
         }
     }
 }

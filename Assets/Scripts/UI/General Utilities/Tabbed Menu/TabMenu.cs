@@ -30,7 +30,12 @@ namespace RPGPlatformer.UI
                 tab.TabButton.Button.onClick.AddListener(() => OpenTab(tab));
             }
 
-            OnShow += () => OpenTab(tabs[0]);
+            OnShow += OpenFirstTab;
+        }
+
+        public virtual void OpenFirstTab()
+        {
+            OpenTab(tabs[0]);
         }
 
         public virtual void OpenTab(Tab tab)

@@ -1,4 +1,3 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,14 +10,23 @@ public class AnimatedSaveButton : MonoBehaviour
     Animator animator;
     Button button;
 
-    public Button Button => button;
+    public Button Button
+    {
+        get
+        {
+            if (!button)
+            {
+                button = GetComponent<Button>();
+            }
+
+            return button;
+        }
+    }
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         button = GetComponent<Button>();
-
-        //button.onClick.AddListener(() => StartCoroutine(PlayEffect()));
     }
 
     public void PrepareForAnimation()

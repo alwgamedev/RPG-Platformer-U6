@@ -14,7 +14,11 @@ namespace RPGPlatformer.Movement
         {
             base.Awake();
 
-            SettingsManager.IAMConfigured += OnIAMConfigure;
+            if (SettingsManager.Instance && SettingsManager.Instance.IAMIsConfigured)
+            {
+                OnIAMConfigure();
+            }
+            SettingsManager.IAMConfigured += OnIAMConfigure;//still subscribe to get settings updates
         }
 
         void OnIAMConfigure()

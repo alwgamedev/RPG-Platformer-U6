@@ -8,6 +8,16 @@ namespace RPGPlatformer.UI
     {
         [SerializeField] AbilityBarItemTooltip tooltip;
 
+        CombatStyle? storedCombatStyle;
+
+        private void Start()
+        {
+            if (storedCombatStyle.HasValue)
+            {
+                DisplayBook(storedCombatStyle.Value);
+            }
+        }
+
         public override void Configure()
         {
             base.Configure();
@@ -23,11 +33,19 @@ namespace RPGPlatformer.UI
 
         public void DisplayBook(CombatStyle combatStyle)
         {
-            tooltip.Clear();
-            AbilityBar = new(null, AbilityTools.GetAllAbilities(combatStyle)
-                .Select(x => new AbilityBarItem(x, false)).ToList());
+            if (!didAwake)
+            {
+                storedCombatStyle = combatStyle;
+            }
+            else
+            {
+                tooltip.Clear();
+                var a = new AbilityBar(null, AbilityTools.GetAllAbilities(combatStyle)
+                    .Select(x => new AbilityBarItem(x, false)).ToList());
 
-            ConnectAbilityBar(AbilityBar, DefaultAcceptedCombatStyles(combatStyle));
+                ConnectAbilityBar(a, DefaultAcceptedCombatStyles(combatStyle));
+                storedCombatStyle = null;
+            }
         }
 
         public override void Clear()

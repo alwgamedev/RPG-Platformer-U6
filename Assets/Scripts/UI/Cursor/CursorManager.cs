@@ -35,7 +35,11 @@ namespace RPGPlatformer.UI
             {
                 Instance = this;
                 BuildCursorLookup();
-                SettingsManager.IAMConfigured += OnIAMConfigure;
+                if (SettingsManager.Instance && SettingsManager.Instance.IAMIsConfigured)
+                {
+                    OnIAMConfigure();
+                }
+                SettingsManager.IAMConfigured += OnIAMConfigure;//still subscribe to get settings updates
             }
             else 
             {
