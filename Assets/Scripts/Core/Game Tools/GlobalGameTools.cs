@@ -20,34 +20,9 @@ namespace RPGPlatformer.Core
         public static GlobalGameTools Instance { get; private set; }
         public static string PlayerName { get; private set; } = "Player";
         public Transform PlayerTransform => playerTransform;
-        //{
-        //    //this is in case something needs player before GGT has done Awake, I guess?
-        //    //that's terrible because FindPlayer includes subscribing to an event??
-        //    get
-        //    {
-        //        if (playerTransform == null)
-        //        {
-        //            FindPlayer();
-        //        }
-
-        //        return playerTransform;
-        //    }
-        //}
         public IMovementController PlayerMover => playerMover;
         public ICombatController Player => playerCC;
-        //{
-        //    get
-        //    {
-        //        if (playerCC == null)
-        //        {
-        //            FindPlayer();
-        //        }
-
-        //        return playerCC;
-        //    }
-        //}
         public bool PlayerIsDead => Player == null || Player.Combatant.Health.IsDead;
-        //public static bool PlayerIsInCombat => Player != null && Player.IsInCombat;
         public CancellationTokenSource TokenSource {  get; private set; }
         public TickTimer TickTimer { get; private set; }
         public ResourcesManager ResourcesManager => resourcesManager;

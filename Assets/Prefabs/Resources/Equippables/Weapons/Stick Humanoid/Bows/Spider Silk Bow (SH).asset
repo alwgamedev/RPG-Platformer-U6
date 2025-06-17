@@ -10,25 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a22419fee20bfb548b6d9bc3edfd37a8, type: 3}
-  m_Name: Basic Bow (SH)
+  m_Name: Spider Silk Bow (SH)
   m_EditorClassIdentifier: 
   baseData:
-    lookupName: Basic Bow (SH)
-    displayName: Basic Bow
-    description: A basic bow
-    icon: {fileID: 2589477999225594112, guid: 45690b297d6febd46b7dfaf0baaa889e, type: 3}
+    lookupName: Spider Silk Bow (SH)
+    displayName: Spider Silk Bow
+    description: Strong, precise, and a little sticky.
+    icon: {fileID: 21300000, guid: 13637fee7beb717468d3643fe0045111, type: 3}
     maxStack: 1
   equippableItemData:
     slot: 3
     damageBonus: 0
     defenseBonus: 0
-    levelReqs:
-    - skill: 4
-      level: 1
-    prefab: {fileID: 7710583885491714212, guid: 102c7d7911ce5e345898daa3ec878377, type: 3}
+    levelReqs: []
+    prefab: {fileID: 7710583885491714212, guid: db8820a91ecc0c74d8d362424889ffd7, type: 3}
     spriteSwapData: []
   weaponStats:
-    baseDamage: 275
+    baseDamage: 70
     attackRange: 8
     baseAttackRate: 4
   animatorOverrideController: {fileID: 22100000, guid: 878581dc1900c55489253a28ad1711dd, type: 2}

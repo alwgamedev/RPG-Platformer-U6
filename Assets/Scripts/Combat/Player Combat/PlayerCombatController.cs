@@ -76,6 +76,7 @@ namespace RPGPlatformer.Combat
             var staff = InventoryItemSO.FindItemSO["Basic Staff (SH)"];
             var bow = InventoryItemSO.FindItemSO["Basic Bow (SH)"];
             var sword = InventoryItemSO.FindItemSO["Basic Sword (SH)"];
+            var ssbow = InventoryItemSO.FindItemSO["Spider Silk Bow (SH)"];
             var gold = InventoryItemSO.FindItemSO["Gold Coins"];
             var cookie = InventoryItemSO.FindItemSO["Cookie"];
             var redBody = InventoryItemSO.FindItemSO["Red Body"];
@@ -88,6 +89,7 @@ namespace RPGPlatformer.Combat
             stateDriver.TakeLoot(staff.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(bow.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(sword.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(ssbow.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(cookie.CreateInstanceOfItem().ToInventorySlotData(8));
             stateDriver.TakeLoot(gold.CreateInstanceOfItem().ToInventorySlotData(773));
             stateDriver.TakeLoot(redBody.CreateInstanceOfItem().ToInventorySlotData(1));

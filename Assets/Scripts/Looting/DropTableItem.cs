@@ -1,15 +1,15 @@
 ﻿using RPGPlatformer.Inventory;
+using RPGPlatformer.Core;
 using System;
 using UnityEngine;
 
 namespace RPGPlatformer.Loot
 {
     [Serializable]
-    public struct DropTableItem : ISerializationCallbackReceiver
+    public struct DropTableItem
     {
         [SerializeField] InventoryItemSO item;
-        [SerializeField] int minQuantity;
-        [SerializeField] int maxQuantity;
+        [SerializeField] RandomizableInt quantity;
         [Range(0, 1)][SerializeField] float dropChance;
 
         public IInventorySlotDataContainer RollAndGenerateDropItem()
@@ -24,15 +24,7 @@ namespace RPGPlatformer.Loot
                 return null;
             }
 
-            var q = MiscTools.rng.Next(minQuantity, maxQuantity + 1);
-            return item.CreateInstanceOfItem().ToInventorySlotData(q);
-        }
-
-        public void OnBeforeSerialize()
-        {
-            minQuantity = Math.Max(minQuantity, 0);
-            maxQuantity = Math.Max(maxQuantity, 0);
-            minQuantity = Math.Min(minQuantity, maxQuantity);
+            return item.CreateInstanceOfItem().ToInventorySlotData(quantity.Value);
         }
 
         public void OnAfterDeserialize() { }

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requeAutomaticallyAtEndOfEffect: 1
+  requeOnParentDeath: 0
   particleEffect: {fileID: 9024309626091116130}
 --- !u!1 &8437101988832029444
 GameObject:
@@ -75,7 +76,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 0.02, y: 0.09, z: 1}
+  m_LocalScale: {x: 0.02, y: 0.09, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5017182423917077166}
@@ -4881,6 +4882,7 @@ ParticleSystemRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4903,7 +4905,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 198256187
-  m_SortingLayer: 2
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_RenderMode: 1
   m_MeshDistribution: 0

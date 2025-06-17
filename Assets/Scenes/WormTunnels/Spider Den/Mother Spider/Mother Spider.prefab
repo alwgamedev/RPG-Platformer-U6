@@ -8092,8 +8092,8 @@ MonoBehaviour:
   findStatBarInChildren: 0
   stat:
     minValue: 0
-    maxValue: 1750
-    defaultValue: 1750
+    maxValue: 2400
+    defaultValue: 2400
     replenishRate: 0
     autoReplenish: 1
     statBar: {fileID: 4489949363248811169}
@@ -8111,7 +8111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Mother Spider
-  targetLayer: Player
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -8145,8 +8144,18 @@ MonoBehaviour:
   timeToDelayBeforeFinalizeDeath: 2
   minimumCombatDistanceMultiplier: 0.5
   combatXPReward: 50
-  dropSize: 0
-  dropTable: {fileID: 0}
+  dropGenerator:
+    tables:
+    - table: {fileID: 11400000, guid: 5c83aee9e1c08954d879ac787b753cf8, type: 2}
+      quantityFromTable:
+        mode: 1
+        min: 0
+        max: 1
+    - table: {fileID: 11400000, guid: dcc8885deea1122408762a6e09802d88, type: 2}
+      quantityFromTable:
+        mode: 0
+        min: 0
+        max: 1
   weaponSwapSOs: []
 --- !u!114 &7001330247236237916
 MonoBehaviour:

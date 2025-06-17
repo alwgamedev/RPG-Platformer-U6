@@ -23,11 +23,11 @@ namespace RPGPlatformer.Loot
 
             int j;
 
-            for (int i =  0; i < table.Length; i++)
+            for (int i =  0; i < numSlots; i++)
             {
-                j = MiscTools.rng.Next(0, table.Length);
+                j = MiscTools.rng.Next(table.Length);
                 result[i] = table[j].RollAndGenerateDropItem();
-                //^I'm sure about randomizing j every time -- later we may want
+                //^I'm not sure about randomizing j every time -- later we may want
                 //to have some number of table entries that are included in every drop
             }
 

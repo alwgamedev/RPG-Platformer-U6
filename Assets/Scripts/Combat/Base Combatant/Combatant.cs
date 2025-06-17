@@ -8,6 +8,7 @@ using RPGPlatformer.Loot;
 using RPGPlatformer.Skills;
 using System.Threading.Tasks;
 using System.Threading;
+using RPGPlatformer.Movement;
 
 namespace RPGPlatformer.Combat
 {
@@ -439,7 +440,13 @@ namespace RPGPlatformer.Combat
 
         public void DropLoot(IInventorySlotDataContainer loot)
         {
-            dropSpawner.SpawnDrop(transform.position, loot);
+            var p = transform.position;
+            var r = Physics2D.Raycast(p, -Vector2.up, Mathf.Infinity, LayerMask.GetMask("GroundLayer"));
+            if (r)
+            {
+                p = r.collider.ClosestPoint(p) + Vector2.up;
+            }
+            dropSpawner.SpawnDrop(p, loot);
         }
 
         public void DropLoot(IInventorySlotDataContainer[] loot)

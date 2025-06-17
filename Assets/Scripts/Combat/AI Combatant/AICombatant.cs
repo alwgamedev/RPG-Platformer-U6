@@ -9,9 +9,8 @@ namespace RPGPlatformer.Combat
 {
     public class AICombatant : Combatant
     {
-        [SerializeField] protected int combatXPReward = 50; 
-        [SerializeField] protected int dropSize;//(max) number of items in generated drop, could make this RandomizableInt
-        [SerializeField] protected DropTable dropTable;
+        [SerializeField] protected int combatXPReward = 50;
+        [SerializeField] protected DropGenerator dropGenerator;
         [SerializeField] protected WeaponSO[] weaponSwapSOs;
 
         //^in the future to make things more balanced you may want to have separate common and rare drop table,
@@ -22,8 +21,9 @@ namespace RPGPlatformer.Combat
         protected Dictionary<string, Weapon> weaponSwaps = new();
 
         public DamageTakenTracker DamageTracker => damageTracker;
-        public int DropSize => dropSize;
-        public DropTable DropTable => dropTable;
+        public DropGenerator DropGenerator => dropGenerator;
+        //public int DropSize => dropSize;
+        //public DropTable DropTable => dropTable;
         //true when loot drop has been generated and is carried in inventory
         //false before loot drop has been generated or once it has been dropped;
 
@@ -66,9 +66,12 @@ namespace RPGPlatformer.Combat
 
         public void GenerateLootDrop()
         {
-            if (hasGeneratedLootDrop || DropTable == null)
-                return;
-            TakeLoot(DropTable.GenerateDrop(DropSize), false);
+            if (hasGeneratedLootDrop) return;
+            var drop = dropGenerator.GenerateDrop();
+            foreach (var d in drop)
+            {
+                TakeLoot(d, false);
+            }
             hasGeneratedLootDrop = true;
         }
 
