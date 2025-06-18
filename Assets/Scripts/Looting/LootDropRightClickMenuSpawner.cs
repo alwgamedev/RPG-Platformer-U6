@@ -1,6 +1,5 @@
 ﻿using RPGPlatformer.UI;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace RPGPlatformer.Loot
 {

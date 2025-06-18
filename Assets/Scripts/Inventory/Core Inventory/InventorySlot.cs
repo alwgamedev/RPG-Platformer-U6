@@ -22,7 +22,11 @@ namespace RPGPlatformer.Inventory
 
             if (data.Item.Equals(item))//in particular current item is not null
             {
-                var addable = Math.Min(data.Quantity, item.BaseData.MaxStack - data.Quantity);
+                if (quantity >= item.BaseData.MaxStack)
+                {
+                    return data;
+                }
+                var addable = Math.Min(data.Quantity, item.BaseData.MaxStack - quantity);
                 quantity += addable;
                 return data.Item.ToInventorySlotData(data.Quantity - addable);
             }

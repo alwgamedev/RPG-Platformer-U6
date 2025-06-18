@@ -203,7 +203,8 @@ namespace RPGPlatformer.Inventory
                     //in an infinite loop
                     Debug.LogWarning($"placing item {data.Item.BaseData.DisplayName} failed");
                     Debug.LogWarning($"attempted to distribute {remaining} quantity to inventory slots " +
-                        $"and after distributing there is {leftOver.Quantity} quantity remaining");
+                        $"and after distributing there is {leftOver.Quantity} quantity remaining " +
+                        "(>= starting quantity)");
                     return leftOver;
                 }
                 return DistributeToFirstAvailableSlots(leftOver);
@@ -265,11 +266,14 @@ namespace RPGPlatformer.Inventory
 
         private int FindFirstVacantSlotOfType(InventoryItem item)
         {
-            for (int i = 0; i < slots.Length; i++)
+            if (item != null)
             {
-                if (slots[i].HasSpaceForMore() && item.Equals(slots[i].Item))
+                for (int i = 0; i < slots.Length; i++)
                 {
-                    return i;
+                    if (slots[i].HasSpaceForMore() && item.Equals(slots[i].Item))
+                    {
+                        return i;
+                    }
                 }
             }
             return -1;

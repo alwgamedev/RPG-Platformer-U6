@@ -10,7 +10,7 @@ namespace RPGPlatformer.UI
     {
         [SerializeField] int maxMessages = 100;
         [SerializeField] TextMeshProUGUI content;
-
+        [SerializeField] CollapsableUI collapsableUI;
         GameLogInputField inputField;
         Queue<string> messages = new();
 
@@ -48,7 +48,6 @@ namespace RPGPlatformer.UI
             inputField = GetComponentInChildren<GameLogInputField>(true);
             inputField.InputSubmitted += (input) => EnableInputField(false);
             EnableInputField(false);
-            //still subscribe in case action map gets rebuilt due to input bindings change or something
         }
 
         private void OnIAMConfigure()
@@ -98,6 +97,10 @@ namespace RPGPlatformer.UI
 
         private void EnableInputField(bool val)
         {
+            if (collapsableUI && !collapsableUI.IsOpen)
+            {
+                collapsableUI.SetOpen(true);
+            }
             inputField.ResetInputField();
             inputField.gameObject.SetActive(val);
             if (val)

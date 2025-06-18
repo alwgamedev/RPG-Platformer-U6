@@ -21,7 +21,7 @@ namespace RPGPlatformer.UI
         public void ListenForNumericalInput()
         {
             SetContentType(TMP_InputField.ContentType.IntegerNumber);
-            inputField.onSubmit.AddListener((text) => SubmitInput(ParseNumericalInput(text)));
+            inputField.onSubmit.AddListener(SubmitNumericalInput);
         }
 
         public void ResetInputField()
@@ -46,13 +46,20 @@ namespace RPGPlatformer.UI
             return null;
         }
 
-        private void SubmitInput(object input)
-        //hopefully this will also trigger when IF is deselected
-        //(and in that case no input will be submitted)
+        private void SubmitNumericalInput(string text)
         {
+            SubmitInput(ParseNumericalInput(text));
+        }
+
+        private void SubmitInput(object input)
+        //this will also trigger when IF is deselected
+        //(and in that case no input will be submitted)
+        //(so you can cancel input attempt by clicking outside the input field, basically)
+        {
+            inputField.onSubmit.RemoveListener(SubmitNumericalInput);
+
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                Debug.Log("Input submitted");
                 InputSubmitted?.Invoke(input);
             }
             else

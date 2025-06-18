@@ -16,7 +16,6 @@ namespace RPGPlatformer.Loot
         protected bool beingInspected;
         protected ILooter playerLooter;
         protected InventoryManager inventory;
-        //protected Action OnUpdate;
 
         public bool IsPlayer => false;//(part of IInventoryOwner interface)
         public override string ExamineText => "I should search this for loot.";

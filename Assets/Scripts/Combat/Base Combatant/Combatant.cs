@@ -20,9 +20,7 @@ namespace RPGPlatformer.Combat
     public class Combatant : StateDriver, ICombatant, IInventoryOwner, ILooter, ILootDropper
     {
         [SerializeField] protected string displayName;
-        //[SerializeField] protected string targetLayer;
         [SerializeField] protected LayerMask targetLayerMask;
-        //[SerializeField] protected string targetTag;//unused
         [SerializeField] protected ItemSlot headSlot;
         [SerializeField] protected ItemSlot torsoSlot;
         [SerializeField] protected ItemSlot legsSlot;
@@ -71,6 +69,7 @@ namespace RPGPlatformer.Combat
         public IHealth Health => health;
         public ReplenishableStat Stamina => stamina;
         public ReplenishableStat Wrath => wrath;
+        public Vector2 DropPosition => health.HitEffectTransform.position;
         public bool DestroyOnFinalizeDeath { get => destroyOnFinalizeDeath; set => destroyOnFinalizeDeath = value; }
 
         public event Action OnTargetingFailed;
@@ -439,18 +438,12 @@ namespace RPGPlatformer.Combat
 
         public void DropLoot(IInventorySlotDataContainer loot)
         {
-            var p = transform.position;
-            var r = Physics2D.Raycast(p, -Vector2.up, Mathf.Infinity, LayerMask.GetMask("GroundLayer"));
-            if (r)
-            {
-                p = r.collider.ClosestPoint(p) + Vector2.up;
-            }
-            dropSpawner.SpawnDrop(p, loot);
+            dropSpawner.SpawnDrop(DropPosition, loot);
         }
 
         public void DropLoot(IInventorySlotDataContainer[] loot)
         {
-            dropSpawner.SpawnDrop(transform.position, loot);
+            dropSpawner.SpawnDrop(DropPosition, loot);
         }
 
         public void TakeLoot(IInventorySlotDataContainer loot, bool handleOverflow = true)
@@ -489,6 +482,9 @@ namespace RPGPlatformer.Combat
         {
             if (data == null) return;
 
+            //writing it this way has a purpose -- checks if data contains any nontrivial slots,
+            //and drops ALL loot as soon as it finds a nontrivial slot
+            //(so that all items are sent in one drop)
             for (int i = 0; i < data.Length; i++)
             {
                 if (data[i]?.Item != null && data[i].Quantity > 0)
