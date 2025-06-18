@@ -835,8 +835,13 @@ MonoBehaviour:
   timeToDelayBeforeFinalizeDeath: 0
   minimumCombatDistanceMultiplier: 0.5
   combatXPReward: 350
-  dropSize: 1
-  dropTable: {fileID: 11400000, guid: 24fd6ec42274d43498ad9fd9a852adcb, type: 2}
+  dropGenerator:
+    tables:
+    - table: {fileID: 11400000, guid: 24fd6ec42274d43498ad9fd9a852adcb, type: 2}
+      quantityFromTable:
+        mode: 1
+        min: 0
+        max: 1
   weaponSwapSOs: []
 --- !u!114 &5621162454144449062
 MonoBehaviour:
