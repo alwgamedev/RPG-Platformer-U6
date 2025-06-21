@@ -1,5 +1,6 @@
 ﻿using RPGPlatformer.AIControl;
 using RPGPlatformer.Core;
+using RPGPlatformer.Inventory;
 
 namespace RPGPlatformer.Dialogue
 {
@@ -37,6 +38,13 @@ namespace RPGPlatformer.Dialogue
             {
                 patrollerController.BeginDefaultPatrol();
             }
+        }
+
+        public void TakePayment(string[] args)
+        {
+            var p = GlobalGameTools.Instance.Player;
+            var io = (IInventoryOwner)p.Combatant;
+            io.Inventory.RemoveItem(args[0], 1);
         }
     }
 }

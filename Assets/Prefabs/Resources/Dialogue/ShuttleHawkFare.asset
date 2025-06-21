@@ -74,10 +74,10 @@ MonoBehaviour:
     functionData:
       actionName: HasItem
       parameters:
-      - Worm
+      - Earthworm Drop
   continuations:
-  - 9812c815-e659-4e30-9545-97314c8499ae
   - 938171b3-02b6-4e02-abf6-389c4e2ed78a
+  - 9812c815-e659-4e30-9545-97314c8499ae
 --- !u!114 &-2207411446009075578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,6 +211,9 @@ MonoBehaviour:
   uniqueID: fc3048d4-b9e6-40d4-a4a9-68eeabc7fb78
   position: {x: 2651.2, y: 867.2}
   entryActions:
+  - actionName: TakePayment
+    parameters:
+    - Earthworm Drop
   - actionName: PrepareForDeparture
     parameters: []
   exitActions: []
@@ -261,10 +264,10 @@ MonoBehaviour:
     functionData:
       actionName: HasItem
       parameters:
-      - Worm
+      - Earthworm Drop
   continuations:
-  - 9812c815-e659-4e30-9545-97314c8499ae
   - d0b07c5e-af07-463a-bfbd-ba017a6d6779
+  - 9812c815-e659-4e30-9545-97314c8499ae
 --- !u!114 &3828516515457430189
 MonoBehaviour:
   m_ObjectHideFlags: 0

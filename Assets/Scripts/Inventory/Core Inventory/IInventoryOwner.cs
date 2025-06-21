@@ -8,6 +8,25 @@ namespace RPGPlatformer.Inventory
         public bool IsPlayer { get; }
 
         public InventoryManager Inventory { get; }
+        
+        //needs to be lookup name of the item
+        public bool HasItem(string item)
+        {
+            if (item == null) return false;
+
+            if (this is IEquippableCharacter ec)
+            {
+                foreach (var slot in ec.EquipSlots.Values)
+                {
+                    if (slot && item.Equals(slot.EquippedItem?.BaseData.LookupName))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return Inventory != null && Inventory.ContainsItem(item);
+        }
 
         public bool HasItem(InventoryItem item)
         {

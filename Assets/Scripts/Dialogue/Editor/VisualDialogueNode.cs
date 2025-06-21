@@ -42,6 +42,8 @@ namespace RPGPlatformer.Dialogue.Editor
 
         public bool NodeReady()
         {
+            //response nodes sometimes causing issues (not adding their output ports)
+            //but decision node never seems to cause issues
             if (dialogueNode is ResponseChoicesDialogueNode r)
             {
                 return OutputPorts.Count == r.ResponseChoices().Count;
@@ -144,6 +146,8 @@ namespace RPGPlatformer.Dialogue.Editor
                 return p;
             };
 
+            lv.Q<Foldout>().value = true;
+            //SO THAT ITEMS GET MADE ASAP, NOT NEXT TIME WE OPEN FOLDOUT
             lv.BindProperty(serObject.FindProperty("continuations"));
 
             outputContainer.Add(lv);
@@ -188,8 +192,10 @@ namespace RPGPlatformer.Dialogue.Editor
             choicesList.style.minWidth = 250;
             choicesList.style.maxWidth = 325;
             choicesList.headerTitle = "Response Choices";
+            choicesList.Q<Foldout>().value = true;
+            //ITEMS WON'T GET MADE UNTIL FOLDOUT IS OPEN, AND WE NEED THE PORTS READY ASAP
             choicesList.BindProperty(serObject.FindProperty("responseChoices"));
-
+            
             outputContainer.Add(choicesList);
 
             float startTime = Time.realtimeSinceStartup;
@@ -197,7 +203,7 @@ namespace RPGPlatformer.Dialogue.Editor
 
             //have to do this bc if you set bindItem before BindProperty is all set up,
             //then it doesn't give you the good bindItem that does everything magically.
-            //looks like stupid hackery, and it is
+            //shit way of doing it tho...
             bool LVReady()
             {
                 if (Time.realtimeSinceStartup - startTime > 1)

@@ -44,7 +44,8 @@ namespace RPGPlatformer.Combat
         {
             if (getAoeCenter == null) return;
             IEnumerable targets = FindTargetsAtPosition(getAoeCenter(controller), aoeRadius);
-            DealAoeDamage(damageDealer, targets, damage, excludeInstigator, stunDuration, freezeAnimationDuringStun, getHitEffect);
+            DealAoeDamage(damageDealer, targets, damage, excludeInstigator, stunDuration, 
+                freezeAnimationDuringStun, getHitEffect);
         }
     }
 

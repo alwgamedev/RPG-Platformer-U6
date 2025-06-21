@@ -30,6 +30,7 @@ namespace RPGPlatformer.Dialogue.Editor
 
         public void DisplayDialogue(DialogueSO dialogue)
         {
+            Debug.Log($"Displaying dialogue: {dialogue.name}");
             this.dialogue = null;//so that OnGraphViewChanged doesn't affect selected dialogue
             DeleteElements(graphElements);
             FindVisualNode.Clear();
@@ -68,6 +69,7 @@ namespace RPGPlatformer.Dialogue.Editor
             {
                 if (Time.realtimeSinceStartup - startTime > 1)
                 {
+                    Debug.Log($"{GetType().Name} timed out while waiting for dialogue ports to be ready");
                     return true;
                 }
 

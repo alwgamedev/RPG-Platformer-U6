@@ -268,11 +268,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &1011263810 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 6020091611272211644, guid: f5381072d815e164e84021737173a10a, type: 3}
-  m_PrefabInstance: {fileID: 1239181354}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1191671364
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,6 +388,10 @@ PrefabInstance:
     - target: {fileID: 393799725689929377, guid: f5381072d815e164e84021737173a10a, type: 3}
       propertyPath: m_Name
       value: Blank Sprite Shape Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 393799725689929377, guid: f5381072d815e164e84021737173a10a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1040949900820552318, guid: f5381072d815e164e84021737173a10a, type: 3}
       propertyPath: m_Creator
@@ -1317,11 +1316,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7269237510352361801, guid: 8ed4fb4129dbd6c49b7221b32290c6c7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.7039481
+      value: 130.42
       objectReference: {fileID: 0}
     - target: {fileID: 7269237510352361801, guid: 8ed4fb4129dbd6c49b7221b32290c6c7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.11045699
+      value: 8.66
       objectReference: {fileID: 0}
     - target: {fileID: 7269237510352361801, guid: 8ed4fb4129dbd6c49b7221b32290c6c7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1411,6 +1410,10 @@ PrefabInstance:
     - target: {fileID: 8888867213344029472, guid: 9af7af24ce911a047846bf358da551a9, type: 3}
       propertyPath: m_Name
       value: Persistent Objects
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888867213344029472, guid: 9af7af24ce911a047846bf358da551a9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1552,10 +1555,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Earthworm
       objectReference: {fileID: 0}
-    - target: {fileID: 4166631166757328849, guid: 834ba9ab61b6c17458fd05098bf522a9, type: 3}
-      propertyPath: groundCollider
-      value: 
-      objectReference: {fileID: 1011263810}
     - target: {fileID: 4166631166757328849, guid: 834ba9ab61b6c17458fd05098bf522a9, type: 3}
       propertyPath: groundBounds.maxTransform
       value: 

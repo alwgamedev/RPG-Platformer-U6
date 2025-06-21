@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Unity.Loading;
 using UnityEngine;
 
 namespace RPGPlatformer.Inventory
@@ -66,28 +67,14 @@ namespace RPGPlatformer.Inventory
             return false;
         }
 
-        //public bool IsFull()
-        //{
-        //   for(int i = 0; i < slots.Length; i++)
-        //   {
-        //        if (slots[i].HasSpaceForMore())
-        //        {
-        //            return false;
-        //        }
-        //   }
-        //   return true;
-        //}
+        public bool ContainsItem(string itemLookup)
+        {
+            return FindFirstSlotContaining(itemLookup) >= 0;
+        }
 
         public bool ContainsItem(InventoryItem item)
         {
-            if (item == null) return false;
-
-            foreach (var slot in slots)
-            {
-                if (item.Equals(slot.Item) && slot.Quantity > 0) return true;
-            }
-
-            return false;
+            return FindFirstSlotContaining(item) >= 0;
         }
 
         public bool IsEmpty()
@@ -252,6 +239,67 @@ namespace RPGPlatformer.Inventory
             return Enumerable.Range(0, slots.Length).Select(i => RemoveAllFromSlot(i)).ToArray();
         }
 
+        public int RemoveItem(InventoryItem item, int quantity = 1)
+        {
+            var r = QuietRemoveItem(item, quantity);
+            OnInventoryChanged?.Invoke();
+            return r;
+        }
+
+        public int RemoveItem(string itemLookup, int quantity = 1)
+        {
+            var r = QuietRemoveItem(itemLookup, quantity);
+            OnInventoryChanged?.Invoke();
+            return r;
+        }
+
+        //remove item without invoking OnInventoryChanged
+        private int QuietRemoveItem(InventoryItem item, int quantity = 1)
+        {
+            if (quantity <= 0 || item == null)
+            {
+                return 0;
+            }
+
+            int i = FindFirstSlotContaining(item);
+            if (i < 0)
+            {
+                return 0;
+            }
+
+            var r = CoreRemoveItem(i, quantity).Quantity;
+            if (r > 0 && quantity > r)
+            {
+                r += RemoveItem(item, quantity - r);
+            }
+
+            return r;
+        }
+
+        //remove item without invoking OnInventoryChanged
+        private int QuietRemoveItem(string itemLookup, int quantity = 1)
+        {
+            if (quantity <= 0 || itemLookup == null)
+            {
+                return 0;
+            }
+
+            int i = FindFirstSlotContaining(itemLookup);
+            if (i < 0)
+            {
+                return 0;
+            }
+
+            var r = CoreRemoveItem(i, quantity).Quantity;
+            if (r > 0 && quantity > r)
+            {
+                r += RemoveItem(itemLookup, quantity - r);
+            }
+
+            OnInventoryChanged?.Invoke();
+            return r;
+        }
+
         private int FindFirstEmptySlot()
         {
             for (int i = 0; i < slots.Length; i++)
@@ -279,6 +327,38 @@ namespace RPGPlatformer.Inventory
             return -1;
         }
 
+        private int FindFirstSlotContaining(InventoryItem item)
+        {
+            if (item != null)
+            {
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    if (item.Equals(slots[i].Item) && slots[i].Quantity > 0)
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        private int FindFirstSlotContaining(string itemLookup)
+        {
+            if (itemLookup != null)
+            {
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    if (itemLookup.Equals(slots[i].Item?.BaseData.LookupName) && slots[i].Quantity > 0)
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
         //NOTE: this will replace existing item if not of same type as current item (even if new item is null)
         private IInventorySlotDataContainer CorePlaceItem(int i, IInventorySlotDataContainer data)
         {
@@ -290,7 +370,8 @@ namespace RPGPlatformer.Inventory
         private IInventorySlotDataContainer CoreRemoveItem(int i, int quantity = 1)
         {
             var data = slots[i].Remove(quantity);
-            data?.Item?.OnRemovedFromInventorySlot();//if it gave us an item copy, then OnRemoved will be null, so either way this works
+            data?.Item?.OnRemovedFromInventorySlot();
+            //if it gave us an item copy, then OnRemoved will be null, so either way this works
             if (slots[i].Quantity == 0)
             {
                 slots[i].Item?.OnRemovedFromInventorySlot();
