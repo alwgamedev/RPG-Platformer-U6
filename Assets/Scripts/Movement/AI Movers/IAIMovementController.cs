@@ -11,5 +11,7 @@ namespace RPGPlatformer.Movement
 
         //public void SetMoveInput(Vector3 moveInput);
         public bool DropOffAhead(HorizontalOrientation direction, out float distance);
+
+        public bool CanMove(Vector3 moveInput);
     }
 }

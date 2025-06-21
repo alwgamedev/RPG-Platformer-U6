@@ -92,7 +92,7 @@ namespace RPGPlatformer.Movement
         //    return Grounded;
         //}
 
-        protected virtual bool CanMove(Vector3 moveInput)
+        public virtual bool CanMove(Vector3 moveInput)
         {
             if (rightBound && moveInput.x > 0 && transform.position.x > rightBound.position.x) return false;
             if (leftBound && moveInput.x < 0 && transform.position.x < leftBound.position.x) return false;

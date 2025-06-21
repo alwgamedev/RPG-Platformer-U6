@@ -81,7 +81,7 @@ namespace RPGPlatformer.Movement
 
         private void HandleMoveInput()
         {
-            if (CanMove())
+            if (CanMove(moveInput))
             {
                 stateDriver.HandleMoveInput(MoveInput);
             }
@@ -109,7 +109,7 @@ namespace RPGPlatformer.Movement
         public void SetCurled(bool val)
             //expose this at the top level, bc higher up AI controllers will only know about the MovementController
         {
-            if (val && !CanMove(.75f)) return;//prevent him from curling and uncurling when at edge of movement bounds
+            if (val && !CanMove(moveInput, .75f)) return;//prevent him from curling and uncurling when at edge of movement bounds
             stateDriver.SetCurled(val);
         }
 
@@ -161,7 +161,13 @@ namespace RPGPlatformer.Movement
             return RelativeVelocity.magnitude / maxSpeed;
         }
 
-        private bool CanMove(float buffer = 0)
+        //(for interface)
+        public bool CanMove(Vector3 moveInput)
+        {
+            return CanMove(moveInput, 0);
+        }
+
+        private bool CanMove(Vector3 moveInput, float buffer = 0)
         {
             if (rightBound && moveInput.x > 0 && transform.position.x > rightBound.position.x - buffer) return false;
             if (leftBound && moveInput.x < 0 && transform.position.x < leftBound.position.x + buffer) return false;

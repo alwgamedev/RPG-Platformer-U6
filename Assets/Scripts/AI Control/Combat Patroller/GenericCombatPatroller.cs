@@ -187,8 +187,9 @@ namespace RPGPlatformer.AIControl
         //(would want to change this for flying enemies)
         protected virtual bool CanPursue(float distSquared, float tolerance)
         {
-            return !InRange(Mathf.Abs(currentTarget.transform.position.x - transform.position.x),
-                MinimumCombatDistance, tolerance);
+            var d = CurrentTarget.transform.position.x - transform.position.x;
+            return MovementController.CanMove(d * Vector3.right) 
+                && !InRange(Mathf.Abs(d), MinimumCombatDistance, tolerance);
         }
 
         //allows child classes to decide how to pursue based on distance

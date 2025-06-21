@@ -43,7 +43,8 @@ namespace RPGPlatformer.AIControl
         {
             if (combatController.ChannelingAbility) return;
 
-            if (!charging && !awaitingBeginCharge && UnarmedWeaponEquipped && unarmedAttacksCounter > 1)
+            if (!charging && !awaitingBeginCharge && UnarmedWeaponEquipped && 
+                (unarmedAttacksCounter > 1 || !CanPursue(distanceSqrd, tolerance)))
             {
                 EquipRangedWeapon();
             }
@@ -71,7 +72,7 @@ namespace RPGPlatformer.AIControl
             if (!UnarmedWeaponEquipped)
             {
                 rangedAttacksCounter++;
-                if (rangedAttacksCounter > 2)
+                if (ShouldBeginCharge())
                 {
                     awaitingBeginCharge = true;
                     combatController.OnChannelEnded += ChannelEndedHandler;
@@ -97,6 +98,14 @@ namespace RPGPlatformer.AIControl
             }
         }
 
+        private bool ShouldBeginCharge()
+        {
+            return rangedAttacksCounter > 2
+                && TryGetDistanceSqrd(CurrentTarget, out var d2, out var t)
+                && (combatController.Combatant.CanAttackAtDistSqrd(d2, t, unarmedAttackRange)
+                || CanPursue(d2, t));
+        }
+
         private void BeginCharge()
         {
             if (UnarmedWeaponEquipped || !combatController.IsInCombat)
@@ -114,6 +123,7 @@ namespace RPGPlatformer.AIControl
             if (!UnarmedWeaponEquipped)
             {
                 unarmedAttacksCounter = 0;
+                rangedAttacksCounter = 0;
             }
             ((AICombatant)combatController.Combatant).EquipWeaponSwap("Unarmed (Mother Spider)");
         }
@@ -122,6 +132,7 @@ namespace RPGPlatformer.AIControl
         {
             if (UnarmedWeaponEquipped)
             {
+                unarmedAttacksCounter = 0;
                 rangedAttacksCounter = 0;
             }
             ((AICombatant)combatController.Combatant).EquipWeaponSwap("Ranged Weapon (Mother Spider)");
