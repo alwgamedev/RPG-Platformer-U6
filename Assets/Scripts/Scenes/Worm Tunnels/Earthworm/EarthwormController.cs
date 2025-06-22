@@ -138,6 +138,7 @@ namespace RPGPlatformer.AIControl
                 OnUpdate = stateDriver.AboveGroundBehavior;
                 stateDriver.SetAutoRetaliate(true);
                 stateDriver.SetInvincible(false);
+                stateDriver.EnableContactColliders();
                 stateDriver.StartAttacking();
             }
         }
@@ -148,6 +149,7 @@ namespace RPGPlatformer.AIControl
             stateDriver.DisableAllIK();
             stateDriver.SetAutoRetaliate(false);
             stateDriver.SetInvincible(true);
+            stateDriver.DisableContactColliders();//so that he doesn't drag the player underground
             stateDriver.StopAttacking();
         }
 

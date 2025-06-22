@@ -14,6 +14,7 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float retreatMoveSpeed = 2;
         [SerializeField] float tunnelMoveSpeed = 8;
         [SerializeField] float maxTimeAboveGround = 10;
+        [SerializeField] Collider2D[] contactColliders;
         [SerializeField] Transform underGroundBodyAnchor;
         [SerializeField] Transform aboveGroundBodyAnchor;
         [SerializeField] ParticleSystem slamDustParticles;
@@ -51,6 +52,12 @@ namespace RPGPlatformer.AIControl
             curveGuide = GetComponentInChildren<VisualCurveGuide>();
         }
 
+        //private void Start()
+        //{
+        //    //combatController.OnDeath += OnDeath;//we just need to disable colliders which we'll do in anim event
+        //    //combatController.OnRevive += OnRevive; //it won't be revived 
+        //}
+
         public void InitializeState()
         {
             CurrentTarget = GlobalGameTools.Instance.Player.Combatant.Health;
@@ -82,6 +89,28 @@ namespace RPGPlatformer.AIControl
 
 
         //SETTINGS
+
+        public void EnableContactColliders()
+        {
+            foreach (var c in contactColliders)
+            {
+                if (c)
+                {
+                    c.enabled = true;
+                }
+            }
+        }
+
+        public void DisableContactColliders()
+        {
+            foreach (var c in contactColliders)
+            {
+                if (c)
+                {
+                    c.enabled = false;
+                }
+            }
+        }
 
         public void SetAutoRetaliate(bool val)
         {
@@ -381,6 +410,16 @@ namespace RPGPlatformer.AIControl
                 combatController.OnDeath -= Cancel;
             }
         }
+
+        //private void OnDeath()
+        //{
+        //    DisableContactColliders();
+        //}
+
+        //private void OnRevive()
+        //{
+        //    EnableContactColliders();
+        //}
 
         protected override void OnDestroy()
         {
