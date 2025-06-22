@@ -1,5 +1,6 @@
 ﻿using RPGPlatformer.Core;
 using RPGPlatformer.Movement;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGPlatformer.AIControl
@@ -9,9 +10,12 @@ namespace RPGPlatformer.AIControl
         [SerializeField] float departureWaitTime = 30;
         [SerializeField] float inFlightMountGravity = 100;
         [SerializeField] float defaultMountGravity = 60;
+        [SerializeField] float departureVerificationTime = 1;
+        [SerializeField] float dismountVerificationTime = 5;
 
+        float mountVerificationTimer = 0;
         bool readyForDeparture;
-        bool playerHasMounted;
+        bool playerIsMounted;
 
         MountableEntity[] mounts;
 
@@ -41,7 +45,7 @@ namespace RPGPlatformer.AIControl
         public void PrepareForDeparture()
         {
             Trigger(typeof(AwaitingDeparture).Name);
-            playerHasMounted = false;
+            playerIsMounted = false;
             readyForDeparture = false;
         }
 
@@ -52,9 +56,15 @@ namespace RPGPlatformer.AIControl
 
         public void AwaitingDepartureBehavior()
         {
-            if (readyForDeparture && playerHasMounted)
+            if (readyForDeparture && playerIsMounted)
             {
-                Trigger(typeof(Shuttling).Name);
+                mountVerificationTimer += Time.deltaTime;
+                if (mountVerificationTimer > departureVerificationTime)
+                {
+                    //SubscribeMountedHandlers(false);//keep mounted handlers subscribed for shuttling!
+                    mountVerificationTimer = 0;
+                    Trigger(typeof(Shuttling).Name);
+                }
                 return;
             }
 
@@ -64,30 +74,70 @@ namespace RPGPlatformer.AIControl
         public void ReadyForDeparture()
         {
             readyForDeparture = true;
-            playerHasMounted = false;
+            playerIsMounted = false;
+            mountVerificationTimer = 0;
 
             BeginPatrol(NavigationMode.timedRest, departureWaitTime);
-            SubscribeMountedHandler(true);
+            SubscribeMountedHandlers(true);
         }
 
         public void DepartureTimeOut()
         {
             Trigger(typeof(Patrol).Name);
-            if (!playerHasMounted)
+            if (!playerIsMounted)
             {
-                SubscribeMountedHandler(false);
+                SubscribeMountedHandlers(false);
             }
         }
 
-        public void BeginFlightPath(PatrolPath flightPath, bool forwards = true)
+        public void BeginFlightPath(LinkedListNode<PatrolPathWayPoint> startPoint, bool forwards = true)
         {
-            BeginPatrol(forwards ? NavigationMode.pathForwards : NavigationMode.pathBackwards, flightPath);
+            BeginPatrol(forwards ? NavigationMode.pathForwards : NavigationMode.pathBackwards, startPoint);
             MovementController.BeginFlying();
+        }
+
+        public void ShuttlingBehavior()
+        {
+            if (IsFollowingFlightPath() && !MovementController.Flying)
+            {
+                MovementController.BeginFlying();
+                //just in case e.g. player is naughty and blocks him while taking off
+            }
+            //check mode=pathforwards because he is still in Shuttling state while resting at final destination
+            if (!playerIsMounted && PatrolNavigator.CurrentMode == NavigationMode.pathForwards)
+            {
+                mountVerificationTimer += Time.deltaTime;
+                if (mountVerificationTimer > dismountVerificationTime)
+                {
+                    SubscribeMountedHandlers(false);
+                    Trigger(typeof(ReturningToNest).Name);
+                    return;
+                }
+            }
+
+            PatrolBehavior();
+        }
+
+        private bool IsFollowingFlightPath()
+        {
+            return PatrolNavigator.CurrentMode == NavigationMode.pathForwards 
+                || PatrolNavigator.CurrentMode == NavigationMode.pathBackwards;
         }
 
         public void ShuttleDestionationReached()
         {
+            SubscribeMountedHandlers(false);
             BeginPatrol(NavigationMode.timedRest, departureWaitTime);
+        }
+
+        public void ReturningToNestBehavior()
+        {
+            if (IsFollowingFlightPath() && !MovementController.Flying)
+            {
+                MovementController.BeginFlying();
+            }
+
+            PatrolBehavior();
         }
 
         public void ReadyToReturnToNest()
@@ -102,14 +152,24 @@ namespace RPGPlatformer.AIControl
 
         private void MountedHandler(IMounter mounter)
         {
-            if (mounter.transform == GlobalGameTools.Instance.PlayerTransform)
+            if (mounter.transform == GlobalGameTools.Instance.PlayerTransform && !playerIsMounted)
             {
-                playerHasMounted = true;
-                SubscribeMountedHandler(false);
+                playerIsMounted = true;
+                mountVerificationTimer = 0;
+                //SubscribeMountedHandler(false);
             }
         }
 
-        private void SubscribeMountedHandler(bool val)
+        private void DismountedHandler(IMounter mounter)
+        {
+            if (mounter.transform == GlobalGameTools.Instance.PlayerTransform && playerIsMounted)
+            {
+                playerIsMounted = false;
+                mountVerificationTimer = 0;
+            }
+        }
+
+        private void SubscribeMountedHandlers(bool val)
         {
             foreach (var mount in mounts)
             {
@@ -117,12 +177,14 @@ namespace RPGPlatformer.AIControl
                 {
                     mount.EnableTriggerStay(true);
                     mount.Mounted += MountedHandler;
+                    mount.Dismounted += DismountedHandler;
                     mount.MountStay += MountedHandler;
                 }
                 else
                 {
                     mount.EnableTriggerStay(false);
                     mount.Mounted -= MountedHandler;
+                    mount.Dismounted -= DismountedHandler;
                     mount.MountStay -= MountedHandler;
                 }
             }

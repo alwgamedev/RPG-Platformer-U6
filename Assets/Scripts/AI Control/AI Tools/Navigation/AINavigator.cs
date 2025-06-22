@@ -56,10 +56,10 @@ namespace RPGPlatformer.AIControl
                     BeginBoundedPatrol((RandomizableVector3/*(Transform, Transform)*/)parameters);
                     break;
                 case NavigationMode.pathForwards:
-                    BeginPathPatrol((LinkedList<PatrolPathWayPoint>)parameters, true);
+                    BeginPathPatrol((LinkedListNode<PatrolPathWayPoint>)parameters, true);
                     break;
                 case NavigationMode.pathBackwards:
-                    BeginPathPatrol((LinkedList<PatrolPathWayPoint>)parameters, false);
+                    BeginPathPatrol((LinkedListNode<PatrolPathWayPoint>)parameters, false);
                     break;
             }
         }
@@ -90,10 +90,10 @@ namespace RPGPlatformer.AIControl
             GetNextBoundedDestination();
         }
 
-        private void BeginPathPatrol(LinkedList<PatrolPathWayPoint> path, bool forwards)
+        private void BeginPathPatrol(LinkedListNode<PatrolPathWayPoint> startNode, bool forwards)
         {
             CurrentMode = forwards ? NavigationMode.pathForwards : NavigationMode.pathBackwards;
-            TargetPoint = forwards ? path.First : path.Last;
+            TargetPoint = startNode;
         }
 
 
@@ -161,6 +161,23 @@ namespace RPGPlatformer.AIControl
             }
 
             m.MoveTowards(TargetPoint.Value.transform.position);
+        }
+
+        public void ReversePath()
+        {
+            switch (CurrentMode)
+            {
+                case NavigationMode.pathForwards:
+                    TargetPoint = TargetPoint.Previous ?? TargetPoint;
+                    CurrentMode = NavigationMode.pathBackwards;
+                    break;
+                case NavigationMode.pathBackwards:
+                    TargetPoint = TargetPoint.Next ?? TargetPoint;
+                    CurrentMode = NavigationMode.pathForwards;
+                    break;
+                default:
+                    break;
+            }
         }
 
         //HANDLE DESTINATION REACHED

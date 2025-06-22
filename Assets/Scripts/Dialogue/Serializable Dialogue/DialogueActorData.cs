@@ -27,6 +27,9 @@ namespace RPGPlatformer.Dialogue
                     var a = actors[i];
                     a.labelledObject = GlobalGameTools.Instance.PlayerTransform.GetComponent<DialogueActor>();
                     actors[i] = a;
+                    Actors[i] = a;
+                    //also update dict, just because OnBeforeSerialize was getting called if you open dialogue trigger's
+                    //inspector during play mode and overwriting actors array
                 }
             }
         }

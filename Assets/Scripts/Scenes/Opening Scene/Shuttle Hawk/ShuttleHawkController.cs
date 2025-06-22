@@ -59,8 +59,8 @@ namespace RPGPlatformer.AIControl
             base.BuildStateBehaviorDict();
 
             StateBehavior[stateManager.StateGraph.awaitingDeparture] = stateDriver.AwaitingDepartureBehavior;
-            StateBehavior[stateManager.StateGraph.shuttling] = stateDriver.PatrolBehavior;
-            StateBehavior[stateManager.StateGraph.returningToNest] = stateDriver.PatrolBehavior;
+            StateBehavior[stateManager.StateGraph.shuttling] = stateDriver.ShuttlingBehavior;
+            StateBehavior[stateManager.StateGraph.returningToNest] = stateDriver.ReturningToNestBehavior;
         }
 
         private void BuildPatrolDestinationReachedHandlerDict()
@@ -93,12 +93,21 @@ namespace RPGPlatformer.AIControl
 
         private void OnShuttlingEntry()
         {
-            stateDriver.BeginFlightPath(shuttlePath);
+            stateDriver.BeginFlightPath(shuttlePath.WayPoints.First);
         }
 
         private void OnReturningToNestEntry()
         {
-            stateDriver.BeginFlightPath(returnPath);
+            if (stateDriver.PatrolNavigator.CurrentMode == NavigationMode.pathForwards)
+            {
+                stateDriver.PatrolNavigator.ReversePath();
+                //this case occurs only when shuttle trip was cancelled (bc player fell off)
+                //and making an early return to nest
+            }
+            else
+            {
+                stateDriver.BeginFlightPath(returnPath.WayPoints.First);
+            }
         }
 
         protected override void OnDestinationReached()

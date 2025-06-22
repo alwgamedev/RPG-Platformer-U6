@@ -364,8 +364,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   departureWaitTime: 18
-  inFlightMountGravity: 65
-  defaultMountGravity: 65
+  inFlightMountGravity: 112
+  defaultMountGravity: 80
+  departureVerificationTime: 1.5
+  dismountVerificationTime: 5
 --- !u!114 &5848020814946518481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,7 +410,7 @@ MonoBehaviour:
   jumpForce: {x: 0, y: 375}
   doubleJumpForceMultiplier: 1.18
   inFlightLinearDamping: 100
-  flightSpeed: 2.75
+  flightSpeed: 2.25
   takeOffForce: {x: 0, y: 7500}
 --- !u!114 &1519639630161499023
 MonoBehaviour:
@@ -438,7 +440,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 50
+    acceleration: 55
     flipSprite: 1
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -466,12 +468,12 @@ MonoBehaviour:
     minRotationLeft: {x: -1, y: 0}
   - movementType: 3
     moveDirection: 1
-    acceleration: 215
+    acceleration: 200
     flipSprite: 1
     changeDirectionWrtGlobalUp: 1
     clampXVelocityOnly: 0
     rotateToDirection: 1
-    rotationSpeed: 0.25
+    rotationSpeed: 0.6
     maxRotationAngle: 1.4
     minRotationAngle: -0.2
     maxRotationRight: {x: 0.16996716, y: 0.98544973}
@@ -544,7 +546,20 @@ MonoBehaviour:
       actionName: TakePayment
       trigger:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 1374627201273509011}
+            m_TargetAssemblyTypeName: RPGPlatformer.Dialogue.ShuttleHawkDialogueActor,
+              Assembly-CSharp
+            m_MethodName: TakePayment
+            m_Mode: 0
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
     - nodeID: fc3048d4-b9e6-40d4-a4a9-68eeabc7fb78
       actionName: PrepareForDeparture
       trigger:
