@@ -65,6 +65,14 @@ PrefabInstance:
       value: -6.528
       objectReference: {fileID: 0}
     - target: {fileID: 5172148425502274794, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
+      propertyPath: tweenTime
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5172148425502274794, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
+      propertyPath: maxIntensity
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5172148425502274794, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
       propertyPath: easeOutTimeScale
       value: -1
       objectReference: {fileID: 0}
@@ -188,8 +196,33 @@ PrefabInstance:
       propertyPath: popupPrefab
       value: 
       objectReference: {fileID: 921919042981876621, guid: 49f70e84f06cf344d88841a84413df81, type: 3}
+    - target: {fileID: 6415810540769253202, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
+      propertyPath: maxInteractableDistance
+      value: 4.25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 485279002436617384, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 119154843655986619}
   m_SourcePrefab: {fileID: 100100000, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
+--- !u!1 &7263278522954037562 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 485279002436617384, guid: 00d7bc0c9b2da8648b451200e45c36e2, type: 3}
+  m_PrefabInstance: {fileID: 7093266152756280722}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &119154843655986619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7263278522954037562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec313f54535e9b84184bc4a7a93cf58a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueIdentifier: 

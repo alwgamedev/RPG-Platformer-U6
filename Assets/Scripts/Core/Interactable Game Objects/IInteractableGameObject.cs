@@ -11,6 +11,7 @@ namespace RPGPlatformer.Core
         //public string DisplayName { get; }
         public bool MouseOver { get; }
         public CursorType CursorType { get; }
+        public bool PlayerHasInteracted { get; }
 
         public bool PlayerCanInteract();
 

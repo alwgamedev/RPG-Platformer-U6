@@ -5,6 +5,9 @@ using System;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using RPGPlatformer.Dialogue;
+using RPGPlatformer.Saving;
+using System.Text.Json.Nodes;
+using System.Text.Json;
 
 
 namespace RPGPlatformer.Core
@@ -14,7 +17,7 @@ namespace RPGPlatformer.Core
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
     public class InteractableGameObject : MonoBehaviour, IInteractableGameObject, IPausable, 
-        IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+        IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, ISavable
     //why use pointer events instead of OnMouseOver etc.?
     //because pointer events are detected by trigger colliders, so we can expand the object's
     //interactable area by adding a trigger collider that won't affect its physics interactions
@@ -34,6 +37,10 @@ namespace RPGPlatformer.Core
         public virtual string ExamineText => examineText;
         public virtual CursorType CursorType { get; protected set; }
         public bool MouseOver { get; protected set; }
+        public bool PlayerHasInteracted { get; protected set; }
+        //^note this will only be triggered by left clicking the IGO
+        //it doesn't make sense to single out right click actions that 
+        //would trigger this (e.g. examine shouldn't, but others should)
 
         public event Action PlayerOutOfRange;
 
@@ -130,6 +137,7 @@ namespace RPGPlatformer.Core
             return true;
         }
 
+        //same thing but with VOID return type
         protected virtual void SendNotificationIfPlayerOutOfRange()
         {
             PlayerInRangeWithNotifications();
@@ -227,13 +235,34 @@ namespace RPGPlatformer.Core
 
             if (eventData.IsLeftMouseButtonEvent() && PlayerCanInteract())
             {
+                if (!PlayerHasInteracted)
+                {
+                    PlayerHasInteracted = true;
+                    OnFirstLeftClick();
+                }
                 OnLeftClick();
             }
         }
 
+        protected virtual void OnFirstLeftClick() { }
+
         protected virtual void OnLeftClick()
         {
             Examine();
+        }
+
+
+        //ISAVABLE
+
+        public JsonNode CaptureState()
+        {
+            return JsonSerializer.SerializeToNode(PlayerHasInteracted);
+        }
+
+        public void RestoreState(JsonNode jNode)
+        {
+            var b = JsonSerializer.Deserialize<bool>(jNode);
+            PlayerHasInteracted = b;
         }
 
         protected virtual void OnDestroy()

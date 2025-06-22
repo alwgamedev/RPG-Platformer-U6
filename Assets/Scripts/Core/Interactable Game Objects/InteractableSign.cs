@@ -3,6 +3,8 @@ using RPGPlatformer.UI;
 using System.Collections.Generic;
 using System;
 using System.Collections;
+using RPGPlatformer.Effects;
+using RPGPlatformer.Saving;
 
 namespace RPGPlatformer.Core
 {
@@ -11,10 +13,29 @@ namespace RPGPlatformer.Core
         [SerializeField] protected PopupWindow popupPrefab;
         [SerializeField] protected string title;
         [SerializeField] protected string content;//may want a custom editor with multiline text box
+        [SerializeField] protected bool highlightBeforeFirstInteraction;
 
         protected PopupWindow activePopup;
-        //in case we want to have any interaction with the popup while active (e.g. change text when a button pressed)
-        //also to accurately know whether a popup is active (instead of just a bool)
+        protected Highlighter highlighter;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            highlighter = GetComponent<Highlighter>();
+            SavingSystem.SceneLoadComplete += OnSceneLoadComplete;
+        }
+
+        //make sure saving system finishes load before we do this
+        //(since load is asynchronous we can't guarantee it's done before Start)
+        protected void OnSceneLoadComplete()
+        {
+            if (highlighter && !PlayerHasInteracted && highlightBeforeFirstInteraction)
+            {
+                OnUpdate += HighlightIfPlayerInRange;
+            }
+
+            SavingSystem.SceneLoadComplete -= OnSceneLoadComplete;
+        }
 
         public override IEnumerable<(string, Func<bool>, Action)> InteractionOptions()
         {
@@ -59,8 +80,23 @@ namespace RPGPlatformer.Core
                 OnUpdate = null;
                 PlayerOutOfRange -= PlayerOutOfRangeHandler;
                 activePopup.Destroyed -= DestroyedHandler;
+                if (highlighter && highlighter.HighlightActive)
+                {
+                    highlighter.EnableHighlight(false);
+                }
                 activePopup = null;
             }
+        }
+
+        protected override void OnFirstLeftClick()
+        {
+            base.OnFirstLeftClick();
+
+            OnUpdate -= HighlightIfPlayerInRange;
+            //if (highlighter && highlighter.HighlightActive)
+            //{
+            //    highlighter.EnableHighlight(false);
+            //}
         }
 
         protected override void OnLeftClick()
@@ -68,6 +104,19 @@ namespace RPGPlatformer.Core
             if (CanSpawnPopup())
             {
                 SpawnPopup();
+            }
+        }
+
+        protected void HighlightIfPlayerInRange()
+        {
+            var p = PlayerInRange();
+            if (p && !highlighter.HighlightActive)
+            {
+                highlighter.EnableHighlight(true);
+            }
+            else if (!p && highlighter.HighlightActive)
+            {
+                highlighter.EnableHighlight(false);
             }
         }
     }
