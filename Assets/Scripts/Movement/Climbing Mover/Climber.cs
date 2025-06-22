@@ -4,6 +4,8 @@ namespace RPGPlatformer.Movement
 {
     public class Climber : AdvancedMover, IClimber
     {
+        [SerializeField] Transform climbingAnchor;//usually the character's hand
+
         protected int climbableObjectLayer;
 
         //public bool ClimbableCollisionEnabled { get; protected set; }
@@ -72,8 +74,9 @@ namespace RPGPlatformer.Movement
             }
 
             var p = ClimberData.WorldPosition();
-            var d = Vector3.Distance(transform.position, p);
-            transform.position = Vector3.Lerp(transform.position, p,
+            var delta = transform.position - climbingAnchor.position;
+            var d = Vector3.Distance(climbingAnchor.position, p);
+            transform.position = delta + Vector3.Lerp(climbingAnchor.position, p,
                 options.PositionLerpRate * Time.deltaTime / d);
             var tUp = ClimberData.localPosition < 0 ? -ClimberData.currentNode.LowerDirection()
                 : ClimberData.currentNode.HigherDirection();

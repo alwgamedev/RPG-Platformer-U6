@@ -701,7 +701,7 @@ MonoBehaviour:
     nodeDetectionRadius: 0.6
     climbSpeed: 1.5
     rotationSpeed: 10
-    positionTweenRate: 500
+    positionTweenRate: 1500
     swingPushAcceleration: 15
 --- !u!114 &4224925343655634794
 MonoBehaviour:
@@ -728,6 +728,7 @@ MonoBehaviour:
   maxNumJumps: 2
   jumpForce: {x: 0, y: 290}
   doubleJumpForceMultiplier: 1.18
+  climbingAnchor: {fileID: 844971893775054568}
 --- !u!114 &253623311915411687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -908,6 +909,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff14fc66d78c4c498b4caf1a0b674cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &844971893775054568 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5761516950912080784, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
+  m_PrefabInstance: {fileID: 4921577125819395448}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1709556298534080478 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6049851851736670886, guid: 43ae1cbce09e97844a155cbf7576128d, type: 3}
