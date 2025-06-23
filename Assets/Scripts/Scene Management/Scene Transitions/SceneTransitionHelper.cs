@@ -1,4 +1,6 @@
-﻿using RPGPlatformer.Saving;
+﻿using RPGPlatformer.Core;
+using RPGPlatformer.Saving;
+using RPGPlatformer.UI;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -24,6 +26,7 @@ namespace RPGPlatformer.SceneManagement
             {
                 Instance = this;
                 ISceneTransitionTrigger.SceneTransitionTriggered += LoadScene;
+                SceneManager.sceneLoaded += FadeSceneIn;
             }
             else
             {
@@ -52,6 +55,7 @@ namespace RPGPlatformer.SceneManagement
 
         public async void LoadScene(SceneTransitionTriggerData data)
         {
+            await GameHUD.FadeSceneOut();
             await LoadSceneTask(data);
         }
 
@@ -69,17 +73,26 @@ namespace RPGPlatformer.SceneManagement
             var ao = SceneManager.LoadSceneAsync(data.SceneToLoad);
             ao.allowSceneActivation = false;
 
-            while (!ao.isDone)
+            async Task t()
             {
-                if (ao.progress >= 0.9f)
+                while (!ao.isDone)
                 {
-                    Debug.Log("INITIATING LAG!");
-                    ao.allowSceneActivation = true;
-                    break;
-                }
+                    if (GlobalGameTools.Instance.TokenSource.IsCancellationRequested)
+                    {
+                        throw new TaskCanceledException();
+                    }
+                    if (ao.progress >= 0.9f)
+                    {
+                        return;
+                    }
 
-                await Task.Yield();
+                    await Task.Yield();
+                }
             }
+
+            await Task.WhenAll(GameHUD.FadeSceneOut(), t());
+
+            ao.allowSceneActivation = true;
 
             //saving system will then restore state in response to "SceneManager.sceneLoaded" event
             //(do it that way, because not every scene loading may go through the SceneTransitionHelper,
@@ -91,6 +104,11 @@ namespace RPGPlatformer.SceneManagement
             //(we had this issue with PlayerSpawnManager and Combatant))
         }
 
+        private async void FadeSceneIn(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            await GameHUD.FadeSceneIn();
+        }
+
         private void OnDestroy()
         {
             if (Instance == this)
@@ -98,6 +116,7 @@ namespace RPGPlatformer.SceneManagement
                 Instance = null;
                 LastSceneTransition = null;
                 ISceneTransitionTrigger.SceneTransitionTriggered -= LoadScene;
+                SceneManager.sceneLoaded -= FadeSceneIn;
             }
         }
     }

@@ -108,6 +108,10 @@ namespace RPGPlatformer.SceneManagement
         private void OnDestroy()
         {
             SavingSystem.SceneLoadComplete -= OnSceneLoadComplete;
+            if (GlobalGameTools.Instance && GlobalGameTools.Instance.TickTimer)
+            {
+                GlobalGameTools.Instance.TickTimer.NewTick -= OnNewTick;
+            }
         }
     }
 }

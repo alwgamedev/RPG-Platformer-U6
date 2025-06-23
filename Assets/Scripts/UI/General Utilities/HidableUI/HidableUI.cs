@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using RPGPlatformer.SceneManagement;
+using System.Threading.Tasks;
+using System.Threading;
 
 
 namespace RPGPlatformer.UI
@@ -19,6 +21,11 @@ namespace RPGPlatformer.UI
             hide, show, ignore, returnToPreviousState
         }
 
+        public enum FadeState
+        {
+            none, fadeShow, fadeHide
+        }
+
         [SerializeField] protected bool showOnEnable = true;
         [SerializeField] protected bool useShowOnEnable = true;
         [SerializeField] protected bool interactableWhenShown;
@@ -28,8 +35,9 @@ namespace RPGPlatformer.UI
 
         protected Action PauseAction;
         protected Action UnpauseAction;
-
         protected bool visibleBeforePause;
+
+        protected FadeState fadeState = FadeState.none;
 
         public CanvasGroup CanvasGroup { get; protected set; }
         public bool Visible { get; protected set; }
@@ -78,6 +86,48 @@ namespace RPGPlatformer.UI
             CanvasGroup.blocksRaycasts = false;
             Visible = false;
             OnHide?.Invoke();
+        }
+
+        public virtual async Task FadeShow(float time, CancellationToken token)
+        {
+            if (fadeState == FadeState.fadeShow || Visible) return;
+
+            fadeState = FadeState.fadeShow;
+
+            while (CanvasGroup.alpha < 1)
+            {
+                await Task.Yield();
+                if (fadeState != FadeState.fadeShow) return;
+                if (token.IsCancellationRequested)
+                {
+                    throw new TaskCanceledException();
+                }
+                CanvasGroup.alpha += Time.deltaTime / time;
+            }
+
+            fadeState = FadeState.none;
+            Show();
+        }
+
+        public virtual async Task FadeHide(float time, CancellationToken token)
+        {
+            if (fadeState == FadeState.fadeHide || !Visible) return;
+
+            fadeState = FadeState.fadeHide;
+
+            while (CanvasGroup.alpha > 0)
+            {
+                await Task.Yield();
+                if (fadeState != FadeState.fadeHide) return;
+                if (token.IsCancellationRequested)
+                {
+                    throw new TaskCanceledException();
+                }
+                CanvasGroup.alpha -= Time.deltaTime / time;
+            }
+
+            fadeState = FadeState.none;
+            Hide();
         }
 
         public virtual void SetInteractable(bool val)

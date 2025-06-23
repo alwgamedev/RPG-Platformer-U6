@@ -1,10 +1,16 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Core;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace RPGPlatformer.UI
 {
     //includes only the in-game hud; does not include pause ui
     public class GameHUD : HidableUI
     {
+        [SerializeField] HidableUI sceneFader;
+        [SerializeField] float sceneFadeTime = 0.25f;
+
         AbilityBarUI abilityBar;
         DialogueUI dialogueUI;
         EquipmentInspectorUI equipmentInspector;
@@ -17,6 +23,7 @@ namespace RPGPlatformer.UI
         public static GameLog GameLog => GameLog.Instance;
         public static PlayerInventoryUI PlayerInventory => Instance.playerInventory;
         public static XPAlertBar XPAlertBar => Instance.xpAlertBar;
+        public static HidableUI SceneFader => Instance.sceneFader;
         public static GameHUD Instance { get; private set; }
 
         protected override void Awake()
@@ -40,6 +47,26 @@ namespace RPGPlatformer.UI
             equipmentInspector = GetComponentInChildren<EquipmentInspectorUI>(true);
             playerInventory = GetComponentInChildren<PlayerInventoryUI>(true);
             xpAlertBar = GetComponentInChildren<XPAlertBar>(true);
+        }
+
+        public static async Task FadeSceneOut()
+        {
+            if (!Instance || !SceneFader)
+            {
+                Debug.Log("no scene fader");
+                return;
+            }
+            await SceneFader.FadeShow(Instance.sceneFadeTime, GlobalGameTools.Instance.TokenSource.Token);
+        }
+
+        public static async Task FadeSceneIn()
+        {
+            if (!Instance || !SceneFader)
+            {
+                Debug.Log("no scene fader");
+                return;
+            }
+            await SceneFader.FadeHide(Instance.sceneFadeTime, GlobalGameTools.Instance.TokenSource.Token);
         }
 
         protected override void OnDestroy()

@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
+using RPGPlatformer.SceneManagement;
 using UnityEngine;
 
 namespace RPGPlatformer.Cinematics
@@ -9,12 +10,14 @@ namespace RPGPlatformer.Cinematics
     {
         [SerializeField] Combatant earthworm;
         [SerializeField] NoiseSettings cameraRumble;
+        [SerializeField] ColliderDrivenScenePortal exitPortal;
 
         private void Start()
         {
             if (earthworm)
             {
                 earthworm.DeathFinalized += OnEarthwormDeath;
+                exitPortal.gameObject.SetActive(false);
             }
         }
 
@@ -25,17 +28,19 @@ namespace RPGPlatformer.Cinematics
             //^e.g. if player dies at same time as worm, we don't want to worry about racing
             //against the respawn portal, so player will just have to escape out of the way they came in
             await MiscTools.DelayGameTime(4, GlobalGameTools.Instance.TokenSource.Token);
+            //give player a few seconds to loot
             PlayerFollowCamera.SetNoiseProfile(cameraRumble);
             //disable player input for a cinematic cutscene
             //rocks will fall blocking the way player came in (to right)
             //and a passage out will open up (to left)
             //re-enable player input
+            exitPortal.gameObject.SetActive(true);
             //dust and small rocks falling from ceiling (dealing small damage)
             //may add millipede chasing as well (millipede one-hits player and is invincible (can't be damaged))
             //player should run left
             //if player dies during this time they will just be teleported out of worm tunnels instantly
-                //(although maybe with a fade to black)
-                //(let's actually add a black fadeout/fadein for all scene transitions)
+            //(although maybe with a fade to black)
+            //(let's actually add a black fadeout/fadein for all scene transitions)
             //far enough down the exit corridor player will be snatched by evil roots,
             //and pulled up into ceiling; then trigger scene transition back to open scene
             //will emerge out of the tunnels entrance with an upward force (as if being thrown out by the evil roots)
