@@ -22,7 +22,7 @@ namespace RPGPlatformer.Combat
             return (controller, projectile) => (collider) =>
             {
                 var colliderHealth = GetHealthComponent(collider);
-                if(colliderHealth != null)
+                if(colliderHealth != null && !projectile.CheckIfRepeatHit(colliderHealth))
                 {
                     DealDamage(controller.Combatant, colliderHealth, 
                         ability.ComputeDamage(controller.Combatant) * projectile.PowerMultiplier, 
@@ -58,7 +58,7 @@ namespace RPGPlatformer.Combat
             {
                 var colliderHealth = GetHealthComponent(collider);
 
-                if (colliderHealth != null)
+                if (colliderHealth != null && !projectile.CheckIfRepeatHit(colliderHealth))
                 {
                     async void AVBleed()
                     {

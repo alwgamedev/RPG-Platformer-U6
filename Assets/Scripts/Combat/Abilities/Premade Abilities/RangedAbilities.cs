@@ -195,9 +195,9 @@ namespace RPGPlatformer.Combat
             HoldAimOnRelease = true,
             DamageMultiplier = 2.25f,
             MaxHits = 4,
-            Cooldown = 8,
+            Cooldown = 12,
             StaminaFractionChange = -0.18f,
-            WrathFractionChange = -0.35f
+            WrathFractionChange = -0.4f
         };
 
         public static GrenadeLikeAbilityWithPowerUp Ambush = new()//ultimate bleed

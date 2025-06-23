@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 using RPGPlatformer.Core;
 
@@ -26,6 +26,7 @@ namespace RPGPlatformer.Combat
         protected Transform shooter;
         protected Func<Vector2> GetAimPos;
         protected Func<Collider2D, IHealth> HitAction;
+        protected List<IHealth> hitHealths = new();
 
         protected float lifeTimer;
         protected float hits;
@@ -97,6 +98,22 @@ namespace RPGPlatformer.Combat
             LookAtTarget(GetAimPos());
             myRigidbody.AddForce(powerMultiplier * shootForce * forceMultiplierScale * transform.up,
                 ForceMode2D.Impulse);
+        }
+
+        //health assumed to be non-null
+        public bool CheckIfRepeatHit(IHealth health)
+        {
+            if (health == null)
+            {
+                return false;
+            }
+            if (hitHealths.Contains(health))
+            {
+                return true;
+            }
+
+            hitHealths.Add(health);
+            return false;
         }
 
 
@@ -200,6 +217,7 @@ namespace RPGPlatformer.Combat
             GetAimPos = null;
             HitAction = null;
             shooter = null;
+            hitHealths = new();
             EnableHead(true);
             triggerCollider.enabled = true;
             EnableDynamicCollider(true);

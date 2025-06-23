@@ -12,5 +12,7 @@ namespace RPGPlatformer.Combat
             Func<Collider2D, IHealth> hitAction, int maxHits = 1);
 
         public void Shoot();
+
+        public bool CheckIfRepeatHit(IHealth health);
     }
 }
