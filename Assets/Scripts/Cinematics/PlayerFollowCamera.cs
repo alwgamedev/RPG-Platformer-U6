@@ -6,28 +6,42 @@ namespace RPGPlatformer.Cinematics
 {
     public class PlayerFollowCamera : MonoBehaviour
     {
-        static CinemachineVirtualCamera vc;
-
+        static CinemachineVirtualCamera VC;
+        static CinemachineBasicMultiChannelPerlin Noise;
+        //why static? so we can make the methods below static
         static PlayerFollowCamera Instance;
+        //and why this? so we know who's responsible for clearing the static fields OnDestroy 
 
         private void Awake()
         {
             Instance = this;
-            vc = GetComponentInChildren<CinemachineVirtualCamera>();
+            VC = GetComponentInChildren<CinemachineVirtualCamera>();
+            if (VC)
+            {
+                Noise = VC.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            }
         }
 
         public static void FollowPlayer(bool val)
         {
-            if (vc)
+            if (VC)
             {
                 if (val && GlobalGameTools.Instance)
                 { 
-                    vc.Follow = GlobalGameTools.Instance.PlayerTransform;
+                    VC.Follow = GlobalGameTools.Instance.PlayerTransform;
                 }
                 else
                 {
-                    vc.Follow = null;
+                    VC.Follow = null;
                 }
+            }
+        }
+
+        public static void SetNoiseProfile(NoiseSettings n)
+        {
+            if (Noise)
+            {
+                Noise.m_NoiseProfile = n;
             }
         }
 
@@ -36,7 +50,8 @@ namespace RPGPlatformer.Cinematics
             if (Instance == this)
             {
                 Instance = null;
-                vc = null;
+                VC = null;
+                Noise = null;
             }
         }
     }
