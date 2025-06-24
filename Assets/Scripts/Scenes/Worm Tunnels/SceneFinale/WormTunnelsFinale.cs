@@ -2,39 +2,60 @@
 using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
 using RPGPlatformer.SceneManagement;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace RPGPlatformer.Cinematics
 {
     public class WormTunnelsFinale : MonoBehaviour
     {
+        [SerializeField] PlayerSpawnManager playerSpawnManager;
         [SerializeField] Combatant earthworm;
         [SerializeField] NoiseSettings cameraRumble;
-        [SerializeField] ColliderDrivenScenePortal exitPortal;
+        [SerializeField] Transform exitBlocker;
+        [SerializeField] Transform fallingDebrisGroup;
 
         private void Start()
         {
             if (earthworm)
             {
                 earthworm.DeathFinalized += OnEarthwormDeath;
-                exitPortal.gameObject.SetActive(false);
+                fallingDebrisGroup.gameObject.SetActive(false);
             }
         }
 
+        //so we don't have to worry about player death messing up anything, let's put a save checkpoint inside
+        //the earthworm arena
         private async void OnEarthwormDeath()
         {
             earthworm.DeathFinalized -= OnEarthwormDeath;
-            if (GlobalGameTools.Instance.PlayerIsDead) return;
-            //^e.g. if player dies at same time as worm, we don't want to worry about racing
-            //against the respawn portal, so player will just have to escape out of the way they came in
-            await MiscTools.DelayGameTime(4, GlobalGameTools.Instance.TokenSource.Token);
+            await MiscTools.DelayGameTime(3, GlobalGameTools.Instance.TokenSource.Token);
             //give player a few seconds to loot
+            while (GlobalGameTools.Instance.PlayerIsDead)
+            {
+                //because we don't want disable/enable input to compete with the disable/enable input
+                //that happens when player dies
+                await Task.Yield();
+                if (GlobalGameTools.Instance.TokenSource.Token.IsCancellationRequested)
+                {
+                    throw new TaskCanceledException();
+                }
+            }
+
+            GlobalGameTools.Instance.Player.Combatant.SetInvincible(true);
+            ((IInputDependent)GlobalGameTools.Instance.Player).InputSource.DisableInput();
             PlayerFollowCamera.SetNoiseProfile(cameraRumble);
-            //disable player input for a cinematic cutscene
-            //rocks will fall blocking the way player came in (to right)
-            //and a passage out will open up (to left)
-            //re-enable player input
-            exitPortal.gameObject.SetActive(true);
+            //begin small rocks falling from ceiling
+            await MiscTools.DelayGameTime(1, GlobalGameTools.Instance.TokenSource.Token);
+
+            //BEGIN CUTSCENE
+            //show rocks falling, blocking the way player came in (to right)
+            fallingDebrisGroup.gameObject.SetActive(true);
+            exitBlocker.gameObject.SetActive(false);
+            //END CUTSCENE
+
+            ((IInputDependent)GlobalGameTools.Instance.Player).InputSource.EnableInput();
+            GlobalGameTools.Instance.Player.Combatant.SetInvincible(false);
             //dust and small rocks falling from ceiling (dealing small damage)
             //may add millipede chasing as well (millipede one-hits player and is invincible (can't be damaged))
             //player should run left
@@ -45,7 +66,6 @@ namespace RPGPlatformer.Cinematics
             //and pulled up into ceiling; then trigger scene transition back to open scene
             //will emerge out of the tunnels entrance with an upward force (as if being thrown out by the evil roots)
             //(and maybe force goes to side slightly so you don't fall straight back in)
-
         }
 
         private void OnDestroy()

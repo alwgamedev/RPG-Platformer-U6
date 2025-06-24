@@ -24,7 +24,6 @@ namespace RPGPlatformer.Environment
         Task dropCycle;
 
         event Action PlayerEnteredBounds;
-        //event Action PlayerExitedBounds;
 
         private void Awake()
         {
@@ -96,24 +95,6 @@ namespace RPGPlatformer.Environment
 
                 dropCycle = DropCycle(cts.Token);
                 await dropCycle;
-
-                //dropCycle task will complete when playerInBounds = false,
-                //but this allows us to end the cycle immediately rather than at beginning of
-                //next iteration
-                //try
-                //{
-                //    PlayerExitedBounds += cts.Cancel;
-                //    dropCycle = DropCycle(cts.Token);
-                //    await dropCycle;
-                //}
-                //catch (TaskCanceledException)
-                //{
-                //    return;
-                //}
-                //finally
-                //{
-                //    PlayerExitedBounds -= cts.Cancel;
-                //}
             }
         }
 
@@ -151,17 +132,6 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        //private void OnTriggerStay2D(Collider2D collider)
-        //{
-        //    if (!gameObject.activeInHierarchy) return;
-
-        //    if (!playerInBounds && collider.transform == GlobalGameTools.Instance.PlayerTransform)
-        //    {
-        //        playerInBounds = true;
-        //        PlayerEnteredBounds?.Invoke();
-        //    }
-        //}
-
         private void OnTriggerExit2D(Collider2D collider)
         {
             if (!gameObject.activeInHierarchy) return;
@@ -184,7 +154,6 @@ namespace RPGPlatformer.Environment
         private void OnDestroy()
         {
             PlayerEnteredBounds = null;
-            //PlayerExitedBounds = null;
         }
     }
 }

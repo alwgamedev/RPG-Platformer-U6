@@ -52,10 +52,10 @@ namespace RPGPlatformer.AIControl
             AnimationState = "Slam",
             //TO-DO: add hit effect (so you know if you've been hit and stunned)
             Cooldown = 6,
-            DamageMultiplier = 5,//TO-DO (balance the damage dealt so player is incentivized to dodge instead of tank)
+            DamageMultiplier = 6.5f,//TO-DO (balance the damage dealt so player is incentivized to dodge instead of tank)
             StaminaFractionChange = 0,
             WrathFractionChange = -.24f,
-            AoeRadius = 1,
+            AoeRadius = .75f,
             GetAoeCenter = (controller) =>
             {
                 return ((EarthwormCombatController)controller).Nose.position;

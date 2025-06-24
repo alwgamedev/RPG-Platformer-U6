@@ -82,4 +82,18 @@ public static class MiscTools
 
         return new(x, y, z);
     }
+
+    public static Color RandomColor(Color min, Color max)
+    {
+        return RandomColor(min, max, rng);
+    }
+
+    public static Color RandomColor(Color min, Color max, System.Random rng)
+    {
+        var r = RandomFloat(min.r, max.r, rng);
+        var g = RandomFloat(min.g, max.g, rng);
+        var b = RandomFloat(min.b, max.b, rng);
+        var a = RandomFloat(min.a, max.a, rng);
+        return new Color(r, g, b, a);
+    }
 }

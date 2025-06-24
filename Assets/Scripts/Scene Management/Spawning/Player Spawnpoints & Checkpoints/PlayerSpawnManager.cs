@@ -17,6 +17,7 @@ namespace RPGPlatformer.SceneManagement
         [SerializeField] PlayerSpawnPoint defaultSpawnPoint;
         [SerializeField] PlayerSpawnPoint[] sceneSpawnPoints;
 
+        bool respawnPlayerSubscribed = false;
         float playerHeight;
         string lastPlayerCheckpoint;//this will be the savable state
 
@@ -27,11 +28,27 @@ namespace RPGPlatformer.SceneManagement
             BuildSpawnPointLookup();
             if (automaticallyRespawnPlayerOnDeath)
             {
-                GlobalGameTools.PlayerDeathFinalized += RespawnPlayerOnDeath;
+                EnableRespawnPlayerOnDeath(true);
             }
 
             SaveCheckpoint.CheckpointReached += OnSaveCheckpointReached;
             SavingSystem.SceneLoadComplete += InitialPlayerSpawn;
+        }
+
+        public void EnableRespawnPlayerOnDeath(bool val)
+        {
+            if (val == respawnPlayerSubscribed) return;
+
+            if (val)
+            {
+                respawnPlayerSubscribed = true;
+                GlobalGameTools.PlayerDeathFinalized += RespawnPlayerOnDeath;
+            }
+            else
+            {
+                respawnPlayerSubscribed = false;
+                GlobalGameTools.PlayerDeathFinalized -= RespawnPlayerOnDeath;
+            }
         }
 
         private async void OnSaveCheckpointReached(SaveCheckpoint checkpoint)

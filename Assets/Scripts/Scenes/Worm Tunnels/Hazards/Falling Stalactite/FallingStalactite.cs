@@ -11,9 +11,6 @@ namespace RPGPlatformer.Environment
     {
         [SerializeField] RandomizableVector3 scale;
         [SerializeField] float impactDamage;
-        [SerializeField] float rumbleDisplacement;
-        [SerializeField] float rumbleFrequency;//time to go from 0 to rumbleDisplacement
-        [SerializeField] float rumbleDuration;
         [SerializeField] Transform sHead;
         [SerializeField] Transform sBase;
         [SerializeField] float emergeTime;
