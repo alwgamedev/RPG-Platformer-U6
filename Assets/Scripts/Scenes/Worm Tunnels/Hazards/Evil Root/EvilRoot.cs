@@ -3,48 +3,51 @@ using RPGPlatformer.Movement;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RPGPlatformer.Environment
 {
     public class EvilRoot : PoolableObject
     {
-        [SerializeField] float dormantLengthScale = 0.1f;
-        [SerializeField] float emergedLengthScale = 2.5f;
-        [SerializeField] float emergeGrowTime = 1;
-        [SerializeField] float retreatMoveTime = 1;
-        [SerializeField] float retreatGrowTime = 1.5f;
-        [SerializeField] Transform dormantHeadPosition;
-        [SerializeField] Transform emergedHeadPosition;
-        [SerializeField] CurveIKEffect followGuideIK;
-        [SerializeField] CurveIKEffect followPlayerIK;
-        [SerializeField] TriggerColliderMessenger head;
-        [SerializeField] float grabRange = 3;
-        [SerializeField] float grabAttemptTimeOut = 1;
-        [SerializeField] float grabSpeed = 4;
-        [SerializeField] float grabSnapBackTime = 0.1f;
-        [SerializeField] float throwLength;
-        [SerializeField] float throwForce;
-        [SerializeField] float throwTime = 0.25f;
-        [Range(0, 1)][SerializeField] float throwReleaseFraction = 0.6f;
+        [SerializeField] protected float dormantLengthScale = 0.1f;
+        [SerializeField] protected float emergedLengthScale = 2.5f;
+        [SerializeField] protected float emergeGrowTime = 1;
+        [SerializeField] protected float retreatMoveTime = 1;
+        [SerializeField] protected float retreatGrowTime = 1.5f;
+        [SerializeField] protected Transform dormantHeadPosition;
+        [SerializeField] protected Transform emergedHeadPosition;
+        [SerializeField] protected CurveIKEffect followGuideIK;
+        [SerializeField] protected CurveIKEffect followPlayerIK;
+        [SerializeField] protected TriggerColliderMessenger head;
+        [SerializeField] protected float grabRange = 3;
+        [SerializeField] protected float grabAttemptTimeOut = 1;
+        [SerializeField] protected float grabSpeed = 4;
+        [SerializeField] protected float grabSnapBackTime = 0.1f;
+        [SerializeField] protected float throwLength;
+        [SerializeField] protected float throwForce;
+        [SerializeField] protected float throwTime = 0.25f;
+        [Range(0, 1)][SerializeField] protected float throwReleaseFraction = 0.6f;
 
-        VisualCurveGuide vcg;
-        bool headIsTouchingPlayer;
-        float headRadius2;
-        bool hasThrown;
-        Transform playerParent;
+        protected VisualCurveGuide vcg;
+        protected bool headIsTouchingPlayer;
+        protected float headRadius2;
+        protected bool hasThrown;
+        protected Transform playerParent;
 
-        static EvilRoot RootHoldingPlayer;
-        static event Action PlayerGrabbed;
+        protected event Action Destroyed;
 
-        private void Awake()
+        public static EvilRoot RootHoldingPlayer { get; protected set; }
+        public static event Action PlayerGrabbed;
+
+        protected virtual void Awake()
         {
             vcg = GetComponent<VisualCurveGuide>();
             headRadius2 = head.GetComponent<CircleCollider2D>().radius;
             headRadius2 *= headRadius2;
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             head.TriggerEnter += OnHeadTriggerEnter;
             head.TriggerStay += OnHeadTriggerStay;
@@ -69,8 +72,13 @@ namespace RPGPlatformer.Environment
             if (TryGetComponent(out ChildSortingLayer csl))
             {
                 csl.dataSource = erm.RootSortingLayerDataSource;
+                csl.Validate();
             }
-            ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone = erm.Platform;
+            var b = (ColliderBasedCurveBounds)vcg.bounds;
+            if (b)
+            {
+                b.prohibitedZone = erm.Platform;
+            }
         }
 
         public override void ResetPoolableObject()
@@ -85,23 +93,51 @@ namespace RPGPlatformer.Environment
 
         //BASIC FUNCTIONS
 
-        public async void OnDeploy(CancellationToken token)
-        { 
-            var a = vcg.LerpLengthScale(emergedLengthScale, emergeGrowTime,
-                token, HasNotThrownYet);
-            var b = Emerge(token);
-            await Task.WhenAll(a, b);
-            await Retreat(token);
-            ReturnToPool();
+        public virtual async void OnDeploy(CancellationToken token)
+        {
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+            try
+            {
+                Destroyed += cts.Cancel;
+                var a = vcg.LerpLengthScale(emergedLengthScale, emergeGrowTime,
+                cts.Token, HasNotThrownYet);
+                var b = Emerge(cts.Token);
+                await Task.WhenAll(a, b);
+                await Retreat(cts.Token);
+                ReturnToPool();
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            finally
+            {
+                Destroyed -= cts.Cancel;
+            }
+
         }
 
-        public async Task Emerge(CancellationToken token)
+        public virtual async Task Emerge(CancellationToken token)
         {
+            await Emerge(false, true, true, token);
+        }
+
+        public virtual async Task Emerge(bool useEmergePosition, bool cancelIfAnotherRootGrabs, bool throwIfGrabSucceeds,
+            CancellationToken token)
+        {
+            if (useEmergePosition)
+            {
+                await followGuideIK.LerpTowardsTransform(emergedHeadPosition, emergeGrowTime, token);
+            }
+
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
 
             try
             {
-                PlayerGrabbed += cts.Cancel;
+                if (cancelIfAnotherRootGrabs)
+                {
+                    PlayerGrabbed += cts.Cancel;
+                }
                 await GrabPlayer(cts.Token);
             }
             catch (TaskCanceledException) { }
@@ -113,18 +149,21 @@ namespace RPGPlatformer.Environment
             if (RootHoldingPlayer == this)
             {
                 PlayerGrabbed?.Invoke();
-                await ThrowPlayer(ThrowRight(), token);
+                if (throwIfGrabSucceeds)
+                {
+                    await ThrowPlayer(ThrowRight(), token);
+                }
             }
         }
 
-        public async Task Retreat(CancellationToken token)
+        public virtual async Task Retreat(CancellationToken token)
         {
             var b = vcg.LerpLengthScale(dormantLengthScale, retreatGrowTime, token);
             var a = followGuideIK.LerpTowardsTransform(dormantHeadPosition, retreatMoveTime, token);
             await Task.WhenAll(a, b);
         }
 
-        public async Task GrabPlayer(CancellationToken token)
+        public virtual async Task GrabPlayer(CancellationToken token)
         {
             Vector2 p = followGuideIK.TargetPosition();
             Task<bool> reach = ReachForPlayer(token);
@@ -145,7 +184,7 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        public async Task<bool> ReachForPlayer(CancellationToken token)
+        public virtual async Task<bool> ReachForPlayer(CancellationToken token)
         {
             float timer = 0;
             followPlayerIK.ikStrength = 0;
@@ -171,7 +210,7 @@ namespace RPGPlatformer.Environment
             return headIsTouchingPlayer;
         }
 
-        public async Task ThrowPlayer(bool throwRight, CancellationToken token)
+        public virtual async Task ThrowPlayer(bool throwRight, CancellationToken token)
         {
             hasThrown = true;//so that we stop growing lengthScale at this point
             float angle = MiscTools.RandomFloat(Mathf.PI / 16, 3 * Mathf.PI / 16);
@@ -196,7 +235,7 @@ namespace RPGPlatformer.Environment
             RootHoldingPlayer = null;
         }
 
-        private void AnchorPlayer()
+        protected void AnchorPlayer()
         {
             var player = GlobalGameTools.Instance.Player;
             playerParent = GlobalGameTools.Instance.PlayerTransform.parent;
@@ -208,7 +247,7 @@ namespace RPGPlatformer.Environment
             playerRb.transform.SetParent(head.transform);
         }
 
-        private void ReleasePlayer(Vector2 force)
+        protected void ReleasePlayer(Vector2 force)
         {
             var player = GlobalGameTools.Instance.Player;
             var playerRb = ((Mover)GlobalGameTools.Instance.PlayerMover.Mover).Rigidbody;
@@ -218,21 +257,33 @@ namespace RPGPlatformer.Environment
             ((IInputDependent)player).InputSource.EnableInput();
         }
 
-        private bool ThrowRight()
+        protected bool ThrowRight()
         {
-            var t = GlobalGameTools.Instance.Player.MovementController.CurrentOrientation
-                    == HorizontalOrientation.left;
+            bool throwRight = GlobalGameTools.Instance.Player.MovementController.CurrentOrientation 
+                == HorizontalOrientation.left;
+            var playerPosition = GlobalGameTools.Instance.PlayerTransform.position;
+            var boundsCenter = ((ColliderBasedCurveBounds)vcg.bounds).prohibitedZone.bounds.center;
+            if (throwRight && playerPosition.x < boundsCenter.x && playerPosition.y < boundsCenter.y)
+            {
+                throwRight = false;
+                //prevents you from repeatedly getting thrown back into the platform when you are
+                //in the "third quadrant" (relative to direction player is facing)
+            }
+            else if (!throwRight && playerPosition.x > boundsCenter.x && playerPosition.y < boundsCenter.y)
+            {
+                throwRight = true;
+            }
             if (MiscTools.rng.Next() < .05)//5% chance of throwing in the wrong direction
             {
-                t = !t;
+                throwRight = !throwRight;
             }
 
-            return t;
+            return throwRight;
         }
 
         //IK SETTINGS
 
-        private void FollowGuide()
+        protected void FollowGuide()
         {
             if (!followGuideIK || !followPlayerIK)
                 return;
@@ -241,7 +292,7 @@ namespace RPGPlatformer.Environment
             followGuideIK.enabled = true;
         }
 
-        private void FollowPlayer()
+        protected void FollowPlayer()
         {
             if (!followGuideIK || !followPlayerIK)
                 return;
@@ -255,7 +306,7 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        private void DeactivateAllIK()
+        protected void DeactivateAllIK()
         {
             followGuideIK.enabled = false;
             followPlayerIK.enabled = false;
@@ -264,13 +315,13 @@ namespace RPGPlatformer.Environment
 
         //CAN GRAB PLAYER?
 
-        private bool IsPlayer(Collider2D c)
+        protected bool IsPlayer(Collider2D c)
         {
             return GlobalGameTools.Instance.PlayerTransform 
                 && c.transform == GlobalGameTools.Instance.PlayerTransform;
         }
 
-        private bool HasNotThrownYet()
+        protected bool HasNotThrownYet()
         {
             return !hasThrown;
         }
@@ -280,20 +331,20 @@ namespace RPGPlatformer.Environment
             return Vector2.SqrMagnitude(t.position - head.transform.position) < headRadius2;
         }
 
-        private bool InGrabRange(Transform t)
-        {
-            return Vector2.SqrMagnitude(t.position - head.transform.position) < grabRange * grabRange;
-        }
+        //private bool InGrabRange(Transform t)
+        //{
+        //    return Vector2.SqrMagnitude(t.position - head.transform.position) < grabRange * grabRange;
+        //}
 
-        private bool PlayerNotInGrabRange()
-        {
-            return !PlayerInGrabRange();
-        }
+        //private bool PlayerNotInGrabRange()
+        //{
+        //    return !PlayerInGrabRange();
+        //}
 
-        private bool PlayerInGrabRange()
-        {
-            return InGrabRange(GlobalGameTools.Instance.PlayerTransform);
-        }
+        //private bool PlayerInGrabRange()
+        //{
+        //    return InGrabRange(GlobalGameTools.Instance.PlayerTransform);
+        //}
 
         private void OnHeadTriggerEnter(Collider2D collider)
         {
@@ -319,7 +370,7 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             head.TriggerEnter -= OnHeadTriggerEnter;
             head.TriggerStay -= OnHeadTriggerStay;
@@ -331,8 +382,10 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
+            Destroyed?.Invoke();
+            Destroyed = null;
             PlayerGrabbed = null;
         }
     }

@@ -41,6 +41,7 @@ namespace RPGPlatformer.Movement
 
         public bool InWater => swimmer && swimmer.InWater;
         public Rigidbody2D Rigidbody => myRigidbody;
+        public Collider2D Collider => myCollider;
         public virtual float MaxSpeed { get; set; }
         public float Width => myWidth;
         public float Height => myHeight;

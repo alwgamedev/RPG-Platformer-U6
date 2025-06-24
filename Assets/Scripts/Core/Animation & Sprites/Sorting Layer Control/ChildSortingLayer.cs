@@ -47,9 +47,15 @@ namespace RPGPlatformer.Core
 
         private void OnValidate()
         {
+            Validate();   
+        }
+
+        public void Validate()
+        {
             UpdateSLDS();
             UpdateSortingData();
         }
+
 
         public void UpdateSortingData()
         {
@@ -72,7 +78,7 @@ namespace RPGPlatformer.Core
             }
         }
 
-        private void UpdateSLDS()
+        public void UpdateSLDS()
         {
             UnhookCurrentSLDS();
 

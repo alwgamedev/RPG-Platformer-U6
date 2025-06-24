@@ -43,7 +43,10 @@ namespace RPGPlatformer.Environment
 
         public override void AfterSetActive()
         {
-            particles.Play();
+            if (particles)
+            {
+                particles.Play();
+            }
         }
 
         public override void BeforeSetActive() { }
@@ -55,7 +58,10 @@ namespace RPGPlatformer.Environment
 
         public override void ResetPoolableObject()
         {
-            particles.Stop();
+            if (particles)
+            {
+                particles.Stop();
+            }
         }
     }
 }

@@ -1,13 +1,17 @@
 ﻿using RPGPlatformer.Core;
+using RPGPlatformer.Saving;
 using UnityEngine;
 
 namespace RPGPlatformer.SceneManagement
 {
+    //you can also just not attach a collider if you want a scene trigger that will be set manually
     public class ColliderDrivenScenePortal : MonoBehaviour, ISceneTransitionTrigger
     {
         [SerializeField] SceneTransitionTriggerData sceneTransition;
 
-        bool transitionTriggered;
+        protected bool transitionTriggered;
+
+        public bool TransitionTriggered => transitionTriggered;
 
         public void TriggerSceneTransition()
         {
