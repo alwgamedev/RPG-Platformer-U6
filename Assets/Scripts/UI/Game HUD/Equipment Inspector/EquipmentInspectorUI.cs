@@ -17,11 +17,16 @@ namespace RPGPlatformer.UI
 
         Dictionary<EquipmentSlot, EquipmentInspectorSlotUI> slots = new();
 
+        //CollapsableUI collapsableUI;
+        //Animation highlightAnim;
         IEquippableCharacter player;
 
         protected override void Awake()
         {
             base.Awake();
+
+            //collapsableUI = GetComponent<CollapsableUI>();
+            //highlightAnim = collapsableUI.CollapseButton.GetComponent<Animation>();
 
             slots = new()
             {
@@ -84,6 +89,11 @@ namespace RPGPlatformer.UI
         //an event for each slot, but oh well we have to match Action delegate...)
         public void UpdateUI()
         {
+            //if (!collapsableUI.IsOpen)
+            //{
+            //    highlightAnim.Play();
+            //}
+
             foreach (var entry in slots)
             {
                 UpdateUI(player, entry.Key);

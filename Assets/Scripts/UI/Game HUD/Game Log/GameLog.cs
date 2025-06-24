@@ -10,7 +10,9 @@ namespace RPGPlatformer.UI
     {
         [SerializeField] int maxMessages = 100;
         [SerializeField] TextMeshProUGUI content;
-        [SerializeField] CollapsableUI collapsableUI;
+        
+        CollapsableUI collapsableUI;
+        //Animation highlightAnim;
         GameLogInputField inputField;
         Queue<string> messages = new();
 
@@ -23,6 +25,8 @@ namespace RPGPlatformer.UI
             {
                 Instance = this;
                 content.text = "";
+                collapsableUI = GetComponent<CollapsableUI>();
+                //highlightAnim = collapsableUI.CollapseButton.GetComponent<Animation>();
                 if (SettingsManager.Instance && SettingsManager.Instance.IAMIsConfigured)
                 {
                     OnIAMConfigure();
@@ -74,8 +78,11 @@ namespace RPGPlatformer.UI
 
         private void PrivateLog(string text)
         {
-            //if (string.IsNullOrEmpty(text)) return;
-            //we shouldn't ever be logging a null or empty message, so this is pointless
+            //if (!collapsableUI.IsOpen)
+            //{
+            //    highlightAnim.Play();
+            //    //or highlight flash here instead
+            //}
 
             messages.Enqueue(text);
 

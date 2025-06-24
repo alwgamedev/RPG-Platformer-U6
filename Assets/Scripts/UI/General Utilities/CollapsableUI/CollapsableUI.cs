@@ -10,6 +10,7 @@ namespace RPGPlatformer.UI
         [SerializeField] bool openOnStart;
 
         public bool IsOpen { get; private set; }
+        public Button CollapseButton => collapseButton;
 
         private void Start()
         {
