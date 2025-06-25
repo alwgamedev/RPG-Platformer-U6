@@ -4,6 +4,7 @@ using RPGPlatformer.Core;
 using RPGPlatformer.SceneManagement;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace RPGPlatformer.Cinematics
 {
@@ -14,14 +15,18 @@ namespace RPGPlatformer.Cinematics
         [SerializeField] NoiseSettings cameraRumble;
         [SerializeField] Transform exitBlocker;
         [SerializeField] Transform fallingDebrisGroup;
+        [SerializeField] Transform caveIn;
+        [SerializeField] PlayableDirector caveInDirector;
 
         private void Start()
         {
             if (earthworm)
             {
                 earthworm.DeathFinalized += OnEarthwormDeath;
-                fallingDebrisGroup.gameObject.SetActive(false);
             }
+
+            fallingDebrisGroup.gameObject.SetActive(false);
+            caveIn.gameObject.SetActive(false);
         }
 
         //so we don't have to worry about player death messing up anything, let's put a save checkpoint inside
@@ -44,28 +49,27 @@ namespace RPGPlatformer.Cinematics
 
             GlobalGameTools.Instance.Player.Combatant.SetInvincible(true);
             ((IInputDependent)GlobalGameTools.Instance.Player).InputSource.DisableInput();
-            PlayerFollowCamera.SetNoiseProfile(cameraRumble);
-            //begin small rocks falling from ceiling
+            PlayerFollowCamera.SetNoiseProfile(cameraRumble); 
+            fallingDebrisGroup.gameObject.SetActive(true);
             await MiscTools.DelayGameTime(1, GlobalGameTools.Instance.TokenSource.Token);
 
             //BEGIN CUTSCENE
-            //show rocks falling, blocking the way player came in (to right)
-            fallingDebrisGroup.gameObject.SetActive(true);
-            exitBlocker.gameObject.SetActive(false);
-            //END CUTSCENE
+            caveInDirector.Play();
+            caveInDirector.stopped += OnCaveInComplete;//gets called at end of timeline :)
+            await MiscTools.DelayGameTime(0.35f, GlobalGameTools.Instance.TokenSource.Token);
+            caveIn.gameObject.SetActive(true);
+        }
 
+        void OnCaveInComplete(PlayableDirector d)
+        {
+            if (caveInDirector)
+            {
+                caveInDirector.stopped -= OnCaveInComplete;
+            }
+
+            exitBlocker.gameObject.SetActive(false);
             ((IInputDependent)GlobalGameTools.Instance.Player).InputSource.EnableInput();
             GlobalGameTools.Instance.Player.Combatant.SetInvincible(false);
-            //dust and small rocks falling from ceiling (dealing small damage)
-            //may add millipede chasing as well (millipede one-hits player and is invincible (can't be damaged))
-            //player should run left
-            //if player dies during this time they will just be teleported out of worm tunnels instantly
-            //(although maybe with a fade to black)
-            //(let's actually add a black fadeout/fadein for all scene transitions)
-            //far enough down the exit corridor player will be snatched by evil roots,
-            //and pulled up into ceiling; then trigger scene transition back to open scene
-            //will emerge out of the tunnels entrance with an upward force (as if being thrown out by the evil roots)
-            //(and maybe force goes to side slightly so you don't fall straight back in)
         }
 
         private void OnDestroy()
@@ -73,6 +77,10 @@ namespace RPGPlatformer.Cinematics
             if (earthworm)
             {
                 earthworm.DeathFinalized -= OnEarthwormDeath;
+            }
+            if (caveInDirector)
+            {
+                caveInDirector.stopped -= OnCaveInComplete;
             }
         }
     }

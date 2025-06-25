@@ -145,10 +145,10 @@ MonoBehaviour:
     max: 6.5
   emergeGrowTime:
     mode: 0
-    min: 0.25
-    max: 0.4
-  retreatMoveTime: 0.75
-  retreatGrowTime: 0.75
+    min: 0.3
+    max: 0.5
+  retreatMoveTime: 1.25
+  retreatGrowTime: 1.25
   dormantHeadPosition: {fileID: 4304737672754909756}
   emergedHeadPosition: {fileID: 6389440871268606796}
   followGuideIK: {fileID: 106926566448083169}
@@ -156,7 +156,7 @@ MonoBehaviour:
   head: {fileID: 6354302318805065209}
   grabRange: 5
   grabAttemptTimeOut: 3
-  grabSpeed: 2
+  grabSpeed: 1
   grabSnapBackTime: 0
   throwLength: 0
   throwForce: 0

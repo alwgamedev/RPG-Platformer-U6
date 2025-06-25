@@ -9,10 +9,14 @@ namespace RPGPlatformer.Environment
         [SerializeField] RandomizableVector3 scale;
         [SerializeField] RandomizableFloat impactDamage;
         [SerializeField] RandomizableColor color;
+        [SerializeField] RandomizableFloat lifeTime;
+        [SerializeField] bool finiteLifetime;
 
         SpriteRenderer spriteRenderer;
         Collider2D ceiling;
         ParticleSystem particles;
+        float maxLifeTime;
+        float lifeTimer;
 
         public SpriteRenderer SpriteRenderer => spriteRenderer;
         public CombatStyle CurrentCombatStyle => CombatStyle.Unarmed;
@@ -24,6 +28,18 @@ namespace RPGPlatformer.Environment
             spriteRenderer.color = color.Value;
             particles = GetComponentInChildren<ParticleSystem>();
             transform.localScale = scale.Value;
+        }
+
+        private void Update()
+        {
+            if (finiteLifetime)
+            {
+                lifeTimer += Time.deltaTime;
+                if (lifeTimer > maxLifeTime)
+                {
+                    ReturnToPool();
+                }
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collider)
@@ -57,6 +73,8 @@ namespace RPGPlatformer.Environment
         public override void Configure(object parameters)
         {
             ceiling = ((GameObject) parameters).GetComponent<Collider2D>();
+            maxLifeTime = lifeTime.Value;
+            lifeTimer = 0;
         }
 
         public override void ResetPoolableObject()
@@ -65,6 +83,9 @@ namespace RPGPlatformer.Environment
             {
                 particles.Stop();
             }
+
+            maxLifeTime = lifeTime.Value;
+            lifeTimer = 0;
         }
     }
 }
