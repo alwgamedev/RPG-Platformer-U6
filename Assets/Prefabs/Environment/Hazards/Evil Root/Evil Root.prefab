@@ -334,7 +334,7 @@ MonoBehaviour:
   endPoint: {fileID: 4323310675879455635}
   iterations: 15
   prohibitedZone: {fileID: 0}
-  buffer: 0.005
+  buffer: 0
 --- !u!114 &662670812258613749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,10 +358,10 @@ MonoBehaviour:
   followPlayerIK: {fileID: 7639152704686829164}
   head: {fileID: 4201806285803211995}
   grabRange: 2
-  grabAttemptTimeOut: 0.4
+  grabAttemptTimeOut: 0.5
   grabSpeed: 5
-  grabSnapBackTime: 0.1
-  throwLength: 4
+  grabSnapBackTime: 0.15
+  throwLength: 4.5
   throwForce: 11
   throwTime: 0.325
   throwReleaseFraction: 0.5
