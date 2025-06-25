@@ -10,8 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3229122253887992468}
   - component: {fileID: 4771724460095548765}
+  - component: {fileID: 1822804824977266065}
+  - component: {fileID: 6162733219776211641}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: Luminescent Tree Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +79,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 26ca8ffbfa4bab74db5b3200a9f34ee7, type: 3}
-  m_Color: {r: 0.6405482, g: 0.645283, b: 0.60266995, a: 1}
+  m_Color: {r: 0.7584905, g: 0.7255749, b: 0.7255749, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -87,6 +89,35 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1822804824977266065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3546454833209032369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e751681f20c0b5148993dce53ca94fc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingLayer:
+    layerNumber: 2
+  sortingOrder: 0
+--- !u!114 &6162733219776211641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3546454833209032369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ba8b20ac7a0c894ca6ae1c5b5c4a43e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orderDelta: 0
+  dataSource: {fileID: 3229122253887992468}
 --- !u!1 &4226224267868922548
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,7 +222,7 @@ MonoBehaviour:
   minThickness: 0
   maxThickness: 0.02
   minIntensity: 0
-  maxIntensity: 500
+  maxIntensity: 850
   thicknessCurve:
     serializedVersion: 2
     m_Curve:
@@ -270,7 +301,7 @@ MonoBehaviour:
   displayName: Luminescent Tree
   examineText: Strange place for a tree...
   defaultCursorType: 4
-  maxInteractableDistance: 5
+  maxInteractableDistance: 2.5
   glowingBranchSO: {fileID: 11400000, guid: 1ae5c16abc01a94418c9e588557df66f, type: 2}
 --- !u!114 &736617973307103334
 MonoBehaviour:

@@ -44,8 +44,8 @@ namespace RPGPlatformer.Environment
 
         protected void DeployRoot()
         {
-            var r = (EvilRoot)pool.ReleaseObject();
-            r.transform.position = spawnPos.Value;
+            var r = (EvilRoot)pool.ReleaseObject(spawnPos.Value);
+            //r.transform.position = spawnPos.Value;
             r.SetEmergePosition(GetRandomEmergePosition(r.transform.position.x));
             //r.SetColliderAvoidanceSide(r.transform.position.x < transform.position.x ?
             //    CurveBounds.AvoidanceSide.left : CurveBounds.AvoidanceSide.right);

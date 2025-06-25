@@ -15,17 +15,18 @@ namespace RPGPlatformer.Environment
         {
             base.Awake();
 
-            float r = MiscTools.RandomFloat(-.1f, .1f);
-            emergeGrowTime += r;
-            retreatMoveTime -= r;
+            //float r = MiscTools.RandomFloat(-.1f, .1f);
+            //emergeGrowTime += r;
+            //retreatMoveTime -= r;
         }
 
-        public override async Task Emerge(CancellationToken token)
+        public override async Task Emerge(float emergeTime, CancellationToken token)
         {
-            await Emerge(true, false, false, token);
+            await Emerge(emergeTime, true, false, false, token);
+            //do cancel once one grabs so that they all begin retreat at the same time
         }
 
-        public override async Task Retreat(CancellationToken token)
+        public override async Task Retreat(CancellationToken token, float timeScale = 1)
         {
             if (RootHoldingPlayer == this)
             {
@@ -36,14 +37,8 @@ namespace RPGPlatformer.Environment
             }
             else
             {
-                bool PlayerHeld()
-                {
-                    return RootHoldingPlayer;
-                }
-
                 FollowPlayer();
-                await vcg.LerpLengthScale(dormantLengthScale, retreatMoveTime,
-                token, PlayerHeld);
+                await base.Retreat(token, timeScale = 1.5f);
             }
         }
 

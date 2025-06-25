@@ -11,8 +11,10 @@ namespace RPGPlatformer.Environment
     public class EvilRoot : PoolableObject
     {
         [SerializeField] protected float dormantLengthScale = 0.1f;
-        [SerializeField] protected float emergedLengthScale = 2.5f;
-        [SerializeField] protected float emergeGrowTime = 1;
+        //[SerializeField] protected float emergedLengthScale = 3.25f;
+        [SerializeField] protected RandomizableFloat emergedLengthScale;
+        [SerializeField] protected RandomizableFloat emergeGrowTime;
+        //[SerializeField] protected float emergeGrowTime = .2f;
         [SerializeField] protected float retreatMoveTime = 1;
         [SerializeField] protected float retreatGrowTime = 1.5f;
         [SerializeField] protected Transform dormantHeadPosition;
@@ -98,10 +100,10 @@ namespace RPGPlatformer.Environment
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
             try
             {
+                var t = emergeGrowTime.Value;
                 Destroyed += cts.Cancel;
-                var a = vcg.LerpLengthScale(emergedLengthScale, emergeGrowTime,
-                cts.Token, HasNotThrownYet);
-                var b = Emerge(cts.Token);
+                var a = vcg.LerpLengthScale(emergedLengthScale.Value, t, cts.Token, HasNotThrownYet);
+                var b = Emerge(t, cts.Token);
                 await Task.WhenAll(a, b);
                 await Retreat(cts.Token);
                 ReturnToPool();
@@ -117,17 +119,17 @@ namespace RPGPlatformer.Environment
 
         }
 
-        public virtual async Task Emerge(CancellationToken token)
+        public virtual async Task Emerge(float emergeTime, CancellationToken token)
         {
-            await Emerge(false, true, true, token);
+            await Emerge(emergeTime, false, true, true, token);
         }
 
-        public virtual async Task Emerge(bool useEmergePosition, bool cancelIfAnotherRootGrabs, bool throwIfGrabSucceeds,
+        public virtual async Task Emerge(float emergeTime, bool useEmergePosition, bool cancelIfAnotherRootGrabs, bool throwIfGrabSucceeds,
             CancellationToken token)
         {
             if (useEmergePosition)
             {
-                await followGuideIK.LerpTowardsTransform(emergedHeadPosition, emergeGrowTime, token);
+                await followGuideIK.LerpTowardsTransform(emergedHeadPosition, emergeTime, token);
             }
 
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
@@ -156,10 +158,10 @@ namespace RPGPlatformer.Environment
             }
         }
 
-        public virtual async Task Retreat(CancellationToken token)
+        public virtual async Task Retreat(CancellationToken token, float timeScale = 1)
         {
-            var b = vcg.LerpLengthScale(dormantLengthScale, retreatGrowTime, token);
-            var a = followGuideIK.LerpTowardsTransform(dormantHeadPosition, retreatMoveTime, token);
+            var b = vcg.LerpLengthScale(dormantLengthScale, retreatGrowTime / timeScale, token);
+            var a = followGuideIK.LerpTowardsTransform(dormantHeadPosition, retreatMoveTime / timeScale, token);
             await Task.WhenAll(a, b);
         }
 

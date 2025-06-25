@@ -348,8 +348,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dormantLengthScale: 0.1
-  emergedLengthScale: 3.25
-  emergeGrowTime: 0.2
+  emergedLengthScale:
+    mode: 0
+    min: 2.25
+    max: 3.75
+  emergeGrowTime:
+    mode: 0
+    min: 0.15
+    max: 0.3
   retreatMoveTime: 1.25
   retreatGrowTime: 1.25
   dormantHeadPosition: {fileID: 6475425159343801118}
