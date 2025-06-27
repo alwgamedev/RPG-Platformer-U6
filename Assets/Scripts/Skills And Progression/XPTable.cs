@@ -15,7 +15,7 @@ namespace RPGPlatformer.Skills
 
         public int MaxXP()
         {
-            return XPAtLevel(MaxLevel);
+            return XPAtLevel(MaxLevel + 1) - 1;
         }
 
         public int LevelAtXP(int xp)
@@ -56,10 +56,10 @@ namespace RPGPlatformer.Skills
 
         public int LevelXPDelta(int level)
         {
-            if(level >= MaxLevel)
-            {
-                return 0;
-            }
+            //if(level >= MaxLevel)
+            //{
+            //    return 0;
+            //}
 
             return XPAtLevel(level + 1) - XPAtLevel(level);
         }

@@ -1,5 +1,6 @@
 ﻿using RPGPlatformer.Combat;
 using RPGPlatformer.Movement;
+using RPGPlatformer.Skills;
 using System;
 using System.Threading;
 using UnityEngine;
@@ -16,12 +17,14 @@ namespace RPGPlatformer.Core
         Transform playerTransform;
         IMovementController playerMover;
         ICombatController playerCC;
+        CharacterProgressionManager playerProgressionManager;
 
         public static GlobalGameTools Instance { get; private set; }
         public static string PlayerName { get; private set; } = "Player";
         public Transform PlayerTransform => playerTransform;
         public IMovementController PlayerMover => playerMover;
         public ICombatController Player => playerCC;
+        public CharacterProgressionManager PlayerProgressionManager => playerProgressionManager;
         public bool PlayerIsDead => Player == null || Player.Combatant.Health.IsDead;
         public CancellationTokenSource TokenSource {  get; private set; }
         public TickTimer TickTimer { get; private set; }
@@ -70,6 +73,7 @@ namespace RPGPlatformer.Core
             playerGO.GetComponent<ICombatant>().DeathFinalized += BroadcastPlayerDeathFinalized;
             //***get comp instead of playerCC.Combatant, because the playerCC awake may come after GGT's,
             //which means the playerCC won't have found its combatant yet
+            playerProgressionManager = playerGO.GetComponent<CharacterProgressionManager>();
 
             //var playerGO = GameObject.FindWithTag("Player");
 

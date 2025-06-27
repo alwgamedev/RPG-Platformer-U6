@@ -4,6 +4,7 @@ using System.Text.Json.Nodes;
 using UnityEngine;
 using RPGPlatformer.Saving;
 using RPGPlatformer.UI;
+using RPGPlatformer.Core;
 
 
 namespace RPGPlatformer.Skills
@@ -16,6 +17,7 @@ namespace RPGPlatformer.Skills
         public bool CanGainXP => canGainXP;
         public int TotalLevel => progressionData.TotalLevel();
         public int CombatLevel => progressionData.CombatLevel();
+        public int AutoCalculatedHealthPoints => progressionData.AutoCalculatedHealthPoints();
 
         public event Action<XPGainEventData> ExperienceGained;
         public event Action<CharacterSkill, int> LevelUp;
@@ -42,18 +44,22 @@ namespace RPGPlatformer.Skills
             return progressionData.GetLevel(skill);
         }
 
-        public int AutoCalculatedHealthPoints()
+        public int GetXP(CharacterSkill skill)
         {
-            return 4000 + (312 * (progressionData.GetLevel(CharacterSkillBook.Fitness) - 1));
+            return progressionData.GetXP(skill);
+        }
+
+        public float GetXPFraction(CharacterSkill skill)
+        {
+            return progressionData.GetXPFraction(skill);
         }
 
         public void GainExperience(CharacterSkill skill, int xpToGain)
         {
             if (!canGainXP) return;
-            //if (!progressionData.TryGetProgressionData(skill, out var data)) return;
 
             var data = progressionData.GetProgressionData(skill);
-            if (xpToGain <= 0 || data.Level >= skill.XPTable.MaxLevel) return;
+            if (xpToGain <= 0 /*|| data.Level >= skill.XPTable.MaxLevel*/) return;
 
             int oldLevel = data.Level;
             int xpGained = data.GainExperience(xpToGain, skill.XPTable);
@@ -63,7 +69,10 @@ namespace RPGPlatformer.Skills
             if(data.Level > oldLevel)
             {
                 LevelUp?.Invoke(skill, data.Level);
-                GameLog.Log($"Level up! You are now level {data.Level} in {skill.SkillName}.");
+                if (transform == GlobalGameTools.Instance.PlayerTransform)
+                {
+                    GameLog.Log($"Level up! You are now level {data.Level} in {skill.SkillName}.");
+                }
             }
         }
 

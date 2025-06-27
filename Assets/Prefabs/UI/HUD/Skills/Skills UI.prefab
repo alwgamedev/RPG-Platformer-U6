@@ -14,11 +14,11 @@ GameObject:
   - component: {fileID: 4279978701833885379}
   - component: {fileID: 140107086295112951}
   - component: {fileID: 5992996745883852073}
-  - component: {fileID: 2793816555241788879}
   - component: {fileID: 357570591142447923}
   - component: {fileID: 4737717731001546597}
+  - component: {fileID: 1355359769107226157}
   m_Layer: 5
-  m_Name: Inventory
+  m_Name: Skills UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,26 +135,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &2793816555241788879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6856401877978964850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a34fbc8d879c19f41ad4c8bf0e083568, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showOnEnable: 1
-  useShowOnEnable: 1
-  interactableWhenShown: 1
-  blockRaycastsWhenShown: 1
-  pauseAction: 2
-  unpauseAction: 2
-  inventorySlotPrefab: {fileID: 8604536382215273377, guid: 7a9c09ec3df0fa342a46b317b3ae785d, type: 3}
-  fillLastRowWithEmptySlots: 0
 --- !u!114 &357570591142447923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,7 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   content: {fileID: 6260880769534887712}
   collapseButton: {fileID: 760193112192704096}
-  openOnStart: 1
+  openOnStart: 0
 --- !u!114 &4737717731001546597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +170,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1355359769107226157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6856401877978964850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef1fe94f71fa55f4bada940cfe30b246, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillsContainer: {fileID: 1651157100827882181}
+  skillItemPrefab: {fileID: 3432768442944340932, guid: 3267a41758513df43a445b077fd7d6df, type: 3}
 --- !u!1001 &823854651123746690
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -198,17 +192,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5887317479485752009}
     m_Modifications:
+    - target: {fileID: 1238112568288695306, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238112568288695306, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+      propertyPath: m_ChildAlignment
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238112568288695306, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238112568288695306, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238112568288695306, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1238112568288695306, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1288319559545987444, guid: 1757a587fc9985842a8458f980549d53, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1288319559545987444, guid: 1757a587fc9985842a8458f980549d53, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1288319559545987444, guid: 1757a587fc9985842a8458f980549d53, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 370
       objectReference: {fileID: 0}
     - target: {fileID: 1288319559545987444, guid: 1757a587fc9985842a8458f980549d53, type: 3}
       propertyPath: m_SizeDelta.y
@@ -216,7 +234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1288319559545987444, guid: 1757a587fc9985842a8458f980549d53, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 185
       objectReference: {fileID: 0}
     - target: {fileID: 1288319559545987444, guid: 1757a587fc9985842a8458f980549d53, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -330,16 +348,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Inventory Container
       objectReference: {fileID: 0}
+    - target: {fileID: 6895307670271979708, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7796093600356679411, guid: 1757a587fc9985842a8458f980549d53, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8091911055169829984, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+      propertyPath: m_PreferredHeight
+      value: -1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7796093600356679411, guid: 1757a587fc9985842a8458f980549d53, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6895307670271979708, guid: 1757a587fc9985842a8458f980549d53, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+--- !u!224 &1651157100827882181 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2127104003450697031, guid: 1757a587fc9985842a8458f980549d53, type: 3}
+  m_PrefabInstance: {fileID: 823854651123746690}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4061303099927340432 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3689097727520825874, guid: 1757a587fc9985842a8458f980549d53, type: 3}
@@ -492,7 +524,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7456965713804011768, guid: d3172bd0f6e1b9343a80a4688c308105, type: 3}
       propertyPath: m_text
-      value: Inventory
+      value: Skills
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

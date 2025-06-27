@@ -54,8 +54,7 @@ namespace RPGPlatformer.Combat
         public string DisplayName => $"<b>{displayName}</b>";
         public int CombatLevel => progressionManager.CombatLevel;
         public virtual bool IsPlayer => false;
-        //public string TargetLayer => targetLayer;
-        //public string TargetTag => targetTag;
+        public CharacterProgressionManager ProgressionManager => progressionManager;
         public InventoryManager Inventory => inventory;
         public Dictionary<EquipmentSlot, ItemSlot> EquipSlots => equipSlots;
         public Transform MainhandElbow => mainhandElbow;
@@ -199,7 +198,7 @@ namespace RPGPlatformer.Combat
 
         protected virtual void SetAutoCalculatedHealthPoints(bool maintainFraction = false)
         {
-            Health.Stat.SetMaxAndDefaultValue(progressionManager.AutoCalculatedHealthPoints(), maintainFraction);
+            Health.Stat.SetMaxAndDefaultValue(progressionManager.AutoCalculatedHealthPoints, maintainFraction);
         }
 
         protected virtual void OnLevelUp(CharacterSkill skill, int level)

@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using RPGPlatformer.Combat;
+﻿using RPGPlatformer.Combat;
+using System;
+using System.Collections.Generic;
 
 namespace RPGPlatformer.Skills
 {
@@ -16,10 +17,13 @@ namespace RPGPlatformer.Skills
         public static CharacterSkill Melee = new("Melee");
         public static CharacterSkill Ranged = new("Range");
 
-        //public static readonly List<CharacterSkill> SkillList = new()
-        //{
-        //    Fitness, Defense, Magic, Melee, Ranged
-        //};
+        public static IEnumerable<CharacterSkill> AllSkills()
+        {
+            foreach (var s in Enum.GetValues(typeof(StandardCharacterSkill)))
+            {
+                yield return GetCharacterSkill((StandardCharacterSkill)s);
+            }
+        }
 
         public static CharacterSkill GetCharacterSkill(StandardCharacterSkill skill)
         {

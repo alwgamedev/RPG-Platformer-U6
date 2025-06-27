@@ -49,6 +49,16 @@ namespace RPGPlatformer.Skills
             return SkillLookup[skill].Level;
         }
 
+        public int GetXP(CharacterSkill skill)
+        {
+            return SkillLookup[skill].XP;
+        }
+
+        public float GetXPFraction(CharacterSkill skill)
+        {
+            return skill.XPTable.PercentProgressTowardNextLevel(GetXP(skill), GetLevel(skill));
+        }
+
         public int TotalLevel()
         {
             int result = 0;
@@ -64,6 +74,11 @@ namespace RPGPlatformer.Skills
             return fitness.Level + defense.Level + Math.Max(Math.Max(magic.Level, melee.Level), ranged.Level);
         }
 
+        public int AutoCalculatedHealthPoints()
+        {
+            return 4000 + (312 * (GetLevel(CharacterSkillBook.Fitness) - 1));
+        }
+
         public SkillProgressionData GetProgressionData(CharacterSkill skill)
         {
             if (SkillLookup == null)
@@ -72,26 +87,6 @@ namespace RPGPlatformer.Skills
             }
             return SkillLookup[skill];
         }
-
-        ////this is mainly to allow flexible initialization of the dictionary
-        //public bool TryGetProgressionData(CharacterSkill skill, out SkillProgressionData data)
-        //{
-        //    data = null;
-        //    if (skill == null)
-        //    if (SkillLookup == null)
-        //    {
-        //        Configure();
-        //    }
-
-        //    if (skill == null || !SkillLookup.ContainsKey(skill))
-        //    {
-        //        Debug.Log($"{GetType().Name} could not find data for that skill.");
-        //        return false;
-        //    }
-
-        //    data = SkillLookup[skill];
-        //    return true;
-        //}
 
         public void Configure()
         {
@@ -113,11 +108,6 @@ namespace RPGPlatformer.Skills
                 [CharacterSkillBook.Ranged] = ranged
             };
         }
-
-        //protected void RecomputeLevel(CharacterSkill skill)
-        //{
-        //    SkillLookup[skill].RecomputeLevel(skill.XPTable);
-        //}
 
         protected void RecomputeLevels()
         {

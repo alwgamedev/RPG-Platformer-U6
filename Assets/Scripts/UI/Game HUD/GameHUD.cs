@@ -16,6 +16,7 @@ namespace RPGPlatformer.UI
         EquipmentInspectorUI equipmentInspector;
         PlayerInventoryUI playerInventory;
         XPAlertBar xpAlertBar;
+        SkillsUI skillsUI;
 
         public static AbilityBarUI AbilityBar => Instance.abilityBar;
         public static DialogueUI DialogueUI => Instance.dialogueUI;
@@ -47,6 +48,7 @@ namespace RPGPlatformer.UI
             equipmentInspector = GetComponentInChildren<EquipmentInspectorUI>(true);
             playerInventory = GetComponentInChildren<PlayerInventoryUI>(true);
             xpAlertBar = GetComponentInChildren<XPAlertBar>(true);
+            skillsUI = GetComponentInChildren<SkillsUI>(true);
         }
 
         public static async Task FadeSceneOut()
