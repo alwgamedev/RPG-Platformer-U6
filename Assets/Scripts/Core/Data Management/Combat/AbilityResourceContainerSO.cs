@@ -30,6 +30,7 @@ namespace RPGPlatformer.Core
                 CombatStyle.Mage => mageAbilityResources,
                 CombatStyle.Melee => meleeAbilityResources,
                 CombatStyle.Ranged => rangedAbilityResources,
+                CombatStyle.Unarmed => unarmedAbilityResources,
                 _ => otherAbilityResources
             };
         }

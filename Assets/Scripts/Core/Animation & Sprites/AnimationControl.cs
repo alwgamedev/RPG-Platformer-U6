@@ -155,7 +155,10 @@ namespace RPGPlatformer.Core
                 animator.SetBool(p.Key, p.Value);
             }
 
-            animator.Update(0.0f);
+            if (gameObject.activeInHierarchy)
+            {
+                animator.Update(0.0f);
+            }
         }
 
         public void RevertAnimatorOverride()
@@ -165,6 +168,7 @@ namespace RPGPlatformer.Core
 
         public void PlayAnimationState(string stateName, string layerName, float normalizedTime)
         {
+            if (!gameObject.activeInHierarchy) return;
             animator.Play(StateID(stateName), LayerIndex(layerName), normalizedTime);
         }
 

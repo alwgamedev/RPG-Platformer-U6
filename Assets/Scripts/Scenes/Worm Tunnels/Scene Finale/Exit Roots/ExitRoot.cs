@@ -38,7 +38,7 @@ namespace RPGPlatformer.Environment
             else
             {
                 FollowPlayer();
-                await base.Retreat(token, timeScale = 1.5f);
+                await base.Retreat(token, 1.5f);
             }
         }
 

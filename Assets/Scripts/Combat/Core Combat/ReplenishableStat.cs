@@ -49,20 +49,25 @@ namespace RPGPlatformer.Combat
 
         public event Action Depleted;
 
-        public void SetMaxValue(float value)
+        public void SetMaxValue(float value, bool maintainFraction = false)
         {
-            defaultValue = value;
+            var f = FractionOfMax;
+            maxValue = value;
+            if (maintainFraction)
+            {
+                CurrentValue = f * maxValue;
+            }
         }
 
         public void SetDefaultValue(float value)
         {
-            maxValue = value;
+            defaultValue = value;
         }
 
-        public void SetMaxAndDefaultValue(float value)
+        public void SetMaxAndDefaultValue(float value, bool maintainFraction = false)
         {
-            defaultValue = value;
-            maxValue = value;
+            SetDefaultValue(value);
+            SetMaxValue(value, maintainFraction);
         }
 
         public void TakeDefaultValue()

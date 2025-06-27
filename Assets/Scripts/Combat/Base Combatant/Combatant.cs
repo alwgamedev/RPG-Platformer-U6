@@ -83,7 +83,10 @@ namespace RPGPlatformer.Combat
             health = GetComponent<Health>();
             progressionManager = GetComponent<CharacterProgressionManager>();
             inventory = GetComponent<InventoryManager>();
-            dropSpawner = GetComponent<DropSpawner>(); 
+            dropSpawner = GetComponent<DropSpawner>();
+
+            progressionManager.StateRestored += OnProgressionManagerStateRestored;
+            progressionManager.LevelUp += OnLevelUp;
             
             combatBonusesManager = new(this);
             //_targetLayer = LayerMask.GetMask(targetLayer);
@@ -179,7 +182,7 @@ namespace RPGPlatformer.Combat
         {
             if(useAutoCalculatedHealthPoints)
             {
-                Health.Stat.SetMaxAndDefaultValue(progressionManager.AutoCalculatedHealthPoints());
+                SetAutoCalculatedHealthPoints();
             }
 
             stamina.autoReplenish = true;
@@ -194,6 +197,19 @@ namespace RPGPlatformer.Combat
             wrath.TakeDefaultValue();
         }
 
+        protected virtual void SetAutoCalculatedHealthPoints(bool maintainFraction = false)
+        {
+            Health.Stat.SetMaxAndDefaultValue(progressionManager.AutoCalculatedHealthPoints(), maintainFraction);
+        }
+
+        protected virtual void OnLevelUp(CharacterSkill skill, int level)
+        {
+            if (useAutoCalculatedHealthPoints && skill == CharacterSkillBook.Fitness)
+            {
+                SetAutoCalculatedHealthPoints();
+            }
+        }
+
         protected virtual void OnStaminaDepleted() { }
 
         protected virtual void OnWrathDepleted() { }
@@ -201,6 +217,11 @@ namespace RPGPlatformer.Combat
         protected virtual void UpdateAttackRange()
         {
             AttackRange = equippedWeapon?.WeaponStats.AttackRange ?? 0;
+        }
+
+        protected virtual void OnProgressionManagerStateRestored()
+        {
+            SetAutoCalculatedHealthPoints(true);
         }
 
 
@@ -665,6 +686,11 @@ namespace RPGPlatformer.Combat
             FinalizeDeathTrigger = null;
             DeathFinalized = null;
             AfterDeathFinalized = null;
+            if (progressionManager)
+            {
+                progressionManager.LevelUp -= OnLevelUp;
+                progressionManager.StateRestored -= OnProgressionManagerStateRestored;
+            }
         }
     }
 }

@@ -159,7 +159,7 @@ MonoBehaviour:
   trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0
-  stepMax: 1.25
+  stepMax: 1.15
   reversedStepMin: 0.75
   reversedStepMax: -0.2
   initialTimerFraction: 0.75
@@ -170,7 +170,7 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: 0
+  groundHeightBuffer: -0.1
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
@@ -377,7 +377,7 @@ MonoBehaviour:
   trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0.8
-  stepMax: 1.4
+  stepMax: 1.2
   reversedStepMin: 0.6
   reversedStepMax: -0.05
   initialTimerFraction: 1
@@ -388,7 +388,7 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: 0
+  groundHeightBuffer: -0.1
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
@@ -6064,7 +6064,7 @@ MonoBehaviour:
   trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0
-  stepMax: 1.25
+  stepMax: 1.15
   reversedStepMin: 0.75
   reversedStepMax: -0.2
   initialTimerFraction: 0
@@ -6075,7 +6075,7 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: 0
+  groundHeightBuffer: -0.1
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
@@ -6377,7 +6377,7 @@ MonoBehaviour:
   trackingLerpRate: 100
   trackingStrength: 0
   stepMin: 0.8
-  stepMax: 1.4
+  stepMax: 1.2
   reversedStepMin: 0.6
   reversedStepMax: -0.05
   initialTimerFraction: 0.25
@@ -6388,7 +6388,7 @@ MonoBehaviour:
   stepHeightMultiplier: 0.5
   stepSpeedMultiplier: 1.5
   reversedStepSpeedMultiplier: 2.5
-  groundHeightBuffer: 0
+  groundHeightBuffer: -0.1
   raycastLength: 5
   maintainPositionSpeedScale: 4
   baseMaintainPositionStrength: 0
@@ -7920,7 +7920,7 @@ MonoBehaviour:
   movementOptions:
   - movementType: 0
     moveDirection: 0
-    acceleration: 100
+    acceleration: 125
     flipSprite: 1
     changeDirectionWrtGlobalUp: 0
     clampXVelocityOnly: 0
@@ -8143,7 +8143,7 @@ MonoBehaviour:
   finalizeDeathViaTrigger: 0
   timeToDelayBeforeFinalizeDeath: 2
   minimumCombatDistanceMultiplier: 0.5
-  combatXPReward: 50
+  combatXPReward: 44
   dropGenerator:
     tables:
     - table: {fileID: 11400000, guid: 5c83aee9e1c08954d879ac787b753cf8, type: 2}

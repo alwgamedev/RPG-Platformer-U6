@@ -13,11 +13,13 @@ namespace RPGPlatformer.Skills
         [SerializeField] CharacterProgressionData progressionData = new();
         [SerializeField] bool canGainXP;
 
+        public bool CanGainXP => canGainXP;
         public int TotalLevel => progressionData.TotalLevel();
         public int CombatLevel => progressionData.CombatLevel();
 
         public event Action<XPGainEventData> ExperienceGained;
         public event Action<CharacterSkill, int> LevelUp;
+        public event Action StateRestored;
 
         private void Awake()
         {
@@ -74,12 +76,14 @@ namespace RPGPlatformer.Skills
         {
             progressionData = jNode.Deserialize<CharacterProgressionData>();
             Configure();
+            StateRestored?.Invoke();
         }
 
         private void OnDestroy()
         {
             ExperienceGained = null;
             LevelUp = null;
+            StateRestored = null;
         }
     }
 }

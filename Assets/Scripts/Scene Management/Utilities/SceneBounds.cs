@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Core;
+using RPGPlatformer.Combat;
 using UnityEngine;
 
 namespace RPGPlatformer.SceneManagement
@@ -8,12 +9,13 @@ namespace RPGPlatformer.SceneManagement
         private void OnTriggerExit2D(Collider2D collider)
         {
             if (!gameObject.activeInHierarchy) return;
-            var p = GlobalGameTools.Instance.PlayerTransform;
-            if (p && collider.transform == p
+            if (collider.transform == GlobalGameTools.Instance.PlayerTransform 
                 && !GlobalGameTools.Instance.PlayerIsDead)
             {
                 GlobalGameTools.Instance.Player.Combatant.Instakill();
             }
+
+            //all these dumb checks because trigger exit is getting called every time you exit play mode
         }
     }
 }
