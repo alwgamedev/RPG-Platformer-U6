@@ -108,7 +108,7 @@ namespace RPGPlatformer.Combat
             DamageMultiplier = 1.35f,
         };
 
-        public static CloseRangeAbility Uppercut = new()//basic
+        public static CloseRangeAbility Uppercut = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//basic
         {
             Description = $"Deals more damage and generates more wrath than {nameof(Slash)}, but takes a higher toll" +
             " on your stamina.",
@@ -128,7 +128,7 @@ namespace RPGPlatformer.Combat
 
         };
 
-        public static CloseRangeAbility Jab = new()//basic stun
+        public static CloseRangeAbility Jab = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//basic stun
         {
             Description = "Surprise your opponent with a quick jab and regain stamina while" +
                 " they are briefly stunned.",
@@ -151,7 +151,7 @@ namespace RPGPlatformer.Combat
 
         };
 
-        public static AutoTargetedBleed Slice = new()//thresh bleed
+        public static AutoTargetedBleed Slice = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//thresh bleed
         {
             Description = "Gather your wrath and stamina to slice a heavy, bleeding gash" +
             " through your opponent's flesh.",
@@ -174,8 +174,9 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = -.25f
         };
 
-        public static CloseRangeAbility Thrust = new()//thresh
-        {
+        public static CloseRangeAbility Thrust
+            = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//thresh
+            {
             Description = "Thrust your weapon at your nearest opponent, dealing immediate heavy damage.",
             AbilityTags = new()
             {
