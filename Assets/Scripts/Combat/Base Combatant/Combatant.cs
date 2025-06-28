@@ -8,6 +8,7 @@ using RPGPlatformer.Loot;
 using RPGPlatformer.Skills;
 using System.Threading.Tasks;
 using System.Threading;
+using RPGPlatformer.SceneManagement;
 
 namespace RPGPlatformer.Combat
 {
@@ -17,7 +18,7 @@ namespace RPGPlatformer.Combat
     [RequireComponent(typeof(InventoryManager))]
     [RequireComponent(typeof(DropSpawner))]
     [RequireComponent(typeof(Health))]
-    public class Combatant : StateDriver, ICombatant, IInventoryOwner, ILooter, ILootDropper
+    public class Combatant : StateDriver, ICombatant, IInventoryOwner, ILooter, ILootDropper, IOutOfBoundsHandler
     {
         [SerializeField] protected string displayName;
         [SerializeField] protected LayerMask targetLayerMask;
@@ -322,6 +323,11 @@ namespace RPGPlatformer.Combat
                     Destroy(gameObject);
                 }
             }
+        }
+
+        public virtual void OnOutOfBounds()
+        {
+            Instakill();
         }
 
 

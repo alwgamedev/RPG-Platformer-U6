@@ -46,7 +46,7 @@ namespace RPGPlatformer.UI
             if(owner is ILootDrop lootDrop)
             {
                 takeAllButton.onClick.AddListener(lootDrop.TakeAll);
-                lootDrop.OnDropDestroyed += CloseInspector;
+                lootDrop.OnDropDestroyed += DropDestroyedHandler;
                 lootDrop.PlayerOutOfRange += PlayerOutOfRangeHandler;
                 lootDrop.BeginInspection();
             }
@@ -57,13 +57,18 @@ namespace RPGPlatformer.UI
             if(owner != null && owner is ILootDrop lootDrop)
             {
                 lootDrop.EndInspection();
-                lootDrop.OnDropDestroyed -= CloseInspector;
+                lootDrop.OnDropDestroyed -= DropDestroyedHandler;
                 lootDrop.PlayerOutOfRange -= PlayerOutOfRangeHandler;
             }
 
             base.DisconnectOwner();
 
             takeAllButton.onClick.RemoveAllListeners();
+        }
+
+        private void DropDestroyedHandler(ILootDrop d)
+        {
+            CloseInspector();
         }
 
         private void PlayerOutOfRangeHandler()

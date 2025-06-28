@@ -22,7 +22,7 @@ namespace RPGPlatformer.Loot
         public override CursorType CursorType => CursorType.Loot;
         public InventoryManager Inventory => inventory;
 
-        public event Action OnDropDestroyed;
+        public event Action<ILootDrop> OnDropDestroyed;
 
         public static event Action<ILootDrop> OnLootSearched;
 
@@ -141,16 +141,20 @@ namespace RPGPlatformer.Loot
             GameLog.Log($"You're too far away to see the contents of {DisplayName} ...");
         }
 
-        private void DestroyDrop()
+        public void DestroyDrop()
         {
-            OnDropDestroyed?.Invoke();
-            Destroy(gameObject);
+            //OnDropDestroyed?.Invoke(this);
+            if (gameObject)
+            {
+                Destroy(gameObject);
+            }
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
 
+            OnDropDestroyed?.Invoke(this);
             OnDropDestroyed = null;
             //PlayerOutOfRange = null;
             OnUpdate = null;

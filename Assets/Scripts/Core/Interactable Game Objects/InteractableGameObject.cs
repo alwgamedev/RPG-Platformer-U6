@@ -17,7 +17,7 @@ namespace RPGPlatformer.Core
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(MonoBehaviourPauseConfigurer))]
     public class InteractableGameObject : MonoBehaviour, IInteractableGameObject, IPausable, 
-        IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, ISavable
+        IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, ISavable, IOutOfBoundsHandler
     //why use pointer events instead of OnMouseOver etc.?
     //because pointer events are detected by trigger colliders, so we can expand the object's
     //interactable area by adding a trigger collider that won't affect its physics interactions
@@ -263,6 +263,17 @@ namespace RPGPlatformer.Core
         {
             var b = JsonSerializer.Deserialize<bool>(jNode);
             PlayerHasInteracted = b;
+        }
+
+
+        //IOUTOFBOUNDSHANDLER
+
+        public virtual void OnOutOfBounds()
+        {
+            if (gameObject)
+            {
+                Destroy(gameObject);
+            }
         }
 
         protected virtual void OnDestroy()
