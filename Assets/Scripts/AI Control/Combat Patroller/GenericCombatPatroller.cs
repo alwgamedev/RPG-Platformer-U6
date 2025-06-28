@@ -154,7 +154,7 @@ namespace RPGPlatformer.AIControl
             suspicionTimer = 0;
         }
 
-        public void PursuitBehavior()
+        public virtual void PursuitBehavior()
         {
             if (!TryGetDistanceSqrd(CurrentTarget, out float d2, out float t)
                 || !InRange(d2, pursuitRange, t))

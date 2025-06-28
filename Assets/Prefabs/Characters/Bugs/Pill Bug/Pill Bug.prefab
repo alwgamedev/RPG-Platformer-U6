@@ -3997,7 +3997,12 @@ MonoBehaviour:
   minimumCombatDistanceMultiplier: 0.7
   combatXPReward: 18
   dropGenerator:
-    tables: []
+    tables:
+    - table: {fileID: 11400000, guid: ac2abb9e3e001e4408eb54a0b508efcd, type: 2}
+      quantityFromTable:
+        mode: 1
+        min: 0
+        max: 3
   weaponSwapSOs: []
 --- !u!114 &4959208345934829776
 MonoBehaviour:

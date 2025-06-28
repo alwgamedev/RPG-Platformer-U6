@@ -1,4 +1,5 @@
 ﻿using RPGPlatformer.Inventory;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,8 +38,13 @@ namespace RPGPlatformer.UI
 
             if(fillLastRowWithEmptySlots)
             {
-                int lastRowCount = slots.Count() % gridLayoutGroup.constraintCount;
+                int n = slots.Length;
+                int lastRowCount = n % gridLayoutGroup.constraintCount;
+                if (lastRowCount == 0) return;//last row is already full
+
                 int remainder = gridLayoutGroup.constraintCount - lastRowCount;
+                var newSlots = new InventorySlotUI[n + remainder];
+                Array.Copy(slots, newSlots, n);
                 for(int i = 0; i < remainder; i++)
                 {
                     if (owner.Inventory.TryAddNewSlot())
@@ -47,9 +53,11 @@ namespace RPGPlatformer.UI
                         slot.PlaceItem(null);
                         slot.DisplayItem();
                         slot.OnDragResolved += () => owner.Inventory.MatchItems(slots);
-                        slots = slots.Append(slot).ToArray();
+                        newSlots[n + i] = slot;
                     }
                 }
+
+                slots = newSlots;
             }
         }
     }

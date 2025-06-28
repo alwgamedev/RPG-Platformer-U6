@@ -96,7 +96,7 @@ namespace RPGPlatformer.Combat
             stateDriver.TakeLoot(sword.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(ssbow.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(cookie.CreateInstanceOfItem().ToInventorySlotData(8));
-            stateDriver.TakeLoot(gold.CreateInstanceOfItem().ToInventorySlotData(2400));
+            stateDriver.TakeLoot(gold.CreateInstanceOfItem().ToInventorySlotData(2450069));
             stateDriver.TakeLoot(redBody.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(bwHat.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(bwTop.CreateInstanceOfItem().ToInventorySlotData(1));

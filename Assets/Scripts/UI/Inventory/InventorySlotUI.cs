@@ -111,7 +111,7 @@ namespace RPGPlatformer.UI
                 quantityText.text = "";
                 return;
             }
-            quantityText.text = quantity.ToString();
+            quantityText.text = $"{quantity:N0}";
         }
 
         private void SetDosesText()

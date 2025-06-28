@@ -67,6 +67,18 @@ namespace RPGPlatformer.AIControl
             base.InRangeAttackBehavior(distanceSqrd, tolerance);
         }
 
+        protected override bool ShouldBreakPursuitToAttack(float distSquared, float tolerance)
+        {
+            var b = base.ShouldBreakPursuitToAttack(distSquared, tolerance);
+            var d = (CurrentTarget.transform.position.x - transform.position.x) * Vector3.right;
+            if (!b && !MovementController.CanMove(d))
+            {
+                EquipRangedWeapon();
+            }
+
+            return b;
+        }
+
         private void OnAutoAttack()
         {
             if (!UnarmedWeaponEquipped)
@@ -126,6 +138,8 @@ namespace RPGPlatformer.AIControl
                 rangedAttacksCounter = 0;
             }
             ((AICombatant)combatController.Combatant).EquipWeaponSwap("Unarmed (Mother Spider)");
+
+            combatController.StartAttacking();
         }
 
         private void EquipRangedWeapon()
@@ -136,6 +150,8 @@ namespace RPGPlatformer.AIControl
                 rangedAttacksCounter = 0;
             }
             ((AICombatant)combatController.Combatant).EquipWeaponSwap("Ranged Weapon (Mother Spider)");
+
+            combatController.StartAttacking();
         }
     }
 }
