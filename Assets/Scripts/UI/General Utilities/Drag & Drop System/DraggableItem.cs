@@ -19,7 +19,8 @@ namespace RPGPlatformer.UI
         CanvasGroup canvasGroup;
         bool canDrag = true;
         
-        public bool CanDrag => canDrag && (source?.ItemCanBeDragged() ?? true);//mainly so that dragging gets cancelled when you pause
+        public bool CanDrag => canDrag && (source?.ItemCanBeDragged() ?? true);
+        //mainly so that dragging gets cancelled when you pause
         public bool IsDragging { get; protected set; }
 
         private void Awake()
@@ -115,7 +116,8 @@ namespace RPGPlatformer.UI
                 OnFailedDrop();
                 return;
             }
-            else if (source != null && source is IDragDropSlot<T> sourceSlot && target is IDragDropSlot<T> targetSlot)
+            else if (source != null && source is IDragDropSlot<T> sourceSlot 
+                && target is IDragDropSlot<T> targetSlot)
             {
                 if (!TrySwap(sourceSlot, targetSlot) && target.AllowReplacementIfCantSwap)
                 {
@@ -126,6 +128,11 @@ namespace RPGPlatformer.UI
 
         private bool TrySwap(IDragDropSlot<T> source, IDragDropSlot<T> target)
         {
+            if (source.TryTransfer(target))
+            {
+                return true;
+            }
+
             T sourceItem = source.Contents();
             T targetItem = target.Contents();
 

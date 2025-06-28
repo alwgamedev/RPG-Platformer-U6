@@ -11,5 +11,6 @@ namespace RPGPlatformer.UI
         public bool ItemCanBeDragged();
         public void RemoveItem();
         public void DragComplete();
+        public bool TryTransfer(IDragDropSlot<T> target);
     }
 }

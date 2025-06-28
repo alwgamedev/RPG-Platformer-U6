@@ -87,6 +87,11 @@ namespace RPGPlatformer.UI
             AbilityBarItem = null;
         }
 
+        public bool TryTransfer(IDragDropSlot<AbilityBarItem> target)
+        {
+            return false;
+        }
+
 
         //EDITING ITEM
 
