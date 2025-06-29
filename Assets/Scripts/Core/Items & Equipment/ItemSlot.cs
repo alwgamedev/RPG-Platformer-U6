@@ -27,7 +27,7 @@ namespace RPGPlatformer.Core
 
         //public EquippableItem DefaultItem => defaultItem;
         public EquippableItem EquippedItem => equippedItem;
-        public GameObject EquippedItemGO { get; protected set; }
+        public EquippableItemGO EquippedItemGO { get; protected set; }
 
         //public string SortingLayer => sortingLayer;
         //public int SortingOrder => sortingOrder;
@@ -80,7 +80,7 @@ namespace RPGPlatformer.Core
         {
             if (EquippedItemGO)
             {
-                Destroy(EquippedItemGO);
+                Destroy(EquippedItemGO.gameObject);
             }
 
             equippedItem = item;
@@ -103,10 +103,7 @@ namespace RPGPlatformer.Core
                     else
                     {
                         var slds = renderer.gameObject.GetComponent<SortingLayerDataSource>();
-                        if (slds != null)
-                        {
-                            slds.UpdateSortingData();
-                        }
+                        slds?.UpdateSortingData();
                     }
 
                     if (!osi)
@@ -150,11 +147,11 @@ namespace RPGPlatformer.Core
             return DefaultLabelForCategory[category];
         }
 
-        protected virtual GameObject AttachPrefab(EquippableItem item)
+        protected virtual EquippableItemGO AttachPrefab(EquippableItem item)
         {
-            if (item?.EquippableItemData?.Prefab != null)
+            if (item?.EquippableItemData?.ItemGO != null)
             {
-                return Instantiate(item.EquippableItemData.Prefab, transform);
+                return Instantiate(item.EquippableItemData.ItemGO, transform);
             }
             return null;
         }

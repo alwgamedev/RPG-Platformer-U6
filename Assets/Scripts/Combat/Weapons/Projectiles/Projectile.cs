@@ -67,7 +67,7 @@ namespace RPGPlatformer.Combat
         {
             EnableHead(false);
             triggerCollider.enabled = false;
-            transform.SetParent(combatant.EquipSlots[EquipmentSlot.Mainhand].transform);
+            transform.SetParent(combatant.ProjectileAnchor);
             transform.localPosition = Vector3.zero;
             this.powerMultiplier = powerMultiplier;
             this.maxHits = maxHits;

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using RPGPlatformer.Core;
+using System.Linq;
 
 namespace RPGPlatformer.UI
 {
@@ -84,14 +85,20 @@ namespace RPGPlatformer.UI
             //    //or highlight flash here instead
             //}
 
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                Debug.Log($"GameLog received an empty message. Was it null? {text == null}");
+                return;
+            }
+
             messages.Enqueue(text);
 
             if (messages.Count > maxMessages)
             {
                 messages.Dequeue();
-                content.text = string.Join('\n', messages);
+                content.text = string.Join('\n', messages.Where(x => !string.IsNullOrWhiteSpace(x)));
             }
-            else if (messages.Count > 0)
+            else if (messages.Count > 0 )
             {
                 content.text += "\n" + text;
             }

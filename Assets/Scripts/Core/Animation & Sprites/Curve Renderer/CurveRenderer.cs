@@ -6,11 +6,11 @@ namespace RPGPlatformer.Core
 {
     [ExecuteAlways]
     [RequireComponent(typeof(LineRenderer))]
-    public class CurveRenderer : MonoBehaviour//, ISerializationCallbackReceiver
+    public class CurveRenderer : MonoBehaviour
     {
         [Min(0)][SerializeField] int lineRendererPositionCount = 75;
         [SerializeField] CurveGuidePoint[] guidePoints;//doesn't need to be serialized?
-        [SerializeField] bool lerpMode;//can be removed?
+        [SerializeField] bool lerpMode;
         [SerializeField] float lerpRate = 5;
         [SerializeField] float tangentWeight = 1;
         //note: numPointsDrawn is independent of pointData.Length.
@@ -77,6 +77,10 @@ namespace RPGPlatformer.Core
             //and we want to resize the array as rarely as possible
             transferQueue.Clear();//transferQueue should already be empty, but just in case
 
+            //YEAH, but this is all pretty stupid, because I'm not deactivating guide points ever
+            //so we're never using the virtual segments thing... so it's just slow for no reason
+            //(although when you only have 5-15 guide points, it might not be that big of a deal)
+
             numVirtualSegments = guides.Length - 1;
             int virtualSegs = 0;
             for (int i = 0; i < guides.Length; i++)
@@ -133,7 +137,7 @@ namespace RPGPlatformer.Core
             {
                 if (i == lineRendererPositionCount - 1)
                 {
-                    goalPositions[i] = guidePoints[^1].point;//^1 = length - 1 (last elmt of arry)
+                    goalPositions[i] = guidePoints[^1].point;
                     break;
                 }
 

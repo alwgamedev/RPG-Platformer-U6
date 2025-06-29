@@ -60,6 +60,18 @@ namespace RPGPlatformer.Combat
         public Dictionary<EquipmentSlot, ItemSlot> EquipSlots => equipSlots;
         public Transform MainhandElbow => mainhandElbow;
         public Transform ChestBone => chestBone;
+        public Transform ProjectileAnchor
+        {
+            get
+            {
+                if (mainhandSlot.EquippedItemGO && mainhandSlot.EquippedItemGO.ProjectileAnchor)
+                {
+                    return mainhandSlot.EquippedItemGO.ProjectileAnchor;
+                }
+
+                return mainhandSlot.transform;
+            }
+        }
         public float AttackRange { get; protected set; }
         public float IdealMinimumCombatDistance { get; protected set; }
         public IWeapon EquippedWeapon => equippedWeapon;

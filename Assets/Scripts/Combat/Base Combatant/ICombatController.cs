@@ -11,6 +11,7 @@ namespace RPGPlatformer.Combat
         public bool ChannelingAbility { get; }
         public bool PoweringUp { get; }
         public bool FireButtonIsDown { get; }
+        public bool HasStoredAction { get; }
         public TickTimer TickTimer { get; }
         public ICombatant Combatant { get; }
         public ICombatantMovementController MovementController{ get; }

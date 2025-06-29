@@ -13,10 +13,12 @@ namespace RPGPlatformer.Inventory
         [SerializeField] protected float damageBonus;
         [SerializeField] protected float defenseBonus;
         [SerializeField] protected List<LevelRequirement> levelReqs = new();
-        [SerializeField] protected GameObject prefab;
+        //[SerializeField] protected GameObject prefab;
+        [SerializeField] protected EquippableItemGO itemGO;
         [SerializeField] protected List<SpriteSwapData> spriteSwapData = new();
 
-        public GameObject Prefab => prefab;
+        //public GameObject Prefab => prefab;
+        public EquippableItemGO ItemGO => itemGO;
         public float DamageBonus => damageBonus;
         public float DefenseBonus => defenseBonus;
         public List<LevelRequirement> LevelReqs => levelReqs;

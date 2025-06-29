@@ -52,6 +52,7 @@ namespace RPGPlatformer.Combat
         public bool ChannelingAbility { get; protected set; }
         public bool PoweringUp { get; protected set; }
         public bool FireButtonIsDown { get; protected set; }
+        public bool HasStoredAction => StoredAction != null;
         public ICombatant Combatant => stateDriver;
         public ICombatantMovementController MovementController { get; protected set; }
         public virtual IInputSource InputSource { get; protected set; }

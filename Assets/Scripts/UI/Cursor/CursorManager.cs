@@ -54,7 +54,11 @@ namespace RPGPlatformer.UI
             var player = GlobalGameTools.Instance.Player;
             player.OnChannelStarted += () =>
             {
-                EquipAnimatedCursor(focusingRedCrosshairs);
+                if (!player.HasStoredAction)
+                //don't use aiming cursor just because you're waiting for an animation event
+                {
+                    EquipAnimatedCursor(focusingRedCrosshairs);
+                }
             };
             player.OnChannelEnded += () =>
             {

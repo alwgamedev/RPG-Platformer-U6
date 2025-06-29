@@ -15,7 +15,7 @@ namespace RPGPlatformer.Skills
         public static CharacterSkill Defense = new("Defense");
         public static CharacterSkill Magic = new("Magic");
         public static CharacterSkill Melee = new("Melee");
-        public static CharacterSkill Ranged = new("Range");
+        public static CharacterSkill Ranged = new("Ranged");
 
         public static IEnumerable<CharacterSkill> AllSkills()
         {
