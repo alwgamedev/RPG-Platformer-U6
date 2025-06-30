@@ -83,7 +83,8 @@ namespace RPGPlatformer.Environment
         {
             if (gameObject.activeInHierarchy)
             {
-                foliageController.BeginEaseIn(velocity * _influenceStrength, orientation);
+                foliageController.BeginEaseIn(velocity * _influenceStrength, orientation 
+                    * Mathf.Sign(transform.lossyScale.x));
             }
         }
 
