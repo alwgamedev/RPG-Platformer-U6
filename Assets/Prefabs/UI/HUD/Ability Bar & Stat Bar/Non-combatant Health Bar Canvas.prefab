@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2233138420364355909, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2233138420364355909, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
     - target: {fileID: 2726064523525699808, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -130,11 +138,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4597062589672823393, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5114048950063824794, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
       propertyPath: m_Name
       value: Non-combatant Health Bar Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2066734928849760859, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
@@ -156,6 +184,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2846787642444588830 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3380969883822556138, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+  m_PrefabInstance: {fileID: 678438759727375604}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4501342897570369445 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3971532693174283089, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
@@ -189,18 +222,13 @@ MonoBehaviour:
   blockRaycastsWhenShown: 0
   pauseAction: 0
   unpauseAction: 3
-  nameContainer: {fileID: 6625566433683049379}
+  nameContainer: {fileID: 2846787642444588830}
   healthContainer: {fileID: 4501342897570369445}
   tmp: {fileID: 1254655070769176289}
   statBar: {fileID: 7440593116781107121}
   damagePopupSpawnPoint: {fileID: 5257459761412202505}
   damagePopupPrefab: {fileID: 4642073706672816971, guid: ccea7d19f71f7f64ab730d6a4cbb2a12, type: 3}
   disengageTime: 6
---- !u!1 &6625566433683049379 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5951772870333312855, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
-  m_PrefabInstance: {fileID: 678438759727375604}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7440593116781107121 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7937594830997975877, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}

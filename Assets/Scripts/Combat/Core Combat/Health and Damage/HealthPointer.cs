@@ -11,6 +11,9 @@ namespace RPGPlatformer.Combat
 
         public IHealth HealthComponent()
         {
+            if (!enabled) return null;
+            //this is important for things like spider web barrier, where we need to be able to have
+            //the health be unresponsive for some period (in that case, until the mother spider is killed)
             return health;
         }
     }

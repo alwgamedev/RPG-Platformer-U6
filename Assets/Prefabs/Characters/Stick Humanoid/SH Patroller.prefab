@@ -140,6 +140,26 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771017868916564280, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8317993972996110747, guid: 456c5c743b9eca642bdacafba76edc48, type: 3}
       propertyPath: m_Size.x
       value: 0.7
@@ -774,7 +794,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: SH Patroller
-  targetLayer: Player
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -808,8 +827,8 @@ MonoBehaviour:
   timeToDelayBeforeFinalizeDeath: 1.5
   minimumCombatDistanceMultiplier: 0.5
   combatXPReward: 24
-  dropSize: 0
-  dropTable: {fileID: 0}
+  dropGenerator:
+    tables: []
   weaponSwapSOs: []
 --- !u!114 &8912017489112769141
 MonoBehaviour:

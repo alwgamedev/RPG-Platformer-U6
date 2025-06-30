@@ -171,10 +171,7 @@ namespace RPGPlatformer.UI
         {
             StopAllCoroutines();
             CanvasGroup.alpha = 1;
-            if (!noParentName)
-            {
-                nameContainer.SetActive(true);
-            }
+            nameContainer.SetActive(!noParentName);
             healthContainer.SetActive(true);
         }
 

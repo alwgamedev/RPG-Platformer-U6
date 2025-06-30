@@ -121,6 +121,13 @@ namespace RPGPlatformer.Environment
             if (motherSpider && !motherSpider.Defeated)
             {
                 healthCollider.enabled = false;
+                foreach (var c in contactColliders)
+                {
+                    if (c && c.TryGetComponent(out HealthPointer h))
+                    {
+                        h.enabled = false;
+                    }
+                }
                 motherSpider.OnDefeated += EnableHealth;
             }
 
@@ -140,7 +147,14 @@ namespace RPGPlatformer.Environment
 
         private void EnableHealth()
         {
-            healthCollider.enabled = true;
+            healthCollider.enabled = true; 
+            foreach (var c in contactColliders)
+            {
+                if (c && c.TryGetComponent(out HealthPointer h))
+                {
+                    h.enabled = true;
+                }
+            }
         }
 
         private void DamageHandler(float damage, IDamageDealer d)

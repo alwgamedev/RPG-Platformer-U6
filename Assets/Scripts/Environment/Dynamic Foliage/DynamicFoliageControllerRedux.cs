@@ -5,13 +5,13 @@ namespace RPGPlatformer.Environment
 {
     public class DynamicFoliageControllerRedux : MonoBehaviour
     {
-        [SerializeField] float easeInTime = .15f;//time to ease in from 0 influence to max influence
-        [SerializeField] float easeOutTime = .15f;
-        [SerializeField] bool randomizeEaseInTime;
-        [SerializeField] bool randomizeEaseOutTime;
+        [SerializeField] float easeInTime = .12f;//time to ease in from 0 influence to max influence
+        [SerializeField] float easeOutTime = .35f;
+        [SerializeField] bool randomizeEaseInTime = true;
+        [SerializeField] bool randomizeEaseOutTime = true;
         //[SerializeField] float easeOutRate = .5f;
         //[SerializeField] float easeOutConst = 0.1f;
-        [SerializeField] float maxInfluence = 1;//minInfluence will be assumed -maxInfluence
+        [SerializeField] float maxInfluence = 30;//minInfluence will be assumed -maxInfluence
 
         Material foliageMaterial;
         int externalInfluenceProperty = Shader.PropertyToID("_ExternalInfluence");

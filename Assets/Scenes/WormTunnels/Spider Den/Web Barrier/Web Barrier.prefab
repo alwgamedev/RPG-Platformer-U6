@@ -779,13 +779,13 @@ MonoBehaviour:
   lineRendererPositionCount: 30
   guidePoints:
   - virtualSegments: 0
-    point: {x: -113.48764, y: -25.294289, z: 0}
+    point: {x: 31.80208, y: 1.5186554, z: 0}
     velocity: {x: 0, y: -0.5, z: 0}
   - virtualSegments: 1
-    point: {x: -113.48764, y: -25.944288, z: 0}
+    point: {x: 31.80208, y: 0.8686554, z: 0}
     velocity: {x: 0, y: -0.5, z: 0}
   - virtualSegments: 1
-    point: {x: -113.48764, y: -26.669289, z: 0}
+    point: {x: 31.80208, y: 0.14365539, z: 0}
     velocity: {x: 0, y: -0.5, z: 0}
   lerpMode: 0
   lerpRate: 25
@@ -1345,13 +1345,13 @@ MonoBehaviour:
   lineRendererPositionCount: 75
   guidePoints:
   - virtualSegments: 0
-    point: {x: -113.48764, y: -26.669289, z: 0}
+    point: {x: 31.80208, y: 0.14365539, z: 0}
     velocity: {x: 0, y: -0.5, z: 0}
   - virtualSegments: 1
-    point: {x: -113.48764, y: -27.394289, z: 0}
+    point: {x: 31.80208, y: -0.5813446, z: 0}
     velocity: {x: 0, y: -0.5, z: 0}
   - virtualSegments: 1
-    point: {x: -113.48764, y: -27.894289, z: 0}
+    point: {x: 31.80208, y: -1.0813446, z: 0}
     velocity: {x: 0, y: -0.5, z: 0}
   lerpMode: 0
   lerpRate: 5
@@ -1547,10 +1547,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3937905725388865173, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4210075057892375067, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1581,7 +1577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4210075057892375067, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4210075057892375067, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1631,29 +1627,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4543139569690858283, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4543139569690858283, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4543139569690858283, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4543139569690858283, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4543139569690858283, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5733799317348244334, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
       propertyPath: m_Name
       value: Non-combatant Health Bar Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097082889318434252, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097082889318434252, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097082889318434252, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097082889318434252, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097082889318434252, guid: 45f941624b5ad6841bcc2d6c85bfbe74, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

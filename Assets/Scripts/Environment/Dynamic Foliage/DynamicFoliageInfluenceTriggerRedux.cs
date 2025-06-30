@@ -1,34 +1,20 @@
 ﻿using RPGPlatformer.Core;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace RPGPlatformer.Environment
 {
     public class DynamicFoliageInfluenceTriggerRedux : MonoBehaviour
     {
-        [SerializeField] bool randomizeExternalInfluenceStrength;
-        [Min(0)][SerializeField] float minExternalInfluenceStrength;
-        [Min(0)][SerializeField] float maxExternalInfluenceStrength;
+        [SerializeField] RandomizableFloat influenceStrength;
 
+        float _influenceStrength;
         DynamicFoliageControllerRedux foliageController;
 
-        float influenceStrength = 1;
         Collider2D influencingCollider;
 
         private void Awake()
         {
-            if (randomizeExternalInfluenceStrength && minExternalInfluenceStrength <= maxExternalInfluenceStrength)
-            {
-                influenceStrength
-                    = MiscTools.RandomFloat(minExternalInfluenceStrength, maxExternalInfluenceStrength);
-                //UnityEngine.Random.Range(minExternalInfluenceStrength, maxExternalInfluenceStrength);
-            }
-            else
-            {
-                influenceStrength = maxExternalInfluenceStrength;
-            }
+            _influenceStrength = influenceStrength.Value;
         }
 
         private void Start()
@@ -97,7 +83,7 @@ namespace RPGPlatformer.Environment
         {
             if (gameObject.activeInHierarchy)
             {
-                foliageController.BeginEaseIn(velocity * influenceStrength, orientation);
+                foliageController.BeginEaseIn(velocity * _influenceStrength, orientation);
             }
         }
 
