@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2765709863372221830}
   - component: {fileID: 1955809703578049187}
   - component: {fileID: 1040949900820552318}
-  - component: {fileID: 6020091611272211644}
+  - component: {fileID: 5940327320543384179}
   m_Layer: 3
   m_Name: Blank Sprite Shape Ground
   m_TagString: Ground
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 393799725689929377}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.772884, y: -4.585038, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,7 +44,7 @@ SpriteShapeRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -92,8 +92,8 @@ SpriteShapeRenderer:
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   m_LocalAABB:
-    m_Center: {x: 0.0002465248, y: -0.00016963482, z: 0}
-    m_Extent: {x: 2.3399153, y: 1.0001695, z: 0}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 1.351982, y: 1.351982, z: 0}
   m_SpriteSortPoint: 0
 --- !u!114 &1040949900820552318
 MonoBehaviour:
@@ -111,51 +111,51 @@ MonoBehaviour:
     m_IsOpenEnded: 0
     m_ControlPoints:
     - position: {x: -1, y: -1, z: 0}
-      leftTangent: {x: 0.53597367, y: -0.00048214197, z: -0}
-      rightTangent: {x: -0.53597367, y: 0.00048214197, z: 0}
+      leftTangent: {x: 0.47140452, y: -0.47140452, z: -0}
+      rightTangent: {x: -0.47140452, y: 0.47140452, z: 0}
       mode: 1
       height: 1
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: -2, y: 1, z: 0}
-      leftTangent: {x: -1.0023332, y: 0.0010559559, z: 0}
-      rightTangent: {x: 1.0023332, y: -0.0010559559, z: -0}
+    - position: {x: -1, y: 1, z: 0}
+      leftTangent: {x: -0.47140452, y: -0.47140452, z: -0}
+      rightTangent: {x: 0.47140452, y: 0.47140452, z: 0}
       mode: 1
       height: 1
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
-    - position: {x: 2, y: 1, z: 0}
-      leftTangent: {x: -1.0005913, y: -0.0016920567, z: -0}
-      rightTangent: {x: 1.0005913, y: 0.0016920567, z: 0}
+    - position: {x: 1, y: 1, z: 0}
+      leftTangent: {x: -0.47140452, y: 0.47140452, z: -0}
+      rightTangent: {x: 0.47140452, y: -0.47140452, z: 0}
       mode: 1
       height: 1
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
     - position: {x: 1, y: -1, z: 0}
-      leftTangent: {x: 0.54391515, y: 0.0004222989, z: 0}
-      rightTangent: {x: -0.54391515, y: -0.0004222989, z: -0}
+      leftTangent: {x: 0.47140452, y: 0.47140452, z: -0}
+      rightTangent: {x: -0.47140452, y: -0.47140452, z: 0}
       mode: 1
       height: 1
       spriteIndex: 0
       corner: 1
       m_CornerMode: 1
   m_SpriteShape: {fileID: 11400000, guid: 20f2a873555b1d54bb07039189e789f5, type: 2}
-  m_FillPixelPerUnit: 256
+  m_FillPixelPerUnit: 100
   m_StretchTiling: 1
   m_SplineDetail: 16
   m_AdaptiveUV: 1
-  m_StretchUV: 0
+  m_StretchUV: 1
   m_WorldSpaceUV: 0
   m_CornerAngleThreshold: 30
   m_ColliderDetail: 16
-  m_ColliderOffset: 0.5
+  m_ColliderOffset: 0
   m_UpdateCollider: 1
   m_EnableTangents: 0
   m_GeometryCached: 0
-  m_UTess2D: 1
+  m_UTess2D: 0
   m_UpdateShadow: 0
   m_ShadowDetail: 16
   m_ShadowOffset: 0.5
@@ -164,35 +164,35 @@ MonoBehaviour:
   m_Modifiers: []
   m_ColliderSegment:
   - {x: -1, y: -1}
-  - {x: -1.1185927, y: -0.9744214}
-  - {x: -1.2559531, y: -0.9026212}
-  - {x: -1.406038, y: -0.7917135}
-  - {x: -1.7202103, y: -0.4810324}
-  - {x: -2.0127678, y: -0.099291846}
-  - {x: -2.1358345, y: 0.10044043}
-  - {x: -2.2353683, y: 0.2965951}
-  - {x: -2.3053274, y: 0.48205802}
-  - {x: -2.3396688, y: 0.64971495}
-  - {x: -2.3323493, y: 0.7924518}
-  - {x: -2.2773268, y: 0.9031544}
-  - {x: -2.1685576, y: 0.9747085}
-  - {x: -2, y: 1}
-  - {x: 2, y: 1}
-  - {x: 2.1683533, y: 0.9748186}
-  - {x: 2.2771707, y: 0.9033428}
-  - {x: 2.3324428, y: 0.7926904}
-  - {x: 2.3401618, y: 0.64997923}
-  - {x: 2.3063178, y: 0.4823272}
-  - {x: 2.2369032, y: 0.29685265}
-  - {x: 2.1379077, y: 0.1006728}
-  - {x: 1.8751416, y: -0.2953303}
-  - {x: 1.5659487, y: -0.64873874}
-  - {x: 1.4089203, y: -0.79167545}
-  - {x: 1.2582585, y: -0.9026097}
-  - {x: 1.1199546, y: -0.9744239}
+  - {x: -1.1634203, y: -0.7829734}
+  - {x: -1.2765576, y: -0.5201251}
+  - {x: -1.3394114, y: -0.22811773}
+  - {x: -1.351982, y: 0.07638645}
+  - {x: -1.3142697, y: 0.37672496}
+  - {x: -1.2262741, y: 0.6562355}
+  - {x: -1.0879955, y: 0.8982557}
+  - {x: -0.89825577, y: 1.0879955}
+  - {x: -0.6562355, y: 1.2262744}
+  - {x: -0.37672484, y: 1.3142695}
+  - {x: -0.07638635, y: 1.3519819}
+  - {x: 0.22811778, y: 1.3394113}
+  - {x: 0.5201251, y: 1.2765572}
+  - {x: 0.78297335, y: 1.1634202}
+  - {x: 1, y: 1}
+  - {x: 1.0821292, y: 0.8923894}
+  - {x: 1.1810194, y: 0.6109807}
+  - {x: 1.209513, y: 0.27196828}
+  - {x: 1.1877236, y: -0.087871954}
+  - {x: 1.1047566, y: -0.58623815}
+  - {x: 1, y: -1}
+  - {x: 0.43176454, y: -1.1357646}
+  - {x: -0.09235327, y: -1.2036467}
+  - {x: -0.44637644, y: -1.2028086}
+  - {x: -0.761184, y: -1.1416309}
+  - {x: -0.89238936, y: -1.0821291}
   - {x: -1, y: -1}
   m_ShadowSegment: []
---- !u!60 &6020091611272211644
+--- !u!60 &5940327320543384179
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -202,7 +202,7 @@ PolygonCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 1f1602a4b46885b4b937bbd0ef7fbe02, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -226,7 +226,7 @@ PolygonCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.05}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -239,31 +239,31 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: -1, y: -1}
-      - {x: -1.1185927, y: -0.9744214}
-      - {x: -1.2559531, y: -0.9026212}
-      - {x: -1.406038, y: -0.7917135}
-      - {x: -1.7202103, y: -0.4810324}
-      - {x: -2.0127678, y: -0.099291846}
-      - {x: -2.1358345, y: 0.10044043}
-      - {x: -2.2353683, y: 0.2965951}
-      - {x: -2.3053274, y: 0.48205802}
-      - {x: -2.3396688, y: 0.64971495}
-      - {x: -2.3323493, y: 0.7924518}
-      - {x: -2.2773268, y: 0.9031544}
-      - {x: -2.1685576, y: 0.9747085}
-      - {x: -2, y: 1}
-      - {x: 2, y: 1}
-      - {x: 2.1683533, y: 0.9748186}
-      - {x: 2.2771707, y: 0.9033428}
-      - {x: 2.3324428, y: 0.7926904}
-      - {x: 2.3401618, y: 0.64997923}
-      - {x: 2.3063178, y: 0.4823272}
-      - {x: 2.2369032, y: 0.29685265}
-      - {x: 2.1379077, y: 0.1006728}
-      - {x: 1.8751416, y: -0.2953303}
-      - {x: 1.5659487, y: -0.64873874}
-      - {x: 1.4089203, y: -0.79167545}
-      - {x: 1.2582585, y: -0.9026097}
-      - {x: 1.1199546, y: -0.9744239}
+      - {x: -1.1634203, y: -0.7829734}
+      - {x: -1.2765576, y: -0.5201251}
+      - {x: -1.3394114, y: -0.22811773}
+      - {x: -1.351982, y: 0.07638645}
+      - {x: -1.3142697, y: 0.37672496}
+      - {x: -1.2262741, y: 0.6562355}
+      - {x: -1.0879955, y: 0.8982557}
+      - {x: -0.89825577, y: 1.0879955}
+      - {x: -0.6562355, y: 1.2262744}
+      - {x: -0.37672484, y: 1.3142695}
+      - {x: -0.07638635, y: 1.3519819}
+      - {x: 0.22811778, y: 1.3394113}
+      - {x: 0.5201251, y: 1.2765572}
+      - {x: 0.78297335, y: 1.1634202}
+      - {x: 1, y: 1}
+      - {x: 1.0821292, y: 0.8923894}
+      - {x: 1.1810194, y: 0.6109807}
+      - {x: 1.209513, y: 0.27196828}
+      - {x: 1.1877236, y: -0.087871954}
+      - {x: 1.1047566, y: -0.58623815}
+      - {x: 1, y: -1}
+      - {x: 0.43176454, y: -1.1357646}
+      - {x: -0.09235327, y: -1.2036467}
+      - {x: -0.44637644, y: -1.2028086}
+      - {x: -0.761184, y: -1.1416309}
+      - {x: -0.89238936, y: -1.0821291}
       - {x: -1, y: -1}
   m_UseDelaunayMesh: 0
