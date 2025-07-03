@@ -139,7 +139,7 @@ namespace RPGPlatformer.AIControl
             }
             ((AICombatant)combatController.Combatant).EquipWeaponSwap("Unarmed (Mother Spider)");
 
-            combatController.StartAttacking();
+            //combatController.StartAttacking();
         }
 
         private void EquipRangedWeapon()
@@ -151,7 +151,7 @@ namespace RPGPlatformer.AIControl
             }
             ((AICombatant)combatController.Combatant).EquipWeaponSwap("Ranged Weapon (Mother Spider)");
 
-            combatController.StartAttacking();
+            //combatController.StartAttacking();
         }
     }
 }
