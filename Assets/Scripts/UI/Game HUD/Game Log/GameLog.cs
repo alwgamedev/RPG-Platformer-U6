@@ -19,6 +19,7 @@ namespace RPGPlatformer.UI
 
         public static GameLog Instance { get; private set; }
         public static GameLogInputField InputField => Instance.inputField;
+        public static CollapsableUI CollapsableUI => Instance.collapsableUI;
 
         private void Awake()
         {
@@ -62,11 +63,11 @@ namespace RPGPlatformer.UI
             iam.InputAction(InputActionsManager.rightClickActionName).started += DisableInputFieldOnMouseDown;
         }
 
-        public static void Log(string text)
+        public static void Log(string text, bool forceOpenUI = false)
         {
             if (Instance)
             {
-                Instance.PrivateLog(text);
+                Instance.PrivateLog(text, forceOpenUI);
             }
         }
 
@@ -77,18 +78,17 @@ namespace RPGPlatformer.UI
             Log("Enter the desired quantity:");
         }
 
-        private void PrivateLog(string text)
+        private void PrivateLog(string text, bool forceOpenUI = false)
         {
-            //if (!collapsableUI.IsOpen)
-            //{
-            //    highlightAnim.Play();
-            //    //or highlight flash here instead
-            //}
-
             if (string.IsNullOrWhiteSpace(text))
             {
                 Debug.Log($"GameLog received an empty message. Was it null? {text == null}");
                 return;
+            }
+
+            if (forceOpenUI && !collapsableUI.IsOpen)
+            {
+                collapsableUI.SetOpen(true);
             }
 
             messages.Enqueue(text);

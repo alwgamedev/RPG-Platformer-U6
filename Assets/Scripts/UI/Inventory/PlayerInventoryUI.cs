@@ -6,15 +6,13 @@ namespace RPGPlatformer.UI
 {
     public class PlayerInventoryUI : GridLayoutInventoryUI
     {
-        //CollapsableUI collapsableUI;
-        //Animation highlightAnim;
+        public CollapsableUI CollapsableUI { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
 
-            //collapsableUI = GetComponent<CollapsableUI>();
-            //highlightAnim = collapsableUI.CollapseButton.GetComponent<Animation>();
+            CollapsableUI = GetComponent<CollapsableUI>();
         }
 
         protected override void FindOwner()

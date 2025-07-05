@@ -71,9 +71,11 @@ namespace RPGPlatformer.Core
 
         private void GiveTreeBranchToPlayer()
         {
-            GlobalGameTools.Instance.PlayerLooter.TakeLoot(glowingBranch.ItemCopy().ToInventorySlotData(1));
-            GameLog.Log("You take one of the branches for closer inspection.");
-            GameLog.Log($"{glowingBranchSO.BaseData.DisplayName} has been placed in your inventory.");
+            GameHUD.GiftPlayerLoot(glowingBranch.ItemCopy().ToInventorySlotData(1),
+                "You take one of the branches for closer inspection.");
+            //GlobalGameTools.Instance.PlayerLooter.TakeLoot(glowingBranch.ItemCopy().ToInventorySlotData(1));
+            //GameLog.Log("You take one of the branches for closer inspection.");
+            //GameLog.Log($"{glowingBranchSO.BaseData.DisplayName} has been placed in your inventory.");
         }
 
         private async Task IlluminateTree()

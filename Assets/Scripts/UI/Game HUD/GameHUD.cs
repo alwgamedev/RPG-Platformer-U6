@@ -1,7 +1,7 @@
 ﻿using RPGPlatformer.Core;
+using RPGPlatformer.Inventory;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace RPGPlatformer.UI
 {
@@ -23,6 +23,7 @@ namespace RPGPlatformer.UI
         public static EquipmentInspectorUI EquipmentInspector => Instance.equipmentInspector;
         public static GameLog GameLog => GameLog.Instance;
         public static PlayerInventoryUI PlayerInventory => Instance.playerInventory;
+        public static SkillsUI SkillsUI => Instance.skillsUI;
         public static XPAlertBar XPAlertBar => Instance.xpAlertBar;
         public static HidableUI SceneFader => Instance.sceneFader;
         public static GameHUD Instance { get; private set; }
@@ -49,6 +50,32 @@ namespace RPGPlatformer.UI
             playerInventory = GetComponentInChildren<PlayerInventoryUI>(true);
             xpAlertBar = GetComponentInChildren<XPAlertBar>(true);
             skillsUI = GetComponentInChildren<SkillsUI>(true);
+        }
+
+        public static void GiftPlayerLoot(IInventorySlotDataContainer loot, string message = null, 
+            bool handleOverflow = true)
+        {
+            if (loot?.Item == null || loot.Quantity <= 0)
+            {
+                Debug.LogWarning("Gifting player loot failed." +
+                    $" Was loot null? {loot == null}. Was Item null? {loot?.Item == null}.");
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                GameLog.Log(message);
+            }
+            if (!string.IsNullOrWhiteSpace(loot.Item.BaseData.DisplayName))
+            {
+                GameLog.Log($"{loot.Item.BaseData.DisplayName} has been placed in your inventory.");
+            }
+
+            if (!PlayerInventory.CollapsableUI.IsOpen)
+            {
+                PlayerInventory.CollapsableUI.SetOpen(true);
+            }
+            GlobalGameTools.Instance.PlayerLooter.TakeLoot(loot, handleOverflow);
         }
 
         public static async Task FadeSceneOut()
