@@ -69,7 +69,7 @@ namespace RPGPlatformer.Core
 
         private void SetSortingData(int? layerID, int? layerOrder)
         {
-            if (!layerID.HasValue || !layerOrder.HasValue) return;
+            if (!gameObject || !layerID.HasValue || !layerOrder.HasValue) return;
 
             if (TryGetComponent(out Renderer renderer))
             {
