@@ -9,7 +9,7 @@ using RPGPlatformer.Core;
 
 namespace RPGPlatformer.Skills
 {
-    public class CharacterProgressionManager : MonoBehaviour, ISavable, IXPGainer
+    public class CharacterProgressionManager : MonoBehaviour, ISavable, ICharacterProgressionManager
     {
         [SerializeField] CharacterProgressionData progressionData = new();
         [SerializeField] bool canGainXP;
@@ -20,7 +20,7 @@ namespace RPGPlatformer.Skills
         public int AutoCalculatedHealthPoints => progressionData.AutoCalculatedHealthPoints();
 
         public event Action<XPGainEventData> ExperienceGained;
-        public event Action<CharacterSkill, int> LevelUp;
+        public event Action<ICharacterSkill, int> LevelUp;
         public event Action StateRestored;
 
         private void Awake()
@@ -39,22 +39,22 @@ namespace RPGPlatformer.Skills
             return GetLevel(CharacterSkillBook.GetCharacterSkill(skill));
         }
 
-        public int GetLevel(CharacterSkill skill)
+        public int GetLevel(ICharacterSkill skill)
         {
             return progressionData.GetLevel(skill);
         }
 
-        public int GetXP(CharacterSkill skill)
+        public int GetXP(ICharacterSkill skill)
         {
             return progressionData.GetXP(skill);
         }
 
-        public float GetXPFraction(CharacterSkill skill)
+        public float GetXPFraction(ICharacterSkill skill)
         {
             return progressionData.GetXPFraction(skill);
         }
 
-        public void GainExperience(CharacterSkill skill, int xpToGain)
+        public void GainExperience(ICharacterSkill skill, int xpToGain)
         {
             if (!canGainXP) return;
 
@@ -66,7 +66,7 @@ namespace RPGPlatformer.Skills
 
             ExperienceGained?.Invoke(new(skill, data, xpGained));
 
-            if(data.Level > oldLevel)
+            if (data.Level > oldLevel)
             {
                 LevelUp?.Invoke(skill, data.Level);
                 if (transform == GlobalGameTools.Instance.PlayerTransform)

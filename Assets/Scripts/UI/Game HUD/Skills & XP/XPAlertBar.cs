@@ -10,12 +10,11 @@ namespace RPGPlatformer.UI
     {
         [SerializeField] XPAlert alertPrefab;
 
-        Dictionary<CharacterSkill, XPAlert> activeXPAlerts = new();
+        Dictionary<ICharacterSkill, XPAlert> activeXPAlerts = new();
 
         private void Start()
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            player.GetComponent<CharacterProgressionManager>().ExperienceGained +=
+            GlobalGameTools.Instance.PlayerProgressionManager.ExperienceGained +=
                 async (eventData) => await HandleXPGainEvent(eventData);
         }
 
@@ -32,14 +31,14 @@ namespace RPGPlatformer.UI
                 .HandleXPGainEvent(eventData, GlobalGameTools.Instance.TokenSource.Token);
         }
 
-        private void InstantiateNewAlert(CharacterSkill skill)
+        private void InstantiateNewAlert(ICharacterSkill skill)
         {
             var newAlert = Instantiate(alertPrefab, transform);
             newAlert.QueueEmptied += () => DestroyCompletedAlert(skill, newAlert);
             activeXPAlerts[skill] = newAlert;
         }
 
-        private void DestroyCompletedAlert(CharacterSkill key, XPAlert alert)
+        private void DestroyCompletedAlert(ICharacterSkill key, XPAlert alert)
         {
             if (key == null)
 

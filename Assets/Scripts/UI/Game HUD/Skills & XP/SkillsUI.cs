@@ -11,7 +11,7 @@ namespace RPGPlatformer.UI
         [SerializeField] RectTransform skillsContainer;
         [SerializeField] SkillItemUI skillItemPrefab;
 
-        Dictionary<CharacterSkill, SkillItemUI> GetSkillUI = new();
+        Dictionary<ICharacterSkill, SkillItemUI> GetSkillUI = new();
 
         private void Awake()
         {
@@ -54,7 +54,7 @@ namespace RPGPlatformer.UI
         {
             SavingSystem.SceneLoadComplete -= UpdateUI;
             var cpm = GlobalGameTools.Instance.PlayerProgressionManager;
-            if (cpm)
+            if (cpm != null)
             {
                 cpm.ExperienceGained -= HandleExperienceGain;
             }

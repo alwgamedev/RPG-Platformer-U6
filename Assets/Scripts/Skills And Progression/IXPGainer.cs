@@ -2,6 +2,6 @@
 {
     public interface IXPGainer
     {
-        public void GainExperience(CharacterSkill skill, int xp);
+        public void GainExperience(ICharacterSkill skill, int xp);
     }
 }

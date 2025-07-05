@@ -15,7 +15,7 @@ namespace RPGPlatformer.Core
     {
         [SerializeField] AbilityResourceContainerSO abilityResources;
 
-        public Dictionary<CharacterSkill, Sprite> CircularSkillIcons = new();
+        public Dictionary<ICharacterSkill, Sprite> CircularSkillIcons = new();
 
         public AbilityResourceContainerSO AbilityResources => abilityResources;
 

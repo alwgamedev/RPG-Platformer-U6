@@ -214,7 +214,7 @@ namespace RPGPlatformer.Combat
             Health.Stat.SetMaxAndDefaultValue(progressionManager.AutoCalculatedHealthPoints, maintainFraction);
         }
 
-        protected virtual void OnLevelUp(CharacterSkill skill, int level)
+        protected virtual void OnLevelUp(ICharacterSkill skill, int level)
         {
             if (useAutoCalculatedHealthPoints && skill == CharacterSkillBook.Fitness)
             {

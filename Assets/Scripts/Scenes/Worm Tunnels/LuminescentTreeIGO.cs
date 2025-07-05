@@ -15,8 +15,8 @@ namespace RPGPlatformer.Core
 
         Highlighter highlighter;
         InventoryItem glowingBranch;
-        ILooter playerLooter;
-        IInventoryOwner playerInventoryOwner;
+        //ILooter playerLooter;
+        //IInventoryOwner playerInventoryOwner;
 
         protected override void Awake()
         {
@@ -27,9 +27,9 @@ namespace RPGPlatformer.Core
 
         private void Start()
         {
-            var player = GlobalGameTools.Instance.Player.Combatant;
-            playerLooter = (ILooter)player;
-            playerInventoryOwner = (IInventoryOwner)player;
+            //var player = GlobalGameTools.Instance.Player.Combatant;
+            //playerLooter = (ILooter)player;
+            //playerInventoryOwner = (IInventoryOwner)player;
 
             glowingBranch = glowingBranchSO.CreateInstanceOfItem();
         }
@@ -52,7 +52,7 @@ namespace RPGPlatformer.Core
                 await IlluminateTree();
             }
 
-            if (playerInventoryOwner.HasItem(glowingBranch))
+            if (GlobalGameTools.Instance.PlayerInventoryOwner.HasItem(glowingBranch))
             {
                 GameLog.Log("You already have a tree branch.");
             }
@@ -71,9 +71,9 @@ namespace RPGPlatformer.Core
 
         private void GiveTreeBranchToPlayer()
         {
-            playerLooter.TakeLoot(glowingBranch.ItemCopy().ToInventorySlotData(1));
+            GlobalGameTools.Instance.PlayerLooter.TakeLoot(glowingBranch.ItemCopy().ToInventorySlotData(1));
             GameLog.Log("You take one of the branches for closer inspection.");
-            GameLog.Log($"({glowingBranchSO.BaseData.DisplayName} has been placed in your inventory.)");
+            GameLog.Log($"{glowingBranchSO.BaseData.DisplayName} has been placed in your inventory.");
         }
 
         private async Task IlluminateTree()

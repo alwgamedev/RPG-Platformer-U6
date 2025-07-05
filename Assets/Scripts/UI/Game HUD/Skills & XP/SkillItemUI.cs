@@ -11,7 +11,7 @@ namespace RPGPlatformer.UI
         [SerializeField] Image xpBar;
         [SerializeField] TextMeshProUGUI xpText;//{xP} / {xpMax} XP
 
-        public void DisplaySkill(CharacterProgressionManager cpm, CharacterSkill skill)
+        public void DisplaySkill(ICharacterProgressionManager cpm, ICharacterSkill skill)
         {
             var lvl = cpm.GetLevel(skill);
             header.text = $"<b>{skill.SkillName}:</b> Level {lvl}";

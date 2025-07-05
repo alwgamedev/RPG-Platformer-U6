@@ -1,4 +1,6 @@
 ﻿using RPGPlatformer.Combat;
+using RPGPlatformer.Inventory;
+using RPGPlatformer.Loot;
 using RPGPlatformer.Movement;
 using RPGPlatformer.Skills;
 using System;
@@ -17,14 +19,20 @@ namespace RPGPlatformer.Core
         Transform playerTransform;
         IMovementController playerMover;
         ICombatController playerCC;
-        CharacterProgressionManager playerProgressionManager;
+        ILooter playerLooter;
+        IInventoryOwner playerInventoryOwner;
+        ICharacterProgressionManager playerProgressionManager;
 
         public static GlobalGameTools Instance { get; private set; }
         public static string PlayerName { get; private set; } = "Player";
         public Transform PlayerTransform => playerTransform;
         public IMovementController PlayerMover => playerMover;
         public ICombatController Player => playerCC;
-        public CharacterProgressionManager PlayerProgressionManager => playerProgressionManager;
+        public ILooter PlayerLooter => playerLooter;
+        public IInventoryOwner PlayerInventoryOwner => playerInventoryOwner;
+        public ICharacterProgressionManager PlayerProgressionManager => playerProgressionManager;
+        //let's create ICharacterProgressionManagerInterface
+        //(I don't like GGT depending on much bc everything depends on GGT)
         public bool PlayerIsDead => Player == null || Player.Combatant.Health.IsDead;
         public CancellationTokenSource TokenSource {  get; private set; }
         public TickTimer TickTimer { get; private set; }
@@ -70,10 +78,13 @@ namespace RPGPlatformer.Core
             playerMover = playerTransform.GetComponent<IMovementController>();
             playerCC = playerGO.GetComponent<ICombatController>();
             playerCC.OnDeath += BroadcastPlayerDeath;
-            playerGO.GetComponent<ICombatant>().DeathFinalized += BroadcastPlayerDeathFinalized;
+            var comb = playerGO.GetComponent<ICombatant>();
+            comb.DeathFinalized += BroadcastPlayerDeathFinalized;
             //***get comp instead of playerCC.Combatant, because the playerCC awake may come after GGT's,
             //which means the playerCC won't have found its combatant yet
-            playerProgressionManager = playerGO.GetComponent<CharacterProgressionManager>();
+            playerProgressionManager = playerGO.GetComponent<ICharacterProgressionManager>();
+            playerLooter = (ILooter)comb;
+            playerInventoryOwner = (IInventoryOwner)comb;
 
             //var playerGO = GameObject.FindWithTag("Player");
 

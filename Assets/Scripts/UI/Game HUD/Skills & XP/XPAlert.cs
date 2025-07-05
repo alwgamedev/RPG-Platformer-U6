@@ -72,13 +72,13 @@ namespace RPGPlatformer.UI
 
         private async Task PlayAlert(XPGainEventData eventData, CancellationToken token)
         {
-            CharacterSkill skill = eventData.skill;
-            SkillProgressionData data = eventData.progressionData;
+            var skill = eventData.skill;
+            var data = eventData.progressionData;
             int xpGain = eventData.xpGained;
 
             int startingXP = data.XP - xpGain;
             int endingXP = data.XP;
-            int endingLevel = data.Level;
+            //int endingLevel = data.Level;
             int startingLevel = skill.XPTable.LevelAtXP(data.XP - xpGain);
             //^check directly because we could have gained multiple levels
 
@@ -128,7 +128,7 @@ namespace RPGPlatformer.UI
             xpGainedTextAnimation.Play();
         }
 
-        private void DisplaySkillAndLevel(CharacterSkill skill, int level)
+        private void DisplaySkillAndLevel(ICharacterSkill skill, int level)
         {
             skillNameText.text = skill.SkillName;
             levelText.text = $"Level {level}";
@@ -138,7 +138,7 @@ namespace RPGPlatformer.UI
             }
         }
 
-        private void SetProgressBarFillAmount(XPTable xpTable, int currentLevel, float currentXP)
+        private void SetProgressBarFillAmount(IXPTable xpTable, int currentLevel, float currentXP)
         {
             progressBar.fillAmount = (currentXP - xpTable.XPAtLevel(currentLevel)) / xpTable.LevelXPDelta(currentLevel);
         }

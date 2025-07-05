@@ -7,7 +7,7 @@ namespace RPGPlatformer.Skills
     [Serializable]
     public class CharacterProgressionData
     {
-        Dictionary<CharacterSkill, SkillProgressionData> SkillLookup;
+        Dictionary<ICharacterSkill, SkillProgressionData> SkillLookup;
 
         [SerializeField] SkillProgressionData fitness = new();
         [SerializeField] SkillProgressionData defense = new();
@@ -44,17 +44,17 @@ namespace RPGPlatformer.Skills
             set => ranged = value ?? new();
         }
 
-        public int GetLevel(CharacterSkill skill)
+        public int GetLevel(ICharacterSkill skill)
         {
             return SkillLookup[skill].Level;
         }
 
-        public int GetXP(CharacterSkill skill)
+        public int GetXP(ICharacterSkill skill)
         {
             return SkillLookup[skill].XP;
         }
 
-        public float GetXPFraction(CharacterSkill skill)
+        public float GetXPFraction(ICharacterSkill skill)
         {
             return skill.XPTable.PercentProgressTowardNextLevel(GetXP(skill), GetLevel(skill));
         }
@@ -79,7 +79,7 @@ namespace RPGPlatformer.Skills
             return 4000 + (312 * (GetLevel(CharacterSkillBook.Fitness) - 1));
         }
 
-        public SkillProgressionData GetProgressionData(CharacterSkill skill)
+        public ISkillProgressionData GetProgressionData(ICharacterSkill skill)
         {
             if (SkillLookup == null)
             {

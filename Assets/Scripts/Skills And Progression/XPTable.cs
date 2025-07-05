@@ -2,32 +2,44 @@
 
 namespace RPGPlatformer.Skills
 {
-    public class XPTable
+    public interface IXPTable
     {
-        public readonly int MaxLevel;
+        int MaxLevel { get; }
 
+        int LevelAtXP(int xp);
+        int LevelXPDelta(int level);
+        int MaxXP();
+        float PercentProgressTowardNextLevel(int currentXP, int? currentLevel = null);
+        int XPAtLevel(int lvl);
+    }
+
+    public class XPTable : IXPTable
+    {
+        readonly int maxLevel;
         readonly Dictionary<int, int> LevelToXPDict = new();//key: level, value: xp at beginning of level
 
-        public XPTable(int MaxLevel)
+        public int MaxLevel => maxLevel;
+
+        public XPTable(int maxLevel)
         {
-            this.MaxLevel = MaxLevel;
+            this.maxLevel = maxLevel;
         }
 
         public int MaxXP()
         {
-            return XPAtLevel(MaxLevel + 1) - 1;
+            return XPAtLevel(maxLevel + 1) - 1;
         }
 
         public int LevelAtXP(int xp)
         {
-            for (int i = 1; i < MaxLevel; i++)
+            for (int i = 1; i < maxLevel; i++)
             {
                 if (xp < XPAtLevel(i + 1))
                 {
                     return i;
                 }
             }
-            return MaxLevel;
+            return maxLevel;
         }
 
         public int XPAtLevel(int lvl)
@@ -68,7 +80,7 @@ namespace RPGPlatformer.Skills
         {
             int level = currentLevel.HasValue ? currentLevel.Value : LevelAtXP(currentXP);
 
-            if(currentLevel >= MaxLevel)
+            if (currentLevel >= maxLevel)
             {
                 return 0;
             }
