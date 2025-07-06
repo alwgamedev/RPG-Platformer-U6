@@ -157,7 +157,7 @@ MonoBehaviour:
   easeOutTime: 0.35
   randomizeEaseInTime: 0
   randomizeEaseOutTime: 0
-  maxInfluence: 0.5
+  maxInfluence: 5.5
 --- !u!114 &3755773098650474499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,6 +171,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   influenceStrength:
-    mode: 0
-    min: 1
-    max: 1.5
+    mode: 1
+    min: 0
+    max: 1

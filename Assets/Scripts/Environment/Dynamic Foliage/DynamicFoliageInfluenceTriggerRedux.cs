@@ -38,9 +38,19 @@ namespace RPGPlatformer.Environment
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
+            if (!gameObject.activeInHierarchy) return;
             if (CanTriggerInfluence(collider))
             {
                 BeginInfluence(collider);
+            }
+        }
+
+        private void OnTriggerStay2D(Collider2D collider)
+        {
+            if (!gameObject.activeInHierarchy) return;
+            if (CanTriggerInfluence(collider) && collider == influencingCollider)
+            {
+                UpdateInfluence(collider.attachedRigidbody.linearVelocity, Orientation(collider.transform));
             }
         }
 
@@ -52,14 +62,18 @@ namespace RPGPlatformer.Environment
         private void BeginInfluence(Collider2D collider)
         {
             influencingCollider = collider;
+            BeginEaseIn(collider.attachedRigidbody.linearVelocity, Orientation(collider.transform));
+        }
 
-            float orientation = Mathf.Sign(collider.transform.localScale.x);
-            if ((transform.position.x < collider.transform.position.x && orientation > 0)
-                || (transform.position.x > collider.transform.position.x && orientation < 0))
+        private float Orientation(Transform t)
+        {
+            float orientation = Mathf.Sign(t.localScale.x);
+            if ((transform.position.x < t.position.x && orientation > 0)
+                || (transform.position.x > t.position.x && orientation < 0))
             {
                 orientation *= -1;
             }
-            BeginEaseIn(collider.attachedRigidbody.linearVelocity, orientation);
+            return orientation * Mathf.Sign(transform.lossyScale.x);
         }
 
         private void EndInfluence(Collider2D collider)
@@ -83,8 +97,15 @@ namespace RPGPlatformer.Environment
         {
             if (gameObject.activeInHierarchy)
             {
-                foliageController.BeginEaseIn(velocity * _influenceStrength, orientation 
-                    * Mathf.Sign(transform.lossyScale.x));
+                foliageController.BeginEaseIn(velocity * _influenceStrength, orientation);
+            }
+        }
+
+        private void UpdateInfluence(Vector2 velocity, float orientation)
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                foliageController.SetGoalInfluence(velocity * _influenceStrength, orientation);
             }
         }
 

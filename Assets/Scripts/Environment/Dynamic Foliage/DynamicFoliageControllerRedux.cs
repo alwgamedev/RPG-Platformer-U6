@@ -53,9 +53,14 @@ namespace RPGPlatformer.Environment
 
         public void BeginEaseIn(Vector2 velocity, float orientation)
         {
-            goalInfluence = Mathf.Clamp(orientation * (Mathf.Abs(velocity.x) + Mathf.Abs(velocity.y)),
-                - maxInfluence, maxInfluence);
+            SetGoalInfluence(velocity, orientation);
             OnUpdate = EaseIn;
+        }
+
+        public void SetGoalInfluence(Vector2 velocity, float orientation)
+        {
+            goalInfluence = Mathf.Clamp(orientation * (Mathf.Abs(velocity.x) + Mathf.Abs(velocity.y)),
+                -maxInfluence, maxInfluence);
         }
 
         public void BeginEaseOut()
