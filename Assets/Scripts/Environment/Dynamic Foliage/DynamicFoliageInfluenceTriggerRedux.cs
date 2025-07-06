@@ -38,25 +38,18 @@ namespace RPGPlatformer.Environment
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (!gameObject.activeInHierarchy) return;
-            if (CanTriggerInfluence(collider))
+            if (gameObject.activeInHierarchy && CanTriggerInfluence(collider))
             {
                 BeginInfluence(collider);
             }
         }
 
-        private void OnTriggerStay2D(Collider2D collider)
-        {
-            if (!gameObject.activeInHierarchy) return;
-            if (CanTriggerInfluence(collider) && collider == influencingCollider)
-            {
-                UpdateInfluence(collider.attachedRigidbody.linearVelocity, Orientation(collider.transform));
-            }
-        }
-
         private void OnTriggerExit2D(Collider2D collider)
         {
-            EndInfluence(collider);
+            if (gameObject.activeInHierarchy)
+            {
+                EndInfluence(collider);
+            }
         }
 
         private void BeginInfluence(Collider2D collider)
@@ -95,26 +88,12 @@ namespace RPGPlatformer.Environment
 
         private void BeginEaseIn(Vector2 velocity, float orientation)
         {
-            if (gameObject.activeInHierarchy)
-            {
-                foliageController.BeginEaseIn(velocity * _influenceStrength, orientation);
-            }
-        }
-
-        private void UpdateInfluence(Vector2 velocity, float orientation)
-        {
-            if (gameObject.activeInHierarchy)
-            {
-                foliageController.SetGoalInfluence(velocity * _influenceStrength, orientation);
-            }
+            foliageController.BeginEaseIn(velocity * _influenceStrength, orientation);
         }
 
         private void BeginEaseOut()
         {
-            if (gameObject.activeInHierarchy)
-            {
-                foliageController.BeginEaseOut();
-            }
+            foliageController.BeginEaseOut();
         }
     }
 }
