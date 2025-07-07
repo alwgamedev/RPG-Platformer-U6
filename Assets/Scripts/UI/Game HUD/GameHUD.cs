@@ -75,6 +75,7 @@ namespace RPGPlatformer.UI
             {
                 PlayerInventory.CollapsableUI.SetOpen(true);
             }
+            PlayerInventory.CollapsableUI.HighlightFlash();
             GlobalGameTools.Instance.PlayerLooter.TakeLoot(loot, handleOverflow);
         }
 

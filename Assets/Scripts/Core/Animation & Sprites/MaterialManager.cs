@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using UnityEditor;
+using TMPro;
 using UnityEngine;
 
 namespace RPGPlatformer.Core
@@ -7,6 +7,7 @@ namespace RPGPlatformer.Core
     public class MaterialManager : MonoBehaviour
     {
         [SerializeField] protected bool cloneMaterialOnStart = true;
+        [SerializeField] protected bool isTMP;
 
         Material material;
 
@@ -23,12 +24,25 @@ namespace RPGPlatformer.Core
 
         private void InitializeMaterial()
         {
-            var renderer = GetComponentInChildren<Renderer>();
-            if (cloneMaterialOnStart)
+            if (isTMP)
             {
-                renderer.material = new Material(renderer.material);
+                var tmp = GetComponentInChildren<TextMeshProUGUI>();
+                if (cloneMaterialOnStart)
+                {
+                    tmp.material = new Material(tmp.material);
+                }
+
+                material = tmp.material;
             }
-            material = renderer.material;
+            else
+            {
+                var renderer = GetComponentInChildren<Renderer>();
+                if (cloneMaterialOnStart)
+                {
+                    renderer.material = new Material(renderer.material);
+                }
+                material = renderer.material;
+            }
 
             var floatProps = material.GetPropertyNames(MaterialPropertyType.Float);
             var vectorProps = material.GetPropertyNames(MaterialPropertyType.Vector);
@@ -54,14 +68,14 @@ namespace RPGPlatformer.Core
             material.SetFloat(FloatPropertyID[name], val);
         }
 
-        public void SetColor(string name, Color color)
-        {
-            material.SetColor(VectorPropertyID[name], color);
-        }
-
         public Color GetColor(string name)
         {
             return material.GetColor(VectorPropertyID[name]);
+        }
+
+        public void SetColor(string name, Color color)
+        {
+            material.SetColor(VectorPropertyID[name], color);
         }
     }
 }

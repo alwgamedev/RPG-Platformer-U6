@@ -9,8 +9,15 @@ namespace RPGPlatformer.UI
         [SerializeField] Button collapseButton;
         [SerializeField] bool openOnStart;
 
+        Animation highlightAnimation;
+
         public bool IsOpen { get; private set; }
         public Button CollapseButton => collapseButton;
+
+        private void Awake()
+        {
+            highlightAnimation = collapseButton.GetComponentInChildren<Animation>();
+        }
 
         private void Start()
         {
@@ -24,10 +31,15 @@ namespace RPGPlatformer.UI
             IsOpen = val;
         }
 
-        public float ContentWidth()
+        public void HighlightFlash()
         {
-            return ((RectTransform)content.transform).rect.width;
+            highlightAnimation.Play();
         }
+
+        //public float ContentWidth()
+        //{
+        //    return ((RectTransform)content.transform).rect.width;
+        //}
 
         private void ToggleOpen()
         {

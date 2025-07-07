@@ -63,11 +63,11 @@ namespace RPGPlatformer.UI
             iam.InputAction(InputActionsManager.rightClickActionName).started += DisableInputFieldOnMouseDown;
         }
 
-        public static void Log(string text, bool forceOpenUI = false)
+        public static void Log(string text, bool highlight = false/*, bool forceOpenUI = false*/)
         {
             if (Instance)
             {
-                Instance.PrivateLog(text, forceOpenUI);
+                Instance.PrivateLog(text, highlight/*, forceOpenUI*/);
             }
         }
 
@@ -78,7 +78,7 @@ namespace RPGPlatformer.UI
             Log("Enter the desired quantity:");
         }
 
-        private void PrivateLog(string text, bool forceOpenUI = false)
+        private void PrivateLog(string text, bool highlight = false/*, bool forceOpenUI = false*/)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -86,10 +86,13 @@ namespace RPGPlatformer.UI
                 return;
             }
 
-            if (forceOpenUI && !collapsableUI.IsOpen)
-            {
-                collapsableUI.SetOpen(true);
-            }
+            //if (!collapsableUI.IsOpen)
+            //{
+            //    if (forceOpenUI)
+            //    {
+            //        collapsableUI.SetOpen(true);
+            //    }
+            //}
 
             messages.Enqueue(text);
 
@@ -107,6 +110,11 @@ namespace RPGPlatformer.UI
                 content.text = text;
             }
             //UpdateMessageCounterAndTrim(message);
+
+            if (highlight)
+            {
+                collapsableUI.HighlightFlash();
+            }
         }
 
         private void EnableInputField(bool val)

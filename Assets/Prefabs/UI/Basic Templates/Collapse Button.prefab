@@ -104,13 +104,13 @@ MonoBehaviour:
   m_text: Collapse
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 8b134a5a6a1dd8d48b42a53b42751a14, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283670712
+    rgba: 4290965759
   m_fontColor: {r: 0.72156864, g: 0.627451, b: 0.3254902, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 7330896238725593618}
   - component: {fileID: 9097113767040509949}
   - component: {fileID: 8603789935466079695}
+  - component: {fileID: 896155330326847327}
   m_Layer: 5
   m_Name: Collapse Button
   m_TagString: Untagged
@@ -362,3 +363,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!111 &896155330326847327
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5011090018944734460}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 7400000, guid: a0aad93b35765ba41a4bdc78439d96c7, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: a0aad93b35765ba41a4bdc78439d96c7, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
