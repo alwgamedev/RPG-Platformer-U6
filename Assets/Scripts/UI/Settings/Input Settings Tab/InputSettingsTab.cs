@@ -4,8 +4,6 @@ using UnityEngine.UI;
 using TMPro;
 using RPGPlatformer.Combat;
 using RPGPlatformer.Core;
-using Unity.VisualScripting;
-using System.Linq;
 
 namespace RPGPlatformer.UI
 {

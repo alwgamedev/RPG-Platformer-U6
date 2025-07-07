@@ -9,12 +9,16 @@ namespace RPGPlatformer.SceneManagement
 
         private void Start()
         {
-            SubscribeToPauseManager(FindAnyObjectByType<PauseManager>());
+            SubscribeToPauseManager(PauseManager.Instance);
         }
 
         private void SubscribeToPauseManager(PauseManager pm)
         {
-            if (!pm) return;
+            if (!pm)
+            {
+                Debug.LogWarning($"{GetType().Name} on {gameObject.name} was given a null {typeof(PauseManager).Name}");
+                return;
+            }
 
             OnDestroyed = () => UnsubscribeFromPauseManager(pm);
 

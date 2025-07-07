@@ -46,12 +46,21 @@ namespace RPGPlatformer.UI
             OnHide += ClosePopupPanel;
         }
 
-        private void Start()
+        protected override void OnEnable()
         {
             saveTabButton.Button.onClick.AddListener(SaveOpenTab);
             saveAllButton.Button.onClick.AddListener(SaveAllTabs);
             closeButton.onClick.AddListener(CloseMenu);
+
+            base.OnEnable();
         }
+
+        //private void Start()
+        //{
+        //    saveTabButton.Button.onClick.AddListener(SaveOpenTab);
+        //    saveAllButton.Button.onClick.AddListener(SaveAllTabs);
+        //    closeButton.onClick.AddListener(CloseMenu);
+        //}
 
         private void Redraw()
         {
@@ -183,6 +192,16 @@ namespace RPGPlatformer.UI
         {
             saveTabButton.Button.onClick.RemoveListener(SaveOpenTab);
             saveAllButton.Button.onClick.RemoveListener(SaveAllTabs);
+            closeButton.onClick.RemoveListener(CloseMenu);
         }
+
+        //protected override void OnDestroy()
+        //{
+        //    base.OnDestroy();
+
+        //    //saveTabButton.Button.onClick.RemoveAllListeners();
+        //    //saveAllButton.Button.onClick.RemoveAllListeners();
+        //    //closeButton.oncl
+        //}
     }
 }

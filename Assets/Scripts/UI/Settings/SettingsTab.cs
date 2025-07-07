@@ -11,7 +11,7 @@ namespace RPGPlatformer.UI
 
         protected virtual void Awake()
         {
-            if(loadDefaultSettingsButton != null)
+            if(loadDefaultSettingsButton)
             {
                 loadDefaultSettingsButton.onClick.AddListener(LoadDefaultSettings);
             }
