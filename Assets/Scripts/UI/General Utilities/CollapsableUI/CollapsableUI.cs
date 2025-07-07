@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using RPGPlatformer.Effects;
+using UnityEngine;
 using UnityEngine.UI;
+using RPGPlatformer.Core;
 
 namespace RPGPlatformer.UI
 {
@@ -9,14 +11,16 @@ namespace RPGPlatformer.UI
         [SerializeField] Button collapseButton;
         [SerializeField] bool openOnStart;
 
-        Animation highlightAnimation;
+        //Animation highlightAnimation;
+        TextHighlighter highlighter;
 
         public bool IsOpen { get; private set; }
         public Button CollapseButton => collapseButton;
 
         private void Awake()
         {
-            highlightAnimation = collapseButton.GetComponentInChildren<Animation>();
+            //highlightAnimation = collapseButton.GetComponentInChildren<Animation>();
+            highlighter = collapseButton.GetComponentInChildren<TextHighlighter>();
         }
 
         private void Start()
@@ -31,9 +35,9 @@ namespace RPGPlatformer.UI
             IsOpen = val;
         }
 
-        public void HighlightFlash()
+        public async void HighlightFlash()
         {
-            highlightAnimation.Play();
+            await highlighter.HighlightFlash(GlobalGameTools.Instance.TokenSource.Token);
         }
 
         //public float ContentWidth()

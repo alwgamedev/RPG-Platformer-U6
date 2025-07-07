@@ -21,8 +21,11 @@ namespace RPGPlatformer.Effects
         [SerializeField] float tweenTime = 1;//seconds to go from min to max highlight
         [SerializeField] float easeInTimeScale = 1;
         [SerializeField] float easeOutTimeScale = - 0.5f;
+        
+        const float defaultHighlightFlashRestDuration = .1f;
 
-        MaterialManager materialManager;
+        protected MaterialManager materialManager;
+        
         float thicknessRange;
         float intensityRange;
         float tweenRate;//tween progress per second = timeScale / tweenTime
@@ -35,7 +38,7 @@ namespace RPGPlatformer.Effects
 
         public event Action HighlightTweenComplete;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             materialManager = GetComponent<MaterialManager>();
             thicknessRange = maxThickness - minThickness;
@@ -43,7 +46,7 @@ namespace RPGPlatformer.Effects
             tweenRate = intensityRange / tweenTime;
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             InstantMinHighlight();
         }
@@ -81,10 +84,11 @@ namespace RPGPlatformer.Effects
             BeginTween(val ? easeInTimeScale : easeOutTimeScale);
         }
 
-        public async Task HighlightFlash(float duration, CancellationToken token)
+        public async Task HighlightFlash(CancellationToken token,
+            float restDuration = defaultHighlightFlashRestDuration)
         {
             EnableHighlight(true);
-            await MiscTools.DelayGameTime(duration, token);
+            await MiscTools.DelayGameTime((easeInTimeScale * (1 - tweenProgress) / tweenRate) + restDuration, token);
             EnableHighlight(false);
         }
 
@@ -144,11 +148,13 @@ namespace RPGPlatformer.Effects
 
         private void SetThickness(float val)
         {
-            if (!matHasThicknessParameter) return;
-            materialManager.SetFloat("_Thickness", val);
+            if (matHasThicknessParameter)
+            {
+                materialManager.SetFloat("_Thickness", val);
+            }
         }
 
-        private void SetIntensity(float val)
+        protected virtual void SetIntensity(float val)
         {
             materialManager.SetFloat("_BloomIntensityMultiplier", val);
         }

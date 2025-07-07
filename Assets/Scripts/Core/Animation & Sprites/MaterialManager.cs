@@ -15,6 +15,8 @@ namespace RPGPlatformer.Core
         Dictionary<string, int> FloatPropertyID = new();
         Dictionary<string, int> VectorPropertyID = new();//color properties also get stored here
 
+        public bool IsTMP => isTMP;
+
         //can add other property types (e.g. texture property) but for now don't need it
 
         protected virtual void Awake()
@@ -29,10 +31,10 @@ namespace RPGPlatformer.Core
                 var tmp = GetComponentInChildren<TextMeshProUGUI>();
                 if (cloneMaterialOnStart)
                 {
-                    tmp.material = new Material(tmp.material);
+                    tmp.fontSharedMaterial = new Material(tmp.fontSharedMaterial);
                 }
 
-                material = tmp.material;
+                material = tmp.fontSharedMaterial;
             }
             else
             {
@@ -77,5 +79,15 @@ namespace RPGPlatformer.Core
         {
             material.SetColor(VectorPropertyID[name], color);
         }
+
+        //public Color GetFaceColor()
+        //{
+        //    return material.GetColor(ShaderUtilities.ID_FaceColor);
+        //}
+
+        //public void SetFaceColor(Color color)
+        //{
+        //    material.SetColor(ShaderUtilities.ID_FaceColor, color);
+        //}
     }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7378540816837873250}
   - component: {fileID: 8853119774775936370}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Slot Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,8 +75,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4284919489
-  m_fontColor: {r: 0.75686276, g: 0.68235296, b: 0.4, a: 1}
+    rgba: 4280000715
+  m_fontColor: {r: 0.79607844, g: 0.627451, b: 0.105882354, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -197,7 +197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4265038581201750774, guid: 7a9c09ec3df0fa342a46b317b3ae785d, type: 3}
       propertyPath: m_fontSize
-      value: 7.15
+      value: 6.8
       objectReference: {fileID: 0}
     - target: {fileID: 5250138519940036987, guid: 7a9c09ec3df0fa342a46b317b3ae785d, type: 3}
       propertyPath: m_Pivot.x
@@ -289,7 +289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8952269589433393593, guid: 7a9c09ec3df0fa342a46b317b3ae785d, type: 3}
       propertyPath: m_fontSize
-      value: 10.7
+      value: 9.1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8604536382215273377, guid: 7a9c09ec3df0fa342a46b317b3ae785d, type: 3}
@@ -342,9 +342,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11b36cd3f7f83b45a947bed8b29ec8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetCanvasSource: 0
   menuPrefab: {fileID: 8243535585966996843, guid: c551c427647afd148b00f56340a43966, type: 3}
-  disableWhenPlayerIsDead: 1
   menuButtonPrefab: {fileID: 6071247106101167904, guid: 0460550107ed1174fab3368bcfe61d21, type: 3}
+  disableWhenPlayerIsDead: 1
 --- !u!225 &2420608868017055901
 CanvasGroup:
   m_ObjectHideFlags: 0
