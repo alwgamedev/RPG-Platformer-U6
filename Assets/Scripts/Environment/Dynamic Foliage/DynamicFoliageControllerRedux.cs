@@ -16,10 +16,13 @@ namespace RPGPlatformer.Environment
         Material foliageMaterial;
         int externalInfluenceProperty = Shader.PropertyToID("_ExternalInfluence");
 
+        float startingInfluence;
         float goalInfluence;
         float currentInfluence;
-        float easeInRate;
-        float easeOutRate;
+        //float easeInRate;
+        //float easeOutRate;
+        float easeTime;
+        float easeTimer;
 
         Action OnUpdate;
 
@@ -29,7 +32,7 @@ namespace RPGPlatformer.Environment
         {
             if (randomizeEaseInTime)
             {
-                easeInRate *= MiscTools.RandomFloat(0.75f, 1.25f);//(float)(0.5f * rng.NextDouble() + 0.75f);
+                easeInTime *= MiscTools.RandomFloat(0.75f, 1.25f);//(float)(0.5f * rng.NextDouble() + 0.75f);
             }
 
             if (randomizeEaseOutTime)
@@ -37,8 +40,8 @@ namespace RPGPlatformer.Environment
                 easeOutTime *= MiscTools.RandomFloat(0.75f, 1.25f);//(float)(0.5f * rng.NextDouble() + 0.75f);
             }
 
-            easeInRate = maxInfluence / easeInTime;
-            easeOutRate = maxInfluence / easeOutTime;
+            //easeInRate = maxInfluence / easeInTime;
+            //easeOutRate = maxInfluence / easeOutTime;
         }
 
         private void Start()
@@ -53,8 +56,11 @@ namespace RPGPlatformer.Environment
 
         public void BeginEaseIn(Vector2 velocity, float orientation)
         {
+            startingInfluence = currentInfluence;
             SetGoalInfluence(velocity, orientation);
-            OnUpdate = EaseIn;
+            easeTimer = 0;
+            easeTime = easeInTime * Mathf.Abs(goalInfluence - currentInfluence) / maxInfluence;
+            OnUpdate = LinearEase;//EaseIn;
         }
 
         public void SetGoalInfluence(Vector2 velocity, float orientation)
@@ -65,8 +71,11 @@ namespace RPGPlatformer.Environment
 
         public void BeginEaseOut()
         {
+            startingInfluence = currentInfluence;
             goalInfluence = 0;
-            OnUpdate = EaseOut;
+            easeTimer = 0;
+            easeTime = easeOutTime * Mathf.Abs(currentInfluence) / maxInfluence;
+            OnUpdate = LinearEase;//EaseOut;
         }
 
         private void SetInfluence(float influence)
@@ -74,21 +83,21 @@ namespace RPGPlatformer.Environment
             foliageMaterial.SetFloat(externalInfluenceProperty, influence);
         }
 
-        private void EaseIn()
-        {
-            LinearEase(easeInRate);
-        }
+        //private void EaseIn()
+        //{
+        //    LinearEase();
+        //}
 
-        private void EaseOut()
-        {
-            LinearEase(easeOutRate);
-        }
+        //private void EaseOut()
+        //{
+        //    LinearEase();
+        //}
 
-        private void LinearEase(float easeRate)
+        private void LinearEase()
         {
-            currentInfluence +=
-                Mathf.Sign(goalInfluence - currentInfluence) * easeRate * Time.deltaTime;
-            if (Mathf.Abs(currentInfluence - goalInfluence) < 0.1f)
+            easeTimer += Time.deltaTime;
+            currentInfluence = Mathf.Lerp(startingInfluence, goalInfluence, easeTimer / easeTime);
+            if (Mathf.Abs(currentInfluence - goalInfluence) < 0.0001f)
             {
                 CompleteEase();
             }
