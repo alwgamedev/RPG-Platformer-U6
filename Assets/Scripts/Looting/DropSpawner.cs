@@ -35,6 +35,7 @@ namespace RPGPlatformer.Loot
             //    }
             //}
 
+            //position.z -= .1f;//this gives it higher priority for mouse raycasts, but it's a bad solution
             LootDrop drop = Instantiate(dropPrefab, position, Quaternion.identity);
             drop.Inventory.MatchItems(trimmed, true);
             //activeDrops.Add(drop);

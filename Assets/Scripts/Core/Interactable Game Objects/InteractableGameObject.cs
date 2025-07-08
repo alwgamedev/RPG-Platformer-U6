@@ -8,6 +8,7 @@ using RPGPlatformer.Dialogue;
 using RPGPlatformer.Saving;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+using System.Linq;
 
 
 namespace RPGPlatformer.Core
@@ -28,7 +29,8 @@ namespace RPGPlatformer.Core
         [SerializeField] protected CursorType defaultCursorType = CursorType.Default;
         [SerializeField] protected float maxInteractableDistance = 1.5f;
 
-        protected int homeLayer;
+        protected int igoLayer;
+        protected int ignoreLayer;
         protected RightClickMenuSpawner rcm;
         protected Action OnUpdate;
         //protected Action leftClickAction;
@@ -56,7 +58,13 @@ namespace RPGPlatformer.Core
         protected virtual void Awake()
         {
             rcm = GetComponent<RightClickMenuSpawner>();
+            //if (rcm)
+            //{
+            //    rcm.MenuSpawned += SetHoveredIGOToNull;
+            //}
             CursorType = defaultCursorType;
+            igoLayer = LayerMask.NameToLayer("Interactable Game Object");
+            ignoreLayer = LayerMask.NameToLayer("Ignore Raycast");
         }
 
         protected virtual void Update()
@@ -175,13 +183,13 @@ namespace RPGPlatformer.Core
         {
             if (val)
             {
-                gameObject.layer = homeLayer;
+                gameObject.layer = igoLayer;
 
             }
             else
             {
-                homeLayer = gameObject.layer;
-                gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                //homeLayer = gameObject.layer;
+                gameObject.layer = ignoreLayer;
             }
         }
 
@@ -205,14 +213,30 @@ namespace RPGPlatformer.Core
 
         private static bool MouseOverAny()
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return false;
+            }
+
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            return Physics2D.OverlapCircleAll(mousePosition, 0.05f, LayerMask.GetMask("Interactable Game Elements"))
-                .Length != 0;
+            var colls = Physics2D.OverlapPointAll(mousePosition, LayerMask.GetMask("Interactable Game Object"));
+
+            foreach (var c in colls)
+            {
+                if (c && (!HoveredIGO?.transform || !c.transform.IsChildOf(HoveredIGO.transform)) 
+                    && c.TryGetComponent(out InteractableGameObject igo))
+                {
+                    igo.OnPointerEnter(null);
+                }
+                return true;
+            }
+
+            return false;
         }
 
 
         //MOUSE EVENT HANDLERS
-
+        
         //NOTE: will not trigger on an inactive game object (even though trigger colliders still send events)
         public virtual void OnPointerEnter(PointerEventData eventData)
         {

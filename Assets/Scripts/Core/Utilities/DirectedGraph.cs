@@ -5,8 +5,8 @@ namespace RPGPlatformer.Core
 {
     public class DirectedGraph<T>
     {
-        protected HashSet<T> vertices;
-        protected HashSet<(T, T)> edges;
+        protected List<T> vertices;
+        protected List<(T, T)> edges;
 
         //public IEnumerable<T> Vertices => vertices;
         //public IEnumerable<(T, T)> Edges => edges;
