@@ -4,6 +4,7 @@ using UnityEngine.U2D;
 
 namespace RPGPlatformer.Core
 {
+    [ExecuteAlways]
     public class ChildColor : MonoBehaviour
     {
         [SerializeField] ColorControl colorControl;

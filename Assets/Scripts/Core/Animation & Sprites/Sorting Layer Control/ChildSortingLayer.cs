@@ -98,16 +98,20 @@ namespace RPGPlatformer.Core
 
         private void UnhookCurrentSLDS()
         {
-            if (slds != null)
+            if (slds == null || (slds is MonoBehaviour s && !s))
             {
-                slds.DataUpdated -= UpdateSortingData;
-                slds.Destroyed -= OnDataSourceDestroyed;
                 slds = null;
+                return;
             }
+
+            slds.DataUpdated -= UpdateSortingData;
+            slds.Destroyed -= OnDataSourceDestroyed;
+            slds = null;
         }
 
         private void HookUpNewSLDS(SortingLayerDataSource s)
         {
+            if (s == null || (s is MonoBehaviour t && !t)) return;
             slds = s;
 
             if (slds != null && slds != (SortingLayerDataSource)this)
