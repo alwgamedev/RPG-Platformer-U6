@@ -22,7 +22,10 @@ namespace RPGPlatformer.Core
                 {
                     return renderer.sortingLayerID;
                 }
-
+                if (slds != null)
+                {
+                    return slds.SortingLayerID;
+                }
                 return null;
             }
         }
@@ -35,7 +38,10 @@ namespace RPGPlatformer.Core
                 {
                     return renderer.sortingOrder;
                 }
-
+                if (slds != null && slds.SortingOrder.HasValue)
+                {
+                    return slds.SortingOrder.Value + orderDelta;
+                }
                 return null;
             }
         }
