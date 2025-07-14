@@ -81,6 +81,10 @@ namespace SpriteShapeExtras
                 }
                 Debug.Log(go.name + " : " + counter);
                 OuterEdges(polyCollider, indexArrayLocal, posArray, indexCount);
+
+#if UNITY_EDITOR
+                PrefabUtility.RecordPrefabInstancePropertyModifications(polyCollider);
+#endif
             }
         }
     
