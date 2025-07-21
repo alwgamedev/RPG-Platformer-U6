@@ -8,6 +8,7 @@ namespace RPGPlatformer.Core
     {
         [SerializeField] protected bool cloneMaterialOnStart = true;
         [SerializeField] protected bool isTMP;
+        [SerializeField] protected bool getMainTexFromSpriteRenderer;
 
         Material material;
 
@@ -44,6 +45,12 @@ namespace RPGPlatformer.Core
                     renderer.material = new Material(renderer.material);
                 }
                 material = renderer.material;
+
+                if (getMainTexFromSpriteRenderer && renderer is SpriteRenderer sr)
+                {
+                    material.mainTexture = sr.sprite.texture;
+                    Debug.Log($"got main tex: {material.mainTexture.name}");
+                }
             }
 
             var floatProps = material.GetPropertyNames(MaterialPropertyType.Float);
