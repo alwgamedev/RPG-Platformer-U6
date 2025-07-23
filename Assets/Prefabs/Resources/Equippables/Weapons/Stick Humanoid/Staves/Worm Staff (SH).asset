@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50d08bd12bf79bd41a4d1fbe0ec87a88, type: 3}
+  m_Name: Worm Staff (SH)
+  m_EditorClassIdentifier: 
+  baseData:
+    lookupName: Worm Staff (SH)
+    displayName: Worm Staff
+    description: A basic staff.
+    icon: {fileID: 6250548456142871353, guid: f3d66307f4760ab46ac076485ca5d996, type: 3}
+    maxStack: 1
+  equippableItemData:
+    slot: 3
+    damageBonus: 0
+    defenseBonus: 0
+    levelReqs:
+    - skill: 2
+      level: 1
+    itemGO: {fileID: 421364573511792134, guid: 195cf8eaf54a69a45b8d5ff179f5facf, type: 3}
+    spriteSwapData: []
+  weaponStats:
+    baseDamage: 65
+    attackRange: 8
+    baseAttackRate: 3
+  animatorOverrideController: {fileID: 22100000, guid: 878581dc1900c55489253a28ad1711dd, type: 2}

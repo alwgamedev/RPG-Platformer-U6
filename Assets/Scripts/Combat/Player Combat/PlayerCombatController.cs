@@ -88,6 +88,7 @@ namespace RPGPlatformer.Combat
             var bwTop = InventoryItemSO.FindItemSO["Blue Wizard Top"];
             var bwPants = InventoryItemSO.FindItemSO["Blue Wizard Pants"];
             var worm = InventoryItemSO.FindItemSO["Earthworm Drop"];
+            var wormStaff = InventoryItemSO.FindItemSO["Worm Staff (SH)"];
 
             stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(spaghetti.CreateInstanceOfItem().ToInventorySlotData(1));
@@ -102,6 +103,7 @@ namespace RPGPlatformer.Combat
             stateDriver.TakeLoot(bwTop.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(bwPants.CreateInstanceOfItem().ToInventorySlotData(1));
             stateDriver.TakeLoot(worm.CreateInstanceOfItem().ToInventorySlotData(1));
+            stateDriver.TakeLoot(wormStaff.CreateInstanceOfItem().ToInventorySlotData(1));
         }
 
         private void OnIGOClicked()
