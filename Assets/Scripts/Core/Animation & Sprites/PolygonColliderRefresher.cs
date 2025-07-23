@@ -23,7 +23,10 @@ namespace RPGPlatformer.Core
             var p = new List<Vector2>();
             sr.sprite.GetPhysicsShape(0, p);
             c.points = p.ToArray();
+
+#if UNITY_EDITOR
             PrefabUtility.RecordPrefabInstancePropertyModifications(c);
+#endif
         }
     }
 }

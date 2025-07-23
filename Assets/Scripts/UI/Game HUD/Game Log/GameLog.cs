@@ -63,11 +63,11 @@ namespace RPGPlatformer.UI
             iam.InputAction(InputActionsManager.rightClickActionName).started += DisableInputFieldOnMouseDown;
         }
 
-        public static void Log(string text, bool highlight = false/*, bool forceOpenUI = false*/)
+        public static void Log(string text /*, bool highlight = false*/ /*, bool forceOpenUI = false*/)
         {
             if (Instance)
             {
-                Instance.PrivateLog(text, highlight/*, forceOpenUI*/);
+                Instance.PrivateLog(text, !Instance.collapsableUI.IsOpen);
             }
         }
 

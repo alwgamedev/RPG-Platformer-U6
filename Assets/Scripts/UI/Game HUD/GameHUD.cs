@@ -53,7 +53,7 @@ namespace RPGPlatformer.UI
         }
 
         public static void GiftPlayerLoot(IInventorySlotDataContainer loot, string message = null, 
-            bool handleOverflow = true)
+            bool forceOpenInventory = false, bool handleOverflow = true)
         {
             if (loot?.Item == null || loot.Quantity <= 0)
             {
@@ -71,10 +71,10 @@ namespace RPGPlatformer.UI
                 GameLog.Log($"{loot.Item.BaseData.DisplayName} has been placed in your inventory.");
             }
 
-            //if (!PlayerInventory.CollapsableUI.IsOpen)
-            //{
-            //    PlayerInventory.CollapsableUI.SetOpen(true);
-            //}
+            if (forceOpenInventory && !PlayerInventory.CollapsableUI.IsOpen)
+            {
+                PlayerInventory.CollapsableUI.SetOpen(true);
+            }
             PlayerInventory.CollapsableUI.HighlightFlash();
             GlobalGameTools.Instance.PlayerLooter.TakeLoot(loot, handleOverflow);
         }
