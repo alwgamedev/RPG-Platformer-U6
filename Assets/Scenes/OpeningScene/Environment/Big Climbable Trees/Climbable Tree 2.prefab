@@ -29517,6 +29517,7 @@ GameObject:
   - component: {fileID: 1607262064444207574}
   - component: {fileID: 4955575445247634216}
   - component: {fileID: 8118249654118819854}
+  - component: {fileID: 6240159450196842107}
   m_Layer: 3
   m_Name: Branch
   m_TagString: Ground
@@ -29584,7 +29585,7 @@ SpriteShapeRenderer:
   m_SortingLayerID: 777158391
   m_SortingLayer: 2
   m_SortingOrder: 2
-  m_Color: {r: 0.6377357, g: 0.6377357, b: 0.6377357, a: 1}
+  m_Color: {r: 0.5471698, g: 0.5440726, b: 0.5440726, a: 1}
   m_MaskInteraction: 0
   m_ShapeTexture: {fileID: 0}
   m_Sprites:
@@ -29842,6 +29843,21 @@ MonoBehaviour:
     indexCount: 90
     vertexCount: 60
     spriteIndex: 0
+--- !u!114 &6240159450196842107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8878338632342387449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7e0b479c04cc94fb79f6c3d9192c7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorControl: {fileID: 8172200441293961597}
+  colorShift: {r: 0, g: 0, b: 0, a: 0}
+  colorMultiplier: {r: 0.59183675, g: 0.60254395, b: 0.67951626, a: 1}
 --- !u!1 &8887281142030253481
 GameObject:
   m_ObjectHideFlags: 0
