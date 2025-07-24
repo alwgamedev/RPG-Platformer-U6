@@ -57,11 +57,11 @@ namespace RPGPlatformer.AIControl
 
         public virtual void OnInputDisabled() { }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
+        //protected override void OnDestroy()
+        //{
+        //    base.OnDestroy();
 
-            OnUpdate = null;
-        }
+        //    OnUpdate = null;
+        //}
     }
 }
