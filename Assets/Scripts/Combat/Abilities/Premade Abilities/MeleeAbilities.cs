@@ -221,7 +221,8 @@ namespace RPGPlatformer.Combat
             //FreezeAnimationDuringStun = false
         };
 
-        public static AoePowerUpAbility Ravage = new()//ultimate AoE
+        public static AoePowerUpAbility Ravage 
+            = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//ultimate AoE
         {
             Description = "Channel your accumulated wrath to deal massive damage to" +
             " anything that dares come close.",

@@ -61,9 +61,9 @@ namespace RPGPlatformer.Combat
 
         public Func<ICombatController, Vector2> GetAoeCenter { get; init; }
 
-        public AoeAbilityThatExecutesImmediately(DelayedAbilityExecutionOptions delayOptions = default) : base()
+        public AoeAbilityThatExecutesImmediately(DelayedAbilityExecutionOptions delayOptions) : base(delayOptions)
         {
-            if (delayOptions.delayExecute)
+            if (DelayOptions.delayExecute)
             {
                 OnExecute = (controller) => controller.StoreAction(() =>
                 {
@@ -103,11 +103,28 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public AoeAbilityThatExecutesOnNextFireButtonDown() : base()
+        public AoeAbilityThatExecutesOnNextFireButtonDown(DelayedAbilityExecutionOptions delayOptions) 
+            : base(delayOptions)
         {
-            OnExecute = (controller, position) => ExecuteAoeAbility(null, c => position, AoeRadius,
-                ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
-                StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+            //OnExecute = (controller, position) => ExecuteAoeAbility(null, c => position, AoeRadius,
+            //    ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
+            //    StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+
+            if (DelayOptions.delayExecute)
+            {
+                OnExecute = (controller, position) => controller.StoreAction(() =>
+                {
+                    ExecuteAoeAbility(null, c => position, AoeRadius,
+                    ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
+                    StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+                }, delayOptions.channelDuringDelay, delayOptions.endChannelOnExecute);
+            }
+            else
+            {
+                OnExecute = (controller, position) => ExecuteAoeAbility(null, c => position, AoeRadius,
+                    ComputeDamage(controller.Combatant), ExcludeInstigator, controller.Combatant,
+                    StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+            }
         }
     }
 
@@ -134,14 +151,33 @@ namespace RPGPlatformer.Combat
             }
         }
 
-        public AoePowerUpAbility() : base()
+        public AoePowerUpAbility(DelayedAbilityExecutionOptions delayOptions) : base(delayOptions)
         {
             OnExecute = (controller, args) => 
                 ExecuteAoeAbility(null, c => args.Item1, AoeRadius,
                 ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
                 ExcludeInstigator, controller.Combatant,
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);
-            
+
+
+            if (DelayOptions.delayExecute)
+            {
+                OnExecute = (controller, args) => controller.StoreAction(() =>
+                {
+                    ExecuteAoeAbility(null, c => args.Item1, AoeRadius,
+                    ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
+                    ExcludeInstigator, controller.Combatant,
+                    StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+                }, delayOptions.channelDuringDelay, delayOptions.endChannelOnExecute);
+            }
+            else
+            {
+                OnExecute = (controller, args) =>
+                    ExecuteAoeAbility(null, c => args.Item1, AoeRadius,
+                    ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
+                    ExcludeInstigator, controller.Combatant,
+                    StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+            }
         }
     }
 }

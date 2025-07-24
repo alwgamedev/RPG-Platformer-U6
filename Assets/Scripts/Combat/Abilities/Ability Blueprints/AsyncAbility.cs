@@ -22,7 +22,7 @@ namespace RPGPlatformer.Combat
     public class AsyncAbility<T> : AttackAbility//, IAsyncAbility
     {
         //public override bool IsAsyncAbility => true;
-        public virtual bool EndChannelAutomatically { get; } = true;
+        public virtual bool EndChannelAutomatically => !DelayOptions.delayExecute;
             //^we would want to leave channel open e.g. if the async ability has the CC store an action
             //(like with projectile abilities)
         public bool DelayedReleaseOfChannel { get; init; } = true;
@@ -31,6 +31,8 @@ namespace RPGPlatformer.Combat
         //Prepare is responsible for cancelling itself when the token is cancelled
         public new Action<ICombatController, T> OnExecute { get; init; }
         //public virtual AsyncAbilityInputType InputType { get; }
+
+        public AsyncAbility(DelayedAbilityExecutionOptions delayOptions) : base(delayOptions) { }
 
         public override void Execute(ICombatController controller)
         {
@@ -106,7 +108,8 @@ namespace RPGPlatformer.Combat
 
         public Func<ICombatController, T> GetData { get; init; }
 
-        public AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately() : base()
+        public AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately(DelayedAbilityExecutionOptions delayOptions) 
+            : base(delayOptions)
         {
             Prepare = GetDataOnFireButtonDown;
         }

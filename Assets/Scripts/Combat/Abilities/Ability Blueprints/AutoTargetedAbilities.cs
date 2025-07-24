@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using RPGPlatformer.Effects;
+using UnityEngine.InputSystem.XR;
+using static UnityEngine.Rendering.GPUSort;
 
 namespace RPGPlatformer.Combat
 {
@@ -14,9 +16,9 @@ namespace RPGPlatformer.Combat
 
         public bool AllowExecuteWithoutTarget { get; init; }
 
-        public AutoTargetedAbility(DelayedAbilityExecutionOptions delayOptions = default)
+        public AutoTargetedAbility(DelayedAbilityExecutionOptions delayOptions) : base(delayOptions)
         {
-            if (delayOptions.delayExecute)
+            if (DelayOptions.delayExecute)
             {
                 OnExecute = (controller, target) => controller.StoreAction(() =>
                     DealDamage(controller.Combatant, target,
@@ -99,7 +101,7 @@ namespace RPGPlatformer.Combat
     //(*) base AttackAbility stats
     public class CloseRangeAbility : AutoTargetedAbility
     {
-        public CloseRangeAbility(DelayedAbilityExecutionOptions delayOptions = default) : base(delayOptions)
+        public CloseRangeAbility(DelayedAbilityExecutionOptions delayOptions) : base(delayOptions)
         {
             AutoTarget = (controller) => TargetInFront(controller.Combatant);
         }
@@ -111,9 +113,9 @@ namespace RPGPlatformer.Combat
     //(*) base AttackAbility stats only
     public class AutoTargetedBleed : AutoTargetedAbility
     {
-        public AutoTargetedBleed(DelayedAbilityExecutionOptions delayOptions = default) : base(delayOptions)
+        public AutoTargetedBleed(DelayedAbilityExecutionOptions delayOptions) : base(delayOptions)
         {
-            if (delayOptions.delayExecute)
+            if (DelayOptions.delayExecute)
             {
                 OnExecute = (controller, target)
                     => controller.StoreAction(async () =>
@@ -135,12 +137,12 @@ namespace RPGPlatformer.Combat
     //(*) base AttackAbility stats
     //(*) OnExecute = Action<(Health, int)>
     //(*) whether it HasChannelAnimation (bool)
-    public class AutoTargetOnNextFireButtonDown 
+    public abstract class AutoTargetOnNextFireButtonDown 
         : AbilityThatGetsDataOnNextFireButtonDownAndExecutesImmediately<IHealth>
     {
         public Func<ICombatController, IHealth> AutoTarget;
 
-        public AutoTargetOnNextFireButtonDown() : base()
+        public AutoTargetOnNextFireButtonDown(DelayedAbilityExecutionOptions delayOptions) : base(delayOptions)
         {
             GetData = (controller) =>
             {
@@ -157,21 +159,49 @@ namespace RPGPlatformer.Combat
     //(*) whether it HasChannelAnimation (bool)
     public class AutoTargetOnNextFireButtonDownSingleDamage : AutoTargetOnNextFireButtonDown
     {
-        public AutoTargetOnNextFireButtonDownSingleDamage() : base()
+        public AutoTargetOnNextFireButtonDownSingleDamage(DelayedAbilityExecutionOptions delayOptions) 
+            : base(delayOptions)
         {
-            OnExecute = (controller, target) => 
+            if (DelayOptions.delayExecute)
+            {
+                OnExecute = (controller, target)
+                    => controller.StoreAction(() => 
+                        DealDamage(controller.Combatant, target, ComputeDamage(controller.Combatant),
+                        StunDuration, FreezeAnimationDuringStun, GetHitEffect), 
+                        delayOptions.channelDuringDelay, delayOptions.endChannelOnExecute);
+            }
+            else
+            {
+                OnExecute = (controller, target) =>
                 DealDamage(controller.Combatant, target, ComputeDamage(controller.Combatant),
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+            }
         }
     }
 
     public class AutoTargetOnNextFireButtonDownBleed : AutoTargetOnNextFireButtonDown
     {
-        public AutoTargetOnNextFireButtonDownBleed() : base()
+        public AutoTargetOnNextFireButtonDownBleed(DelayedAbilityExecutionOptions delayOptions) 
+            : base(delayOptions)
         {
-            OnExecute = async (controller, target) =>
-                await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
-                BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
+            //OnExecute = async (controller, target) =>
+            //    await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
+            //    BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
+
+            if (DelayOptions.delayExecute)
+            {
+                OnExecute = (controller, target)
+                    => controller.StoreAction(async () =>
+                        await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
+                        BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect),
+                        delayOptions.channelDuringDelay, delayOptions.endChannelOnExecute);
+            }
+            else
+            {
+                OnExecute = async (controller, target) =>
+                    await Bleed(controller.Combatant, target, ComputeDamage(controller.Combatant),
+                        BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
+            }
         }
     }
 
@@ -181,11 +211,11 @@ namespace RPGPlatformer.Combat
     //(*) base AttackAbility stats
     //(*) OnExecute = Action<(Health, int)>
     //(*) whether it HasChannelAnimation and HasPowerUpAnimation (bools)
-    public class AutoTargetedPowerUpAbility : PowerUpAbility<IHealth>
+    public abstract class AutoTargetedPowerUpAbility : PowerUpAbility<IHealth>
     {
         public Func<ICombatController, IHealth> AutoTarget { get; init; }
 
-        public AutoTargetedPowerUpAbility() : base()
+        public AutoTargetedPowerUpAbility(DelayedAbilityExecutionOptions delayOptions) : base(delayOptions)
         {
             GetData = (controller) =>
             {
@@ -203,12 +233,30 @@ namespace RPGPlatformer.Combat
     //(*) whether it HasChannelAnimation and HasPowerUpAnimation (bools)
     public class AutoTargetedPowerUpWithSingleDamageHit : AutoTargetedPowerUpAbility
     {
-        public AutoTargetedPowerUpWithSingleDamageHit() : base()
+        public AutoTargetedPowerUpWithSingleDamageHit(DelayedAbilityExecutionOptions delayOptions) 
+            : base(delayOptions)
         {
              OnExecute = (controller, args) =>
                 AutoTargetedAbility.DealDamageWithRangeCheck(controller.Combatant, args.Item1,
                 ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
                 StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+
+            if (DelayOptions.delayExecute)
+            {
+                OnExecute = (controller, args)
+                    => controller.StoreAction(() =>
+                        AutoTargetedAbility.DealDamageWithRangeCheck(controller.Combatant, args.Item1,
+                        ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
+                        StunDuration, FreezeAnimationDuringStun, GetHitEffect),
+                        delayOptions.channelDuringDelay, delayOptions.endChannelOnExecute);
+            }
+            else
+            {
+                OnExecute = (controller, args) =>
+                    AutoTargetedAbility.DealDamageWithRangeCheck(controller.Combatant, args.Item1,
+                    ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
+                    StunDuration, FreezeAnimationDuringStun, GetHitEffect);
+            }
         }
     }
 
@@ -220,7 +268,8 @@ namespace RPGPlatformer.Combat
     //(*) whether it HasChannelAnimation and HasPowerUpAnimation (bools)
     public class AutoTargetedPowerUpBleed : AutoTargetedPowerUpAbility
     {
-        public AutoTargetedPowerUpBleed() : base()
+        public AutoTargetedPowerUpBleed(DelayedAbilityExecutionOptions delayOptions) 
+            : base(delayOptions)
         {
             OnExecute = async (controller, args) =>
                 await Bleed(controller.Combatant, args.Item1, 
@@ -228,6 +277,23 @@ namespace RPGPlatformer.Combat
                     BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
             //NOTE: if no target or target out of range,
             //it will have already cancelled the ability in GetData (see AutoTargetedPowerUpAbility)
+
+            if (DelayOptions.delayExecute)
+            {
+                OnExecute = (controller, args)
+                    => controller.StoreAction(async () =>
+                        await Bleed(controller.Combatant, args.Item1,
+                        ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
+                        BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect),
+                        delayOptions.channelDuringDelay, delayOptions.endChannelOnExecute);
+            }
+            else
+            {
+                OnExecute = async (controller, args) =>
+                    await Bleed(controller.Combatant, args.Item1,
+                    ComputeDamage(controller.Combatant) * ComputePowerMultiplier(args.Item2),
+                    BleedCount, BleedRate, DamagePerBleedIteration, GetHitEffect);
+            }
         }
 
     }

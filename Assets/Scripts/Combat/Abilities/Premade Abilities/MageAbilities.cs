@@ -88,7 +88,8 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = 0.04f
         };
 
-        public static AutoTargetOnNextFireButtonDownBleed Afflict = new()//basic bleed
+        public static AutoTargetOnNextFireButtonDownBleed Afflict = new(DelayedAbilityExecutionOptions.NoDelay)
+        //basic bleed
         {
             Description = "Afflict your target with a persistent bleed.",
             AbilityTags = new()
@@ -110,7 +111,8 @@ namespace RPGPlatformer.Combat
             BleedRate = 1.2f
         };
 
-        public static AutoTargetOnNextFireButtonDownSingleDamage Daze = new()//basic stun
+        public static AutoTargetOnNextFireButtonDownSingleDamage Daze = new(DelayedAbilityExecutionOptions.NoDelay)
+        //basic stun
         {
             Description = "Briefly stun your opponent and benefit from the respite by gaining stamina.",
             AbilityTags = new()
@@ -154,7 +156,8 @@ namespace RPGPlatformer.Combat
             WrathFractionChange = -0.25f
         };
 
-        public static AoeAbilityThatExecutesOnNextFireButtonDown Captivate = new()//threshold AoE stun
+        public static AoeAbilityThatExecutesOnNextFireButtonDown Captivate 
+            = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//threshold AoE stun
         {
             Description = "Call on the winter spirits to cast an icy freeze over your opponents.",
             AbilityTags = new()
@@ -203,7 +206,8 @@ namespace RPGPlatformer.Combat
             AoeRadius = 1.5f,
         };
 
-        public static AutoTargetedPowerUpBleed Invoke = new()//ultimate bleed
+        public static AutoTargetedPowerUpBleed Invoke 
+            = new(DelayedAbilityExecutionOptions.DelayAndEndChannelOnExecute)//ultimate bleed
         {
             Description = "Invoke your opponent's inner malice and use it against them.",
             AbilityTags = new()

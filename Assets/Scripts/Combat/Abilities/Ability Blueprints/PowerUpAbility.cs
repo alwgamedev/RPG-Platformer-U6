@@ -33,7 +33,7 @@ namespace RPGPlatformer.Combat
             return 1 + (power / PowerGainRate);
         }
 
-        public PowerUpAbility() : base()
+        public PowerUpAbility(DelayedAbilityExecutionOptions delayOptions) : base(delayOptions)
         {
             Prepare = PowerUp;
         }

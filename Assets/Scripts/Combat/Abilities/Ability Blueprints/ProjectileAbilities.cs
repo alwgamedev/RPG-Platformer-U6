@@ -8,6 +8,10 @@ namespace RPGPlatformer.Combat
     using static IAoeAbility;
     using static Health;
 
+    //NOTE: projectile abilities should always use default delay options (no delay),
+    //because they already have they delay built in: their execute will prepare and store projectile,
+    //and then the stored projectile must be fired in animation.
+
     public interface IProjectileAbility
     {
         public int MaxHits { get; }
@@ -89,7 +93,7 @@ namespace RPGPlatformer.Combat
         //making this settable because I want to provide a non-static default value in the constructor,
         //but I also may want to change it per instance without having to create a new class
 
-        public GunLikeAbility()
+        public GunLikeAbility() : base(DelayedAbilityExecutionOptions.NoDelay)
         {
             OnExecute = (controller) => 
                 PrepareProjectileWithStandardAiming(controller, GetProjectile?.Invoke(), 1, 
@@ -109,7 +113,7 @@ namespace RPGPlatformer.Combat
         public Func<IProjectile> GetProjectile { get; init; }
         public Func<AttackAbility, GetHitActionDelegate> GetHitAction { get; set; } = GetHitActionSingleDamage;
 
-        public GrenadeLikeAbility() : base()
+        public GrenadeLikeAbility() : base(DelayedAbilityExecutionOptions.NoDelay)
         {
             GetData = (controller) => null;
             OnExecute = (controller, args) => 
@@ -125,7 +129,7 @@ namespace RPGPlatformer.Combat
     //(*) OnExecute = Action<(Vector2, int)>
     public class AimedPowerUpAbility : PowerUpAbility<object>
     {
-        public AimedPowerUpAbility() : base()
+        public AimedPowerUpAbility() : base(DelayedAbilityExecutionOptions.NoDelay)
         {
             GetData = controller => null;
         }

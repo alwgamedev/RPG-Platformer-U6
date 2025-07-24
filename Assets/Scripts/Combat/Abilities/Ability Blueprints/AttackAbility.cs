@@ -37,6 +37,7 @@ namespace RPGPlatformer.Combat
         public Func<PoolableEffect> GetHitEffect { get; init; }
         public bool CanBeIncludedInAutoCastCycle { get; init; }
         //public virtual bool IsAsyncAbility => false;//for convenience
+        public DelayedAbilityExecutionOptions DelayOptions { get; init; }
         public bool ObeyGCD { get; init; }
         public bool UseActiveAimingWhilePoweringUp { get; init; }
         public bool HoldAimOnRelease { get; init; }
@@ -56,6 +57,12 @@ namespace RPGPlatformer.Combat
         public Action<ICombatController> OnExecute { get; init; }
         //OnExecute should be instructions for how the combat controller should execute the ability.
         //(Using Action instead of virtual method so that we can customize instance by instance)
+
+        public AttackAbility(DelayedAbilityExecutionOptions delayOptions)
+        {
+            DelayOptions = delayOptions;
+        }
+
 
         public string GetAbilityName()
         {
